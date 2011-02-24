@@ -1,0 +1,45 @@
+ <#include "/admin/util/editor/editor.html" />
+<div class="content-box">
+  <h2> #i18n{digglike.manageDefaultMessage.title}</h2>
+  <form action="jsp/admin/plugins/digglike/DoModifyDefaultMessage.jsp" method="post" >
+ <p>
+    <label for="libelle_contribution">#i18n{digglike.manageDefaultMessage.labelLibelleContribution} : * </label>
+    <input type="text" name="libelle_contribution" id="" size="80" value="${default_message.libelleContribution}" />
+   </p>
+   
+   <p>
+     <label for="unavailability_message"> #i18n{digglike.manageDefaultMessage.labelUnavailabilityMessage} : * </label>
+       <div  class="editor">
+     	<textarea name="unavailability_message" id="unavailability_message" rows="20" cols="90" class="richtext">${default_message.unavailabilityMessage}</textarea>
+	 </div>
+	 <br/>
+  </p>
+   
+  <p>
+    <label for="libelle_validate_button">#i18n{digglike.manageDefaultMessage.labelLibelleValidateButton} : * </label>
+    <input type="text" name="libelle_validate_button" id="" size="80" value="${default_message.libelleValidateButton}" />
+   </p>
+   	 <p>
+		    <label for="number_digg_submit_in_top_score">#i18n{digglike.manageDefaultMessage.labelNumberDiggSubmitInTopScore} * : </label>
+		     <input type="text" name="number_digg_submit_in_top_score" id="number_digg_submit_in_top_score" size="3" value="${default_message.numberDiggSubmitInTopScore}" maxlength="10" />
+			
+			 <br/>
+	</p>
+	<p id="p_number_digg_submit_in_top_comment">
+		    <label for="number_digg_submit_in_top_comment">#i18n{digglike.manageDefaultMessage.labelNumberDiggSubmitInTopComment} * : </label>
+		     <input type="text" name="number_digg_submit_in_top_comment" id="number_digg_submit_in_top_comment" size="3" value="${default_message.numberDiggSubmitInTopComment}" maxlength="10" />
+			 <br/>
+	</p>
+	 <p>
+		    <label for="number_digg_submit_caracters_shown">#i18n{digglike.manageDefaultMessage.labelNumberDiggSubmitCaractersShown} * : </label>
+		     <input type="text" name="number_digg_submit_caracters_shown" id="number_digg_submit_caracters_shown" size="5" value="${default_message.numberDiggSubmitCaractersShown}" maxlength="10" />
+			<br/>
+			<label>&nbsp;</label>#i18n{digglike.manageDefaultMessage.labelNumberDiggSubmitCaractersShownComment}
+	   </p>
+   	<p>
+   	 <input type="submit" value="#i18n{digglike.createDigg.buttonSave}" class="button" />
+   	 <input type="button" value="#i18n{digglike.createDigg.buttonCancel}" class="button" onclick="javascript:history.go(-1)" />
+   </p>
+  </form>
+ </div>
+ <@initEditor />

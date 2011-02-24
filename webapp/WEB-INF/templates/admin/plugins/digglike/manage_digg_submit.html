@@ -1,0 +1,232 @@
+
+<script language="JavaScript" type="text/javascript">
+	var tabDiggSubmitValueToClose=new Array();
+</script> 
+
+<div class="content-box">
+  <h2>  #i18n{digglike.manageDiggSubmit.title}</h2>
+  <div class="highlight-box">
+    <form action="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp" method="post" name="" id="filter">
+      <p>
+        <label for="">
+          #i18n{digglike.manageDiggSubmit.labelDiggSubmitState} : 
+        </label>
+        <@combo name="id_digg_submit_state"  items=digg_submit_state_list default_value=digg_submit_state_selected />
+       	&nbsp;
+       	<span style="font-weight:bold;color:#395E7D;">
+         	 #i18n{digglike.manageDiggSubmit.labelDiggSubmitReport} : 
+         </span>
+      		<@combo name="id_digg_submit_report"   items=digg_submit_report_list default_value=digg_submit_report_selected />
+			&nbsp;
+         <span style="font-weight:bold;color:#395E7D;">
+         	 #i18n{digglike.manageDiggSubmit.labelDiggSubmitSort} : 
+         </span>
+      		<@combo name="id_digg_submit_sort"   items=digg_submit_sort_list default_value=digg_submit_sort_selected />
+			&nbsp;
+        <input class="button" value="#i18n{digglike.manageDiggSubmit.buttonSort}" 	type="submit" id="button_submit">
+      </p>
+    </form>
+    <span align="center">
+			<label for="">#i18n{digglike.manageDiggSubmit.labelSearch}</label>
+			<form name="search" method="post" action="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp">
+               	<input type="hidden" name="page" value="search" />
+                   <#if query?exists>
+                    <input type="text" name="query" size="20" value="${query}" style="margin-bottom:5px;" />
+                   <#else>
+   	                <input type="text" name="query" size="20" value="" style="margin-bottom:5px;" />
+                   </#if>
+				<input class="button" value="#i18n{digglike.manageDiggSubmit.buttonSearch}" type="submit">
+			</form>
+      </span>
+  </div>
+   <table>
+    <tr>
+      <td>
+		   <form method="post"  action="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp">
+		        <@pagination paginator=paginator />
+			<!-- Number of feeds per page selector -->
+		        #i18n{digglike.manageDiggSubmit.labelItemsPerPage} :
+		        <select name="items_per_page">
+		            <#list [ "10" , "20" , "50" , "100" ] as nb>
+		            	<#if nb_items_per_page = nb >
+		             		<option selected="selected" value="${nb}">${nb}</option>
+		            	<#else>
+		             		<option value="${nb}">${nb}</option>
+		            	</#if>
+		            </#list>
+		        </select>
+		        <input type="submit" class="button" value="#i18n{digglike.manageDiggSubmit.buttonItemsPerPage}" />
+		    </form>
+    </td>
+    <td align="right">
+	    <form method="post"  action="jsp/admin/plugins/digglike/DoDownloadDiggExport.jsp">
+	        
+		   		#i18n{digglike.manageDiggSubmit.labelDiggExport} : 
+		   	  
+	 			 <@combo name="id_export_format"  items=export_format_list default_value=-1 />
+				<input value="#i18n{digglike.manageDiggSubmit.buttonDiggExport}" class="button"  type="submit">
+			
+	     </form>    
+     </td>
+     </tr>
+   </table>
+  <table>
+    <tr>
+  	  <th>
+       #i18n{digglike.manageDiggSubmit.rowOrder}
+      </th>
+      <th>
+       #i18n{digglike.manageDiggSubmit.rowTitle}
+      </th>
+     <th>
+        #i18n{digglike.manageDiggSubmit.rowDiggSubmitState}
+      </th>
+       
+      <th>
+        #i18n{digglike.manageDiggSubmit.rowNumberVote}
+      </th>
+     <th>
+        #i18n{digglike.manageDiggSubmit.rowNumberScore}
+      </th>
+     <th>
+        #i18n{digglike.manageDiggSubmit.rowNumberComment}
+      </th>
+      <th>
+        #i18n{digglike.manageDiggSubmit.rowNumberCommentEnable}
+      </th>
+      <th>
+        #i18n{digglike.manageDiggSubmit.rowNumberCommentIdle}
+      </th>
+      <th>
+        #i18n{digglike.manageDiggSubmit.rowCategory}
+      </th>
+      <th width=130px>
+        #i18n{digglike.manageDiggSubmit.rowActions}
+      </th>
+    </tr>
+   <#list digg_submit_list as digg_submit>	
+   <tr>
+   		<td>
+   			<form method="post"  action="jsp/admin/plugins/digglike/DoModifyDiggSubmitOrder.jsp">	
+                   <input type="hidden" name="id_digg_submit" value="${digg_submit.idDiggSubmit}" />
+					<input type="hidden" name="id_digg" value="${digg.idDigg}" />
+                   <@combo name="digg_submit_order" default_value="${digg_submit.diggSubmitOrder}" items=order_list />
+                   <input type="submit" class="button" value="#i18n{digglike.manageDiggSubmit.buttonChangeOrder}" />
+           </form>
+   		</td>
+      <td>
+       <#if digg_submit.reported>
+      				<img src="images/admin/skin/plugins/digglike/warning.png" width="15px" height="15px" alt="#i18n{digglike.manageDiggSubmit.altWarning}" title="#i18n{digglike.manageDiggSubmit.altWarning}">
+      	</#if>
+      	<#if digg_submit.diggSubmitTitle?exists>
+      		  ${digg_submit.diggSubmitTitle}
+      		  
+        </#if> 
+      			<a onclick="displayId('diggSubmitValue${digg_submit.idDiggSubmit}');">  
+      			<img src="images/admin/skin/open_block.gif" alt="" border="0"></a>
+				<script language="JavaScript" type="text/javascript" >
+				 tabDiggSubmitValueToClose.push(${digg_submit.idDiggSubmit});
+			  </script>
+			...
+		
+		<#if digg_submit.diggSubmitValue?exists>
+      		<div id="diggSubmitValue${digg_submit.idDiggSubmit}" class="highlight-box">
+      	  		${digg_submit.diggSubmitValue}
+      	  	</div>
+   		</#if>	 
+      </td>
+       
+      <td>
+      
+      
+     	<#if digg_submit.diggSubmitState.number=publish_state_number>
+      		<img  src="images/admin/skin/plugins/digglike/actions/enable.png" alt="${digg_submit.diggSubmitState.title}" title="${digg_submit.diggSubmitState.title}" />
+      	<#elseif digg_submit.diggSubmitState.number=waiting_for_publish_state_number>
+      		<img  src="images/admin/skin/plugins/digglike/actions/submit.png" alt="${digg_submit.diggSubmitState.title}" title="${digg_submit.diggSubmitState.title}" />
+      	<#else>
+      		<img src="images/admin/skin/plugins/digglike/actions/disable.png" alt="${digg_submit.diggSubmitState.title}" title="${digg_submit.diggSubmitState.title}" />
+      	</#if>
+     		
+      </td>
+      <td align="center">
+     		${digg_submit.numberVote}
+      </td>
+     <td align="center">
+     		${digg_submit.numberScore}
+      </td>
+     <td align="center">
+     		${digg_submit.numberComment}
+      </td>
+      <td align="center">
+     		${digg_submit.numberCommentEnable}
+      </td>
+      <td align="center">
+     		${digg_submit.numberComment - digg_submit.numberCommentEnable}
+      </td>
+      <td>
+       <#if category_list?has_content>
+       	 <form method="post"  action="jsp/admin/plugins/digglike/DoChangeDiggSubmitCategory.jsp">
+       			<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden">
+       			<#if digg_submit.category?exists>
+       				<@combo name="id_category"   items=category_list default_value="${digg_submit.category.idCategory}" />
+       			<#else>
+       				<@combo name="id_category"   items=category_list default_value="-1" />
+       			</#if>	
+				<input type="submit" class="button" value="#i18n{digglike.manageDiggSubmit.buttonModify}" />
+    		</form>
+    	</#if>
+		
+		</td>
+     <td>
+     <a href="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=${digg_submit.idDiggSubmit}">
+		  <img src="images/admin/skin/plugins/digglike/actions/proposition.png" alt="#i18n{digglike.manageDiggSubmit.altManageComment}" title="#i18n{digglike.manageDiggSubmit.altManageComment}">
+	  </a>
+	<a name="${digg_submit.idDiggSubmit}"></a>	 
+     <#if digg_submit.diggSubmitState.number=disable_state_number>
+            
+            <a href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${waiting_for_publish_state_number}#${digg_submit.idDiggSubmit}">
+				  <img src="images/admin/skin/plugins/digglike/actions/submit.png" alt="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}" title="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
+			</a>
+			
+            
+             <a href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${publish_state_number}#${digg_submit.idDiggSubmit}">
+			   <img src="images/admin/skin/plugins/digglike/actions/enable.png" alt="#i18n{digglike.manageDiggSubmit.altPublish}" title="#i18n{digglike.manageDiggSubmit.altPublish}">
+			</a>
+
+				 	
+     <#elseif digg_submit.diggSubmitState.number=waiting_for_publish_state_number >
+			
+			<a href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${disable_state_number}#${digg_submit.idDiggSubmit}">
+				  <img src="images/admin/skin/plugins/digglike/actions/disable.png" alt="#i18n{digglike.manageDiggSubmit.altDisable}" title="#i18n{digglike.manageDiggSubmit.altDisable}">
+			</a>
+			 <a href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${publish_state_number}#${digg_submit.idDiggSubmit}">
+			   <img src="images/admin/skin/plugins/digglike/actions/enable.png" alt="#i18n{digglike.manageDiggSubmit.altPublish}" title="#i18n{digglike.manageDiggSubmit.altPublish}">
+			</a>
+			
+				     
+	 <#elseif digg_submit.diggSubmitState.number=publish_state_number >
+            <a href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${disable_state_number}#${digg_submit.idDiggSubmit}">
+				  <img src="images/admin/skin/plugins/digglike/actions/disable.png" alt="#i18n{digglike.manageDiggSubmit.altDisable}" title="#i18n{digglike.manageDiggSubmit.altDisable}">
+			</a>
+          <a href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${waiting_for_publish_state_number}#${digg_submit.idDiggSubmit}">
+				  <img src="images/admin/skin/plugins/digglike/actions/submit.png" alt="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}" title="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
+			</a>
+			
+			
+    </#if>	 
+	<a href="jsp/admin/plugins/digglike/ConfirmRemoveDiggSubmit.jsp?id_digg_submit=${digg_submit.idDiggSubmit}">
+	 	<img src="images/admin/skin/plugins/digglike/actions/delete.png" alt="#i18n{digglike.manageDiggSubmit.altDelete}" title="#i18n{digglike.manageDiggSubmit.altDelete}">
+	</a>
+    </td>
+    </tr>
+    </#list>
+   </table>
+ </div>
+
+ <script language="JavaScript" type="text/javascript">
+	for (i=0; i<tabDiggSubmitValueToClose.length; i++) 
+	{
+
+		hideId("diggSubmitValue"+tabDiggSubmitValueToClose[i]);		
+	}
+</script>

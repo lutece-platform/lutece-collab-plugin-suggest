@@ -1,0 +1,93 @@
+<#if list_digg_submit?has_content>
+	<#if paginator?exists>
+		<div class="digg-portlet">
+			#i18n{digglike.diggListSubmit.paginator.labelResultsCount} : <strong>${paginator.itemsCount}</strong> <br />
+			#i18n{digglike.diggListSubmit.paginator.labelResultsRange} : <strong>${paginator.rangeMin} - ${paginator.rangeMax}</strong> <br />
+			<@pagination paginator=paginator />
+		</div>     
+	</#if>
+	<#list list_digg_submit as digg_submit_display>	 
+		<#if digg_submit_display.digg_submit.category?exists>
+			<#if digg_submit_display.digg_submit.diggSubmitType?exists>
+				<div id="${digg_submit_display.digg_submit.idDiggSubmit}"  style="padding:10px; min-height:80px; background-image:none; background-color: ${digg_submit_display.digg_submit.category.color!'#FFFFFF'};" class="portlet" >
+				<div style="position: absolute; width: 50px;"><img width="50" style="margin-left: -20px; margin-top: -20px;" src="${digg_submit_display.digg_submit.diggSubmitType.imageUrl!''}"/></div>
+			</#if>
+			<#if !digg_submit_display.digg_submit.diggSubmitType?exists>
+				<div id="${digg_submit_display.digg_submit.idDiggSubmit}"  style="padding:10px; min-height:80px; background-image:none; background-color: ${digg_submit_display.digg_submit.category.color!'#FFFFFF'};" class="portlet" >
+			</#if>
+		</#if>
+		<#if !digg_submit_display.digg_submit.category?exists>
+			<#if digg_submit_display.digg_submit.diggSubmitType?exists>
+				<div id="${digg_submit_display.digg_submit.idDiggSubmit}"  style="padding:10px; min-height:80px; background-image:none; background-color: ${digg_submit_display.digg_submit.diggSubmitType.color!'#FFFFFF'};" class="portlet" >
+				<div style="position: absolute; width: 50px;"><img width="50" style="margin-left: -20px; margin-top: -20px;" src="${digg_submit_display.digg_submit.diggSubmitType.imageUrl!''}"/></div>
+			</#if>
+			<#if !digg_submit_display.digg_submit.diggSubmitType?exists>
+				<div id="${digg_submit_display.digg_submit.idDiggSubmit}"  style="padding:10px; min-height:80px; background-image:none;" class="portlet" >
+			</#if>
+		</#if>
+			
+			<a name="digg${digg_submit_display.digg_submit.idDiggSubmit}"></a>
+			<div style="float:left; width:16%; margin-top: 10px;">
+				<#if digg_submit_display.digg_submit.numberScore?exists>
+					<div style="text-align:center;">${digg_submit_display.digg_submit.numberScore}</div>
+				</#if>		 
+				<#if digg_submit_display.digg_submit_vote_type?exists>
+					<div>${digg_submit_display.digg_submit_vote_type}</div>
+				</#if>
+			</div>
+			<#if digg_submit_display.digg_submit.diggSubmitValueShowInTheList?exists>
+				${digg_submit_display.digg_submit.diggSubmitValueShowInTheList}
+			</#if>
+
+			<div style="text-align:right">
+				<#if digg_submit_display.lutece_user?exists>
+					<span class="user-info">
+						#i18n{digglike.diggListSubmit.postByUser} : 
+						<#if digg_submit_display.lutece_user?exists>
+							${digg_submit_display.lutece_user!""}
+						<#else>
+							${digg_submit_display.lutece_user.getUserInfo("user.name.given")} ${digg_submit_display.lutece_user.getUserInfo("user.name.family")}
+						</#if>
+					</span>
+				</#if>
+				<#if authorized_comment>
+					<span class="comment-link">
+						<a href="${fullUrl}?page=digg&id_digg=${id_digg}&id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&digg_comment=1&digg_detail=1">${digg_submit_display.digg_submit.numberCommentEnable} #i18n{digglike.diggListSubmit.labelComments}</a>
+					</span>
+				</#if>
+				<#if digg_submit_moderate>	
+					<span class="comment-link">
+						<a href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=0&id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&report=1#digg${digg_submit_display.digg_submit.idDiggSubmit}">#i18n{digglike.diggListSubmit.labelReport}</a>
+					</span>
+				</#if>
+				<span class="read-digg-detail">
+					<a href="${fullUrl}?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&digg_comment=1&digg_detail=1">#i18n{digglike.diggListSubmit.labelReadMore} ... </a>
+				</span>
+			</div>
+			<#if authorized_comment>
+				<#assign nbComments = 1>
+				<div style="margin-top:10px;">
+					<ul>
+					<#list digg_submit_display.digg_submit.comments as comment>	
+						<#if nbComments <= number_comments>
+							<div id=comments>
+								<li>
+									<#if comment.value?length <= cumber_char_comments>
+										${comment.value[0..]}
+									<#else>
+										${comment.value[0..cumber_char_comments-1]}...
+									</#if> 
+								</li>
+							</div>
+						</#if> 
+						<#assign nbComments = nbComments + 1>
+					</#list>
+					</ul>
+				</div>
+			</#if> 
+		</div>
+		<div>&nbsp;</div>
+	</#list>
+<#else>
+	<div class="clear">&nbsp;</div>
+</#if>	 

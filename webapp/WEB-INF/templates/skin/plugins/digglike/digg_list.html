@@ -1,0 +1,38 @@
+<#if unavailability_message?exists>
+	${unavailability_message}      
+<#else>
+	<div class="span-22 prepend-1 append-1 append-bottom last">
+		<div  style="padding:10px;" class="portlet">
+			<h2>#i18n{digglike.diggList.title}:</h2> 
+			<form method="post"  action="${fullUrl}?page=digg">
+	        	<@pagination paginator=paginator />
+				<!-- Number of feeds per page selector -->
+		        #i18n{digglike.manageDigg.labelItemsPerPage} :
+		        <select name="items_per_page">
+		            <#list [ "10" , "20" , "50" , "100" ] as nb>
+		            	<#if nb_items_per_page = nb >
+		             		<option selected="selected" value="${nb}">${nb}</option>
+		            	<#else>
+		             		<option value="${nb}">${nb}</option>
+		            	</#if>
+		            </#list>
+		        </select>
+		        <input type="submit" class="button" value="#i18n{digglike.manageDigg.buttonItemsPerPage}" />
+		    </form>
+		</div>
+	</div>
+	
+	<div class="span-22 prepend-1 append-1 append-bottom">
+		<div class="portlet" style="padding: 10px; min-height: 180px;">
+			<table>
+				<#list list_digg as digg>	
+				   <tr>
+				      <td>
+				      	<a href="${fullUrl}?page=digg&amp;id_digg=${digg.idDigg}">${digg.title}</a>
+				      </td> 
+				    </tr>
+			    </#list>
+			</table>
+		</div>
+	</div>		              
+</#if>

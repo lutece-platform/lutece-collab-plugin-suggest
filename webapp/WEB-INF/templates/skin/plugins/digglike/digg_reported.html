@@ -1,0 +1,31 @@
+<div id="${digg_submit.idDiggSubmit}" class="diggSubmitElement portlet-background-content -lutece-border-radius append-bottom category<#if digg_submit.category??>${digg_submit.category.idCategory}"></#if>">
+	<div class="-lutece-padding-1em">
+		<#if digg_submit.numberScore?exists>
+			<div class="-lutece-framed -lutece-border-radius span-1 -lutece-text-center">${digg_submit.numberScore}</div>
+		</#if>		 
+		<#if digg_submit.diggSubmitValue?exists>
+			<div class="diggSubmitElementValue">${digg_submit.diggSubmitValue}</div>
+	    </#if>	 
+		<div class="comments">
+			<h2>#i18n{digglike.diggReported.labelReported}</h2>
+			<div class="add-comment">
+	    		<form action="${fullUrl}?page=digg#digg${digg_submit.idDiggSubmit}" method="post" name="" id="" >
+					<input name="id_digg" value="${id_digg}" type="hidden" />
+					<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden" />
+					<#if digg_detail?exists && digg_detail="1">
+						<input name="digg_detail" value="1" type="hidden" />
+		   			<#else>
+		   				<input name="digg_detail" value="0" type="hidden" />
+		   			</#if>
+		   			<label for="reported_value">#i18n{digglike.diggReported.labelAddNewReported}:</label>
+					<br/>
+					<textarea name="reported_value" id="reported_value" rows="3" cols="30"></textarea>
+					<br/>
+					<input type="submit" value="#i18n{digglike.diggReported.buttonAdd}" name="submit_reported" />
+					<input type="submit" value="#i18n{digglike.diggReported.buttonCancel}" name="cancel_reported" />
+					<br/>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

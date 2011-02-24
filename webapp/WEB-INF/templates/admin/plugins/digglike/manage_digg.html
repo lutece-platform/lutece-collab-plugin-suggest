@@ -1,0 +1,79 @@
+<div class="content-box">
+  <h2>  #i18n{digglike.manageDigg.title}</h2>
+  <div class="highlight-box">
+    <form action="jsp/admin/plugins/digglike/ManageDigg.jsp" method="" name="" id="">
+      <p>
+        <label for="">
+          #i18n{digglike.manageDigg.labelActive} : 
+        </label>
+        <@combo name="id_digg_state"  items=digg_state_list default_value=digg_state_selected />
+      &nbsp;
+       <span style="font-weight:bold;color:#395E7D;">
+         #i18n{digglike.manageDigg.labelWorkGroup} :
+        </span>
+        <@combo name="workgroup"  items=user_workgroup_list default_value=user_workgroup_selected />
+		&nbsp;
+        <input class="button" value="#i18n{digglike.manageDigg.buttonSearch}" 	type="submit">
+      </p>
+    </form>
+  </div>
+   <form method="post"  action="jsp/admin/plugins/digglike/ManageDigg.jsp">
+        <@pagination paginator=paginator />
+	<!-- Number of feeds per page selector -->
+        #i18n{digglike.manageDigg.labelItemsPerPage} :
+        <select name="items_per_page">
+            <#list [ "10" , "20" , "50" , "100" ] as nb>
+            	<#if nb_items_per_page = nb >
+             		<option selected="selected" value="${nb}">${nb}</option>
+            	<#else>
+             		<option value="${nb}">${nb}</option>
+            	</#if>
+            </#list>
+        </select>
+        <input type="submit" class="button" value="#i18n{digglike.manageDigg.buttonItemsPerPage}" />
+    </form>
+  <table>
+    <tr>
+      <th>
+       #i18n{digglike.manageDigg.rowTitle}
+      </th>
+     <th>
+        #i18n{digglike.manageDigg.rowState}
+      </th>
+      <th>
+        #i18n{digglike.manageDigg.rowActions}
+      </th>
+    </tr>
+   <#list digg_list as digg>	
+   <tr>
+      <td>
+      	${digg.title} 
+      </td>
+      <td>
+       <#if digg.active>
+      		<img  src="images/admin/skin/plugins/digglike/actions/enable.png" />
+      <#else>
+      		<img src="images/admin/skin/plugins/digglike/actions/disable.png" />
+      </#if>
+     
+      </td>
+     <td>
+			<#if digg.actions?exists>
+				<#list digg.actions as action>
+				 	<a href="${action.url}?id_digg=${digg.idDigg}">
+				  		<img src="${action.iconUrl}" alt="${action.name}" title="${action.description}">
+				  	</a>
+				</#list>
+			</#if>	
+		</td>
+    </tr>
+    </#list>
+   </table>
+ <#if permission_create_digg?exists && permission_create_digg>
+  	<form method="post" action="jsp/admin/plugins/digglike/CreateDigg.jsp">
+    	<p>
+      		<input type="submit" value="#i18n{digglike.manageDigg.buttonCreate}" class="button" />
+    	</p>
+  	</form>
+  </#if>
+</div>

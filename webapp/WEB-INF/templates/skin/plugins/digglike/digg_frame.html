@@ -1,0 +1,110 @@
+<#if unavailability_message?exists>
+	${unavailability_message}      
+<#else>
+<div class="span-22 prepend-1 append-1 append-bottom last">
+	<div  style="padding:10px;" class="portlet">
+		<h2>${label_digg}</h2>
+		<#if header_digg?exists>
+			${header_digg}      
+		</#if>
+		<#if mode_digg?has_content && mode_digg == 0>
+			<div  style="text-align:right;">
+				<form name="form_sort" id="form_sort" method="get" action="${fullUrl}">
+					#i18n{digglike.diggFrame.labelSorterTitle}:
+					<input name="page" value="digg" type="hidden">
+					<input name="id_digg" value="${id_digg}" type="hidden">
+					<input name="mode_digg" value="0" type="hidden">
+					<select id="id_filter_period" name="id_filter_period">
+						<option value="-1">#i18n{digglike.diggFrame.labelFilterAll}</option>
+						<option value="${filter_day_value}">#i18n{digglike.diggFrame.labelFilterTopDay}</option>
+						<option value="${filter_yesterday_value}">#i18n{digglike.diggFrame.labelFilterYesterday}</option>
+						<option value="${filter_week_value}">#i18n{digglike.diggFrame.labelFilterWeek}</option>
+						<option value="${filter_month_value}">#i18n{digglike.diggFrame.labelFilterMonth}</option>
+					</select>
+					<@combo name="id_digg_submit_sort" items=list_digg_submit_sort default_value=id_digg_submit_sort />&nbsp;
+					<input class="-lutece-input -lutece-border-radius-mini" value="#i18n{digglike.diggFrame.buttonSorter}" 	id="submit_sort" type="submit">
+				</form>
+			</div>
+		</#if>
+	</div>
+</div>
+
+<div class="span-14 prepend-1 append-1 append-bottom">${content_digg}</div>		              
+
+<div class="span-7 append-1 append-bottom last">
+	<div class="-digglike-element2">
+	<#if mode_digg?has_content && mode_digg == 0>
+		<div class="-digglike-element2-inner" style="text-align:center;">
+			<b><a class="-lutece-border-radius-top" href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=1" target="_top">#i18n{digglike.diggFrame.labelProposal}</a></b>
+		</div>
+		<div class="-digglike-element2-inner">
+			<div class="-lutece-title-3">#i18n{digglike.diggFrame.altSearch}</div>
+			<form name="search" method="post" action="${fullUrl}?page=digg">
+               	<input name="id_digg" value="${id_digg}" type="hidden" />
+               	<input type="hidden" name="page" value="search" />
+                   <#if query?exists>
+                    <input type="text" name="query" size="20" value="${query}" style="margin-bottom:5px;" />
+                   <#else>
+   	                <input type="text" name="query" size="20" value="" style="margin-bottom:5px;" />
+                   </#if>
+				<input class="-lutece-input -lutece-border-radius-mini" value="#i18n{digglike.diggFrame.altSearch}" type="submit">
+			</form>
+		</div>
+	<#else>
+		<div class="-digglike-element2-inner" style="text-align:center;">
+			<b><a class="-lutece-border-radius-top" href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=0" target="_top">#i18n{digglike.diggFrame.backToList}</a></b>
+		</div>
+    </#if>
+    <#if show_category_block>
+		<#if list_categories_digg?has_content>
+			<div class="-digglike-element2-inner">
+				<div  class="-lutece-title-3">#i18n{digglike.diggFrame.labelCategories}</div>
+				<#list list_categories_digg as digg_categories>
+					<a href="${fullUrl}?page=digg&amp;id_digg=${id_digg}&amp;id_filter_category=${digg_categories.idCategory}" class="-lutece-list">${digg_categories.title}</a><br />
+				</#list>
+			</div>
+		</#if>
+    </#if>
+    <#if show_top_score_block>
+		<#if list_top_popularity_digg?has_content>
+	 		<div class="-digglike-element2-inner">
+	 			<div class="-lutece-title-3">#i18n{digglike.diggFrame.labelTopScore}</div>
+					<#list list_top_popularity_digg as digg_popularities>
+						<a href="${fullUrl}?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_popularities.idDiggSubmit}&amp;digg_comment=1&amp;digg_detail=1" class="-lutece-list">
+							<#if digg_popularities.diggSubmitTitle?exists>
+								<#if number_shown_characters?exists&&digg_popularities.diggSubmitTitle?length &gt;number_shown_characters>
+									<#if digg_popularities.diggSubmitTitle?contains("resource_type")>
+										#i18n{digglike.diggFrame.diggsubmit.image} &nbsp; ${digg_popularities.idDiggSubmit}
+									<#else>
+										${digg_popularities.diggSubmitTitle?substring(0,number_shown_characters)}...
+									</#if>
+								<#else>
+									${digg_popularities.diggSubmitTitle}
+								</#if>
+							</#if>
+						</a><br />
+					</#list>
+	        </div>
+		</#if>
+	</#if>
+	<#if authorized_comment && show_top_comment_block>
+		<#if list_top_comment_digg?has_content>
+			<div class="-digglike-element2-inner">
+				<div class="-lutece-title-3">#i18n{digglike.diggFrame.labelTopComment}</div>
+				<#list list_top_comment_digg as digg_top_comment>
+					<a href="${fullUrl}?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_top_comment.idDiggSubmit}&amp;digg_comment=1&amp;digg_detail=1" class="-lutece-list">
+						<#if digg_top_comment.diggSubmitTitle?exists>
+							<#if number_shown_characters?exists&&digg_top_comment.diggSubmitTitle?length &gt;number_shown_characters>
+								${digg_top_comment.diggSubmitTitle?substring(0,number_shown_characters)}...
+							<#else>
+								${digg_top_comment.diggSubmitTitle}
+							</#if>
+						</#if>
+					</a><br />
+				</#list>
+			</div>
+		</#if>
+	</#if>
+	</div>
+</div>
+</#if>

@@ -1,0 +1,47 @@
+<div class="highlight-box">
+  		<p>
+	    	<label for="id_digg">#i18n{digglike.resource_rss.label_digg} * :</label>
+			<@comboWithParams name="id_digg" default_value="${digglike_list_default_item}" additionalParameters="onchange=\"javascript:select_submit();\"" items=digglike_list />
+	 	</p>
+		<p>
+			<label for="rss_choice">#i18n{digglike.resource_rss.digg_choice} </label>
+			<input checked="checked" type="radio" name="rss_choice" id="choice_digg" value="digg" onclick="javascript:hidden();">
+			<Br />
+			<label for="digglike_rss_choice">#i18n{digglike.resource_rss.digg_submit_choice} </label>
+			<input type="radio" name="rss_choice" id = "choice_submit" value="digg_submit" onclick="javascript:select_submit();">
+		</p>
+		
+		<#assign keys = diggsubmit_list?keys/> 
+		<#list keys as submit>
+			<p id="digg_submit${submit}">
+				<#if diggsubmit_list[submit]?has_content>
+					<label for="id_digg_submit${submit}">#i18n{digglike.resource_rss.submit_comment_choice} :</label>
+					<@combo name="id_digg_submit${submit}" default_value=-1 items=diggsubmit_list[submit] />
+				<#else>
+					<label>&nbsp;</label>#i18n{digglike.resource_rss.empty_digg}
+					<input type="hidden" value="empty_digg" name="id_digg_submit${submit}">
+				</#if>
+			</p>
+		</#list>
+
+</div>
+
+<script type="text/javascript" charset="utf-8">
+	function hidden()
+	{
+		<#list keys as submit>
+		document.getElementById("digg_submit${submit}").style.display="none";
+		</#list>
+	}
+	function select_submit()
+	{
+		hidden();
+		if(document.getElementById("choice_submit").checked)
+		{
+			var id_digg = document.getElementById("id_digg").options[document.getElementById("id_digg").selectedIndex].value;
+			document.getElementById("digg_submit" + id_digg).style.display="block";
+		}
+	}
+	hidden();
+	
+</script>

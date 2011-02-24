@@ -1,0 +1,62 @@
+<div class="content-box">
+        <h2>#i18n{digglike.manageDiggSubmitType.title}</h2>
+        
+        
+         <form method="post"  action="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp">
+        <@pagination paginator=paginator />
+	<!-- Number of feeds per page selector -->
+        #i18n{digglike.manageDiggSubmitType.labelItemsPerPage} :
+        <select name="items_per_page">
+            <#list [ "10" , "20" , "50" , "100" ] as nb>
+            	<#if nb_items_per_page = nb >
+             		<option selected="selected" value="${nb}">${nb}</option>
+            	<#else>
+             		<option value="${nb}">${nb}</option>
+            	</#if>
+            </#list>
+        </select>
+        <input type="submit" class="button" value="#i18n{digglike.manageDiggSubmitType.buttonItemsPerPage}" />
+    </form>
+         
+          <table> 
+            <tr>
+              <th>
+               #i18n{digglike.manageDiggSubmitType.rowName}
+              </th>
+              <th  >
+                #i18n{digglike.manageDiggSubmitType.rowColor}
+              </th>
+              <th  >
+                #i18n{digglike.manageDiggSubmitType.rowParameterizable}
+              </th>
+              <th  >
+               #i18n{digglike.manageDiggSubmitType.rowActions}
+              </th>
+            </tr>
+             <#list type_list as type>	
+	            <tr>
+	              <td  >
+	                <a href="jsp/admin/plugins/digglike/ModifyDiggSubmitType.jsp?id_type=${type.idType}" class="bullet-link">${type.name}</a>
+	              </td>
+	              <td >
+	               ${type.color!""}
+	                </td>
+	                <td > 
+	               		${type.parameterizableInFO?string("#i18n{digglike.manageDiggSubmitType.yes}","#i18n{digglike.manageDiggSubmitType.no}")}
+	                </td>
+	                <td >
+	               	<a href="jsp/admin/plugins/digglike/ConfirmRemoveDiggSubmitType.jsp?id_type=${type.idType}">
+	         			 <img src="images/admin/skin/plugins/digglike/actions/delete.png" alt="#i18n{digglike.manageDiggSubmitType.altDelete}" title="#i18n{digglike.manageDiggSubmitType.altDelete}" />
+	       			 </a>
+	                </td>
+	            </tr>
+	         </#list>
+          </table> 
+         
+          <form method="post"  action="jsp/admin/plugins/digglike/CreateDiggSubmitType.jsp" >
+            <p>
+              <input type="submit" class="button" value="#i18n{digglike.manageDiggSubmitType.buttonCreate}"   />
+            </p>
+          </form>
+        
+      </div> 

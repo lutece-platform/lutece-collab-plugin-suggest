@@ -1,0 +1,69 @@
+  <SCRIPT LANGUAGE="JavaScript">
+	function makeArray(q){
+		for(i=1 ; i <= q ; i++)
+		{
+			this[i]=0;
+		}
+	}
+
+	 Colors = new makeArray(7);
+	 Colors[1] = "00";
+	 Colors[2] = "33";
+	 Colors[3] = "66";
+	 Colors[4] = "99";
+	 Colors[5] = "CC";
+	 Colors[6] = "FF";
+ </script>
+  <div class="content-box">
+    <h2> #i18n{digglike.modifyDiggSubmitType.title}</h2>
+    <form method="post" action="jsp/admin/plugins/digglike/DoModifyDiggSubmitType.jsp" enctype="multipart/form-data" >
+        <input name="id_type" value="${type.idType}" type="hidden">
+        <p>
+            <label for="name" >#i18n{digglike.createDiggSubmitType.labelName} * : </label>
+            <input type="text" size="20" id="name" name="name" maxlength="20" value="${type.name}"/>
+        </p>  
+        <p>
+            <label for="color" >#i18n{digglike.createDiggSubmitType.labelColor} : </label>
+            <input type="text" size="10" id="color" name="color" maxlength="7" value="${type.color}"/>
+        </p>	
+           <p>
+            <label for="color_picker" >#i18n{digglike.createCategory.labelColorPicker} : </label>
+			<table id="color_picker" style='width: 10%;' border="0" align=center>
+ 				<tr>
+					<script language="JavaScript">
+ 						for(i=1 ; i <= 6 ; i++)
+ 	 					{
+ 							for(j=1 ; j <= 6 ; j++)
+ 	 						{
+ 								for(k=1 ; k <= 6 ; k++)
+ 	 							{
+									var thiscolor = Colors[i] + Colors[j] + Colors[k];
+									document.writeln("<td style='padding:0 0 0 0; border: none;' bgcolor = \"#" + thiscolor + "\" align = center><a ");
+									document.writeln("\'\' onClick = \"document.getElementById('color').value = \'#" + thiscolor + "\'\">" + '_' + "</a></td>");
+
+ 								}
+ 							}
+ 							document.writeln("<TR>");
+ 						}
+ 					</script>
+ 				</tr>
+ 			</table>
+        </p> 
+         <p>
+            <label for="parameterizable" >#i18n{digglike.createDiggSubmitType.labelParameterizable} * : </label>
+            <input id="parameterizable" name="parameterizable" type="checkbox" <#if type.parameterizableInFO> checked='checked'</#if>/>          
+        </p>		
+        <p>
+            <label for="image_source" >#i18n{digglike.createDiggSubmitType.labelImage} : </label>
+            <img width="50" src='${type.imageUrl}' /><br />
+            <label for="image_source" >.</label>
+            <input type="file" id="image_source" name="image_source" size="60" maxlength="100"/>
+        
+        </p>
+        <p>
+            
+            <input type="submit" value="#i18n{digglike.createDiggSubmitType.buttonSave}" class="button" />
+            <input type="button" value="#i18n{digglike.createDiggSubmitType.buttonCancel}" class="button" onclick="javascript:history.go(-1)" />
+         </p>
+    </form>
+  </div>

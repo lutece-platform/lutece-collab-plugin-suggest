@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<xsl:output method="text" cdata-section-elements="digg-submit-value digg-submit-category digg-submit-comment"/>
+
+	
+	<xsl:template match="/">
+		<xsl:apply-templates select="digg"/> 
+	</xsl:template>
+
+	<xsl:template match="digg"> 
+		<xsl:text>"</xsl:text>
+		<xsl:value-of select="digg-title"/>
+		<xsl:text>"&#10;</xsl:text> 
+		<xsl:apply-templates select="diggs-submit/digg-submit"/>   
+	</xsl:template>
+	
+	<xsl:template match="digg-submit">
+		<digg-submit>  
+			<xsl:apply-templates select="diggs-submit-comments/digg-submit-comment"/> 
+			 <xsl:if test="count(diggs-submit-comments/digg-submit-comment)=0">
+				<xsl:text>"</xsl:text>
+				<xsl:value-of select="digg-submit-date-response"/>
+				<xsl:text>"</xsl:text>
+				<xsl:text>;</xsl:text>
+				<xsl:text>"</xsl:text>
+				<xsl:value-of select="digg-submit-score"/>
+				<xsl:text>"</xsl:text>
+				<xsl:text>;</xsl:text>
+				<xsl:text>"</xsl:text>
+				<xsl:value-of select="digg-submit-number-vote"/>
+				<xsl:text>"</xsl:text>
+				<xsl:text>;</xsl:text>
+				<xsl:text>"</xsl:text>
+				<xsl:value-of select="digg-submit-number-comment"/>
+				<xsl:text>"</xsl:text>
+				<xsl:text>;</xsl:text>
+				<xsl:text>"</xsl:text>
+				<xsl:value-of select="digg-submit-value"/>
+				<xsl:text>"</xsl:text>
+				<xsl:text>;</xsl:text>
+				<xsl:text>"</xsl:text>
+				<xsl:value-of select="digg-submit-category"/>
+				<xsl:text>"</xsl:text> 
+				<xsl:text>&#10;</xsl:text>
+			</xsl:if>
+			
+		</digg-submit>
+	</xsl:template>
+	
+	<xsl:template match="digg-submit-comment">  
+			
+		<xsl:text>"</xsl:text>
+		<xsl:value-of select="ancestor::diggs-submit/digg-submit/digg-submit-date-response"/>
+		<xsl:text>"</xsl:text>
+		<xsl:text>;</xsl:text>
+		<xsl:text>"</xsl:text>
+		<xsl:value-of select="ancestor::diggs-submit/digg-submit/digg-submit-score"/>
+		<xsl:text>"</xsl:text>
+		<xsl:text>;</xsl:text>
+		<xsl:text>"</xsl:text>
+		<xsl:value-of select="ancestor::diggs-submit/digg-submit/digg-submit-number-vote"/>
+		<xsl:text>"</xsl:text>
+		<xsl:text>;</xsl:text>
+		<xsl:text>"</xsl:text>
+		<xsl:value-of select="ancestor::diggs-submit/digg-submit/digg-submit-number-comment"/>
+		<xsl:text>"</xsl:text>
+		<xsl:text>;</xsl:text>
+		<xsl:text>"</xsl:text>
+		<xsl:value-of select="ancestor::diggs-submit/digg-submit/digg-submit-value"/>
+		<xsl:text>"</xsl:text>
+		<xsl:text>;</xsl:text>
+		<xsl:text>"</xsl:text>
+		<xsl:value-of select="ancestor::diggs-submit/digg-submit/digg-submit-category"/>
+		<xsl:text>"</xsl:text> 
+		<xsl:text>;</xsl:text>
+		<xsl:text>"</xsl:text>
+		<xsl:value-of select="digg-submit-comment-date"/> 
+		<xsl:text>"</xsl:text>
+		<xsl:text>;</xsl:text>
+		<xsl:text>"</xsl:text>
+		<xsl:value-of select="digg-submit-comment-value"/>  
+		<xsl:text>"</xsl:text>  
+		<xsl:text>&#10;</xsl:text>
+	</xsl:template>
+</xsl:stylesheet>

@@ -1,0 +1,51 @@
+<div class="content-box">
+        <h2>#i18n{digglike.manageCategory.title}</h2>
+        
+       <form method="post"  action="jsp/admin/plugins/digglike/ManageCategory.jsp">
+        <@pagination paginator=paginator />
+	<!-- Number of feeds per page selector -->
+        #i18n{digglike.manageCategory.labelItemsPerPage} :
+        <select name="items_per_page">
+            <#list [ "5" , "10" , "20" , "50" ] as nb>
+            	<#if nb_items_per_page = nb >
+             		<option selected="selected" value="${nb}">${nb}</option>
+            	<#else>
+             		<option value="${nb}">${nb}</option>
+            	</#if>
+            </#list>
+        </select>
+        <input type="submit" class="button" value="#i18n{digglike.manageCategory.buttonItemsPerPage}" />
+    </form>
+         
+          <table> 
+            <tr>
+              <th width="80%" >
+               #i18n{digglike.manageCategory.rowTitle}
+              </th>
+              <th width="20%" >
+               #i18n{digglike.manageCategory.rowActions}
+              </th>
+            </tr>
+             <#list category_list as category>	
+	            <tr>
+	              <td>
+	                <a href="jsp/admin/plugins/digglike/ModifyCategory.jsp?id_category=${category.idCategory}" class="bullet-link">
+	                	${category.title}
+	                </a>
+	              </td>
+	               <td>
+	               	   <a href="jsp/admin/plugins/digglike/ConfirmRemoveCategory.jsp?id_category=${category.idCategory}">
+	         			 <img src="images/admin/skin/plugins/digglike/actions/delete.png" alt="#i18n{digglike.manageCategory.altDelete}" title="#i18n{digglike.manageCategory.altDelete}" />
+	       			 </a>
+	                </td>
+	            </tr>
+	         </#list>
+          </table> 
+         
+          <form method="post"  action="jsp/admin/plugins/digglike/CreateCategory.jsp" >
+            <p>
+              <input type="submit" class="button" value="#i18n{digglike.manageCategory.buttonCreate}"   />
+            </p>
+          </form>
+        
+      </div> 

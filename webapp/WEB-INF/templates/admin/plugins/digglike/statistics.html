@@ -1,0 +1,60 @@
+<div class="content-box">
+  <h2>#i18n{digglike.statistics.titleStatistic}</h2>
+	<form action="jsp/admin/plugins/digglike/Statistics.jsp" method="post" name="" id=""  >
+		<div class="highlight-box">
+			<p>
+				<label class="text-label" for="fist_response_date_filter">#i18n{digglike.statistics.labelDigg}</label>
+				<#if digg?exists>
+					<@combo name="id_digg"   items=digg_list default_value="${digg.idDigg}" />
+				<#else>
+					<@combo name="id_digg"   items=digg_list default_value="-1" />
+				</#if>
+			</p>
+		 	<p>
+				<label class="text-label" for="fist_response_date_filter">#i18n{digglike.statistics.labelValidationDate}</label>
+				<input type="text" name="first_date_filter" id="first_date_filter" size="10" value="<#if first_date_filter?has_content>${first_date_filter?date}</#if>" />
+	
+				#i18n{digglike.statistics.labelAnd}
+				
+				<input type="text" name="last_date_filter" id="last_date_filter" size="10" value="<#if last_date_filter?has_content>${last_date_filter?if_exists?date}</#if>" />
+				<input type="submit" class="button" value="#i18n{digglike.statistics.buttonSearch}" />
+			</p>
+				
+		 </div>
+		<#if digg?exists>
+		  <div class="highlight-box">
+ 			 <h2> #i18n{digglike.statistics.title}: ${digg.title}</h2>
+	
+		    <p><span style="margin-left:50px;"><label class="text-label" for="">#i18n{digglike.statistics.DiggSubmitNumber} </label></span> 
+		       <span style="font-weight:bold;color:#000;">${number_diggsubmit_published} / ${number_diggsubmit_waiting} / ${number_diggsubmit_disabled}</span> 
+		    </p> 
+		     <p><span style="margin-left:50px;"><label class="text-label" for="">#i18n{digglike.statistics.labelNbCommentsPerDiggsubmit} </label></span> 
+		       <span style="font-weight:bold;color:#000;">${number_comments!0}</span> 
+		    </p> 
+		     <p><span style="margin-left:50px;"><label class="text-label" for="">#i18n{digglike.statistics.labelNbVotesPerDiggsubmit} </label></span> 
+		       <span style="font-weight:bold;color:#000;">${number_votes!0}</span> 
+		    </p>   
+		    <p><span style="margin-left:50px;"><label class="text-label" for="">#i18n{digglike.statistics.labelNbUsers} </label></span> 
+		       <span style="font-weight:bold;color:#000;">${number_users!0}</span> 
+		    </p>  
+   			
+   			<table>
+		        <tr>
+		            <th>#i18n{digglike.statistics.labelTitle}</th>
+		            <th>#i18n{digglike.statistics.labelScore}</th>
+		        </tr>
+	           <#list high_scores as diggsubmit>	
+		        
+			        <tr>
+				        <td><a href=${url}${diggsubmit.idDiggSubmit} >${diggsubmit.diggSubmitTitle}</a></td>
+				        <td>${diggsubmit.numberScore}</td>
+			        </tr>
+		        </#list>
+	        </table>
+	  </div>
+	  </#if>
+  </form>
+	 
+   </div>
+     
+	 

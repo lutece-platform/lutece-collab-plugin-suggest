@@ -1,0 +1,37 @@
+<div class="digg-vote-star-rating" style="display:none; ">
+	<form id="form${id_digg_submit}" action="${fullUrl}#digg${id_digg_submit}"  >
+		<input type="hidden" name="vote" value="0">
+		<input type="hidden" name="id_digg" value="${id_digg}">
+		<input type="hidden" name="page" value="digg">
+		<input type="hidden" name="mode_digg" value=0>
+		<input type="hidden" name="digg_detail" value="${digg_detail}">
+		<input type="hidden" name="id_digg_submit" value="${id_digg_submit}"">
+		<input class="star-rating" type="radio"  name="vote${id_digg_submit}" value="-2"  title="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainstMore}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainstMore}"  />
+		<input class="star-rating" type="radio"  name="vote${id_digg_submit}" value="-1" title="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainst}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainst}"/>
+		<input class="star-rating" type="radio"  name="vote${id_digg_submit}" value="1" title="#i18n{digglike.diggVoteTypeStarRating.titleVoteFor}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteFor}"/>
+		<input class="star-rating" type="radio"  name="vote${id_digg_submit}" value="2" title="#i18n{digglike.diggVoteTypeStarRating.titleVoteForMore}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteForMore}"/>
+	</form>
+ </div>
+ 
+<div class="digg-vote-star-rating-javascript-disable" >
+ <div class="star">
+	<a href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=0&id_digg_submit=${id_digg_submit}&vote=-2&digg_detail=${digg_detail}#digg${id_digg_submit}"   title="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainstMore}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainstMore}">
+	</a>
+	</div >
+	
+	<div class="star">
+	<a href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=0&id_digg_submit=${id_digg_submit}&vote=-1&digg_detail=${digg_detail}#digg${id_digg_submit}" title="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainst}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainst}">
+	</a>
+	</div>
+	
+	<div class="star">
+	<a href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=0&id_digg_submit=${id_digg_submit}&vote=1&digg_detail=${digg_detail}#digg${id_digg_submit}"  title="#i18n{digglike.diggVoteTypeStarRating.titleVoteFor}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteFor}">
+	</a>
+	</div>
+	
+	<div class="star">
+	<a href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=0&id_digg_submit=${id_digg_submit}&vote=2&digg_detail=${digg_detail}#digg${id_digg_submit}" title="#i18n{digglike.diggVoteTypeStarRating.titleVoteForMore}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteForMore}">
+	</a>
+	</div>
+</div>
+ 

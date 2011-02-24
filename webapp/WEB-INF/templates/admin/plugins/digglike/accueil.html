@@ -1,0 +1,69 @@
+
+	<div class="content-box" >
+		<h2>#i18n{digglike.accueil.title}</h2>
+		<table>
+        	<tr>
+	           	 <td>
+	                <a href="jsp/admin/plugins/digglike/ManageDigg.jsp?plugin_name=digglike" class="bullet-link">#i18n{digglike.accueil.labelManageDigg}</a>
+	            </td>
+	            <td>
+					#i18n{digglike.accueil.labelManageDiggComment}
+	            </td>
+	        </tr>
+        
+        <#if permission_manage_category>   
+			<tr>
+				<td>
+	                <a href="jsp/admin/plugins/digglike/ManageCategory.jsp?plugin_name=digglike" class="bullet-link">#i18n{digglike.accueil.labelCategory}</a>
+	       		</td>
+	            <td>
+				 	#i18n{digglike.accueil.labelCategoryComment}
+	            </td>
+	        </tr>
+	        <tr>
+				<td>
+	                <a href="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp?plugin_name=digglike" class="bullet-link">#i18n{digglike.accueil.labelType}</a>
+	       		</td>
+	            <td>
+				 	#i18n{digglike.accueil.labelTypeComment}
+	            </td>
+	        </tr>
+	     </#if>
+       
+	     <#if permission_manage_default_message>   
+			<tr>
+				<td>
+	                <a href="jsp/admin/plugins/digglike/ManageDefaultMessage.jsp?plugin_name=digglike" class="bullet-link">#i18n{digglike.accueil.labelDefaultMessage}</a>
+	       		</td>
+	            <td>
+				 	#i18n{digglike.accueil.labelDefaultMessageComment}
+	            </td>
+	        </tr>
+	     </#if>
+	       
+        <#if permission_manage_export_format>
+	        <tr>
+	             
+	            <td>
+	            	<a href="jsp/admin/plugins/digglike/ManageExportFormat.jsp?plugin_name=digglike" class="bullet-link">#i18n{digglike.accueil.labelExportFormat}</a>
+	            </td>       
+	              <td>    
+	             		#i18n{digglike.accueil.labelExportFormatComment}
+	              </td>
+	        </tr>	
+        </#if>
+        <tr>
+             
+            <td>
+            	<a href="jsp/admin/plugins/digglike/Statistics.jsp" class="bullet-link">#i18n{digglike.accueil.labelStatistics}</a>
+            </td>       
+              <td>    
+             		#i18n{digglike.accueil.labelStatisticsComment}
+              </td>
+        </tr>	
+	    </table>
+	 </div>
+
+ 
+
+ 

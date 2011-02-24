@@ -1,0 +1,146 @@
+ <#include "/admin/util/editor/editor.html" />
+<div class="content-box">
+ <h2>#i18n{digglike.modifyEntry.titleQuestion}:'${entry.digg.title}'</h2>
+ <form action="jsp/admin/plugins/digglike/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+    <input name="id_entry" value="${entry.idEntry}" type="hidden">
+	<p>
+    	<label for="title">#i18n{digglike.createEntry.labelTitle} *  : </label>
+    	<input type="text" name="title" id="title" size="80" value="${entry.title}" maxlength="255" />
+    	<br/>
+		<label>&nbsp;</label>#i18n{digglike.createEntry.labelTitleComment}
+ 	</p>
+   <p>
+     <label for="help_message">#i18n{digglike.createEntry.labelHelpMessage} : </label>
+       <textarea  name="help_message"  id="help_message" rows="20" cols="90">${entry.helpMessage}</textarea>
+	
+	 <br/>
+	 <label>&nbsp;</label> #i18n{digglike.createEntry.labelHelpMessageComment}
+	</p>
+    <p>
+     <label for="comment"> #i18n{digglike.createEntry.labelComment} : </label>
+
+     <textarea name="comment" cols="80" rows="2">${entry.comment}</textarea>
+     </p>
+    <p>
+     <label for="">#i18n{digglike.createEntry.labelType} : </label>
+             ${entry.entryType.title}
+	</p>
+	 <p>
+  		<label for="value">#i18n{digglike.createEntry.labelValueDefault} : </label>
+		<input type="text" name="value" id="value" size="80" value="${entry.defaultValue}"/>
+			
+	</p>
+  <p>
+    	<label for="mandatory">#i18n{digglike.createEntry.labelMandatory} : </label>
+   		 <#if entry.mandatory>
+   		 	<input name="mandatory" value="1" type="checkbox" checked="checked" >
+   		 <#else>
+   			<input name="mandatory" value="1" type="checkbox" >
+   		 </#if>	
+   </p>
+     <p>
+	    <label for="width">#i18n{digglike.createEntry.labelWidth} * : </label>
+	    <#if entry.width!=-1>
+	     <input type="text" name="width" id="width" size="5" value="${entry.width}" />
+	    <#else>
+	      <input type="text" name="width" id="width" size="5" value="" />
+	    </#if>		
+	    		
+  	 </p>
+  	 <p>
+	    <label for="max_size_enter">#i18n{digglike.createEntry.labelMaxSizeEnter} : </label>
+	    <#if entry.maxSizeEnter!=-1>
+	    	<input type="text" name="max_size_enter" id="max_size_enter" size="5" value="${entry.maxSizeEnter}" />
+	     <#else>
+   			<input type="text" name="max_size_enter" id="max_size_enter" size="5" value="" />
+	      </#if>			
+	   </p>
+	  	<p>
+	    	<label for="mandatory">#i18n{digglike.createEntry.labelShowInDiggSubmitList} : </label>
+	   		 <#if entry.showInDiggSubmitList>
+	   		 	<input name="show_in_digg_submit_list" value="1" type="checkbox" checked="checked" >
+	   		 <#else>
+	   		 	<input name="show_in_digg_submit_list" value="1" type="checkbox" >
+	   		 </#if>
+	   		 <br/>
+		    <label>&nbsp;</label>#i18n{digglike.createDigg.labelShowInDiggSubmitListComment}
+	   </p>
+   <p>
+  		<input type="submit" value="#i18n{digglike.modifyEntry.buttonSave}" class="button"  name="save" / >
+  		<input type="submit" value="#i18n{digglike.modifyEntry.buttonApply}" class="button"  name="apply"/ >
+  		<input type="submit" value="#i18n{digglike.modifyEntry.buttonCancel}" class="button" name="cancel" />
+   </p>
+  </form>
+ </div>
+
+<div class="content-box">
+	          <h2>#i18n{digglike.createEntry.manageRegularExpression.title}</h2>
+				<div class="highlight-box">
+		         	 <p style="text-align:right;margin-right:20px;">
+		           		 #i18n{digglike.createEntry.manageRegularExpression.labelNumberRegularExpression} <b>${number_items}</b>
+		         	 </p>
+		            <p>
+		            <form  method="post"  action="jsp/admin/plugins/digglike/DoInsertVerification.jsp#list"> 
+		              <input name="id_entry" value="${entry.idEntry}" type="hidden">
+		            <label for="id_expression">
+		                	 #i18n{digglike.createEntry.manageRegularExpression.labelInsert}
+		              	</label>
+		               	<@combo name="id_expression"  items=regular_expression_list default_value=-1 />
+						<input value="#i18n{digglike.createEntry.manageRegularExpression.buttonInsert}" class="button"  type="submit">
+						 <br/>
+						 <br/>
+	 				
+	 					<label>&nbsp;</label> #i18n{digglike.createEntry.manageRegularExpression.labelInsertComment}
+		            </form>
+		        </p>
+		        <p>&nbsp;</p>
+	        </div>
+		   <form method="post"  action="jsp/admin/plugins/digglike/ModifyEntry.jsp?id_entry=${entry.idEntry}#list">
+	        <@pagination paginator=paginator />
+				<!-- Number of feeds per page selector -->
+	        		#i18n{digglike.createEntry.manageRegularExpression.labelItemsPerPage} :
+	        		<select name="items_per_page">
+	            		<#list [ "5" , "10" , "20" , "50" ] as nb>
+	            			<#if nb_items_per_page = nb >
+	             				<option selected="selected" value="${nb}">${nb}</option>
+	            			<#else>
+	             				<option value="${nb}">${nb}</option>
+	            		</#if>
+	            </#list>
+	        </select>
+	        <input type="submit" class="button" value="#i18n{digglike.createEntry.manageRegularExpression.buttonItemsPerPage}" />
+	    </form>
+	    <a name="list" id="list"></a>
+        <table width="100%">
+          <tr> 
+            <th > #i18n{digglike.createEntry.manageRegularExpression.rowTitle}
+            </th>
+            <th > #i18n{digglike.createEntry.manageRegularExpression.rowInformationMessage}
+            </th>
+            <th> #i18n{digglike.createEntry.manageRegularExpression.rowValidExemple}
+            </th>
+			<th> #i18n{digglike.createEntry.manageField.rowActions}
+            </th>
+          </tr>
+           <#list list as expression>
+          	<tr>
+            	<td >
+            		${expression.title}
+              	</td>
+	            <td>
+	           		${expression.informationMessage}
+	           </td>
+	            <td >
+	       			  ${expression.validExemple}  	
+	            </td >
+	            <td >
+	             	  <a href="jsp/admin/plugins/digglike/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_entry=${entry.idEntry}#list">
+	                  <img src="images/admin/skin/plugins/digglike/actions/delete.png" alt="#i18n{digglike.createEntry.manageField.titleDelete}" title="#i18n{digglike.createEntry.manageField.titleDelete}" />
+	                </a>
+	             </td>
+	          </tr>
+			</#list> 
+        </table> 
+    </div>
+
+ <@initEditor />

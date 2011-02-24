@@ -1,0 +1,45 @@
+
+<#if digg_submit.diggSubmitType?exists>
+	<div style="padding:10px; min-height:180px; background-image:none; background-color: ${digg_submit.diggSubmitType.color!'#FFFFFF'};" class="portlet">
+	<div style="position: absolute; width: 50px;"><img width="50" style="margin-left: -20px; margin-top: -20px;" src="${digg_submit.diggSubmitType.imageUrl!''}"/></div>
+</#if>
+<#if !digg_submit.diggSubmitType?exists>
+	<div style="padding:10px; min-height:180px;" class="portlet">
+</#if> 
+	<div style="width:100%; text-align:right; margin-top: 10px;">
+		<#if digg_submit.numberScore?exists>
+			<div style="padding: 0 10px; width:30px">${digg_submit.numberScore}</div>
+		</#if>
+		<#if digg_submit_vote_type?exists>
+			<div style="width:150px">${digg_submit_vote_type}</div>
+		</#if>
+	</div>
+	<#if digg_submit.diggSubmitValue?exists>
+		${digg_submit.diggSubmitValue}
+	</#if>
+	<#if lutece_user?exists>
+		<div class="user-info" style="text-align:right">
+			#i18n{digglike.diggListSubmit.postByUser} : 
+			<#if lutece_user?exists>
+				${lutece_user!""}
+			<#else>
+				${lutece_user.getUserInfo("user.name.given")} ${lutece_user.getUserInfo("user.name.family")}
+			</#if>
+		</div>
+	</#if>
+</div>
+<#if digg_submit_moderate>
+	<div class="comment-link -lutece-border-radius">
+		<a href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=0&id_digg_submit=${digg_submit.idDiggSubmit}&report=1&digg_detail=1#digg${digg_submit.idDiggSubmit}">#i18n{digglike.diggListSubmit.labelReport}</a>
+	</div>
+</#if>
+<#if authorized_comment>
+	<#if list_comment?has_content>
+		<div class="-lutece-title-3" style="padding-top:10px;">#i18n{digglike.diggDetail.labelComments}</div>
+		${list_comment}
+	<#else>
+		<div>
+			<a href="${fullUrl}?page=digg&id_digg=${id_digg}&id_digg_submit=${digg_submit.idDiggSubmit}&digg_comment=1&digg_detail=1">${digg_submit.numberCommentEnable} #i18n{digglike.diggDetail.labelComments}</a>
+		</div>
+	</#if>
+</#if>

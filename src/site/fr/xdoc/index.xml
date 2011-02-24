@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<properties>
+		<title>Introduction</title>
+	</properties>
+	<body>
+		<section name="Descriptif du plugin">
+			<subsection name="Introduction">
+				<p>
+					Le plugin Digglike permet aux utilisateurs de déposer du contenu sur le site en vue de le soumettre aux votes 
+					et commentaires des visiteurs.
+				</p>
+			</subsection>
+			<subsection name="Principales fonctionnalités">
+				<ul>
+				  <li>Création dynamique d'un type de contenu pouvant être soumis par les utilisateurs. Un type de contenu est créé en sélectionnant les différents champs qui devront être renseignés par l'utilisateur lors de la soumission d'une proposition.</li>
+				  <li>Gestion du contenu déposé par les utilisateurs (publication, dé publication, suppression de certaines propositions et de commentaires).</li>
+				  <li>Possibilité de filtrer les propositions par date de publication, catégorie ou par l'intermédiaire d'un champs de recherche.</li>
+				  <li>Possibilité d'ordonner les propositions par popularité ou ordre chronologique.</li>
+				</ul>
+			</subsection>
+			<subsection name="Gestion des authentifications">
+				<ul>
+				  <li>Possibilité d'exiger que l'utilisateur soit authentifié pour pouvoir voter, commenter ou soumettre une proposition.</li>
+				  <li>Possibilité d'empêcher un utilisateur de voter plusieurs fois pour la même proposition.</li>
+				</ul>
+			</subsection>
+			<subsection name="Modération du contenu déposé par les utilisateurs">
+				<ul>
+				  <li>Possibilité d'exiger que les propositions et commentaires ne soient publiés qu'après vérification par le ou les modérateurs du digg.</li>
+				  <li>Notification par email lors de la soumission d'une proposition, d'un commentaire ou d'un signalement d'une proposition considérée comme inadéquate.</li>
+				</ul>
+			</subsection>
+			<subsection name="Autre fonctionnalités">
+				<ul>
+				  <li>Activation, désactivation d'un digg avec message d'indisponibilité.</li>
+				  <li>Consultation des propositions et des commentaires avec possibilité d'export.</li>
+				  <li>Contrôle des saisies utilisateurs par expressions régulières.</li>
+				  <li>Possibilité d'ajouter un Captcha dans le formulaire de saisie d'une proposition.(i.e disponible par l'ajout d'un Captcha )</li>
+				  <li>Gestion des expressions régulières, gestion des xsl d'export, gestion des catégories… </li>
+				</ul>
+			</subsection>
+		</section>
+	</body>
+</document>

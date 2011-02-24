@@ -1,0 +1,471 @@
+ <#include "/admin/util/editor/editor.html" />
+ <script language="JavaScript" type="text/javascript">
+	function displayAuthorizedComment()
+	{
+		
+	
+		displayId('p_disable_new_comment');
+		if(document.getElementById('disable_new_comment').checked)
+		{
+		 	displayId('p_id_mailing_list_comment');
+		}
+		
+	}
+	function doDisplayMsg(isChecked)
+		{
+
+			if (isChecked) 
+			{
+				displayId('show_manage_display');
+			} 
+			else 
+			{
+				hideId('show_manage_display');
+			
+			}
+		}
+	
+</script> 
+
+ 
+ <div class="content-box">
+  <h2> #i18n{digg.modifyDigg.title}</h2>
+   <form action="jsp/admin/plugins/digglike/DoModifyDigg.jsp" method="post" name="" id=""  >
+  <input name="id_digg" value="${digg.idDigg}" type="hidden">
+     <p>
+		    <label for="title">#i18n{digglike.createDigg.labelTitle} * : </label>
+		      <#if digg.title?exists>
+		      	<input type="text" name="title" id="" size="80" value="${digg.title}" maxlength="255"/>
+			  <#else>
+				<input type="text" name="title" id="" size="80" value="" maxlength="255"/>
+			   </#if>
+			 <br/>
+			<label>&nbsp;</label>#i18n{digglike.createDigg.labelTitleComment}
+	   </p>
+	   <p>
+		    <label for="header">#i18n{digglike.createDigg.labelHeader} : </label>
+		      <div  class="editor" >
+	     		<#if digg.header?exists>
+	     			<textarea name="header" id="unavailability_message" rows="20" cols="90"   class="richtext"  style="width:100%">${digg.header}</textarea>
+		 		<#else>
+		 			<textarea name="header" id="unavailability_message" rows="20" cols="90"   class="richtext"  style="width:100%"></textarea>
+		 		</#if>
+		 	<br/>
+		 	</div>
+			<label>&nbsp;</label>#i18n{digglike.createDigg.labelHeaderComment}
+	   </p>
+	    <p>
+		    <label for="libelle_contribution">#i18n{digglike.createDigg.labelLibelleContribution} * : </label>
+		    <#if digg.libelleContribution?exists>
+		       <input type="text" name="libelle_contribution" id="libelle_contribution" size="80" value="${digg.libelleContribution}"maxlength="255" />
+			 <#else>
+			   <input type="text" name="libelle_contribution" id="libelle_contribution" size="80" value="${default_message.libelleContribution}" maxlength="255"/>
+			 </#if>
+			 <br/>
+			<label>&nbsp;</label>#i18n{digglike.createDigg.labelLibelleContributionComment}
+	   </p>
+	   <p>
+	     	<label for="unavailability_message">#i18n{digglike.createDigg.labelUnavailabilityMessage} * : </label>
+	     	 <div  class="editor" >
+	     		<#if digg.unavailabilityMessage?exists>
+	     			<textarea name="unavailability_message" id="unavailability_message" rows="20" cols="90"   class="richtext"  style="width:100%">${digg.unavailabilityMessage}</textarea>
+		 		<#else>
+		 			<textarea name="unavailability_message" id="unavailability_message" rows="20" cols="90"   class="richtext"  style="width:100%">${default_message.unavailabilityMessage}</textarea>
+		 		
+		 		</#if>
+		 		<br/>
+		 	</div>	
+	     	<label>&nbsp;</label>
+			#i18n{digglike.createDigg.labelUnavailabilityMessageComment}   
+ 	    </p>
+  		<p>
+		    <label for="workgroup">#i18n{digglike.createDigg.labelWorkgroup}  : </label>
+		     <#if digg.workgroup?exists>
+		     	<@combo name="workgroup"  items=user_workgroup_list default_value=digg.workgroup />
+		     <#else>
+		     	<@combo name="workgroup"  items=user_workgroup_list default_value="" />
+			 </#if>
+			 <br/>
+			<label>&nbsp;</label>
+			#i18n{digglike.createDigg.labelWorkgroupComment}
+	   	</p>
+	   	<p>
+		    <label for="id_vote_type">#i18n{digglike.createDigg.labelVoteType}  : </label>
+		    <#if digg.voteType?exists>
+		    	 <@combo name="id_vote_type"   items=vote_type_list default_value=digg.voteType.idVoteType />
+			 <#else>
+			  	<@combo name="id_vote_type"   items=vote_type_list default_value="-1" />
+			 </#if>
+			 <br/>
+			<label>&nbsp;</label>
+			#i18n{digglike.createDigg.labelVoteType}
+	   	</p>
+	   	 
+	   	
+	   	<!-- 
+	   	 <p>            
+            <label for="active_digg_proposition_state"> #i18n{digglike.createDigg.labelActiveDiggPropositionState}  :             
+            </label>            
+            <input name="active_digg_proposition_state" value="${yes_value}" type="radio"  onclick="displayId('p_number_vote_required')" <#if digg.activeDiggPropositionState> checked='checked'</#if>>  #i18n{digglike.digglike.labelYes}            
+            <input name="active_digg_proposition_state" value="${no_value}" type="radio"   onclick="hideId('p_number_vote_required')" <#if !digg.activeDiggPropositionState> checked='checked'</#if>>#i18n{digglike.digglike.labelNo}            
+            <br/>            
+            <label>              &nbsp;             
+            </label> #i18n{digglike.createDigg.labelActiveDiggPropositionStateComment}      
+          </p>
+          
+          <p  id="p_number_vote_required">              
+            <label for="number_vote_required">#i18n{digglike.createDigg.labelActiveNumberVoteRequired}  :               
+            </label> 
+            <#if digg.numberVoteRequired!=-1>
+            	<input type="text" name="number_vote_required" id="number_vote_required" size="4" value="${digg.numberVoteRequired}" />             
+             <#else>	
+            	<input type="text" name="number_vote_required" id="number_vote_required" size="4" value="" />              
+            </#if>
+            <br/>              
+            <label>                &nbsp;               
+            </label> #i18n{digglike.createDigg.labelActiveNumberVoteRequiredComment}          
+          </p>  
+          --> 
+          	
+         
+           <p>              
+            <label for="number_day_required">#i18n{digglike.createDigg.labelNumberDayRequired}  :               
+            </label>    
+            <#if digg.numberDayRequired!=-1>          
+            	<input type="text" name="number_day_required" id="number_day_required" size="4" value="${digg.numberDayRequired}" />              
+            <#else>
+               <input type="text" name="number_day_required" id="number_day_required" size="4" value="" />
+            </#if>
+            <br/>              
+            <label>                &nbsp;               
+            </label> #i18n{digglike.createDigg.labelNumberDayRequiredComment}          
+          </p>   
+        <#if authentification_enable> 	   
+          <p>            
+            <label for="required_authentification">#i18n{digglike.createDigg.labelRequiredAuthentification} :             
+            </label>            
+            <input name="active_digg_submit_authentification" value="active_digg_submit_authentification" type="checkbox" <#if digg.activeDiggSubmitAuthentification> checked='checked'</#if>>#i18n{digglike.createDigg.labelRequiredAuthentificationCreation}           
+            <input name="active_vote_authentification" value="active_vote_authentification" type="checkbox" <#if digg.activeVoteAuthentification> checked='checked'</#if>>#i18n{digglike.createDigg.labelRequiredAuthentificationVote}             
+            <input name="active_comment_authentification" value="active_comment_authentification" type="checkbox" <#if digg.activeCommentAuthentification> checked='checked'</#if>>#i18n{digglike.createDigg.labelRequiredAuthentificationCommentSubmit}            
+            <br/>            
+            <label>              &nbsp;             
+            </label> #i18n{digglike.createDigg.labelRequiredAuthentificationComment}          
+          </p>
+         </#if>
+          <p>
+		    <label for="role">#i18n{digglike.createDigg.labelRole} : </label>
+	        	 <@combo name="role" default_value="${digg.role}" items=role_list />
+			 <br/>
+			  <label>&nbsp;</label>
+			#i18n{digglike.createDigg.labelRoleComment}
+		 </p>
+          <p>            
+            <label for="disable_new_digg_submit"> #i18n{digglike.createDigg.labelDisableNewDiggSubmit}  :             
+            </label>            
+            <input name="disable_new_digg_submit" value="${yes_value}" type="radio"   onclick="displayId('p_id_mailing_list_digg_submit')" <#if digg.disableNewDiggSubmit> checked='checked'</#if>>  #i18n{digglike.digglike.labelYes}            
+            <input name="disable_new_digg_submit" value="${no_value}" type="radio"   onclick="hideId('p_id_mailing_list_digg_submit')" <#if !digg.disableNewDiggSubmit> checked='checked'</#if>>#i18n{digglike.digglike.labelNo}            
+            <br/>            
+            <label>              &nbsp;             
+            </label> #i18n{digglike.createDigg.labelDisableNewDiggSubmitComment}      
+          </p>
+                                            
+	      <p id="p_id_mailing_list_digg_submit">
+	    	<label for="id_mailing_list_digg_submit">#i18n{digglike.createDigg.labelMailingListDiggSubmit} : </label>
+		    <@combo name="id_mailing_list_digg_submit"   items=mailing_list default_value=digg.idMailingListDiggSubmit />
+			   <br/>
+			  <label>&nbsp;</label>
+			#i18n{digglike.createDigg.labelMailingListDiggSubmitComment}
+		 </p>
+		 
+		 <p>            
+            <label for="new_digg_submit_mail"> #i18n{digglike.createDigg.labelMailNewDiggSubmit}  :             
+            </label>            
+            <input name="enable_mail_new_digg_submit" value="${yes_value}" type="radio"   onclick="displayId('p_id_mailing_list_new_digg_submit')" <#if digg.enableMailNewDiggSubmit> checked='checked'</#if>>  #i18n{digglike.digglike.labelYes}            
+            <input name="enable_mail_new_digg_submit" value="${no_value}" type="radio"   onclick="hideId('p_id_mailing_list_new_digg_submit')" <#if !digg.enableMailNewDiggSubmit> checked='checked'</#if>>#i18n{digglike.digglike.labelNo}            
+            <br/>            
+            <label>              &nbsp;             
+            </label> #i18n{digglike.createDigg.labelMailNewDiggSubmitComment}      
+          </p>
+                                            
+	      <p id="p_id_mailing_list_new_digg_submit">
+	    	<label for="id_mailing_list_new_digg_submit">#i18n{digglike.createDigg.labelMailingListDiggSubmit} : </label>
+		    <@combo name="id_mailing_list_new_digg_submit"   items=mailing_list default_value=digg.idMailingListNewDiggSubmit />
+			   <br/>
+			  <label>&nbsp;</label>
+			#i18n{digglike.createDigg.labelMailingListDiggSubmitComment}
+		 </p>
+		 
+		 
+		 
+		 
+		 
+		 <p>            
+            <label for="authorized_comment"> #i18n{digglike.createDigg.labelAuthorizedCommentSubmit}  :             
+            </label>            
+            <input id="disable_new_comment" name="authorized_comment" value="${yes_value}" type="radio"  onclick="displayAuthorizedComment()" <#if digg.authorizedComment> checked='checked'</#if>>  #i18n{digglike.digglike.labelYes}            
+            <input name="authorized_comment" value="${no_value}" type="radio"   onclick="hideId('p_disable_new_comment');hideId('p_id_mailing_list_comment');"<#if !digg.authorizedComment> checked='checked'</#if>>#i18n{digglike.digglike.labelNo}            
+            <br/>            
+            <label>              &nbsp;             
+            </label>  #i18n{digglike.createDigg.labelAuthorizedCommentSubmitComment}    
+          </p>
+          
+          <p id="p_disable_new_comment">            
+            <label for="disable_new_comment"> #i18n{digglike.createDigg.labelDisableNewCommentSubmit}  :             
+            </label>            
+            <input name="disable_new_comment" value="${yes_value}" type="radio"   onclick="displayId('p_id_mailing_list_comment')" <#if digg.disableNewComment> checked='checked'</#if>>  #i18n{digglike.digglike.labelYes}            
+            <input name="disable_new_comment" value="${no_value}" type="radio"   onclick="hideId('p_id_mailing_list_comment')" <#if !digg.disableNewComment> checked='checked'</#if>>#i18n{digglike.digglike.labelNo}            
+            <br/>            
+            <label>              &nbsp;             
+            </label> #i18n{digglike.createDigg.labelDisableNewCommentSubmitComment}      
+          </p>
+          
+          <p id="p_id_mailing_list_comment">
+	    	<label for="id_mailing_list_comment">#i18n{digglike.createDigg.labelMailingListCommentSubmit} : </label>
+		    <@combo name="id_mailing_list_comment"   items=mailing_list default_value=digg.idMailingListComment />
+			   <br/>
+			  <label>&nbsp;</label>
+			#i18n{digglike.createDigg.labelMailingListCommentSubmitComment}
+		 </p>
+		 
+		 <p>
+		  	<label for="confirmation_message">#i18n{digglike.createDigg.labelConfirmationMessage} :</label>
+			<textarea name="confirmation_message" id="" rows="5" cols="80"><#if digg.confirmationMessage?exists >${digg.confirmationMessage}</#if></textarea>
+			<br/>
+			<label>&nbsp;</label>
+			#i18n{digglike.createDigg.labelConfirmationMessageComment}
+          </p>	
+		 
+		  <p>            
+            <label for="limit_number_vote"> #i18n{digglike.createDigg.labelLimitNumberVote}  :             
+            </label>            
+            <input name="limit_number_vote" value="${yes_value}" type="radio" <#if digg.limitNumberVote> checked='checked'</#if> >  #i18n{digglike.digglike.labelYes}            
+            <input name="limit_number_vote" value="${no_value}" type="radio" <#if !digg.limitNumberVote> checked='checked'</#if> >#i18n{digglike.digglike.labelNo}            
+            <br/>            
+            <label>              &nbsp;             
+            </label> #i18n{digglike.createDigg.labelLimitNumberVoteComment}      
+          </p>
+		<#if is_active_captcha> 
+			 <p>
+			    <label for="">#i18n{digglike.createDigg.labelActiveCaptcha} : </label>
+			    <input name="active_captcha" value="1" type="checkbox" <#if digg.activeCaptcha> checked='checked'</#if>>
+				<br/>
+			    <label>&nbsp;</label>
+			    #i18n{digglike.createDigg.labelActiveCaptchaComment}
+		   </p>
+		</#if>   
+	    <p>
+			<label for="">#i18n{digglike.createDigg.labelLibelleValidateButton} * : </label>
+			<#if digg.libelleValidateButton?exists>
+				<input type="text" name="libelle_validate_button" id="" size="80" value="${digg.libelleValidateButton}" maxlength="255" />
+	   		<#else>
+	   			<input type="text" name="libelle_validate_button" id="" size="80" value="${default_message.libelleValidateButton}" maxlength="255" />
+	   		</#if>
+	   </p>
+	   	<h3>
+     			<a href="javascript:doDisplayMsg(true)" ><img src="images/admin/skin/open_block.gif" alt="#i18n{form.createForm.titleOpen}"></a>
+    			 <a href="javascript:doDisplayMsg(false)" ><img src="images/admin/skin/closed_block.gif" alt="#i18n{form.createForm.titleClose}"></a>
+    			#i18n{digglike.createDigg.labelTitleManageDiggPage}
+    	</h3>
+	  <div class="highlight-box"  id="show_manage_display"> 
+		 <p>
+			    <label for="number_digg_submit_caracters_shown">#i18n{digglike.createDigg.labelNumberDiggSubmitCaractersShown} * : </label>
+			    <#if digg.numberDiggSubmitCaractersShown!=-1>
+			     	<input type="text" name="number_digg_submit_caracters_shown" id="number_digg_submit_caracters_shown" size="5" value="${digg.numberDiggSubmitCaractersShown}" maxlength="10" />
+				<#else>
+					<input type="text" name="number_digg_submit_caracters_shown" id="number_digg_submit_caracters_shown" size="5" value="" maxlength="10" />
+				</#if>
+				<br/>
+				<label>&nbsp;</label>#i18n{digglike.createDigg.labelNumberDiggSubmitCaractersShownComment}
+	  	 </p>
+	  	
+	  	<p>            
+            <label for="active_categiry_block">#i18n{digglike.createDigg.labelShowBlock} :             
+            </label>            
+            <input name="show_category_block" value="show_category_block" type="checkbox" <#if digg.showCategoryBlock> checked='checked'</#if>>#i18n{digglike.createDigg.labelCategoryBlock}        
+            <input name="show_top_score_block" value="show_top_score_block"  type="checkbox" <#if digg.showTopScoreBlock> checked='checked'</#if>>#i18n{digglike.createDigg.labelTopScoreBlock}           
+            <input name="show_top_comment_block" value="show_top_comment_block" type="checkbox" <#if digg.showTopCommentBlock> checked='checked'</#if> >#i18n{digglike.createDigg.labelTopCommentBlock}         
+            <br/>            
+            <label>              &nbsp;             
+            </label> #i18n{digglike.createDigg.labelShowBlockComment}          
+          </p>
+	   <p>
+		    <label for="number_digg_submit_in_top_score">#i18n{digglike.createDigg.labelNumberDiggSubmitInTopScore}  : </label>
+		    <#if digg.numberDiggSubmitInTopScore!=-1>
+		     	<input type="text" name="number_digg_submit_in_top_score" id="number_digg_submit_in_top_score" size="3" value="${digg.numberDiggSubmitInTopScore}" maxlength="10" />
+			<#else>
+				 <input type="text" name="number_digg_submit_in_top_score" id="number_digg_submit_in_top_score" size="3" value="" maxlength="10" />
+			</#if>
+			<br/>
+			<label>&nbsp;</label>#i18n{digglike.createDigg.labelNumberDiggSubmitInTopScoreComment}
+	   </p>  
+	   <p id="p_number_digg_submit_in_top_comment">
+		    <label for="number_digg_submit_in_top_comment">#i18n{digglike.createDigg.labelNumberDiggSubmitInTopComment}  : </label>
+		     <#if digg.numberDiggSubmitInTopComment!=-1 >
+		     	<input type="text" name="number_digg_submit_in_top_comment" id="number_digg_submit_in_top_comment" size="3" value="${digg.numberDiggSubmitInTopComment}" maxlength="10" />
+			<#else>
+				<input type="text" name="number_digg_submit_in_top_comment" id="number_digg_submit_in_top_comment" size="3" value="" maxlength="10" />
+			</#if>
+			 <br/>
+			<label>&nbsp;</label>#i18n{digglike.createDigg.labelNumberDiggSubmitInTopCommentComment}
+	    </p>
+	    <p>
+			    <label for="">#i18n{digglike.createDigg.labelActiveDiggSubmitPaginator} : </label>
+			   
+			   
+			    <input name="active_digg_submit_paginator" value="${yes_value}" type="checkbox" <#if digg.activeDiggSubmitPaginator> checked='checked'</#if>>
+				<br/>
+			    <label>&nbsp;</label>
+			    #i18n{digglike.createDigg.labelActiveDiggSubmitPaginatorComment}
+		   </p>
+		   
+		    <p id="p_number_digg_submit_per_page">
+		    <label for="number_digg_submit_per_page">#i18n{digglike.createDigg.labelNumberDiggSubmitPerPage}  : </label>
+		   <#if digg.numberDiggSubmitPerPage!=-1 >
+		     <input type="text" name="number_digg_submit_per_page" id="number_digg_submit_per_page" size="3" value="${digg.numberDiggSubmitPerPage}" maxlength="10" />
+			<#else>
+			  <input type="text" name="number_digg_submit_per_page" id="number_digg_submit_per_page" size="3" value="" maxlength="10" />
+			</#if>
+			 <br/>
+			<label>&nbsp;</label>#i18n{digglike.createDigg.labelNumberDiggSubmitPerPageComment}
+	   	</p>
+	   	<p>
+			<label for="id_theme_list">#i18n{digglike.createDigg.labelThemeXpage} :</label>
+			<@combo name="id_theme_list" items=theme_list default_value=digg.codeTheme />
+			<br />
+			<label>&nbsp;</label>#i18n{digglike.createDigg.labelThemeXpageComment}
+		</p>
+ 	</div>
+   <p>
+  		<input type="submit" value="#i18n{digglike.createDigg.buttonSave}" class="button"  name="save" />
+  		<input type="submit" value="#i18n{digglike.modifyDigg.buttonApply}" class="button"  name="apply"/>
+  		<input type="submit" value="#i18n{digglike.createDigg.buttonCancel}" class="button" name="cancel" />
+   </p>
+ </form>
+ </div>
+   <a name="list" id="list"></a>
+	<div class="content-box">
+	          <h2>#i18n{digglike.modifyDigg.manageEnter.title}</h2>
+				 <div class="highlight-box">
+		         	 <p style="text-align:right;margin-right:20px;">
+		           		 #i18n{digglike.modifyDigg.manageEnter.labelQuestionNumber} <b>${number_question}</b>
+		         	 </p>
+		           	 <p>
+		            <form  method="post"  action="jsp/admin/plugins/digglike/CreateEntry.jsp"> 
+		              	<label for="id_type">
+		                	 #i18n{digglike.modifyDigg.manageEnter.labelInsertEntry} : 
+		              	</label>
+		               	<@combo name="id_type"  items=entry_type_list default_value=-1 />
+						<input value="#i18n{digglike.modifyDigg.manageEnter.buttonInsertEntry} " class="button"  type="submit">
+		            </form>
+		        </p>
+		        <p>&nbsp;</p>
+	        </div>
+        <br />
+	        <form method="post"  action="jsp/admin/plugins/digglike/ModifyDigg.jsp?id_digg=${digg.idDigg}#list">
+	        <@pagination paginator=paginator />
+				<!-- Number of feeds per page selector -->
+	        		#i18n{digglike.modifyDigg.manageEnter.labelItemsPerPage} :
+	        		<select name="items_per_page">
+	            		<#list [ "5" , "10" , "20" , "50" ] as nb>
+	            			<#if nb_items_per_page = nb >
+	             				<option selected="selected" value="${nb}">${nb}</option>
+	            			<#else>
+	             				<option value="${nb}">${nb}</option>
+	            		</#if>
+	            </#list>
+	        </select>
+	        <input type="submit" class="button" value="#i18n{digglike.modifyDigg.manageEnter.buttonItemsPerPage}" />
+	    </form>
+	  
+        <table width="100%">
+          <tr> 
+            <th width="50%"> #i18n{digglike.modifyDigg.manageEnter.rowTitle}
+            </th>
+            <th width="15%"> #i18n{digglike.modifyDigg.manageEnter.rowType}
+            </th>
+           
+            <th width="20%"> #i18n{digglike.modifyDigg.manageEnter.rowActions}
+            </th>
+          </tr>
+           <#list entry_list as entry>
+          	<tr>
+	            		
+               <td>
+          				<a href="jsp/admin/plugins/digglike/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="bullet-link">
+            					${entry.title}
+						
+						</a>
+				</td>
+				
+	           	 <td>
+	           			${entry.entryType.title}
+	           	</td>
+	           
+	              <td >
+	              <#if id_entry_first_in_the_list!=entry.idEntry>
+	              	<a href="jsp/admin/plugins/digglike/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}#list">
+	                  <img src="images/admin/skin/plugins/digglike/actions/up.png"  alt="#i18n{digglike.modifyDigg.manageEnter.titleMoveUp}" title="#i18n{digglike.modifyDigg.manageEnter.titleMoveUp}">
+	                 </a>
+	                </#if>
+	               <#if id_entry_last_in_the_list!=entry.idEntry>
+	                	<a href="jsp/admin/plugins/digglike/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}#list">
+	                 	 <img src="images/admin/skin/plugins/digglike/actions/down.png" alt="#i18n{digglike.modifyDigg.manageEnter.titleMoveDown}" title="#i18n{digglike.modifyDigg.manageEnter.titleMoveDown}">
+	                 	</a>
+	                 </#if>
+	                <a href="jsp/admin/plugins/digglike/DoCopyEntry.jsp?id_entry=${entry.idEntry}#list">
+				        	<img src="images/admin/skin/plugins/digglike/actions/editcopy.png" alt="#i18n{digglike.modifyDigg.manageEnter.titleCopy}" title="#i18n{digglike.modifyDigg.manageEnter.titleCopy}" />
+				     </a>
+				     <a href="jsp/admin/plugins/digglike/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}#list">
+	                  <img src="images/admin/skin/plugins/digglike/actions/delete.png" alt="#i18n{digglike.modifyDigg.manageEnter.titleDelete}" title="#i18n{digglike.modifyDigg.manageEnter.titleDelete}" />
+	                </a>
+	             </td>
+	          </tr>
+			</#list> 
+        </table> 
+    </div>
+    <div class="content-box">
+    <form method="post"  action="jsp/admin/plugins/digglike/DoInsertCategoryAssociation.jsp#list">
+     <input name="id_digg" value="${digg.idDigg}" type="hidden">
+	    <h2>#i18n{digglike.createDigg.labelCategoryTitleList} </h2>
+			<table>
+		     <tr>
+		        <th>#i18n{digglike.createDigg.labelCategoryRowTitle}</th>
+		         <th>#i18n{digglike.createDigg.labelCategoryRowAction}</th>
+		     </tr>
+		     <#if digg.categories?exists>
+				 <#list digg.categories as category>
+			     <tr>
+			       <td> ${category.title}</td>
+			        <td nowrap="nowrap" > 
+			        <a href="jsp/admin/plugins/digglike/DoRemoveCategoryAssociation.jsp?id_digg=${digg.idDigg}&id_category=${category.idCategory}#list">
+			        	<img src="images/admin/skin/plugins/digglike/actions/delete.png" alt="#i18n{digglike.createDigg.titleDeleteCategory}" title="#i18n{digglike.createDigg.titleDeleteCategory}" /></a> </td>
+			     </tr>
+			     </#list>
+		     </#if>
+		     </table>
+		     
+	 	   <p>
+	    	   <label for="id_category">#i18n{digglike.createDigg.labelCategoryTitle}:</label>
+	        	<@combo name="id_category"   items=category_list default_value="-1" />
+		    	<input type="submit" value="#i18n{digglike.createDigg.buttonInsertCategory}" class="button" name="insert_category" />
+	     	  <br>
+	    	</p>
+    </form>
+    </div>       
+ <@initEditor />
+<script language="JavaScript" type="text/javascript">
+	  <#if !digg.disableNewDiggSubmit> 
+	 	hideId('p_id_mailing_list_digg_submit');
+	 </#if>
+	 <#if !digg.enableMailNewDiggSubmit> 
+	 	hideId('p_id_mailing_list_new_digg_submit');
+	 </#if>
+	  <#if !digg.authorizedComment>
+		hideId('p_disable_new_comment');
+	hideId('p_id_mailing_list_comment');
+	 <#elseif !digg.disableNewComment>
+		hideId('p_id_mailing_list_comment');
+	</#if>
+	
+	  hideId('show_manage_display');
+</script> 

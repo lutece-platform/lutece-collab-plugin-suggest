@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Lutece - Form">
+	<body>
+		<links>
+			<item name="FR" href="/fr/index.html" />
+		</links>
+
+		<menu name="Overview">
+			<item name="Introduction" href="index.html" />
+			<item name="Download" href="download.html" />
+		</menu>
+
+		<menu name="Downloads" inherit="bottom">
+			<item name="Released versions" href="../../stable_builds/plugins/plugin-digglike/"/>
+			<item name="Nightly builds" href="../../nightly_builds/plugins/plugin-digglike/" />
+		</menu>
+
+		<menu ref="reports" />
+	</body>
+</project>

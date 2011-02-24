@@ -1,0 +1,47 @@
+ <#include "/admin/util/editor/editor.html" />
+  <div class="content-box">
+    <h2> #i18n{digglike.createRegularExpression.title}</h2>
+    <form method="post" action="jsp/admin/plugins/digglike/DoCreateRegularExpression.jsp" >
+        
+        <p>
+            <label for="title" >#i18n{digglike.createRegularExpression.labelTitle} : * </label>
+            <input type="text" size="20" id="title" name="title" maxlength="20"/>
+        </p>  
+        <p>
+            <label for="value" >#i18n{digglike.createRegularExpression.labelValue} : * </label>
+            <input type="text" size="80" id="value" name="value"  value=""/>
+        </p>		
+       <div class="content-box">
+  		<p>
+    		 <label for="valid_exemple">#i18n{digglike.createRegularExpression.labelValidExemple} : * </label>
+     		<input type="text" name="valid_exemple" value="" size="97" />
+	 		<br/>
+     		<label>&nbsp;</label>
+			#i18n{digglike.createRegularExpression.labelValidExempleComment}
+   		</p>
+  
+   <p>
+     <label for="information_message">	#i18n{digglike.createRegularExpression.labelInformationMessage} : * </label>
+     <div  class="editor">
+     	<textarea class="richtext" name="information_message" id="information_message" cols="80" rows="2"></textarea>
+	</div>
+	 <br/>
+     <label>&nbsp;</label>
+			#i18n{digglike.createRegularExpression.labelInformationMessageComment}
+   </p>
+   <p>
+     <label for="error_message">#i18n{digglike.createRegularExpression.labelErrorMessage} : * </label>
+     <div  class="editor">
+     	<textarea class="richtext" name="error_message" id="error_message" cols="80" rows="2"></textarea>
+	 </div>
+	 <br/>
+     <label>&nbsp;</label>
+			#i18n{digglike.createRegularExpression.labelErrorMessageComment}   
+	</p>
+     <p>
+      		<input type="submit" value="#i18n{digglike.createRegularExpression.buttonSave}" class="button" />
+            <input type="button" value="#i18n{digglike.createRegularExpression.buttonCancel}" class="button" onclick="javascript:history.go(-1)" />
+     </p>
+  </form>
+ </div>
+   <@initEditor />

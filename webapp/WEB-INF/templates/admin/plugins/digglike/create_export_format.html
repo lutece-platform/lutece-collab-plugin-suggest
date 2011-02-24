@@ -1,0 +1,29 @@
+  <div class="content-box">
+            
+    <h2> #i18n{digglike.createExportFormat.title}</h2>
+    <form method="post" action="jsp/admin/plugins/digglike/DoCreateExportFormat.jsp" enctype="multipart/form-data">
+        
+        <p>
+            <label for="title" >#i18n{digglike.createExportFormat.labelTitle} * : </label>
+            <input type="text" size="20" id="title" name="title" maxlength="20"/>
+        </p>  
+        <p>
+            <label for="description" >#i18n{digglike.createExportFormat.labelDescription} * : </label>
+            <input type="text" size="60" id="description" name="description" maxlength="255" value=""/>
+        </p>	
+        <p>
+            <label for="extension" >#i18n{digglike.createExportFormat.labelExtension} * : </label>
+            <input type="text" size="10" id="extension" name="extension" maxlength="10" value=""/>
+        </p>		
+        <p>
+            <label for="stylesheet_source" >#i18n{digglike.createExportFormat.labelXsl} * : </label>
+            <input type="file" id="stylesheet_source" name="stylesheet_source" size="60" maxlength="100"/>
+        </p>
+      	 <p>
+            
+            <input type="submit" value="#i18n{digglike.createExportFormat.buttonSave}" class="button" />
+            <input type="button" value="#i18n{digglike.createExportFormat.buttonCancel}" class="button" onclick="javascript:history.go(-1)" />
+        </p>
+
+    </form>
+        </div>
