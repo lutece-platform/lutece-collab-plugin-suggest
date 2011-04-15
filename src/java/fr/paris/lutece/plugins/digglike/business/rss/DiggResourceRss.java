@@ -44,6 +44,12 @@ import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitState;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.service.DigglikePlugin;
+import fr.paris.lutece.portal.business.rss.FeedResource;
+import fr.paris.lutece.portal.business.rss.FeedResourceImage;
+import fr.paris.lutece.portal.business.rss.FeedResourceItem;
+import fr.paris.lutece.portal.business.rss.IFeedResource;
+import fr.paris.lutece.portal.business.rss.IFeedResourceImage;
+import fr.paris.lutece.portal.business.rss.IFeedResourceItem;
 import fr.paris.lutece.portal.business.rss.ResourceRss;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -58,6 +64,7 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -77,8 +84,15 @@ public class DiggResourceRss extends ResourceRss
     private static final String TEMPLATE_TASK_EVALUATION_MODIFY_CONFIG = "admin/plugins/digglike/rss/resource_modify_config.html";
     private static final String TEMPLATE_PUSH_RSS_XML_DIGG = "admin/plugins/digglike/rss/rss_xml_digg.html";
     private static final String TEMPLATE_PUSH_RSS_XML_SUBMIT = "admin/plugins/digglike/rss/rss_xml_submit.html";
+    private static final String TEMPLATE_RSS_SUBMIT_DESCRIPTION = "admin/plugins/digglike/rss/rss_submit_description.html";
+    private static final String TEMPLATE_RSS_SUBMIT_ITEM_TITLE = "admin/plugins/digglike/rss/rss_submit_item_title.html";
+    private static final String TEMPLATE_RSS_DIGG_ITEM_TITLE ="admin/plugins/digglike/rss/rss_digg_item_title.html";
 
-    //	Markers
+    //JSPs
+    private static final String JSP_MANAGE_COMMENT_SUBMIT = "/jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=";
+    private static final String JSP_MANAGE_DIGG_SUBMIT = "/jsp/admin/plugins/digglike/ManageDiggSubmit.jsp?id_digg=";
+    
+    //Markers
     private static final String MARK_DIGG_LIST = "digglike_list";
     private static final String MARK_DIGG_LIST_DEFAULT_ITEM = "digglike_list_default_item";
     private static final String MARK_RSS_ID_DIGG = "id_digg";
@@ -102,9 +116,11 @@ public class DiggResourceRss extends ResourceRss
     private static final String PARAMETER_RSS_CHOICE = "rss_choice";
     private static final String PARAMETER_RSS_CHOICE_SUBMIT = "digg_submit";
     private static final String PARAMETER_ID_DIGG_SUBMIT = "id_digg_submit";
+    private static final String PARAMETER_URL_FEED_IMAGE = "/images/local/skin/valid-rss.png";
 
     //Properties
     private static final String FIELD_ID_DIGG = "digglike.resource_rss.label_digg";
+    private static final String FIELD_STATE = "digglike.resource_rss.state";
     private static final String FIELD_STATE_ENABLE = "digglike.resource_rss.enable";
     private static final String FIELD_STATE_DISABLE = "digglike.resource_rss.disable";
     private static final String FORMAT_RSS_DATE = "EEE, d MMM yyyy HH:mm:ss Z";
@@ -507,6 +523,175 @@ public class DiggResourceRss extends ResourceRss
         }
     }
 
+    /**
+     * Gets the feed with items
+     * @return the {@link IFeedResource}
+     */
+    public IFeedResource getFeed(  )
+    {
+    	String strRssFileLanguage = AppPropertiesService.getProperty( PROPERTY_SITE_LANGUAGE );
+    	Locale locale = new Locale( strRssFileLanguage );
+
+    	String strWebAppUrl = AppPropertiesService.getProperty( PROPERTY_WEBAPP_PROD_URL );
+    	String strSiteUrl = strWebAppUrl;
+
+    	Plugin pluginDiggglike = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
+    	DiggResourceRssConfig config = DiggResourceRssConfigHome.findByPrimaryKey( this.getId(  ), pluginDiggglike );
+
+    	if ( config.isSubmitRss(  ) )
+    	{
+    		//Submit Rss
+    		DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( config.getIdDiggSubmit(  ), pluginDiggglike );
+    		DiggSubmitState diggsubmitStage = diggSubmit.getDiggSubmitState(  );
+    		Category category = diggSubmit.getCategory(  );
+    		
+    		IFeedResource resource = new FeedResource(  );
+    		resource.setTitle( diggSubmit.getDiggSubmitTitle(  ) );
+    		resource.setLink( strSiteUrl + JSP_MANAGE_DIGG_SUBMIT + diggSubmit.getIdDiggSubmit(  ) );
+    		resource.setLanguage( strRssFileLanguage );
+    		
+    		Date date = new Date( diggSubmit.getDateResponse(  ).getTime(  ) );
+    		resource.setDate( date );
+    		
+    		IFeedResourceImage image = new FeedResourceImage(  );
+        	image.setUrl( strSiteUrl + PARAMETER_URL_FEED_IMAGE );
+        	image.setTitle( diggSubmit.getDiggSubmitTitle(  ) );
+    		image.setLink( strSiteUrl );
+        	
+        	resource.setImage( image );
+
+    		String strDescription;
+    		Map<String, Object> model = new HashMap<String, Object>(  );
+
+    		model.put( MARK_RSS_SITE_DESCRIPTION,
+    			diggSubmit.getDiggSubmitValue(  ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
+    		model.put( MARK_RSS_SITE_STATE, diggsubmitStage.getTitle(  ) );
+    		if ( category != null )
+    		{
+    			model.put( MARK_RSS_CATEGORY, category.getTitle(  ) );
+    		}
+    		model.put( MARK_RSS_NUMBER_VOTE, diggSubmit.getNumberVote(  ) );
+    		model.put( MARK_RSS_SCORE, diggSubmit.getNumberScore(  ) );
+    		
+    		HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_RSS_SUBMIT_DESCRIPTION, locale, model );
+            strDescription = template.getHtml(  );
+    		
+    		resource.setDescription( strDescription );
+
+    		SubmitFilter submitFilter = new SubmitFilter(  );
+    		submitFilter.setIdDiggSubmit( config.getIdDiggSubmit(  ) );
+    		
+    		List<CommentSubmit> listResultCommentSubmit = CommentSubmitHome.getCommentSubmitList( submitFilter, pluginDiggglike );
+    		List<IFeedResourceItem> listItems = new ArrayList<IFeedResourceItem>(  );
+
+    		//Description of the comments	
+    		for ( CommentSubmit commentSubmit : listResultCommentSubmit )
+    		{
+    			IFeedResourceItem item = new FeedResourceItem(  );
+    			
+    			String strTitleItem;
+    			Map<String, Object> model2 = new HashMap<String, Object>(  );
+
+    			if ( commentSubmit.getLuteceUserKey(  ) != null )
+    			{
+    				model2.put( MARK_RSS_ITEM_AUTHOR, commentSubmit.getLuteceUserKey(  ) );
+    			}
+    			else
+    			{
+    				model2.put( MARK_RSS_ITEM_AUTHOR, null );
+    			}
+    			
+    			model2.put( MARK_RSS_ITEM_STATE,
+    				commentSubmit.isActive(  ) ? I18nService.getLocalizedString( FIELD_STATE_ENABLE, locale )
+    										   : I18nService.getLocalizedString( FIELD_STATE_DISABLE, locale ) );
+    			
+    			HtmlTemplate template2 = AppTemplateService.getTemplate( TEMPLATE_RSS_SUBMIT_ITEM_TITLE, locale, model2 );
+                strTitleItem = template2.getHtml(  );
+
+    			item.setTitle( strTitleItem );
+    			item.setLink( strSiteUrl + JSP_MANAGE_COMMENT_SUBMIT + diggSubmit.getIdDiggSubmit(  ) );
+    			item.setDescription( commentSubmit.getValue(  ) );
+    			item.setDate( commentSubmit.getDateComment(  ) );
+    			
+    			listItems.add( item );
+    		}
+    		
+    		resource.setItems( listItems );
+            
+        	return resource;
+    	}
+    	else
+    	{
+    		//Digg Rss
+    		Digg digg = DiggHome.findByPrimaryKey( config.getIdDigg(  ), pluginDiggglike );
+    		
+    		IFeedResource resource = new FeedResource(  );
+    		resource.setTitle( digg.getTitle(  ) );
+    		resource.setLink( strSiteUrl + JSP_MANAGE_DIGG_SUBMIT + digg.getIdDigg(  ) );
+    		resource.setLanguage( strRssFileLanguage );
+    		
+    		Date date = new Date( digg.getDateCreation(  ).getTime(  ) );
+    		resource.setDate( date );
+    		
+    		IFeedResourceImage image = new FeedResourceImage(  );
+        	image.setUrl( strSiteUrl + PARAMETER_URL_FEED_IMAGE );
+        	image.setTitle( digg.getTitle(  ) );
+    		image.setLink( strSiteUrl );
+        	
+        	resource.setImage( image );
+    		
+    		if ( digg.isActive(  ) )
+    		{
+    			resource.setDescription( I18nService.getLocalizedString( FIELD_STATE, locale ) + " : " + I18nService.getLocalizedString( FIELD_STATE_ENABLE, locale ) );
+    		}
+    		else
+    		{
+    			resource.setDescription( I18nService.getLocalizedString( FIELD_STATE, locale ) + " : " +  I18nService.getLocalizedString( FIELD_STATE_DISABLE, locale ) );
+    		}
+    		
+    		SubmitFilter submitFilter = new SubmitFilter(  );
+    		submitFilter.setIdDigg( config.getIdDigg(  ) );
+    		
+    		List<DiggSubmit> listResultDiggSubmit = DiggSubmitHome.getDiggSubmitList( submitFilter, pluginDiggglike );
+    		List<IFeedResourceItem> listItems = new ArrayList<IFeedResourceItem>(  );
+    		
+    		//Description of  the submits
+    		for ( DiggSubmit diggSubmit : listResultDiggSubmit )
+    		{
+    			IFeedResourceItem item = new FeedResourceItem(  );
+    			
+    			String strTitle;
+    			Map<String, Object> model = new HashMap<String, Object>(  );
+    			DiggSubmitState diggsubmitState = diggSubmit.getDiggSubmitState(  );
+    			Category category = diggSubmit.getCategory(  );
+    		
+    			model.put( MARK_RSS_ITEM_TITLE, diggSubmit.getDiggSubmitTitle(  ) );
+    			model.put( MARK_RSS_NUMBER_VOTE, diggSubmit.getNumberVote(  ) );
+    			model.put( MARK_RSS_SCORE, diggSubmit.getNumberScore(  ) );
+    			model.put( MARK_RSS_ITEM_STATE, diggsubmitState.getTitle(  ) );
+
+    			if ( category != null )
+    			{
+    				model.put( MARK_RSS_CATEGORY, diggSubmit.getDiggSubmitTitle(  ) );
+    			}
+    			
+    			HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_RSS_DIGG_ITEM_TITLE, locale, model );
+                strTitle = template.getHtml(  );
+    			
+    			item.setTitle( strTitle );
+    			item.setLink( strSiteUrl + JSP_MANAGE_COMMENT_SUBMIT + diggSubmit.getIdDiggSubmit(  ) );
+    			item.setDescription( diggSubmit.getDiggSubmitValue(  ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
+    			item.setDate( diggSubmit.getDateResponse(  ) );
+    		
+    			listItems.add( item );
+    		}
+    		
+    		resource.setItems( listItems );
+    		
+    		return resource;
+    	}
+    }
+    
     /**
      * Update the ResourceRss configuration
      * @param idResourceRss id of resourceRss
