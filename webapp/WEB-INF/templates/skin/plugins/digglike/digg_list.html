@@ -19,9 +19,38 @@
 		        </select>
 		        <input type="submit" class="button" value="#i18n{digglike.manageDigg.buttonItemsPerPage}" />
 		    </form>
+		    
+		    <div class="-lutece-title-3">#i18n{digglike.diggFrame.altSearch}</div>
+			<form name="search" method="post" action="${fullUrl}?page=digg">
+	            <input type="hidden" name="page" value="search" />
+	            <#if query?exists>
+	              	<input type="text" name="query" size="20" value="${query}" style="margin-bottom:5px;" />
+	            <#else>
+	   	           	<input type="text" name="query" size="20" value="" style="margin-bottom:5px;" />
+	            </#if>
+				<input class="-lutece-input -lutece-border-radius-mini" value="#i18n{digglike.diggFrame.altSearch}" type="submit">
+			</form>
+			
 		</div>
 	</div>
+		
+	<#if content_digg?exists>
+	<div class="span-22 prepend-1 append-1 append-bottom">
+		<div class="portlet" style="padding: 10px; min-height: 180px;">
+			<table>
+				<#list content_digg as digg_submit>	
+				   <tr>
+				      <td>
+				      	<a href="${fullUrl}?page=digg&amp;id_digg=${digg_submit.idDiggSubmit}">${digg_submit.diggSubmitTitle}</a>
+				      </td> 
+				    </tr>
+			    </#list>
+			</table>
+		</div>
+	</div>
+	</#if>
 	
+	<#if list_digg?exists>
 	<div class="span-22 prepend-1 append-1 append-bottom">
 		<div class="portlet" style="padding: 10px; min-height: 180px;">
 			<table>
@@ -34,5 +63,7 @@
 			    </#list>
 			</table>
 		</div>
-	</div>		              
+	</div>
+	</#if>
+	
 </#if>

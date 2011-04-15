@@ -91,6 +91,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
+
 
 /**
  * This class manages Form page.
@@ -284,9 +286,20 @@ public class DiggApp implements XPageApplication
             int nItemsPerPageDigg = _nDefaultItemsPerPage;
             nItemsPerPageDigg = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE,
                     nItemsPerPageDigg, _nDefaultItemsPerPage );
-            strContentDigg = getHtmlListDigg( locale, plugin, strCurrentPageIndexDigg, nItemsPerPageDigg,
-                    urlDiggXpageHome );
-
+            
+            String strQuery = request.getParameter( PARAMETER_QUERY );
+            
+            if( StringUtils.isNotBlank( strQuery ) )
+            {
+            	strContentDigg = getSearch( strQuery, locale, plugin, strCurrentPageIndexDigg, nItemsPerPageDigg,
+	                    urlDiggXpageHome );
+            }
+            else
+            {
+	            strContentDigg = getHtmlListDigg( locale, plugin, strCurrentPageIndexDigg, nItemsPerPageDigg,
+	                    urlDiggXpageHome );
+            }
+            
             model.put( MARK_CONTENT_DIGG, strContentDigg );
 
             page.setContent( strContentDigg );
@@ -682,8 +695,41 @@ public class DiggApp implements XPageApplication
 
         return page;
     }
-
+    
     /**
+     * return the html list of digg submit
+     * @param strQuery the strQuery
+     * @param locale the locale
+     * @param plugin the plugin
+     * @param strCurrentPageIndexDigg the current page index
+     * @param nItemsPerPageDigg the number of items per page
+     * @param urlDiggXPage the url of the digg xpage
+     * @throws SiteMessageException  SiteMessageException
+     * @return the html template
+     */
+
+    private String getSearch( String strQuery, Locale locale, Plugin plugin, String strCurrentPageIndexDigg,
+            int nItemsPerPageDigg, UrlItem urlDiggXPage ) throws SiteMessageException
+    {
+    	SubmitFilter filter = new SubmitFilter(  );
+    	
+    	List listResultSearch = DigglikeSearchService.getInstance(  ).getSearchResults( strQuery, filter, plugin );
+    	
+    	HashMap model = new HashMap(  );
+    	Paginator paginator = new Paginator( listResultSearch, nItemsPerPageDigg, urlDiggXPage.getUrl(  ),
+                PARAMETER_PAGE_INDEX, strCurrentPageIndexDigg );
+
+        model.put( MARK_PAGINATOR, paginator );
+        model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + nItemsPerPageDigg );
+        model.put( FULL_URL, _strFullUrl );
+        model.put( MARK_CONTENT_DIGG, paginator.getPageItems(  ) );
+    	
+    	HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_XPAGE_LIST_DIGG, locale, model );
+
+        return templateList.getHtml(  );
+	}
+
+	/**
      * Increment score
      *
      * @param strVote the value to add at score

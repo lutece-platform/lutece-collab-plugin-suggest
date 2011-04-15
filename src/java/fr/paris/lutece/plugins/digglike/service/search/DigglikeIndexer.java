@@ -78,6 +78,7 @@ public class DigglikeIndexer implements SearchIndexer
     private static final String PROPERTY_INDEXER_VERSION = "digglike.indexer.version";
     private static final String PROPERTY_INDEXER_ENABLE = "digglike.indexer.enable";
     private static final String PROPERTY_XPAGE_APPLICATION_ID = "digglike.xpage.applicationId";
+    private static final String JSP_SEARCH_DIGG = "jsp/site/Portal.jsp?page=digg";
 
     // request parameters
     private static final String PARAMETER_ID_DIGG = "id_digg";
@@ -256,7 +257,7 @@ public class DigglikeIndexer implements SearchIndexer
         // Add the summary as an UnIndexed field, so that it is stored and returned
         // with hit documents for display.
         // doc.add( new Field( SearchItem.FIELD_SUMMARY, diggSubmit.getDiggSubmitValueShowInTheList(), Field.Store.YES, Field.Index.NO ) );
-        doc.add( new Field( DigglikeSearchItem.FIELD_TYPE, INDEX_TYPE_DIGG, Field.Store.YES, Field.Index.ANALYZED ) );
+        doc.add( new Field( DigglikeSearchItem.FIELD_TYPE, INDEX_TYPE_DIGG, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
 
         doc.add( new Field( SearchItem.FIELD_ROLE, diggSubmit.getDigg(  ).getRole(  ), Field.Store.YES,
                 Field.Index.NOT_ANALYZED ) );
@@ -301,4 +302,24 @@ public class DigglikeIndexer implements SearchIndexer
 
         return bReturn;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+	public List<String> getListType(  )
+	{
+		List<String> listType = new ArrayList<String>(  );
+		listType.add( INDEX_TYPE_DIGG );
+		
+		return listType;
+	}
+
+	/**
+     * {@inheritDoc}
+     */
+	public String getSpecificSearchAppUrl(  )
+	{
+		return JSP_SEARCH_DIGG;
+	}
+
 }
