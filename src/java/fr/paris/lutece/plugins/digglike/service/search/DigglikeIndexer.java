@@ -259,7 +259,10 @@ public class DigglikeIndexer implements SearchIndexer
         // doc.add( new Field( SearchItem.FIELD_SUMMARY, diggSubmit.getDiggSubmitValueShowInTheList(), Field.Store.YES, Field.Index.NO ) );
         doc.add( new Field( DigglikeSearchItem.FIELD_TYPE, INDEX_TYPE_DIGG, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
 
-        doc.add( new Field( SearchItem.FIELD_ROLE, diggSubmit.getDigg(  ).getRole(  ), Field.Store.YES,
+        Plugin plugin = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
+        Digg digg = DiggHome.findByPrimaryKey( diggSubmit.getDigg(  ).getIdDigg(  ), plugin );
+        
+        doc.add( new Field( SearchItem.FIELD_ROLE, digg.getRole(  ), Field.Store.YES,
                 Field.Index.NOT_ANALYZED ) );
 
         // return the document
