@@ -33,16 +33,17 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.paris.lutece.plugins.digglike.service.search.DigglikeIndexer;
+import fr.paris.lutece.plugins.digglike.utils.DiggIndexerUtils;
 import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -75,8 +76,11 @@ public final class DiggSubmitHome
 
         if ( diggSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) == DiggSubmit.STATE_PUBLISH )
         {
-            IndexationService.addIndexerAction( Integer.toString( nIdDiggSubmit ),
+        	String strIdDiggSubmit = Integer.toString( nIdDiggSubmit );
+            IndexationService.addIndexerAction( strIdDiggSubmit,
                 AppPropertiesService.getProperty( DigglikeIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_CREATE );
+            
+            DiggIndexerUtils.addIndexerAction( strIdDiggSubmit, IndexerAction.TASK_CREATE );
         }
 
         return nIdDiggSubmit;
@@ -108,16 +112,18 @@ public final class DiggSubmitHome
         if ( formSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) != diggSubmitStored.getDiggSubmitState(  )
                                                                                                .getIdDiggSubmitState(  ) )
         {
+        	String strIdDiggSubmit = Integer.toString( formSubmit.getIdDiggSubmit(  ) );
             if ( formSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) == DiggSubmit.STATE_PUBLISH )
             {
-                IndexationService.addIndexerAction( Integer.toString( formSubmit.getIdDiggSubmit(  ) ),
+                IndexationService.addIndexerAction(  strIdDiggSubmit,
                     AppPropertiesService.getProperty( DigglikeIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_CREATE );
+                DiggIndexerUtils.addIndexerAction( strIdDiggSubmit, IndexerAction.TASK_CREATE );
             }
             else
             {
-                IndexationService.addIndexerAction( Integer.toString( formSubmit.getIdDiggSubmit(  ) ) + "_" +
-                    DigglikeIndexer.SHORT_NAME,
+                IndexationService.addIndexerAction( strIdDiggSubmit + "_" + DigglikeIndexer.SHORT_NAME,
                     AppPropertiesService.getProperty( DigglikeIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_DELETE );
+                DiggIndexerUtils.addIndexerAction( strIdDiggSubmit, IndexerAction.TASK_DELETE );
             }
         }
         else
@@ -169,8 +175,11 @@ public final class DiggSubmitHome
 
         if ( digg.getDiggSubmitState(  ).getIdDiggSubmitState(  ) == DiggSubmit.STATE_PUBLISH )
         {
-            IndexationService.addIndexerAction( Integer.toString( nIdDiggSubmit ) + "_" + DigglikeIndexer.SHORT_NAME,
+        	String strIdDiggSubmit = Integer.toString( nIdDiggSubmit );
+            IndexationService.addIndexerAction( strIdDiggSubmit + "_" + DigglikeIndexer.SHORT_NAME,
                 AppPropertiesService.getProperty( DigglikeIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_DELETE );
+            
+            DiggIndexerUtils.addIndexerAction( strIdDiggSubmit, IndexerAction.TASK_DELETE );
         }
 
         _dao.delete( nIdDiggSubmit, plugin );

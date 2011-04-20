@@ -33,6 +33,20 @@
  */
 package fr.paris.lutece.plugins.digglike.web;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import fr.paris.lutece.plugins.digglike.business.Category;
 import fr.paris.lutece.plugins.digglike.business.CategoryHome;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
@@ -64,6 +78,7 @@ import fr.paris.lutece.plugins.digglike.service.DigglikePlugin;
 import fr.paris.lutece.plugins.digglike.service.DigglikeResourceIdService;
 import fr.paris.lutece.plugins.digglike.service.digglikesearch.DigglikeSearchService;
 import fr.paris.lutece.plugins.digglike.service.search.DigglikeIndexer;
+import fr.paris.lutece.plugins.digglike.utils.DiggIndexerUtils;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
 import fr.paris.lutece.portal.business.rbac.RBAC;
@@ -98,23 +113,6 @@ import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
 import fr.paris.lutece.util.xml.XmlUtil;
-
-import java.io.IOException;
-import java.io.OutputStream;
-
-import java.math.BigDecimal;
-
-import java.sql.Timestamp;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -2309,10 +2307,13 @@ public class DiggJspBean extends PluginAdminPageJspBean
             {
                 for ( DiggSubmit submit : digg.getDiggsSubmit(  ) )
                 {
-                    IndexationService.addIndexerAction( Integer.toString( submit.getIdDiggSubmit(  ) ) + "_" +
-                        DigglikeIndexer.SHORT_NAME,
+                	String strIdDiggSubmit = Integer.toString( submit.getIdDiggSubmit(  ) );
+                    IndexationService.addIndexerAction( strIdDiggSubmit + "_" +
+                            DigglikeIndexer.SHORT_NAME,
                         AppPropertiesService.getProperty( DigglikeIndexer.PROPERTY_INDEXER_NAME ),
                         IndexerAction.TASK_DELETE );
+                    
+                    DiggIndexerUtils.addIndexerAction( strIdDiggSubmit, IndexerAction.TASK_DELETE );
                 }
             }
         }
@@ -2344,9 +2345,12 @@ public class DiggJspBean extends PluginAdminPageJspBean
             {
                 for ( DiggSubmit submit : digg.getDiggsSubmit(  ) )
                 {
-                    IndexationService.addIndexerAction( Integer.toString( submit.getIdDiggSubmit(  ) ),
+                	String strIdDiggSubmit = Integer.toString( submit.getIdDiggSubmit(  ) );
+                    IndexationService.addIndexerAction( strIdDiggSubmit,
                         AppPropertiesService.getProperty( DigglikeIndexer.PROPERTY_INDEXER_NAME ),
                         IndexerAction.TASK_CREATE );
+                    
+                    DiggIndexerUtils.addIndexerAction( strIdDiggSubmit, IndexerAction.TASK_CREATE );
                 }
             }
         }
