@@ -135,8 +135,20 @@ public class DigglikeIndexer implements SearchIndexer
 
                 //url.addParameter( DiggApp.PARAMETER_CLEAR_FILTER,DiggApp.PARAMETER_CLEAR_FILTER);
                 //url.setAnchor(DiggApp.ANCHOR_DIGG_SUBMIT+diggSubmit.getIdDiggSubmit());
-                org.apache.lucene.document.Document docDiggSubmit = getDocument( diggSubmit, url.getUrl(  ) );
-                IndexationService.write( docDiggSubmit );
+                org.apache.lucene.document.Document docDiggSubmit = null;
+                try
+                {
+                	docDiggSubmit = getDocument( diggSubmit, url.getUrl(  ) );
+                }
+                catch ( Exception e )
+                {
+                	String strMessage = "Digg ID : " + digg.getIdDigg(  );
+                	IndexationService.error( this, e, strMessage );
+                }
+                if ( docDiggSubmit != null )
+                {
+                	IndexationService.write( docDiggSubmit );
+                }
             }
         }
     }
