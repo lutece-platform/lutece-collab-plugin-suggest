@@ -346,7 +346,7 @@ ALTER TABLE digglike_vote_type_vote_button ADD CONSTRAINT fk_digglike_vote_butto
 CREATE TABLE digglike_rss_cf (
 	id_rss int default 0 NOT NULL,
 	id_digg int default 0 NOT NULL,
-	is_submit_rss smallint(6) default 0 NOT NULL,	
+	is_submit_rss smallint default 0 NOT NULL,	
 	id_digg_submit int default 0 NOT NULL,
 	PRIMARY KEY (id_rss)
 );
@@ -382,7 +382,7 @@ CREATE TABLE digglike_entry_attr_additional (
 DROP TABLE IF EXISTS digglike_video;
 CREATE TABLE digglike_video (
 	id_digg_submit int NOT NULL,
-	video_content longblob DEFAULT NULL,
+	video_content long varbinary DEFAULT NULL,
 	video_mime_type varchar(100) DEFAULT NULL,
 	credits varchar(100) DEFAULT NULL,
 	PRIMARY KEY (id_digg_submit)
