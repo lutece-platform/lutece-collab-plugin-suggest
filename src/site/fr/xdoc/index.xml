@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
 	<properties>
-		<title>Introduction</title>
+		<title>Plugin digglike</title>
 	</properties>
 	<body>
-		<section name="Descriptif du plugin">
+		<section name="Plugin digglike">
 			<subsection name="Introduction">
 				<p>
 					Le plugin Digglike permet aux utilisateurs de déposer du contenu sur le site en vue de le soumettre aux votes 
