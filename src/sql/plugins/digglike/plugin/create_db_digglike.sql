@@ -196,7 +196,7 @@ CREATE TABLE digglike_comment_submit (
 CREATE INDEX index_digglike_comment_submit ON digglike_comment_submit (id_digg_submit);
 
 ALTER TABLE digglike_comment_submit ADD CONSTRAINT fk_digglike_comment_submit FOREIGN KEY (id_digg_submit)
-	REFERENCES digglike_digg (id_digg);
+	REFERENCES digglike_digg (id_digg_submit);
 
 --
 -- Table structure for table digglike_digg_category
