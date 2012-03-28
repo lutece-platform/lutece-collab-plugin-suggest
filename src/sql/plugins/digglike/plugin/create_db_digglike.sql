@@ -3,24 +3,24 @@ DROP TABLE IF EXISTS digglike_tag_submit;
 DROP TABLE IF EXISTS digglike_response;
 DROP TABLE IF EXISTS digglike_entry_verify_by;
 DROP TABLE IF EXISTS digglike_entry;
-DROP TABLE IF EXISTS digglike_digg_submit;
-DROP TABLE IF EXISTS digglike_digg_category;
-DROP TABLE IF EXISTS digglike_comment_submit;
-DROP TABLE IF EXISTS digglike_digg;
-DROP TABLE IF EXISTS digglike_vote_type;
-DROP TABLE IF EXISTS digglike_vote_button;
-DROP TABLE IF EXISTS digglike_vote;
-DROP TABLE IF EXISTS digglike_export_format;
-DROP TABLE IF EXISTS digglike_entry_type;
-DROP TABLE IF EXISTS digglike_digg_submit_state;
-DROP TABLE IF EXISTS digglike_default_message;
-DROP TABLE IF EXISTS digglike_category;
-DROP TABLE IF EXISTS digglike_action;
-DROP TABLE IF EXISTS digglike_image;
-DROP TABLE IF EXISTS digglike_digg_submit_type;
-DROP TABLE IF EXISTS digglike_rss_cf; 
-DROP TABLE IF EXISTS digglike_entry_attr_additional;
-DROP TABLE IF EXISTS digglike_video;
+DROP TABLE IF EXISTS digglike_digg_submit CASCADE;
+DROP TABLE IF EXISTS digglike_digg_category CASCADE;
+DROP TABLE IF EXISTS digglike_comment_submit CASCADE;
+DROP TABLE IF EXISTS digglike_digg CASCADE;
+DROP TABLE IF EXISTS digglike_vote_type CASCADE;
+DROP TABLE IF EXISTS digglike_vote_button CASCADE;
+DROP TABLE IF EXISTS digglike_vote CASCADE;
+DROP TABLE IF EXISTS digglike_export_format CASCADE;
+DROP TABLE IF EXISTS digglike_entry_type CASCADE;
+DROP TABLE IF EXISTS digglike_digg_submit_state CASCADE;
+DROP TABLE IF EXISTS digglike_default_message CASCADE;
+DROP TABLE IF EXISTS digglike_category CASCADE;
+DROP TABLE IF EXISTS digglike_action CASCADE;
+DROP TABLE IF EXISTS digglike_image CASCADE;
+DROP TABLE IF EXISTS digglike_digg_submit_type CASCADE;
+DROP TABLE IF EXISTS digglike_rss_cf CASCADE; 
+DROP TABLE IF EXISTS digglike_entry_attr_additional CASCADE;
+DROP TABLE IF EXISTS digglike_video CASCADE;
 
 --
 -- Table structure for table digglike_action
@@ -179,43 +179,6 @@ ALTER TABLE digglike_digg ADD CONSTRAINT fk_digglike_digg FOREIGN KEY (id_vote_t
 	REFERENCES digglike_vote_type (id_vote_type);
 
 --
--- Table structure for table digglike_comment_submit
---
-CREATE TABLE digglike_comment_submit (
-	id_comment_submit int default 0 NOT NULL,
-	id_digg_submit int default NULL,
-	id_parent_comment int default 0,
-	date_comment timestamp NULL,
-	comment_value long varchar,
-	active smallint default 0,
-	lutece_user_key varchar(100) default NULL,
-	official_answer smallint default 0, 
-	PRIMARY KEY (id_comment_submit)
-);
-
-CREATE INDEX index_digglike_comment_submit ON digglike_comment_submit (id_digg_submit);
-
-ALTER TABLE digglike_comment_submit ADD CONSTRAINT fk_digglike_comment_submit FOREIGN KEY (id_digg_submit)
-	REFERENCES digglike_digg (id_digg_submit);
-
---
--- Table structure for table digglike_digg_category
---
-CREATE TABLE digglike_digg_category (
-	id_digg int default 0 NOT NULL,
-	id_category int default 0 NOT NULL,
-	PRIMARY KEY (id_digg,id_category)
-);
-
-CREATE INDEX index_digglike_digg_category_digg ON digglike_digg_category (id_digg);
-CREATE INDEX index_digglike_digg_category_category ON digglike_digg_category (id_category);
-
-ALTER TABLE digglike_digg_category ADD CONSTRAINT fk_digglike_digg_category_digg FOREIGN KEY (id_digg)
-	REFERENCES digglike_digg (id_digg);
-ALTER TABLE digglike_digg_category ADD CONSTRAINT fk_digglike_digg_category_category FOREIGN KEY (id_category)
-	REFERENCES digglike_category (id_category);
-
---
 -- Table structure for table digglike_digg_submit
 --
 CREATE TABLE digglike_digg_submit (
@@ -244,6 +207,43 @@ CREATE INDEX index_digglike_digg_submit_category ON digglike_digg_submit (id_cat
 ALTER TABLE digglike_digg_submit ADD CONSTRAINT fk_digglike_digg_submit_digg FOREIGN KEY (id_digg)
 	REFERENCES digglike_digg (id_digg);
 ALTER TABLE digglike_digg_submit ADD CONSTRAINT fk_digglike_digg_submit_category FOREIGN KEY (id_category)
+	REFERENCES digglike_category (id_category);
+
+--
+-- Table structure for table digglike_comment_submit
+--
+CREATE TABLE digglike_comment_submit (
+	id_comment_submit int default 0 NOT NULL,
+	id_digg_submit int default NULL,
+	id_parent_comment int default 0,
+	date_comment timestamp NULL,
+	comment_value long varchar,
+	active smallint default 0,
+	lutece_user_key varchar(100) default NULL,
+	official_answer smallint default 0, 
+	PRIMARY KEY (id_comment_submit)
+);
+
+CREATE INDEX index_digglike_comment_submit ON digglike_comment_submit (id_digg_submit);
+
+ALTER TABLE digglike_comment_submit ADD CONSTRAINT fk_digglike_comment_submit FOREIGN KEY (id_digg_submit)
+	REFERENCES digglike_digg_submit (id_digg_submit);
+
+--
+-- Table structure for table digglike_digg_category
+--
+CREATE TABLE digglike_digg_category (
+	id_digg int default 0 NOT NULL,
+	id_category int default 0 NOT NULL,
+	PRIMARY KEY (id_digg,id_category)
+);
+
+CREATE INDEX index_digglike_digg_category_digg ON digglike_digg_category (id_digg);
+CREATE INDEX index_digglike_digg_category_category ON digglike_digg_category (id_category);
+
+ALTER TABLE digglike_digg_category ADD CONSTRAINT fk_digglike_digg_category_digg FOREIGN KEY (id_digg)
+	REFERENCES digglike_digg (id_digg);
+ALTER TABLE digglike_digg_category ADD CONSTRAINT fk_digglike_digg_category_category FOREIGN KEY (id_category)
 	REFERENCES digglike_category (id_category);
 
 --
