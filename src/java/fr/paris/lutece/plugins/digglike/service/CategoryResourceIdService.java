@@ -90,7 +90,7 @@ public class CategoryResourceIdService extends ResourceIdService
      */
     public ReferenceList getResourceIdList( Locale locale )
     {
-        return DiggUtils.getRefListCategory( CategoryHome.getList( PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) ) );
+        return DiggUtils.getRefListCategory( CategoryHome.getList( PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) ));
     }
 
     /**

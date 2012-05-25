@@ -55,17 +55,17 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_digg_submit ) FROM digglike_digg_submit";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT d.id_digg_submit,d.id_digg,s.id_state,s.title,s.number,d.date_response, " +
         "d.vote_number,d.score_number,d.id_category,d.digg_submit_value,d.digg_submit_title,d.comment_enable_number,d.digg_submit_value_show_in_the_list, " +
-        "d.reported, d.lutece_user_key, d.digg_submit_list_order, d.digg_submit_type FROM digglike_digg_submit d,digglike_digg_submit_state s WHERE d.id_state=s.id_state AND id_digg_submit=? ";
+        "d.reported, d.lutece_user_key, d.digg_submit_list_order, d.digg_submit_type,d.number_view FROM digglike_digg_submit d,digglike_digg_submit_state s WHERE d.id_state=s.id_state AND id_digg_submit=? ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_digg_submit ( id_digg_submit,id_digg,id_state,date_response, " +
         "vote_number,score_number,id_category,digg_submit_value ,digg_submit_title,comment_enable_number,digg_submit_value_show_in_the_list,reported," +
-        "lutece_user_key,digg_submit_list_order,digg_submit_type ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        "lutece_user_key,digg_submit_list_order,digg_submit_type,number_view ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM digglike_digg_submit WHERE id_digg_submit = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE digglike_digg_submit SET " +
         "id_digg_submit=?,id_digg=?,id_state=?" +
-        ",vote_number=?,score_number=?,id_category=?,digg_submit_value=?,digg_submit_title=? ,comment_enable_number=? ,digg_submit_value_show_in_the_list=?,reported=?,lutece_user_key= ?,digg_submit_list_order=?,digg_submit_type=? " +
+        ",vote_number=?,score_number=?,id_category=?,digg_submit_value=?,digg_submit_title=? ,comment_enable_number=? ,digg_submit_value_show_in_the_list=?,reported=?,lutece_user_key= ?,digg_submit_list_order=?,digg_submit_type=?,number_view=? " +
         "WHERE id_digg_submit=? ";
     private static final String SQL_QUERY_SELECT_DIGG_SUBMIT_BY_FILTER = "SELECT d.id_digg_submit,d.id_digg,s.id_state,s.title,s.number,d.date_response,  " +
-        "d.vote_number,score_number,d.id_category,d.digg_submit_value,d.digg_submit_title,d.comment_enable_number,digg_submit_value_show_in_the_list,d.reported, d.lutece_user_key, d.digg_submit_list_order, d.digg_submit_type  " +
+        "d.vote_number,score_number,d.id_category,d.digg_submit_value,d.digg_submit_title,d.comment_enable_number,digg_submit_value_show_in_the_list,d.reported, d.lutece_user_key, d.digg_submit_list_order, d.digg_submit_type,d.number_view  " +
         "FROM digglike_digg_submit d, digglike_digg_submit_state s ";
     private static final String SQL_QUERY_SELECT_ID_DIGG_SUBMIT_BY_FILTER = "SELECT d.id_digg_submit " +
         "FROM digglike_digg_submit d ";
@@ -88,6 +88,9 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
     private static final String SQL_FILTER_SORT_BY_SCORE_DESC = " d.score_number DESC ";
     private static final String SQL_FILTER_SORT_BY_NUMBER_COMMENT_ASC = " d.comment_enable_number ASC ";
     private static final String SQL_FILTER_SORT_BY_NUMBER_COMMENT_DESC = " d.comment_enable_number DESC ";
+    private static final String SQL_FILTER_SORT_BY_NUMBER_VIEW_ASC = " d.number_view ASC ";
+    private static final String SQL_FILTER_SORT_BY_NUMBER_VIEW_DESC = " d.number_view DESC ";
+    
     private static final String SQL_FILTER_SORT_MANUALLY = " d.digg_submit_list_order ASC ";
     private static final String SQL_ORDER_BY = " ORDER BY ";
     private static final String SQL_FILTER_ID_STATE = " d.id_state = s.id_state ";
@@ -178,7 +181,7 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         {
             daoUtil.setIntNull( 15 );
         }
-
+        daoUtil.setInt( 16, diggSubmit.getNumberView() );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
 
@@ -239,12 +242,8 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
             {
                 diggSubmit.setDiggSubmitType( DiggSubmitTypeHome.findByPrimaryKey( daoUtil.getInt( 17 ), plugin ) );
             }
-
-            //import the comments of all the diggs 
-            SubmitFilter submmitFilterComment = new SubmitFilter(  );
-            submmitFilterComment.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
-            submmitFilterComment.setIdCommentSubmitState( 1 );
-            diggSubmit.setComments( CommentSubmitHome.getCommentSubmitList( submmitFilterComment, plugin ) );
+            diggSubmit.setNumberView(daoUtil.getInt( 18 ));
+          
         }
 
         daoUtil.free(  );
@@ -306,8 +305,9 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         {
             daoUtil.setIntNull( 14 );
         }
+        daoUtil.setInt( 15, diggSubmit.getNumberView() );
 
-        daoUtil.setInt( 15, diggSubmit.getIdDiggSubmit(  ) );
+        daoUtil.setInt( 16, diggSubmit.getIdDiggSubmit(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -465,13 +465,8 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
             {
                 diggSubmit.setDiggSubmitType( DiggSubmitTypeHome.findByPrimaryKey( daoUtil.getInt( 17 ), plugin ) );
             }
-
-            //import the comments of all the diggs 
-            SubmitFilter submmitFilterComment = new SubmitFilter(  );
-            submmitFilterComment.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
-            submmitFilterComment.setIdCommentSubmitState( 1 );
-            diggSubmit.setComments( CommentSubmitHome.getCommentSubmitList( submmitFilterComment, plugin ) );
-
+            diggSubmit.setNumberView(daoUtil.getInt( 18 ));
+            
             diggSubmitList.add( diggSubmit );
         }
 
@@ -765,6 +760,16 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
 
                     case SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC:
                         strOrderBy.append( SQL_FILTER_SORT_BY_NUMBER_COMMENT_DESC );
+
+                        break;
+
+                    case SubmitFilter.SORT_BY_NUMBER_VIEW_ASC:
+                        strOrderBy.append( SQL_FILTER_SORT_BY_NUMBER_VIEW_ASC );
+
+                        break;
+
+                    case SubmitFilter.SORT_BY_NUMBER_VIEW_DESC:
+                        strOrderBy.append( SQL_FILTER_SORT_BY_NUMBER_VIEW_DESC );
 
                         break;
 

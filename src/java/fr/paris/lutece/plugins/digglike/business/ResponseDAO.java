@@ -50,7 +50,7 @@ public final class ResponseDAO implements IResponseDAO
     private static final String EMPTY_STRING = "";
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_response ) FROM digglike_response";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT " +
-        "resp.id_response,resp.id_digg_submit,resp.response_value,type.class_name,ent.id_entry,ent.title,ent.id_type, " +
+        "resp.id_response,resp.id_digg_submit,resp.response_value,type.class_name,ent.id_entry,ent.title,ent.id_type,ent.show_in_digg_submit_list " +
         "FROM digglike_response resp,digglike_entry ent,digglike_entry_type type  " +
         "WHERE resp.id_response=? and resp.id_entry =ent.id_entry and ent.id_type=type.id_type ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_response ( " +
@@ -59,7 +59,7 @@ public final class ResponseDAO implements IResponseDAO
     private static final String SQL_QUERY_UPDATE = "UPDATE  digglike_response SET " +
         "id_response=?,id_digg_submit=?,response_value=?,id_entry=? WHERE id_response=?";
     private static final String SQL_QUERY_SELECT_RESPONSE_BY_FILTER = "SELECT " +
-        "resp.id_response,resp.id_digg_submit,resp.response_value,type.class_name,ent.id_entry,ent.title,ent.id_type " +
+        "resp.id_response,resp.id_digg_submit,resp.response_value,type.class_name,ent.id_entry,ent.title,ent.id_type,ent.show_in_digg_submit_list " +
         "FROM digglike_response resp,digglike_entry ent,digglike_entry_type type  " +
         "WHERE resp.id_entry =ent.id_entry and ent.id_type=type.id_type ";
     private static final String SQL_FILTER_ID_DIGG_SUBMIT = " AND resp.id_digg_submit = ? ";
@@ -139,7 +139,7 @@ public final class ResponseDAO implements IResponseDAO
             response.setValueResponse( daoUtil.getString( 3 ) );
             entryType = new EntryType(  );
             entryType.setClassName( daoUtil.getString( 4 ) );
-
+            entryType.setIdType( daoUtil.getInt( 7 ));
             try
             {
                 entry = (IEntry) Class.forName( entryType.getClassName(  ) ).newInstance(  );
@@ -171,6 +171,7 @@ public final class ResponseDAO implements IResponseDAO
             entry.setEntryType( entryType );
             entry.setIdEntry( daoUtil.getInt( 5 ) );
             entry.setTitle( daoUtil.getString( 6 ) );
+            entry.setShowInDiggSubmitList( daoUtil.getBoolean( 8 ) );
             response.setEntry( entry );
         }
 
@@ -262,7 +263,7 @@ public final class ResponseDAO implements IResponseDAO
             response.setValueResponse( daoUtil.getString( 3 ) );
             entryType = new EntryType(  );
             entryType.setClassName( daoUtil.getString( 4 ) );
-
+            entryType.setIdType( daoUtil.getInt( 7 ));
             try
             {
                 entry = (IEntry) Class.forName( entryType.getClassName(  ) ).newInstance(  );
@@ -294,6 +295,10 @@ public final class ResponseDAO implements IResponseDAO
             entry.setEntryType( entryType );
             entry.setIdEntry( daoUtil.getInt( 5 ) );
             entry.setTitle( daoUtil.getString( 6 ) );
+           
+            
+            entry.setShowInDiggSubmitList( daoUtil.getBoolean( 8 ) );
+            
             response.setEntry( entry );
 
             responseList.add( response );

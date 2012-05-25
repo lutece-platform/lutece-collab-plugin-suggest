@@ -1,3 +1,4 @@
+<#include "/util/editor/editor.html" />
 <SCRIPT language="Javascript">
 <!-- 
 
@@ -149,7 +150,7 @@ function displayComments(idParent) {
 		#i18n{digglike.manageCommentSubmit.labelAddOfficialAnswer}
 		<form method="post" action="jsp/admin/plugins/digglike/DoSubmitOfficialAnswer.jsp">
 			<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden">
-			<textarea name="comment_value" id="comment_value" rows="6" cols="49" style="width:100%; border:0; margin:0; padding:0;" ></textarea>
+			<textarea name="comment_value" id="comment_value" rows="6" cols="49" style="width:100%; border:0; margin:0; padding:0;"  <#if digg.activeEditorBbcode> class='markitup' </#if>  ></textarea>
 			<input type="submit" value="#i18n{digglike.manageCommentSubmit.buttonAdd}" class="button" name="add"/>
 		</form>
    	  
@@ -195,7 +196,7 @@ function displayComments(idParent) {
 	        </p>
 	        <p>
 	            <strong>#i18n{digglike.manageCommentSubmit.rowValueCommentSubmit}: </strong><br />
-	          		${comment_submit.value}
+	          		${digg.parseBbcodeValue(comment_submit.value)}
 	        </p>       
 	        
 	     	<p>
@@ -224,7 +225,7 @@ function displayComments(idParent) {
 			          </p>
 			        <p>
 			            <strong>#i18n{digglike.manageCommentSubmit.rowValueCommentSubmit}: </strong><br />
-			          		${comment_comment.value}
+			          		${digg.parseBbcodeValue(comment_comment.value)}
 			        </p>       
 			      <p>
 				      <form method="post" action="jsp/admin/plugins/digglike/DoChangeCommentSubmit.jsp">
@@ -246,5 +247,5 @@ function displayComments(idParent) {
 </div>
 <script language="JavaScript" type="text/javascript">
 	hideId("diggSubmitValue");		
-	
 </script>
+<@initEditor type="bbcode" />

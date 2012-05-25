@@ -72,10 +72,10 @@
 						<#if nbComments <= number_comments>
 							<div id=comments>
 								<li>
-									<#if comment.value?length <= cumber_char_comments>
-										${comment.value[0..]}
+									<#if comment.value?length!=0 && comment.value?length <= cumber_char_comments>
+										${digg.parseBbcodeValue(comment.value[0..])}
 									<#else>
-										${comment.value[0..cumber_char_comments-1]}...
+										${digg.parseBbcodeValue(comment.value[0..cumber_char_comments-1])}...
 									</#if> 
 								</li>
 							</div>

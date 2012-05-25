@@ -100,44 +100,52 @@ public final class DiggSubmitHome
     /**
      * Update of the diggSubmit which is specified in parameter
      *
-     * @param formSubmit The instance of the diggSubmit which contains the informations to update
+     * @param diggSubmit The instance of the diggSubmit which contains the informations to update
      * @param plugin the Plugin
      *
      */
-    public static void update( DiggSubmit formSubmit, Plugin plugin )
-    {
-        DiggSubmit diggSubmitStored = findByPrimaryKey( formSubmit.getIdDiggSubmit(  ), plugin );
-
-        //if state has changed
-        if ( formSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) != diggSubmitStored.getDiggSubmitState(  )
-                                                                                               .getIdDiggSubmitState(  ) )
-        {
-        	String strIdDiggSubmit = Integer.toString( formSubmit.getIdDiggSubmit(  ) );
-            if ( formSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) == DiggSubmit.STATE_PUBLISH )
-            {
-                IndexationService.addIndexerAction(  strIdDiggSubmit,
-                    AppPropertiesService.getProperty( DigglikeIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_CREATE );
-                DiggIndexerUtils.addIndexerAction( strIdDiggSubmit, IndexerAction.TASK_CREATE );
-            }
-            else
-            {
-                IndexationService.addIndexerAction( strIdDiggSubmit + "_" + DigglikeIndexer.SHORT_NAME,
-                    AppPropertiesService.getProperty( DigglikeIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_DELETE );
-                DiggIndexerUtils.addIndexerAction( strIdDiggSubmit, IndexerAction.TASK_DELETE );
-            }
-        }
-        else
-        {
-            /*if(formSubmit.getDiggSubmitState().getIdDiggSubmitState() == DiggSubmit.STATE_PUBLISH)
-                {
-                        IndexationService.addIndexerAction( Integer.toString(formSubmit.getIdDiggSubmit())
-                                        , AppPropertiesService.getProperty( DigglikeIndexer.PROPERTY_INDEXER_NAME)
-                                        , IndexerAction.TASK_MODIFY );
-                }    */
-        }
-
-        _dao.store( formSubmit, plugin );
+    public static void update( DiggSubmit diggSubmit, Plugin plugin )
+    {	
+    	update(diggSubmit, true, plugin);
     }
+    
+    /**
+     * Update of the diggSubmit which is specified in parameter
+     * @param diggSubmit
+     * @param bUpdateIndex
+     * @param plugin
+     */
+    
+    public static void update( DiggSubmit diggSubmit,boolean bUpdateIndex,Plugin plugin )
+    {
+    	
+    	if(bUpdateIndex)
+    	{
+	    	DiggSubmit diggSubmitStored = findByPrimaryKey( diggSubmit.getIdDiggSubmit(  ), plugin );
+	    	
+	    	//if state has changed
+	        if ( diggSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) != diggSubmitStored.getDiggSubmitState(  )
+	                                                                                               .getIdDiggSubmitState(  ) )
+	        {
+	        	String strIdDiggSubmit = Integer.toString( diggSubmit.getIdDiggSubmit(  ) );
+	            if ( diggSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) == DiggSubmit.STATE_PUBLISH )
+	            {
+	                DiggIndexerUtils.addIndexerAction( strIdDiggSubmit, IndexerAction.TASK_CREATE );
+	            }
+	            else
+	            {
+	                DiggIndexerUtils.addIndexerAction( strIdDiggSubmit, IndexerAction.TASK_DELETE );
+	            }
+	        }
+	        
+	        IndexationService.addIndexerAction( Integer.toString(diggSubmit.getIdDiggSubmit())
+	                        , AppPropertiesService.getProperty( DigglikeIndexer.PROPERTY_INDEXER_NAME)
+	                        , IndexerAction.TASK_MODIFY );
+    	}
+        _dao.store( diggSubmit, plugin );
+    	
+    }
+    
 
     /**
      * Remove the DiggSubmit whose identifier is specified in parameter
@@ -197,8 +205,17 @@ public final class DiggSubmitHome
      */
     public static DiggSubmit findByPrimaryKey( int nKey, Plugin plugin )
     {
-        return _dao.load( nKey, plugin );
-    }
+        DiggSubmit diggSubmit=_dao.load( nKey, plugin );
+        
+        if(diggSubmit != null)
+        {
+	        SubmitFilter submmitFilterComment = new SubmitFilter(  );
+	        submmitFilterComment.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
+	        submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
+	        diggSubmit.setComments( CommentSubmitHome.getCommentSubmitList( submmitFilterComment, plugin ) );
+        }
+        return diggSubmit;
+      }
 
     /**
      * Load the data of all the diggSubmit who verify the filter and returns them in a  list
@@ -208,7 +225,22 @@ public final class DiggSubmitHome
      */
     public static List<DiggSubmit> getDiggSubmitList( SubmitFilter filter, Plugin plugin )
     {
-        return _dao.selectListByFilter( filter, plugin );
+       
+    	List<DiggSubmit> listDiggSubmit=_dao.selectListByFilter( filter, plugin );
+    	
+    	if( listDiggSubmit !=null )
+    	{
+    	 
+    		SubmitFilter submmitFilterComment = new SubmitFilter(  );
+    		for(DiggSubmit diggSubmit:listDiggSubmit)
+    		{
+    			submmitFilterComment.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
+    			submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
+    			diggSubmit.setComments( CommentSubmitHome.getCommentSubmitList( submmitFilterComment, plugin ) );
+    		}
+	    }
+    	
+    	return listDiggSubmit;
     }
 
     /**

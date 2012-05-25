@@ -3,7 +3,7 @@
 	function displayAuthorizedComment()
 	{
 		
-	
+		displayId('p_active_editor_bbcode_on_comment');
 		displayId('p_disable_new_comment');
 		if(document.getElementById('disable_new_comment').checked)
 		{
@@ -203,12 +203,20 @@
             <label for="authorized_comment"> #i18n{digglike.createDigg.labelAuthorizedCommentSubmit}  :             
             </label>            
             <input id="disable_new_comment" name="authorized_comment" value="${yes_value}" type="radio"  onclick="displayAuthorizedComment()" <#if digg.authorizedComment> checked='checked'</#if>>  #i18n{digglike.digglike.labelYes}            
-            <input name="authorized_comment" value="${no_value}" type="radio"   onclick="hideId('p_disable_new_comment');hideId('p_id_mailing_list_comment');"<#if !digg.authorizedComment> checked='checked'</#if>>#i18n{digglike.digglike.labelNo}            
+            <input name="authorized_comment" value="${no_value}" type="radio"   onclick="hideId('p_disable_new_comment');hideId('p_id_mailing_list_comment');hideId('p_active_editor_bbcode_on_comment');"<#if !digg.authorizedComment> checked='checked'</#if>>#i18n{digglike.digglike.labelNo}            
             <br/>            
             <label>              &nbsp;             
             </label>  #i18n{digglike.createDigg.labelAuthorizedCommentSubmitComment}    
           </p>
-          
+           <p id="p_active_editor_bbcode_on_comment">            
+            <label for="active_editor_bbcode_on_comment"> #i18n{digglike.createDigg.labelActiveEditorBbcodeOnComment}  :             
+            </label>            
+            <input id="active_editor_bbcode_on_comment" name="active_editor_bbcode_on_comment" value="${yes_value}" type="radio" <#if digg.activeEditorBbcode> checked='checked'</#if>>  #i18n{digglike.digglike.labelYes}            
+            <input id="active_editor_bbcode_on_comment" name="active_editor_bbcode_on_comment" value="${no_value}" type="radio" <#if !digg.activeEditorBbcode> checked='checked'</#if>>#i18n{digglike.digglike.labelNo}            
+            <br/>            
+            <label>              &nbsp;             
+            </label> #i18n{digglike.createDigg.labelActiveEditorBbcodeOnCommentComment}      
+          </p>
           <p id="p_disable_new_comment">            
             <label for="disable_new_comment"> #i18n{digglike.createDigg.labelDisableNewCommentSubmit}  :             
             </label>            

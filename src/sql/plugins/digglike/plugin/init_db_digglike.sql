@@ -6,6 +6,7 @@ INSERT INTO digglike_entry_type (id_type,title,class_name) VALUES (2,'Zone de te
 INSERT INTO digglike_entry_type (id_type,title,class_name) VALUES (3,'Zone de texte long','fr.paris.lutece.plugins.digglike.business.EntryTypeTextArea');
 INSERT INTO digglike_entry_type (id_type,title,class_name) VALUES (4,'Image','fr.paris.lutece.plugins.digglike.business.EntryTypeImage');
 INSERT INTO digglike_entry_type (id_type,title,class_name) VALUES (5,'Video','fr.paris.lutece.plugins.digglike.business.EntryTypeVideo');
+INSERT INTO digglike_entry_type (id_type,title,class_name) VALUES (6,'Editeur bbcode','fr.paris.lutece.plugins.digglike.business.EntryTypeEditorBbcode');
 
 --
 -- Dumping data for table digglike_action
@@ -28,6 +29,10 @@ INSERT INTO digglike_action (id_action,name_key,description_key,action_url,icon_
 (8,'digglike.action.copy.name','digglike.action.copy.description','jsp/admin/plugins/digglike/DoCopyDigg.jsp','images/admin/skin/plugins/digglike/actions/editcopy.png','COPY',1);
 INSERT INTO digglike_action (id_action,name_key,description_key,action_url,icon_url,action_permission,digg_state) VALUES 
 (9,'digglike.action.delete.name','digglike.action.delete.description','jsp/admin/plugins/digglike/ConfirmRemoveDigg.jsp','images/admin/skin/plugins/digglike/actions/delete.png','DELETE',0);
+INSERT INTO digglike_action (id_action,name_key,description_key,action_url,icon_url,action_permission,digg_state) VALUES 
+(10,'digglike.action.updateAllDiggSubmit.name','digglike.action.updateAllDiggSubmit.description','jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp','images/admin/skin/plugins/digglike/actions/updatealldiggsubmit.png','UPDATE_ALL_DIGG_SUBMIT',1);
+INSERT INTO digglike_action (id_action,name_key,description_key,action_url,icon_url,action_permission,digg_state) VALUES 
+(11,'digglike.action.updateAllDiggSubmit.name','digglike.action.updateAllDiggSubmit.description','jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp','images/admin/skin/plugins/digglike/actions/updatealldiggsubmit.png','UPDATE_ALL_DIGG_SUBMIT',0);
 
 --
 -- Dumping data for table digglike_vote_type

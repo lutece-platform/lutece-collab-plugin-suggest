@@ -1,4 +1,4 @@
-
+<#include "/util/editor/editor.html" />
 <SCRIPT language="Javascript">
 <!--
 function showAddComment(root, commentId) {
@@ -41,7 +41,7 @@ function showAddComment(root, commentId) {
 		"		</div>"+
 		"		<div style='float:right; position:relative; z-index:2; width:57%; height:80%; border:0; margin:0; padding:0;'>"+
 		"			<div style='padding:10px; height:100%;' class='portlet'>"+
-		"				<textarea name='comment_value' id='comment_value' rows='4' cols='29' style='width:100%; border:0; margin:0; padding:0;' ></textarea>"+
+		"				<textarea "+<#if active_editor_bbcode> class='markitup' </#if>+"name='comment_value' id='comment_value' rows='4' cols='29' style='width:100%; border:0; margin:0; padding:0;' ></textarea>"+
 		"			</div>"+
 		"		</div>"+
 		"	</div>"+
@@ -88,7 +88,8 @@ function showAddComment(root, commentId) {
 					#i18n{digglike.diggComment.officialAnswer}
 					<div style="float:right; position:relative; z-index:2; width:76%; height:80%; border:0; margin:0; padding:0;">
 						<div style="padding:10px; height:100%; overflow:auto;" class="official-answer">
-							${comment_submit_lutece_user.comment_submit.value}
+							${digg.parseBbcodeValue(comment_submit_lutece_user.comment_submit.value)}
+							
 							<div style="padding: 5px 5px 0px 0px; right: 0pt; bottom: 0pt; position: absolute;" align="right">
 								<a href="javascript:;" onClick="showAddComment(${rootId}, ${comment_submit_lutece_user.comment_submit.idCommentSubmit});">
 									#i18n{digglike.diggComment.labelCommentAComment}
@@ -104,7 +105,8 @@ function showAddComment(root, commentId) {
 				<#else>
 					<div style="float:right; position:relative; z-index:2; width:76%; height:100%; border:0; margin:0; padding:0;">
 						<div style="padding:10px; height:100%; overflow:auto;" class="portlet">
-							${comment_submit_lutece_user.comment_submit.value}
+						
+							${digg.parseBbcodeValue(comment_submit_lutece_user.comment_submit.value)}
 							<div style="padding: 5px 5px 0px 0px; right: 0pt; bottom: 0pt; position: absolute;" align="right">
 								<a href="javascript:;" onClick="showAddComment(${rootId}, ${comment_submit_lutece_user.comment_submit.idCommentSubmit});">
 									#i18n{digglike.diggComment.labelCommentAComment}
@@ -135,7 +137,7 @@ function showAddComment(root, commentId) {
 							#i18n{digglike.diggComment.officialAnswer}
 							<div style="float:right; position:relative; z-index:2; width:66%; height:80%; border:0; margin:0; padding:0;">
 								<div style="padding:10px; height:100%; overflow:auto;" class="official-answer">
-									${comment_comment.value}
+									${digg.parseBbcodeValue(comment_comment.value)}
 								</div>
 							</div>
 							<div style="float:right; position:relative; z-index:4; right:-1px ;width:8%; height:100%; text-align:right; border:0; margin:0; padding:0;">
@@ -146,7 +148,7 @@ function showAddComment(root, commentId) {
 						<#else>
 							<div style="float:right; position:relative; z-index:2; width:66%; height:100%; border:0; margin:0; padding:0;">
 								<div style="padding:10px; height:100%; overflow:auto;" class="portlet">
-									${comment_comment.value}
+									${digg.parseBbcodeValue(comment_comment.value)}
 								</div>
 							</div>
 							<div style="float:right; position:relative; z-index:4; right:-1px ;width:8%; height:100%; text-align:right; border:0; margin:0; padding:0;">
@@ -181,7 +183,7 @@ function showAddComment(root, commentId) {
 		</div>
 		<div style="float:left; position:relative; z-index:2; width:77%; height:100%; border:0; margin:0; padding:0;">
 			<div style="padding:10px; height:100%;" class="portlet">
-				<textarea name="comment_value" id="comment_value" rows="6" cols="49" style="width:100%; border:0; margin:0; padding:0;" ></textarea>
+				<textarea name="comment_value" id="comment_value" rows="6" cols="49" style="width:100%; border:0; margin:0; padding:0;" <#if active_editor_bbcode> class='markitup' </#if> ></textarea>
 			</div>
 		</div>
 	</div>
@@ -199,3 +201,4 @@ function showAddComment(root, commentId) {
 		<input type="submit" value="ajouter" name="submit_comment" class="-lutece-input" />
 	</div>
 </form>
+<@initEditor type="bbcode" />

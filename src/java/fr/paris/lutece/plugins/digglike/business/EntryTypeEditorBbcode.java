@@ -33,72 +33,46 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.editor.EditorBbcodeService;
 
-import java.util.List;
 
 
 /**
  *
- *Interface IVoteTypeDAO
+ * class EntryTypeEditorBbcode
  *
  */
-public interface ICategoryDAO
+public class EntryTypeEditorBbcode extends EntryTypeTextArea
 {
-    /**
-     * Insert a new record in the table.
-     *
-     * @param category instance of the Category object to insert
-     * @param plugin the plugin
-     */
-    void insert( Category category, Plugin plugin );
+    private final String _template_html_code_form = "admin/plugins/digglike/html_code_form_entry_type_editor_bbcode.html";
+    private final String _template_html_code_response = "admin/plugins/digglike/html_code_response_entry_type_editor_bbcode.html";
 
     /**
-     * update record in the table.
+     * Get the HtmlCode  of   the entry
+     * @return the HtmlCode  of   the entry
      *
-     * @param category instance of the Category object to update
-     * @param plugin the plugin
-     */
-    void store( Category category, Plugin plugin );
-
-    /**
-     * Delete a record from the table
-     *
-     * @param  nIdCategory The identifier of the category
-     * @param plugin the plugin
-     */
-    void delete( int nIdCategory, Plugin plugin );
-
-    /**
-     * Load the data of the category from the table
-     *
-     * @param idKey The identifier of the category
-     * @param plugin the plugin
-     * @return The category
-     */
-    Category load( int idKey, Plugin plugin );
-
-    /**
-     * Load the data of all category returns them in a  list
-     * @param plugin the plugin
-     * @return  the list of category
-     */
-    List<Category> select( Plugin plugin );
-    
+     * */
+    public String getTemplateHtmlCodeForm(  )
+    {
+        return _template_html_code_form;
+    }
     
     
     /**
-     * Select all category associate to a digg and returns them in a  list
-     * @param plugin the plugin
-     * @return  the list of category
+     * Get the template of the html code of the response value  associate to the entry
+    * @return the template of the html code of the response value  associate to the entry
      */
-    List<Category> select(int nIdDigg ,Plugin plugin );
+    public String getTemplateHtmlCodeResponse(  )
+    {
+        return _template_html_code_response;
+    }
+    
+    public String parseBbcodeValue(String strValue)
+    {
+    	
+    	return EditorBbcodeService.getInstance().parse(strValue);
+    	
+    	
+    }
 
-    /**
-    * true if there is a  digg associate to the category
-    * @param nIdCategory the key of the category
-    * @param plugin the plugin
-    * @return true if there is a digg associate to the category
-    */
-    boolean isAssociateToDigg( int nIdCategory, Plugin plugin );
-}
+ }

@@ -98,6 +98,15 @@ public class DigglikeLuceneSearchEngine implements DigglikeSearchEngine
                 fields.add( DigglikeSearchItem.FIELD_ID_DIGG );
                 flags.add( BooleanClause.Occur.MUST );
             }
+          //filter on digg submit state
+            if ( filter.containsIdDiggSubmitState(  ) )
+            {
+                Query queryState = new TermQuery( new Term( DigglikeSearchItem.FIELD_STATE,
+                            String.valueOf( filter.getIdDiggSubmitState( ) ) ) );
+                queries.add( queryState.toString(  ) );
+                fields.add( DigglikeSearchItem.FIELD_STATE );
+                flags.add( BooleanClause.Occur.MUST );
+            }
 
             //filter on digg type
             Query queryTypeDigg = new TermQuery( new Term( DigglikeSearchItem.FIELD_TYPE,

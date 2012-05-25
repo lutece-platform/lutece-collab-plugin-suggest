@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import fr.paris.lutece.plugins.digglike.utils.ProcessBBCode;
+import fr.paris.lutece.portal.service.editor.EditorBbcodeService;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionRemovalListenerService;
 import fr.paris.lutece.portal.service.role.RoleRemovalListenerService;
@@ -110,6 +112,7 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     private int _nSortField;
     private String _strCodeTheme;
     private String _strConfirmationMessage;
+    private boolean _bActiveEditorBbcode;
 
     /**
      * Initialize the Digg
@@ -913,4 +916,34 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     {
         _strConfirmationMessage = strConfirmationMessage;
     }
+    /**
+     * set true if the editor BBcode must be display
+     * @param _nActiveEditorBbCode true if the editor BBcode must be display
+     */
+	public void setActiveEditorBbcode(boolean _nActiveEditorBbCode) {
+		this._bActiveEditorBbcode = _nActiveEditorBbCode;
+	}
+	
+	/**
+	 * 
+	 * @return true if the editor BBcode must be display
+	 */
+	public boolean isActiveEditorBbcode() {
+		return _bActiveEditorBbcode;
+	}
+	
+	
+	
+	public String parseBbcodeValue(String strValue)
+    {
+    	if(isActiveEditorBbcode())
+    	{
+    		return EditorBbcodeService.getInstance().parse(strValue);
+    	}
+    	return strValue;
+    	
+    }
+	
+	
+	
 }

@@ -77,9 +77,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -96,13 +98,7 @@ public final class DiggUtils
     public static final int CONSTANT_SUBMIT_FILTER_WEEK = 2;
     public static final int CONSTANT_SUBMIT_FILTER_MONTH = 3;
     public static final int CONSTANT_SUBMIT_FILTER_YESTERDAY = 4;
-    public static final int CONSTANT_SORT_BY_DATE_RESPONSE_ASC = 1;
-    public static final int CONSTANT_SORT_BY_DATE_RESPONSE_DESC = 2;
-    public static final int CONSTANT_SORT_BY_SCORE_ASC = 3;
-    public static final int CONSTANT_SORT_BY_SCORE_DESC = 4;
-    public static final int CONSTANT_SORT_BY_NUMBER_COMMENT_ASC = 5;
-    public static final int CONSTANT_SORT_BY_NUMBER_COMMENT_DESC = 6;
-    public static final int CONSTANT_SORT_MANUALLY = 7;
+ 
     public static final String EMPTY_STRING = "";
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_ENTRY = "entry";
@@ -121,6 +117,7 @@ public final class DiggUtils
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
     private static final String CONSTANT_WHERE = " WHERE ";
     private static final String CONSTANT_AND = " AND ";
+    private static final String MARK_ID_DEFAULT_CATEGORY="id_default_category";
 
     //	 Xml Tags
 
@@ -144,6 +141,8 @@ public final class DiggUtils
     private static final String PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_DESC = "digglike.sorterListItemDateResponseDesc";
     private static final String PROPERTY_SORTER_LIST_ITEM_SCORE_ASC = "digglike.sorterListItemScoreAsc";
     private static final String PROPERTY_SORTER_LIST_ITEM_SCORE_DESC = "digglike.sorterListItemScoreDesc";
+    private static final String PROPERTY_SORTER_LIST_ITEM_VIEW_ASC = "digglike.sorterListItemViewAsc";
+    private static final String PROPERTY_SORTER_LIST_ITEM_VIEW_DESC = "digglike.sorterListItemViewDesc";
     private static final String PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_ASC = "digglike.sorterListItemCommentAsc";
     private static final String PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_DESC = "digglike.sorterListItemCommentDesc";
     private static final String PROPERTY_SORTER_LIST_ITEM_MANUAL = "digglike.sorterListItemManualDesc";
@@ -694,7 +693,7 @@ public final class DiggUtils
      * @param strFullUrl the full url
      * @return the html code of the form
      */
-    public static String getHtmlForm( Digg digg, Plugin plugin, Locale locale, String strFullUrl )
+    public static String getHtmlForm( Digg digg, Plugin plugin, Locale locale, String strFullUrl,int nIdDefaultCategory )
     {
         List<IEntry> listEntryFirstLevel;
         Map<String, Object> model = new HashMap<String, Object>(  );
@@ -710,7 +709,7 @@ public final class DiggUtils
         ArrayList<Category> listCats = new ArrayList<Category>(  );
         Category category = new Category(  );
 
-        category.setIdCategory( -2 );
+        category.setIdCategory( -1 );
         category.setTitle( I18nService.getLocalizedString( PROPERTY_CHOOSE_CATEGORY, locale ) );
 
         if ( !digg.getCategories(  ).isEmpty(  ) )
@@ -718,10 +717,7 @@ public final class DiggUtils
             listCats.add( category );
         }
 
-        for ( Category c : digg.getCategories(  ) )
-        {
-            listCats.add( c );
-        }
+        listCats.addAll(digg.getCategories());
 
         DiggSubmitType type = new DiggSubmitType(  );
         List<DiggSubmitType> listTypes = (ArrayList<DiggSubmitType>) DiggSubmitTypeHome.getList( plugin );
@@ -760,7 +756,7 @@ public final class DiggUtils
 
         model.put( MARK_CATEGORY_LIST, refCategoryList );
         model.put( MARK_TYPE_LIST, refTypeList );
-
+        model.put(MARK_ID_DEFAULT_CATEGORY, nIdDefaultCategory);
         model.put( MARK_DIGG, digg );
         model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );
         model.put( MARK_LOCALE, locale );
@@ -1042,44 +1038,55 @@ public final class DiggUtils
     {
         switch ( nIdSort )
         {
-            case CONSTANT_SORT_BY_DATE_RESPONSE_ASC:
+            case SubmitFilter.SORT_BY_DATE_RESPONSE_ASC :
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_ASC );
 
                 break;
 
-            case CONSTANT_SORT_BY_DATE_RESPONSE_DESC:
+            case SubmitFilter.SORT_BY_DATE_RESPONSE_DESC:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
                 break;
 
-            case CONSTANT_SORT_BY_SCORE_ASC:
+            case SubmitFilter.SORT_BY_SCORE_ASC:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_SCORE_ASC );
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
                 break;
 
-            case CONSTANT_SORT_BY_SCORE_DESC:
+            case SubmitFilter.SORT_BY_SCORE_DESC:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_SCORE_DESC );
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
                 break;
 
-            case CONSTANT_SORT_BY_NUMBER_COMMENT_ASC:
+            case SubmitFilter.SORT_BY_NUMBER_COMMENT_ASC:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_NUMBER_COMMENT_ASC );
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
                 break;
 
-            case CONSTANT_SORT_BY_NUMBER_COMMENT_DESC:
+            case SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC );
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
                 break;
-
-            case CONSTANT_SORT_MANUALLY:
+                
+            case SubmitFilter.SORT_MANUALLY:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_MANUALLY );
 
                 break;
+            case SubmitFilter.SORT_BY_NUMBER_VIEW_ASC:
+                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_NUMBER_VIEW_ASC );
+                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+
+                break;
+            case SubmitFilter.SORT_BY_NUMBER_VIEW_DESC:
+                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_NUMBER_VIEW_DESC );
+                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+
+                break;
+ 
 
             default:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_SCORE_DESC );
@@ -1098,17 +1105,17 @@ public final class DiggUtils
     {
         switch ( nIdSort )
         {
-            case CONSTANT_SORT_BY_DATE_RESPONSE_ASC:
+            case SubmitFilter.SORT_BY_DATE_RESPONSE_ASC:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_ASC );
 
                 break;
 
-            case CONSTANT_SORT_BY_DATE_RESPONSE_DESC:
+            case SubmitFilter.SORT_BY_DATE_RESPONSE_DESC:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
                 break;
 
-            case CONSTANT_SORT_MANUALLY:
+            case SubmitFilter.SORT_MANUALLY:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_MANUALLY );
 
                 break;
@@ -1170,15 +1177,16 @@ public final class DiggUtils
      * @param listCategories the list of categories
      * @return reference list of  category
      */
-    public static ReferenceList getRefListCategory( List<Category> listCategories )
+    public static ReferenceList getRefListCategory( List<Category> listCategories)
     {
-        ReferenceList refListCategories = new ReferenceList(  );
+        ReferenceList refListCategories = new ReferenceList();
 
         for ( Category category : listCategories )
         {
             refListCategories.addItem( category.getIdCategory(  ), category.getTitle(  ) );
         }
-
+        
+       
         return refListCategories;
     }
 
@@ -1231,20 +1239,28 @@ public final class DiggUtils
         ReferenceList refListSorter = new ReferenceList(  );
 
         refListSorter.addItem( -1, EMPTY_STRING );
-        refListSorter.addItem( CONSTANT_SORT_BY_DATE_RESPONSE_ASC,
+        refListSorter.addItem( SubmitFilter.SORT_BY_DATE_RESPONSE_ASC,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_ASC, locale ) );
-        refListSorter.addItem( CONSTANT_SORT_BY_DATE_RESPONSE_DESC,
+        refListSorter.addItem( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_DESC, locale ) );
-        refListSorter.addItem( CONSTANT_SORT_BY_SCORE_ASC,
+        refListSorter.addItem( SubmitFilter.SORT_BY_SCORE_ASC,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_SCORE_ASC, locale ) );
-        refListSorter.addItem( CONSTANT_SORT_BY_SCORE_DESC,
+        refListSorter.addItem( SubmitFilter.SORT_BY_SCORE_DESC,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_SCORE_DESC, locale ) );
-        refListSorter.addItem( CONSTANT_SORT_BY_NUMBER_COMMENT_ASC,
+        refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_COMMENT_ASC,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_ASC, locale ) );
-        refListSorter.addItem( CONSTANT_SORT_BY_NUMBER_COMMENT_DESC,
+        refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_DESC, locale ) );
-        refListSorter.addItem( CONSTANT_SORT_MANUALLY,
+        refListSorter.addItem( SubmitFilter.SORT_MANUALLY,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_MANUAL, locale ) );
+        
+        
+        refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_VIEW_ASC,
+                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_VIEW_ASC, locale ) );
+            refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_VIEW_DESC,
+                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_VIEW_DESC, locale ) );
+          
+        
 
         return refListSorter;
     }
@@ -1260,9 +1276,9 @@ public final class DiggUtils
         ReferenceList refListSorter = new ReferenceList(  );
 
         refListSorter.addItem( -1, EMPTY_STRING );
-        refListSorter.addItem( CONSTANT_SORT_BY_DATE_RESPONSE_ASC,
+        refListSorter.addItem( SubmitFilter.SORT_BY_DATE_RESPONSE_ASC,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_ASC, locale ) );
-        refListSorter.addItem( CONSTANT_SORT_BY_DATE_RESPONSE_DESC,
+        refListSorter.addItem( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_DESC, locale ) );
 
         return refListSorter;
@@ -1337,5 +1353,34 @@ public final class DiggUtils
         }
 
         return strBuffer.toString(  );
+    }
+    
+    /**
+     * Like {@link List#retainAll(java.util.Collection)}, keeping first list
+     * order. This method is based on the fact that list1 and list2 have unique
+     * elements.
+     *
+     * @param list1
+     *            the first list
+     * @param list2
+     *            the other list
+     * @return first list
+     */
+    public static List<Integer> retainAllIdsKeepingFirstOrder( List<Integer> list1, List<Integer> list2 )
+    {
+        Iterator<Integer> it = list1.iterator(  );
+
+        // makes contains quicker
+        TreeSet<Integer> ts = new TreeSet<Integer>( list2 );
+
+        while ( it.hasNext(  ) )
+        {
+            if ( !ts.contains( it.next(  ) ) )
+            {
+                it.remove(  );
+            }
+        }
+
+        return list1;
     }
 }

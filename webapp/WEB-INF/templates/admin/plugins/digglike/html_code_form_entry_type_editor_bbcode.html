@@ -1,0 +1,12 @@
+<#include "/util/editor/editor.html" />
+<div class="form-element">
+<label for="${entry.idEntry}">${entry.title}<#if entry.mandatory> *	</#if> :</label>
+<br />
+<#if entry.defaultValue?exists>
+	<textarea class="markitup" name="${entry.idEntry}" id="${entry.idEntry}"  cols="${entry.width}" rows="${entry.height}">${entry.defaultValue}</textarea>
+<#else>
+   	<textarea class="markitup" name="${entry.idEntry}" id="${entry.idEntry}" cols="${entry.width}" rows="${entry.height}" ></textarea>
+</#if>
+<#if entry.helpMessage?exists&&entry.helpMessage!=''><span class="form-help"><a class="digg-info" href="javascript:void;"><img  src="images/admin/skin/plugins/digglike/help.gif" /><span><pre> ${entry.helpMessage}</pre></span></a></span></#if>	
+</div>
+<@initEditor type="bbcode" />

@@ -172,7 +172,14 @@ public final class DiggHome
      */
     public static Digg findByPrimaryKey( int nKey, Plugin plugin )
     {
-        return _dao.load( nKey, plugin );
+        Digg digg= _dao.load( nKey, plugin );
+        if(digg!=null)
+        {
+        	digg.setCategories(CategoryHome.getListByIdDigg(nKey, plugin));
+        	
+        }
+        return digg;
+        
     }
 
     /**

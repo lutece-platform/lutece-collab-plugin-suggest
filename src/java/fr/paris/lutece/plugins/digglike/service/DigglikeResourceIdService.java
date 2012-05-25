@@ -69,6 +69,11 @@ public class DigglikeResourceIdService extends ResourceIdService
 
     /** Permission for viewing digg submit */
     public static final String PERMISSION_MANAGE_DIGG_SUBMIT = "MANAGE_DIGG_SUBMIT";
+    
+    /** Permission for update All digg submit */
+    public static final String PERMISSION_UPDATE_ALL_DIGG_SUBMIT = "UPDATE_ALL_DIGG_SUBMIT";
+    
+    
 
     /** Permission for enable or disable digg */
     public static final String PERMISSION_CHANGE_STATE = "CHANGE_STATE";

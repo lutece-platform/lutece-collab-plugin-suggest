@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.digglike.service.search;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +44,8 @@ import org.apache.lucene.demo.html.HTMLParser;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 
+import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
+import fr.paris.lutece.plugins.digglike.business.CommentSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggFilter;
 import fr.paris.lutece.plugins.digglike.business.DiggHome;
@@ -101,53 +104,49 @@ public class DigglikeIndexer implements SearchIndexer
     */
     public void indexDocuments(  ) throws IOException, InterruptedException, SiteMessageException
     {
-        String strPortalUrl = AppPathService.getPortalUrl(  );
-
-        Plugin plugin = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
+        
+    	Plugin plugin = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
 
         //filter on digg state(the digg submit are add if the digg is activated)
         DiggFilter diggFilter = new DiggFilter(  );
         diggFilter.setIdState( Digg.STATE_ENABLE );
 
         List<Digg> diggActivatedList = DiggHome.getDiggList( diggFilter, plugin );
-        List<DiggSubmit> diggSubmitActivatedList;
+        List<Integer> diggSubmitActivatedList;
 
         SubmitFilter submitFilter = new SubmitFilter(  );
         //        submitFilter.setIdDiggSubmitState( DiggSubmit.STATE_PUBLISH );
         submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_SCORE_DESC );
         submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+        
 
         for ( Digg digg : diggActivatedList )
         {
             submitFilter.setIdDigg( digg.getIdDigg(  ) );
-            diggSubmitActivatedList = DiggSubmitHome.getDiggSubmitList( submitFilter, plugin );
+            diggSubmitActivatedList = DiggSubmitHome.getDiggSubmitListId( submitFilter, plugin );
 
-            for ( DiggSubmit diggSubmit : diggSubmitActivatedList )
+            for ( Integer idDiggSubmit : diggSubmitActivatedList )
             {
-                diggSubmit.setDigg( digg );
-
-                UrlItem url = new UrlItem( strPortalUrl );
-                url.addParameter( XPageAppService.PARAM_XPAGE_APP,
-                    AppPropertiesService.getProperty( PROPERTY_XPAGE_APPLICATION_ID, "digg" ) );
-                url.addParameter( PARAMETER_ID_DIGG, digg.getIdDigg(  ) );
-                url.addParameter( PARAMETER_ID_DIGG_SUBMIT, diggSubmit.getIdDiggSubmit(  ) );
-                url.addParameter( DiggApp.PARAMETER_DIGG_DETAIL, 1 );
-
+               
+                
                 //url.addParameter( DiggApp.PARAMETER_CLEAR_FILTER,DiggApp.PARAMETER_CLEAR_FILTER);
                 //url.setAnchor(DiggApp.ANCHOR_DIGG_SUBMIT+diggSubmit.getIdDiggSubmit());
-                org.apache.lucene.document.Document docDiggSubmit = null;
+                List<Document> listDocDiggSubmit = null;
                 try
                 {
-                	docDiggSubmit = getDocument( diggSubmit, url.getUrl(  ) );
+                	listDocDiggSubmit = getDocuments( idDiggSubmit.toString());
                 }
                 catch ( Exception e )
                 {
                 	String strMessage = "Digg ID : " + digg.getIdDigg(  );
                 	IndexationService.error( this, e, strMessage );
                 }
-                if ( docDiggSubmit != null )
+                if ( listDocDiggSubmit != null &&  listDocDiggSubmit.size()!=0)
                 {
-                	IndexationService.write( docDiggSubmit );
+                	for(Document docDiggSubmit:listDocDiggSubmit )
+                	{
+                		IndexationService.write( docDiggSubmit );
+                	}
                 }
             }
         }
@@ -161,38 +160,21 @@ public class DigglikeIndexer implements SearchIndexer
      * @throws InterruptedException Exception
      * @throws SiteMessageException Exception
      */
-    public List<Document> getDocuments( String strIdDigg )
+    public List<Document> getDocuments( String strIdDiggSubmit )
         throws IOException, InterruptedException, SiteMessageException
     {
         List<org.apache.lucene.document.Document> listDocs = new ArrayList<org.apache.lucene.document.Document>(  );
         String strPortalUrl = AppPathService.getPortalUrl(  );
-
+        Integer nIdDiggSubmit=Integer.parseInt( strIdDiggSubmit );
         Plugin plugin = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
-
-        //filter on digg state(the digg submit are add if the digg is activated)
-        /*DiggFilter diggFilter = new DiggFilter(  );
-        diggFilter.setIdState( Digg.STATE_ENABLE );
-        
-        List<Digg> diggActivatedList = DiggHome.getDiggList( diggFilter, plugin );*/
-
-        /*Digg digg = DiggHome.findByPrimaryKey(nIdDigg, plugin);
-        List<DiggSubmit> diggSubmitActivatedList;
-        
-        SubmitFilter submitFilter = new SubmitFilter(  );
-        submitFilter.setIdDiggSubmitState( DiggSubmit.STATE_PUBLISH );
-        
-        submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_SCORE_DESC );
-        submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
-        submitFilter.setIdDigg( digg.getIdDigg(  ) );
-        diggSubmitActivatedList = DiggSubmitHome.getDiggSubmitList( submitFilter, plugin );
-        
-        for ( DiggSubmit diggSubmit : diggSubmitActivatedList )
-        {
-            diggSubmit.setDigg( digg );*/
-        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( Integer.parseInt( strIdDigg ), plugin );
-
+        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit, plugin );
+        //
+        //SubmitFilter commentFilter=new SubmitFilter();
+       // commentFilter.setIdDiggSubmit(nIdDiggSubmit);
         if ( diggSubmit != null )
         {
+        	//Add comment
+        	//diggSubmit.setComments(CommentSubmitHome.getCommentSubmitList(commentFilter, plugin)); 
             UrlItem url = new UrlItem( strPortalUrl );
             url.addParameter( XPageAppService.PARAM_XPAGE_APP,
                 AppPropertiesService.getProperty( PROPERTY_XPAGE_APPLICATION_ID, "digg" ) );
@@ -229,6 +211,8 @@ public class DigglikeIndexer implements SearchIndexer
         // Add the url as a field named "url".  Use an UnIndexed field, so
         // that the url is just stored with the question/answer, but is not searchable.
         doc.add( new Field( SearchItem.FIELD_URL, strUrl, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
+        
+        
         doc.add( new Field( DigglikeSearchItem.FIELD_ID_DIGG, String.valueOf( diggSubmit.getDigg(  ).getIdDigg(  ) ),
                 Field.Store.YES, Field.Index.NOT_ANALYZED ) );
         doc.add( new Field( DigglikeSearchItem.FIELD_ID_DIGG_SUBMIT,
@@ -240,10 +224,23 @@ public class DigglikeIndexer implements SearchIndexer
         doc.add( new Field( DigglikeSearchItem.FIELD_UID,
                 String.valueOf( diggSubmit.getIdDiggSubmit(  ) ) + "_" + SHORT_NAME, Field.Store.YES,
                 Field.Index.NOT_ANALYZED ) );
-
-        StringReader readerDiggSubmit = new StringReader( diggSubmit.getDiggSubmitValue(  ) );
+        //Add state
+        doc.add( new Field( DigglikeSearchItem.FIELD_STATE,
+                Integer.toString( diggSubmit.getDiggSubmitState().getIdDiggSubmitState() ), Field.Store.YES, Field.Index.NOT_ANALYZED ) );
+        
+        StringWriter writerFieldContent=new StringWriter();
+        writerFieldContent.write(diggSubmit.getDiggSubmitValue(  ));
+        //Add the list of comments
+        if(diggSubmit.getComments()!=null)
+        {
+        	for(CommentSubmit comment:diggSubmit.getComments())
+        	{
+        		writerFieldContent.write(comment.getValue());
+        	}
+        		
+        }
+        StringReader readerDiggSubmit = new StringReader(writerFieldContent.toString() );
         HTMLParser parser = new HTMLParser( readerDiggSubmit );
-
         //the content of the question/answer is recovered in the parser because this one
         //had replaced the encoded caracters (as &eacute;) by the corresponding special caracter (as ?)
         Reader reader = parser.getReader(  );

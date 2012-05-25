@@ -170,6 +170,7 @@ CREATE TABLE digglike_digg (
 	sort_asc smallint default 0,
 	code_theme varchar(25)default NULL,
 	confirmation_message LONG VARCHAR DEFAULT NULL,
+	active_editor_bbcode smallint default 0,
 	PRIMARY KEY (id_digg)
 );
 
@@ -198,6 +199,7 @@ CREATE TABLE digglike_digg_submit (
 	lutece_user_key varchar(100) default NULL,
 	digg_submit_list_order int default 0,
 	digg_submit_type int default 0,
+	number_view int default 0,
 	PRIMARY KEY (id_digg_submit)
 );
 

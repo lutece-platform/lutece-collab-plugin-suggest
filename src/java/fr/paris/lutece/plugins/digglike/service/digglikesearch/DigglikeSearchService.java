@@ -36,10 +36,13 @@ package fr.paris.lutece.plugins.digglike.service.digglikesearch;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.service.search.DigglikeIndexer;
+import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
@@ -75,32 +78,37 @@ public class DigglikeSearchService
      * @param plugin The plugin
      * @return Results as a collection of {@link DiggSubmit}
      */
-    public List<DiggSubmit> getSearchResults( String strQuery, SubmitFilter filter, Plugin plugin )
+    public List<Integer> getSearchResults( String strQuery, SubmitFilter filter, Plugin plugin )
     {
-        List<DiggSubmit> listDiggSubmitResult = new ArrayList<DiggSubmit>(  );
+       
+    	List<Integer> listDiggSubmitResult = new ArrayList<Integer>(  );
         DigglikeSearchEngine engine = (DigglikeSearchEngine) SpringContextService.getPluginBean( plugin.getName(  ),
                 BEAN_SEARCH_ENGINE );
         List<Integer> diggSubmitListId = DiggSubmitHome.getDiggSubmitListId( filter, plugin );
-        List<DigglikeSearchItem> listSearchesults = engine.getSearchResults( strQuery, filter );
-        DiggSubmit diggSubmit;
-
-        for ( Integer nDiggSubmitId : diggSubmitListId )
+        List<DigglikeSearchItem> listSearchesults = StringUtils.isEmpty( strQuery ) ? null: engine.getSearchResults( strQuery, filter );
+        
+        
+        if(	listSearchesults == null || listSearchesults.size() == 0 )
         {
-            for ( DigglikeSearchItem searchResult : listSearchesults )
-            {
-                if ( ( searchResult.getType(  ) != null ) && ( searchResult.getId(  ) != null ) &&
-                        searchResult.getType(  ).equals( DigglikeIndexer.INDEX_TYPE_DIGG ) &&
-                        searchResult.getIdDiggSubmit(  ).matches( REGEX_ID ) &&
-                        ( Integer.parseInt( searchResult.getIdDiggSubmit(  ) ) == nDiggSubmitId ) )
-                {
-                    diggSubmit = DiggSubmitHome.findByPrimaryKey( nDiggSubmitId, plugin );
-
-                    if ( diggSubmit != null )
-                    {
-                        listDiggSubmitResult.add( diggSubmit );
-                    }
-                }
-            }
+        	
+        	listDiggSubmitResult = diggSubmitListId;
+        }
+        else
+        {
+	        for ( Integer nDiggSubmitId : diggSubmitListId )
+	        {
+	        	for ( DigglikeSearchItem searchResult : listSearchesults )
+	            {
+	                if ( ( searchResult.getType(  ) != null ) && ( searchResult.getId(  ) != null ) &&
+	                        searchResult.getType(  ).equals( DigglikeIndexer.INDEX_TYPE_DIGG ) &&
+	                        searchResult.getIdDiggSubmit(  ).matches( REGEX_ID ) &&
+	                        ( Integer.parseInt( searchResult.getIdDiggSubmit(  ) ) == nDiggSubmitId ) )
+	                {
+	                    
+	                    	listDiggSubmitResult.add( DiggUtils.getIntegerParameter( searchResult.getIdDiggSubmit(  ) ) );
+	                  }
+	            }
+	        }
         }
 
         return listDiggSubmitResult;
