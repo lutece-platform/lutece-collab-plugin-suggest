@@ -94,11 +94,14 @@ import javax.servlet.http.HttpServletResponse;
  */
 public final class DiggUtils
 {
-    public static final int CONSTANT_SUBMIT_FILTER_TO_DAY = 1;
+	public static final int CONSTANT_ID_NULL = -1;
+	public static final int CONSTANT_SUBMIT_FILTER_TO_DAY = 1;
     public static final int CONSTANT_SUBMIT_FILTER_WEEK = 2;
     public static final int CONSTANT_SUBMIT_FILTER_MONTH = 3;
     public static final int CONSTANT_SUBMIT_FILTER_YESTERDAY = 4;
- 
+    public static final int  CONSTANT_MODE_DIGG_LIST=0;
+    public static final int  CONSTANT_MODE_DIGG_FORM=1;
+    
     public static final String EMPTY_STRING = "";
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_ENTRY = "entry";

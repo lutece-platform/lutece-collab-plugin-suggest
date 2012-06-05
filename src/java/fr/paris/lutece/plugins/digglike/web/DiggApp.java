@@ -114,7 +114,7 @@ public class DiggApp implements XPageApplication
     private static final String MARK_LIST_CATEGORIES_DIGG = "list_categories_digg";
     private static final String MARK_LIST_TYPES = "list_types";
     private static final String MARK_ID_DIGG = "id_digg";
-      private static final String MARK_MODE_DIGG = "mode_digg";
+     private static final String MARK_MODE_DIGG = "mode_digg";
     private static final Object MARK_DIGG_LIST = "list_digg";
     private static final String MARK_LIST_SUBMIT_TOP_COMMENT = "list_top_comment_digg";
     private static final String MARK_LIST_SUBMIT_TOP_POPULARITY_DIGG = "list_top_popularity_digg";
@@ -404,7 +404,7 @@ public class DiggApp implements XPageApplication
                     }
                 }
 
-                if ( nIdSubmitDigg != -1 )
+                if ( nIdSubmitDigg != DiggUtils.CONSTANT_ID_NULL )
                 {
                     //vote
                     if ( strVote != null )
@@ -449,14 +449,14 @@ public class DiggApp implements XPageApplication
                                     strCommentDigg );
                         }
 
-                        model.put( MARK_MODE_DIGG, 0 );
+                        model.put( MARK_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST );
                     }
 
                     //Report
                     else if ( ( strReport != null ) && digg.isDisableNewDiggSubmit(  ) )
                     {
                         strContentDigg = getHtmlReported( request, nMode, plugin, digg, nIdSubmitDigg, strDetail );
-                        model.put( MARK_MODE_DIGG, 0 );
+                        model.put( MARK_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST );
                     }
 
                     // new reported 
@@ -486,7 +486,7 @@ public class DiggApp implements XPageApplication
                         Map<String, Object> parameters = new HashMap<String, Object>(  );
                         parameters.put( PARAMETER_ID_SUBMIT_DIGG, nIdSubmitDigg );
                         parameters.put( PARAMETER_ID_DIGG, nIdDigg );
-                        parameters.put( PARAMETER_MODE_DIGG, 0 );
+                        parameters.put( PARAMETER_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST);
                         urlDiggXpage.setAnchor( ANCHOR_DIGG_SUBMIT + nIdSubmitDigg );
                         parameters.put( PARAMETER_DIGG_DETAIL, strDetail );
 
@@ -548,25 +548,35 @@ public class DiggApp implements XPageApplication
                             strMessage = MESSAGE_NEW_COMMENT_SUBMIT_DISABLE;
                         }
 
-                        Map<String, Object> parameters = new HashMap<String, Object>(  );
+                       
+                        if( !StringUtils.isEmpty(digg.getConfirmationMessage(  )))
+                    	{
+	                        Map<String, Object> parameters = new HashMap<String, Object>(  );
+	
+	                        parameters.put( PARAMETER_ID_SUBMIT_DIGG, nIdSubmitDigg );
+	                        parameters.put( PARAMETER_ID_DIGG, nIdDigg );
+	                        parameters.put( PARAMETER_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST );
+	                        parameters.put( PARAMETER_COMMENT_DIGG, CONSTANTE_PARAMETER_TRUE_VALUE );
+	                        parameters.put( PARAMETER_DIGG_DETAIL, CONSTANTE_PARAMETER_TRUE_VALUE );
+	
+	                        Object[] args = { ( digg.getConfirmationMessage(  ) == null ) ? ""
+	                                                                                      : digg.getConfirmationMessage(  ) };
+	                        SiteMessageService.setMessage( request, strMessage, args, null, urlDiggXpage.getUrl(  ), null,
+	                            SiteMessage.TYPE_INFO, parameters );
+                    	}
+                        else
+                        {
+                        	String strCommentDigg = request.getParameter( PARAMETER_COMMENT_DIGG );
+                            strContentDigg = getHtmlDiggSubmitDetail(request, nMode, plugin, digg, nIdSubmitDigg, strCommentDigg);
 
-                        parameters.put( PARAMETER_ID_SUBMIT_DIGG, nIdSubmitDigg );
-                        parameters.put( PARAMETER_ID_DIGG, nIdDigg );
-                        parameters.put( PARAMETER_MODE_DIGG, 0 );
-                        parameters.put( PARAMETER_COMMENT_DIGG, CONSTANTE_PARAMETER_TRUE_VALUE );
-                        parameters.put( PARAMETER_DIGG_DETAIL, CONSTANTE_PARAMETER_TRUE_VALUE );
-
-                        Object[] args = { ( digg.getConfirmationMessage(  ) == null ) ? ""
-                                                                                      : digg.getConfirmationMessage(  ) };
-                        SiteMessageService.setMessage( request, strMessage, args, null, urlDiggXpage.getUrl(  ), null,
-                            SiteMessage.TYPE_INFO, parameters );
+                        }
                     }
                     else
                     {
                         strContentDigg = getHtmlListDiggSubmit( locale, plugin, digg, nIdFilterPeriod,
                                 nIdDiggSubmitSort, nIdFilterCategory, diggSubmitStatePublish.getIdDiggSubmitState(  ),
                                 strQuery, strFilterPageIndex, urlDiggXpage );
-                        model.put( MARK_MODE_DIGG, 0 );
+                        model.put( MARK_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST);
                     }
                 }
 
@@ -588,7 +598,7 @@ public class DiggApp implements XPageApplication
                     //Check if a category is selected (in the case or the digg has some categories)
                     if ( strIdCategory != null )
                     {
-                        if ( strIdCategory.equals( "-2" ) )
+                        if ( strIdCategory.equals( Integer.toString(Category.DEFAULT_ID_CATEGORY )) )
                         {
                             SiteMessageService.setMessage( request, MESSAGE_ERROR_NO_CATEGORY, SiteMessage.TYPE_STOP );
                         }
@@ -611,18 +621,28 @@ public class DiggApp implements XPageApplication
 
                     Map<String, Object> parameters = new HashMap<String, Object>(  );
                     parameters.put( PARAMETER_ID_DIGG, nIdDigg );
-                    parameters.put( PARAMETER_MODE_DIGG, 0 );
-
-                    Object[] args = { ( digg.getConfirmationMessage(  ) == null ) ? "" : digg.getConfirmationMessage(  ) };
-                    SiteMessageService.setMessage( request, strMessage, args, null, urlDiggXpage.getUrl(  ), null,
-                        SiteMessage.TYPE_INFO, parameters );
+                    parameters.put( PARAMETER_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST );
+                    if( !StringUtils.isEmpty(digg.getConfirmationMessage(  )))
+                    	{
+	                    Object[] args = { ( digg.getConfirmationMessage(  ) == null ) ? "" : digg.getConfirmationMessage(  ) };
+	                    SiteMessageService.setMessage( request, strMessage, args, null, urlDiggXpage.getUrl(  ), null,
+	                        SiteMessage.TYPE_INFO, parameters );
+                    		}
+                    else
+                    {
+                    	   strContentDigg = getHtmlListDiggSubmit( locale, plugin, digg, nIdFilterPeriod, nIdDiggSubmitSort,
+                                   nIdFilterCategory, diggSubmitStatePublish.getIdDiggSubmitState(  ), strQuery,
+                                   strFilterPageIndex, urlDiggXpage );
+                           model.put( MARK_MODE_DIGG,DiggUtils.CONSTANT_MODE_DIGG_LIST );
+                    }
+                    
                 }
 
                 // Display form for post diggSubmit
-                else if ( ( strModeDigg != null ) && strModeDigg.equals( "1" ) )
+                else if ( ( strModeDigg != null ) && strModeDigg.equals( Integer.toString(DiggUtils.CONSTANT_MODE_DIGG_FORM)) )
                 {
                     strContentDigg = getHtmlForm( request, nMode, plugin, digg,nIdFilterCategory );
-                    model.put( MARK_MODE_DIGG, 1 );
+                    model.put( MARK_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_FORM );
                 }
 
                 // Display list diggSubmit
@@ -631,7 +651,7 @@ public class DiggApp implements XPageApplication
                     strContentDigg = getHtmlListDiggSubmit( locale, plugin, digg, nIdFilterPeriod, nIdDiggSubmitSort,
                             nIdFilterCategory, diggSubmitStatePublish.getIdDiggSubmitState(  ), strQuery,
                             strFilterPageIndex, urlDiggXpage );
-                    model.put( MARK_MODE_DIGG, 0 );
+                    model.put( MARK_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST );
                 }
 
                 //Filter by comment
@@ -1295,13 +1315,13 @@ public class DiggApp implements XPageApplication
             }
         }
 
-        if ( nIdCategory != -1 )
+        if ( nIdCategory != DiggUtils.CONSTANT_ID_NULL )
         {
             Category category = CategoryHome.findByPrimaryKey( nIdCategory, plugin );
             diggSubmit.setCategory( category );
         }
 
-        if ( nIdType != -1 )
+        if ( nIdType != DiggUtils.CONSTANT_ID_NULL  )
         {
             DiggSubmitType type = DiggSubmitTypeHome.findByPrimaryKey( nIdType, plugin );
             diggSubmit.setDiggSubmitType( type );
@@ -1315,9 +1335,9 @@ public class DiggApp implements XPageApplication
     private void clearSessionFilter( HttpSession session )
     {
         session.setAttribute( SESSION_FILTER_QUERY, EMPTY_STRING );
-        session.setAttribute( SESSION_FILTER_ID_PERIOD, -1 );
-        session.setAttribute( SESSION_FILTER_ID_SORT, -1 );
-        session.setAttribute( SESSION_FILTER_ID_CATEGORY, -1 );
+        session.setAttribute( SESSION_FILTER_ID_PERIOD,DiggUtils.CONSTANT_ID_NULL );
+        session.setAttribute( SESSION_FILTER_ID_SORT, DiggUtils.CONSTANT_ID_NULL  );
+        session.setAttribute( SESSION_FILTER_ID_CATEGORY, DiggUtils.CONSTANT_ID_NULL );
         session.setAttribute( SESSION_FILTER_PAGE_INDEX, DEFAULT_PAGE_INDEX );
     }
 }
