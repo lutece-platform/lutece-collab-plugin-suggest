@@ -43,9 +43,13 @@ public class DiggFilter
 {
     public static final String ALL_STRING = "all";
     public static final int ALL_INT = -1;
+    public static final int ID_TRUE = 1;
+    public static final int ID_FALSE = 0;
     private int _nIdState = ALL_INT;
+    private int _nIdDefaultDigg = ALL_INT;
     private String _strWorkgroup = ALL_STRING;
     private String _strRole = Digg.ROLE_NONE;
+   
 
     /**
      * @return the _strRole
@@ -127,5 +131,34 @@ public class DiggFilter
     public boolean containsRoleCriteria(  )
     {
         return ( !_strRole.equals( Digg.ROLE_NONE ) );
+    }
+    /**
+    *
+    * @return 1 if the diggs return must be a default digg
+    *         0 if the diggs return must no be a default digg
+    */
+    public int getIdDefaultDigg(  )
+    {
+        return _nIdDefaultDigg;
+    }
+
+    /**
+     * Set 1 if the diggs return must be a default digg
+    *         0 if the diggs return must no be a default digg
+     * @param idDefaultDigg  1 if the  diggs return must be a default digg
+     *                                      0 if the  diggs return must not be a default digg
+     */
+    public void setIdDefaultDigg( int idDefaultDigg )
+    {
+        _nIdDefaultDigg = idDefaultDigg;
+    }
+
+    /**
+     *
+     * @return true if the filter contain digg state
+     */
+    public boolean containsIdDefaultDigg(  )
+    {
+        return ( _nIdDefaultDigg != ALL_INT );
     }
 }

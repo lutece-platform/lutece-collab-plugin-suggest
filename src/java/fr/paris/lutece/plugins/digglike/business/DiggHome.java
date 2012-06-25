@@ -78,12 +78,13 @@ public final class DiggHome
     public static void copy( Digg digg, Plugin plugin )
     {
         Digg diggCopy = digg;
-
+       
         List<IEntry> listEntry;
         EntryFilter filter = new EntryFilter(  );
         filter.setIdDigg( digg.getIdDigg(  ) );
         listEntry = EntryHome.getEntryList( filter, plugin );
         diggCopy.setActive( false );
+        diggCopy.setDefaultDigg(false);
         diggCopy.setIdDigg( create( digg, plugin ) );
 
         for ( IEntry entry : listEntry )

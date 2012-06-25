@@ -1,3 +1,17 @@
+<div id="content-box-actions">
+  	  <#if permission_manage_advanced_parameters>
+   		<form method="post" action="jsp/admin/plugins/digglike/ManageAdvancedParameters.jsp">
+    		<input type="submit" value="#i18n{digglike.manageDigg.buttonManageAdvancedParameters}" class="button bt-toolbar" />
+   		</form>
+   	</#if>
+  	 <#if permission_create_digg?exists && permission_create_digg>
+  		<form method="post" action="jsp/admin/plugins/digglike/CreateDigg.jsp">
+    		<input type="submit" value="#i18n{digglike.manageDigg.buttonCreate}" class="button bt-toolbar" />
+   		</form>
+   	</#if>
+ 	
+ </div>
+
 <div class="content-box">
   <h2>  #i18n{digglike.manageDigg.title}</h2>
   <div class="highlight-box">
@@ -69,11 +83,5 @@
     </tr>
     </#list>
    </table>
- <#if permission_create_digg?exists && permission_create_digg>
-  	<form method="post" action="jsp/admin/plugins/digglike/CreateDigg.jsp">
-    	<p>
-      		<input type="submit" value="#i18n{digglike.manageDigg.buttonCreate}" class="button" />
-    	</p>
-  	</form>
-  </#if>
+
 </div>

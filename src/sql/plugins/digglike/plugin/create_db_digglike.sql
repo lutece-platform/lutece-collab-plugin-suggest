@@ -171,6 +171,9 @@ CREATE TABLE digglike_digg (
 	code_theme varchar(25)default NULL,
 	confirmation_message LONG VARCHAR DEFAULT NULL,
 	active_editor_bbcode smallint default 0,
+	default_digg smallint default 0,
+	id_default_sort int,
+	active_digg_submit_type smallint default 0,
 	PRIMARY KEY (id_digg)
 );
 

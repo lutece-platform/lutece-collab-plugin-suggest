@@ -33,6 +33,18 @@
  */
 package fr.paris.lutece.plugins.digglike.web;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.digglike.business.Category;
 import fr.paris.lutece.plugins.digglike.business.CategoryHome;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
@@ -80,18 +92,6 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -272,9 +272,15 @@ public class DiggApp implements XPageApplication
         UrlItem urlDiggXpage = new UrlItem( strPortalUrl );
         urlDiggXpage.addParameter( XPageAppService.PARAM_XPAGE_APP,
             AppPropertiesService.getProperty( PROPERTY_PAGE_APPLICATION_ID ) );
-        urlDiggXpage.addParameter( PARAMETER_ID_DIGG, strIdDigg );
-
-        if ( ( digg == null ) || ( diggSubmitStatePublish == null ) )
+        
+        //find default digg
+        int nIdDefaultDigg;
+        DiggFilter filterDefaultDigg=new DiggFilter();
+    	filterDefaultDigg.setIdDefaultDigg(DiggFilter.ID_TRUE);
+    	List listDefaultDigg=DiggHome.getDiggList( filterDefaultDigg, plugin );
+    	nIdDefaultDigg=(listDefaultDigg!=null &&listDefaultDigg.size()>0)?((Digg)listDefaultDigg.get(0)).getIdDigg():DiggUtils.CONSTANT_ID_NULL;
+    	
+        if ( (( digg == null ) || ( diggSubmitStatePublish == null )) && ( nIdDefaultDigg == DiggUtils.CONSTANT_ID_NULL ))
         {
             //show the diggs list
             UrlItem urlDiggXpageHome = new UrlItem( strPortalUrl );
@@ -308,7 +314,14 @@ public class DiggApp implements XPageApplication
         }
         else
         {
-            if ( ( digg.getRole(  ) != null ) && !digg.getRole(  ).equals( Digg.ROLE_NONE ) &&
+        	//used default digg
+        	if(digg == null )
+        	{
+        		digg=DiggHome.findByPrimaryKey(nIdDefaultDigg, plugin);
+        		
+        	}
+        	urlDiggXpage.addParameter( PARAMETER_ID_DIGG, digg.getIdDigg() );
+        	if ( ( digg.getRole(  ) != null ) && !digg.getRole(  ).equals( Digg.ROLE_NONE ) &&
                     SecurityService.isAuthenticationEnable(  ) )
             {
                 luteceUserConnected = SecurityService.getInstance(  ).getRemoteUser( request );
@@ -816,8 +829,7 @@ public class DiggApp implements XPageApplication
 
         //Filter the list
         DiggUtils.initSubmitFilterByPeriod( submitFilter, nFilterPeriod );
-        DiggUtils.initSubmitFilterBySort( submitFilter, nSortDigg );
-
+        DiggUtils.initSubmitFilterBySort( submitFilter, nSortDigg!=DiggUtils.CONSTANT_ID_NULL?nSortDigg:digg.getIdDefaultSort());
         submitFilter.setIdDigg( digg.getIdDigg(  ) );
         submitFilter.setIdDiggSubmitState( nIdDigSubmitState );
         submitFilter.setIdCategory( nIdFilterCategory );
@@ -863,7 +875,9 @@ public class DiggApp implements XPageApplication
     private String getHtmlListDigg( Locale locale, Plugin plugin, String strCurrentPageIndexDigg,
         int nItemsPerPageDigg, UrlItem urlDiggXPage,LuteceUser luteceUserConnected ) throws SiteMessageException
     {
-        DiggFilter filter = new DiggFilter(  );
+       
+    	
+    	DiggFilter filter = new DiggFilter(  );
 
         List listDigg = DiggHome.getDiggList( filter, plugin );
 

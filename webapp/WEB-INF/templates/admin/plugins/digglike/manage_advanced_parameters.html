@@ -1,0 +1,81 @@
+	<div class="content-box" >
+		<h2>#i18n{digglike.manageAdvancedParameters.title}</h2>
+		
+		<div class="highlight-box">
+		
+		<p>#i18n{digglike.manageAdvancedParameters.labelModifyAdvancedParameters}</p>
+		<form method="post" action="jsp/admin/plugins/digglike/DoModifyAdvancedParameters.jsp">
+			<p>
+				<label for="id_default_digg">#i18n{digglike.manageAdvancedParameters.labelDefaultDigg} : </label>
+				<@combo name="id_default_digg" items=digg_list default_value="${id_default_digg}" />
+			<br />
+			<label>&nbsp;</label>#i18n{digglike.manageAdvancedParameters.labelDefaultDiggComment}
+			</p>
+			<p>
+				<input type="submit" class="button" value="#i18n{digglike.manageAdvancedParameters.buttonModify}" />
+			</p>
+		</form>
+		
+		</div>
+		
+		
+		<div class="highlight-box">
+		
+			<table>
+	        	 <#if permission_manage_category>   
+				<tr>
+					<td>
+		                <a href="jsp/admin/plugins/digglike/ManageCategory.jsp?plugin_name=digglike" class="bullet-link">#i18n{digglike.manageAdvancedParameters.labelCategory}</a>
+		       		</td>
+		            <td>
+					 	#i18n{digglike.manageAdvancedParameters.labelCategoryComment}
+		            </td>
+		        </tr>
+		        <tr>
+					<td>
+		                <a href="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp?plugin_name=digglike" class="bullet-link">#i18n{digglike.manageAdvancedParameters.labelType}</a>
+		       		</td>
+		            <td>
+					 	#i18n{digglike.manageAdvancedParameters.labelTypeComment}
+		            </td>
+		        </tr>
+		     </#if>
+	       
+		     <#if permission_manage_default_message>   
+				<tr>
+					<td>
+		                <a href="jsp/admin/plugins/digglike/ManageDefaultMessage.jsp?plugin_name=digglike" class="bullet-link">#i18n{digglike.manageAdvancedParameters.labelDefaultMessage}</a>
+		       		</td>
+		            <td>
+					 	#i18n{digglike.manageAdvancedParameters.labelDefaultMessageComment}
+		            </td>
+		        </tr>
+		     </#if>
+		       
+	        <#if permission_manage_export_format>
+		        <tr>
+		             
+		            <td>
+		            	<a href="jsp/admin/plugins/digglike/ManageExportFormat.jsp?plugin_name=digglike" class="bullet-link">#i18n{digglike.manageAdvancedParameters.labelExportFormat}</a>
+		            </td>       
+		              <td>    
+		             		#i18n{digglike.manageAdvancedParameters.labelExportFormatComment}
+		              </td>
+		        </tr>	
+	        </#if>
+	        <tr>
+	             
+	            <td>
+	            	<a href="jsp/admin/plugins/digglike/Statistics.jsp" class="bullet-link">#i18n{digglike.manageAdvancedParameters.labelStatistics}</a>
+	            </td>       
+	              <td>    
+	             		#i18n{digglike.manageAdvancedParameters.labelStatisticsComment}
+	              </td>
+	        </tr>	
+		    </table>
+		</div>    
+	 </div>
+
+ 
+
+ 

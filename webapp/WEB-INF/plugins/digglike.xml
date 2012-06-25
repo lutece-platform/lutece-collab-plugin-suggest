@@ -39,7 +39,7 @@
             <feature-title>digglike.adminFeature.digglike_management.name</feature-title>
             <feature-description>digglike.adminFeature.digglike_management.description</feature-description>
             <feature-level>2</feature-level>
-            <feature-url>jsp/admin/plugins/digglike/ManagePluginDigglike.jsp</feature-url>
+            <feature-url>jsp/admin/plugins/digglike/ManageDigg.jsp</feature-url>
             <feature-icon-url>images/admin/skin/plugins/digglike/digg.png</feature-icon-url>
         </admin-feature>
     </admin-features>

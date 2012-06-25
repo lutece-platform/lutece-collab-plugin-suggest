@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.plugins.digglike.utils.ProcessBBCode;
 import fr.paris.lutece.portal.service.editor.EditorBbcodeService;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
@@ -113,8 +114,17 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     private String _strCodeTheme;
     private String _strConfirmationMessage;
     private boolean _bActiveEditorBbcode;
+    private int _nIdDefaultSort = DiggUtils.CONSTANT_ID_NULL;
+    private boolean _bActiveDiggSubmitType;
+    private boolean _bDefaultDigg;
 
-    /**
+
+
+
+
+	
+
+	/**
      * Initialize the Digg
      */
     public static void init(  )
@@ -933,7 +943,11 @@ public class Digg implements AdminWorkgroupResource, RBACResource
 	}
 	
 	
-	
+	/**
+	 * parseBbcodeValue
+	 * @param strValue the value to parse
+	 * @return the result of the parsing
+	 */
 	public String parseBbcodeValue(String strValue)
     {
     	if(isActiveEditorBbcode())
@@ -944,6 +958,52 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     	
     }
 	
+	/**
+	 * 
+	 * @return the default sort id
+	 */
+    public int getIdDefaultSort() {
+		return _nIdDefaultSort;
+	}
+
+    /**
+     * set id Default Sort
+     * @param nIdDefaultSort  the default sort id
+     */
+	public void setIdDefaultSort(int nIdDefaultSort) {
+		_nIdDefaultSort = nIdDefaultSort;
+	}
 	
+	/**
+	 * 
+	 * @return true if the Type of the Digg must be choosed  
+	 */
+	public boolean isActiveDiggSubmitType() {
+		return _bActiveDiggSubmitType;
+	}
+	
+	/**
+	 * set true if the Type of the Digg must be choosed 
+	 * @param bActiveDiggSubmitType true if the Type of the Digg must be choosed
+	 */
+	public void setActiveDiggSubmitType(boolean bActiveDiggSubmitType) {
+		_bActiveDiggSubmitType = bActiveDiggSubmitType;
+	}
+	
+	/**
+	 * 
+	 * @return true if the digg is a Default digg 
+	 */
+	public boolean isDefaultDigg() {
+		return _bDefaultDigg;
+	}
+
+	/**
+	 * set true if the digg is a Default digg
+	 * @param bDefaultDigg true if the digg is a Default digg
+	 */
+	public void setDefaultDigg(boolean bDefaultDigg) {
+		_bDefaultDigg = bDefaultDigg;
+	}
 	
 }

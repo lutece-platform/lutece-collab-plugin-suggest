@@ -66,7 +66,9 @@ public class DigglikeResourceIdService extends ResourceIdService
 
     /** Permission for copying a digg */
     public static final String PERMISSION_COPY = "COPY";
-
+    /** Permission for managing advanced parameters */
+    public static final String PERMISSION_MANAGE_ADVANCED_PARAMETERS="MANAGE_ADVANCED_PARAMETERS";
+    
     /** Permission for viewing digg submit */
     public static final String PERMISSION_MANAGE_DIGG_SUBMIT = "MANAGE_DIGG_SUBMIT";
     
@@ -84,6 +86,7 @@ public class DigglikeResourceIdService extends ResourceIdService
     private static final String PROPERTY_LABEL_COPY = "digglike.permission.label.copy";
     private static final String PROPERTY_LABEL_MANAGE_DIGG_SUBMIT = "digglike.permission.label.manageDiggSubmit";
     private static final String PROPERTY_LABEL_CHANGE_STATE = "digglike.permission.label.changeState";
+    private static final String PROPERTY_LABEL_MANAGE_ADVANCED_PARAMETERS = "digglike.permission.label.manageAdvancedParameters";
 
     /** Creates a new instance of DigglikeTypeResourceIdService */
     public DigglikeResourceIdService(  )
@@ -131,6 +134,12 @@ public class DigglikeResourceIdService extends ResourceIdService
         p.setPermissionKey( PERMISSION_DELETE );
         p.setPermissionTitleKey( PROPERTY_LABEL_DELETE );
         rt.registerPermission( p );
+        
+        p = new Permission(  );
+        p.setPermissionKey( PERMISSION_MANAGE_ADVANCED_PARAMETERS );
+        p.setPermissionTitleKey( PROPERTY_LABEL_MANAGE_ADVANCED_PARAMETERS );
+        rt.registerPermission( p );
+
 
         ResourceTypeManager.registerResourceType( rt );
     }

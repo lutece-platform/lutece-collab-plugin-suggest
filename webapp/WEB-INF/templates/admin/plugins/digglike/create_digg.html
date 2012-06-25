@@ -10,26 +10,56 @@
 		}
 	}
 
-	function doDisplayMsg(isChecked)
+	function doDisplayDiggAdvancedSettings(isChecked)
+	{
+		if (isChecked)
 		{
-
-			if (isChecked) 
-			{
-				displayId('show_manage_display');
-			} 
-			else 
-			{
-				hideId('show_manage_display');
-			
-			}
+			displayId('advanced_settings');			
+			hideId('settings');
+			displayId('button_back');
+			hideId('button_advanced_settings');
 		}
+		else
+		{
+			hideId('advanced_settings');
+			displayId('settings');			
+			hideId('button_back');
+			displayId('button_advanced_settings');		
+	
+			//for ie6
+		    if(typeof(xinha_editors.unavailability_message) != 'undefined')
+		    {			    
+				xinha_editors.unavailability_message.sizeEditor( );
+		    }
+		}
+		
+	}
+	window.onload = function() 
+	{
+		doDisplayDiggAdvancedSettings( false );
+		hideId('p_number_vote_required'); 
+		hideId('p_id_mailing_list_digg_submit');
+		hideId('p_id_mailing_list_new_digg_submit');
+		hideId('p_disable_new_comment');
+		hideId('p_id_mailing_list_comment');
+		hideId('show_manage_display');
+	}
 	
 </script> 
 
-<div class="content-box">
+<div id="content-box-actions">	
+	  	<form id="button_advanced_settings" method="post" action="javascript:doDisplayDiggAdvancedSettings(true)" style="visibility:hidden;display:none;">
+			<input type="submit" value="#i18n{digglike.createDigg.buttonAdvancedSetting}" class="button bt-toolbar" />
+	  	</form>	
+	  	<form id="button_back" method="post" action="javascript:doDisplayDiggAdvancedSettings(false)" style="visibility:hidden;display:none;">
+			<input type="submit" value="#i18n{digglike.createDigg.buttonBack}" class="button bt-toolbar" />
+	  	</form>	
+</div>
+
+<form action="jsp/admin/plugins/digglike/DoCreateDigg.jsp?plugin_name=digglike" method="post" name="" id=""  >
+ <div id="settings" class="content-box">
   <h2> #i18n{digglike.createDigg.title}</h2>
-   <form action="jsp/admin/plugins/digglike/DoCreateDigg.jsp?plugin_name=digglike" method="post" name="" id=""  >
-  
+   
 	   <p>
 		    <label for="title">#i18n{digglike.createDigg.labelTitle} * : </label>
 		      <input type="text" name="title" id="" size="80" value="" maxlength="255" />
@@ -237,14 +267,17 @@
 			
 	   			<input type="text" name="libelle_validate_button" id="" size="80" value="${default_message.libelleValidateButton}" maxlength="255"/>
 	   	</p>
-	  	<h3>
-     			<a href="javascript:doDisplayMsg(true)" ><img src="images/admin/skin/open_block.gif" alt="#i18n{form.createForm.titleOpen}"></a>
-    			 <a href="javascript:doDisplayMsg(false)" ><img src="images/admin/skin/closed_block.gif" alt="#i18n{form.createForm.titleClose}"></a>
-    			#i18n{digglike.createDigg.labelTitleManageDiggPage}
-    	</h3>
-	  <div class="highlight-box"  id="show_manage_display">   
-         
-         <p>
+	  
+
+   <p>
+  		<input type="submit" value="#i18n{digglike.createDigg.buttonSave}" class="button" name="save" />
+  		<input type="submit" value="#i18n{digglike.modifyDigg.buttonApply}" class="button"  name="apply"/>
+  		<input type="submit" value="#i18n{digglike.createDigg.buttonCancel}" class="button" name="cancel" />
+   </p>
+   </div>
+   <div id="advanced_settings" class="content-box">
+	  <h2> #i18n{digglike.createDigg.advancedParametersTitle}</h2>
+      <p>
 		    <label for="number_digg_submit_caracters_shown">#i18n{digglike.createDigg.labelNumberDiggSubmitCaractersShown} * : </label>
 		     <input type="text" name="number_digg_submit_caracters_shown" id="number_digg_submit_caracters_shown" size="5" value="${default_message.numberDiggSubmitCaractersShown}" maxlength="10" />
 			<br/>
@@ -297,25 +330,31 @@
 			<br />
 			<label>&nbsp;</label>#i18n{digglike.createDigg.labelThemeXpageComment}
 		</p>
-	   	
-	   	
-	   	</div>
-   <p>
-  		<input type="submit" value="#i18n{digglike.createDigg.buttonSave}" class="button" name="save" />
-  		<input type="submit" value="#i18n{digglike.modifyDigg.buttonApply}" class="button"  name="apply"/>
-  		<input type="submit" value="#i18n{digglike.createDigg.buttonCancel}" class="button" name="cancel" />
-   </p>
+		 <p>            
+            <label for="active_digg_submit_type">#i18n{digglike.createDigg.labelActiveDiggSubmitType} :             
+            </label>            
+            <input name="active_digg_submit_type" value="active_digg_submit_type" type="checkbox" >
+                <br/>            
+            <label>              &nbsp;             
+            </label> #i18n{digglike.createDigg.labelActiveDiggSubmitTypeComment}          
+          </p>
+          <p>
+			<label for="id_default_sort">#i18n{digglike.createDigg.labelDefaultSort} :</label>
+			<@combo name="id_default_sort" items=digg_submit_sort_list default_value="-1" />
+			<br />
+			<label>&nbsp;</label>#i18n{digglike.createDigg.labelDefaultSortComment}
+		</p>
+		<p>
+			<label>&nbsp;</label>
+			<span class="alert">
+				#i18n{digglike.createDigg.advancedParametersSave}
+			</span>
+		</p>
+</div>
  </form>
- </div>
+
+ 
 
  <@initEditor />
- <script language="JavaScript" type="text/javascript">
-	   hideId('p_number_vote_required'); 
-	   hideId('p_id_mailing_list_digg_submit');
-	   hideId('p_id_mailing_list_new_digg_submit');
-	   hideId('p_disable_new_comment');
-	   hideId('p_id_mailing_list_comment');
-	   hideId('show_manage_display');
-</script> 
- 
+
 

@@ -758,8 +758,11 @@ public final class DiggUtils
         }
 
         model.put( MARK_CATEGORY_LIST, refCategoryList );
-        model.put( MARK_TYPE_LIST, refTypeList );
-        model.put(MARK_ID_DEFAULT_CATEGORY, nIdDefaultCategory);
+       if(digg.isActiveDiggSubmitType())
+       {
+    	   model.put( MARK_TYPE_LIST, refTypeList );
+       }
+    	model.put(MARK_ID_DEFAULT_CATEGORY, nIdDefaultCategory);
         model.put( MARK_DIGG, digg );
         model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );
         model.put( MARK_LOCALE, locale );
@@ -1217,18 +1220,23 @@ public final class DiggUtils
      *
      *
      * @param listDiggs the list of categories
+     * @param bIncludeDefault true if a default item must be insert
+     * 
      * @return reference list of  category
      */
-    public static ReferenceList getRefListDigg( List<Digg> listDiggs )
+    public static ReferenceList getRefListDigg( List<Digg> listDiggs,boolean bIncludeDefault )
     {
-        ReferenceList refListCategories = new ReferenceList(  );
-
+        ReferenceList refListDiggs = new ReferenceList(  );
+        if(bIncludeDefault)
+        {
+        	refListDiggs.addItem( -1, EMPTY_STRING );
+        } 
         for ( Digg digg : listDiggs )
         {
-            refListCategories.addItem( digg.getIdDigg(  ), digg.getTitle(  ) );
+            refListDiggs.addItem( digg.getIdDigg(  ), digg.getTitle(  ) );
         }
 
-        return refListCategories;
+        return refListDiggs;
     }
 
     /**

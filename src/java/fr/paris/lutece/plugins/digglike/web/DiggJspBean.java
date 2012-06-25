@@ -74,9 +74,12 @@ import fr.paris.lutece.plugins.digglike.business.IEntry;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.business.VoteType;
 import fr.paris.lutece.plugins.digglike.business.VoteTypeHome;
+import fr.paris.lutece.plugins.digglike.service.CategoryResourceIdService;
+import fr.paris.lutece.plugins.digglike.service.DefaultMessageResourceIdService;
 import fr.paris.lutece.plugins.digglike.service.DigglikePlugin;
 import fr.paris.lutece.plugins.digglike.service.DigglikeResourceIdService;
 import fr.paris.lutece.plugins.digglike.service.DigglikeService;
+import fr.paris.lutece.plugins.digglike.service.ExportFormatResourceIdService;
 import fr.paris.lutece.plugins.digglike.service.digglikesearch.DigglikeSearchService;
 import fr.paris.lutece.plugins.digglike.service.search.DigglikeIndexer;
 import fr.paris.lutece.plugins.digglike.utils.DiggIndexerUtils;
@@ -131,7 +134,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 	private static final String TEMPLATE_CREATE_DIGG = "admin/plugins/digglike/create_digg.html";
 	private static final String TEMPLATE_MODIFY_DIGG = "admin/plugins/digglike/modify_digg.html";
 	private static final String TEMPLATE_STATISTICS_DIGG = "admin/plugins/digglike/statistics.html";
-
+	private static final String TEMPLATE_MANAGE_ADVANCED_PARAMETERS="admin/plugins/digglike/manage_advanced_parameters.html";
 	// message
 	private static final String MESSAGE_NEW_COMMENT_SUBMIT_INVALID = "digglike.message.newCommentSubmitInvalid";
 	private static final String MESSAGE_CONFIRM_REMOVE_DIGG = "digglike.message.confirmRemoveDigg";
@@ -177,6 +180,11 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 	private static final String PROPERTY_MODIFY_QUESTION_TITLE = "digglike.modifyEntry.titleQuestion";
 	private static final String PROPERTY_NUMBER_DIGG_SUBMIT_VALUE_SHOWN_CHARACTERS = "digglike.diggSubmitValue.NumberShownCharacters";
 	private static final String PROPERTY_DIGGSUBMIT_HIGHSCORES = "digglike.highscores.diggSubmit.number";
+	private static final String PROPERTY_MANAGE_DIGG_PAGE_TITLE ="digglike.manageDigg.pageTitle"; 
+	private static final String PROPERTY_MANAGE_ADVANCED_PARAMETERS_PAGE_TITLE="digglike.manageAdvancedParameters.pageTitle";
+	private static final String PROPERTY_MANAGE_DIGG_SUBMIT_PAGE_TITLE="digglike.manageDiggSubmit.pageTitle";
+	private static final String PROPERTY_MANAGE_COMMENT_SUBMIT_PAGE_TITLE="digglike.manageCommentSubmit.pageTitle";
+	
 
 	// Markers
 	private static final String MARK_WEBAPP_URL = "webapp_url";
@@ -205,6 +213,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 	private static final String MARK_ID_DIGG_SUBMIT_PREV = "digg_submit_prev";
 	private static final String MARK_ID_DIGG_SUBMIT_NEXT = "digg_submit_next";
 	private static final String MARK_PERMISSION_CREATE_DIGG = "permission_create_digg";
+	private static final String MARK_PERMISSION_MANAGE_ADVANCED_PARAMETERS = "permission_manage_advanced_parameters";
 	private static final String MARK_ENTRY_TYPE_GROUP = "entry_type_group";
 	private static final String MARK_ENTRY_LIST = "entry_list";
 	private static final String MARK_LIST = "list";
@@ -238,6 +247,10 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 	private static final String MARK_URL = "url";
 	private static final String MARK_DEFAULT_THEME = "default_theme";
 	private static final String MARK_THEME_REF_LIST = "theme_list";
+	private static final String MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE = "permission_manage_default_message";
+	private static final String MARK_PERMISSION_MANAGE_CATEGORY = "permission_manage_category";
+	private static final String MARK_PERMISSION_MANAGE_EXPORT_FORMAT = "permission_manage_export_format";
+	private static final String MARK_ID_DEFAULT_DIGG="id_default_digg";
 	
 
 	// Jsp Definition
@@ -252,6 +265,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 	private static final String JSP_MODIFY_ENTRY = "jsp/admin/plugins/digglike/ModifyEntry.jsp";
 	private static final String JSP_MANAGE_DIGG_SUBMIT = "jsp/admin/plugins/digglike/ManageDiggSubmit.jsp";
 	private static final String JSP_MANAGE_COMMENT_SUBMIT = "jsp/admin/plugins/digglike/ManageCommentSubmit.jsp";
+	private static final String JSP_MANAGE_ADVANCED_PARAMETERS = "jsp/admin/plugins/digglike/ManageAdvancedParameters.jsp";
 	private static final String JSP_DO_UPDATE_ALL_DIGG_SUBMIT = "jsp/admin/plugins/digglike/DoUpdateAllDiggSubmit.jsp";
 	// parameters form
 	private static final String PARAMETER_ID_DIGG = "id_digg";
@@ -318,6 +332,9 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 	private static final String PARAMETER_THEME_XPAGE = "id_theme_list";
 	private static final String PARAMETER_CONFIRMATION_MESSAGE = "confirmation_message";
 	private static final String PARAMETER_ACTIVE_EDITOR_BBCODE_ON_COMMENT = "active_editor_bbcode_on_comment";
+	private static final String PARAMETER_ID_DEFAULT_SORT = "id_default_sort";
+	private static final String PARAMETER_ACTIVE_DIGG_SUBMIT_TYPE = "active_digg_submit_type";
+	private static final String PARAMETER_ID_DEFAULT_DIGG="id_default_digg";
 	// other constants
 	private static final String EMPTY_STRING = "";
 	private static final String JCAPTCHA_PLUGIN = "jcaptcha";
@@ -433,16 +450,19 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		model.put(MARK_DIGG_STATE_SELECTED, _nIdDiggState);
 
 		model.put(MARK_DIGG_LIST, paginator.getPageItems());
-
-		if (RBACService.isAuthorized(Digg.RESOURCE_TYPE,
+		boolean bPermissionAdvancedParameter = RBACService.isAuthorized(Digg.RESOURCE_TYPE,
 				RBAC.WILDCARD_RESOURCES_ID,
-				DigglikeResourceIdService.PERMISSION_CREATE, getUser())) {
-			model.put(MARK_PERMISSION_CREATE_DIGG, true);
-		} else {
-			model.put(MARK_PERMISSION_CREATE_DIGG, false);
-		}
+				DigglikeResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser());
+		boolean bPermissionCreateDigg = RBACService.isAuthorized(Digg.RESOURCE_TYPE,
+				RBAC.WILDCARD_RESOURCES_ID,
+				DigglikeResourceIdService.PERMISSION_CREATE, getUser());
+		
+		model.put(MARK_PERMISSION_MANAGE_ADVANCED_PARAMETERS,bPermissionAdvancedParameter);
+		model.put(MARK_PERMISSION_CREATE_DIGG,bPermissionCreateDigg);
+		
+		  
+		setPageTitleProperty( PROPERTY_MANAGE_DIGG_PAGE_TITLE );
 
-		setPageTitleProperty(EMPTY_STRING);
 
 		HtmlTemplate templateList = AppTemplateService.getTemplate(
 				TEMPLATE_MANAGE_DIGG, locale, model);
@@ -451,6 +471,49 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		// refMailingList=AdminMailingListService.getMailingLists(adminUser);
 		return getAdminPage(templateList.getHtml());
 	}
+	
+	/**
+     * Returns advanced parameters form
+     *
+     * @param request The Http request
+     * @return Html form
+     */
+    public String getManageAdvancedParameters( HttpServletRequest request )
+    {
+        if ( !RBACService.isAuthorized( Digg.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+        		DigglikeResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
+        {
+            return getManageDigg( request );
+        }
+        
+        
+
+        HashMap model = new HashMap(  );
+        List<Digg> listDigg=DiggHome.getDiggList(new DiggFilter(), getPlugin());
+        int nIdDefaultDigg=-1;
+        for(Digg digg:listDigg )
+        {
+        	if (digg.isDefaultDigg())
+        	{
+        		nIdDefaultDigg=digg.getIdDigg();
+        		break;
+        	}
+        }
+      
+        model.put(MARK_DIGG_LIST, DiggUtils.getRefListDigg(listDigg,true));
+        model.put(MARK_ID_DEFAULT_DIGG, nIdDefaultDigg);
+        model.put( MARK_PERMISSION_MANAGE_EXPORT_FORMAT, RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    ExportFormatResourceIdService.PERMISSION_MANAGE, getUser() ));
+        model.put( MARK_PERMISSION_MANAGE_CATEGORY,RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    CategoryResourceIdService.PERMISSION_MANAGE, getUser()) );
+        model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE,  RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                    DefaultMessageResourceIdService.PERMISSION_MANAGE, getUser(  ) )  );
+        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_ADVANCED_PARAMETERS, getLocale(  ), model );
+        
+        setPageTitleProperty( PROPERTY_MANAGE_ADVANCED_PARAMETERS_PAGE_TITLE );
+        return getAdminPage( templateList.getHtml(  ) );
+    }
+	
 
 	/**
 	 * Return management DiggSubmit( list of digg submit)
@@ -594,7 +657,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		model.put(MARK_REPORT_SELECTED, _nIdDiggSubmitReport);
 		model.put(MARK_EXPORT_FORMAT_REF_LIST, ExportFormatHome
 				.getListExport(plugin));
-		setPageTitleProperty(EMPTY_STRING);
+		 setPageTitleProperty( PROPERTY_MANAGE_DIGG_SUBMIT_PAGE_TITLE );
 
 		HtmlTemplate templateList = AppTemplateService.getTemplate(
 				TEMPLATE_MANAGE_DIGG_SUBMIT, locale, model);
@@ -808,7 +871,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		model.put(MARK_LIST_COMMENT_SORT, refListCommentSort);
 		model.put(MARK_DIGG, digg);
 
-		setPageTitleProperty(EMPTY_STRING);
+		 setPageTitleProperty( PROPERTY_MANAGE_COMMENT_SUBMIT_PAGE_TITLE );
 
 		HtmlTemplate templateList = AppTemplateService.getTemplate(
 				TEMPLATE_MANAGE_COMMENT_SUBMIT, locale, model);
@@ -1309,6 +1372,12 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		String strHeader = request.getParameter(PARAMETER_HEADER);
 		String strConfirmationMessage = request
 				.getParameter(PARAMETER_CONFIRMATION_MESSAGE);
+		String strActiveDiggSubmitType = request
+		.getParameter( PARAMETER_ACTIVE_DIGG_SUBMIT_TYPE );
+		String strIdDefaultSort = request
+		.getParameter( PARAMETER_ID_DEFAULT_SORT);
+		
+		
 
 		int nIdVoteType = DiggUtils.getIntegerParameter(strIdVoteType);
 		int nIdMailingListDiggSubmit = DiggUtils
@@ -1329,6 +1398,10 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 				.getIntegerParameter(strNumberDiggSubmitInTopComment);
 		int nNumberDiggSubmitPerPage = DiggUtils
 				.getIntegerParameter(strNumberDiggSubmitPerPage);
+		int nIdDefaultSort = DiggUtils
+		.getIntegerParameter(strIdDefaultSort);
+
+		
 
 		String strFieldError = EMPTY_STRING;
 
@@ -1453,30 +1526,11 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		}
 
 		digg.setNumberDayRequired(nNumberDayRequired);
-
-		if (strActiveDiggSubmitAuthentification != null) {
-			digg.setActiveDiggSubmitAuthentification(true);
-		} else {
-			digg.setActiveDiggSubmitAuthentification(false);
-		}
-
-		if (strActiveVoteAuthentification != null) {
-			digg.setActiveVoteAuthentification(true);
-		} else {
-			digg.setActiveVoteAuthentification(false);
-		}
-
-		if (strActiveCommentAuthentification != null) {
-			digg.setActiveCommentAuthentification(true);
-		} else {
-			digg.setActiveCommentAuthentification(false);
-		}
-
-		if (strActiveCaptcha != null) {
-			digg.setActiveCaptcha(true);
-		} else {
-			digg.setActiveCaptcha(false);
-		}
+		digg.setActiveDiggSubmitAuthentification(strActiveDiggSubmitAuthentification != null);
+		digg.setActiveVoteAuthentification(strActiveVoteAuthentification != null);
+		digg.setActiveCommentAuthentification(strActiveCommentAuthentification != null);
+		digg.setActiveCaptcha(strActiveCaptcha != null);
+		
 
 		if ((strDisableNewDiggSubmit != null)
 				&& strDisableNewDiggSubmit.trim().equals(CONSTANTE_YES_VALUE)) {
@@ -1530,32 +1584,13 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 			digg.setLimitNumberVote(true);
 		} else {
 			digg.setLimitNumberVote(false);
-		}
-
-		if (strShowCategoryBlock != null) {
-			digg.setShowCategoryBlock(true);
-		} else {
-			digg.setShowCategoryBlock(false);
-		}
-
-		if (strShowTopScoreBlock != null) {
-			digg.setShowTopScoreBlock(true);
-		} else {
-			digg.setShowTopScoreBlock(false);
-		}
-
-		if (strShowTopCommentBlock != null) {
-			digg.setShowTopCommentBlock(true);
-		} else {
-			digg.setShowTopCommentBlock(false);
-		}
-
-		if (strActiveDiggSubmitPaginator != null) {
-			digg.setActiveDiggSubmitPaginator(true);
-		} else {
-			digg.setActiveDiggSubmitPaginator(false);
-		}
-
+		}	
+			
+		digg.setShowCategoryBlock(strShowCategoryBlock != null);
+		digg.setShowTopScoreBlock(strShowTopScoreBlock != null);
+		digg.setShowTopCommentBlock(strShowTopCommentBlock != null);
+		digg.setActiveDiggSubmitPaginator(strActiveDiggSubmitPaginator != null);
+	
 		if (strThemeXpage != null) {
 			digg.setCodeTheme(strThemeXpage);
 		}
@@ -1568,7 +1603,8 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		digg.setRole(strRole);
 		digg.setHeader(strHeader);
 		digg.setConfirmationMessage(strConfirmationMessage);
-
+		digg.setActiveDiggSubmitType(strActiveDiggSubmitType!=null);
+		digg.setIdDefaultSort(nIdDefaultSort);
 		return null; // No error
 	}
 
@@ -1610,7 +1646,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 			themesRefList.addItem(theme.getCodeTheme(), theme
 					.getThemeDescription());
 		}
-
+		ReferenceList refListDiggSort = DiggUtils.getRefListDiggSort(locale);
 		ReferenceList refVoteTypeList = initRefListVoteType(plugin, locale);
 		DefaultMessage defaultMessage = DefaultMessageHome.find(plugin);
 		HashMap model = new HashMap();
@@ -1631,6 +1667,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		model.put(MARK_DEFAULT_VALUE_ROLE, Digg.ROLE_NONE);
 		model.put(MARK_THEME_REF_LIST, themesRefList);
 		model.put(MARK_DEFAULT_THEME, defaultTheme);
+		model.put(MARK_LIST_DIGG_SUBMIT_SORT, refListDiggSort );
 
 		setPageTitleProperty(PROPERTY_CREATE_DIGG_TITLE);
 
@@ -1753,7 +1790,8 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		ReferenceList refCategoryList = DiggUtils
 				.getRefListCategory(listCategoriesView);
 		ReferenceList refVoteTypeList = initRefListVoteType(plugin, locale);
-
+		ReferenceList refListDiggSort = DiggUtils.getRefListDiggSort(locale);
+		
 		EntryType entryTypeGroup = new EntryType();
 		refEntryType = initRefListEntryType(plugin, locale);
 
@@ -1796,6 +1834,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		model.put(MARK_ROLE_LIST, RoleHome.getRolesList());
 		model.put(MARK_DEFAULT_VALUE_ROLE, Digg.ROLE_NONE);
 		model.put(MARK_THEME_REF_LIST, themesRefList);
+		model.put(MARK_LIST_DIGG_SUBMIT_SORT, refListDiggSort );
 
 		setPageTitleProperty(PROPERTY_MODIFY_DIGG_TITLE);
 
@@ -2571,6 +2610,18 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		return AppPathService.getBaseUrl(request) + JSP_MODIFY_ENTRY
 				+ "?id_entry=" + nIdEntry;
 	}
+	
+	/**
+	 * return url of the jsp manage advanced  parameters
+	 * 
+	 * @param request
+	 *            The HTTP request
+	 * @return url of the jsp manage advanced parameters
+	 */
+	private String getJspManageAdvancedParameters(HttpServletRequest request) {
+		return AppPathService.getBaseUrl(request) + JSP_MANAGE_ADVANCED_PARAMETERS;
+	}
+
 
 	/**
 	 * Init reference list whidth the different entry type
@@ -2908,7 +2959,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		listDiggSubmit = DiggSubmitHome.getDiggSubmitList(filter, plugin,
 				nNumberMaxDiggSubmit);
 
-		ReferenceList refDiggList = DiggUtils.getRefListDigg(listDigg);
+		ReferenceList refDiggList = DiggUtils.getRefListDigg(listDigg,false);
 
 		HashMap model = new HashMap();
 
@@ -3370,5 +3421,55 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 
 		return getJspManageDigg(request);
 	}
+	
+	
+	/**
+	 * do mofify advanced parameters
+	 * @param request the request
+	 * @return url
+	 */
+	public String doModifyAdvancedParameters(HttpServletRequest request)
+	{
+		Digg digg;
+		Plugin plugin = getPlugin();
+		String strIdDefaultDigg = request.getParameter(PARAMETER_ID_DEFAULT_DIGG);
+		int nIdDefaultDigg = DiggUtils.getIntegerParameter(strIdDefaultDigg);
+       if ( !RBACService.isAuthorized( Digg.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+        		DigglikeResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
+        {
+            return getManageDigg( request );
+        }
+       
+       //find default Digg
+		DiggFilter filter=new DiggFilter();
+		filter.setIdDefaultDigg(DiggFilter.ID_TRUE);
+		List<Digg> listDefaultDigg=DiggHome.getDiggList(filter, plugin);
+		//update default digg
+		for(Digg defaultDigg:listDefaultDigg)
+		{
+			digg=DiggHome.findByPrimaryKey(defaultDigg.getIdDigg(), plugin);
+			digg.setDefaultDigg(false);
+			DiggHome.update(digg, plugin);
+			
+		}
+		
+		if(nIdDefaultDigg!=DiggUtils.CONSTANT_ID_NULL)
+		{
+			Digg diggDefault=DiggHome.findByPrimaryKey(nIdDefaultDigg, plugin);
+			if(diggDefault!=null)
+			{
+				diggDefault.setDefaultDigg(true);
+				DiggHome.update(diggDefault, plugin);
+			}
+		}
+		
+		
+
+		return getJspManageAdvancedParameters(request);
+		
+	}
+	
+	
+	
 
 }
