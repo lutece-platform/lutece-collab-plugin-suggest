@@ -1,5 +1,5 @@
 <#include "/util/editor/editor.html" />
-<SCRIPT language="Javascript">
+<script type="text/javascript">
 <!--
 function showAddComment(root, commentId) {
  
@@ -41,7 +41,7 @@ function showAddComment(root, commentId) {
 		"		</div>"+
 		"		<div style='float:right; position:relative; z-index:2; width:57%; height:80%; border:0; margin:0; padding:0;'>"+
 		"			<div style='padding:10px; height:100%;' class='portlet'>"+
-		"				<textarea "+<#if active_editor_bbcode> class='markitup' </#if>+"name='comment_value' id='comment_value' rows='4' cols='29' style='width:100%; border:0; margin:0; padding:0;' ></textarea>"+
+		"				<textarea class='"+<#if active_editor_bbcode>markitup+</#if>"' name='comment_value' id='comment_value' rows='4' cols='29' style='width:100%; border:0; margin:0; padding:0;' ></textarea>"+
 		"			</div>"+
 		"		</div>"+
 		"	</div>"+
@@ -64,7 +64,7 @@ function showAddComment(root, commentId) {
 } 
 
 //-->
-</SCRIPT>
+</script>
 <#assign rootId = 0>
 
 <#if list_comment?has_content>
