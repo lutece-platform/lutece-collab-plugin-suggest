@@ -51,18 +51,23 @@ import fr.paris.lutece.portal.business.rss.IFeedResource;
 import fr.paris.lutece.portal.business.rss.IFeedResourceImage;
 import fr.paris.lutece.portal.business.rss.IFeedResourceItem;
 import fr.paris.lutece.portal.business.rss.ResourceRss;
+import fr.paris.lutece.portal.service.content.XPageAppService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
+import fr.paris.lutece.util.url.UrlItem;
+
+import org.apache.commons.lang.StringUtils;
 
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -74,75 +79,175 @@ import javax.servlet.http.HttpServletRequest;
 
 
 /**
- *
- * DirectoryResourceRss
+ * DirectoryResourceRss.
  */
 public class DiggResourceRss extends ResourceRss
 {
-    //templates
+    // templates
+    /** The Constant TEMPLATE_TASK_EVALUATION_CREATE_CONFIG. */
     private static final String TEMPLATE_TASK_EVALUATION_CREATE_CONFIG = "admin/plugins/digglike/rss/resource_create_config.html";
+    
+    /** The Constant TEMPLATE_TASK_EVALUATION_MODIFY_CONFIG. */
     private static final String TEMPLATE_TASK_EVALUATION_MODIFY_CONFIG = "admin/plugins/digglike/rss/resource_modify_config.html";
+    
+    /** The Constant TEMPLATE_PUSH_RSS_XML_DIGG. */
     private static final String TEMPLATE_PUSH_RSS_XML_DIGG = "admin/plugins/digglike/rss/rss_xml_digg.html";
+    
+    /** The Constant TEMPLATE_PUSH_RSS_XML_SUBMIT. */
     private static final String TEMPLATE_PUSH_RSS_XML_SUBMIT = "admin/plugins/digglike/rss/rss_xml_submit.html";
+    
+    /** The Constant TEMPLATE_RSS_SUBMIT_DESCRIPTION. */
     private static final String TEMPLATE_RSS_SUBMIT_DESCRIPTION = "admin/plugins/digglike/rss/rss_submit_description.html";
+    
+    /** The Constant TEMPLATE_RSS_SUBMIT_ITEM_TITLE. */
     private static final String TEMPLATE_RSS_SUBMIT_ITEM_TITLE = "admin/plugins/digglike/rss/rss_submit_item_title.html";
+    
+    /** The Constant TEMPLATE_RSS_DIGG_ITEM_TITLE. */
     private static final String TEMPLATE_RSS_DIGG_ITEM_TITLE ="admin/plugins/digglike/rss/rss_digg_item_title.html";
 
-    //JSPs
-    private static final String JSP_MANAGE_COMMENT_SUBMIT = "/jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=";
-    private static final String JSP_MANAGE_DIGG_SUBMIT = "/jsp/admin/plugins/digglike/ManageDiggSubmit.jsp?id_digg=";
+    // JSPs
+    // private static final String JSP_MANAGE_COMMENT_SUBMIT = "/jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=";
+    // private static final String JSP_MANAGE_DIGG_SUBMIT = "/jsp/admin/plugins/digglike/ManageDiggSubmit.jsp?id_digg=";
     
-    //Markers
+    // Markers
+    /** The Constant MARK_DIGG_LIST. */
     private static final String MARK_DIGG_LIST = "digglike_list";
+    
+    /** The Constant MARK_DIGG_LIST_DEFAULT_ITEM. */
     private static final String MARK_DIGG_LIST_DEFAULT_ITEM = "digglike_list_default_item";
+    
+    /** The Constant MARK_RSS_ID_DIGG. */
     private static final String MARK_RSS_ID_DIGG = "id_digg";
+    
+    /** The Constant MARK_RSS_ID_SUBMIT. */
     private static final String MARK_RSS_ID_SUBMIT = "id_submit";
+    
+    /** The Constant MARK_DIGGSUBMIT_LIST. */
     private static final String MARK_DIGGSUBMIT_LIST = "diggsubmit_list";
+    
+    /** The Constant MARK_EMPTY_DIGG. */
     private static final String MARK_EMPTY_DIGG = "empty_digg";
+    
+    /** The Constant MARK_RSS_ITEM_TITLE. */
     private static final String MARK_RSS_ITEM_TITLE = "item_title";
+    
+    /** The Constant MARK_RSS_ITEM_DESCRIPTION. */
     private static final String MARK_RSS_ITEM_DESCRIPTION = "item_description";
+    
+    /** The Constant MARK_RSS_ITEM_DATE. */
     private static final String MARK_RSS_ITEM_DATE = "item_date";
+    
+    /** The Constant MARK_DIGG_SUBMIT_LIST_DEFAULT_ITEM. */
     private static final String MARK_DIGG_SUBMIT_LIST_DEFAULT_ITEM = "digglike_list_submit_default_item";
+    
+    /** The Constant MARK_IS_DIGG_SUBMIT_RSS. */
     private static final String MARK_IS_DIGG_SUBMIT_RSS = "digglike_is_digg_submit_rss";
+    
+    /** The Constant MARK_RSS_SITE_DATE. */
     private static final String MARK_RSS_SITE_DATE = "site_date";
+    
+    /** The Constant MARK_RSS_NUMBER_VOTE. */
     private static final String MARK_RSS_NUMBER_VOTE = "number_vote";
+    
+    /** The Constant MARK_RSS_SCORE. */
     private static final String MARK_RSS_SCORE = "score";
+    
+    /** The Constant MARK_RSS_CATEGORY. */
     private static final String MARK_RSS_CATEGORY = "category";
+    
+    /** The Constant MARK_RSS_ITEM_STATE. */
     private static final String MARK_RSS_ITEM_STATE = "state";
+    
+    /** The Constant MARK_RSS_ITEM_AUTHOR. */
     private static final String MARK_RSS_ITEM_AUTHOR = "author";
-
-    //Parameters
-    private static final String PARAMETER_ID_DIGG = "id_digg";
-    private static final String PARAMETER_RSS_CHOICE = "rss_choice";
-    private static final String PARAMETER_RSS_CHOICE_SUBMIT = "digg_submit";
-    private static final String PARAMETER_ID_DIGG_SUBMIT = "id_digg_submit";
-    private static final String PARAMETER_URL_FEED_IMAGE = "/images/local/skin/valid-rss.png";
-
-    //Properties
-    private static final String FIELD_ID_DIGG = "digglike.resource_rss.label_digg";
-    private static final String FIELD_STATE = "digglike.resource_rss.state";
-    private static final String FIELD_STATE_ENABLE = "digglike.resource_rss.enable";
-    private static final String FIELD_STATE_DISABLE = "digglike.resource_rss.disable";
-    private static final String FORMAT_RSS_DATE = "EEE, d MMM yyyy HH:mm:ss Z";
-
-    //Messages
-    private static final String MESSAGE_MANDATORY_FIELD = "digglike.message.mandatory.field";
-    private static final String MESSAGE_EMPTY_DIGG = "digglike.message.empty_digg";
-    private static final String PROPERTY_SITE_LANGUAGE = "rss.language";
-    private static final String PROPERTY_WEBAPP_PROD_URL = "lutece.prod.url";
+    
+    /** The Constant MARK_RSS_SITE_NAME. */
     private static final String MARK_RSS_SITE_NAME = "site_name";
+    
+    /** The Constant MARK_RSS_SITE_ID. */
     private static final String MARK_RSS_SITE_ID = "digg_id";
+    
+    /** The Constant MARK_RSS_FILE_LANGUAGE. */
     private static final String MARK_RSS_FILE_LANGUAGE = "file_language";
+    
+    /** The Constant MARK_RSS_SITE_URL. */
     private static final String MARK_RSS_SITE_URL = "site_url";
+    
+    /** The Constant MARK_ITEM_LIST. */
     private static final String MARK_ITEM_LIST = "itemList";
+    
+    /** The Constant MARK_RSS_SITE_DESCRIPTION. */
     private static final String MARK_RSS_SITE_DESCRIPTION = "site_description";
+    
+    /** The Constant MARK_RSS_SITE_STATE. */
     private static final String MARK_RSS_SITE_STATE = "state";
 
+    // Parameters
+    /** The Constant PARAMETER_ID_DIGG. */
+    private static final String PARAMETER_ID_DIGG = "id_digg";
+    
+    /** The Constant PARAMETER_RSS_CHOICE. */
+    private static final String PARAMETER_RSS_CHOICE = "rss_choice";
+    
+    /** The Constant PARAMETER_RSS_CHOICE_SUBMIT. */
+    private static final String PARAMETER_RSS_CHOICE_SUBMIT = "digg_submit";
+    
+    /** The Constant PARAMETER_ID_DIGG_SUBMIT. */
+    private static final String PARAMETER_ID_DIGG_SUBMIT = "id_digg_submit";
+    
+    /** The Constant PARAMETER_URL_FEED_IMAGE. */
+    private static final String PARAMETER_URL_FEED_IMAGE = "/images/local/skin/valid-rss.png";
+    
+    /** The Constant PARAMETER_DIGG_COMMENT. */
+    private static final String PARAMETER_DIGG_COMMENT = "digg_comment";
+	
+	/** The Constant PARAMETER_DIGG_DETAIL. */
+	private static final String PARAMETER_DIGG_DETAIL = "digg_detail";
+
+    // Properties
+    /** The Constant FIELD_ID_DIGG. */
+    private static final String FIELD_ID_DIGG = "digglike.resource_rss.label_digg";
+    
+    /** The Constant FIELD_STATE. */
+    private static final String FIELD_STATE = "digglike.resource_rss.state";
+    
+    /** The Constant FIELD_STATE_ENABLE. */
+    private static final String FIELD_STATE_ENABLE = "digglike.resource_rss.enable";
+    
+    /** The Constant FIELD_STATE_DISABLE. */
+    private static final String FIELD_STATE_DISABLE = "digglike.resource_rss.disable";
+    
+    /** The Constant FORMAT_RSS_DATE. */
+    private static final String FORMAT_RSS_DATE = "EEE, d MMM yyyy HH:mm:ss Z";
+
+    // Messages
+    /** The Constant MESSAGE_MANDATORY_FIELD. */
+    private static final String MESSAGE_MANDATORY_FIELD = "digglike.message.mandatory.field";
+    
+    /** The Constant MESSAGE_EMPTY_DIGG. */
+    private static final String MESSAGE_EMPTY_DIGG = "digglike.message.empty_digg";
+    
+    /** The Constant PROPERTY_SITE_LANGUAGE. */
+    private static final String PROPERTY_SITE_LANGUAGE = "rss.language";
+    
+    /** The Constant PROPERTY_WEBAPP_PROD_URL. */
+    private static final String PROPERTY_WEBAPP_PROD_URL = "lutece.prod.url";
+    
+    /** The Constant PROPERTY_XPAGE_APPLICATION_ID. */
+    private static final String PROPERTY_XPAGE_APPLICATION_ID = "digglike.xpage.applicationId";
+    
+    // Constants
+ 	/** The Constant DEFAULT_XPAGE_ID. */
+    private static final String DEFAULT_XPAGE_ID = "digg";
+    
+    /** The Constant SLASH. */
+    private static final String SLASH = "/";
+
     /**
-     * verified that the resource contains the resource to be exploited
-     * @return true if resourceRss content resource
+     * {@inheritDoc}
      */
-    public boolean contentResourceRss(  )
+    @Override
+	public boolean contentResourceRss(  )
     {
         Plugin pluginDigglike = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
 
@@ -157,11 +262,10 @@ public class DiggResourceRss extends ResourceRss
     }
 
     /**
-     * Save the ResourceRss configuration
-     * @param request request
-     * @param locale locale
+     * {@inheritDoc}
      */
-    public void doSaveConfig( HttpServletRequest request, Locale locale )
+    @Override
+	public void doSaveConfig( HttpServletRequest request, Locale locale )
     {
         Plugin pluginDigglike = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
 
@@ -186,11 +290,10 @@ public class DiggResourceRss extends ResourceRss
     }
 
     /**
-     * Update the ResourceRss configuration
-     * @param request request
-     * @param locale locale
+     * {@inheritDoc}
      */
-    public void doUpdateConfig( HttpServletRequest request, Locale locale )
+    @Override
+	public void doUpdateConfig( HttpServletRequest request, Locale locale )
     {
         Plugin pluginDigglike = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
         String strIdDigg = request.getParameter( PARAMETER_ID_DIGG );
@@ -213,13 +316,10 @@ public class DiggResourceRss extends ResourceRss
     }
 
     /**
-     * validates the user input associated to the resource rss
-     * @param request request
-     * @param locale locale
-     * @return null if there is no error in the resourceRss form
-     *                    else return the error message url
+     * {@inheritDoc}
      */
-    public String doValidateConfigForm( HttpServletRequest request, Locale locale )
+    @Override
+	public String doValidateConfigForm( HttpServletRequest request, Locale locale )
     {
         Plugin pluginDigglike = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
         String strError = "";
@@ -264,12 +364,10 @@ public class DiggResourceRss extends ResourceRss
     }
 
     /**
-     * returns the informations which must be displayed in the creation resourceRss configuration
-     * @param request request
-     * @param locale locale
-     * @return the information which must  be displayed in the creation resourceRss configuration
+     * {@inheritDoc}
      */
-    public String getDisplayCreateConfigForm( HttpServletRequest request, Locale locale )
+    @Override
+	public String getDisplayCreateConfigForm( HttpServletRequest request, Locale locale )
     {
         Plugin pluginDigglike = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
 
@@ -280,7 +378,7 @@ public class DiggResourceRss extends ResourceRss
 
         HashMap<String, Object> model = new HashMap<String, Object>(  );
 
-        Map diggMap = new HashMap(  );
+        Map<String, ReferenceList> diggMap = new HashMap<String, ReferenceList>(  );
 
         for ( Digg digg : diggList )
         {
@@ -311,12 +409,10 @@ public class DiggResourceRss extends ResourceRss
     }
 
     /**
-     * returns the informations which must  be displayed in the modification resourceRss configuration
-     * @param request request
-     * @param locale locale
-     * @return the information which must  be displayed in the modification resourceRss configuration
+     * {@inheritDoc}
      */
-    public String getDisplayModifyConfigForm( HttpServletRequest request, Locale locale )
+    @Override
+	public String getDisplayModifyConfigForm( HttpServletRequest request, Locale locale )
     {
         Plugin pluginDigglike = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
         DiggFilter filter = new DiggFilter(  );
@@ -338,7 +434,7 @@ public class DiggResourceRss extends ResourceRss
             model.put( MARK_DIGG_LIST_DEFAULT_ITEM, diggResourceRssConfig.getIdDigg(  ) );
         }
 
-        Map diggMap = new HashMap(  );
+        Map<String, ReferenceList> diggMap = new HashMap<String, ReferenceList>(  );
 
         for ( Digg digg : diggList )
         {
@@ -379,10 +475,10 @@ public class DiggResourceRss extends ResourceRss
     }
 
     /**
-     * create Html Rss
-     * @return Html rss
+     * {@inheritDoc}
      */
-    public String createHtmlRss(  )
+    @Override
+	public String createHtmlRss(  )
     {
         HashMap<String, Object> model = new HashMap<String, Object>(  );
         Plugin pluginDiggglike = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
@@ -425,7 +521,7 @@ public class DiggResourceRss extends ResourceRss
 
             List<CommentSubmit> listResultCommentSubmit = CommentSubmitHome.getCommentSubmitList( submitFilter,
                     pluginDiggglike );
-            List<HashMap> listItem = new ArrayList<HashMap>(  );
+            List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>(  );
 
             //Descriptino of the comments
             for ( CommentSubmit commentSubmit : listResultCommentSubmit )
@@ -486,7 +582,7 @@ public class DiggResourceRss extends ResourceRss
             submitFilter.setIdDigg( config.getIdDigg(  ) );
 
             List<DiggSubmit> listResultDiggSubmit = DiggSubmitHome.getDiggSubmitList( submitFilter, pluginDiggglike );
-            List<HashMap> listItem = new ArrayList<HashMap>(  );
+            List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>(  );
 
             //Description of  the submits
             for ( DiggSubmit diggSubmit : listResultDiggSubmit )
@@ -524,10 +620,10 @@ public class DiggResourceRss extends ResourceRss
     }
 
     /**
-     * Gets the feed with items
-     * @return the {@link IFeedResource}
+     * {@inheritDoc}
      */
-    public IFeedResource getFeed(  )
+    @Override
+	public IFeedResource getFeed(  )
     {
     	String strRssFileLanguage = AppPropertiesService.getProperty( PROPERTY_SITE_LANGUAGE );
     	Locale locale = new Locale( strRssFileLanguage );
@@ -547,7 +643,12 @@ public class DiggResourceRss extends ResourceRss
     		
     		IFeedResource resource = new FeedResource(  );
     		resource.setTitle( diggSubmit.getDiggSubmitTitle(  ) );
-    		resource.setLink( strSiteUrl + JSP_MANAGE_DIGG_SUBMIT + diggSubmit.getIdDiggSubmit(  ) );
+    		/**
+			 * The link is changed to access to the digg in FO
+			 * @since v2.2.5
+			 */
+			// resource.setLink( strSiteUrl + JSP_MANAGE_DIGG_SUBMIT + diggSubmit.getIdDiggSubmit( ) );
+			resource.setLink( buildUrlDigg( strSiteUrl, diggSubmit.getDigg( ) ) );
     		resource.setLanguage( strRssFileLanguage );
     		
     		Date date = new Date( diggSubmit.getDateResponse(  ).getTime(  ) );
@@ -609,7 +710,12 @@ public class DiggResourceRss extends ResourceRss
                 strTitleItem = template2.getHtml(  );
 
     			item.setTitle( strTitleItem );
-    			item.setLink( strSiteUrl + JSP_MANAGE_COMMENT_SUBMIT + diggSubmit.getIdDiggSubmit(  ) );
+    			/**
+				 * The link is changed to access to the digg submit in FO
+				 * @since v2.2.5
+				 */
+				// item.setLink( strSiteUrl + JSP_MANAGE_COMMENT_SUBMIT + diggSubmit.getIdDiggSubmit( ) );
+				item.setLink( buildUrlDiggSubmit( strSiteUrl, diggSubmit ) );
     			item.setDescription( commentSubmit.getValue(  ) );
     			item.setDate( commentSubmit.getDateComment(  ) );
     			
@@ -627,7 +733,12 @@ public class DiggResourceRss extends ResourceRss
     		
     		IFeedResource resource = new FeedResource(  );
     		resource.setTitle( digg.getTitle(  ) );
-    		resource.setLink( strSiteUrl + JSP_MANAGE_DIGG_SUBMIT + digg.getIdDigg(  ) );
+    		/**
+			 * The link is changed to access to the digg in FO
+			 * @since v2.2.5
+			 */
+    		// resource.setLink( strSiteUrl + JSP_MANAGE_DIGG_SUBMIT + digg.getIdDigg(  ) );
+    		resource.setLink( buildUrlDigg( strSiteUrl, digg ) );
     		resource.setLanguage( strRssFileLanguage );
     		
     		Date date = new Date( digg.getDateCreation(  ).getTime(  ) );
@@ -679,7 +790,12 @@ public class DiggResourceRss extends ResourceRss
                 strTitle = template.getHtml(  );
     			
     			item.setTitle( strTitle );
-    			item.setLink( strSiteUrl + JSP_MANAGE_COMMENT_SUBMIT + diggSubmit.getIdDiggSubmit(  ) );
+    			/**
+				 * The link is changed to access to the digg submit in FO
+				 * @since v2.2.5
+				 */
+				// item.setLink( strSiteUrl + JSP_MANAGE_COMMENT_SUBMIT + diggSubmit.getIdDiggSubmit( ) );
+				item.setLink( buildUrlDiggSubmit( strSiteUrl, diggSubmit ) );
     			item.setDescription( diggSubmit.getDiggSubmitValue(  ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
     			item.setDate( diggSubmit.getDateResponse(  ) );
     		
@@ -693,21 +809,20 @@ public class DiggResourceRss extends ResourceRss
     }
     
     /**
-     * Update the ResourceRss configuration
-     * @param idResourceRss id of resourceRss
+     * {@inheritDoc}
      */
-    public void deleteResourceRssConfig( int idResourceRss )
+    @Override
+	public void deleteResourceRssConfig( int idResourceRss )
     {
         Plugin pluginDirectory = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
         DiggResourceRssConfigHome.remove( idResourceRss, pluginDirectory );
     }
 
     /**
-     * Return the list of parameter to keep when action apply
-     * @param request request
-     * @return the map of parameter
+     * {@inheritDoc}
      */
-    public Map<String, String> getParameterToApply( HttpServletRequest request )
+    @Override
+	public Map<String, String> getParameterToApply( HttpServletRequest request )
     {
         Map<String, String> map = new HashMap<String, String>(  );
 
@@ -717,10 +832,10 @@ public class DiggResourceRss extends ResourceRss
     }
 
     /**
-     * verify that the resource exist
-     * @return true if resource exist
+     * {@inheritDoc}
      */
-    public boolean checkResource(  )
+    @Override
+	public boolean checkResource(  )
     {
         Plugin pluginDirectory = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
         DiggResourceRssConfig config = DiggResourceRssConfigHome.findByPrimaryKey( this.getId(  ), pluginDirectory );
@@ -728,4 +843,52 @@ public class DiggResourceRss extends ResourceRss
 
         return ( digg != null );
     }
+    
+    /**
+	 * Builds the url digg submit.
+	 * 
+	 * @param strSiteUrl the str site url
+	 * @param diggSubmit the digg submit
+	 * @return the string
+	 */
+	private static String buildUrlDiggSubmit( String strSiteUrl, DiggSubmit diggSubmit )
+	{
+		if ( diggSubmit != null && diggSubmit.getDigg( ) != null )
+		{
+			UrlItem url = new UrlItem( strSiteUrl + SLASH + AppPathService.getPortalUrl( ) );
+			url.addParameter( XPageAppService.PARAM_XPAGE_APP, AppPropertiesService.getProperty( PROPERTY_XPAGE_APPLICATION_ID, DEFAULT_XPAGE_ID ) );
+			url.addParameter( PARAMETER_ID_DIGG, diggSubmit.getDigg( ).getIdDigg( ) );
+			url.addParameter( PARAMETER_ID_DIGG_SUBMIT, diggSubmit.getIdDiggSubmit( ) );
+			url.addParameter( PARAMETER_DIGG_COMMENT, "1" );
+			url.addParameter( PARAMETER_DIGG_DETAIL, "1" );
+
+			return url.getUrl( );
+		}
+
+		AppLogService.debug( "DiggResourceRss - DiggSubmit is null when trying to build the URL." );
+
+		return StringUtils.EMPTY;
+	}
+
+	/**
+	 * Builds the url digg submit.
+	 *
+	 * @param strSiteUrl the str site url
+	 * @param digg the digg
+	 * @return the string
+	 */
+	private static String buildUrlDigg( String strSiteUrl, Digg digg )
+	{
+		if ( digg != null )
+		{
+			UrlItem url = new UrlItem( strSiteUrl + SLASH + AppPathService.getPortalUrl( ) );
+			url.addParameter( XPageAppService.PARAM_XPAGE_APP, AppPropertiesService.getProperty( PROPERTY_XPAGE_APPLICATION_ID, DEFAULT_XPAGE_ID ) );
+			url.addParameter( PARAMETER_ID_DIGG, digg.getIdDigg( ) );
+
+			return url.getUrl( );
+		}
+		AppLogService.debug( "DiggResourceRss - Digg is null when trying to build the URL." );
+
+		return StringUtils.EMPTY;
+	}
 }
