@@ -852,10 +852,7 @@ public final class DiggUtils
         {
             if ( ( response.getValueResponse(  ) != null ) && response.getEntry(  ).isShowInDiggSubmitList(  ) )
             {
-                response.setValueResponse( response.getValueResponse(  ).replaceAll( "<script.*</script>", "" )
-                                                   .replaceAll( "<[^>]+>", "" ) );
-
-                if ( ( nNumberCaractersInBuffer + response.getValueResponse(  ).length(  ) ) <= nNumberCaractersShown )
+               if ( ( nNumberCaractersInBuffer + response.getValueResponse(  ).length(  ) ) <= nNumberCaractersShown )
                 {
                     nNumberCaractersInBuffer += response.getValueResponse(  ).length(  );
 
