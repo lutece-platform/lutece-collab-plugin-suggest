@@ -46,6 +46,7 @@ import fr.paris.lutece.plugins.digglike.business.ResponseHome;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 /**
  * 
@@ -54,7 +55,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
  */
 public class DigglikeService {
 	private static DigglikeService _singleton = new DigglikeService();
-
+	private IDiggSubmitService _diggSubmitService = SpringContextService.getBean( DiggSubmitService.BEAN_SERVICE );
 	/**
 	 * Initialize the Digg service
 	 * 
@@ -125,7 +126,7 @@ public class DigglikeService {
 		diggSubmit.setDiggSubmitTitle(DiggUtils.getDiggSubmitTitle(diggSubmit,
 				locale));
 		//update DiggSubmit
-		DiggSubmitHome.update(diggSubmit, plugin);
+		_diggSubmitService.update(diggSubmit, plugin);
 		
 
 	}

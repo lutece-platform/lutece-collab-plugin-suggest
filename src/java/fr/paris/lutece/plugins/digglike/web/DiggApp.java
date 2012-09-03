@@ -53,7 +53,6 @@ import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggFilter;
 import fr.paris.lutece.plugins.digglike.business.DiggHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
-import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitState;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitStateHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitType;
@@ -64,11 +63,12 @@ import fr.paris.lutece.plugins.digglike.business.FormError;
 import fr.paris.lutece.plugins.digglike.business.IEntry;
 import fr.paris.lutece.plugins.digglike.business.ReportedMessage;
 import fr.paris.lutece.plugins.digglike.business.Response;
-import fr.paris.lutece.plugins.digglike.business.ResponseHome;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.business.VoteHome;
 import fr.paris.lutece.plugins.digglike.business.VoteType;
 import fr.paris.lutece.plugins.digglike.business.VoteTypeHome;
+import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
+import fr.paris.lutece.plugins.digglike.service.IDiggSubmitService;
 import fr.paris.lutece.plugins.digglike.service.digglikesearch.DigglikeSearchService;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
@@ -82,7 +82,9 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.xpages.XPage;
@@ -202,6 +204,7 @@ public class DiggApp implements XPageApplication
     private static final String MESSAGE_NEW_DIGG_SUBMIT = "digglike.message.newDiggSubmit";
     private static final String MESSAGE_NEW_DIGG_SUBMIT_DISABLE = "digglike.message.newDiggSubmitDisable";
     private static final String MESSAGE_NEW_DIGG_SUBMIT_INVALID = "digglike.message.newDiggSubmitInvalid";
+    private static final String MESSAGE_MESSAGE_SUBMIT_SAVE_ERROR = "digglike.message.submitSaveError";
     private static final String MESSAGE_NEW_COMMENT_SUBMIT = "digglike.message.newCommentSubmit";
     private static final String MESSAGE_NEW_COMMENT_SUBMIT_DISABLE = "digglike.message.newCommentSubmitDisable";
     private static final String MESSAGE_NEW_REPORTED_SUBMIT = "digglike.message.newReportedSubmit";
@@ -229,6 +232,7 @@ public class DiggApp implements XPageApplication
     private static final String PROPERTY_MAX_AMOUNT_COMMENTS_CHAR = "digglike.comments.max.char.qty";
     private String _strFullUrl; //ex : http://toto:90/digg/jsp/site/Portal.jsp
     private int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_ITEM_PER_PAGE, 50 );
+    private IDiggSubmitService _diggSubmitService = SpringContextService.getBean( DiggSubmitService.BEAN_SERVICE );
 
     /**
      * Returns the Form XPage result content depending on the request parameters and the current mode.
@@ -483,7 +487,7 @@ public class DiggApp implements XPageApplication
                             SiteMessageService.setMessage( request, MESSAGE_MANDATORY_REPORTED, SiteMessage.TYPE_STOP );
                         }
 
-                        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdSubmitDigg, plugin );
+                        DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey( nIdSubmitDigg, plugin );
 
                         if ( diggSubmit == null )
                         {
@@ -678,7 +682,7 @@ public class DiggApp implements XPageApplication
                     DiggUtils.initSubmitFilterBySort( submmitFilterTopComment,
                         SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC );
 
-                    List<DiggSubmit> listDiggSubmitTopDay = DiggSubmitHome.getDiggSubmitList( submmitFilterTopComment,
+                    List<DiggSubmit> listDiggSubmitTopDay = _diggSubmitService.getDiggSubmitList( submmitFilterTopComment,
                             plugin, digg.getNumberDiggSubmitInTopComment(  ) );
                     model.put( MARK_LIST_SUBMIT_TOP_COMMENT, listDiggSubmitTopDay );
                 }
@@ -691,7 +695,7 @@ public class DiggApp implements XPageApplication
 
                 submmitFilterTopPopularity.setIdDiggSubmitState( diggSubmitStatePublish.getIdDiggSubmitState(  ) );
 
-                List<DiggSubmit> listDiggSubmitTopPopularity = DiggSubmitHome.getDiggSubmitList( submmitFilterTopPopularity,
+                List<DiggSubmit> listDiggSubmitTopPopularity = _diggSubmitService.getDiggSubmitList( submmitFilterTopPopularity,
                         plugin, digg.getNumberDiggSubmitInTopScore(  ) );
                 ReferenceList refListDiggSort = DiggUtils.getRefListDiggSort( locale );
 
@@ -920,7 +924,7 @@ public class DiggApp implements XPageApplication
             HashMap<String, Object> modelDigg = new HashMap<String, Object>(  );
             modelDigg.put( FULL_URL, _strFullUrl );
             luteceUser = null;
-            diggSubmit= DiggSubmitHome.findByPrimaryKey(idDiggSubmit,plugin ); 
+            diggSubmit= _diggSubmitService.findByPrimaryKey(idDiggSubmit,plugin ); 
             modelDigg.put( MARK_DIGG_SUBMIT,diggSubmit );
 
             if ( SecurityService.isAuthenticationEnable(  ) && ( diggSubmit.getLuteceUserKey(  ) != null ) )
@@ -989,7 +993,7 @@ public class DiggApp implements XPageApplication
         HashMap<String, Object> model = new HashMap<String, Object>(  );
         model.put( FULL_URL, _strFullUrl );
 
-        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdSubmitDigg, plugin );
+        DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey( nIdSubmitDigg, plugin );
      
         
         
@@ -1000,7 +1004,7 @@ public class DiggApp implements XPageApplication
         
         //update number view
         diggSubmit.setNumberView(diggSubmit.getNumberView()+1);
-        DiggSubmitHome.update(diggSubmit, false, plugin);
+        _diggSubmitService.update(diggSubmit, false, plugin);
 
         SubmitFilter submmitFilterComment = new SubmitFilter(  );
         submmitFilterComment.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
@@ -1077,7 +1081,7 @@ public class DiggApp implements XPageApplication
         HashMap<String, Object> model = new HashMap<String, Object>(  );
         model.put( FULL_URL, _strFullUrl );
 
-        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdSubmitDigg, plugin );
+        DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey( nIdSubmitDigg, plugin );
 
         if ( ( diggSubmit == null ) || ( diggSubmit.getDiggSubmitState(  ).getNumber(  ) == DiggSubmit.STATE_DISABLE ) )
         {
@@ -1201,7 +1205,6 @@ public class DiggApp implements XPageApplication
         }
 
         diggSubmit.setDigg( digg );
-        diggSubmit.setIdDiggSubmit( DiggSubmitHome.create( diggSubmit, plugin ) );
         doInsertResponseInDiggSubmit( request, diggSubmit, nIdCategory, nIdType, plugin );
         diggSubmit.setDiggSubmitValue( DiggUtils.getHtmlDiggSubmitValue( diggSubmit, locale ) );
         diggSubmit.setDiggSubmitValueShowInTheList( DiggUtils.getHtmlDiggSubmitValueShowInTheList( diggSubmit, locale ) );
@@ -1213,7 +1216,7 @@ public class DiggApp implements XPageApplication
              if ( StringUtil.containsXssCharacters( response.getValueResponse(  ) ) &&
                      !response.getValueResponse(  ).contains( "<img " ) && !response.getValueResponse(  ).contains( "<div id='mediaspace" ) )
              {
-                     DiggSubmitHome.remove( diggSubmit.getIdDiggSubmit(  ), plugin);
+            	 
                  SiteMessageService.setMessage( request, MESSAGE_NEW_DIGG_SUBMIT_INVALID, SiteMessage.TYPE_STOP );
              }
          }
@@ -1221,16 +1224,23 @@ public class DiggApp implements XPageApplication
         {
             diggSubmit.setLuteceUserKey( user.getName(  ) );
         }
-
-        //        diggSubmit.setIdDiggSubmit( DiggSubmitHome.create( diggSubmit, plugin ) );
-        DiggSubmitHome.update( diggSubmit, plugin );
-
-        //store response
-        for ( Response response : diggSubmit.getResponses(  ) )
+        
+       
+        try
         {
-            response.setDiggSubmit( diggSubmit );
-            ResponseHome.create( response, plugin );
+        	 _diggSubmitService.create(diggSubmit, plugin);
         }
+        catch ( Exception ex )
+        {
+            // something very wrong happened... a database check might be needed
+            AppLogService.error( ex.getMessage(  ) + " for DiggSubmit " + diggSubmit.getIdDiggSubmit(), ex );
+            // revert
+            // we clear the DB form the given formsubmit (FormSubmitHome also removes the reponses)
+            _diggSubmitService.remove( diggSubmit.getIdDiggSubmit(), plugin );
+            // throw a message to the user
+            SiteMessageService.setMessage( request, MESSAGE_MESSAGE_SUBMIT_SAVE_ERROR, SiteMessage.TYPE_ERROR );
+        }
+
 
         return diggSubmit;
     }
@@ -1255,7 +1265,7 @@ public class DiggApp implements XPageApplication
 
         CommentSubmit commentSubmit = new CommentSubmit(  );
 
-        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdSubmitDigg, plugin );
+        DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey( nIdSubmitDigg, plugin );
 
         if ( ( diggSubmit == null ) || ( diggSubmit.getDiggSubmitState(  ).getNumber(  ) == DiggSubmit.STATE_DISABLE ) )
         {
@@ -1273,7 +1283,7 @@ public class DiggApp implements XPageApplication
         {
             commentSubmit.setActive( true );
             diggSubmit.setNumberCommentEnable( diggSubmit.getNumberCommentEnable(  ) + 1 );
-            DiggSubmitHome.update( diggSubmit, plugin );
+            _diggSubmitService.update( diggSubmit, plugin );
         }
 
         commentSubmit.setDateComment( DiggUtils.getCurrentDate(  ) );

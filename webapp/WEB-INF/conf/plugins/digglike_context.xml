@@ -22,7 +22,10 @@
 	<bean id="resourceRssDigglikeConfigDAO"  class="fr.paris.lutece.plugins.digglike.business.rss.DiggResourceRssConfigDAO" />
 	<bean id="digglike.entryAdditionalAttributeDAO"  class="fr.paris.lutece.plugins.digglike.business.EntryAdditionalAttributeDAO" />
 	<bean id="digglike.videoTypeDAO"  class="fr.paris.lutece.plugins.digglike.business.VideoTypeDAO" />
-    
+    <bean id="digglike.diggSubmitService"  class="fr.paris.lutece.plugins.digglike.service.DiggSubmitService" />
+    <bean id="digglike.transactionManager"  class="fr.paris.lutece.portal.service.database.DAOUtilTransactionManager">
+	 	<property name="pluginName" value="digglike" />
+	 </bean>
 	<!-- RSS -->
     <bean id="ResourceRssTypeDigg" class="fr.paris.lutece.portal.business.rss.ResourceRssType" >
     	<property name="key" value="ResourceRssTypeDigg" />

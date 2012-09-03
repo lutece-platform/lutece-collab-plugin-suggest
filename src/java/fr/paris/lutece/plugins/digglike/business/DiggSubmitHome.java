@@ -73,7 +73,7 @@ public final class DiggSubmitHome
     public static int create( DiggSubmit diggSubmit, Plugin plugin )
     {
         int nIdDiggSubmit = _dao.insert( diggSubmit, plugin );
-
+        diggSubmit.setIdDiggSubmit(nIdDiggSubmit);
         if ( diggSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) == DiggSubmit.STATE_PUBLISH )
         {
         	String strIdDiggSubmit = Integer.toString( nIdDiggSubmit );
@@ -82,7 +82,15 @@ public final class DiggSubmitHome
             
             DiggIndexerUtils.addIndexerAction( strIdDiggSubmit, IndexerAction.TASK_CREATE );
         }
-
+        //store response
+        if(diggSubmit.getResponses()!=null)
+        {
+	        for ( Response response : diggSubmit.getResponses(  ) )
+	        {
+	            response.setDiggSubmit( diggSubmit );
+	            ResponseHome.create( response, plugin );
+	        }
+        }
         return nIdDiggSubmit;
     }
 

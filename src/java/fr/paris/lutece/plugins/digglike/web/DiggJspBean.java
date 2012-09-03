@@ -59,7 +59,6 @@ import fr.paris.lutece.plugins.digglike.business.DiggActionHome;
 import fr.paris.lutece.plugins.digglike.business.DiggFilter;
 import fr.paris.lutece.plugins.digglike.business.DiggHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
-import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitState;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitStateHome;
 import fr.paris.lutece.plugins.digglike.business.EntryAdditionalAttribute;
@@ -76,10 +75,12 @@ import fr.paris.lutece.plugins.digglike.business.VoteType;
 import fr.paris.lutece.plugins.digglike.business.VoteTypeHome;
 import fr.paris.lutece.plugins.digglike.service.CategoryResourceIdService;
 import fr.paris.lutece.plugins.digglike.service.DefaultMessageResourceIdService;
+import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
 import fr.paris.lutece.plugins.digglike.service.DigglikePlugin;
 import fr.paris.lutece.plugins.digglike.service.DigglikeResourceIdService;
 import fr.paris.lutece.plugins.digglike.service.DigglikeService;
 import fr.paris.lutece.plugins.digglike.service.ExportFormatResourceIdService;
+import fr.paris.lutece.plugins.digglike.service.IDiggSubmitService;
 import fr.paris.lutece.plugins.digglike.service.digglikesearch.DigglikeSearchService;
 import fr.paris.lutece.plugins.digglike.service.search.DigglikeIndexer;
 import fr.paris.lutece.plugins.digglike.utils.DiggIndexerUtils;
@@ -103,6 +104,7 @@ import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
@@ -370,6 +372,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 	private int _nIdDiggSubmitSort = -1;
 	private int _nIdDiggSubmitReport = -1;
 	private String _strWorkGroup = AdminWorkgroupService.ALL_GROUPS;
+	private IDiggSubmitService _diggSubmitService = SpringContextService.getBean( DiggSubmitService.BEAN_SERVICE );
 
 	/*-------------------------------MANAGEMENT  DIGG-----------------------------*/
 
@@ -605,7 +608,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 			try {
 				nId = Integer.parseInt(strQuery);
 				filter.setIdDiggSubmit(nId);
-				listIdDiggSubmitResult = DiggSubmitHome.getDiggSubmitListId(
+				listIdDiggSubmitResult = _diggSubmitService.getDiggSubmitListId(
 						filter, getPlugin());
 			} catch (NumberFormatException e) {
 				// the query is not the id of the digg submit
@@ -613,7 +616,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 						.getSearchResults(strQuery, filter, plugin);
 			}
 		} else {
-			listIdDiggSubmitResult = DiggSubmitHome.getDiggSubmitListId(filter,
+			listIdDiggSubmitResult = _diggSubmitService.getDiggSubmitListId(filter,
 					getPlugin());
 		}
 
@@ -629,7 +632,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 
 		for (Object idDiggSubmitDisplay : paginator.getPageItems()) {
 
-			listDiggSubmitDisplay.add(DiggSubmitHome.findByPrimaryKey(
+			listDiggSubmitDisplay.add(_diggSubmitService.findByPrimaryKey(
 					(Integer) idDiggSubmitDisplay, getPlugin()));
 		}
 
@@ -720,7 +723,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		filter.setIdReported(_nIdDiggSubmitReport);
 		DiggUtils.initSubmitFilterBySort(filter, _nIdDiggSubmitSort);
 
-		List<DiggSubmit> listDiggSubmit = DiggSubmitHome
+		List<DiggSubmit> listDiggSubmit = _diggSubmitService
 				.getDiggSubmitListWithNumberComment(filter, getPlugin());
 
 		for (DiggSubmit diggSubmit : listDiggSubmit) {
@@ -806,7 +809,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 			_nIdDiggSubmit = DiggUtils.getIntegerParameter(strIdDiggSubmit);
 		}
 
-		DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey(_nIdDiggSubmit,
+		DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey(_nIdDiggSubmit,
 				plugin);
 		Digg digg = DiggHome.findByPrimaryKey(diggSubmit.getDigg().getIdDigg(),
 				plugin);
@@ -856,9 +859,9 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 				+ _nItemsPerPageCommentSubmit);
 		model.put(MARK_COMMENT_SUBMIT_LIST, paginator.getPageItems());
 		model.put(MARK_DIGG_SUBMIT, diggSubmit);
-		model.put(MARK_ID_DIGG_SUBMIT_PREV, DiggSubmitHome
+		model.put(MARK_ID_DIGG_SUBMIT_PREV, _diggSubmitService
 				.findPrevIdDiggSubmitInTheList(_nIdDiggSubmit, filter, plugin));
-		model.put(MARK_ID_DIGG_SUBMIT_NEXT, DiggSubmitHome
+		model.put(MARK_ID_DIGG_SUBMIT_NEXT, _diggSubmitService
 				.findNextIdDiggSubmitInTheList(_nIdDiggSubmit, filter, plugin));
 		model.put(MARK_DISABLE_DIGG_SUBMIT_STATE_NUMBER,
 				DiggSubmit.STATE_DISABLE);
@@ -899,7 +902,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 			return getHomeUrl(request);
 		}
 
-		DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey(nIdDiggSubmit,
+		DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey(nIdDiggSubmit,
 				getPlugin());
 
 		if ((diggSubmit == null)
@@ -943,7 +946,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 			return getHomeUrl(request);
 		}
 
-		DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey(nIdDiggSubmit,
+		DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey(nIdDiggSubmit,
 				getPlugin());
 
 		if ((diggSubmit == null)
@@ -965,7 +968,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 			strUrlBack = getJspManageDiggSubmit(request);
 		}
 
-		DiggSubmitHome.remove(nIdDiggSubmit, plugin);
+		_diggSubmitService.remove(nIdDiggSubmit, plugin);
 
 		return strUrlBack;
 	}
@@ -986,7 +989,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		int nIdDiggSubmit = DiggUtils.getIntegerParameter(strIdDiggSubmit);
 		int nStateNumber = DiggUtils.getIntegerParameter(strStateNumber);
 
-		DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey(nIdDiggSubmit,
+		DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey(nIdDiggSubmit,
 				plugin);
 		DiggSubmitState diggSubmitState = DiggSubmitStateHome.findByNumero(
 				nStateNumber, plugin);
@@ -1003,7 +1006,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		}
 
 		diggSubmit.setDiggSubmitState(diggSubmitState);
-		DiggSubmitHome.update(diggSubmit, plugin);
+		_diggSubmitService.update(diggSubmit, plugin);
 
 		if (strComment != null) {
 			return getJspManageCommentSubmit(request);
@@ -1028,7 +1031,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		int nIdDiggSubmit = DiggUtils.getIntegerParameter(strIdDiggSubmit);
 		int nIdCategory = DiggUtils.getIntegerParameter(strIdCategory);
 
-		DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey(nIdDiggSubmit,
+		DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey(nIdDiggSubmit,
 				plugin);
 		Category category = CategoryHome.findByPrimaryKey(nIdCategory, plugin);
 
@@ -1045,7 +1048,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 
 		diggSubmit.setCategory(category);
 
-		DiggSubmitHome.update(diggSubmit, plugin);
+		_diggSubmitService.update(diggSubmit, plugin);
 
 		if (strComment != null) {
 			return getJspManageCommentSubmit(request);
@@ -1104,7 +1107,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		CommentSubmit commentSubmit = new CommentSubmit();
 		Plugin plugin = getPlugin();
 
-		DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey(nIdSubmitDigg,
+		DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey(nIdSubmitDigg,
 				plugin);
 
 		// Check XSS characters
@@ -1118,7 +1121,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		commentSubmit.setActive(true);
 		diggSubmit
 				.setNumberCommentEnable(diggSubmit.getNumberCommentEnable() + 1);
-		DiggSubmitHome.update(diggSubmit, plugin);
+		_diggSubmitService.update(diggSubmit, plugin);
 
 		commentSubmit.setDateComment(DiggUtils.getCurrentDate());
 		commentSubmit.setDiggSubmit(diggSubmit);
@@ -1162,7 +1165,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 			return getJspManageDigg(request);
 		}
 
-		DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey(commentSubmit
+		DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey(commentSubmit
 				.getDiggSubmit().getIdDiggSubmit(), plugin);
 
 		if (!RBACService.isAuthorized(Digg.RESOURCE_TYPE, EMPTY_STRING
@@ -1179,7 +1182,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 					.getNumberCommentEnable() - 1);
 		}
 
-		DiggSubmitHome.update(diggSubmit, plugin);
+		_diggSubmitService.update(diggSubmit, plugin);
 
 		return getJspManageCommentSubmit(request);
 	}
@@ -1201,7 +1204,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 				nIdCommentSubmit, plugin);
 
 		if (commentSubmit != null) {
-			DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey(
+			DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey(
 					commentSubmit.getDiggSubmit().getIdDiggSubmit(), plugin);
 
 			if (!RBACService.isAuthorized(Digg.RESOURCE_TYPE, EMPTY_STRING
@@ -1215,7 +1218,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 			CommentSubmitHome.update(commentSubmit, plugin);
 			diggSubmit.setNumberCommentEnable(diggSubmit
 					.getNumberCommentEnable() - 1);
-			DiggSubmitHome.update(diggSubmit, plugin);
+			_diggSubmitService.update(diggSubmit, plugin);
 		}
 
 		return getJspManageCommentSubmit(request);
@@ -1238,7 +1241,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 				nIdCommentSubmit, plugin);
 
 		if (commentSubmit != null) {
-			DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey(
+			DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey(
 					commentSubmit.getDiggSubmit().getIdDiggSubmit(), plugin);
 
 			if (!RBACService.isAuthorized(Digg.RESOURCE_TYPE, EMPTY_STRING
@@ -1252,7 +1255,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 			CommentSubmitHome.update(commentSubmit, plugin);
 			diggSubmit.setNumberCommentEnable(diggSubmit
 					.getNumberCommentEnable() + 1);
-			DiggSubmitHome.update(diggSubmit, plugin);
+			_diggSubmitService.update(diggSubmit, plugin);
 		}
 
 		return getJspManageCommentSubmit(request);
@@ -1270,7 +1273,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		SubmitFilter filter = new SubmitFilter();
 		filter.setIdDigg(_nIdDigg);
 		filter.setIdDiggSubmitState(_nIdDiggSubmitState);
-		_nIdDiggSubmit = DiggSubmitHome.findNextIdDiggSubmitInTheList(
+		_nIdDiggSubmit = _diggSubmitService.findNextIdDiggSubmitInTheList(
 				_nIdDiggSubmit, filter, plugin);
 
 		return getJspManageCommentSubmit(request);
@@ -1288,7 +1291,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		SubmitFilter filter = new SubmitFilter();
 		filter.setIdDigg(_nIdDigg);
 		filter.setIdDiggSubmitState(_nIdDiggSubmitState);
-		_nIdDiggSubmit = DiggSubmitHome.findPrevIdDiggSubmitInTheList(
+		_nIdDiggSubmit = _diggSubmitService.findPrevIdDiggSubmitInTheList(
 				_nIdDiggSubmit, filter, plugin);
 
 		return getJspManageCommentSubmit(request);
@@ -1975,7 +1978,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		SubmitFilter responseFilter = new SubmitFilter();
 		responseFilter.setIdDigg(nIdDigg);
 
-		int nNumberdiggSubmit = DiggSubmitHome.getCountDiggSubmit(
+		int nNumberdiggSubmit = _diggSubmitService.getCountDiggSubmit(
 				responseFilter, plugin);
 
 		if (nNumberdiggSubmit == 0) {
@@ -2793,7 +2796,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		int nIdDiggSubmit = Integer.parseInt(request
 				.getParameter(PARAMETER_ID_DIGG_SUBMIT));
 
-		int nOrder = DiggSubmitHome.getDiggSubmitOrderById(nIdDiggSubmit,
+		int nOrder = _diggSubmitService.getDiggSubmitOrderById(nIdDiggSubmit,
 				getPlugin());
 		int nNewOrder = Integer.parseInt(request
 				.getParameter(PARAMETER_DIGG_SUBMIT_ORDER));
@@ -2819,23 +2822,23 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 			int nIdDiggSubmit) {
 		if (nNewOrder < nOrder) {
 			for (int i = nOrder - 1; i > (nNewOrder - 1); i--) {
-				int nIdDiggSubmitOrder = DiggSubmitHome.getDiggSubmitIdByOrder(
+				int nIdDiggSubmitOrder = _diggSubmitService.getDiggSubmitIdByOrder(
 						i, getPlugin());
-				DiggSubmitHome.updateDiggSubmitOrder(i + 1, nIdDiggSubmitOrder,
+				_diggSubmitService.updateDiggSubmitOrder(i + 1, nIdDiggSubmitOrder,
 						getPlugin());
 			}
 
-			DiggSubmitHome.updateDiggSubmitOrder(nNewOrder, nIdDiggSubmit,
+			_diggSubmitService.updateDiggSubmitOrder(nNewOrder, nIdDiggSubmit,
 					getPlugin());
 		} else {
 			for (int i = nOrder; i < (nNewOrder + 1); i++) {
-				int nIdDiggSubmitOrder = DiggSubmitHome.getDiggSubmitIdByOrder(
+				int nIdDiggSubmitOrder = _diggSubmitService.getDiggSubmitIdByOrder(
 						i, getPlugin());
-				DiggSubmitHome.updateDiggSubmitOrder(i - 1, nIdDiggSubmitOrder,
+				_diggSubmitService.updateDiggSubmitOrder(i - 1, nIdDiggSubmitOrder,
 						getPlugin());
 			}
 
-			DiggSubmitHome.updateDiggSubmitOrder(nNewOrder, nIdDiggSubmit,
+			_diggSubmitService.updateDiggSubmitOrder(nNewOrder, nIdDiggSubmit,
 					getPlugin());
 		}
 	}
@@ -2848,7 +2851,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 	 * @return the list of sequence numbers
 	 */
 	private ReferenceList getDiggSubmitOrderList(int nIdDigg) {
-		int nMax = DiggSubmitHome.getMaxOrderContactList(nIdDigg, getPlugin());
+		int nMax = _diggSubmitService.getMaxOrderContactList(nIdDigg, getPlugin());
 		ReferenceList list = new ReferenceList();
 
 		for (int i = 1; i < (nMax + 1); i++) {
@@ -2924,7 +2927,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 
 		int nNbVotes = 0;
 
-		List<DiggSubmit> listDiggSubmit = DiggSubmitHome.getDiggSubmitList(
+		List<DiggSubmit> listDiggSubmit = _diggSubmitService.getDiggSubmitList(
 				filter, plugin);
 		List<String> listUsersKey = new ArrayList();
 
@@ -2939,15 +2942,15 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		// number of digg submit
 		filter.setIdDiggSubmitState(DiggSubmit.STATE_DISABLE);
 
-		int nNbDiggSubmitDisabled = DiggSubmitHome.getCountDiggSubmit(filter,
+		int nNbDiggSubmitDisabled = _diggSubmitService.getCountDiggSubmit(filter,
 				plugin);
 		filter.setIdDiggSubmitState(DiggSubmit.STATE_WAITING_FOR_PUBLISH);
 
-		int nNbDiggSubmitWaiting = DiggSubmitHome.getCountDiggSubmit(filter,
+		int nNbDiggSubmitWaiting = _diggSubmitService.getCountDiggSubmit(filter,
 				plugin);
 		filter.setIdDiggSubmitState(DiggSubmit.STATE_PUBLISH);
 
-		int nNbDiggSubmitPublished = DiggSubmitHome.getCountDiggSubmit(filter,
+		int nNbDiggSubmitPublished = _diggSubmitService.getCountDiggSubmit(filter,
 				plugin);
 
 		// high scores
@@ -2956,7 +2959,7 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 
 		int nNumberMaxDiggSubmit = AppPropertiesService.getPropertyInt(
 				PROPERTY_DIGGSUBMIT_HIGHSCORES, 10);
-		listDiggSubmit = DiggSubmitHome.getDiggSubmitList(filter, plugin,
+		listDiggSubmit = _diggSubmitService.getDiggSubmitList(filter, plugin,
 				nNumberMaxDiggSubmit);
 
 		ReferenceList refDiggList = DiggUtils.getRefListDigg(listDigg,false);
