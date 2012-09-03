@@ -1,108 +1,42 @@
-
-<script language="JavaScript" type="text/javascript">
-	var tabDiggSubmitValueToClose=new Array();
-</script> 
-
-<div class="content-box">
-  <h2>  #i18n{digglike.manageDiggSubmit.title}</h2>
-  <div class="highlight-box">
-    <form action="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp" method="post" name="" id="filter">
-      <p>
-        <label for="">
-          #i18n{digglike.manageDiggSubmit.labelDiggSubmitState} : 
-        </label>
+<div class="row">
+	<div class="span12">
+	<fieldset>
+	<legend>#i18n{digglike.manageDiggSubmit.title}</legend>
+	<div class="well">
+    <form class="form-search" action="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp" method="post" name="" id="filter">
+		<label for="id_digg_submit_state">#i18n{digglike.manageDiggSubmit.labelDiggSubmitState}</label>
         <@combo name="id_digg_submit_state"  items=digg_submit_state_list default_value=digg_submit_state_selected />
-       	&nbsp;
-       	<span style="font-weight:bold;color:#395E7D;">
-         	 #i18n{digglike.manageDiggSubmit.labelDiggSubmitReport} : 
-         </span>
-      		<@combo name="id_digg_submit_report"   items=digg_submit_report_list default_value=digg_submit_report_selected />
-			&nbsp;
-         <span style="font-weight:bold;color:#395E7D;">
-         	 #i18n{digglike.manageDiggSubmit.labelDiggSubmitSort} : 
-         </span>
-      		<@combo name="id_digg_submit_sort"   items=digg_submit_sort_list default_value=digg_submit_sort_selected />
-			&nbsp;
-        <input class="button" value="#i18n{digglike.manageDiggSubmit.buttonSort}" 	type="submit" id="button_submit">
+       	<label for="id_digg_submit_report">#i18n{digglike.manageDiggSubmit.labelDiggSubmitReport}</label>
+        <@combo name="id_digg_submit_report"   items=digg_submit_report_list default_value=digg_submit_report_selected />
+		<label for="id_digg_submit_report">#i18n{digglike.manageDiggSubmit.labelDiggSubmitSort}</label>
+		<@combo name="id_digg_submit_sort"   items=digg_submit_sort_list default_value=digg_submit_sort_selected />
+		<button class="btn btn-primary" type="submit" id="button_submit"><i class="icon-search icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonSort}</button>
       </p>
     </form>
-    <span align="center">
-			<label for="">#i18n{digglike.manageDiggSubmit.labelSearch}</label>
-			<form name="search" method="post" action="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp">
-               	<input type="hidden" name="page" value="search" />
-                   <#if query?exists>
-                    <input type="text" name="query" size="20" value="${query}" style="margin-bottom:5px;" />
-                   <#else>
-   	                <input type="text" name="query" size="20" value="" style="margin-bottom:5px;" />
-                   </#if>
-				<input class="button" value="#i18n{digglike.manageDiggSubmit.buttonSearch}" type="submit">
-			</form>
-      </span>
-  </div>
-   <table>
+	<form name="search" class="form-search" method="post" action="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp">
+	<label for="">#i18n{digglike.manageDiggSubmit.labelSearch}</label>
+    <input type="hidden" name="page" value="search" />
+		<input type="text" name="query" size="20" value="<#if query?exists>${query}</#if>" style="margin-bottom:5px;" />
+		<button class="btn btn-primary" type="submit"><i class="icon-search icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonSearch}</button>
+	</form>
+    <@paginationAdmin paginator=paginator />
+	<form method="post" class="form-inline" action="jsp/admin/plugins/digglike/DoDownloadDiggExport.jsp">
+	<label>#i18n{digglike.manageDiggSubmit.labelDiggExport}</label>        
+	<@combo name="id_export_format"  items=export_format_list default_value=-1 />
+	<button class="btn btn-primary" type="submit">#i18n{digglike.manageDiggSubmit.buttonDiggExport}</button>
+	</form>    
+   <table class="table table-striped table-condensed">
     <tr>
-      <td>
-		   <form method="post"  action="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp">
-		        <@pagination paginator=paginator />
-			<!-- Number of feeds per page selector -->
-		        #i18n{digglike.manageDiggSubmit.labelItemsPerPage} :
-		        <select name="items_per_page">
-		            <#list [ "10" , "20" , "50" , "100" ] as nb>
-		            	<#if nb_items_per_page = nb >
-		             		<option selected="selected" value="${nb}">${nb}</option>
-		            	<#else>
-		             		<option value="${nb}">${nb}</option>
-		            	</#if>
-		            </#list>
-		        </select>
-		        <input type="submit" class="button" value="#i18n{digglike.manageDiggSubmit.buttonItemsPerPage}" />
-		    </form>
-    </td>
-    <td align="right">
-	    <form method="post"  action="jsp/admin/plugins/digglike/DoDownloadDiggExport.jsp">
-	        
-		   		#i18n{digglike.manageDiggSubmit.labelDiggExport} : 
-		   	  
-	 			 <@combo name="id_export_format"  items=export_format_list default_value=-1 />
-				<input value="#i18n{digglike.manageDiggSubmit.buttonDiggExport}" class="button"  type="submit">
-			
-	     </form>    
-     </td>
-     </tr>
-   </table>
-  <table>
-    <tr>
-  	  <th>
-       #i18n{digglike.manageDiggSubmit.rowOrder}
-      </th>
-      <th>
-       #i18n{digglike.manageDiggSubmit.rowTitle}
-      </th>
-     <th>
-        #i18n{digglike.manageDiggSubmit.rowDiggSubmitState}
-      </th>
-       
-      <th>
-        #i18n{digglike.manageDiggSubmit.rowNumberVote}
-      </th>
-     <th>
-        #i18n{digglike.manageDiggSubmit.rowNumberScore}
-      </th>
-     <th>
-        #i18n{digglike.manageDiggSubmit.rowNumberComment}
-      </th>
-      <th>
-        #i18n{digglike.manageDiggSubmit.rowNumberCommentEnable}
-      </th>
-      <th>
-        #i18n{digglike.manageDiggSubmit.rowNumberCommentIdle}
-      </th>
-      <th>
-        #i18n{digglike.manageDiggSubmit.rowCategory}
-      </th>
-      <th width=130px>
-        #i18n{digglike.manageDiggSubmit.rowActions}
-      </th>
+		<th>#i18n{digglike.manageDiggSubmit.rowOrder}</th>
+		<th>#i18n{digglike.manageDiggSubmit.rowTitle}</th>
+		<th>#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}</th>
+		<th>#i18n{digglike.manageDiggSubmit.rowNumberVote}</th>
+		<th>#i18n{digglike.manageDiggSubmit.rowNumberScore}</th>
+		<th>#i18n{digglike.manageDiggSubmit.rowNumberComment}</th>
+		<th>#i18n{digglike.manageDiggSubmit.rowNumberCommentEnable}</th>
+		<th>#i18n{digglike.manageDiggSubmit.rowNumberCommentIdle}</th>
+		<th>#i18n{digglike.manageDiggSubmit.rowCategory}</th>
+		<th>#i18n{digglike.manageDiggSubmit.rowActions}</th>
     </tr>
    <#list digg_submit_list as digg_submit>	
    <tr>
@@ -118,10 +52,7 @@
        <#if digg_submit.reported>
       				<img src="images/admin/skin/plugins/digglike/warning.png" width="15px" height="15px" alt="#i18n{digglike.manageDiggSubmit.altWarning}" title="#i18n{digglike.manageDiggSubmit.altWarning}">
       	</#if>
-      	<#if digg_submit.diggSubmitTitle?exists>
-      		  ${digg_submit.diggSubmitTitle}
-      		  
-        </#if> 
+      	<#if digg_submit.diggSubmitTitle?exists>${digg_submit.diggSubmitTitle}</#if> 
       			<a onclick="displayId('diggSubmitValue${digg_submit.idDiggSubmit}');">  
       			<img src="images/admin/skin/open_block.gif" alt="" border="0"></a>
 				<script language="JavaScript" type="text/javascript" >
@@ -221,9 +152,12 @@
     </tr>
     </#list>
    </table>
- </div>
+	</fieldset>
+	</div>
+</div>
 
- <script language="JavaScript" type="text/javascript">
+<script language="JavaScript" type="text/javascript">
+	var tabDiggSubmitValueToClose=new Array();
 	for (i=0; i<tabDiggSubmitValueToClose.length; i++) 
 	{
 

@@ -1,80 +1,64 @@
-	<div class="content-box" >
-		<h2>#i18n{digglike.manageAdvancedParameters.title}</h2>
-		
-		<div class="highlight-box">
-		
-		<p>#i18n{digglike.manageAdvancedParameters.labelModifyAdvancedParameters}</p>
-		<form method="post" action="jsp/admin/plugins/digglike/DoModifyAdvancedParameters.jsp">
-			<p>
-				<label for="id_default_digg">#i18n{digglike.manageAdvancedParameters.labelDefaultDigg} : </label>
+<div class="row" >
+	<div class="span12">
+	<fieldset>
+	<legend>#i18n{digglike.manageAdvancedParameters.title}</legend>
+		<div class="span6">
+		<form class="form-horizontal" method="post" action="jsp/admin/plugins/digglike/DoModifyAdvancedParameters.jsp">
+		<div class="control-group">
+		<label class="control-label" for="">#i18n{digglike.manageAdvancedParameters.labelModifyAdvancedParameters}</label>
+			<div class="controls">
+			<label  for="id_default_digg">#i18n{digglike.manageAdvancedParameters.labelDefaultDigg} : </label>
 				<@combo name="id_default_digg" items=digg_list default_value="${id_default_digg}" />
-			<br />
-			<label>&nbsp;</label>#i18n{digglike.manageAdvancedParameters.labelDefaultDiggComment}
-			</p>
-			<p>
-				<input type="submit" class="button" value="#i18n{digglike.manageAdvancedParameters.buttonModify}" />
-			</p>
-		</form>
-		
+				<p class="help-text" >#i18n{digglike.manageAdvancedParameters.labelDefaultDiggComment}</p>
+			</div>
+		</div>
+		<div class="form-actions">	
+			<button class="btn btn-primary" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.manageAdvancedParameters.buttonModify}</button>
 		</div>
 		
-		
-		<div class="highlight-box">
-		
-			<table>
-	        	 <#if permission_manage_category>   
-				<tr>
-					<td>
-		                <a href="jsp/admin/plugins/digglike/ManageCategory.jsp?plugin_name=digglike" class="bullet-link">#i18n{digglike.manageAdvancedParameters.labelCategory}</a>
-		       		</td>
-		            <td>
-					 	#i18n{digglike.manageAdvancedParameters.labelCategoryComment}
-		            </td>
-		        </tr>
-		        <tr>
-					<td>
-		                <a href="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp?plugin_name=digglike" class="bullet-link">#i18n{digglike.manageAdvancedParameters.labelType}</a>
-		       		</td>
-		            <td>
-					 	#i18n{digglike.manageAdvancedParameters.labelTypeComment}
-		            </td>
-		        </tr>
-		     </#if>
-	       
-		     <#if permission_manage_default_message>   
-				<tr>
-					<td>
-		                <a href="jsp/admin/plugins/digglike/ManageDefaultMessage.jsp?plugin_name=digglike" class="bullet-link">#i18n{digglike.manageAdvancedParameters.labelDefaultMessage}</a>
-		       		</td>
-		            <td>
-					 	#i18n{digglike.manageAdvancedParameters.labelDefaultMessageComment}
-		            </td>
-		        </tr>
-		     </#if>
-		       
-	        <#if permission_manage_export_format>
-		        <tr>
-		             
-		            <td>
-		            	<a href="jsp/admin/plugins/digglike/ManageExportFormat.jsp?plugin_name=digglike" class="bullet-link">#i18n{digglike.manageAdvancedParameters.labelExportFormat}</a>
-		            </td>       
-		              <td>    
-		             		#i18n{digglike.manageAdvancedParameters.labelExportFormatComment}
-		              </td>
-		        </tr>	
-	        </#if>
-	        <tr>
-	             
-	            <td>
-	            	<a href="jsp/admin/plugins/digglike/Statistics.jsp" class="bullet-link">#i18n{digglike.manageAdvancedParameters.labelStatistics}</a>
-	            </td>       
-	              <td>    
-	             		#i18n{digglike.manageAdvancedParameters.labelStatisticsComment}
-	              </td>
-	        </tr>	
-		    </table>
-		</div>    
-	 </div>
+		</form>
+		</div> 
+		<div class="span5" >
+			<ul class="nav nav-pills nav-stacked">
+				<#if permission_manage_category>
+				<li>
+					<a href="jsp/admin/plugins/digglike/ManageCategory.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
+						<i class="icon-cog"></i>&nbsp;#i18n{digglike.manageAdvancedParameters.labelCategoryComment}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelTypeComment}" >
+						<i class="icon-inbox"></i>&nbsp;#i18n{digglike.manageAdvancedParameters.labelTypeComment}
+					</a>
+				</li>
+				</#if>
+				<#if permission_manage_default_message>   
+				<li>
+					<a href="jsp/admin/plugins/digglike/ManageDefaultMessage.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelDefaultMessageComment}" >
+						<i class="icon-star"></i>&nbsp;
+						#i18n{digglike.manageAdvancedParameters.labelDefaultMessageComment}
+					</a>
+				</li>
+				</#if>
+				<#if permission_manage_export_format>
+				<li>
+					<a href="jsp/admin/plugins/digglike/ManageExportFormat.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelExportFormatComment}" >
+						<i class="icon-download"></i>&nbsp;
+						#i18n{digglike.manageAdvancedParameters.labelExportFormatComment}
+					</a>
+				</li>
+				</#if>
+				<li>
+					<a href="jsp/admin/plugins/digglike/Statistics.jsp"  title="#i18n{digglike.manageAdvancedParameters.labelStatisticsComment}" >
+						<i class="icon-signal"></i>&nbsp;
+						#i18n{digglike.manageAdvancedParameters.labelStatisticsComment}
+					</a>
+				</li>
+			</ul>
+		</div>
+	</fieldset>		
+	</div>
+</div>
 
  
 

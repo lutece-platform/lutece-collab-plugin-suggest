@@ -1,112 +1,91 @@
- <#include "/admin/util/editor/editor.html" />
-<div class="content-box">
- <h2>#i18n{digglike.modifyEntry.titleQuestion}:'${entry.digg.title}'</h2>
- <form action="jsp/admin/plugins/digglike/DoModifyEntry.jsp#list" method="post" name="" id=""  >
-    <input name="id_entry" value="${entry.idEntry}" type="hidden">
-	<p>
-    	<label for="title">#i18n{digglike.createEntry.labelTitle} * : </label>
-    	<input type="text" name="title" id="title" size="80" value="${entry.title}"  maxlength="255"/>
-    	<br/>
-		<label>&nbsp;</label>#i18n{digglike.createEntry.labelTitleComment}
- 	</p>
-   <p>
-     <label for="help_message">#i18n{digglike.createEntry.labelHelpMessage} : </label>
-    <textarea  name="help_message"  id="help_message" rows="20" cols="90">${entry.helpMessage}</textarea>
-	<br/>
-	 <label>&nbsp;</label> #i18n{digglike.createEntry.labelHelpMessageComment}
-	</p>
-    <p>
-     <label for="comment"> #i18n{digglike.createEntry.labelComment} : </label>
-     <textarea name="comment" cols="80" rows="2">${entry.comment}</textarea>
-     </p>
-    <p>
-     <label for="">#i18n{digglike.createEntry.labelType} : </label>
-             ${entry.entryType.title}
-	</p> 
-	<p>
-	    <label for="width">#i18n{digglike.createEntryVideo.labelWidth} : </label>
-	    <#if entry.width!=-1>
-	    	<input type="text" name="width" id="width" size="5" value="${entry.width}" />
-	    <#else>
-    		<input type="text" name="width" id="width" size="5" value="" />
-	    </#if>
-    			
-  	 </p>
-  	<p>
-    	<label for="height">#i18n{digglike.createEntryVideo.labelHeight} : </label>
-    	<#if entry.height!=-1>
-    		<input type="text" name="height" id="height" size="5" value="${entry.height}" />
-    	<#else>
-    		<input type="text" name="height" id="height" size="5" value="" />
-    	</#if>
-    	
-   	</p>
-   <p>
-    <label for="autostart">#i18n{digglike.createEntryVideo.labelAutostart} : </label>
-    <select name="autostart" id="autostart">
-    	<option <#if autostart = "true">selected</#if> value="true">#i18n{digglike.createEntryVideo.select.yes}</option>
-    	<option <#if autostart = "false">selected</#if> value="false">#i18n{digglike.createEntryVideo.select.no}</option>
-	</select>
-   </p>
-   <p>
-    <label for="loop">#i18n{digglike.createEntryVideo.labelLoop} : </label>
-    <select name="loop" id="loop">
-    	<option <#if loop = "true">selected</#if> value="true">#i18n{digglike.createEntryVideo.select.yes}</option>
-    	<option <#if loop = "false">selected</#if> value="false">#i18n{digglike.createEntryVideo.select.no}</option>
-	</select>
-   </p>
-   	   <p>
-    <label for="quality">#i18n{digglike.createEntryVideo.labelQuality} : </label>
-    <select name="quality" id="quality">
-    	<option <#if quality = "low">selected</#if> value="low">#i18n{digglike.createEntryVideo.select.low}</option>
-    	<option <#if quality = "high">selected</#if> value="high">#i18n{digglike.createEntryVideo.select.high}</option>
-    	<option <#if quality = "autolow">selected</#if> value="autolow">#i18n{digglike.createEntryVideo.select.autolow}</option>
-    	<option <#if quality = "autohigh">selected</#if> value="autohigh">#i18n{digglike.createEntryVideo.select.autohigh}</option>
-    	<option <#if quality = "best">selected</#if> value="best">#i18n{digglike.createEntryVideo.select.best}</option>
-	</select>
-   </p>
-   <p>
-    <label for="alignment">#i18n{digglike.createEntryVideo.labelAlignment} : </label>
-    <select name="alignment" id="alignment">
-    	<option <#if alignment = "left">selected</#if> value="left">#i18n{digglike.createEntryVideo.select.left}</option>
-    	<option <#if alignment = "right">selected</#if> value="right">#i18n{digglike.createEntryVideo.select.right}</option>
-    	<option <#if alignment = "top">selected</#if> value="top">#i18n{digglike.createEntryVideo.select.top}</option>
-    	<option <#if alignment = "bottom">selected</#if> value="bottom">#i18n{digglike.createEntryVideo.select.bottom}</option>
-	</select>
-   </p>
-  	<p>
-    <label for="menu">#i18n{digglike.createEntryVideo.labelMenu} : </label>
-    <select name="menu" id="menu">
-    	<option <#if menu = "true">selected</#if> value="true">#i18n{digglike.createEntryVideo.select.yes}</option>
-    	<option <#if menu = "false">selected</#if> value="false">#i18n{digglike.createEntryVideo.select.no}</option>
-	</select>
-   </p>
-   	
-   	
-  <p>
-    	<label for="mandatory">#i18n{digglike.createEntry.labelMandatory} : </label>
-   		 <#if entry.mandatory>
-   		 	<input name="mandatory" value="1" type="checkbox" checked="checked" >
-   		 <#else>
-   			<input name="mandatory" value="1" type="checkbox" >
-   		 </#if>	
-   </p>
-     
-   	 <p>
-    	<label for="mandatory">#i18n{digglike.createEntry.labelShowInDiggSubmitList} : </label>
-   		 <#if entry.showInDiggSubmitList>
-   		 	<input name="show_in_digg_submit_list" value="1" type="checkbox" checked="checked" >
-   		 <#else>
-   		 	<input name="show_in_digg_submit_list" value="1" type="checkbox" >
-   		 </#if>
-   		 <br/>
-	    <label>&nbsp;</label>#i18n{digglike.createDigg.labelShowInDiggSubmitListComment}
-   </p>
-     <p>
-  		<input type="submit" value="#i18n{digglike.modifyEntry.buttonSave}" class="button"  name="save" / >
-  		<input type="submit" value="#i18n{digglike.modifyEntry.buttonCancel}" class="button" name="cancel" />
-   </p>
-  </form>
+  <#include "/admin/util/editor/editor.html" />
+<div class="row">
+	<div class="span12">
+	<fieldset>
+	<legend>#i18n{digglike.modifyEntry.titleQuestion}:'${entry.digg.title}' &gt; #i18n{digglike.modifyEntry.labelType}${entry.entryType.title}</legend>
+	<form class="form-horizontal" action="jsp/admin/plugins/digglike/DoModifyEntry.jsp" method="post" name="" id=""  >
+	<input name="id_entry" value="${entry.idEntry}" type="hidden">
+	<div class="control-group">
+		<label class="control-label" for="">&nbsp;</label>
+    	<div class="controls">
+			<label for="title">#i18n{digglike.modifyEntry.labelTitle} * </label>
+			<input type="text" name="title" id="title" class="input-xlargei" value="${entry.title}" maxlength="255"/>
+			<span class="help-text">#i18n{digglike.modifyEntry.labelTitleComment}</span>
+		</div>
+		<div class="controls">
+			<label>#i18n{digglike.modifyEntry.labelHelpMessage}</label>
+			<textarea  name="help_message" id="help_message" rows="2" class="span4">${entry.helpMessage}</textarea>#i18n{digglike.modifyEntry.labelHelpMessageComment}
+		</div>
+		<div class="controls">
+			<label for="comment"> #i18n{digglike.modifyEntry.labelComment}</label>
+			<textarea name="comment" class="span4" rows="2">${entry.comment}</textarea>
+		</div>
+		<div class="controls">
+			<label class="checkbox" for="mandatory">#i18n{digglike.modifyEntry.labelMandatory}
+				<input name="mandatory" value="1" type="checkbox" <#if entry.mandatory>checked="checked"</#if> ></label>
+		</div>
+		<div class="controls">
+			<label for="width">#i18n{digglike.modifyEntryVideo.labelWidth}</label>
+				<input type="text" name="width" id="width" class="input-mini" value="<#if entry.width!=-1>${entry.width}</#if>" />
+		</div>
+		<div class="controls">
+			<label  for="height">#i18n{digglike.modifyEntryVideo.labelHeight}</label>
+				<input type="text" name="height" id="height" class="input-mini" value="<#if entry.height!=-1>${entry.height}</#if>" />
+		</div>
+		<div class="controls">
+		<label  for="autostart">#i18n{digglike.modifyEntryVideo.labelAutostart}</label>
+			<select name="autostart" id="autostart">
+				<option value="true" <#if autostart = "true">selected</#if>>#i18n{digglike.modifyEntryVideo.select.yes}</option>
+				<option value="false" <#if autostart = "false">selected</#if>>#i18n{digglike.modifyEntryVideo.select.no}</option>
+			</select>
+		</div>
+		<div class="controls">
+		<label for="loop">#i18n{digglike.modifyEntryVideo.labelLoop}</label>
+			<select name="loop" id="loop">
+				<option value="true" <#if loop = "true">selected</#if>>#i18n{digglike.modifyEntryVideo.select.yes}</option>
+				<option value="false" <#if loop = "false">selected</#if>>#i18n{digglike.modifyEntryVideo.select.no}</option>
+			</select>
+		</div>
+		<div class="controls">
+		<label for="quality">#i18n{digglike.modifyEntryVideo.labelQuality}</label>
+			<select name="quality" id="quality">
+				<option <#if quality = "low">selected</#if> value="low">#i18n{digglike.createEntryVideo.select.low}</option>
+				<option <#if quality = "high">selected</#if> value="high">#i18n{digglike.createEntryVideo.select.high}</option>
+				<option <#if quality = "autolow">selected</#if> value="autolow">#i18n{digglike.createEntryVideo.select.autolow}</option>
+				<option <#if quality = "autohigh">selected</#if> value="autohigh">#i18n{digglike.createEntryVideo.select.autohigh}</option>
+				<option <#if quality = "best">selected</#if> value="best">#i18n{digglike.createEntryVideo.select.best}</option>
+			</select>
+		</div>
+		<div class="controls">
+		<label for="alignment">#i18n{digglike.modifyEntryVideo.labelAlignment}</label>
+			<select name="alignment" id="alignment">
+				<option <#if alignment = "left">selected</#if> value="left">#i18n{digglike.createEntryVideo.select.left}</option>
+				<option <#if alignment = "right">selected</#if> value="right">#i18n{digglike.createEntryVideo.select.right}</option>
+				<option <#if alignment = "top">selected</#if> value="top">#i18n{digglike.createEntryVideo.select.top}</option>
+				<option <#if alignment = "bottom">selected</#if> value="bottom">#i18n{digglike.createEntryVideo.select.bottom}</option>
+			</select>
+		</div>
+		<div class="controls">
+		<label for="menu">#i18n{digglike.modifyEntryVideo.labelMenu}</label>
+			<select name="menu" id="menu">
+				<option <#if menu = "true">selected</#if> value="true">#i18n{digglike.createEntryVideo.select.yes}</option>
+				<option <#if menu = "false">selected</#if> value="false">#i18n{digglike.createEntryVideo.select.no}</option>
+			</select>
+		</div>
+   		<div class="controls">
+		<label class="checkbox" for="mandatory">#i18n{digglike.modifyEntry.labelShowInDiggSubmitList}
+			<input name="show_in_digg_submit_list" value="1" type="checkbox" <#if entry.showInDiggSubmitList>checked="checked"</#if> ></label>
+			<span class="help-text">#i18n{digglike.createDigg.labelShowInDiggSubmitListComment}</span>
+		</div>
+	</div>
+	<div class="form-actions">
+		<button class="btn btn-primary" type="submit" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.modifyEntry.buttonSave}</button>
+		<button class="btn btn-primary" onclick="javascript:window.history.back();" name="cancel"><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{digglike.modifyEntry.buttonCancel}</button>
+	</div>
+	</form>
+	</fieldset>
+	</div>
  </div>
  <@initEditor />
+ 
 

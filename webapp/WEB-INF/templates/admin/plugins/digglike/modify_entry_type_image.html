@@ -1,70 +1,54 @@
  <#include "/admin/util/editor/editor.html" />
-<div class="content-box">
- <h2>#i18n{digglike.modifyEntry.titleQuestion}:'${entry.digg.title}'</h2>
- <form action="jsp/admin/plugins/digglike/DoModifyEntry.jsp#list" method="post" name="" id=""  >
-    <input name="id_entry" value="${entry.idEntry}" type="hidden">
-	<p>
-    	<label for="title">#i18n{digglike.createEntry.labelTitle} * : </label>
-    	<input type="text" name="title" id="title" size="80" value="${entry.title}"  maxlength="255"/>
-    	<br/>
-		<label>&nbsp;</label>#i18n{digglike.createEntry.labelTitleComment}
- 	</p>
-   <p>
-     <label for="help_message">#i18n{digglike.createEntry.labelHelpMessage} : </label>
-    <textarea  name="help_message"  id="help_message" rows="20" cols="90">${entry.helpMessage}</textarea>
-	<br/>
-	 <label>&nbsp;</label> #i18n{digglike.createEntry.labelHelpMessageComment}
-	</p>
-    <p>
-     <label for="comment"> #i18n{digglike.createEntry.labelComment} : </label>
-     <textarea name="comment" cols="80" rows="2">${entry.comment}</textarea>
-     </p>
-    <p>
-     <label for="">#i18n{digglike.createEntry.labelType} : </label>
-             ${entry.entryType.title}
-	</p> 
-	<p>
-	    <label for="width">#i18n{digglike.createEntryImg.labelWidth} : </label>
-	    <#if entry.width!=-1>
-	    	<input type="text" name="width" id="width" size="5" value="${entry.width}" />
-	    <#else>
-    		<input type="text" name="width" id="width" size="5" value="" />
-	    </#if>
-    			
-  	 </p>
-  	<p>
-    	<label for="height">#i18n{digglike.createEntryImg.labelHeight} : </label>
-    	<#if entry.height!=-1>
-    		<input type="text" name="height" id="height" size="5" value="${entry.height}" />
-    	<#else>
-    		<input type="text" name="height" id="height" size="5" value="" />
-    	</#if>
-    	
-   	</p>
-  <p>
-    	<label for="mandatory">#i18n{digglike.createEntry.labelMandatory} : </label>
-   		 <#if entry.mandatory>
-   		 	<input name="mandatory" value="1" type="checkbox" checked="checked" >
-   		 <#else>
-   			<input name="mandatory" value="1" type="checkbox" >
-   		 </#if>	
-   </p>
-     
-   	 <p>
-    	<label for="mandatory">#i18n{digglike.createEntry.labelShowInDiggSubmitList} : </label>
-   		 <#if entry.showInDiggSubmitList>
-   		 	<input name="show_in_digg_submit_list" value="1" type="checkbox" checked="checked" >
-   		 <#else>
-   		 	<input name="show_in_digg_submit_list" value="1" type="checkbox" >
-   		 </#if>
-   		 <br/>
-	    <label>&nbsp;</label>#i18n{digglike.createDigg.labelShowInDiggSubmitListComment}
-   </p>
-     <p>
-  		<input type="submit" value="#i18n{digglike.modifyEntry.buttonSave}" class="button"  name="save" / >
-  		<input type="submit" value="#i18n{digglike.modifyEntry.buttonCancel}" class="button" name="cancel" />
-   </p>
-  </form>
+<div class="row">
+	<div class="span12">
+	<fieldset>
+	<legend>#i18n{digglike.modifyEntry.titleQuestion}:'${entry.digg.title}' &gt; #i18n{digglike.createEntry.labelType} :${entry.entryType.title}</legend>
+	<form class="form-horizontal" action="jsp/admin/plugins/digglike/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+	<input name="id_entry" value="${entry.idEntry}" type="hidden">
+	<div class="control-group">
+	<label class="control-label" for=""></label>
+		<div class="controls">
+		<label for="title">#i18n{digglike.createEntry.labelTitle} *</label>
+			<input type="text" name="title" id="title" class="input-xlarge" value="${entry.title}" maxlength="255"/>
+			<span class="help-text">#i18n{digglike.createEntry.labelTitleComment}</span>
+		</div>
+		<div class="controls">
+		<label>#i18n{digglike.createEntry.labelHelpMessage}</label>
+			<textarea name="help_message" id="help_message" rows="4" class="span5">${entry.helpMessage}</textarea>
+			<span class="help-text">#i18n{digglike.createEntry.labelHelpMessageComment}</span>
+		</div>
+		<div class="controls">
+			<label for="comment"> #i18n{digglike.createEntry.labelComment}</label>
+			<textarea name="comment" class="span5" rows="2">${entry.comment}</textarea>
+		</div>
+		<div class="controls">
+		<label class="checkbox" for="mandatory">#i18n{digglike.createEntry.labelMandatory}
+			<input name="mandatory" value="1" type="checkbox" <#if entry.mandatory>checked="checked"></#if>></label>
+		</div>
+		<div class="controls">
+		<label for="width">#i18n{digglike.createEntryImg.labelWidth}</label>
+			<input type="text" name="width" id="width" class="input-mini" value="<#if entry.width!=-1>${entry.width}" /></#if>" />
+		</div>
+		<div class="controls">
+		<label for="height">#i18n{digglike.createEntryImg.labelHeight}</label>
+			<input type="text" name="height" id="height" class="input-mini" value="<#if entry.height!=-1>${entry.height}" /></#if>" />
+		</div>
+		<div class="controls">
+			<label class="checkbox" for="mandatory">#i18n{digglike.createEntry.labelShowInDiggSubmitList}
+				<input name="show_in_digg_submit_list" value="1" type="checkbox" <#if entry.showInDiggSubmitList>checked="checked"></#if>>
+			</label>
+			<span class="help-text">#i18n{digglike.createDigg.labelShowInDiggSubmitListComment}</span>
+		</div>
+	</div>
+	<div class="form-actions">
+		<button class="btn btn-primary" type="submit" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createEntry.buttonSave}</button>
+		<button class="btn btn-primary" onclick="javascript:window.history.back();" name="cancel"><i class="icon-remove-cicrle icon-white"></i>&nbsp;#i18n{digglike.createEntry.buttonCancel}</button>
+	</div>
+	</form>
+	</fieldset>
+	</div>
  </div>
+
  <@initEditor />
+ 
 

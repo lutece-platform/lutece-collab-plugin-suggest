@@ -1,62 +1,35 @@
-<div class="content-box">
-        <h2>#i18n{digglike.manageExportFormat.title}</h2>
-        
-        
-         <form method="post"  action="jsp/admin/plugins/digglike/ManageExportFormat.jsp">
-        <@pagination paginator=paginator />
-	<!-- Number of feeds per page selector -->
-        #i18n{digglike.manageExportFormat.labelItemsPerPage} :
-        <select name="items_per_page">
-            <#list [ "10" , "20" , "50" , "100" ] as nb>
-            	<#if nb_items_per_page = nb >
-             		<option selected="selected" value="${nb}">${nb}</option>
-            	<#else>
-             		<option value="${nb}">${nb}</option>
-            	</#if>
-            </#list>
-        </select>
-        <input type="submit" class="button" value="#i18n{digglike.manageExportFormat.buttonItemsPerPage}" />
-    </form>
-         
-          <table> 
-            <tr>
-              <th>
-               #i18n{digglike.manageExportFormat.rowTitle}
-              </th>
-              <th  >
-                #i18n{digglike.manageExportFormat.rowDescription}
-              </th>
-              <th  >
-                #i18n{digglike.manageExportFormat.rowExtension}
-              </th>
-              <th  >
-               #i18n{digglike.manageExportFormat.rowActions}
-              </th>
-            </tr>
-             <#list export_list as export>	
-	            <tr>
-	              <td  >
-	                <a href="jsp/admin/plugins/digglike/ModifyExportFormat.jsp?id_export=${export.idExport}" class="bullet-link">${export.title}</a>
-	              </td>
-	              <td >
-	               ${export.description}
-	                </td>
-	                <td >
-	               ${export.extension}
-	                </td>
-	                <td >
-	               	<a href="jsp/admin/plugins/digglike/ConfirmRemoveExportFormat.jsp?id_export=${export.idExport}">
-	         			 <img src="images/admin/skin/plugins/digglike/actions/delete.png" alt="#i18n{digglike.manageExportFormat.altDelete}" title="#i18n{digglike.manageExportFormat.altDelete}" />
-	       			 </a>
-	                </td>
-	            </tr>
-	         </#list>
-          </table> 
-         
-          <form method="post"  action="jsp/admin/plugins/digglike/CreateExportFormat.jsp" >
-            <p>
-              <input type="submit" class="button" value="#i18n{digglike.manageExportFormat.buttonCreate}"   />
-            </p>
-          </form>
-        
-      </div> 
+<div class="row">
+	<div class="span12">
+	<fieldset>
+    <legend>
+		#i18n{digglike.manageExportFormat.title}
+		<form class="form-inline pull-right" method="post"  action="jsp/admin/plugins/digglike/CreateExportFormat.jsp" >
+			<button class="btn btn-primary" type="submit" ><i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.manageExportFormat.buttonCreate}</button>
+		</form>
+	</legend>
+	<@paginationAdmin paginator=paginator combo=1/>
+	<table class="table table-striped table-condensed"> 
+		<tr>
+			<th>#i18n{digglike.manageExportFormat.rowTitle}</th>
+            <th>#i18n{digglike.manageExportFormat.rowDescription}</th>
+            <th>#i18n{digglike.manageExportFormat.rowExtension}</th>
+            <th>#i18n{digglike.manageExportFormat.rowActions}</th>
+		</tr>
+        <#list export_list as export>	
+		<tr>
+			<td> ${export.title}</td>
+	        <td>${export.description}</td>
+	        <td>${export.extension}</td>
+			<td>
+				<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/digglike/ModifyExportFormat.jsp?id_export=${export.idExport}"  title="" >
+					<i class="icon-edit icon-white"></i>
+				</a>
+				<a class="btn btn-danger btn-mini" href="jsp/admin/plugins/digglike/ConfirmRemoveExportFormat.jsp?id_export=${export.idExport}"  title="#i18n{digglike.manageExportFormat.altDelete}" >
+					<i class="icon-trash icon-white"></i>
+				</a>
+			</td>
+	    </tr>
+	    </#list>
+    </table> 
+    </div> 
+</div> 

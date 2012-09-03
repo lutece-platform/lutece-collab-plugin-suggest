@@ -1,8 +1,10 @@
- <p>
-  <label for="id_form">#i18n{form.listForm.labelForm} * :</label>
-  <#if idForm?exists>
-     <@combo name="id_form"  items=form_list default_value=idForm/>
-  <#else>
-   	  <@combo name="id_form"  items=form_list default_value=-1 />
-   </#if>
- </p>  	  
+<div class="control-group">
+<label class="control-label" for="id_form">#i18n{form.listForm.labelForm} * :</label>
+	<div class="controls">
+	<#if idForm?exists>
+		<@combo name="id_form"  items=form_list default_value=idForm/>
+	  <#else>
+		<@combo name="id_form"  items=form_list default_value=-1 />
+	   </#if>
+	</div>
+</div>

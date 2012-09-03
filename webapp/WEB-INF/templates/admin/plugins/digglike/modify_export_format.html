@@ -1,31 +1,35 @@
-  <div class="content-box">
-    <h2> #i18n{digglike.modifyExportFormat.title}</h2>
-    <form method="post" action="jsp/admin/plugins/digglike/DoModifyExportFormat.jsp" enctype="multipart/form-data" >
-        <input name="id_export" value="${export.idExport}" type="hidden">
-        <p>
-            <label for="title" >#i18n{digglike.createExportFormat.labelTitle} * : </label>
-            <input type="text" size="20" id="title" name="title" maxlength="20" value="${export.title}"/>
-        </p>  
-        <p>
-            <label for="description" >#i18n{digglike.createExportFormat.labelDescription} * : </label>
-            <input type="text" size="60" id="description" name="description" maxlength="255" value="${export.description}"/>
-        </p>	
-         <p>
-            <label for="extension" >#i18n{digglike.createExportFormat.labelExtension} * : </label>
-            <input type="text" size="10" id="extension" name="extension" maxlength="10" value="${export.extension}"/>
-        </p>		
-        <p>
-            <label for="stylesheet_source" >#i18n{digglike.createExportFormat.labelXsl} * : </label>
-            <a href="jsp/admin/plugins/digglike/DoDownloadXslFile.jsp?id_export=${export.idExport}" target="_blank">#i18n{digglike.modifyExportFormat.labelDownloafXslFile}</a>
-            	<input type="file" id="stylesheet_source" name="stylesheet_source" size="60" maxlength="100"/>
-        
-        </p>
-      			
-        
-        <p>
-            
-            <input type="submit" value="#i18n{digglike.createExportFormat.buttonSave}" class="button" />
-            <input type="button" value="#i18n{digglike.createExportFormat.buttonCancel}" class="button" onclick="javascript:history.go(-1)" />
-         </p>
+<div class="row">
+	<div class="span12">
+	<fieldset>
+    <legend> #i18n{digglike.modifyExportFormat.title}</legend>
+    <form class="form-horizontal" method="post" action="jsp/admin/plugins/digglike/DoModifyExportFormat.jsp" enctype="multipart/form-data" >
+    <div class="control-group">
+		<label class="control-label" for="" ></label>
+        <div class="controls">
+			<label for="title" >#i18n{digglike.createExportFormat.labelTitle} * </label>
+			<input type="text" class="input-small" id="title" name="title" maxlength="20" value="${export.title}"/>
+		</div>
+	    <div class="controls">
+			<label for="description" >#i18n{digglike.createExportFormat.labelDescription} *</label>
+			<input type="text" id="description" name="description" maxlength="255" value="${export.description}"/>
+		</div>
+		<div class="controls">
+			<label for="extension" >#i18n{digglike.createExportFormat.labelExtension} *</label>
+			<input type="text" class="input-mini" id="extension" name="extension" maxlength="10" value="${export.extension}"/>
+		</div>
+		<div class="controls">
+			<label for="stylesheet_source" >#i18n{digglike.createExportFormat.labelXsl} *</label>
+			<input type="file" id="stylesheet_source" name="stylesheet_source" class="input-xlarge" maxlength="100"/>
+			<a class="btn btn-inverse" href="jsp/admin/plugins/digglike/DoDownloadXslFile.jsp?id_export=${export.idExport}" target="_blank">		<i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.modifyExportFormat.labelDownloafXslFile}
+			</a>
+		</div>
+	</div>
+    <div class="form-actions">      
+		<button class="btn btn-primary" type="submit"  name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createExportFormat.buttonSave}</button>
+        <button class="btn btn-primary" onclick="javascript:history.go(-1)" name="cancel"><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{digglike.createExportFormat.buttonCancel}</button>
+	</div>
     </form>
-  </div>
+    </fieldset>
+    </div>
+</div>
+  

@@ -1,47 +1,42 @@
- <#include "/admin/util/editor/editor.html" />
-  <div class="content-box">
-    <h2> #i18n{digglike.modifyRegularExpression.title}</h2>
-    <form method="post" action="jsp/admin/plugins/digglike/DoModifyRegularExpression.jsp" >
- 		<input name="id_expression" value="${expression.idExpression}" type="hidden">
-        <p>
-            <label for="title" >#i18n{digglike.createRegularExpression.labelTitle} : * </label>
-            <input type="text" size="20" id="title" name="title" maxlength="20" value="${expression.title}"/>
-        </p>  
-        <p>
-            <label for="value" >#i18n{digglike.createRegularExpression.labelValue} : * </label>
-            <input type="text" size="80" id="value" name="value"  value="${expression.value}"/>
-        </p>		
-       <div class="content-box">
-  		<p>
-    		<label for="valid_exemple">#i18n{digglike.createRegularExpression.labelValidExemple} : * </label>
-     		<input type="text" name="valid_exemple" value="${expression.validExemple}" size="97" />
-	 		<br/>
-     		<label>&nbsp;</label>
-			#i18n{digglike.createRegularExpression.labelValidExempleComment}
-   		</p>
-  
-   		<p>
-	    	 <label for="information_message">	#i18n{digglike.createRegularExpression.labelInformationMessage} : * </label>
-	     	  <div  class="editor">
-	     		<textarea class="richtext" name="information_message" id="information_message" rows="20" cols="90">${expression.informationMessage}</textarea>
-		 	</div>
-		 	<br/>
-	     	<label>&nbsp;</label>
-				#i18n{digglike.createRegularExpression.labelInformationMessageComment}
-   		</p>
-	   <p>
-	     	<label for="error_message">#i18n{digglike.createRegularExpression.labelErrorMessage} : * </label>
-	     	<div  class="editor">
-	     		<textarea class="richtext" name="error_message" id="error_message" cols="80" rows="2">${expression.errorMessage}</textarea>
-		 	</div>
-		 	<br/>
-	     	<label>&nbsp;</label>
-			#i18n{digglike.createRegularExpression.labelErrorMessageComment}   
-		</p>
-	   <p>
-      		<input type="submit" value="#i18n{digglike.createRegularExpression.buttonSave}" class="button" />
-            <input type="button" value="#i18n{digglike.createRegularExpression.buttonCancel}" class="button" onclick="javascript:history.go(-1)" />
-      </p>
-  </form>
- </div>
-  <@initEditor />
+<#include "/admin/util/editor/editor.html" />
+<div class="row">
+	<div class="span12">
+	<fieldset>
+    <legend> #i18n{digglike.modifyRegularExpression.title}</legend>
+    <form class="form-horizontal" method="post" action="jsp/admin/plugins/digglike/DoModifyRegularExpression.jsp" >
+	<input name="id_expression" value="${expression.idExpression}" type="hidden">
+		 <div class="control-group">
+			<label class="control-label" for="title" >#i18n{digglike.createRegularExpression.labelTitle}* </label>
+			<div class="controls">
+				<label class="control-label" for="title" >#i18n{digglike.createRegularExpression.labelTitle}* </label>
+					<input type="text" id="title" name="title" maxlength="20" value="${expression.title}"/>
+			</div>
+			<div class="controls">
+			<label for="value" >#i18n{digglike.createRegularExpression.labelValue}* </label>
+				<input type="text" class="input-xlarge" id="value" name="value"  value="${expression.value}"/>
+			</div>
+			<div class="controls">
+				<label class="control-label" for="valid_exemple">#i18n{digglike.createRegularExpression.labelValidExemple}* </label>
+				<input type="text" name="valid_exemple" value="${expression.validExemple}" class="input-xxlarge" />
+				<span class="help-text">#i18n{digglike.createRegularExpression.labelValidExempleComment}</span>
+			</div>
+			<div class="controls">
+				<label for="information_message">	#i18n{digglike.createRegularExpression.labelInformationMessage}* </label>
+				<textarea class="richtext" name="information_message" id="information_message" class="span4" rows="2">${expression.informationMessage}</textarea>
+				<span class="help-text">#i18n{digglike.createRegularExpression.labelInformationMessageComment}</span>
+			</div>
+			<div class="controls">
+				<label for="error_message">#i18n{digglike.createRegularExpression.labelErrorMessage}* </label>
+				<textarea class="richtext" name="error_message" id="error_message" class="span4" rows="2">${expression.errorMessage}</textarea>
+				<span class="help-text">#i18n{digglike.createRegularExpression.labelErrorMessageComment} </span>  
+			</div>
+		</div>
+		<div class="form-actions">
+			<button class="btn btn-primary" type="submit" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createRegularExpression.buttonSave}</button>
+			<button class="btn btn-primary" onclick="javascript:window.history.back();" name="cancel"><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{digglike.createRegularExpression.buttonCancel}</button>
+		</div>
+		</form>
+	</fieldset>
+	</div>
+</div>
+<@initEditor />

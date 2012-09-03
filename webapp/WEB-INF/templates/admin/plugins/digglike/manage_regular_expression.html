@@ -1,56 +1,41 @@
-<div class="content-box">
-        <h2>#i18n{digglike.manageRegularExpression.title}</h2>
-        
-        
-         <form method="post"  action="jsp/admin/plugins/digglike/ManageRegularExpression.jsp">
-        <@pagination paginator=paginator />
-	<!-- Number of feeds per page selector -->
-        #i18n{digglike.manageRegularExpression.labelItemsPerPage} :
-        <select name="items_per_page">
-            <#list [ "5" , "10" , "20" , "50" ] as nb>
-            	<#if nb_items_per_page = nb >
-             		<option selected="selected" value="${nb}">${nb}</option>
-            	<#else>
-             		<option value="${nb}">${nb}</option>
-            	</#if>
-            </#list>
-        </select>
-        <input type="submit" class="button" value="#i18n{digglike.manageRegularExpression.buttonItemsPerPage}" />
-    </form>
-         
-          <table> 
-            <tr>
-              <th width="20%" >
-               #i18n{digglike.manageRegularExpression.rowTitle}
-              </th>
-              <th width="40%" >
-                #i18n{digglike.manageRegularExpression.rowDescription}
-              </th>
-              <th width="40%" >
-               #i18n{digglike.manageRegularExpression.rowActions}
-              </th>
+<div class="row">
+	<div class="span12">
+	<fieldset>
+	<legend>
+		#i18n{digglike.manageRegularExpression.title}
+		<form method="post" class="form-inline pull-right"  action="jsp/admin/plugins/digglike/CreateRegularExpression.jsp">
+    		<button type="submit" class="btn btn-primary" /><i class="icon-plus icon-white"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageRegularExpression.buttonCreate}</span></button>
+   		</form>
+	</legend>
+    <@paginationAdmin paginator=paginator />
+	 <table class="table table-striped table-condensed">
+		<thead>
+			<tr>
+				<th>#i18n{digglike.manageRegularExpression.rowTitle}</th>
+				<th>#i18n{digglike.manageRegularExpression.rowDescription}</th>
+				<th>#i18n{digglike.manageRegularExpression.rowActions}</th>
             </tr>
-             <#list expression_list as expression>	
-	            <tr>
-	              <td width="20%" >
-	                <a href="jsp/admin/plugins/digglike/ModifyRegularExpression.jsp?id_expression=${expression.idExpression}" class="bullet-link">${expression.title}</a>
-	              </td>
-	              <td width="40%">
-	               ${expression.value}
-	                </td>
-	                <td width="40%">
-	               	<a href="jsp/admin/plugins/digglike/ConfirmRemoveRegularExpression.jsp?id_expression=${expression.idExpression}">
-	         			 <img src="images/admin/skin/plugins/digglike/actions/delete.png" alt="#i18n{digglike.manageForm.altDelete}" title="#i18n{digglike.manageForm.altDelete}" />
+		</thead>
+        <tbody>   
+        <#list expression_list as expression>	
+	        <tr>
+	            <td>
+					<a href="jsp/admin/plugins/digglike/ModifyRegularExpression.jsp?id_expression=${expression.idExpression}" class="bullet-link">	${expression.title}
+					</a>
+	            </td>
+	            <td>${expression.value}</td>
+				<td>
+					<a class="btn btn-primary btn-mini"  href="jsp/admin/plugins/digglike/ModifyRegularExpression.jsp?id_expression=${expression.idExpression}" class="bullet-link">	
+						<i class="icon-edit icon-white"></i>
+					</a>
+	               	<a class="btn btn-danger btn-mini" href="jsp/admin/plugins/digglike/ConfirmRemoveRegularExpression.jsp?id_expression=${expression.idExpression}" title="#i18n{digglike.manageForm.altDelete}">
+						<i class="icon-trash icon-white"></i>
 	       			 </a>
 	                </td>
 	            </tr>
 	         </#list>
-          </table> 
-         
-          <form method="post"  action="jsp/admin/plugins/digglike/CreateRegularExpression.jsp" >
-            <p>
-              <input type="submit" class="button" value="#i18n{digglike.manageRegularExpression.buttonCreate}"   />
-            </p>
-          </form>
-        
-      </div> 
+		</tbody>  
+        </table> 
+    </fieldset>      
+    </div> 
+</div> 
