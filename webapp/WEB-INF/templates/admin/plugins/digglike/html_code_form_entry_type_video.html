@@ -1,21 +1,15 @@
-<div class="form-element">
-	<span class="form-label">
-		<label for="${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> : </label>
-	</span>
-	<span class="form-field-column"> 
-            <input name="${entry.idEntry}" id="${entry.idEntry}" type="file"  size="32" value="" />
-	</span> <br/>
-	<span class="form-label">
-		<label for="${entry.idEntry}">#i18n{digglike.createEntry.labelCredits}<#if entry.mandatory> *</#if> : </label>
-	</span>
-	<span class="form-field-column"> 
-            <input name="credits${entry.idEntry}" id="credist${entry.idEntry}" type="text"  size="50" value="" />
-	</span> 
-	<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-		<span class="form-help">
-			<a class="info" href="javascript:void;"><img  src="images/admin/skin/plugins/digglike/help.gif" />
-				<span><pre> ${entry.helpMessage}</pre></span>
-			</a>
-		</span>
-	</#if>	
+<div class="control-group">
+<label class="control-label" for="${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> : </label>
+    <div class="controls">
+		<input name="${entry.idEntry}" id="${entry.idEntry}" type="file"  size="32" value="" />
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="${entry.idEntry}">#i18n{digglike.createEntry.labelCredits}<#if entry.mandatory> *</#if> : </label>
+	<div class="controls">
+		<input name="credits${entry.idEntry}" id="credist${entry.idEntry}" type="text"  size="50" value="" />
+		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
+		<span class="help-text">${entry.helpMessage}</span>
+		</#if>	
+	</div>
 </div>

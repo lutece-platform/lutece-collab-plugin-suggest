@@ -11,7 +11,7 @@
 		<div class="control-group">
 			<label class="control-label" for="id_category">#i18n{digglike.createDigg.labelCategoryTitle} *</label>
 			<div class="controls">
-				<@combo name="id_category"   items=category_list default_value="${id_default_category}" />
+				<@combo name="id_category" items=category_list default_value="${id_default_category}" />
 			</div>
 		</div>
 		</#if>	
@@ -19,7 +19,7 @@
 		<div class="control-group">
 		<label class="control-label" for="id_type">#i18n{digglike.createDigg.labelTypeTitle}</label>
 			<div class="controls">
-				<@combo name="id_type"   items=types_list default_value="-1" />
+				<@combo name="id_type" items=types_list default_value="-1" />
 			</div>
 		</div>
 		</#if>
@@ -29,10 +29,11 @@
 		</fieldset>
 		</#if>
 		<div class="form-actions">
-			<button class="btn btn-primary" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;${digg.libelleValidateButton}</button>
+			<button class="btn btn-primary" type="submit" name="submit"><i class="icon-ok icon-white"></i>&nbsp;${digg.libelleValidateButton}</button>
 		</div>
 	</form>
 	</fieldset>
+	</div>
 </div>
 
 <script language="JavaScript" type="text/javascript">

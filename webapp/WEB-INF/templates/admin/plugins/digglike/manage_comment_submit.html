@@ -1,252 +1,190 @@
 <div class="row">
 	<div class="span12">
-		<div class="span4">
+	 <div class="row">
+		<div class="span3">
 		<fieldset>
 		<legend>#i18n{digglike.manageCommentSubmit.rowTitleDiggSubmitTitle}</legend>
-                </th>
-            </tr>
-            <tr>
-                <td>
-                <#if digg_submit.reported>
-      				<img src="images/admin/skin/plugins/digglike/warning.png" width="15px" height="15px" alt="#i18n{digglike.manageDiggSubmit.altWarning}" title="#i18n{digglike.manageDiggSubmit.altWarning}">
-      			</#if>
-                 <#if digg_submit.diggSubmitTitle?exists>
-      		  			<#if	number_shown_characters?exists&&digg_submit.diggSubmitTitle?length &gt;number_shown_characters>
-      						${digg_submit.diggSubmitTitle?substring(0,number_shown_characters)}... 
-      		  			<#else>
-      		  				${digg_submit.diggSubmitTitle}
-      		   			</#if>
-        			</#if> 
-                  </td>
-            </tr>
-            <tr>
-                <th>#i18n{digglike.manageCommentSubmit.rowDateDiggSubmit}</th>
-            </tr>
-            <tr>
-                <td>${digg_submit.dateResponse?date?string.short}</td>
-            </tr>
-            <tr>
-                <th> #i18n{digglike.manageCommentSubmit.rowStateDiggSubmit}</th>
-            </tr>
-            <tr>
-                <td>
-                	 ${digg_submit.diggSubmitState.title}
-     			</td>
-            </tr>
-            <tr>
-                <th> #i18n{digglike.manageCommentSubmit.rowCategory}</th>
-            </tr>
-            <tr>
-                <td>
-                	<#if category_list?has_content>
-       	 				<form method="post"  action="jsp/admin/plugins/digglike/DoChangeDiggSubmitCategory.jsp">
-       						<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden">
-       						<input name="comment" value="comment" type="hidden">
-       						<#if digg_submit.category?exists>
-       							<@combo name="id_category"   items=category_list default_value="${digg_submit.category.idCategory}" />
-       						<#else>
-       							<@combo name="id_category"   items=category_list default_value="-1" />
-       					</#if>	
-				<input type="submit" class="button" value="#i18n{digglike.manageDiggSubmit.buttonModify}" />
+		<p>
+		<#if digg_submit.reported>
+			<span class="label label-warning">#i18n{digglike.manageDiggSubmit.altWarning}</span>
+      	</#if>
+		</p>
+		<p>
+        <#if digg_submit.diggSubmitTitle?exists>
+			<#if number_shown_characters?exists&&digg_submit.diggSubmitTitle?length &gt; number_shown_characters>
+				${digg_submit.diggSubmitTitle?substring(0,number_shown_characters)}... 
+      		<#else>
+				${digg_submit.diggSubmitTitle}
+      		</#if>
+        </#if> 
+		</p>
+        <p>#i18n{digglike.manageCommentSubmit.rowDateDiggSubmit}: <strong>${digg_submit.dateResponse?date?string.short}</strong></p>
+        <p>#i18n{digglike.manageCommentSubmit.rowStateDiggSubmit}: <strong>${digg_submit.diggSubmitState.title}</strong></p>
+     	<p>#i18n{digglike.manageCommentSubmit.rowCategory}</p>
+        <#if category_list?has_content>
+			<form method="post" class="form-horizontal" action="jsp/admin/plugins/digglike/DoChangeDiggSubmitCategory.jsp">
+       		<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden">
+       		<input name="comment" value="comment" type="hidden">
+       		<#if digg_submit.category?exists>
+				<@combo name="id_category"   items=category_list default_value="${digg_submit.category.idCategory}" />
+       		<#else>
+				<@combo name="id_category"   items=category_list default_value="-1" />
+       		</#if>	
+			<button type="submit" class="btn btn-primary" title="#i18n{digglike.manageDiggSubmit.buttonModify}"><i class="icon-ok icon-white"></i></button>
     		</form>
     	</#if>
-     			</td>
-            </tr>
-          <tr>
-                <th> #i18n{digglike.manageCommentSubmit.rowManageDiggSubmit}</th>
-            </tr>
-            <tr>
-                <td>
-                   
-     <a href="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&comment=comment">
-		  <img src="images/admin/skin/plugins/digglike/actions/proposition.png" alt="#i18n{digglike.manageDiggSubmit.altManageComment}" title="#i18n{digglike.manageDiggSubmit.altManageComment}">
-	  </a>
+     	<p>#i18n{digglike.manageCommentSubmit.rowManageDiggSubmit}</p>
+		<p>
+			<a name="${digg_submit.idDiggSubmit}"></a>	 
 			<#if digg_submit.diggSubmitState.number=disable_state_number>
-               
-	            <a href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${waiting_for_publish_state_number}&comment=comment">
-					  <img src="images/admin/skin/plugins/digglike/actions/submit.png" alt="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}" title="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
-				</a>
-	            
-	             <a href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${publish_state_number}&comment=comment ">
-				   <img src="images/admin/skin/plugins/digglike/actions/enable.png" alt="#i18n{digglike.manageDiggSubmit.altPublish}" title="#i18n{digglike.manageDiggSubmit.altPublish}">
-				</a>
-
-				 	
-    	 	<#elseif digg_submit.diggSubmitState.number=waiting_for_publish_state_number >
-			
-				<a href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${disable_state_number}&comment=comment">
-					  <img src="images/admin/skin/plugins/digglike/actions/disable.png" alt="#i18n{digglike.manageDiggSubmit.altDisable}" title="#i18n{digglike.manageDiggSubmit.altDisable}">
-				</a>
-				 <a href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${publish_state_number}&comment=comment">
-				   <img src="images/admin/skin/plugins/digglike/actions/enable.png" alt="#i18n{digglike.manageDiggSubmit.altPublish}" title="#i18n{digglike.manageDiggSubmit.altPublish}">
-				</a>
-			
-				     
-	 		<#elseif digg_submit.diggSubmitState.number=publish_state_number >
-	            <a href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${disable_state_number}&comment=comment">
-					  <img src="images/admin/skin/plugins/digglike/actions/disable.png" alt="#i18n{digglike.manageDiggSubmit.altDisable}" title="#i18n{digglike.manageDiggSubmit.altDisable}">
-				</a>
-	              
-	             <a href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${waiting_for_publish_state_number}&comment=comment">
-					  <img src="images/admin/skin/plugins/digglike/actions/submit.png" alt="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}" title="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
-				</a>
-				
-				
-   			</#if>	 
-			<a href="jsp/admin/plugins/digglike/ConfirmRemoveDiggSubmit.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&comment=comment">
-	 			<img src="images/admin/skin/plugins/digglike/actions/delete.png" alt="#i18n{digglike.manageDiggSubmit.altDelete}" title="#i18n{digglike.manageDiggSubmit.altDelete}">
+            <a class="btn btn-mini btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${waiting_for_publish_state_number}#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
+				<i class="icon-info-sign icon-white"></i>
+			</a>
+			<a class="btn btn-mini btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${publish_state_number}#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altPublish}">
+				<i class="icon-ok icon-white"></i>
+			</a>
+			<#elseif digg_submit.diggSubmitState.number=waiting_for_publish_state_number >
+			<a class="btn btn-mini btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${disable_state_number}#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altDisable}">
+				<i class="icon-remove icon-white"></i>
+			</a>
+			 <a class="btn btn-mini btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${publish_state_number}#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altPublish}">
+			   <i class="icon-ok icon-white"></i>
+			</a>
+			<#elseif digg_submit.diggSubmitState.number=publish_state_number >
+            <a class="btn btn-mini btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${disable_state_number}#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altDisable}">
+				<i class="icon-remove icon-white"></i>
+			</a>
+			<a class="btn btn-mini btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${waiting_for_publish_state_number}#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
+				<i class="icon-ok icon-white"></i>
+			</a>
+			</#if>	 
+			<a class="btn btn-mini btn-danger" href="jsp/admin/plugins/digglike/ConfirmRemoveDiggSubmit.jsp?id_digg_submit=${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altDelete}">
+				<i class="icon-trash icon-white"></i>
 			</a>
 			<#if digg_submit_prev!=-1>
-				 <a href="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=${digg_submit_prev}">
-		  				<img src="images/admin/skin/prev.png" alt="#i18n{digglike.manageCommentSubmit.altPrevDiggSubmit}" title="#i18n{digglike.manageCommentSubmit.altPrevDiggSubmit}">
-	 			 </a>
+			<a class="btn btn-mini btn-primary" href="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=${digg_submit_prev}" title="#i18n{digglike.manageCommentSubmit.altPrevDiggSubmit}">
+		  		<i class="icon-arrow-left icon-white"></i>
+			</a>
 			</#if>
 			<#if digg_submit_next!=-1>
-			 <a href="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=${digg_submit_next}">
-		  		<img src="images/admin/skin/next.png" alt="#i18n{digglike.manageCommentSubmit.altNextDiggSubmit}" title="#i18n{digglike.manageCommentSubmit.altNextDiggSubmit}">
-	 		 </a>
+			<a class="btn btn-mini btn-primary" href="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=${digg_submit_next}" title="#i18n{digglike.manageCommentSubmit.altNextDiggSubmit}">
+				<i class="icon-arrow-right icon-white"></i>
+			</a>
 			</#if>
-    	</td>
-       
-            </tr>
-        </table>
+			</p>
+		</fieldset>
     </div>
-	<div class="span7">
+	<div class="span8">
 		<fieldset>
 		<legend>#i18n{digglike.manageCommentSubmit.rowTitleDiggSubmitValue}</legend> 
 			<#if digg_submit.diggSubmitTitle?exists>
-				${digg_submit.diggSubmitTitle}
-			</#if> 
-			<a onclick="displayId('diggSubmitValue');">  
-				<img src="images/admin/skin/open_block.gif" alt="" border="0"></a>...
+			<span>${digg_submit.diggSubmitTitle}</span>
+			</#if>
 			<#if digg_submit.diggSubmitValue?exists>
-				<div id="diggSubmitValue" class="highlight-box">
-					${digg_submit.diggSubmitValue}
-				</div>
+			<span class="label label-info" rel="popover" data-original-title="${digg_submit.diggSubmitTitle}" data-content="${digg_submit.diggSubmitValue?html}">...</span>
+			<span class="popOverContent">${digg_submit.diggSubmitValue}</span>
 			</#if>	 
-					
-			<h2> #i18n{digglike.manageCommentSubmit.officialAnswer}</h2> 
-			#i18n{digglike.manageCommentSubmit.labelAddOfficialAnswer}
+		</fieldset>
+		<fieldset>	
+		<legend>#i18n{digglike.manageCommentSubmit.officialAnswer} <small>#i18n{digglike.manageCommentSubmit.labelAddOfficialAnswer}</small><legend>
 			<form method="post" action="jsp/admin/plugins/digglike/DoSubmitOfficialAnswer.jsp">
 				<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden">
-				<textarea name="comment_value" id="comment_value" rows="6" cols="49" style="width:100%; border:0; margin:0; padding:0;"  <#if digg.activeEditorBbcode> class='markitup' </#if>  ></textarea>
-				<input type="submit" value="#i18n{digglike.manageCommentSubmit.buttonAdd}" class="button" name="add"/>
+				<textarea name="comment_value" id="comment_value" rows="6" class="span8" <#if digg.activeEditorBbcode> class='markitup'</#if>></textarea>
+				<button type="submit" class="btn btn-primary" name="add"><i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonAdd}</button>
 			</form>
-		  
-			<h2> #i18n{digglike.manageCommentSubmit.title}</h2> 
-		   <form method="post"  action="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp">
-				<@pagination paginator=paginator />
-			<!-- Number of feeds per page selector -->
-				#i18n{digglike.manageDiggSubmit.labelItemsPerPage} :
-				<select name="items_per_page">
-					<#list [ "10" , "20" , "50" , "100" ] as nb>
-						<#if nb_items_per_page = nb >
-							<option selected="selected" value="${nb}">${nb}</option>
-						<#else>
-							<option value="${nb}">${nb}</option>
-						</#if>
-					</#list>
-				</select>
-				<input type="submit" class="button" value="#i18n{digglike.manageDiggSubmit.buttonItemsPerPage}" />
+			</fieldset>
+		<fieldset>
+		<legend> #i18n{digglike.manageCommentSubmit.title}
+			<form class="form-inline pull-right" action="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp" method="post" name="" id="filter">
+			<label>#i18n{digglike.manageCommentSubmit.labelSort}</label>
+			<@combo name="id_comment_sort"  items=comment_sort_list default_value=comment_sort_selected  />
+			<button class="btn btn-primary" title="#i18n{digglike.manageCommentSubmit.buttonSort}" type="submit" id="button_submit"><i class="icon-filter icon-white"></i></button>
 			</form>
-			<form action="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp" method="post" name="" id="filter">
-			  <p>
-					 #i18n{digglike.manageCommentSubmit.labelSort} : 
-					<@combo name="id_comment_sort"   items=comment_sort_list default_value=comment_sort_selected />
-					&nbsp;
-				<input class="button" value="#i18n{digglike.manageCommentSubmit.buttonSort}" 	type="submit" id="button_submit">
-			  </p>
+		</legend>
+		<@paginationAdmin paginator=paginator combo=1 />
+		
+		<#list comment_submit_list as comment_submit>
+		<div class="well">	
+			<#if comment_submit.isOfficialAnswer()><span class="badge badge-info pull-right">#i18n{digglike.manageCommentSubmit.officialAnswer}</span></#if>
+			<p>
+				<strong>#i18n{digglike.manageCommentSubmit.rowValueCommentSubmit}
+				<#if comment_submit.active>
+					<span class="label label-success">#i18n{digglike.manageCommentSubmit.stateEnable}</span>
+				<#else>
+					<span class="label label-important">#i18n{digglike.manageCommentSubmit.stateDisable}</span>
+				</#if>
+				</strong>
+			</p>
+			<pre>${digg.parseBbcodeValue(comment_submit.value)}</pre>
+			<form method="post" class="form-inline pull-right" action="jsp/admin/plugins/digglike/DoChangeCommentSubmit.jsp">
+				<input name="id_comment_submit" value="${comment_submit.idCommentSubmit}" type="hidden">
+				<#if comment_submit.active>
+					<button type="submit" class="btn btn-small btn-primary" name="disable"><i class="icon-remove icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonDisable}</button>
+				<#else>
+					<button type="submit" class="btn btn-small btn-primary" name="enable"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonEnable}</button>
+				</#if>          
+					<button type="submit" class="btn btn-small btn-danger" name="delete"><i class="icon-trash icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonDelete}</button>
 			</form>
-			<#list comment_submit_list as comment_submit>	
-				<hr /> 
-				 <p>
-					#i18n{digglike.manageCommentSubmit.rowStateCommentSubmit}:<#if comment_submit.active>#i18n{digglike.manageCommentSubmit.stateEnable} <#else>#i18n{digglike.manageCommentSubmit.stateDisable}</#if>
-					<br/>
-					<#if comment_submit.isOfficialAnswer()>
-						<b>#i18n{digglike.manageCommentSubmit.officialAnswer}</b>
-						<br/>
-					</#if>
-					 #i18n{digglike.manageCommentSubmit.rowDateCommentSubmit}:  ${comment_submit.dateComment} <br />
-					 <#if comment_submit.comments?has_content> 
-					 #i18n{digglike.manageCommentSubmit.rowLastDateCommentSubmit}:  ${comment_submit.lastDateComment} <br />
-					 <a id="display${comment_submit.idCommentSubmit}" href="javascript:displayComments(${comment_submit.idCommentSubmit});">  
-						<img src="images/admin/skin/open_block.gif" alt="" border="0">&nbsp;#i18n{digglike.manageCommentSubmit.ShowSubComments}</a>
-					</#if> 
-				</p>
-				<p>
-					<strong>#i18n{digglike.manageCommentSubmit.rowValueCommentSubmit}: </strong><br />
-						${digg.parseBbcodeValue(comment_submit.value)}
-				</p>       
-				
-				<p>
-				  <form method="post" action="jsp/admin/plugins/digglike/DoChangeCommentSubmit.jsp">
-					   <input name="id_comment_submit" value="${comment_submit.idCommentSubmit}" type="hidden">
-					<#if comment_submit.active>
-						<input type="submit" value="#i18n{digglike.manageCommentSubmit.buttonDisable}" class="button" name="disable"/>
+			<p>
+			<p>
+			#i18n{digglike.manageCommentSubmit.rowDateCommentSubmit}: <strong>${comment_submit.dateComment}&nbsp;</strong>
+			<#if comment_submit.comments?has_content>
+			<span>			
+			&nbsp;#i18n{digglike.manageCommentSubmit.rowLastDateCommentSubmit}: <strong>${comment_submit.lastDateComment}&nbsp;</strong>
+			</span>
+			</#if> 
+			</p>
+			<#if comment_submit.comments?has_content>
+			<p class="comment_toggle"><i class="icon-chevron-down"></i>&nbsp;#i18n{digglike.manageCommentSubmit.ShowSubComments}</p>
+			<div class="commentComments">
+				<#list comment_submit.comments as comment_comment> 
+				<blockquote>
+					<#if comment_comment.isOfficialAnswer()><span class="badge badge-info pull-right">#i18n{digglike.manageCommentSubmit.officialAnswer}</span></#if>
+					<p>
+					<strong>#i18n{digglike.manageCommentSubmit.rowValueCommentSubmit} 
+					<#if comment_comment.active>
+						<span class="label label-success">#i18n{digglike.manageCommentSubmit.stateEnable}</span>
 					<#else>
-						<input type="submit" value="#i18n{digglike.manageCommentSubmit.buttonEnable}" class="button" name="enable"/>
+						<span class="label label-important">#i18n{digglike.manageCommentSubmit.stateDisable}</span>
+					</#if>
+					</strong>
+					</p>					
+					<pre>${digg.parseBbcodeValue(comment_comment.value)}</pre>
+					<p>#i18n{digglike.manageCommentSubmit.rowDateCommentSubmit}:  ${comment_comment.dateComment} </p> 
+					<form method="post" action="jsp/admin/plugins/digglike/DoChangeCommentSubmit.jsp">
+					<input name="id_comment_submit" value="${comment_comment.idCommentSubmit}" type="hidden">
+					<#if comment_comment.active>
+						<button type="submit" class="btn btn-small btn-primary" name="disable"><i class="icon-remove icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonDisable}</button>
+					<#else>
+						<button type="submit" class="btn btn-small btn-primary" name="enable"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonEnable}</button>
 					</#if>          
-						<input type="submit" value="#i18n{digglike.manageCommentSubmit.buttonDelete}" class="button" name="delete"/>
-				  </form>
-				</p>
-				<#if comment_submit.comments?has_content>
-					<div id="child${comment_submit.idCommentSubmit}"  style="display: none; padding-left:50px;" >
-						<#list comment_submit.comments as comment_comment> 
-						<hr /> 
-						 <p>
-							#i18n{digglike.manageCommentSubmit.rowStateCommentSubmit}:<#if comment_comment.active>#i18n{digglike.manageCommentSubmit.stateEnable} <#else>#i18n{digglike.manageCommentSubmit.stateDisable}</#if>
-							<br/>
-							<#if comment_comment.isOfficialAnswer()>
-								<b>#i18n{digglike.manageCommentSubmit.officialAnswer}</b>
-								<br/>
-							</#if>
-							 #i18n{digglike.manageCommentSubmit.rowDateCommentSubmit}:  ${comment_comment.dateComment} <br /> 
-						  </p>
-						<p>
-							<strong>#i18n{digglike.manageCommentSubmit.rowValueCommentSubmit}: </strong><br />
-								${digg.parseBbcodeValue(comment_comment.value)}
-						</p>       
-					  <p>
-						  <form method="post" action="jsp/admin/plugins/digglike/DoChangeCommentSubmit.jsp">
-							   <input name="id_comment_submit" value="${comment_comment.idCommentSubmit}" type="hidden">
-							<#if comment_comment.active>
-								<input type="submit" value="#i18n{digglike.manageCommentSubmit.buttonDisable}" class="button" name="disable"/>
-							<#else>
-								<input type="submit" value="#i18n{digglike.manageCommentSubmit.buttonEnable}" class="button" name="enable"/>
-							</#if>          
-								<input type="submit" value="#i18n{digglike.manageCommentSubmit.buttonDelete}" class="button" name="delete"/>
-						  </form>
-						</p>
+					<button type="submit" class="btn btn-small btn-danger" name="delete"><i class="icon-trash icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonDelete}</button>
+					</form>
 					
-					</#list>
-				</div>
-			  </#if>
-			</#list>
+				</blockquote>
+				</#list>
+			</div>
+			</#if>
+		</div>
+		</#list>
 		</fieldset>
 		</div>
 	</div>
+	</div>
 </div>
 <#include "/util/editor/editor.html" />
-<SCRIPT language="Javascript">
-<!-- 
+<script>
+$(document).ready( function () {
+	$(".popOverContent").toggle();
+    $("span[rel=popover]").popover({trigger:'hover'});
+	$("div.commentComments").toggle();
+	doToggle( ".comment_toggle" );
+});
 
-function displayComments(idParent) {
-	var ele = document.getElementById("child" + idParent);
-	var text = document.getElementById("display" + idParent);
-	if(ele.style.display == "block") {
-    	ele.style.display = "none";
-		text.innerHTML = "<img src='images/admin/skin/open_block.gif' alt='' border='0'>&nbsp;#i18n{digglike.manageCommentSubmit.ShowSubComments}"; 
-  	}
-	else 
-	{
-		ele.style.display = "block";
-		text.innerHTML = "<img src='images/admin/skin/closed_block.gif' alt='' border='0'>&nbsp;#i18n{digglike.manageCommentSubmit.HideSubComments}"; 
-	}
-}   
-
-//-->
-</SCRIPT>
-<script language="JavaScript" type="text/javascript">
-	hideId("diggSubmitValue");		
+function doToggle( idParent ){
+	$( idParent ).click( function(){ 
+		$(this).next().toggle();
+	});
+}
 </script>
 <@initEditor type="bbcode" />

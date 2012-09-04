@@ -1,7 +1,3 @@
-<#if is_title?exists && is_title>
-	<div class="response-element-title"> 
-<#else>
-	<div class="response-element"> 
-</#if>	  
-    	<a href="${response.valueResponse}" >${response.valueResponse}</a>
-	</div>
+<#if is_title?exists && is_title><p class="lead"><#else><p></#if>	  
+<a href="${response.valueResponse}" >${response.valueResponse}</a>
+</p>

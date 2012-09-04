@@ -1,69 +1,42 @@
-<#if unavailability_message?exists>
-	${unavailability_message}      
-<#else>
-	<div class="span-22 prepend-1 append-1 append-bottom last">
-		<div  style="padding:10px;" class="portlet">
-			<h2>#i18n{digglike.diggList.title}:</h2> 
-			<form method="post"  action="${fullUrl}?page=digg">
-	        	<@pagination paginator=paginator />
-				<!-- Number of feeds per page selector -->
-		        #i18n{digglike.manageDigg.labelItemsPerPage} :
-		        <select name="items_per_page">
-		            <#list [ "10" , "20" , "50" , "100" ] as nb>
-		            	<#if nb_items_per_page = nb >
-		             		<option selected="selected" value="${nb}">${nb}</option>
-		            	<#else>
-		             		<option value="${nb}">${nb}</option>
-		            	</#if>
-		            </#list>
-		        </select>
-		        <input type="submit" class="button" value="#i18n{digglike.manageDigg.buttonItemsPerPage}" />
-		    </form>
-		    
-		    <div class="-lutece-title-3">#i18n{digglike.diggFrame.altSearch}</div>
-			<form name="search" method="post" action="${fullUrl}?page=digg">
-	            <input type="hidden" name="page" value="search" />
-	            <#if query?exists>
-	              	<input type="text" name="query" size="20" value="${query}" style="margin-bottom:5px;" />
-	            <#else>
-	   	           	<input type="text" name="query" size="20" value="" style="margin-bottom:5px;" />
-	            </#if>
-				<input class="-lutece-input -lutece-border-radius-mini" value="#i18n{digglike.diggFrame.altSearch}" type="submit">
-			</form>
-			
+<div class="row">
+	<div class="span12">
+	<#if unavailability_message?exists>
+		${unavailability_message}      
+	<#else>
+		<div class="row">
+			<div class="span3 offset1">
+				<fieldset>
+				<legend>#i18n{digglike.diggFrame.altSearch}</legend> 
+				#i18n{digglike.manageDigg.labelItemsPerPage}<@paginationAdmin paginator=paginator combo=1 />
+				<form name="search" class="form" method="post" action="${fullUrl}?page=digg">
+					<input type="hidden" name="page" value="search" />
+					<input type="text" name="query" class="input-small" value=" <#if query?exists>${query}</#if>" />
+					<button class="btn btn-primary" type="submit"><i class="icon-search icon-white"></i>&nbsp;#i18n{digglike.diggFrame.altSearch}</button>
+				</form>
+				</fieldset>
+			</div>
+			<div class="span7">
+				<fieldset>
+				<legend>#i18n{digglike.diggList.title}:</legend> 
+					<ul>
+					<#if content_digg?exists>
+						<#list content_digg as digg_submit>	
+						<li>
+							<a href="${fullUrl}?page=digg&amp;id_digg=${digg_submit.idDiggSubmit}">${digg_submit.diggSubmitTitle}</a>
+						</li>				
+						</#list>
+					</#if>
+					<#if list_digg?exists>
+						<#list list_digg as digg>	
+						<li>
+							<a href="${fullUrl}?page=digg&amp;id_digg=${digg.idDigg}">${digg.title}</a>
+						</li>
+						</#list>
+					</#if>
+					</ul>
+				</fieldset>	
+			</div>
 		</div>
-	</div>
-		
-	<#if content_digg?exists>
-	<div class="span-22 prepend-1 append-1 append-bottom">
-		<div class="portlet" style="padding: 10px; min-height: 180px;">
-			<table>
-				<#list content_digg as digg_submit>	
-				   <tr>
-				      <td>
-				      	<a href="${fullUrl}?page=digg&amp;id_digg=${digg_submit.idDiggSubmit}">${digg_submit.diggSubmitTitle}</a>
-				      </td> 
-				    </tr>
-			    </#list>
-			</table>
-		</div>
-	</div>
 	</#if>
-	
-	<#if list_digg?exists>
-	<div class="span-22 prepend-1 append-1 append-bottom">
-		<div class="portlet" style="padding: 10px; min-height: 180px;">
-			<table>
-				<#list list_digg as digg>	
-				   <tr>
-				      <td>
-				      	<a href="${fullUrl}?page=digg&amp;id_digg=${digg.idDigg}">${digg.title}</a>
-				      </td> 
-				    </tr>
-			    </#list>
-			</table>
-		</div>
 	</div>
-	</#if>
-	
-</#if>
+</div>

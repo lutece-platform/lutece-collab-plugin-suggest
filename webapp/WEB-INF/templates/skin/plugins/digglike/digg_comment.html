@@ -1,204 +1,87 @@
-<#include "/util/editor/editor.html" />
-<script type="text/javascript">
-<!--
-function showAddComment(root, commentId) {
- 
-	obj = document.getElementById('comment_box')
-	if (obj != null)
-	{
-		obj.parentNode.removeChild(obj);
-	} 
-	obj = document.getElementById('comment_margin')
-	if (obj != null)
-	{
-		obj.parentNode.removeChild(obj);
-	} 
-
-	blankDiv = document.createElement("div"); 
-	blankDiv.id = 'comment_margin';
-	blankDiv.style.marginTop = '20px'; 
-	blankDiv.innerHTML = '&nbsp;'; 
-	document.getElementById(root).appendChild(blankDiv);
-	
-	formDiv = document.createElement("div");
-	formDiv.id = 'comment_box';
-	formDiv.innerHTML = "" +
-		"<form action='${fullUrl}?page=digg' method='post' name='' id='' >"+
-		"	<input name='id_digg' value='${id_digg}' type='hidden' />"+
-		"	<input name='id_digg_submit' value='${id_digg_submit}' type='hidden' />"+
-		"	<input name='digg_comment' value='${digg_comment}' type='hidden' />"+
-		"	<input name='id_digg_comment' value='"+commentId+"' type='hidden' />"+
-		"	<div class='-lutece-title-3' style='padding-left:90px'>#i18n{digglike.diggComment.labelComment}"+
-		"		<#if disable_new_comment_submit>"+
-		"			(#i18n{digglike.diggComment.labelDisableNewCommentSubmit})"+
-		"		</#if>: "+
-		"	</div>"+
-		"	<div style='height:90px; border:0; margin:0; padding:0;'>"+
-		"		<div style='float:left; position:relative; z-index:4; right:-1px ;width:43%; height:100%; text-align:right; border:0; margin:0; padding:0;'>"+
-		"				<div  style='padding-top:20px; float:right;'>"+
-		"					<img src='images/local/skin/comment_arrow.png' />"+
-		"				</div>"+
-		"		</div>"+
-		"		<div style='float:right; position:relative; z-index:2; width:57%; height:80%; border:0; margin:0; padding:0;'>"+
-		"			<div style='padding:10px; height:100%;' class='portlet'>"+
-		"				<textarea class='"+<#if active_editor_bbcode>markitup+</#if>"' name='comment_value' id='comment_value' rows='4' cols='29' style='width:100%; border:0; margin:0; padding:0;' ></textarea>"+
-		"			</div>"+
-		"		</div>"+
-		"	</div>"+
-		"	"+
-		"	<#if jcaptcha?exists>"+
-		"		<div style='float:left;padding-top: 35px;'>"+
-		"			<fieldset class='form-fieldset'> "+
-		"				${jcaptcha}"+
-		"			</fieldset>"+
-		"		</div>"+
-		"	</#if>"+
-		"	"+
-		"	<div style='margin-top:0px'>&nbsp;</div>"+
-		"	<div style='text-align:right;'>"+
-		"		<input type='submit' value='ajouter' name='submit_comment' class='-lutece-input' />"+
-		"	</div>"+
-		"</form>"; 
-	document.getElementById(root).appendChild(formDiv);
-	
-} 
-
-//-->
-</script>
 <#assign rootId = 0>
-
 <#if list_comment?has_content>
-	<#list list_comment as comment_submit_lutece_user>
-		<#assign rootId = rootId + 1>
-		<div id=${rootId}>
-			<div style="height:90px; border:0; margin:0; padding:0;">
-				<div style="float:left; width:15%; height:100%; border:0; margin:0; padding:0;">
-					<#if comment_submit_lutece_user.lutece_user?exists>
-						<#if comment_submit_lutece_user.lutece_user?exists>
-							${comment_submit_lutece_user.lutece_user}
-						<#else>
-							${comment_submit_lutece_user.lutece_user.getUserInfo("user.name.given")}
-							${comment_submit_lutece_user.lutece_user.getUserInfo("user.name.family")}
-						</#if>
-						<br />
-					</#if>
-					${comment_submit_lutece_user.comment_submit.dateComment}
-				</div>
-				<#if comment_submit_lutece_user.comment_submit.isOfficialAnswer()>
-					#i18n{digglike.diggComment.officialAnswer}
-					<div style="float:right; position:relative; z-index:2; width:76%; height:80%; border:0; margin:0; padding:0;">
-						<div style="padding:10px; height:100%; overflow:auto;" class="official-answer">
-							${digg.parseBbcodeValue(comment_submit_lutece_user.comment_submit.value)}
-							
-							<div style="padding: 5px 5px 0px 0px; right: 0pt; bottom: 0pt; position: absolute;" align="right">
-								<a href="javascript:;" onClick="showAddComment(${rootId}, ${comment_submit_lutece_user.comment_submit.idCommentSubmit});">
-									#i18n{digglike.diggComment.labelCommentAComment}
-								</a>
-							</div>
-						</div>
-					</div>
-					<div style="float:right; position:relative; z-index:4; right:-1px ;width:8%; height:100%; text-align:right; border:0; margin:0; padding:0;">
-						<div  style="padding-top:14px; float:right;">
-							<img src="images/local/skin/plugins/digglike/comment_arrow2.png" />
-						</div>
-					</div>
-				<#else>
-					<div style="float:right; position:relative; z-index:2; width:76%; height:100%; border:0; margin:0; padding:0;">
-						<div style="padding:10px; height:100%; overflow:auto;" class="portlet">
-						
-							${digg.parseBbcodeValue(comment_submit_lutece_user.comment_submit.value)}
-							<div style="padding: 5px 5px 0px 0px; right: 0pt; bottom: 0pt; position: absolute;" align="right">
-								<a href="javascript:;" onClick="showAddComment(${rootId}, ${comment_submit_lutece_user.comment_submit.idCommentSubmit});">
-									#i18n{digglike.diggComment.labelCommentAComment}
-								</a>
-							</div>						
-						</div>
-					</div>
-					<div style="float:right; position:relative; z-index:4; right:-1px ;width:8%; height:100%; text-align:right; border:0; margin:0; padding:0;">
-						<div  style="padding-top:14px; float:right;">
-							<img src="images/local/skin/comment_arrow.png" />
-						</div>
-					</div>
-				</#if>
-				
-			</div>
-			
-		</div>
-		<div style="margin-top:20px">&nbsp;</div>
-		<#if comment_submit_lutece_user.comment_submit.comments?has_content>
-			<#list comment_submit_lutece_user.comment_submit.comments as comment_comment>
-				<#assign rootId = rootId + 1>
-				<div id=${rootId}>
-					<div style="height:90px; border:0; margin:0; padding:0;">
-						<div style="float:left; width:15%; height:100%; border:0; margin:0; padding:0;">
-							${comment_comment.dateComment}
-						</div>
-						<#if comment_comment.isOfficialAnswer()>
-							#i18n{digglike.diggComment.officialAnswer}
-							<div style="float:right; position:relative; z-index:2; width:66%; height:80%; border:0; margin:0; padding:0;">
-								<div style="padding:10px; height:100%; overflow:auto;" class="official-answer">
-									${digg.parseBbcodeValue(comment_comment.value)}
-								</div>
-							</div>
-							<div style="float:right; position:relative; z-index:4; right:-1px ;width:8%; height:100%; text-align:right; border:0; margin:0; padding:0;">
-								<div  style="padding-top:14px; float:right;">
-									<img src="images/local/skin/plugins/digglike/comment_arrow2.png" />
-								</div>
-							</div>
-						<#else>
-							<div style="float:right; position:relative; z-index:2; width:66%; height:100%; border:0; margin:0; padding:0;">
-								<div style="padding:10px; height:100%; overflow:auto;" class="portlet">
-									${digg.parseBbcodeValue(comment_comment.value)}
-								</div>
-							</div>
-							<div style="float:right; position:relative; z-index:4; right:-1px ;width:8%; height:100%; text-align:right; border:0; margin:0; padding:0;">
-								<div  style="padding-top:14px; float:right;">
-									<img src="images/local/skin/comment_arrow.png" />
-								</div>
-							</div>
-						</#if>
-						
-					</div>
-					
-				</div>
-				<div style="margin-top:20px">&nbsp;</div>
-			</#list>
-		</#if>
-	</#list>
+<#list list_comment as comment_submit_lutece_user>
+<#assign rootId = rootId + 1>
+<li class="">
+<!-- div class="timeMarker">${comment_submit_lutece_user.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}</div -->
+<div class="">
+<div class="">
+<#if comment_submit_lutece_user.comment_submit.isOfficialAnswer()>
+	<img class="" alt="reponse officielle" title="Réponse officielle" src="images/local/skin/plugins/digglike/lutece_core_team.png" />
+<#else />
+	<img class="" alt="" title="" src="images/local/skin/plugins/digglike/avatar.png" />
 </#if>
-<form action="${fullUrl}?page=digg" method="post" name="" id="" >
-	<input name="id_digg" value="${id_digg}" type="hidden" />
-	<input name="id_digg_submit" value="${id_digg_submit}" type="hidden" />
-	<input name="digg_comment" value="${digg_comment}" type="hidden" />
-	<div class="-lutece-title-3">#i18n{digglike.diggComment.labelAddNewComment}
-		<#if disable_new_comment_submit>
-			(#i18n{digglike.diggComment.labelDisableNewCommentSubmit})
-		</#if>: 
-	</div>
-	<div style="height:110px; border:0; margin:0; padding:0;">
-		<div style="float:left; position:relative; z-index:4; right:-1px ;width:23%; height:100%; text-align:right; border:0; margin:0; padding:0;">
-				<div  style="padding-top:20px; float:right;">
-					<img src="images/local/skin/comment_arrow.png" />
-				</div>
-		</div>
-		<div style="float:left; position:relative; z-index:2; width:77%; height:100%; border:0; margin:0; padding:0;">
-			<div style="padding:10px; height:100%;" class="portlet">
-				<textarea name="comment_value" id="comment_value" rows="6" cols="49" style="width:100%; border:0; margin:0; padding:0;" <#if active_editor_bbcode> class='markitup' </#if> ></textarea>
-			</div>
-		</div>
-	</div>
-	
-	<#if jcaptcha?exists>
-		<div style="float:left;padding-top: 35px;">
-			<fieldset class="form-fieldset"> 
-				${jcaptcha}
-			</fieldset>
-		</div>
+</div>
+<div class="postContent thing">
+<div class="postHeader">
+<div class="info">
+<#if comment_submit_lutece_user.lutece_user?exists>
+#i18n{digglike.diggListSubmit.postByUser} :
+	<#if comment_submit_lutece_user.lutece_user?exists>
+		${comment_submit_lutece_user.lutece_user}
+	<#else>
+		${comment_submit_lutece_user.lutece_user.getUserInfo("user.name.given")}
+		${comment_submit_lutece_user.lutece_user.getUserInfo("user.name.family")}
 	</#if>
-	
-	<div style="margin-top:10px">&nbsp;</div>
-	<div style="text-align:right;">
-		<input type="submit" value="ajouter" name="submit_comment" class="-lutece-input" />
-	</div>
+</#if> le ${comment_submit_lutece_user.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}
+</div>
+</div>
+<div class='postBody'>
+<!-- digg.parseBbcodeValue -->
+${digg.parseBbcodeValue(comment_submit_lutece_user.comment_submit.value)}
+<#if comment_submit_lutece_user.comment_submit.isOfficialAnswer()>
+</div>
+</#if>
+<hr />
+<a href="#" class="button comment-link" id="comment-link${rootId}">#i18n{digglike.diggComment.labelCommentAComment}</a>
+<form action="${fullUrl}?page=digg" method="post" name="" id="comment-comment${rootId}" class="comment-comment ">
+<input name="id_digg" value="${id_digg}" type="hidden" />
+<input name="id_digg_submit" value="${id_digg_submit}" type="hidden" />
+<input name="digg_comment" value="${digg_comment}" type="hidden" />
+<input name="id_digg_comment" value="${comment_submit_lutece_user.comment_submit.idCommentSubmit}" type="hidden" />
+<label for name="comment_value">
+#i18n{digglike.diggComment.labelComment}<#if disable_new_comment_submit>(#i18n{digglike.diggComment.labelDisableNewCommentSubmit})</#if>
+</label>
+<textarea name="comment_value" id="comment_value${rootId}" class="comment-value markitup"></textarea>
+<#if jcaptcha?exists>
+<fieldset class="form-fieldset">${jcaptcha}</fieldset>
+</#if>
+
+<input class="button" type="submit" value="ajouter" name="submit_comment"/>
 </form>
-<@initEditor type="bbcode" />
+</div>
+</div>
+
+</li>
+<#if comment_submit_lutece_user.comment_submit.comments?has_content>
+<#list comment_submit_lutece_user.comment_submit.comments as comment_comment>
+<li class="">
+<!-- div class="timeMarker">${comment_comment.dateComment?string("dd/MM/yyyy HH:mm:ss")}</div -->
+<div class="post hasControls">
+<div class="avatar">
+	<img class="avatar" alt="" src="images/local/skin/plugins/digglike/avatar.png">
+</div>
+<div class="postContent thing">
+<div class="postHeader">
+<div class="info">
+<#if comment_comment.lutece_user?exists>
+	<#if comment_comment.lutece_user?exists>
+			${comment_comment.lutece_user}
+	<#else>
+			${comment_comment.lutece_user.getUserInfo("user.name.given")}
+			${comment_comment.lutece_user.getUserInfo("user.name.family")}
+	</#if>
+</#if>
+${comment_comment.dateComment?string("dd/MM/yyyy HH:mm:ss")}
+</div>
+</div>
+<div class='postBody'>
+${digg.parseBbcodeValue(comment_comment.value)}
+</div>
+</div>
+</div>
+</li>
+</#list>
+</#if>
+</#list>
+</#if>

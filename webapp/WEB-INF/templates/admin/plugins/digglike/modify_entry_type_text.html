@@ -9,21 +9,21 @@
 		<label class="control-label" for=""></label>
     	<div class="controls">
 			<label for="title">#i18n{digglike.createEntry.labelTitle} *</label>
-				<input type="text" name="title" id="title" class="input-xlarge" value="${entry.title}" maxlength="255" />
-				<span class="help-text">#i18n{digglike.createEntry.labelTitleComment}
+				<input type="text" name="title" id="title" class="input-xlarge" value="${entry.title!}" maxlength="255" />
+				<span class="help-text">#i18n{digglike.createEntry.labelTitleComment!}
 		</div>
 		<div class="controls">
 		<label> #i18n{digglike.createEntry.labelHelpMessage}</label>
-			<textarea  name="help_message" id="help_message" rows="2" class="input-xlarge">${entry.helpMessage}</textarea>
+			<textarea  name="help_message" id="help_message" rows="2" class="input-xlarge">${entry.helpMessage!}</textarea>
 			<span class="help-text">#i18n{digglike.createEntry.labelHelpMessageComment}
 		</div>
 		<div class="controls">
 		<label for="comment"> #i18n{digglike.createEntry.labelComment}</label>
-		<textarea name="comment" class="input-xlarge" rows="2">${entry.comment}</textarea>
+		<textarea name="comment" class="input-xlarge" rows="2">${entry.comment!}</textarea>
 		</div>
         <div class="controls">
 			<label for="value">#i18n{digglike.createEntry.labelValueDefault}</label>
-			<input type="text" name="value" id="value" class="input-xlarge"  value="${entry.defaultValue}"/>
+			<input type="text" name="value" id="value" class="input-xlarge"  value="${entry.defaultValue!}"/>
 		</div>
 		<div class="controls">
 			<label class="checkbox" for="mandatory">#i18n{digglike.createEntry.labelMandatory}</label>
@@ -56,7 +56,7 @@
 		#i18n{digglike.createEntry.manageRegularExpression.title}
 		<form  method="post" class="inline pull-right" action="jsp/admin/plugins/digglike/DoInsertVerification.jsp#list"> 
 		<input name="id_entry" value="${entry.idEntry}" type="hidden">
-		#i18n{digglike.createEntry.manageRegularExpression.labelInsert}
+		#i18n{digglike.modifyEntry.manageRegularExpression.labelInsert}
 		<@combo name="id_expression"  items=regular_expression_list default_value=-1 />
 		<button class="btn btn-primary" type="submit"><i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.createEntry.manageRegularExpression.buttonInsert}</button>
 		</form>
@@ -85,6 +85,7 @@
 	            </a>
 	        </td>
 	    </tr>
+		</#list>
 		</tbody>
         </table> 
 		</fieldset>
