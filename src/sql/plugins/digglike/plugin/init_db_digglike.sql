@@ -11,28 +11,20 @@ INSERT INTO digglike_entry_type (id_type,title,class_name) VALUES (6,'Editeur bb
 --
 -- Dumping data for table digglike_action
 --
-INSERT INTO digglike_action (id_action,name_key,description_key,action_url,icon_url,action_permission,digg_state) VALUES 
-(1,'digglike.action.modify.name','digglike.action.modify.description','jsp/admin/plugins/digglike/ModifyDigg.jsp','images/admin/skin/plugins/digglike/actions/modify.png','MODIFY',0);
-INSERT INTO digglike_action (id_action,name_key,description_key,action_url,icon_url,action_permission,digg_state) VALUES 
-(2,'digglike.action.modify.name','digglike.action.modify.description','jsp/admin/plugins/digglike/ModifyDigg.jsp','images/admin/skin/plugins/digglike/actions/modify.png','MODIFY',1);
-INSERT INTO digglike_action (id_action,name_key,description_key,action_url,icon_url,action_permission,digg_state) VALUES 
-(3,'digglike.action.manageDiggSubmit.name','digglike.action.manageDiggSubmit.description','jsp/admin/plugins/digglike/ManageDiggSubmit.jsp','images/admin/skin/plugins/digglike/actions/proposition.png','MANAGE_DIGG_SUBMIT',0);
-INSERT INTO digglike_action (id_action,name_key,description_key,action_url,icon_url,action_permission,digg_state) VALUES 
-(4,'digglike.action.manageDiggSubmit.name','digglike.action.manageDiggSubmit.description','jsp/admin/plugins/digglike/ManageDiggSubmit.jsp','images/admin/skin/plugins/digglike/actions/proposition.png','MANAGE_DIGG_SUBMIT',1);
-INSERT INTO digglike_action (id_action,name_key,description_key,action_url,icon_url,action_permission,digg_state) VALUES 
-(5,'digglike.action.disable.name','digglike.action.disable.description','jsp/admin/plugins/digglike/ConfirmDisableDigg.jsp','images/admin/skin/plugins/digglike/actions/disable.png','CHANGE_STATE',1);
-INSERT INTO digglike_action (id_action,name_key,description_key,action_url,icon_url,action_permission,digg_state) VALUES 
-(6,'digglike.action.enable.name','digglike.action.enable.description','jsp/admin/plugins/digglike/DoEnableDigg.jsp','images/admin/skin/plugins/digglike/actions/enable.png','CHANGE_STATE',0);
-INSERT INTO digglike_action (id_action,name_key,description_key,action_url,icon_url,action_permission,digg_state) VALUES 
-(7,'digglike.action.copy.name','digglike.action.copy.description','jsp/admin/plugins/digglike/DoCopyDigg.jsp','images/admin/skin/plugins/digglike/actions/editcopy.png','COPY',0);
-INSERT INTO digglike_action (id_action,name_key,description_key,action_url,icon_url,action_permission,digg_state) VALUES 
-(8,'digglike.action.copy.name','digglike.action.copy.description','jsp/admin/plugins/digglike/DoCopyDigg.jsp','images/admin/skin/plugins/digglike/actions/editcopy.png','COPY',1);
-INSERT INTO digglike_action (id_action,name_key,description_key,action_url,icon_url,action_permission,digg_state) VALUES 
-(9,'digglike.action.delete.name','digglike.action.delete.description','jsp/admin/plugins/digglike/ConfirmRemoveDigg.jsp','images/admin/skin/plugins/digglike/actions/delete.png','DELETE',0);
-INSERT INTO digglike_action (id_action,name_key,description_key,action_url,icon_url,action_permission,digg_state) VALUES 
-(10,'digglike.action.updateAllDiggSubmit.name','digglike.action.updateAllDiggSubmit.description','jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp','images/admin/skin/plugins/digglike/actions/updatealldiggsubmit.png','UPDATE_ALL_DIGG_SUBMIT',1);
-INSERT INTO digglike_action (id_action,name_key,description_key,action_url,icon_url,action_permission,digg_state) VALUES 
-(11,'digglike.action.updateAllDiggSubmit.name','digglike.action.updateAllDiggSubmit.description','jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp','images/admin/skin/plugins/digglike/actions/updatealldiggsubmit.png','UPDATE_ALL_DIGG_SUBMIT',0);
+
+INSERT INTO digglike_action (id_action, name_key, description_key, action_url, icon_url, action_permission, digg_state) VALUES
+	(1, 'digglike.action.modify.name', 'digglike.action.modify.description', 'jsp/admin/plugins/digglike/ModifyDigg.jsp', 'icon-edit icon-white', 'MODIFY', 0),
+	(2, 'digglike.action.modify.name', 'digglike.action.modify.description', 'jsp/admin/plugins/digglike/ModifyDigg.jsp', 'icon-edit icon-white', 'MODIFY', 1),
+	(3, 'digglike.action.manageDiggSubmit.name', 'digglike.action.manageDiggSubmit.description', 'jsp/admin/plugins/digglike/ManageDiggSubmit.jsp', 'icon-inbox icon-white', 'MANAGE_DIGG_SUBMIT', 0),
+	(4, 'digglike.action.manageDiggSubmit.name', 'digglike.action.manageDiggSubmit.description', 'jsp/admin/plugins/digglike/ManageDiggSubmit.jsp', 'icon-inbox icon-white', 'MANAGE_DIGG_SUBMIT', 1),
+	(5, 'digglike.action.disable.name', 'digglike.action.disable.description', 'jsp/admin/plugins/digglike/ConfirmDisableDigg.jsp', 'icon-remove icon-white', 'CHANGE_STATE', 1),
+	(6, 'digglike.action.enable.name', 'digglike.action.enable.description', 'jsp/admin/plugins/digglike/DoEnableDigg.jsp', 'icon-ok icon-white', 'CHANGE_STATE', 0),
+	(7, 'digglike.action.copy.name', 'digglike.action.copy.description', 'jsp/admin/plugins/digglike/DoCopyDigg.jsp', 'icon-move icon-white', 'COPY', 0),
+	(8, 'digglike.action.copy.name', 'digglike.action.copy.description', 'jsp/admin/plugins/digglike/DoCopyDigg.jsp', 'icon-move icon-white', 'COPY', 1),
+	(9, 'digglike.action.delete.name', 'digglike.action.delete.description', 'jsp/admin/plugins/digglike/ConfirmRemoveDigg.jsp', 'icon-trash icon-white', 'DELETE', 0),
+	(10, 'digglike.action.updateAllDiggSubmit.name', 'digglike.action.updateAllDiggSubmit.description', 'jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp', 'icon-cog icon-white', 'UPDATE_ALL_DIGG_SUBMIT', 1),
+	(11, 'digglike.action.updateAllDiggSubmit.name', 'digglike.action.updateAllDiggSubmit.description', 'jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp', 'icon-cog icon-white', 'UPDATE_ALL_DIGG_SUBMIT', 0);
+
 
 --
 -- Dumping data for table digglike_vote_type

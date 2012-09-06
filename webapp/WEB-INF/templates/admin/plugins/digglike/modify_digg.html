@@ -333,7 +333,7 @@
 		<#if digg.categories?exists>
 			<#list digg.categories as category>
 			<tr>
-				<td style="background-color:${category.color};width:5px;">&nbsp;</td>
+				<td style="background-color:${category.color!};width:5px;">&nbsp;</td>
 				<td>${category.title}</td>
 				<td> 
 					<a class="btn btn-danger btn-mini" href="jsp/admin/plugins/digglike/DoRemoveCategoryAssociation.jsp?id_digg=${digg.idDigg}&id_category=${category.idCategory}#list" title="#i18n{digglike.createDigg.titleDeleteCategory}">
