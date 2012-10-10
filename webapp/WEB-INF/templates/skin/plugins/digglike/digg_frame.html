@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row-fluid">
 	<div class="span12">
 	<#if unavailability_message?exists>
 		${unavailability_message}      
@@ -24,7 +24,7 @@
 			<@combo name="id_digg_submit_sort" default_value=id_digg_submit_sort items=list_digg_submit_sort  />
 			<button class="btn btn-primary" type="submit" ><i class="icon-filter icon-white"></i>&nbsp;#i18n{digglike.diggFrame.buttonSorter}</button>
 		</#if>
-		<div class="row">
+		<div class="row-fluid">
 			<div class="span8">
 				${content_digg}
 			</div>		              

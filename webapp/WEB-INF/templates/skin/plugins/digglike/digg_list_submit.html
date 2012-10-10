@@ -5,11 +5,11 @@
 <@pagination paginator=paginator />
 </#if>
 <#list list_digg_submit as digg_submit_display>
-<div class="row">
+<div class="row-fluid">
 	<div class="span8">
 	<hr>
 	<a name="digg${digg_submit_display.digg_submit.idDiggSubmit}">&nbsp;</a>
-	<div class="row">
+	<div class="row-fluid">
 			<div class="span6">
 			<#if digg_submit_display.digg_submit.diggSubmitValueShowInTheList?exists>
 				${digg_submit_display.digg_submit.diggSubmitValueShowInTheList}

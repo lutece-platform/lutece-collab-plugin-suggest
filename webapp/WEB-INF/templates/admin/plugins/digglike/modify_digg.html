@@ -286,23 +286,23 @@
 			<td>${entry.title}</td>
 			<td>${entry.entryType.title}</td>
 	        <td>
-				<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/digglike/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="btn btn-primary">
+				<a class="btn btn-primary btn-small" href="jsp/admin/plugins/digglike/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="btn btn-primary">
 					<i class="icon-edit icon-white"></i>
 				</a>
 	            <#if id_entry_first_in_the_list!=entry.idEntry>
-	            <a class="btn btn-primary btn-mini" href="jsp/admin/plugins/digglike/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}" title="#i18n{digglike.modifyDigg.manageEnter.titleMoveUp}">
+	            <a class="btn btn-primary btn-small" href="jsp/admin/plugins/digglike/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}" title="#i18n{digglike.modifyDigg.manageEnter.titleMoveUp}">
 					<i class="icon-chevron-up icon-white"></i>
 	            </a>
 	            </#if>
 	            <#if id_entry_last_in_the_list!=entry.idEntry>
-	            <a class="btn btn-primary btn-mini" href="jsp/admin/plugins/digglike/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}" title="#i18n{digglike.modifyDigg.manageEnter.titleMoveDown}">
+	            <a class="btn btn-primary btn-small" href="jsp/admin/plugins/digglike/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}" title="#i18n{digglike.modifyDigg.manageEnter.titleMoveDown}">
 					<i class="icon-chevron-down icon-white"></i>
 				</a>
 	            </#if>
-	            <a class="btn btn-primary btn-mini" href="jsp/admin/plugins/digglike/DoCopyEntry.jsp?id_entry=${entry.idEntry}" title="#i18n{digglike.modifyDigg.manageEnter.titleCopy}">
+	            <a class="btn btn-primary btn-small" href="jsp/admin/plugins/digglike/DoCopyEntry.jsp?id_entry=${entry.idEntry}" title="#i18n{digglike.modifyDigg.manageEnter.titleCopy}">
 					<i class="icon-move icon-white"></i>
 				</a>
-				<a class="btn btn-danger btn-mini" href="jsp/admin/plugins/digglike/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}" title="#i18n{digglike.modifyDigg.manageEnter.titleDelete}">
+				<a class="btn btn-danger btn-small" href="jsp/admin/plugins/digglike/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}" title="#i18n{digglike.modifyDigg.manageEnter.titleDelete}">
 					<i class="icon-trash icon-white"></i>
 	            </a>
 			</td>
@@ -336,7 +336,7 @@
 				<td style="background-color:${category.color!};width:5px;">&nbsp;</td>
 				<td>${category.title}</td>
 				<td> 
-					<a class="btn btn-danger btn-mini" href="jsp/admin/plugins/digglike/DoRemoveCategoryAssociation.jsp?id_digg=${digg.idDigg}&id_category=${category.idCategory}#list" title="#i18n{digglike.createDigg.titleDeleteCategory}">
+					<a class="btn btn-danger btn-small" href="jsp/admin/plugins/digglike/DoRemoveCategoryAssociation.jsp?id_digg=${digg.idDigg}&id_category=${category.idCategory}#list" title="#i18n{digglike.createDigg.titleDeleteCategory}">
 						<i class="icon-trash icon-white"></i>
 					</a>
 				</td>
