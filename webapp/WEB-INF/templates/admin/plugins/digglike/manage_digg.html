@@ -4,12 +4,12 @@
 	<legend>#i18n{digglike.manageDigg.title}
 	 <#if permission_manage_advanced_parameters>
    		<form class="form-inline pull-right spaced" method="post" action="jsp/admin/plugins/digglike/ManageAdvancedParameters.jsp">
-    		<button type="submit" class="btn btn-primary" /><i class="icon-cog icon-white"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageDigg.buttonManageAdvancedParameters}</span></button>
+    		<button type="submit" class="btn btn-primary btn-small" /><i class="icon-cog icon-white"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageDigg.buttonManageAdvancedParameters}</span></button>
    		</form>
    	</#if>
   	 <#if permission_create_digg?exists && permission_create_digg>
   		<form method="post" class="form-inline pull-right"  action="jsp/admin/plugins/digglike/CreateDigg.jsp">
-    		<button type="submit" class="btn btn-primary" /><i class="icon-plus icon-white"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageDigg.buttonCreate}</span></button>
+    		<button type="submit" class="btn btn-primary btn-small" /><i class="icon-plus icon-white"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageDigg.buttonCreate}</span></button>
    		</form>
    	</#if>
 	</legend>
@@ -21,7 +21,7 @@
       &nbsp;
        <span > #i18n{digglike.manageDigg.labelWorkGroup}  </span>
         <@combo name="workgroup"  items=user_workgroup_list default_value=user_workgroup_selected />
-		<button type="submit" class="btn btn-primary" /><i class="icon-filter icon-white"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageDigg.buttonSearch}</span></button>
+		<button type="submit" class="btn btn-primary btn-small" /><i class="icon-filter icon-white"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageDigg.buttonSearch}</span></button>
       
     </form>
   <@paginationAdmin paginator=paginator combo=1 />

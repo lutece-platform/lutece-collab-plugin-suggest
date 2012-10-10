@@ -45,9 +45,9 @@
 		</div>
 	</div>
     <div class="form-actions">
-		<button class="btn btn-primary" type="submit" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.modifyEntry.buttonSave}</button>
-		<button class="btn btn-primary" type="submit" name="apply"><i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{digglike.modifyEntry.buttonApplyAndManageVerification}</button>
-		<button class="btn btn-primary" onclick="javascript:window.history.back();" name="cancel"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.modifyEntry.buttonCancel}</button>
+		<button class="btn btn-primary btn-small" type="submit" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.modifyEntry.buttonSave}</button>
+		<button class="btn btn-primary btn-small" type="submit" name="apply"><i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{digglike.modifyEntry.buttonApplyAndManageVerification}</button>
+		<button class="btn btn-primary btn-small" onclick="javascript:window.history.back();" name="cancel"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.modifyEntry.buttonCancel}</button>
 	</div>
 	</form>
 	</fieldset>
@@ -58,7 +58,7 @@
 		<input name="id_entry" value="${entry.idEntry}" type="hidden">
 		#i18n{digglike.createEntry.manageRegularExpression.labelInsert}
 		<@combo name="id_expression"  items=regular_expression_list default_value=-1 />
-		<button class="btn btn-primary" type="submit"><i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.createEntry.manageRegularExpression.buttonInsert}</button>
+		<button class="btn btn-primary btn-small" type="submit"><i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.createEntry.manageRegularExpression.buttonInsert}</button>
 		</form>
 	</legend>
 	#i18n{digglike.createEntry.manageRegularExpression.labelNumberRegularExpression} <b>${number_items}</b>

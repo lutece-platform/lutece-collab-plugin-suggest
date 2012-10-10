@@ -26,7 +26,7 @@
 		${digg_submit.diggSubmitValue}
 		</#if>
 		<#if digg_submit_moderate>
-			<a class="btn btn-primary" href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=0&id_digg_submit=${digg_submit.idDiggSubmit}&report=1&digg_detail=1#digg${digg_submit.idDiggSubmit}">
+			<a class="btn btn-primary btn-small" href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=0&id_digg_submit=${digg_submit.idDiggSubmit}&report=1&digg_detail=1#digg${digg_submit.idDiggSubmit}">
 			#i18n{digglike.diggListSubmit.labelReport}
 			</a>
 		</#if>
@@ -47,7 +47,7 @@
 				${jcaptcha}
 			</fieldset>
 			</#if>
-			<button class="btn btn-primary" type="submit" name="submit_comment">
+			<button class="btn btn-primary btn-small" type="submit" name="submit_comment">
 				<i class="icon-comment icon-white"></i>&nbsp;#i18n{digglike.diggComment.labelAddNewComment}
 			</button>
 			</form>

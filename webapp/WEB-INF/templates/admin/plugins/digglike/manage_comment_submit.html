@@ -30,7 +30,7 @@
        		<#else>
 				<@combo name="id_category"   items=category_list default_value="-1" />
        		</#if>	
-			<button type="submit" class="btn btn-primary" title="#i18n{digglike.manageDiggSubmit.buttonModify}"><i class="icon-ok icon-white"></i></button>
+			<button type="submit" class="btn btn-primary btn-small" title="#i18n{digglike.manageDiggSubmit.buttonModify}"><i class="icon-ok icon-white"></i></button>
     		</form>
     	</#if>
      	<p>#i18n{digglike.manageCommentSubmit.rowManageDiggSubmit}</p>
@@ -90,7 +90,7 @@
 			<form method="post" action="jsp/admin/plugins/digglike/DoSubmitOfficialAnswer.jsp">
 				<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden">
 				<textarea name="comment_value" id="comment_value" rows="6" class="span8" <#if digg.activeEditorBbcode> class='markitup'</#if>></textarea>
-				<button type="submit" class="btn btn-primary" name="add"><i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonAdd}</button>
+				<button type="submit" class="btn btn-primary btn-small" name="add"><i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonAdd}</button>
 			</form>
 			</fieldset>
 		<fieldset>
@@ -98,7 +98,7 @@
 			<form class="form-inline pull-right" action="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp" method="post" name="" id="filter">
 			<label>#i18n{digglike.manageCommentSubmit.labelSort}</label>
 			<@combo name="id_comment_sort"  items=comment_sort_list default_value=comment_sort_selected  />
-			<button class="btn btn-primary" title="#i18n{digglike.manageCommentSubmit.buttonSort}" type="submit" id="button_submit"><i class="icon-filter icon-white"></i></button>
+			<button class="btn btn-primary btn-small" title="#i18n{digglike.manageCommentSubmit.buttonSort}" type="submit" id="button_submit"><i class="icon-filter icon-white"></i></button>
 			</form>
 		</legend>
 		<@paginationAdmin paginator=paginator combo=1 />

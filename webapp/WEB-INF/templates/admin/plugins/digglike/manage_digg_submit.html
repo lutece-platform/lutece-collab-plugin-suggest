@@ -6,7 +6,7 @@
 		<form method="post" class="form-inline pull-right" action="jsp/admin/plugins/digglike/DoDownloadDiggExport.jsp">
 		<label>#i18n{digglike.manageDiggSubmit.labelDiggExport}</label>        
 		<@combo name="id_export_format" items=export_format_list default_value=-1 />
-		<button class="btn btn-primary" type="submit"><i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonDiggExport}</button>
+		<button class="btn btn-primary btn-small" type="submit"><i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonDiggExport}</button>
 		</form> 
 	</legend>
 	<div class="row-fluid">
@@ -18,14 +18,14 @@
         <@combo name="id_digg_submit_report"   items=digg_submit_report_list default_value=digg_submit_report_selected />
 		<label for="id_digg_submit_report">#i18n{digglike.manageDiggSubmit.labelDiggSubmitSort}</label>
 		<@combo name="id_digg_submit_sort" default_value=digg_submit_sort_selected items=digg_submit_sort_list />
-		<button class="btn btn-primary" type="submit" id="button_submit"><i class="icon-filter icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonSort}</button>
+		<button class="btn btn-primary btn-small" type="submit" id="button_submit"><i class="icon-filter icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonSort}</button>
       </p>
     </form>
 	<form name="search" class="form" method="post" action="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp">
 	<label for="">#i18n{digglike.manageDiggSubmit.labelSearch}</label>
     <input type="hidden" name="page" value="search" />
 		<input type="text" name="query" class="input-mini" value="<#if query?exists>${query}</#if>" style="margin-bottom:5px;" title="#i18n{digglike.manageDiggSubmit.buttonSearch}" />
-		<button class="btn btn-primary" type="submit"><i class="icon-search icon-white"></i></button>
+		<button class="btn btn-primary btn-small" type="submit"><i class="icon-search icon-white"></i></button>
 	</form>
 	</div>
 	<div class="span8">

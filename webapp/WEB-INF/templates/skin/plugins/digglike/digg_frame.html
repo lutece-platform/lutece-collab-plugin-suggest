@@ -22,7 +22,7 @@
 				<option value="${filter_month_value}">#i18n{digglike.diggFrame.labelFilterMonth}</option>
 			</select>
 			<@combo name="id_digg_submit_sort" default_value=id_digg_submit_sort items=list_digg_submit_sort  />
-			<button class="btn btn-primary" type="submit" ><i class="icon-filter icon-white"></i>&nbsp;#i18n{digglike.diggFrame.buttonSorter}</button>
+			<button class="btn btn-primary btn-small" type="submit" ><i class="icon-filter icon-white"></i>&nbsp;#i18n{digglike.diggFrame.buttonSorter}</button>
 		</#if>
 		<div class="row-fluid">
 			<div class="span8">
@@ -33,7 +33,7 @@
 			<legend>#i18n{digglike.diggFrame.altSearch}</legend>
 			<#if mode_digg?has_content && mode_digg == 0>
 				<p>
-				<a class="btn btn-primary" href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=1" target="_top">
+				<a class="btn btn-primary btn-small" href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=1" target="_top">
 					<i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{digglike.diggFrame.labelProposal}
 				</a>
 				</p>
@@ -41,11 +41,11 @@
 				<input name="id_digg" value="${id_digg}" type="hidden" />
 				<input type="hidden" name="page" value="search" />
             	<input type="text" name="query" class="input-small" value="<#if query?exists>${query}</#if>" />
-				<button class="btn btn-primary" type="submit" title="#i18n{digglike.diggFrame.altSearch}">
+				<button class="btn btn-primary btn-small" type="submit" title="#i18n{digglike.diggFrame.altSearch}">
 					<i class="icon-search icon-white"></i>
 				</button>
 			<#else>
-				<a class="btn btn-primary" href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=0" target="_top">
+				<a class="btn btn-primary btn-small" href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=0" target="_top">
 					<i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{digglike.diggFrame.backToList}
 				</a>
 			</#if>

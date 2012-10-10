@@ -251,13 +251,13 @@
 			</div>
 		</div>
 		<div class="form-actions">   	
-			<button class="btn btn-primary" type="submit" name="save">
+			<button class="btn btn-primary btn-small" type="submit" name="save">
 				<i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createDigg.buttonSave}
 			</button>
-			<button class="btn btn-primary" type="submit" name="apply" >
+			<button class="btn btn-primary btn-small" type="submit" name="apply" >
 				<i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{digglike.modifyDigg.buttonApply}
 			</button>
-			<button class="btn btn-primary" type="submit" name="cancel">
+			<button class="btn btn-primary btn-small" type="submit" name="cancel">
 				<i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{digglike.createDigg.buttonCancel}
 			</button>
 		</div>
@@ -269,7 +269,7 @@
 	<legend>
 		#i18n{digglike.modifyDigg.manageEnter.title}
 		<form class="form-inline pull-right" method="post"  action="jsp/admin/plugins/digglike/CreateEntry.jsp"> 
-			<@combo name="id_type"  items=entry_type_list default_value=-1 /><button class="btn btn-primary" type="submit">
+			<@combo name="id_type"  items=entry_type_list default_value=-1 /><button class="btn btn-primary btn-small" type="submit">
 				<i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.modifyDigg.manageEnter.buttonInsertEntry}
 			</button>
 		</form>
@@ -286,7 +286,7 @@
 			<td>${entry.title}</td>
 			<td>${entry.entryType.title}</td>
 	        <td>
-				<a class="btn btn-primary btn-small" href="jsp/admin/plugins/digglike/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="btn btn-primary">
+				<a class="btn btn-primary btn-small" href="jsp/admin/plugins/digglike/ModifyEntry.jsp?id_entry=${entry.idEntry}" class="btn btn-primary btn-small">
 					<i class="icon-edit icon-white"></i>
 				</a>
 	            <#if id_entry_first_in_the_list!=entry.idEntry>
@@ -318,7 +318,7 @@
 	<a id="list">&nbsp;</a>
 	<if category_list?size &lt; 1>
 		<@combo name="id_category" items=category_list default_value="-1"  />
-		<button type="submit"class="btn btn-primary" name="insert_category"><i class="icon-plus icon-white"></i>
+		<button type="submit"class="btn btn-primary btn-small" name="insert_category"><i class="icon-plus icon-white"></i>
 		&nbsp;#i18n{digglike.createDigg.buttonInsertCategory}
 		</button>
 	</if>
