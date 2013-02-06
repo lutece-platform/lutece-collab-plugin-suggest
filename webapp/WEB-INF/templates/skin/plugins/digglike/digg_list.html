@@ -1,13 +1,12 @@
 <div class="row-fluid">
 	<div class="span12">
 	<#if unavailability_message?exists>
-		${unavailability_message}      
+		<div class="alert alert-error">${unavailability_message}</div>    
 	<#else>
 		<div class="row-fluid">
-			<div class="span3 offset1">
+			<div class="span3">
 				<fieldset>
 				<legend>#i18n{digglike.diggFrame.altSearch}</legend> 
-				#i18n{digglike.manageDigg.labelItemsPerPage}<@paginationAdmin paginator=paginator combo=1 />
 				<form name="search" class="form" method="post" action="${fullUrl}?page=digg">
 					<input type="hidden" name="page" value="search" />
 					<input type="text" name="query" class="input-small" value=" <#if query?exists>${query}</#if>" />
@@ -15,7 +14,7 @@
 				</form>
 				</fieldset>
 			</div>
-			<div class="span7">
+			<div class="span8">
 				<fieldset>
 				<legend>#i18n{digglike.diggList.title}:</legend> 
 					<ul>

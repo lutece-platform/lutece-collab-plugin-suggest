@@ -5,29 +5,39 @@
     <form class="form-horizontal" method="post" action="jsp/admin/plugins/digglike/DoModifyDiggSubmitType.jsp" enctype="multipart/form-data">
 	<input name="id_type" value="${type.idType}" type="hidden">
     <div class="control-group">
-		<label class="control-label" for="" ></label>
-        <div class="controls">
 		<label class="control-label" for="name" >#i18n{digglike.createDiggSubmitType.labelName} *</label>
+        <div class="controls">
 			<input type="text" class="input-small" id="name" name="name" maxlength="20" value="${type.name}" />
 		</div>
-        <div class="controls">
+	</div>
+	<div class="control-group">
 		<label class="control-label" for="color" >#i18n{digglike.createDiggSubmitType.labelColor}</label>
+		<div class="controls">
 			<input type="text" class="input-mini" id="color" name="color" maxlength="7" value="${type.color}"/>
 		</div>
+	</div>
+	<div class="control-group">
 		<div class="controls">
 			<label class="checkbox" for="parameterizable" >#i18n{digglike.createDiggSubmitType.labelParameterizable} *
 				<input id="parameterizable" name="parameterizable" type="checkbox" <#if type.parameterizableInFO> checked='checked'</#if>/>
 			</label>
 		</div>
-         <div class="controls">
-		<label  for="image_source" >#i18n{digglike.createDiggSubmitType.labelImage}</label>
+	</div>
+    <div class="control-group">
+	<label class="control-label" for="" ></label>
+		<div class="controls">
+		<label for="image_source" >#i18n{digglike.createDiggSubmitType.labelImage}</label>
 			<input type="file" id="image_source" name="image_source" maxlength="100"/>
-			<span class="help-text"><img width="50" src='${type.imageUrl}' title="img"/></span>
+			<span class="help-text"><img class="thumbnail" src='${type.imageUrl}' title="img"></span>
 		</div>
-		</div>
-        <div class="form-actions">
-			<button class="btn btn-primary btn-small" type="submit" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createExportFormat.buttonSave}</button>
-			<button class="btn btn-primary btn-small" onclick="javascript:window.history.back();" name="cancel"><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{digglike.createExportFormat.buttonCancel}</button>
+	</div>
+    <div class="form-actions">
+		<button class="btn btn-primary btn-small" type="submit" name="save">
+			<i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createExportFormat.buttonSave}
+		</button>
+		<a class="btn btn-small" href="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp?plugin_name=digglike" name="cancel">
+			<i class="icon-remove-circle"></i>&nbsp;#i18n{digglike.createExportFormat.buttonCancel}
+		</a>
 		</div>
 		</form>
       </fieldset>

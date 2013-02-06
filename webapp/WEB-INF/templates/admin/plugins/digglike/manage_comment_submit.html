@@ -10,16 +10,23 @@
       	</#if>
 		</p>
 		<p>
-        <#if digg_submit.diggSubmitTitle?exists>
-			<#if number_shown_characters?exists&&digg_submit.diggSubmitTitle?length &gt; number_shown_characters>
-				${digg_submit.diggSubmitTitle?substring(0,number_shown_characters)}... 
-      		<#else>
-				${digg_submit.diggSubmitTitle}
-      		</#if>
-        </#if> 
+			<#if digg_submit.diggSubmitTitle?exists>
+				<#if number_shown_characters?exists&&digg_submit.diggSubmitTitle?length &gt; number_shown_characters>
+					${digg_submit.diggSubmitTitle?substring(0,number_shown_characters)}... 
+				<#else>
+					${digg_submit.diggSubmitTitle}
+				</#if>
+			</#if>
 		</p>
         <p>#i18n{digglike.manageCommentSubmit.rowDateDiggSubmit}: <strong>${digg_submit.dateResponse?date?string.short}</strong></p>
-        <p>#i18n{digglike.manageCommentSubmit.rowStateDiggSubmit}: <strong>${digg_submit.diggSubmitState.title}</strong></p>
+        <p>
+			#i18n{digglike.manageCommentSubmit.rowStateDiggSubmit}: <#if digg_submit.diggSubmitState.number=publish_state_number>
+				<span class="label label-success" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="icon-white icon-ok"></i></span>
+			<#elseif digg_submit.diggSubmitState.number=waiting_for_publish_state_number>
+				<span class="label label-warning" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="icon-white icon-pause"></i></span>
+			<#else>
+				<span class="label label-important" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="icon-white icon-remove"></i></span>
+			</#if></p>
      	<p>#i18n{digglike.manageCommentSubmit.rowCategory}</p>
         <#if category_list?has_content>
 			<form method="post" class="form-horizontal" action="jsp/admin/plugins/digglike/DoChangeDiggSubmitCategory.jsp">
@@ -35,6 +42,12 @@
     	</#if>
      	<p>#i18n{digglike.manageCommentSubmit.rowManageDiggSubmit}</p>
 		<p>
+			<#if digg_submit.diggSubmitValue?exists>
+				<button class="btn btn-primary btn-small" rel="popover" data-original-title="${digg_submit.diggSubmitTitle}" data-content="${digg_submit.diggSubmitValue?html}">
+					<i class="icon-white icon-eye-open"></i>
+				</button>
+				<span class="popOverContent"></span>
+			</#if>	
 			<a name="${digg_submit.idDiggSubmit}"></a>	 
 			<#if digg_submit.diggSubmitState.number=disable_state_number>
             <a class="btn btn-small btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${waiting_for_publish_state_number}#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
@@ -75,21 +88,11 @@
 		</fieldset>
     </div>
 	<div class="span8">
-		<fieldset>
-		<legend>#i18n{digglike.manageCommentSubmit.rowTitleDiggSubmitValue}</legend> 
-			<#if digg_submit.diggSubmitTitle?exists>
-			<span>${digg_submit.diggSubmitTitle}</span>
-			</#if>
-			<#if digg_submit.diggSubmitValue?exists>
-			<span class="label label-info" rel="popover" data-original-title="${digg_submit.diggSubmitTitle}" data-content="${digg_submit.diggSubmitValue?html}">...</span>
-			<span class="popOverContent">${digg_submit.diggSubmitValue}</span>
-			</#if>	 
-		</fieldset>
 		<fieldset>	
 		<legend>#i18n{digglike.manageCommentSubmit.officialAnswer} <small>#i18n{digglike.manageCommentSubmit.labelAddOfficialAnswer}</small><legend>
 			<form method="post" action="jsp/admin/plugins/digglike/DoSubmitOfficialAnswer.jsp">
 				<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden">
-				<textarea name="comment_value" id="comment_value" rows="6" class="span8" <#if digg.activeEditorBbcode> class='markitup'</#if>></textarea>
+				<textarea name="comment_value" id="comment_value" rows="6" class="span12" <#if digg.activeEditorBbcode> class='markitup'</#if>></textarea>
 				<button type="submit" class="btn btn-primary btn-small" name="add"><i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonAdd}</button>
 			</form>
 			</fieldset>
@@ -176,7 +179,7 @@
 <script>
 $(document).ready( function () {
 	$(".popOverContent").toggle();
-    $("span[rel=popover]").popover({trigger:'hover'});
+    $("button[rel=popover]").popover({trigger:'hover'});
 	$("div.commentComments").toggle();
 	doToggle( ".comment_toggle" );
 });
@@ -187,4 +190,4 @@ function doToggle( idParent ){
 	});
 }
 </script>
-<@initEditor type="bbcode" />
+<@initEditor  />
