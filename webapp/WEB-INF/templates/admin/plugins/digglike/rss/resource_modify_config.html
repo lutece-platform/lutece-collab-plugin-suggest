@@ -1,63 +1,36 @@
-<div class="highlight-box">
-  		<p>
-	    	<label for="id_digg">#i18n{digglike.resource_rss.label_digg} * :</label>
-		     <@comboWithParams name="id_digg" default_value="${digglike_list_default_item}" additionalParameters="onchange=\"javascript:select_submit();\"" items=digglike_list />
-	 	<p>
-	 	<p>
-			<label for="rss_choice">#i18n{digglike.resource_rss.digg_choice} </label>
-			
-			<#if digglike_is_digg_submit_rss>
-				<input type="radio" name="rss_choice" id="choice_digg" value="digg" onclick="javascript:hidden();">
-			<#else>
-				<input checked="checked" type="radio" name="rss_choice" id="choice_digg" value="digg" onclick="javascript:hidden();">
-			</#if>
-			<Br />
-			<label for="digglike_rss_choice">#i18n{digglike.resource_rss.digg_submit_choice} </label>
-			<#if digglike_is_digg_submit_rss>
-				<input checked="checked" type="radio" name="rss_choice" id = "choice_submit" value="digg_submit" onclick="javascript:select_submit();">
-			<#else>
-				<input type="radio" name="rss_choice" id = "choice_submit" value="digg_submit" onclick="javascript:select_submit();">
-			</#if>
-		</p>
-		
-		<#assign keys = diggsubmit_list?keys/> 
-		<#list keys as submit>
-			<p id="digg_submit${submit}">
-				<#if diggsubmit_list[submit]?has_content>
-					<label for="id_digg_submit${submit}">#i18n{digglike.resource_rss.submit_comment_choice} :</label>
-					<@combo name="id_digg_submit${submit}" default_value=digglike_list_submit_default_item items=diggsubmit_list[submit] />
-				<#else>
-					<label>&nbsp;</label>#i18n{digglike.resource_rss.empty_digg}
-					<input type="hidden" value="empty_digg" name="id_digg_submit${submit}">
-				</#if>
-			</p>
-		</#list>
+<label for="id_digg">#i18n{digglike.resource_rss.label_digg} * </label>
+<@comboWithParams name="id_digg" default_value="${digglike_list_default_item}" additionalParameters="onchange=\"javascript:select_submit();\" class=\"input-large\"" items=digglike_list />
+<label class="radio inline" for="rss_choice">#i18n{digglike.resource_rss.digg_choice} 
+<#if digglike_is_digg_submit_rss>
+	<input type="radio" name="rss_choice" id="choice_digg" value="digg">
+<#else>
+	<input checked="checked" type="radio" name="rss_choice" id="choice_digg" value="digg">
+</#if>
+</label>
+<label class="radio inline" for="digglike_rss_choice">#i18n{digglike.resource_rss.digg_submit_choice} 
+	<input <#if digglike_is_digg_submit_rss>checked="checked"</#if> type="radio" name="rss_choice" id="choice_submit" value="digg_submit" onclick="javascript:select_submit();">
+</label>
 
-</div>
+<#assign keys = diggsubmit_list?keys/> 
+	<#list keys as submit>
+	<p id="digg_submit${submit}" class="diggSubmit">
+		<#if diggsubmit_list[submit]?has_content>
+			<label for="id_digg_submit${submit}">#i18n{digglike.resource_rss.submit_comment_choice} :</label>
+			<@combo name="id_digg_submit${submit}" default_value=digglike_list_submit_default_item items=diggsubmit_list[submit] />
+		<#else>
+			<label>&nbsp;</label>#i18n{digglike.resource_rss.empty_digg}
+			<input type="hidden" value="empty_digg" name="id_digg_submit${submit}">
+		</#if>
+	</p>
+</#list>
 
-<script type="text/javascript" charset="utf-8">
-	function hidden()
-	{
-		<#list keys as submit>
-		document.getElementById("digg_submit${submit}").style.display="none";
-		</#list>
-	}
-	function select_submit()
-	{
-		hidden();
-		if(document.getElementById("choice_submit").checked)
-		{
-			var id_digg = document.getElementById("id_digg").options[document.getElementById("id_digg").selectedIndex].value;
-			document.getElementById("digg_submit" + id_digg).style.display="block";
-		}
-	}
-	hidden();
-	<#if digglike_is_digg_submit_rss>
-		function init()
-		{
-			var id_digg = document.getElementById("id_digg").options[document.getElementById("id_digg").selectedIndex].value;
-			document.getElementById("digg_submit" + id_digg).style.display="block";
-		}
-		init();
-	</#if>
+<script>
+$("p.diggSubmit").toggle();
+
+$("#choice_digg").click( function(){
+	$("p.diggSubmit").toggle();
+});
+$("#choice_submit").click( function(){
+	$("p.diggSubmit").toggle();
+});
 </script>
