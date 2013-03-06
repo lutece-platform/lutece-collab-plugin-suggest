@@ -90,7 +90,6 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
     private static final String SQL_FILTER_SORT_BY_NUMBER_COMMENT_DESC = " d.comment_enable_number DESC ";
     private static final String SQL_FILTER_SORT_BY_NUMBER_VIEW_ASC = " d.number_view ASC ";
     private static final String SQL_FILTER_SORT_BY_NUMBER_VIEW_DESC = " d.number_view DESC ";
-    
     private static final String SQL_FILTER_SORT_MANUALLY = " d.digg_submit_list_order ASC ";
     private static final String SQL_ORDER_BY = " ORDER BY ";
     private static final String SQL_FILTER_ID_STATE = " d.id_state = s.id_state ";
@@ -181,7 +180,8 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         {
             daoUtil.setIntNull( 15 );
         }
-        daoUtil.setInt( 16, diggSubmit.getNumberView() );
+
+        daoUtil.setInt( 16, diggSubmit.getNumberView(  ) );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
 
@@ -242,8 +242,8 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
             {
                 diggSubmit.setDiggSubmitType( DiggSubmitTypeHome.findByPrimaryKey( daoUtil.getInt( 17 ), plugin ) );
             }
-            diggSubmit.setNumberView(daoUtil.getInt( 18 ));
-          
+
+            diggSubmit.setNumberView( daoUtil.getInt( 18 ) );
         }
 
         daoUtil.free(  );
@@ -305,7 +305,8 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         {
             daoUtil.setIntNull( 14 );
         }
-        daoUtil.setInt( 15, diggSubmit.getNumberView() );
+
+        daoUtil.setInt( 15, diggSubmit.getNumberView(  ) );
 
         daoUtil.setInt( 16, diggSubmit.getIdDiggSubmit(  ) );
 
@@ -465,8 +466,9 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
             {
                 diggSubmit.setDiggSubmitType( DiggSubmitTypeHome.findByPrimaryKey( daoUtil.getInt( 17 ), plugin ) );
             }
-            diggSubmit.setNumberView(daoUtil.getInt( 18 ));
-            
+
+            diggSubmit.setNumberView( daoUtil.getInt( 18 ) );
+
             diggSubmitList.add( diggSubmit );
         }
 

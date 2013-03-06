@@ -94,14 +94,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 public final class DiggUtils
 {
-	public static final int CONSTANT_ID_NULL = -1;
-	public static final int CONSTANT_SUBMIT_FILTER_TO_DAY = 1;
+    public static final int CONSTANT_ID_NULL = -1;
+    public static final int CONSTANT_SUBMIT_FILTER_TO_DAY = 1;
     public static final int CONSTANT_SUBMIT_FILTER_WEEK = 2;
     public static final int CONSTANT_SUBMIT_FILTER_MONTH = 3;
     public static final int CONSTANT_SUBMIT_FILTER_YESTERDAY = 4;
-    public static final int  CONSTANT_MODE_DIGG_LIST=0;
-    public static final int  CONSTANT_MODE_DIGG_FORM=1;
-    
+    public static final int CONSTANT_MODE_DIGG_LIST = 0;
+    public static final int CONSTANT_MODE_DIGG_FORM = 1;
     public static final String EMPTY_STRING = "";
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_ENTRY = "entry";
@@ -120,7 +119,7 @@ public final class DiggUtils
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
     private static final String CONSTANT_WHERE = " WHERE ";
     private static final String CONSTANT_AND = " AND ";
-    private static final String MARK_ID_DEFAULT_CATEGORY="id_default_category";
+    private static final String MARK_ID_DEFAULT_CATEGORY = "id_default_category";
 
     //	 Xml Tags
 
@@ -696,7 +695,7 @@ public final class DiggUtils
      * @param strFullUrl the full url
      * @return the html code of the form
      */
-    public static String getHtmlForm( Digg digg, Plugin plugin, Locale locale, String strFullUrl,int nIdDefaultCategory )
+    public static String getHtmlForm( Digg digg, Plugin plugin, Locale locale, String strFullUrl, int nIdDefaultCategory )
     {
         List<IEntry> listEntryFirstLevel;
         Map<String, Object> model = new HashMap<String, Object>(  );
@@ -720,7 +719,7 @@ public final class DiggUtils
             listCats.add( category );
         }
 
-        listCats.addAll(digg.getCategories());
+        listCats.addAll( digg.getCategories(  ) );
 
         DiggSubmitType type = new DiggSubmitType(  );
         List<DiggSubmitType> listTypes = (ArrayList<DiggSubmitType>) DiggSubmitTypeHome.getList( plugin );
@@ -758,11 +757,13 @@ public final class DiggUtils
         }
 
         model.put( MARK_CATEGORY_LIST, refCategoryList );
-       if(digg.isActiveDiggSubmitType())
-       {
-    	   model.put( MARK_TYPE_LIST, refTypeList );
-       }
-    	model.put(MARK_ID_DEFAULT_CATEGORY, nIdDefaultCategory);
+
+        if ( digg.isActiveDiggSubmitType(  ) )
+        {
+            model.put( MARK_TYPE_LIST, refTypeList );
+        }
+
+        model.put( MARK_ID_DEFAULT_CATEGORY, nIdDefaultCategory );
         model.put( MARK_DIGG, digg );
         model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );
         model.put( MARK_LOCALE, locale );
@@ -852,7 +853,7 @@ public final class DiggUtils
         {
             if ( ( response.getValueResponse(  ) != null ) && response.getEntry(  ).isShowInDiggSubmitList(  ) )
             {
-               if ( ( nNumberCaractersInBuffer + response.getValueResponse(  ).length(  ) ) <= nNumberCaractersShown )
+                if ( ( nNumberCaractersInBuffer + response.getValueResponse(  ).length(  ) ) <= nNumberCaractersShown )
                 {
                     nNumberCaractersInBuffer += response.getValueResponse(  ).length(  );
 
@@ -1041,7 +1042,7 @@ public final class DiggUtils
     {
         switch ( nIdSort )
         {
-            case SubmitFilter.SORT_BY_DATE_RESPONSE_ASC :
+            case SubmitFilter.SORT_BY_DATE_RESPONSE_ASC:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_ASC );
 
                 break;
@@ -1074,22 +1075,23 @@ public final class DiggUtils
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
                 break;
-                
+
             case SubmitFilter.SORT_MANUALLY:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_MANUALLY );
 
                 break;
+
             case SubmitFilter.SORT_BY_NUMBER_VIEW_ASC:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_NUMBER_VIEW_ASC );
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
                 break;
+
             case SubmitFilter.SORT_BY_NUMBER_VIEW_DESC:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_NUMBER_VIEW_DESC );
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
                 break;
- 
 
             default:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_SCORE_DESC );
@@ -1180,16 +1182,15 @@ public final class DiggUtils
      * @param listCategories the list of categories
      * @return reference list of  category
      */
-    public static ReferenceList getRefListCategory( List<Category> listCategories)
+    public static ReferenceList getRefListCategory( List<Category> listCategories )
     {
-        ReferenceList refListCategories = new ReferenceList();
+        ReferenceList refListCategories = new ReferenceList(  );
 
         for ( Category category : listCategories )
         {
             refListCategories.addItem( category.getIdCategory(  ), category.getTitle(  ) );
         }
-        
-       
+
         return refListCategories;
     }
 
@@ -1218,16 +1219,18 @@ public final class DiggUtils
      *
      * @param listDiggs the list of categories
      * @param bIncludeDefault true if a default item must be insert
-     * 
+     *
      * @return reference list of  category
      */
-    public static ReferenceList getRefListDigg( List<Digg> listDiggs,boolean bIncludeDefault )
+    public static ReferenceList getRefListDigg( List<Digg> listDiggs, boolean bIncludeDefault )
     {
         ReferenceList refListDiggs = new ReferenceList(  );
-        if(bIncludeDefault)
+
+        if ( bIncludeDefault )
         {
-        	refListDiggs.addItem( -1, EMPTY_STRING );
-        } 
+            refListDiggs.addItem( -1, EMPTY_STRING );
+        }
+
         for ( Digg digg : listDiggs )
         {
             refListDiggs.addItem( digg.getIdDigg(  ), digg.getTitle(  ) );
@@ -1261,14 +1264,11 @@ public final class DiggUtils
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_DESC, locale ) );
         refListSorter.addItem( SubmitFilter.SORT_MANUALLY,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_MANUAL, locale ) );
-        
-        
+
         refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_VIEW_ASC,
-                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_VIEW_ASC, locale ) );
-            refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_VIEW_DESC,
-                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_VIEW_DESC, locale ) );
-          
-        
+            I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_VIEW_ASC, locale ) );
+        refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_VIEW_DESC,
+            I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_VIEW_DESC, locale ) );
 
         return refListSorter;
     }
@@ -1362,7 +1362,7 @@ public final class DiggUtils
 
         return strBuffer.toString(  );
     }
-    
+
     /**
      * Like {@link List#retainAll(java.util.Collection)}, keeping first list
      * order. This method is based on the fact that list1 and list2 have unique
@@ -1391,18 +1391,17 @@ public final class DiggUtils
 
         return list1;
     }
-    
+
     /**
      * move a element in the list
      * @param nOldPosistion the old position
      * @param nNewPosition the  new position
      * @param list
      */
-    public static void moveElement(int nOldPosistion,int nNewPosition,ArrayList<Integer> list)
-	{
-		Integer element=list.get(nOldPosistion-1);
-		list.remove(nOldPosistion-1);
-		list.add(nNewPosition-1, element);
-		
-	}
+    public static void moveElement( int nOldPosistion, int nNewPosition, ArrayList<Integer> list )
+    {
+        Integer element = list.get( nOldPosistion - 1 );
+        list.remove( nOldPosistion - 1 );
+        list.add( nNewPosition - 1, element );
+    }
 }

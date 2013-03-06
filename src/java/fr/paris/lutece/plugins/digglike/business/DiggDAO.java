@@ -33,17 +33,18 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.business.style.ThemeHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import java.sql.Timestamp;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -62,8 +63,7 @@ public final class DiggDAO implements IDiggDAO
         "number_digg_submit_in_top_score,number_digg_submit_in_top_comment,limit_number_vote,number_digg_submit_caracters_shown, " +
         "show_category_block,show_top_score_block,show_top_comment_block,active_digg_submit_paginator,number_digg_submit_per_page,role, " +
         "enable_new_digg_submit_mail,id_mailing_list_new_digg_submit,header,sort_field,code_theme,confirmation_message,active_editor_bbcode, " +
-        "default_digg,id_default_sort,active_digg_submit_type "+
-        "FROM digglike_digg WHERE id_digg = ?";
+        "default_digg,id_default_sort,active_digg_submit_type " + "FROM digglike_digg WHERE id_digg = ?";
     private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_digg ( id_digg,title," +
         "unavailability_message,workgroup," +
         "id_vote_type,number_vote_required,number_day_required,active_digg_submit_authentification, " +
@@ -86,8 +86,7 @@ public final class DiggDAO implements IDiggDAO
         "show_category_block=?,show_top_score_block=?,show_top_comment_block=?  ," +
         "active_digg_submit_paginator=?,number_digg_submit_per_page=? ,role=? ," +
         "enable_new_digg_submit_mail=?,id_mailing_list_new_digg_submit=? ,header=? ,sort_field=? ,code_theme=?, confirmation_message=?,active_editor_bbcode=? ," +
-        "default_digg=?,id_default_sort=?,active_digg_submit_type=? "+
-        "WHERE id_digg=?";
+        "default_digg=?,id_default_sort=?,active_digg_submit_type=? " + "WHERE id_digg=?";
     private static final String SQL_QUERY_SELECT_DIGG_BY_FILTER = "SELECT id_digg,title," +
         "unavailability_message,workgroup," +
         "id_vote_type,number_vote_required,number_day_required,active_digg_submit_authentification, " +
@@ -97,9 +96,7 @@ public final class DiggDAO implements IDiggDAO
         "number_digg_submit_in_top_score,number_digg_submit_in_top_comment,limit_number_vote,number_digg_submit_caracters_shown, " +
         "show_category_block,show_top_score_block,show_top_comment_block, active_digg_submit_paginator,number_digg_submit_per_page,role,  " +
         "enable_new_digg_submit_mail,id_mailing_list_new_digg_submit,header, sort_field, code_theme, confirmation_message,active_editor_bbcode, " +
-        "default_digg,id_default_sort,active_digg_submit_type "+
-        " FROM digglike_digg ";
-
+        "default_digg,id_default_sort,active_digg_submit_type " + " FROM digglike_digg ";
     private static final String SQL_QUERY_SELECT_ALL_THEMES = "SELECT id_digg, code_theme FROM digglike_digg";
     private static final String SQL_QUERY_DELETE_ASSOCIATED_CATEGORIE = "DELETE FROM digglike_digg_category WHERE id_digg = ? and id_category= ? ";
     private static final String SQL_QUERY_INSERT_ASSOCIATED_CATEGORY = "INSERT INTO digglike_digg_category(id_digg,id_category) VALUES(?,?) ";
@@ -185,11 +182,11 @@ public final class DiggDAO implements IDiggDAO
         daoUtil.setInt( 35, digg.getSortField(  ) );
         daoUtil.setString( 36, digg.getCodeTheme(  ) );
         daoUtil.setString( 37, digg.getConfirmationMessage(  ) );
-        daoUtil.setBoolean( 38, digg.isActiveEditorBbcode() );
-        daoUtil.setBoolean( 39, digg.isDefaultDigg() );
-        daoUtil.setInt( 40, digg.getIdDefaultSort() );
-        daoUtil.setBoolean( 41, digg.isActiveDiggSubmitType() );
-        
+        daoUtil.setBoolean( 38, digg.isActiveEditorBbcode(  ) );
+        daoUtil.setBoolean( 39, digg.isDefaultDigg(  ) );
+        daoUtil.setInt( 40, digg.getIdDefaultSort(  ) );
+        daoUtil.setBoolean( 41, digg.isActiveDiggSubmitType(  ) );
+
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
 
@@ -256,11 +253,11 @@ public final class DiggDAO implements IDiggDAO
             digg.setSortField( daoUtil.getInt( 35 ) );
             digg.setCodeTheme( daoUtil.getString( 36 ) );
             digg.setConfirmationMessage( daoUtil.getString( 37 ) );
-            digg.setActiveEditorBbcode(daoUtil.getBoolean( 38 ));
-            digg.setDefaultDigg(daoUtil.getBoolean( 39 ));
-            digg.setIdDefaultSort(daoUtil.getInt(40));
-            digg.setActiveDiggSubmitType(daoUtil.getBoolean( 41 ));
-            }
+            digg.setActiveEditorBbcode( daoUtil.getBoolean( 38 ) );
+            digg.setDefaultDigg( daoUtil.getBoolean( 39 ) );
+            digg.setIdDefaultSort( daoUtil.getInt( 40 ) );
+            digg.setActiveDiggSubmitType( daoUtil.getBoolean( 41 ) );
+        }
 
         daoUtil.free(  );
 
@@ -329,10 +326,10 @@ public final class DiggDAO implements IDiggDAO
         daoUtil.setInt( 35, digg.getSortField(  ) );
         daoUtil.setString( 36, digg.getCodeTheme(  ) );
         daoUtil.setString( 37, digg.getConfirmationMessage(  ) );
-        daoUtil.setBoolean( 38, digg.isActiveEditorBbcode() );
-        daoUtil.setBoolean( 39, digg.isDefaultDigg() );
-        daoUtil.setInt( 40, digg.getIdDefaultSort() );
-        daoUtil.setBoolean( 41, digg.isActiveDiggSubmitType() );
+        daoUtil.setBoolean( 38, digg.isActiveEditorBbcode(  ) );
+        daoUtil.setBoolean( 39, digg.isDefaultDigg(  ) );
+        daoUtil.setInt( 40, digg.getIdDefaultSort(  ) );
+        daoUtil.setBoolean( 41, digg.isActiveDiggSubmitType(  ) );
         daoUtil.setInt( 42, digg.getIdDigg(  ) );
 
         daoUtil.executeUpdate(  );
@@ -366,6 +363,7 @@ public final class DiggDAO implements IDiggDAO
         {
             listStrFilter.add( SQL_FILTER_STATE );
         }
+
         if ( filter.containsIdDefaultDigg(  ) )
         {
             listStrFilter.add( SQL_FILTER_DEFAULT_DIGG );
@@ -393,6 +391,7 @@ public final class DiggDAO implements IDiggDAO
             daoUtil.setInt( nIndex, filter.getIdState(  ) );
             nIndex++;
         }
+
         if ( filter.containsIdDefaultDigg(  ) )
         {
             daoUtil.setInt( nIndex, filter.getIdDefaultDigg(  ) );
@@ -445,10 +444,10 @@ public final class DiggDAO implements IDiggDAO
             digg.setSortField( daoUtil.getInt( 35 ) );
             digg.setCodeTheme( daoUtil.getString( 36 ) );
             digg.setConfirmationMessage( daoUtil.getString( 37 ) );
-            digg.setActiveEditorBbcode(daoUtil.getBoolean( 38 ));
-            digg.setDefaultDigg(daoUtil.getBoolean( 39 ));
-            digg.setIdDefaultSort(daoUtil.getInt(40));
-            digg.setActiveDiggSubmitType(daoUtil.getBoolean( 41 ));
+            digg.setActiveEditorBbcode( daoUtil.getBoolean( 38 ) );
+            digg.setDefaultDigg( daoUtil.getBoolean( 39 ) );
+            digg.setIdDefaultSort( daoUtil.getInt( 40 ) );
+            digg.setActiveDiggSubmitType( daoUtil.getBoolean( 41 ) );
 
             diggList.add( digg );
         }
@@ -457,8 +456,6 @@ public final class DiggDAO implements IDiggDAO
 
         return diggList;
     }
-
-  
 
     /**
      * Delete an association between digg and categories
@@ -507,7 +504,7 @@ public final class DiggDAO implements IDiggDAO
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
-    
+
     /**
      * Load all the themes for form xpages
      * @param plugin the plugin

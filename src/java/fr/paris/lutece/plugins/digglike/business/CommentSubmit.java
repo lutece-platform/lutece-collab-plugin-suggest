@@ -33,14 +33,15 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import fr.paris.lutece.util.date.DateUtil;
+import fr.paris.lutece.util.xml.XmlUtil;
+
 import java.sql.Timestamp;
+
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-
-import fr.paris.lutece.util.date.DateUtil;
-import fr.paris.lutece.util.xml.XmlUtil;
 
 
 /**
@@ -50,10 +51,9 @@ import fr.paris.lutece.util.xml.XmlUtil;
  */
 public class CommentSubmit
 {
-    
-	public static final int STATE_DISABLE = 0;
-	public static final int STATE_ENABLE = 1;
-	private static final String TAG_DIGG_SUBMIT_COMMENT = "digg-submit-comment";
+    public static final int STATE_DISABLE = 0;
+    public static final int STATE_ENABLE = 1;
+    private static final String TAG_DIGG_SUBMIT_COMMENT = "digg-submit-comment";
     private static final String TAG_DIGG_SUBMIT_COMMENT_DATE = "digg-submit-comment-date";
     private static final String TAG_DIGG_SUBMIT_COMMENT_VALUE = "digg-submit-comment-value";
     private int _nIdCommentSubmit;
@@ -66,7 +66,6 @@ public class CommentSubmit
     private List<CommentSubmit> _listComments;
     private int _nIdParent;
     private Timestamp _tLastDateComment;
-
 
     /**
      * return the id of the comment submit
@@ -262,5 +261,4 @@ public class CommentSubmit
 
         return strXml.toString(  );
     }
-
 }

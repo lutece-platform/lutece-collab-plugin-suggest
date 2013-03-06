@@ -124,14 +124,15 @@ public final class CategoryHome
     {
         return _dao.isAssociateToDigg( nIdCategory, plugin );
     }
+
     /**
      * Returns a list of all category associate to the digg
      * @param nIdDigg the id digg
      * @param plugin the plugin
      * @return  the list of category
      */
- public static List<Category> getListByIdDigg(int nIdDigg,Plugin plugin )
- {
-     return _dao.select(nIdDigg, plugin );
- } 
+    public static List<Category> getListByIdDigg( int nIdDigg, Plugin plugin )
+    {
+        return _dao.select( nIdDigg, plugin );
+    }
 }

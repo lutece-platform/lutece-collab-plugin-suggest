@@ -33,9 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.service;
 
-import java.util.List;
-import java.util.Locale;
-
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.Digg;
@@ -48,87 +45,85 @@ import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
+import java.util.List;
+import java.util.Locale;
+
+
 /**
- * 
+ *
  * DigglikeService
- * 
+ *
  */
-public class DigglikeService {
-	private static DigglikeService _singleton = new DigglikeService();
-	private IDiggSubmitService _diggSubmitService = SpringContextService.getBean( DiggSubmitService.BEAN_SERVICE );
-	/**
-	 * Initialize the Digg service
-	 * 
-	 */
-	public void init() {
-		Digg.init();
-	}
+public class DigglikeService
+{
+    private static DigglikeService _singleton = new DigglikeService(  );
+    private IDiggSubmitService _diggSubmitService = SpringContextService.getBean( DiggSubmitService.BEAN_SERVICE );
 
-	/**
-	 * Returns the instance of the singleton
-	 * 
-	 * @return The instance of the singleton
-	 */
-	public static DigglikeService getInstance() {
-		return _singleton;
-	}
+    /**
+     * Initialize the Digg service
+     *
+     */
+    public void init(  )
+    {
+        Digg.init(  );
+    }
 
-	/**
-	 * Update the display off all digg submit associated to a digg
-	 * 
-	 * @param nIdDigg
-	 *            the id digg
-	 */
-	public void updateAllDisplayOfDiggSubmit(Integer nIdDigg, Plugin plugin,
-			Locale locale) {
-		
-		
-		Digg digg=DiggHome.findByPrimaryKey(nIdDigg, plugin);
-		SubmitFilter filter=new SubmitFilter();
-		filter.setIdDigg(nIdDigg);
-		List<Integer> listIdDiggSubmit=DiggSubmitHome.getDiggSubmitListId(filter, plugin);
-		for(Integer nIdDiggSubmit: listIdDiggSubmit)
-		{
-			updateDisplayDiggSubmit(nIdDiggSubmit, plugin, locale,digg);
-			
-		}
-	}
+    /**
+     * Returns the instance of the singleton
+     *
+     * @return The instance of the singleton
+     */
+    public static DigglikeService getInstance(  )
+    {
+        return _singleton;
+    }
 
-	/**
-	 * update the display of a diggS
-	 * 
-	 * @param diggSubmit
-	 */
-	public void updateDisplayDiggSubmit(Integer nIdDiggSubmit, Plugin plugin,
-			Locale locale,Digg digg) {
+    /**
+     * Update the display off all digg submit associated to a digg
+     *
+     * @param nIdDigg
+     *            the id digg
+     */
+    public void updateAllDisplayOfDiggSubmit( Integer nIdDigg, Plugin plugin, Locale locale )
+    {
+        Digg digg = DiggHome.findByPrimaryKey( nIdDigg, plugin );
+        SubmitFilter filter = new SubmitFilter(  );
+        filter.setIdDigg( nIdDigg );
 
-		DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey(nIdDiggSubmit,
-				plugin);
-		diggSubmit.setDigg(digg);
-		SubmitFilter filter = new SubmitFilter();
-		filter.setIdDiggSubmit(nIdDiggSubmit);
-		// add responses
-		diggSubmit.setResponses(ResponseHome.getResponseList(filter, plugin));
-		// update Number of comment
-		diggSubmit.setNumberComment(CommentSubmitHome.getCountCommentSubmit(
-				filter, plugin));
-		// update Number of Comment Enable
-		filter.setIdCommentSubmitState(CommentSubmit.STATE_ENABLE);
-		diggSubmit.setNumberCommentEnable(CommentSubmitHome
-				.getCountCommentSubmit(filter, plugin));
-		// update DiggSubmitValue
-		diggSubmit.setDiggSubmitValue(DiggUtils.getHtmlDiggSubmitValue(
-				diggSubmit, locale));
-		// update DiggSubmitValue show in the list
-		diggSubmit.setDiggSubmitValueShowInTheList(DiggUtils
-				.getHtmlDiggSubmitValueShowInTheList(diggSubmit, locale));
-		// update DiggSubmit title
-		diggSubmit.setDiggSubmitTitle(DiggUtils.getDiggSubmitTitle(diggSubmit,
-				locale));
-		//update DiggSubmit
-		_diggSubmitService.update(diggSubmit, plugin);
-		
+        List<Integer> listIdDiggSubmit = DiggSubmitHome.getDiggSubmitListId( filter, plugin );
 
-	}
+        for ( Integer nIdDiggSubmit : listIdDiggSubmit )
+        {
+            updateDisplayDiggSubmit( nIdDiggSubmit, plugin, locale, digg );
+        }
+    }
 
+    /**
+     * update the display of a diggS
+     *
+     * @param diggSubmit
+     */
+    public void updateDisplayDiggSubmit( Integer nIdDiggSubmit, Plugin plugin, Locale locale, Digg digg )
+    {
+        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit, plugin );
+        diggSubmit.setDigg( digg );
+
+        SubmitFilter filter = new SubmitFilter(  );
+        filter.setIdDiggSubmit( nIdDiggSubmit );
+        // add responses
+        diggSubmit.setResponses( ResponseHome.getResponseList( filter, plugin ) );
+        // update Number of comment
+        diggSubmit.setNumberComment( CommentSubmitHome.getCountCommentSubmit( filter, plugin ) );
+        // update Number of Comment Enable
+        filter.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
+        diggSubmit.setNumberCommentEnable( CommentSubmitHome.getCountCommentSubmit( filter, plugin ) );
+        // update DiggSubmitValue
+        diggSubmit.setDiggSubmitValue( DiggUtils.getHtmlDiggSubmitValue( diggSubmit, locale ) );
+        // update DiggSubmitValue show in the list
+        diggSubmit.setDiggSubmitValueShowInTheList( DiggUtils.getHtmlDiggSubmitValueShowInTheList( diggSubmit, locale ) );
+        // update DiggSubmit title
+        diggSubmit.setDiggSubmitTitle( DiggUtils.getDiggSubmitTitle( diggSubmit, locale ) );
+        //update DiggSubmit
+        _diggSubmitService.update( diggSubmit, plugin );
+    }
 }

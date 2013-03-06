@@ -139,7 +139,8 @@ public final class ResponseDAO implements IResponseDAO
             response.setValueResponse( daoUtil.getString( 3 ) );
             entryType = new EntryType(  );
             entryType.setClassName( daoUtil.getString( 4 ) );
-            entryType.setIdType( daoUtil.getInt( 7 ));
+            entryType.setIdType( daoUtil.getInt( 7 ) );
+
             try
             {
                 entry = (IEntry) Class.forName( entryType.getClassName(  ) ).newInstance(  );
@@ -263,7 +264,8 @@ public final class ResponseDAO implements IResponseDAO
             response.setValueResponse( daoUtil.getString( 3 ) );
             entryType = new EntryType(  );
             entryType.setClassName( daoUtil.getString( 4 ) );
-            entryType.setIdType( daoUtil.getInt( 7 ));
+            entryType.setIdType( daoUtil.getInt( 7 ) );
+
             try
             {
                 entry = (IEntry) Class.forName( entryType.getClassName(  ) ).newInstance(  );
@@ -295,10 +297,9 @@ public final class ResponseDAO implements IResponseDAO
             entry.setEntryType( entryType );
             entry.setIdEntry( daoUtil.getInt( 5 ) );
             entry.setTitle( daoUtil.getString( 6 ) );
-           
-            
+
             entry.setShowInDiggSubmitList( daoUtil.getBoolean( 8 ) );
-            
+
             response.setEntry( entry );
 
             responseList.add( response );

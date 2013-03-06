@@ -33,17 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.service.search;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.lucene.demo.html.HTMLParser;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.Digg;
@@ -65,6 +54,18 @@ import fr.paris.lutece.portal.service.search.SearchItem;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.url.UrlItem;
+
+import org.apache.lucene.demo.html.HTMLParser;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -104,8 +105,7 @@ public class DigglikeIndexer implements SearchIndexer
     */
     public void indexDocuments(  ) throws IOException, InterruptedException, SiteMessageException
     {
-        
-    	Plugin plugin = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
+        Plugin plugin = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
 
         //filter on digg state(the digg submit are add if the digg is activated)
         DiggFilter diggFilter = new DiggFilter(  );
@@ -118,7 +118,6 @@ public class DigglikeIndexer implements SearchIndexer
         //        submitFilter.setIdDiggSubmitState( DiggSubmit.STATE_PUBLISH );
         submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_SCORE_DESC );
         submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
-        
 
         for ( Digg digg : diggActivatedList )
         {
@@ -127,26 +126,26 @@ public class DigglikeIndexer implements SearchIndexer
 
             for ( Integer idDiggSubmit : diggSubmitActivatedList )
             {
-               
-                
                 //url.addParameter( DiggApp.PARAMETER_CLEAR_FILTER,DiggApp.PARAMETER_CLEAR_FILTER);
                 //url.setAnchor(DiggApp.ANCHOR_DIGG_SUBMIT+diggSubmit.getIdDiggSubmit());
                 List<Document> listDocDiggSubmit = null;
+
                 try
                 {
-                	listDocDiggSubmit = getDocuments( idDiggSubmit.toString());
+                    listDocDiggSubmit = getDocuments( idDiggSubmit.toString(  ) );
                 }
                 catch ( Exception e )
                 {
-                	String strMessage = "Digg ID : " + digg.getIdDigg(  );
-                	IndexationService.error( this, e, strMessage );
+                    String strMessage = "Digg ID : " + digg.getIdDigg(  );
+                    IndexationService.error( this, e, strMessage );
                 }
-                if ( listDocDiggSubmit != null &&  listDocDiggSubmit.size()!=0)
+
+                if ( ( listDocDiggSubmit != null ) && ( listDocDiggSubmit.size(  ) != 0 ) )
                 {
-                	for(Document docDiggSubmit:listDocDiggSubmit )
-                	{
-                		IndexationService.write( docDiggSubmit );
-                	}
+                    for ( Document docDiggSubmit : listDocDiggSubmit )
+                    {
+                        IndexationService.write( docDiggSubmit );
+                    }
                 }
             }
         }
@@ -165,16 +164,17 @@ public class DigglikeIndexer implements SearchIndexer
     {
         List<org.apache.lucene.document.Document> listDocs = new ArrayList<org.apache.lucene.document.Document>(  );
         String strPortalUrl = AppPathService.getPortalUrl(  );
-        Integer nIdDiggSubmit=Integer.parseInt( strIdDiggSubmit );
+        Integer nIdDiggSubmit = Integer.parseInt( strIdDiggSubmit );
         Plugin plugin = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
         DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit, plugin );
+
         //
         //SubmitFilter commentFilter=new SubmitFilter();
-       // commentFilter.setIdDiggSubmit(nIdDiggSubmit);
+        // commentFilter.setIdDiggSubmit(nIdDiggSubmit);
         if ( diggSubmit != null )
         {
-        	//Add comment
-        	//diggSubmit.setComments(CommentSubmitHome.getCommentSubmitList(commentFilter, plugin)); 
+            //Add comment
+            //diggSubmit.setComments(CommentSubmitHome.getCommentSubmitList(commentFilter, plugin)); 
             UrlItem url = new UrlItem( strPortalUrl );
             url.addParameter( XPageAppService.PARAM_XPAGE_APP,
                 AppPropertiesService.getProperty( PROPERTY_XPAGE_APPLICATION_ID, "digg" ) );
@@ -211,8 +211,7 @@ public class DigglikeIndexer implements SearchIndexer
         // Add the url as a field named "url".  Use an UnIndexed field, so
         // that the url is just stored with the question/answer, but is not searchable.
         doc.add( new Field( SearchItem.FIELD_URL, strUrl, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
-        
-        
+
         doc.add( new Field( DigglikeSearchItem.FIELD_ID_DIGG, String.valueOf( diggSubmit.getDigg(  ).getIdDigg(  ) ),
                 Field.Store.YES, Field.Index.NOT_ANALYZED ) );
         doc.add( new Field( DigglikeSearchItem.FIELD_ID_DIGG_SUBMIT,
@@ -226,21 +225,24 @@ public class DigglikeIndexer implements SearchIndexer
                 Field.Index.NOT_ANALYZED ) );
         //Add state
         doc.add( new Field( DigglikeSearchItem.FIELD_STATE,
-                Integer.toString( diggSubmit.getDiggSubmitState().getIdDiggSubmitState() ), Field.Store.YES, Field.Index.NOT_ANALYZED ) );
-        
-        StringWriter writerFieldContent=new StringWriter();
-        writerFieldContent.write(diggSubmit.getDiggSubmitValue(  ));
+                Integer.toString( diggSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) ), Field.Store.YES,
+                Field.Index.NOT_ANALYZED ) );
+
+        StringWriter writerFieldContent = new StringWriter(  );
+        writerFieldContent.write( diggSubmit.getDiggSubmitValue(  ) );
+
         //Add the list of comments
-        if(diggSubmit.getComments()!=null)
+        if ( diggSubmit.getComments(  ) != null )
         {
-        	for(CommentSubmit comment:diggSubmit.getComments())
-        	{
-        		writerFieldContent.write(comment.getValue());
-        	}
-        		
+            for ( CommentSubmit comment : diggSubmit.getComments(  ) )
+            {
+                writerFieldContent.write( comment.getValue(  ) );
+            }
         }
-        StringReader readerDiggSubmit = new StringReader(writerFieldContent.toString() );
+
+        StringReader readerDiggSubmit = new StringReader( writerFieldContent.toString(  ) );
         HTMLParser parser = new HTMLParser( readerDiggSubmit );
+
         //the content of the question/answer is recovered in the parser because this one
         //had replaced the encoded caracters (as &eacute;) by the corresponding special caracter (as ?)
         Reader reader = parser.getReader(  );
@@ -270,9 +272,8 @@ public class DigglikeIndexer implements SearchIndexer
 
         Plugin plugin = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
         Digg digg = DiggHome.findByPrimaryKey( diggSubmit.getDigg(  ).getIdDigg(  ), plugin );
-        
-        doc.add( new Field( SearchItem.FIELD_ROLE, digg.getRole(  ), Field.Store.YES,
-                Field.Index.NOT_ANALYZED ) );
+
+        doc.add( new Field( SearchItem.FIELD_ROLE, digg.getRole(  ), Field.Store.YES, Field.Index.NOT_ANALYZED ) );
 
         // return the document
         return doc;
@@ -318,20 +319,19 @@ public class DigglikeIndexer implements SearchIndexer
     /**
      * {@inheritDoc}
      */
-	public List<String> getListType(  )
-	{
-		List<String> listType = new ArrayList<String>(  );
-		listType.add( INDEX_TYPE_DIGG );
-		
-		return listType;
-	}
+    public List<String> getListType(  )
+    {
+        List<String> listType = new ArrayList<String>(  );
+        listType.add( INDEX_TYPE_DIGG );
 
-	/**
-     * {@inheritDoc}
-     */
-	public String getSpecificSearchAppUrl(  )
-	{
-		return JSP_SEARCH_DIGG;
-	}
+        return listType;
+    }
 
+    /**
+    * {@inheritDoc}
+    */
+    public String getSpecificSearchAppUrl(  )
+    {
+        return JSP_SEARCH_DIGG;
+    }
 }

@@ -33,13 +33,13 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.util.Collection;
-import java.util.Locale;
-
 import fr.paris.lutece.plugins.digglike.service.DigglikePlugin;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.util.RemovalListener;
+
+import java.util.Collection;
+import java.util.Locale;
 
 
 /**

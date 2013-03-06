@@ -49,7 +49,6 @@ public class DiggFilter
     private int _nIdDefaultDigg = ALL_INT;
     private String _strWorkgroup = ALL_STRING;
     private String _strRole = Digg.ROLE_NONE;
-   
 
     /**
      * @return the _strRole
@@ -132,6 +131,7 @@ public class DiggFilter
     {
         return ( !_strRole.equals( Digg.ROLE_NONE ) );
     }
+
     /**
     *
     * @return 1 if the diggs return must be a default digg

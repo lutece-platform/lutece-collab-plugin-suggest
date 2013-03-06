@@ -57,7 +57,6 @@ public class SubmitFilter
     public final static int SORT_MANUALLY = 8;
     public final static int SORT_BY_NUMBER_VIEW_ASC = 9;
     public final static int SORT_BY_NUMBER_VIEW_DESC = 10;
-    
     public static final int ALL_INT = -1;
     public static final int ID_TRUE = 1;
     public static final int ID_FALSE = 0;

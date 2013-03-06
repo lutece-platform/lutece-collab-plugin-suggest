@@ -335,26 +335,24 @@ public class DiggSubmit
     {
         _nNumberComment = numberComment;
     }
-    
+
     /**
     *
     * @return the number of view  associated to the digg submit
     */
-   public int getNumberView(  )
-   {
-       return _nNumberView;
-   }
+    public int getNumberView(  )
+    {
+        return _nNumberView;
+    }
 
-   /**
-    * set the number of  view  associated to the digg submit
-    * @param numberComment the number of   view  associated to the digg submit
-    */
-   public void setNumberView( int numberView )
-   {
-       _nNumberView = numberView;
-   }
-    
-    
+    /**
+     * set the number of  view  associated to the digg submit
+     * @param numberComment the number of   view  associated to the digg submit
+     */
+    public void setNumberView( int numberView )
+    {
+        _nNumberView = numberView;
+    }
 
     /**
     *

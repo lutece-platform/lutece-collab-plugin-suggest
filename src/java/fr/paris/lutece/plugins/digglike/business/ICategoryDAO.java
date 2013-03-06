@@ -84,15 +84,13 @@ public interface ICategoryDAO
      * @return  the list of category
      */
     List<Category> select( Plugin plugin );
-    
-    
-    
+
     /**
      * Select all category associate to a digg and returns them in a  list
      * @param plugin the plugin
      * @return  the list of category
      */
-    List<Category> select(int nIdDigg ,Plugin plugin );
+    List<Category> select( int nIdDigg, Plugin plugin );
 
     /**
     * true if there is a  digg associate to the category

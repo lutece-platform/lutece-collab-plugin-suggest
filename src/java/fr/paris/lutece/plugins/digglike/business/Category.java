@@ -45,8 +45,7 @@ import fr.paris.lutece.portal.service.rbac.RBACResource;
 public class Category implements RBACResource
 {
     public static final String RESOURCE_TYPE = "DIGGLIKE_CATEGORY_TYPE";
-    public static final int DEFAULT_ID_CATEGORY =-1;
-    
+    public static final int DEFAULT_ID_CATEGORY = -1;
     private int _nIdCategory;
     private String _strTitle;
     private String _strColor;

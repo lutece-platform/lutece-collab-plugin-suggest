@@ -118,15 +118,9 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     private boolean _bActiveDiggSubmitType;
     private boolean _bDefaultDigg;
 
-
-
-
-
-	
-
-	/**
-     * Initialize the Digg
-     */
+    /**
+    * Initialize the Digg
+    */
     public static void init(  )
     {
         // Create removal listeners and register them
@@ -926,84 +920,91 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     {
         _strConfirmationMessage = strConfirmationMessage;
     }
+
     /**
      * set true if the editor BBcode must be display
      * @param _nActiveEditorBbCode true if the editor BBcode must be display
      */
-	public void setActiveEditorBbcode(boolean _nActiveEditorBbCode) {
-		this._bActiveEditorBbcode = _nActiveEditorBbCode;
-	}
-	
-	/**
-	 * 
-	 * @return true if the editor BBcode must be display
-	 */
-	public boolean isActiveEditorBbcode() {
-		return _bActiveEditorBbcode;
-	}
-	
-	
-	/**
-	 * parseBbcodeValue
-	 * @param strValue the value to parse
-	 * @return the result of the parsing
-	 */
-	public String parseBbcodeValue(String strValue)
+    public void setActiveEditorBbcode( boolean _nActiveEditorBbCode )
     {
-    	if(isActiveEditorBbcode())
-    	{
-    		return EditorBbcodeService.getInstance().parse(strValue);
-    	}
-    	return strValue;
-    	
+        this._bActiveEditorBbcode = _nActiveEditorBbCode;
     }
-	
-	/**
-	 * 
-	 * @return the default sort id
-	 */
-    public int getIdDefaultSort() {
-		return _nIdDefaultSort;
-	}
+
+    /**
+     *
+     * @return true if the editor BBcode must be display
+     */
+    public boolean isActiveEditorBbcode(  )
+    {
+        return _bActiveEditorBbcode;
+    }
+
+    /**
+     * parseBbcodeValue
+     * @param strValue the value to parse
+     * @return the result of the parsing
+     */
+    public String parseBbcodeValue( String strValue )
+    {
+        if ( isActiveEditorBbcode(  ) )
+        {
+            return EditorBbcodeService.getInstance(  ).parse( strValue );
+        }
+
+        return strValue;
+    }
+
+    /**
+     *
+     * @return the default sort id
+     */
+    public int getIdDefaultSort(  )
+    {
+        return _nIdDefaultSort;
+    }
 
     /**
      * set id Default Sort
      * @param nIdDefaultSort  the default sort id
      */
-	public void setIdDefaultSort(int nIdDefaultSort) {
-		_nIdDefaultSort = nIdDefaultSort;
-	}
-	
-	/**
-	 * 
-	 * @return true if the Type of the Digg must be choosed  
-	 */
-	public boolean isActiveDiggSubmitType() {
-		return _bActiveDiggSubmitType;
-	}
-	
-	/**
-	 * set true if the Type of the Digg must be choosed 
-	 * @param bActiveDiggSubmitType true if the Type of the Digg must be choosed
-	 */
-	public void setActiveDiggSubmitType(boolean bActiveDiggSubmitType) {
-		_bActiveDiggSubmitType = bActiveDiggSubmitType;
-	}
-	
-	/**
-	 * 
-	 * @return true if the digg is a Default digg 
-	 */
-	public boolean isDefaultDigg() {
-		return _bDefaultDigg;
-	}
+    public void setIdDefaultSort( int nIdDefaultSort )
+    {
+        _nIdDefaultSort = nIdDefaultSort;
+    }
 
-	/**
-	 * set true if the digg is a Default digg
-	 * @param bDefaultDigg true if the digg is a Default digg
-	 */
-	public void setDefaultDigg(boolean bDefaultDigg) {
-		_bDefaultDigg = bDefaultDigg;
-	}
-	
+    /**
+     *
+     * @return true if the Type of the Digg must be choosed
+     */
+    public boolean isActiveDiggSubmitType(  )
+    {
+        return _bActiveDiggSubmitType;
+    }
+
+    /**
+     * set true if the Type of the Digg must be choosed
+     * @param bActiveDiggSubmitType true if the Type of the Digg must be choosed
+     */
+    public void setActiveDiggSubmitType( boolean bActiveDiggSubmitType )
+    {
+        _bActiveDiggSubmitType = bActiveDiggSubmitType;
+    }
+
+    /**
+     *
+     * @return true if the digg is a Default digg
+     */
+    public boolean isDefaultDigg(  )
+    {
+        return _bDefaultDigg;
+    }
+
+    /**
+     * set true if the digg is a Default digg
+     * @param bDefaultDigg true if the digg is a Default digg
+     */
+    public void setDefaultDigg( boolean bDefaultDigg )
+    {
+        _bDefaultDigg = bDefaultDigg;
+    }
 }

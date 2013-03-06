@@ -33,9 +33,11 @@
  */
 package fr.paris.lutece.plugins.digglike.service.digglikesearch;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
+import fr.paris.lutece.plugins.digglike.service.search.DigglikeIndexer;
+import fr.paris.lutece.portal.service.search.IndexationService;
+import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
@@ -48,11 +50,9 @@ import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 
-import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
-import fr.paris.lutece.plugins.digglike.service.search.DigglikeIndexer;
-import fr.paris.lutece.portal.service.search.IndexationService;
-import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
-import fr.paris.lutece.portal.service.util.AppLogService;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -98,11 +98,12 @@ public class DigglikeLuceneSearchEngine implements DigglikeSearchEngine
                 fields.add( DigglikeSearchItem.FIELD_ID_DIGG );
                 flags.add( BooleanClause.Occur.MUST );
             }
-          //filter on digg submit state
+
+            //filter on digg submit state
             if ( filter.containsIdDiggSubmitState(  ) )
             {
                 Query queryState = new TermQuery( new Term( DigglikeSearchItem.FIELD_STATE,
-                            String.valueOf( filter.getIdDiggSubmitState( ) ) ) );
+                            String.valueOf( filter.getIdDiggSubmitState(  ) ) ) );
                 queries.add( queryState.toString(  ) );
                 fields.add( DigglikeSearchItem.FIELD_STATE );
                 flags.add( BooleanClause.Occur.MUST );
@@ -115,7 +116,8 @@ public class DigglikeLuceneSearchEngine implements DigglikeSearchEngine
             fields.add( DigglikeSearchItem.FIELD_TYPE );
             flags.add( BooleanClause.Occur.MUST );
 
-            Query queryMulti = MultiFieldQueryParser.parse( IndexationService.LUCENE_INDEX_VERSION, (String[]) queries.toArray( new String[queries.size(  )] ),
+            Query queryMulti = MultiFieldQueryParser.parse( IndexationService.LUCENE_INDEX_VERSION,
+                    (String[]) queries.toArray( new String[queries.size(  )] ),
                     (String[]) fields.toArray( new String[fields.size(  )] ),
                     (BooleanClause.Occur[]) flags.toArray( new BooleanClause.Occur[flags.size(  )] ),
                     IndexationService.getAnalyser(  ) );
@@ -123,10 +125,10 @@ public class DigglikeLuceneSearchEngine implements DigglikeSearchEngine
             TopDocs topDocs = searcher.search( queryMulti, LuceneSearchEngine.MAX_RESPONSES );
             ScoreDoc[] hits = topDocs.scoreDocs;
 
-            for (int i = 0; i < hits.length; i++)
+            for ( int i = 0; i < hits.length; i++ )
             {
-            	int docId = hits[i].doc;
-                Document document = searcher.doc(docId);
+                int docId = hits[i].doc;
+                Document document = searcher.doc( docId );
                 DigglikeSearchItem si = new DigglikeSearchItem( document );
                 listResults.add( si );
             }

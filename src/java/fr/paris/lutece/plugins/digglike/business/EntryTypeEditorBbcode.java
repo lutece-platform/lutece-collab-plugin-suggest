@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.digglike.business;
 import fr.paris.lutece.portal.service.editor.EditorBbcodeService;
 
 
-
 /**
  *
  * class EntryTypeEditorBbcode
@@ -56,8 +55,7 @@ public class EntryTypeEditorBbcode extends EntryTypeTextArea
     {
         return _template_html_code_form;
     }
-    
-    
+
     /**
      * Get the template of the html code of the response value  associate to the entry
     * @return the template of the html code of the response value  associate to the entry
@@ -66,13 +64,9 @@ public class EntryTypeEditorBbcode extends EntryTypeTextArea
     {
         return _template_html_code_response;
     }
-    
-    public String parseBbcodeValue(String strValue)
-    {
-    	
-    	return EditorBbcodeService.getInstance().parse(strValue);
-    	
-    	
-    }
 
- }
+    public String parseBbcodeValue( String strValue )
+    {
+        return EditorBbcodeService.getInstance(  ).parse( strValue );
+    }
+}

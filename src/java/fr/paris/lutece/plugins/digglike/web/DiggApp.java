@@ -33,18 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.web;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.digglike.business.Category;
 import fr.paris.lutece.plugins.digglike.business.CategoryHome;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
@@ -95,6 +83,18 @@ import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 
 /**
  * This class manages Form page.
@@ -116,7 +116,7 @@ public class DiggApp implements XPageApplication
     private static final String MARK_LIST_CATEGORIES_DIGG = "list_categories_digg";
     private static final String MARK_LIST_TYPES = "list_types";
     private static final String MARK_ID_DIGG = "id_digg";
-     private static final String MARK_MODE_DIGG = "mode_digg";
+    private static final String MARK_MODE_DIGG = "mode_digg";
     private static final Object MARK_DIGG_LIST = "list_digg";
     private static final String MARK_LIST_SUBMIT_TOP_COMMENT = "list_top_comment_digg";
     private static final String MARK_LIST_SUBMIT_TOP_POPULARITY_DIGG = "list_top_popularity_digg";
@@ -152,7 +152,8 @@ public class DiggApp implements XPageApplication
     private static final String MARK_MAX_AMOUNT_COMMENTS = "number_comments";
     private static final String MARK_MAX_AMOUNT_COMMENTS_CHAR = "cumber_char_comments";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
-    private static final String MARK_ACTIVE_EDITOR_BBCODE="active_editor_bbcode";
+    private static final String MARK_ACTIVE_EDITOR_BBCODE = "active_editor_bbcode";
+
     // templates
     private static final String TEMPLATE_XPAGE_FRAME_DIGG = "skin/plugins/digglike/digg_frame.html";
     private static final String TEMPLATE_XPAGE_LIST_SUBMIT_DIGG = "skin/plugins/digglike/digg_list_submit.html";
@@ -251,7 +252,7 @@ public class DiggApp implements XPageApplication
 
         Digg digg;
         Locale locale = request.getLocale(  );
-        LuteceUser luteceUserConnected = SecurityService.getInstance().getRegisteredUser(request);
+        LuteceUser luteceUserConnected = SecurityService.getInstance(  ).getRegisteredUser( request );
         XPage page = new XPage(  );
 
         page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale(  ) ) );
@@ -276,15 +277,18 @@ public class DiggApp implements XPageApplication
         UrlItem urlDiggXpage = new UrlItem( strPortalUrl );
         urlDiggXpage.addParameter( XPageAppService.PARAM_XPAGE_APP,
             AppPropertiesService.getProperty( PROPERTY_PAGE_APPLICATION_ID ) );
-        
+
         //find default digg
         int nIdDefaultDigg;
-        DiggFilter filterDefaultDigg=new DiggFilter();
-    	filterDefaultDigg.setIdDefaultDigg(DiggFilter.ID_TRUE);
-    	List listDefaultDigg=DiggHome.getDiggList( filterDefaultDigg, plugin );
-    	nIdDefaultDigg=(listDefaultDigg!=null &&listDefaultDigg.size()>0)?((Digg)listDefaultDigg.get(0)).getIdDigg():DiggUtils.CONSTANT_ID_NULL;
-    	
-        if ( (( digg == null ) || ( diggSubmitStatePublish == null )) && ( nIdDefaultDigg == DiggUtils.CONSTANT_ID_NULL ))
+        DiggFilter filterDefaultDigg = new DiggFilter(  );
+        filterDefaultDigg.setIdDefaultDigg( DiggFilter.ID_TRUE );
+
+        List listDefaultDigg = DiggHome.getDiggList( filterDefaultDigg, plugin );
+        nIdDefaultDigg = ( ( listDefaultDigg != null ) && ( listDefaultDigg.size(  ) > 0 ) )
+            ? ( (Digg) listDefaultDigg.get( 0 ) ).getIdDigg(  ) : DiggUtils.CONSTANT_ID_NULL;
+
+        if ( ( ( digg == null ) || ( diggSubmitStatePublish == null ) ) &&
+                ( nIdDefaultDigg == DiggUtils.CONSTANT_ID_NULL ) )
         {
             //show the diggs list
             UrlItem urlDiggXpageHome = new UrlItem( strPortalUrl );
@@ -298,34 +302,35 @@ public class DiggApp implements XPageApplication
             int nItemsPerPageDigg = _nDefaultItemsPerPage;
             nItemsPerPageDigg = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE,
                     nItemsPerPageDigg, _nDefaultItemsPerPage );
-            
+
             String strQuery = request.getParameter( PARAMETER_QUERY );
-            
-            if( StringUtils.isNotBlank( strQuery ) )
+
+            if ( StringUtils.isNotBlank( strQuery ) )
             {
-            	strContentDigg = getSearch( strQuery, locale, plugin, strCurrentPageIndexDigg, nItemsPerPageDigg,
-	                    urlDiggXpageHome );
+                strContentDigg = getSearch( strQuery, locale, plugin, strCurrentPageIndexDigg, nItemsPerPageDigg,
+                        urlDiggXpageHome );
             }
             else
             {
-	            strContentDigg = getHtmlListDigg( locale, plugin, strCurrentPageIndexDigg, nItemsPerPageDigg,
-	                    urlDiggXpageHome,luteceUserConnected );
+                strContentDigg = getHtmlListDigg( locale, plugin, strCurrentPageIndexDigg, nItemsPerPageDigg,
+                        urlDiggXpageHome, luteceUserConnected );
             }
-            
+
             model.put( MARK_CONTENT_DIGG, strContentDigg );
 
             page.setContent( strContentDigg );
         }
         else
         {
-        	//used default digg
-        	if(digg == null )
-        	{
-        		digg=DiggHome.findByPrimaryKey(nIdDefaultDigg, plugin);
-        		
-        	}
-        	urlDiggXpage.addParameter( PARAMETER_ID_DIGG, digg.getIdDigg() );
-        	if ( ( digg.getRole(  ) != null ) && !digg.getRole(  ).equals( Digg.ROLE_NONE ) &&
+            //used default digg
+            if ( digg == null )
+            {
+                digg = DiggHome.findByPrimaryKey( nIdDefaultDigg, plugin );
+            }
+
+            urlDiggXpage.addParameter( PARAMETER_ID_DIGG, digg.getIdDigg(  ) );
+
+            if ( ( digg.getRole(  ) != null ) && !digg.getRole(  ).equals( Digg.ROLE_NONE ) &&
                     SecurityService.isAuthenticationEnable(  ) )
             {
                 luteceUserConnected = SecurityService.getInstance(  ).getRemoteUser( request );
@@ -432,11 +437,11 @@ public class DiggApp implements XPageApplication
                             if ( digg.isActiveVoteAuthentification(  ) && SecurityService.isAuthenticationEnable(  ) )
                             {
                                 luteceUserConnected = ( luteceUserConnected != null ) ? luteceUserConnected
-                                                                    : SecurityService.getInstance(  )
-                                                                                     .getRemoteUser( request );
+                                                                                      : SecurityService.getInstance(  )
+                                                                                                       .getRemoteUser( request );
 
-                                if ( VoteHome.getUserNumberVoteOnDiggSubmit( nIdSubmitDigg, luteceUserConnected.getName(  ),
-                                            plugin ) == 0 )
+                                if ( VoteHome.getUserNumberVoteOnDiggSubmit( nIdSubmitDigg,
+                                            luteceUserConnected.getName(  ), plugin ) == 0 )
                                 {
                                     doVote( strVote, nIdSubmitDigg, plugin, luteceUserConnected.getName(  ) );
                                 }
@@ -458,13 +463,13 @@ public class DiggApp implements XPageApplication
                             strContentDigg = getHtmlListDiggSubmit( locale, plugin, digg, nIdFilterPeriod,
                                     nIdDiggSubmitSort, nIdFilterCategory,
                                     diggSubmitStatePublish.getIdDiggSubmitState(  ), strQuery, strFilterPageIndex,
-                                    urlDiggXpage,luteceUserConnected );
+                                    urlDiggXpage, luteceUserConnected );
                         }
                         else
                         {
                             String strCommentDigg = request.getParameter( PARAMETER_COMMENT_DIGG );
                             strContentDigg = getHtmlDiggSubmitDetail( request, nMode, plugin, digg, nIdSubmitDigg,
-                                    strCommentDigg,luteceUserConnected );
+                                    strCommentDigg, luteceUserConnected );
                         }
 
                         model.put( MARK_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST );
@@ -504,7 +509,7 @@ public class DiggApp implements XPageApplication
                         Map<String, Object> parameters = new HashMap<String, Object>(  );
                         parameters.put( PARAMETER_ID_SUBMIT_DIGG, nIdSubmitDigg );
                         parameters.put( PARAMETER_ID_DIGG, nIdDigg );
-                        parameters.put( PARAMETER_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST);
+                        parameters.put( PARAMETER_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST );
                         urlDiggXpage.setAnchor( ANCHOR_DIGG_SUBMIT + nIdSubmitDigg );
                         parameters.put( PARAMETER_DIGG_DETAIL, strDetail );
 
@@ -518,7 +523,7 @@ public class DiggApp implements XPageApplication
                         String strCommentDigg = request.getParameter( PARAMETER_COMMENT_DIGG );
 
                         strContentDigg = getHtmlDiggSubmitDetail( request, nMode, plugin, digg, nIdSubmitDigg,
-                                strCommentDigg,luteceUserConnected );
+                                strCommentDigg, luteceUserConnected );
 
                         //model.put( MARK_MODE_DIGG, 0 );
                     }
@@ -529,7 +534,8 @@ public class DiggApp implements XPageApplication
                         if ( digg.isActiveCommentAuthentification(  ) && SecurityService.isAuthenticationEnable(  ) )
                         {
                             luteceUserConnected = ( luteceUserConnected != null ) ? luteceUserConnected
-                                                                : SecurityService.getInstance(  ).getRemoteUser( request );
+                                                                                  : SecurityService.getInstance(  )
+                                                                                                   .getRemoteUser( request );
                         }
 
                         String strCommentValueDigg = request.getParameter( PARAMETER_COMMENT_VALUE_DIGG );
@@ -566,35 +572,36 @@ public class DiggApp implements XPageApplication
                             strMessage = MESSAGE_NEW_COMMENT_SUBMIT_DISABLE;
                         }
 
-                       
-                        if( !StringUtils.isEmpty(digg.getConfirmationMessage(  )))
-                    	{
-	                        Map<String, Object> parameters = new HashMap<String, Object>(  );
-	
-	                        parameters.put( PARAMETER_ID_SUBMIT_DIGG, nIdSubmitDigg );
-	                        parameters.put( PARAMETER_ID_DIGG, nIdDigg );
-	                        parameters.put( PARAMETER_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST );
-	                        parameters.put( PARAMETER_COMMENT_DIGG, CONSTANTE_PARAMETER_TRUE_VALUE );
-	                        parameters.put( PARAMETER_DIGG_DETAIL, CONSTANTE_PARAMETER_TRUE_VALUE );
-	
-	                        Object[] args = { ( digg.getConfirmationMessage(  ) == null ) ? ""
-	                                                                                      : digg.getConfirmationMessage(  ) };
-	                        SiteMessageService.setMessage( request, strMessage, args, null, urlDiggXpage.getUrl(  ), null,
-	                            SiteMessage.TYPE_INFO, parameters );
-                    	}
+                        if ( !StringUtils.isEmpty( digg.getConfirmationMessage(  ) ) )
+                        {
+                            Map<String, Object> parameters = new HashMap<String, Object>(  );
+
+                            parameters.put( PARAMETER_ID_SUBMIT_DIGG, nIdSubmitDigg );
+                            parameters.put( PARAMETER_ID_DIGG, nIdDigg );
+                            parameters.put( PARAMETER_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST );
+                            parameters.put( PARAMETER_COMMENT_DIGG, CONSTANTE_PARAMETER_TRUE_VALUE );
+                            parameters.put( PARAMETER_DIGG_DETAIL, CONSTANTE_PARAMETER_TRUE_VALUE );
+
+                            Object[] args = 
+                                {
+                                    ( digg.getConfirmationMessage(  ) == null ) ? "" : digg.getConfirmationMessage(  )
+                                };
+                            SiteMessageService.setMessage( request, strMessage, args, null, urlDiggXpage.getUrl(  ),
+                                null, SiteMessage.TYPE_INFO, parameters );
+                        }
                         else
                         {
-                        	String strCommentDigg = request.getParameter( PARAMETER_COMMENT_DIGG );
-                            strContentDigg = getHtmlDiggSubmitDetail(request, nMode, plugin, digg, nIdSubmitDigg, strCommentDigg,luteceUserConnected);
-
+                            String strCommentDigg = request.getParameter( PARAMETER_COMMENT_DIGG );
+                            strContentDigg = getHtmlDiggSubmitDetail( request, nMode, plugin, digg, nIdSubmitDigg,
+                                    strCommentDigg, luteceUserConnected );
                         }
                     }
                     else
                     {
                         strContentDigg = getHtmlListDiggSubmit( locale, plugin, digg, nIdFilterPeriod,
                                 nIdDiggSubmitSort, nIdFilterCategory, diggSubmitStatePublish.getIdDiggSubmitState(  ),
-                                strQuery, strFilterPageIndex, urlDiggXpage,luteceUserConnected );
-                        model.put( MARK_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST);
+                                strQuery, strFilterPageIndex, urlDiggXpage, luteceUserConnected );
+                        model.put( MARK_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST );
                     }
                 }
 
@@ -604,7 +611,8 @@ public class DiggApp implements XPageApplication
                     if ( digg.isActiveDiggSubmitAuthentification(  ) && SecurityService.isAuthenticationEnable(  ) )
                     {
                         luteceUserConnected = ( luteceUserConnected != null ) ? luteceUserConnected
-                                                            : SecurityService.getInstance(  ).getRemoteUser( request );
+                                                                              : SecurityService.getInstance(  )
+                                                                                               .getRemoteUser( request );
                     }
 
                     String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY_DIGG );
@@ -616,7 +624,7 @@ public class DiggApp implements XPageApplication
                     //Check if a category is selected (in the case or the digg has some categories)
                     if ( strIdCategory != null )
                     {
-                        if ( strIdCategory.equals( Integer.toString(Category.DEFAULT_ID_CATEGORY )) )
+                        if ( strIdCategory.equals( Integer.toString( Category.DEFAULT_ID_CATEGORY ) ) )
                         {
                             SiteMessageService.setMessage( request, MESSAGE_ERROR_NO_CATEGORY, SiteMessage.TYPE_STOP );
                         }
@@ -640,26 +648,30 @@ public class DiggApp implements XPageApplication
                     Map<String, Object> parameters = new HashMap<String, Object>(  );
                     parameters.put( PARAMETER_ID_DIGG, nIdDigg );
                     parameters.put( PARAMETER_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST );
-                    if( !StringUtils.isEmpty(digg.getConfirmationMessage(  )))
-                    	{
-	                    Object[] args = { ( digg.getConfirmationMessage(  ) == null ) ? "" : digg.getConfirmationMessage(  ) };
-	                    SiteMessageService.setMessage( request, strMessage, args, null, urlDiggXpage.getUrl(  ), null,
-	                        SiteMessage.TYPE_INFO, parameters );
-                    		}
+
+                    if ( !StringUtils.isEmpty( digg.getConfirmationMessage(  ) ) )
+                    {
+                        Object[] args = 
+                            {
+                                ( digg.getConfirmationMessage(  ) == null ) ? "" : digg.getConfirmationMessage(  )
+                            };
+                        SiteMessageService.setMessage( request, strMessage, args, null, urlDiggXpage.getUrl(  ), null,
+                            SiteMessage.TYPE_INFO, parameters );
+                    }
                     else
                     {
-                    	   strContentDigg = getHtmlListDiggSubmit( locale, plugin, digg, nIdFilterPeriod, nIdDiggSubmitSort,
-                                   nIdFilterCategory, diggSubmitStatePublish.getIdDiggSubmitState(  ), strQuery,
-                                   strFilterPageIndex, urlDiggXpage,luteceUserConnected );
-                           model.put( MARK_MODE_DIGG,DiggUtils.CONSTANT_MODE_DIGG_LIST );
+                        strContentDigg = getHtmlListDiggSubmit( locale, plugin, digg, nIdFilterPeriod,
+                                nIdDiggSubmitSort, nIdFilterCategory, diggSubmitStatePublish.getIdDiggSubmitState(  ),
+                                strQuery, strFilterPageIndex, urlDiggXpage, luteceUserConnected );
+                        model.put( MARK_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST );
                     }
-                    
                 }
 
                 // Display form for post diggSubmit
-                else if ( ( strModeDigg != null ) && strModeDigg.equals( Integer.toString(DiggUtils.CONSTANT_MODE_DIGG_FORM)) )
+                else if ( ( strModeDigg != null ) &&
+                        strModeDigg.equals( Integer.toString( DiggUtils.CONSTANT_MODE_DIGG_FORM ) ) )
                 {
-                    strContentDigg = getHtmlForm( request, nMode, plugin, digg,nIdFilterCategory );
+                    strContentDigg = getHtmlForm( request, nMode, plugin, digg, nIdFilterCategory );
                     model.put( MARK_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_FORM );
                 }
 
@@ -668,7 +680,7 @@ public class DiggApp implements XPageApplication
                 {
                     strContentDigg = getHtmlListDiggSubmit( locale, plugin, digg, nIdFilterPeriod, nIdDiggSubmitSort,
                             nIdFilterCategory, diggSubmitStatePublish.getIdDiggSubmitState(  ), strQuery,
-                            strFilterPageIndex, urlDiggXpage,luteceUserConnected );
+                            strFilterPageIndex, urlDiggXpage, luteceUserConnected );
                     model.put( MARK_MODE_DIGG, DiggUtils.CONSTANT_MODE_DIGG_LIST );
                 }
 
@@ -679,8 +691,7 @@ public class DiggApp implements XPageApplication
                     submmitFilterTopComment.setIdDigg( digg.getIdDigg(  ) );
                     submmitFilterTopComment.setIdDiggSubmitState( diggSubmitStatePublish.getIdDiggSubmitState(  ) );
 
-                    DiggUtils.initSubmitFilterBySort( submmitFilterTopComment,
-                        SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC );
+                    DiggUtils.initSubmitFilterBySort( submmitFilterTopComment, SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC );
 
                     List<DiggSubmit> listDiggSubmitTopDay = _diggSubmitService.getDiggSubmitList( submmitFilterTopComment,
                             plugin, digg.getNumberDiggSubmitInTopComment(  ) );
@@ -721,7 +732,7 @@ public class DiggApp implements XPageApplication
                 model.put( MARK_SHOW_CATEGORY_BLOCK, digg.isShowCategoryBlock(  ) );
                 model.put( MARK_SHOW_TOP_SCORE_BLOCK, digg.isShowTopScoreBlock(  ) );
                 model.put( MARK_SHOW_TOP_COMMENT_BLOCK, digg.isShowTopCommentBlock(  ) );
-                model.put(MARK_LUTECE_USER_CONNECTED,luteceUserConnected);
+                model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
             }
             else
             {
@@ -735,7 +746,7 @@ public class DiggApp implements XPageApplication
 
         return page;
     }
-    
+
     /**
      * return the html list of digg submit
      * @param strQuery the strQuery
@@ -747,36 +758,35 @@ public class DiggApp implements XPageApplication
      * @throws SiteMessageException  SiteMessageException
      * @return the html template
      */
-
     private String getSearch( String strQuery, Locale locale, Plugin plugin, String strCurrentPageIndexDigg,
-            int nItemsPerPageDigg, UrlItem urlDiggXPage ) throws SiteMessageException
+        int nItemsPerPageDigg, UrlItem urlDiggXPage ) throws SiteMessageException
     {
-    	SubmitFilter filter = new SubmitFilter(  );
-    	
-    	List listResultSearch = DigglikeSearchService.getInstance(  ).getSearchResults( strQuery, filter, plugin );
-    	
-    	HashMap model = new HashMap(  );
-    	Paginator paginator = new Paginator( listResultSearch, nItemsPerPageDigg, urlDiggXPage.getUrl(  ),
+        SubmitFilter filter = new SubmitFilter(  );
+
+        List listResultSearch = DigglikeSearchService.getInstance(  ).getSearchResults( strQuery, filter, plugin );
+
+        HashMap model = new HashMap(  );
+        Paginator paginator = new Paginator( listResultSearch, nItemsPerPageDigg, urlDiggXPage.getUrl(  ),
                 PARAMETER_PAGE_INDEX, strCurrentPageIndexDigg );
 
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + nItemsPerPageDigg );
         model.put( FULL_URL, _strFullUrl );
         model.put( MARK_CONTENT_DIGG, paginator.getPageItems(  ) );
-    	
-    	HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_XPAGE_LIST_DIGG, locale, model );
+
+        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_XPAGE_LIST_DIGG, locale, model );
 
         return templateList.getHtml(  );
-	}
+    }
 
-	/**
-     * Increment score
-     *
-     * @param strVote the value to add at score
-     * @param nIdSubmitDigg the id of the digg submit
-     * @param plugin the plugin
-     * @param strUserKey the user key
-     */
+    /**
+    * Increment score
+    *
+    * @param strVote the value to add at score
+    * @param nIdSubmitDigg the id of the digg submit
+    * @param plugin the plugin
+    * @param strUserKey the user key
+    */
     private void doVote( String strVote, int nIdSubmitDigg, Plugin plugin, String strUserKey )
     {
         //Increment vote
@@ -821,26 +831,26 @@ public class DiggApp implements XPageApplication
      * @throws SiteMessageException  SiteMessageException
      */
     private String getHtmlListDiggSubmit( Locale locale, Plugin plugin, Digg digg, int nFilterPeriod, int nSortDigg,
-        int nIdFilterCategory, int nIdDigSubmitState, String strQuery, String strPageIndex, UrlItem urlDiggXPage,LuteceUser luteceUserConnected )
-        throws SiteMessageException
+        int nIdFilterCategory, int nIdDigSubmitState, String strQuery, String strPageIndex, UrlItem urlDiggXPage,
+        LuteceUser luteceUserConnected ) throws SiteMessageException
     {
         Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( FULL_URL, _strFullUrl );
 
         List<Integer> listIdDiggSubmit;
-        
+
         SubmitFilter submitFilter = new SubmitFilter(  );
 
         //Filter the list
         DiggUtils.initSubmitFilterByPeriod( submitFilter, nFilterPeriod );
-        DiggUtils.initSubmitFilterBySort( submitFilter, nSortDigg!=DiggUtils.CONSTANT_ID_NULL?nSortDigg:digg.getIdDefaultSort());
+        DiggUtils.initSubmitFilterBySort( submitFilter,
+            ( nSortDigg != DiggUtils.CONSTANT_ID_NULL ) ? nSortDigg : digg.getIdDefaultSort(  ) );
         submitFilter.setIdDigg( digg.getIdDigg(  ) );
         submitFilter.setIdDiggSubmitState( nIdDigSubmitState );
         submitFilter.setIdCategory( nIdFilterCategory );
-        
+
         listIdDiggSubmit = DigglikeSearchService.getInstance(  ).getSearchResults( strQuery, submitFilter, plugin );
-        
-        
+
         if ( digg.isActiveDiggSubmitPaginator(  ) && ( digg.getNumberDiggSubmitPerPage(  ) > 0 ) )
         {
             Paginator paginator = new Paginator( listIdDiggSubmit, digg.getNumberDiggSubmitPerPage(  ),
@@ -848,9 +858,10 @@ public class DiggApp implements XPageApplication
             listIdDiggSubmit = paginator.getPageItems(  );
             model.put( MARK_PAGINATOR, paginator );
         }
-        model.put( MARK_DIGG,digg);
+
+        model.put( MARK_DIGG, digg );
         model.put( MARK_LIST_DIGG_SUBMIT,
-            getDiggSubmitDisplayList( listIdDiggSubmit, digg, CONSTANTE_PARAMETER_FALSE_VALUE, locale,plugin ) );
+            getDiggSubmitDisplayList( listIdDiggSubmit, digg, CONSTANTE_PARAMETER_FALSE_VALUE, locale, plugin ) );
 
         model.put( MARK_AUTHORIZED_COMMENT, digg.isAuthorizedComment(  ) );
         model.put( MARK_DIGG_SUBMIT_MODERATE, digg.isDisableNewDiggSubmit(  ) );
@@ -858,8 +869,9 @@ public class DiggApp implements XPageApplication
         model.put( MARK_MAX_AMOUNT_COMMENTS, AppPropertiesService.getPropertyInt( PROPERTY_MAX_AMOUNT_COMMENTS, 20 ) );
         model.put( MARK_MAX_AMOUNT_COMMENTS_CHAR,
             AppPropertiesService.getPropertyInt( PROPERTY_MAX_AMOUNT_COMMENTS_CHAR, 20 ) );
-        
-        model.put(MARK_LUTECE_USER_CONNECTED, luteceUserConnected);
+
+        model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
+
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_LIST_SUBMIT_DIGG, locale, model );
 
         return template.getHtml(  );
@@ -877,11 +889,10 @@ public class DiggApp implements XPageApplication
      * @return the html template
      */
     private String getHtmlListDigg( Locale locale, Plugin plugin, String strCurrentPageIndexDigg,
-        int nItemsPerPageDigg, UrlItem urlDiggXPage,LuteceUser luteceUserConnected ) throws SiteMessageException
+        int nItemsPerPageDigg, UrlItem urlDiggXPage, LuteceUser luteceUserConnected )
+        throws SiteMessageException
     {
-       
-    	
-    	DiggFilter filter = new DiggFilter(  );
+        DiggFilter filter = new DiggFilter(  );
 
         List listDigg = DiggHome.getDiggList( filter, plugin );
 
@@ -893,8 +904,8 @@ public class DiggApp implements XPageApplication
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + nItemsPerPageDigg );
         model.put( FULL_URL, _strFullUrl );
         model.put( MARK_DIGG_LIST, paginator.getPageItems(  ) );
-        model.put(MARK_LUTECE_USER_CONNECTED,luteceUserConnected);
-        
+        model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
+
         HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_XPAGE_LIST_DIGG, locale, model );
 
         return templateList.getHtml(  );
@@ -910,26 +921,24 @@ public class DiggApp implements XPageApplication
      * @return a collection which contains digg submit and lutece user associate
      */
     private Collection<HashMap> getDiggSubmitDisplayList( Collection<Integer> listDiggSubmit, Digg digg,
-        String strDiggDetail, Locale locale,Plugin plugin) throws SiteMessageException
+        String strDiggDetail, Locale locale, Plugin plugin )
+        throws SiteMessageException
     {
-        
-    	LuteceUser luteceUser;
-    	DiggSubmit diggSubmit;
-    	Collection<HashMap> listHashDigg = new ArrayList<HashMap>(  );
-       
-        
+        LuteceUser luteceUser;
+        DiggSubmit diggSubmit;
+        Collection<HashMap> listHashDigg = new ArrayList<HashMap>(  );
 
         for ( Integer idDiggSubmit : listDiggSubmit )
         {
             HashMap<String, Object> modelDigg = new HashMap<String, Object>(  );
             modelDigg.put( FULL_URL, _strFullUrl );
             luteceUser = null;
-            diggSubmit= _diggSubmitService.findByPrimaryKey(idDiggSubmit,plugin ); 
-            modelDigg.put( MARK_DIGG_SUBMIT,diggSubmit );
+            diggSubmit = _diggSubmitService.findByPrimaryKey( idDiggSubmit, plugin );
+            modelDigg.put( MARK_DIGG_SUBMIT, diggSubmit );
 
             if ( SecurityService.isAuthenticationEnable(  ) && ( diggSubmit.getLuteceUserKey(  ) != null ) )
             {
-            	luteceUser = SecurityService.getInstance(  ).getUser( diggSubmit.getLuteceUserKey(  ) );
+                luteceUser = SecurityService.getInstance(  ).getUser( diggSubmit.getLuteceUserKey(  ) );
             }
 
             modelDigg.put( MARK_LUTECE_USER, luteceUser );
@@ -986,30 +995,29 @@ public class DiggApp implements XPageApplication
      * @throws SiteMessageException SiteMessageException
      */
     private String getHtmlDiggSubmitDetail( HttpServletRequest request, int nMode, Plugin plugin, Digg digg,
-        int nIdSubmitDigg, String strComment,LuteceUser luteceUserConnected ) throws SiteMessageException
+        int nIdSubmitDigg, String strComment, LuteceUser luteceUserConnected )
+        throws SiteMessageException
     {
-        
-    	LuteceUser luteceUser=null;
+        LuteceUser luteceUser = null;
         HashMap<String, Object> model = new HashMap<String, Object>(  );
         model.put( FULL_URL, _strFullUrl );
 
         DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey( nIdSubmitDigg, plugin );
-     
-        
-        
+
         if ( ( diggSubmit == null ) || ( diggSubmit.getDiggSubmitState(  ).getNumber(  ) == DiggSubmit.STATE_DISABLE ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
         }
-        
+
         //update number view
-        diggSubmit.setNumberView(diggSubmit.getNumberView()+1);
-        _diggSubmitService.update(diggSubmit, false, plugin);
+        diggSubmit.setNumberView( diggSubmit.getNumberView(  ) + 1 );
+        _diggSubmitService.update( diggSubmit, false, plugin );
 
         SubmitFilter submmitFilterComment = new SubmitFilter(  );
         submmitFilterComment.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
         submmitFilterComment.setIdCommentSubmitState( 1 );
-       List<CommentSubmit> listCommentSubmit = CommentSubmitHome.getCommentSubmitList( submmitFilterComment, plugin );
+
+        List<CommentSubmit> listCommentSubmit = CommentSubmitHome.getCommentSubmitList( submmitFilterComment, plugin );
 
         if ( SecurityService.isAuthenticationEnable(  ) && ( diggSubmit.getLuteceUserKey(  ) != null ) )
         {
@@ -1030,7 +1038,7 @@ public class DiggApp implements XPageApplication
                 digg.isAuthorizedComment(  ) )
         {
             model.put( MARK_LIST_COMMENT_SUBMIT_DIGG,
-                getHtmlCommentSubmitList( request, listCommentSubmit, digg, nIdSubmitDigg,luteceUser ) );
+                getHtmlCommentSubmitList( request, listCommentSubmit, digg, nIdSubmitDigg, luteceUser ) );
         }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_DETAIL_SUBMIT_DIGG,
@@ -1108,17 +1116,17 @@ public class DiggApp implements XPageApplication
      * @return the html list of comment submit for a digg submit
      */
     private String getHtmlCommentSubmitList( HttpServletRequest request, List<CommentSubmit> listCommentSubmit,
-        Digg digg, int nIdSubmitDigg,LuteceUser luteceUserConnected )
+        Digg digg, int nIdSubmitDigg, LuteceUser luteceUserConnected )
     {
         HashMap<String, Object> model = new HashMap<String, Object>(  );
         model.put( FULL_URL, _strFullUrl );
-        model.put( MARK_DIGG, digg);
+        model.put( MARK_DIGG, digg );
         model.put( MARK_ID_DIGG, digg.getIdDigg(  ) );
         model.put( MARK_ID_DIGG_SUBMIT, nIdSubmitDigg );
         model.put( MARK_DIGG_COMMENT, CONSTANTE_PARAMETER_TRUE_VALUE );
         model.put( MARK_LIST_COMMENT_SUBMIT_DIGG, getCommentSubmitDisplayList( listCommentSubmit ) );
         model.put( MARK_DISABLE_NEW_COMMENT_SUBMIT, digg.isDisableNewComment(  ) );
-        model.put( MARK_ACTIVE_EDITOR_BBCODE, digg.isActiveEditorBbcode() );
+        model.put( MARK_ACTIVE_EDITOR_BBCODE, digg.isActiveEditorBbcode(  ) );
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
 
         CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService(  );
@@ -1144,7 +1152,7 @@ public class DiggApp implements XPageApplication
      * @return the html form
      * @throws SiteMessageException SiteMessageException
      */
-    private String getHtmlForm( HttpServletRequest request, int nMode, Plugin plugin, Digg digg,int nIdDefaultCategory )
+    private String getHtmlForm( HttpServletRequest request, int nMode, Plugin plugin, Digg digg, int nIdDefaultCategory )
         throws SiteMessageException
     {
         HashMap<String, Object> model = new HashMap<String, Object>(  );
@@ -1153,9 +1161,9 @@ public class DiggApp implements XPageApplication
         Locale locale = request.getLocale(  );
 
         //get form Recap
-        model.put( MARK_FORM_DIGG, DiggUtils.getHtmlForm( digg, plugin, locale, _strFullUrl,nIdDefaultCategory ) );
+        model.put( MARK_FORM_DIGG, DiggUtils.getHtmlForm( digg, plugin, locale, _strFullUrl, nIdDefaultCategory ) );
         model.put( MARK_DISABLE_NEW_DIGG_SUBMIT, digg.isDisableNewDiggSubmit(  ) );
-       
+
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FORM_DIGG, locale, model );
 
         return template.getHtml(  );
@@ -1211,36 +1219,35 @@ public class DiggApp implements XPageApplication
         diggSubmit.setDiggSubmitTitle( DiggUtils.getDiggSubmitTitle( diggSubmit, locale ) );
 
         // Check XSS characters
-         for ( Response response : diggSubmit.getResponses(  ) )
-         {
-             if ( StringUtil.containsXssCharacters( response.getValueResponse(  ) ) &&
-                     !response.getValueResponse(  ).contains( "<img " ) && !response.getValueResponse(  ).contains( "<div id='mediaspace" ) )
-             {
-            	 
-                 SiteMessageService.setMessage( request, MESSAGE_NEW_DIGG_SUBMIT_INVALID, SiteMessage.TYPE_STOP );
-             }
-         }
+        for ( Response response : diggSubmit.getResponses(  ) )
+        {
+            if ( StringUtil.containsXssCharacters( response.getValueResponse(  ) ) &&
+                    !response.getValueResponse(  ).contains( "<img " ) &&
+                    !response.getValueResponse(  ).contains( "<div id='mediaspace" ) )
+            {
+                SiteMessageService.setMessage( request, MESSAGE_NEW_DIGG_SUBMIT_INVALID, SiteMessage.TYPE_STOP );
+            }
+        }
+
         if ( user != null )
         {
             diggSubmit.setLuteceUserKey( user.getName(  ) );
         }
-        
-       
+
         try
         {
-        	 _diggSubmitService.create(diggSubmit, plugin);
+            _diggSubmitService.create( diggSubmit, plugin );
         }
         catch ( Exception ex )
         {
             // something very wrong happened... a database check might be needed
-            AppLogService.error( ex.getMessage(  ) + " for DiggSubmit " + diggSubmit.getIdDiggSubmit(), ex );
+            AppLogService.error( ex.getMessage(  ) + " for DiggSubmit " + diggSubmit.getIdDiggSubmit(  ), ex );
             // revert
             // we clear the DB form the given formsubmit (FormSubmitHome also removes the reponses)
-            _diggSubmitService.remove( diggSubmit.getIdDiggSubmit(), plugin );
+            _diggSubmitService.remove( diggSubmit.getIdDiggSubmit(  ), plugin );
             // throw a message to the user
             SiteMessageService.setMessage( request, MESSAGE_MESSAGE_SUBMIT_SAVE_ERROR, SiteMessage.TYPE_ERROR );
         }
-
 
         return diggSubmit;
     }
@@ -1315,7 +1322,7 @@ public class DiggApp implements XPageApplication
         int nIdType, Plugin plugin ) throws SiteMessageException
     {
         _strFullUrl = request.getRequestURL(  ).toString(  );
-        
+
         List<IEntry> listEntryFirstLevel;
         EntryFilter filter;
         Locale locale = request.getLocale(  );
@@ -1355,7 +1362,7 @@ public class DiggApp implements XPageApplication
             diggSubmit.setCategory( category );
         }
 
-        if ( nIdType != DiggUtils.CONSTANT_ID_NULL  )
+        if ( nIdType != DiggUtils.CONSTANT_ID_NULL )
         {
             DiggSubmitType type = DiggSubmitTypeHome.findByPrimaryKey( nIdType, plugin );
             diggSubmit.setDiggSubmitType( type );
@@ -1369,8 +1376,8 @@ public class DiggApp implements XPageApplication
     private void clearSessionFilter( HttpSession session )
     {
         session.setAttribute( SESSION_FILTER_QUERY, EMPTY_STRING );
-        session.setAttribute( SESSION_FILTER_ID_PERIOD,DiggUtils.CONSTANT_ID_NULL );
-        session.setAttribute( SESSION_FILTER_ID_SORT, DiggUtils.CONSTANT_ID_NULL  );
+        session.setAttribute( SESSION_FILTER_ID_PERIOD, DiggUtils.CONSTANT_ID_NULL );
+        session.setAttribute( SESSION_FILTER_ID_SORT, DiggUtils.CONSTANT_ID_NULL );
         session.setAttribute( SESSION_FILTER_ID_CATEGORY, DiggUtils.CONSTANT_ID_NULL );
         session.setAttribute( SESSION_FILTER_PAGE_INDEX, DEFAULT_PAGE_INDEX );
     }

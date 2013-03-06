@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.digglike.service.digglikesearch;
 
-import java.util.List;
-
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
+
+import java.util.List;
 
 
 /**
