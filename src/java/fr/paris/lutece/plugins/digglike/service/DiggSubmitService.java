@@ -1,5 +1,7 @@
 package fr.paris.lutece.plugins.digglike.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +11,7 @@ import com.mysql.jdbc.PacketTooBigException;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
+import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
@@ -45,17 +48,60 @@ public class DiggSubmitService implements IDiggSubmitService {
 	@Override
 	@Transactional( "digglike.transactionManager" )
 	public void remove(int nIdDiggSubmit, Plugin plugin) {
-		DiggSubmitHome.remove(nIdDiggSubmit, plugin);
+		
+		DiggSubmit diggSubmit=DiggSubmitHome.findByPrimaryKey(nIdDiggSubmit, plugin);
+		if(diggSubmit!=null)
+		{
+			int nIdDigg=diggSubmit.getDigg().getIdDigg();
+			//remove
+			DiggSubmitHome.remove(nIdDiggSubmit, plugin);
+			//update digg submit order
+			updateDiggSubmitOrder(null, null, nIdDigg, plugin);
+		}
 	}
 
 	
 	@Override
 	@Transactional( "digglike.transactionManager" )
-	public void updateDiggSubmitOrder(int nNewOrder, int nIdDiggSubmit,
+	public void updateDiggSubmitOrder(Integer nPositionElement,Integer nNewPositionElement,int nIdDigg, 
 			Plugin plugin) {
-		DiggSubmitHome.updateDiggSubmitOrder(nNewOrder, nIdDiggSubmit, plugin);
 		
+		
+		
+		SubmitFilter filter=new SubmitFilter();
+		filter.setIdDigg(nIdDigg);
+		List<Integer> listSortByManually=new ArrayList<Integer>();
+		listSortByManually.add(SubmitFilter.SORT_MANUALLY);
+		filter.setSortBy(listSortByManually);
+		
+		List<Integer> listIdDiggDubmit=getDiggSubmitListId(filter,plugin);
+		
+		if(listIdDiggDubmit!=null && listIdDiggDubmit.size()>0)
+		{
+			if(nPositionElement!=null && nNewPositionElement!=null && nPositionElement!=nNewPositionElement)
+			{
+				if(  ( nPositionElement>0 && ( nPositionElement<= listIdDiggDubmit.size()+1 )) && (nNewPositionElement>0 && (nNewPositionElement<= listIdDiggDubmit.size()+1)) )
+				{
+					DiggUtils.moveElement(nPositionElement, nNewPositionElement, (ArrayList<Integer>)listIdDiggDubmit);
+					
+				}
+			}
+			int nNewOrder=1;
+			//update all Digg submit
+			for(Integer nIdDiggSubmit:listIdDiggDubmit)
+			{
+				DiggSubmitHome.updateDiggSubmitOrder(nNewOrder++, nIdDiggSubmit, plugin);
+			}
+		}
 	}
+	
+
+		
+		
+	
+	
+	
+	
 
 	@Override
 	public DiggSubmit findByPrimaryKey(int nKey, Plugin plugin) {

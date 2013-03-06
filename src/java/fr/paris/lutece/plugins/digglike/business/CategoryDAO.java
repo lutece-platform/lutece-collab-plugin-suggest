@@ -55,7 +55,7 @@ public class CategoryDAO implements ICategoryDAO
     private static final String SQL_QUERY_DELETE = "DELETE FROM digglike_category WHERE id_category = ? ";
     private static final String SQL_QUERY_COUNT_NUMBER_OF_DIGG_ASSOCIATE_TO_THE_CATEGORY = "select COUNT(id_category) " +
         " FROM digglike_digg_category WHERE id_category=? ";
-    private static final String SQL_QUERY_SELECT_BY_ID_DIGG = "SELECT c.id_category,c.title,c.color FROM digglike_category c,digglike_digg_category.dc "+
+    private static final String SQL_QUERY_SELECT_BY_ID_DIGG = "SELECT c.id_category,c.title,c.color FROM digglike_category c,digglike_digg_category dc "+
     														  "WHERE c.id_category=dc.id_category AND dc.id_digg=? ORDER BY title";
     
     /**

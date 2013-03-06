@@ -1391,4 +1391,18 @@ public final class DiggUtils
 
         return list1;
     }
+    
+    /**
+     * move a element in the list
+     * @param nOldPosistion the old position
+     * @param nNewPosition the  new position
+     * @param list
+     */
+    public static void moveElement(int nOldPosistion,int nNewPosition,ArrayList<Integer> list)
+	{
+		Integer element=list.get(nOldPosistion-1);
+		list.remove(nOldPosistion-1);
+		list.add(nNewPosition-1, element);
+		
+	}
 }

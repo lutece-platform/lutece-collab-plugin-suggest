@@ -149,13 +149,14 @@ public interface IDiggSubmitService {
      int getDiggSubmitOrderById( int nIdDiggSubmit, Plugin plugin );
      
 
-     /**
-      * Update the number order of diggSubmit
-      * @param nIdDiggSubmit the id of the diggSubmit
-      * @param nNewOrder the new number of order
-      * @param plugin The Plugin object
-      */
-      void updateDiggSubmitOrder( int nNewOrder, int nIdDiggSubmit, Plugin plugin );
+    /**
+     * move an element in the list of diggSubmit and update the order 
+     * @param nPositionElement the position of the element to move
+     * @param nNewPositionElement the new position of the element
+     * @param nIdDigg the digg id
+     * @param plugin the plugin
+     */
+      void updateDiggSubmitOrder(Integer nPositionElement, Integer nNewPositionElement, int nIdDigg, Plugin plugin );
     
 
      /**
@@ -165,6 +166,7 @@ public interface IDiggSubmitService {
       * @param plugin The Plugin object
       */
     int getMaxOrderContactList( int nIdDigg, Plugin plugin );
+    
     
 
 }

@@ -2796,52 +2796,21 @@ public class DiggJspBean extends PluginAdminPageJspBean {
 		int nIdDiggSubmit = Integer.parseInt(request
 				.getParameter(PARAMETER_ID_DIGG_SUBMIT));
 
-		int nOrder = _diggSubmitService.getDiggSubmitOrderById(nIdDiggSubmit,
-				getPlugin());
-		int nNewOrder = Integer.parseInt(request
-				.getParameter(PARAMETER_DIGG_SUBMIT_ORDER));
-		modifyDiggSubmitOrder(nOrder, nNewOrder, nIdDiggSubmit);
-
+		DiggSubmit diggSubmit= _diggSubmitService.findByPrimaryKey(nIdDiggSubmit, getPlugin());
 		int nIdDigg = Integer.parseInt(request.getParameter(PARAMETER_ID_DIGG));
+		if(diggSubmit!=null)
+		{
+			int nNewOrder = Integer.parseInt(request
+				.getParameter(PARAMETER_DIGG_SUBMIT_ORDER));
+	
+			
 
+			_diggSubmitService.updateDiggSubmitOrder(diggSubmit.getDiggSubmitOrder(), nNewOrder, diggSubmit.getDigg().getIdDigg(), getPlugin());
+		}
 		return getJspManageDiggSubmit(request) + "?" + PARAMETER_ID_DIGG + "="
 				+ nIdDigg;
 	}
 
-	/**
-	 * Modify the place in the list for a DiggSubmit
-	 * 
-	 * @param nIdDiggSubmit
-	 *            the DiggSubmit identifier
-	 * @param nOrder
-	 *            the actual place in the list
-	 * @param nNewOrder
-	 *            the new place in the list
-	 */
-	private void modifyDiggSubmitOrder(int nOrder, int nNewOrder,
-			int nIdDiggSubmit) {
-		if (nNewOrder < nOrder) {
-			for (int i = nOrder - 1; i > (nNewOrder - 1); i--) {
-				int nIdDiggSubmitOrder = _diggSubmitService.getDiggSubmitIdByOrder(
-						i, getPlugin());
-				_diggSubmitService.updateDiggSubmitOrder(i + 1, nIdDiggSubmitOrder,
-						getPlugin());
-			}
-
-			_diggSubmitService.updateDiggSubmitOrder(nNewOrder, nIdDiggSubmit,
-					getPlugin());
-		} else {
-			for (int i = nOrder; i < (nNewOrder + 1); i++) {
-				int nIdDiggSubmitOrder = _diggSubmitService.getDiggSubmitIdByOrder(
-						i, getPlugin());
-				_diggSubmitService.updateDiggSubmitOrder(i - 1, nIdDiggSubmitOrder,
-						getPlugin());
-			}
-
-			_diggSubmitService.updateDiggSubmitOrder(nNewOrder, nIdDiggSubmit,
-					getPlugin());
-		}
-	}
 
 	/**
 	 * Builts a list of sequence numbers
