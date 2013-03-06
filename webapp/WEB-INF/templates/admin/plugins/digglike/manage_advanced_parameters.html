@@ -1,62 +1,59 @@
 <div class="row-fluid">
 	<div class="span12">
-	<fieldset>
-	<legend>#i18n{digglike.manageAdvancedParameters.title}</legend>
-		<div class="span6">
-		<form class="form-horizontal" method="post" action="jsp/admin/plugins/digglike/DoModifyAdvancedParameters.jsp">
-		<div class="control-group">
-		<label class="control-label" for="">#i18n{digglike.manageAdvancedParameters.labelModifyAdvancedParameters}</label>
-			<div class="controls">
-			<label  for="id_default_digg">#i18n{digglike.manageAdvancedParameters.labelDefaultDigg} : </label>
-				<@combo name="id_default_digg" items=digg_list default_value="${id_default_digg}" />
-				<p class="help-text" >#i18n{digglike.manageAdvancedParameters.labelDefaultDiggComment}</p>
-			</div>
-		</div>
-		<div class="form-actions">	
-			<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.manageAdvancedParameters.buttonModify}</button>
-		</div>
-		
-		</form>
-		</div> 
-		<div class="span5" >
-			<ul class="nav nav-pills nav-stacked">
+			<ul class="nav nav-tabs">
+				<li class="active">
+					<a href="jsp/admin/plugins/digglike/ManageAdvancedParameters.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}">
+						#i18n{digglike.manageAdvancedParameters.title}
+					</a>
+				</li>
 				<#if permission_manage_category>
 				<li>
 					<a href="jsp/admin/plugins/digglike/ManageCategory.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
-						<i class="icon-cog"></i>&nbsp;#i18n{digglike.manageAdvancedParameters.labelCategoryComment}
+						#i18n{digglike.manageAdvancedParameters.labelCategory}
 					</a>
 				</li>
 				<li>
 					<a href="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelTypeComment}" >
-						<i class="icon-inbox"></i>&nbsp;#i18n{digglike.manageAdvancedParameters.labelTypeComment}
+						#i18n{digglike.manageAdvancedParameters.labelType}
 					</a>
 				</li>
 				</#if>
 				<#if permission_manage_default_message>   
 				<li>
 					<a href="jsp/admin/plugins/digglike/ManageDefaultMessage.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelDefaultMessageComment}" >
-						<i class="icon-star"></i>&nbsp;
-						#i18n{digglike.manageAdvancedParameters.labelDefaultMessageComment}
+						#i18n{digglike.manageAdvancedParameters.labelDefaultMessage}
 					</a>
 				</li>
 				</#if>
 				<#if permission_manage_export_format>
 				<li>
 					<a href="jsp/admin/plugins/digglike/ManageExportFormat.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelExportFormatComment}" >
-						<i class="icon-download"></i>&nbsp;
-						#i18n{digglike.manageAdvancedParameters.labelExportFormatComment}
+						#i18n{digglike.manageAdvancedParameters.labelExportFormat}
 					</a>
 				</li>
 				</#if>
 				<li>
 					<a href="jsp/admin/plugins/digglike/Statistics.jsp"  title="#i18n{digglike.manageAdvancedParameters.labelStatisticsComment}" >
-						<i class="icon-signal"></i>&nbsp;
-						#i18n{digglike.manageAdvancedParameters.labelStatisticsComment}
+						#i18n{digglike.manageAdvancedParameters.labelStatistics}
 					</a>
 				</li>
 			</ul>
-		</div>
-	</fieldset>		
+		<fieldset>
+		<legend>#i18n{digglike.manageAdvancedParameters.title}</legend>
+			<form class="form-horizontal" method="post" action="jsp/admin/plugins/digglike/DoModifyAdvancedParameters.jsp">
+			<div class="control-group">
+				<label class="control-label" for="id_default_digg">#i18n{digglike.manageAdvancedParameters.labelDefaultDigg}</label>
+				<div class="controls">
+					<@combo name="id_default_digg" items=digg_list default_value="${id_default_digg}" />
+					<p class="help-text" >#i18n{digglike.manageAdvancedParameters.labelDefaultDiggComment}</p>
+				</div>
+			</div>
+			<div class="form-actions">	
+				<button class="btn btn-primary btn-small" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.manageAdvancedParameters.buttonModify}</button>
+			</div>
+			
+			</form>
+		</fieldset>		
 	</div>
 </div>
 

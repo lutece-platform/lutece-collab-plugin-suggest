@@ -1,43 +1,76 @@
 <div class="row-fluid">
 	<div class="span12">
-	<fieldset>
-	<legend> #i18n{digglike.manageDefaultMessage.title}</legend>
-	<form class="form-horizontal" action="jsp/admin/plugins/digglike/DoModifyDefaultMessage.jsp" method="post" >
-    <div class="control-group">
-		<label class="control-label" for=""> </label>
-		<div class="controls">
-			<label for="libelle_contribution">#i18n{digglike.manageDefaultMessage.labelLibelleContribution} * </label>
-			<input type="text" name="libelle_contribution" id="libelle_contribution" class="input-xlarge" size="80" value="${default_message.libelleContribution}" />
-		</div>
-       <div class="controls">
-			<label for="unavailability_message"> #i18n{digglike.manageDefaultMessage.labelUnavailabilityMessage}  * </label>
-			<textarea name="unavailability_message" id="unavailability_message" rows="10" class="span6" class="richtext">${default_message.unavailabilityMessage}</textarea>
-		</div>
-		<div class="controls">
-			<label  for="libelle_validate_button">#i18n{digglike.manageDefaultMessage.labelLibelleValidateButton}  * </label>
-			<input type="text" name="libelle_validate_button" id="libelle_validate_button" class="input-xlarge" value="${default_message.libelleValidateButton}" />
-		</div>
-		<div class="controls">
-			<label for="number_digg_submit_in_top_score">#i18n{digglike.manageDefaultMessage.labelNumberDiggSubmitInTopScore} * </label>
-			<input type="text" name="number_digg_submit_in_top_score" id="number_digg_submit_in_top_score" class="input-mini" value="${default_message.numberDiggSubmitInTopScore}" maxlength="10" />
-		</div>
-		<div class="controls">
-			<label for="number_digg_submit_in_top_comment">#i18n{digglike.manageDefaultMessage.labelNumberDiggSubmitInTopComment} *  </label>
-			<input type="text" name="number_digg_submit_in_top_comment" id="number_digg_submit_in_top_comment" class="input-mini" value="${default_message.numberDiggSubmitInTopComment}" maxlength="10" />
-		</div>
-		<div class="controls">
-			<label for="number_digg_submit_caracters_shown">#i18n{digglike.manageDefaultMessage.labelNumberDiggSubmitCaractersShown} * </label>
-				<input type="text" name="number_digg_submit_caracters_shown" id="number_digg_submit_caracters_shown" class="input-mini" value="${default_message.numberDiggSubmitCaractersShown}" maxlength="10" />
-				<span class="help-text">#i18n{digglike.manageDefaultMessage.labelNumberDiggSubmitCaractersShownComment}</span>
-		</div>
+		<ul class="nav nav-tabs">
+			<li>
+				<a href="jsp/admin/plugins/digglike/ManageAdvancedParameters.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
+					#i18n{digglike.manageAdvancedParameters.title}
+				</a>
+			</li>
+			<li>
+				<a href="jsp/admin/plugins/digglike/ManageCategory.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
+					#i18n{digglike.manageAdvancedParameters.labelCategory}
+				</a>
+			</li>
+			<li>
+				<a href="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelTypeComment}" >
+					#i18n{digglike.manageAdvancedParameters.labelType}
+				</a>
+			</li>
+			<li class="active">
+				<a href="jsp/admin/plugins/digglike/ManageDefaultMessage.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelDefaultMessageComment}">
+					#i18n{digglike.manageAdvancedParameters.labelDefaultMessage}
+				</a>
+			</li>
+			<li>
+				<a href="jsp/admin/plugins/digglike/ManageExportFormat.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelExportFormatComment}" >
+					#i18n{digglike.manageAdvancedParameters.labelExportFormat}
+				</a>
+			</li>
+			<li>
+				<a href="jsp/admin/plugins/digglike/Statistics.jsp"  title="#i18n{digglike.manageAdvancedParameters.labelStatisticsComment}" >
+					#i18n{digglike.manageAdvancedParameters.labelStatistics}
+				</a>
+			</li>
+		</ul>
+		<fieldset>
+		<legend> #i18n{digglike.manageAdvancedParameters.title} - #i18n{digglike.manageDefaultMessage.title}</legend>
+			<form class="form-horizontal" action="jsp/admin/plugins/digglike/DoModifyDefaultMessage.jsp" method="post" >
+			<div class="control-group">
+				<label class="control-label" for=""> </label>
+				<div class="controls">
+					<label for="libelle_contribution">#i18n{digglike.manageDefaultMessage.labelLibelleContribution} * </label>
+					<input type="text" name="libelle_contribution" id="libelle_contribution" class="input-xlarge" size="80" value="${default_message.libelleContribution}" />
+				</div>
+			   <div class="controls">
+					<label for="unavailability_message"> #i18n{digglike.manageDefaultMessage.labelUnavailabilityMessage}  * </label>
+					<textarea name="unavailability_message" id="unavailability_message" rows="10" class="span6" class="richtext">${default_message.unavailabilityMessage}</textarea>
+				</div>
+				<div class="controls">
+					<label  for="libelle_validate_button">#i18n{digglike.manageDefaultMessage.labelLibelleValidateButton}  * </label>
+					<input type="text" name="libelle_validate_button" id="libelle_validate_button" class="input-xlarge" value="${default_message.libelleValidateButton}" />
+				</div>
+				<div class="controls">
+					<label for="number_digg_submit_in_top_score">#i18n{digglike.manageDefaultMessage.labelNumberDiggSubmitInTopScore} * </label>
+					<input type="text" name="number_digg_submit_in_top_score" id="number_digg_submit_in_top_score" class="input-mini" value="${default_message.numberDiggSubmitInTopScore}" maxlength="10" />
+				</div>
+				<div class="controls">
+					<label for="number_digg_submit_in_top_comment">#i18n{digglike.manageDefaultMessage.labelNumberDiggSubmitInTopComment} *  </label>
+					<input type="text" name="number_digg_submit_in_top_comment" id="number_digg_submit_in_top_comment" class="input-mini" value="${default_message.numberDiggSubmitInTopComment}" maxlength="10" />
+				</div>
+				<div class="controls">
+					<label for="number_digg_submit_caracters_shown">#i18n{digglike.manageDefaultMessage.labelNumberDiggSubmitCaractersShown} * </label>
+						<input type="text" name="number_digg_submit_caracters_shown" id="number_digg_submit_caracters_shown" class="input-mini" value="${default_message.numberDiggSubmitCaractersShown}" maxlength="10" />
+						<span class="help-text">#i18n{digglike.manageDefaultMessage.labelNumberDiggSubmitCaractersShownComment}</span>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary btn-small" type="submit" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createDigg.buttonSave}</button>
+				<button class="btn btn-primary btn-small" onclick="javascript:window.history.back();" name="cancel"><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{digglike.createDigg.buttonCancel}</button>
+			</div>
+		   
+			</form>
+	  </fieldset>
 	</div>
-	<div class="form-actions">
-		<button class="btn btn-primary btn-small" type="submit" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createDigg.buttonSave}</button>
-		<button class="btn btn-primary btn-small" onclick="javascript:window.history.back();" name="cancel"><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{digglike.createDigg.buttonCancel}</button>
-	</div>
-   
-  </fieldset>
-</form>
- </div>
-  <#include "/admin/util/editor/editor.html" />
- <@initEditor />
+</div>
+<#include "/admin/util/editor/editor.html" />
+<@initEditor />

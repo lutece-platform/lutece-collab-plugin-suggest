@@ -1,12 +1,45 @@
 <div class="row-fluid">
 	<div class="span12">
+	<ul class="nav nav-tabs">
+		<li>
+			<a href="jsp/admin/plugins/digglike/ManageAdvancedParameters.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
+				#i18n{digglike.manageAdvancedParameters.title}
+			</a>
+		</li>
+		<li class="active">
+			<a href="jsp/admin/plugins/digglike/ManageCategory.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
+				#i18n{digglike.manageAdvancedParameters.labelCategory}
+			</a>
+		</li>
+		<li>
+			<a href="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelTypeComment}" >
+				#i18n{digglike.manageAdvancedParameters.labelType}
+			</a>
+		</li>
+		<li>
+			<a href="jsp/admin/plugins/digglike/ManageDefaultMessage.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelDefaultMessageComment}">
+				#i18n{digglike.manageAdvancedParameters.labelDefaultMessage}
+			</a>
+		</li>
+		<li>
+			<a href="jsp/admin/plugins/digglike/ManageExportFormat.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelExportFormatComment}" >
+				#i18n{digglike.manageAdvancedParameters.labelExportFormat}
+			</a>
+		</li>
+		<li>
+			<a href="jsp/admin/plugins/digglike/Statistics.jsp"  title="#i18n{digglike.manageAdvancedParameters.labelStatisticsComment}" >
+				#i18n{digglike.manageAdvancedParameters.labelStatistics}
+			</a>
+		</li>
+	</ul>
 	<fieldset>
-    <legend>
-	#i18n{digglike.manageCategory.title}
-	<form class="form-inline pull-right" method="post"  action="jsp/admin/plugins/digglike/CreateCategory.jsp" >
-		<button class="btn btn-primary btn-small" type="submit" ><i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.manageCategory.buttonCreate}</button>
-	</form>
-	</legend>
+		<legend>
+		#i18n{digglike.manageAdvancedParameters.title} - #i18n{digglike.manageCategory.title}
+		<form class="form-inline pull-right" method="post"  action="jsp/admin/plugins/digglike/CreateCategory.jsp" >
+			<button class="btn btn-primary btn-small" type="submit" ><i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.manageCategory.buttonCreate}</button>
+		</form>
+		</legend>
+			
 		<@paginationAdmin paginator=paginator combo=1 /><!-- #i18n{digglike.manageCategory.buttonItemsPerPage}-->
 		<table class="table table-striped table-condensed"> 
 		<thead>
