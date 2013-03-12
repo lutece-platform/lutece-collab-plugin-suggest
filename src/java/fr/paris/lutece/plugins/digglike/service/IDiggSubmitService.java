@@ -88,10 +88,11 @@ public interface IDiggSubmitService
      * Returns an instance of a DiggSubmit whose identifier is specified in parameter
      *
      * @param nKey The diggSubmit primary key
+     * @param bLoadCommentList true if the comment list must be get
      * @param plugin the Plugin
      * @return an instance of DiggSubmit
      */
-    DiggSubmit findByPrimaryKey( int nKey, Plugin plugin );
+    DiggSubmit findByPrimaryKey( int nKey,boolean bLoadCommentList, Plugin plugin );
 
     /**
      * Load the data of all the diggSubmit who verify the filter and returns them in a  list

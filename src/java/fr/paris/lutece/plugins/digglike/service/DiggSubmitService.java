@@ -33,6 +33,11 @@
  */
 package fr.paris.lutece.plugins.digglike.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import com.mysql.jdbc.PacketTooBigException;
 
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
@@ -41,18 +46,13 @@ import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 
 public class DiggSubmitService implements IDiggSubmitService
 {
     public static final String BEAN_SERVICE = "digglike.diggSubmitService";
-
+    private static IDiggSubmitService _singleton;
     @Override
     @Transactional( "digglike.transactionManager" )
     public int create( DiggSubmit diggSubmit, Plugin plugin )
@@ -86,7 +86,7 @@ public class DiggSubmitService implements IDiggSubmitService
     @Transactional( "digglike.transactionManager" )
     public void remove( int nIdDiggSubmit, Plugin plugin )
     {
-        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit, plugin );
+        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit,false, plugin );
 
         if ( diggSubmit != null )
         {
@@ -134,9 +134,9 @@ public class DiggSubmitService implements IDiggSubmitService
     }
 
     @Override
-    public DiggSubmit findByPrimaryKey( int nKey, Plugin plugin )
+    public DiggSubmit findByPrimaryKey( int nKey,boolean bLoadCommentList, Plugin plugin )
     {
-        return DiggSubmitHome.findByPrimaryKey( nKey, plugin );
+        return DiggSubmitHome.findByPrimaryKey( nKey,bLoadCommentList, plugin );
     }
 
     @Override
@@ -198,5 +198,21 @@ public class DiggSubmitService implements IDiggSubmitService
     {
         // TODO Auto-generated method stub
         return DiggSubmitHome.getMaxOrderContactList( nIdDigg, plugin );
+    }
+    
+    
+    /**
+     * Returns the instance of the singleton
+     * 
+     * @return The instance of the singleton
+     */
+    public static IDiggSubmitService getService( )
+    {
+        if ( _singleton == null )
+        {
+        	_singleton = SpringContextService.getBean( BEAN_SERVICE);
+        }
+
+        return _singleton;
     }
 }

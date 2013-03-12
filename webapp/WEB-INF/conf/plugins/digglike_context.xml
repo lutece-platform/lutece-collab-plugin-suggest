@@ -23,6 +23,7 @@
 	<bean id="digglike.entryAdditionalAttributeDAO"  class="fr.paris.lutece.plugins.digglike.business.EntryAdditionalAttributeDAO" />
 	<bean id="digglike.videoTypeDAO"  class="fr.paris.lutece.plugins.digglike.business.VideoTypeDAO" />
     <bean id="digglike.diggSubmitService"  class="fr.paris.lutece.plugins.digglike.service.DiggSubmitService" />
+    <bean id="digglike.commentSubmitService"  class="fr.paris.lutece.plugins.digglike.service.CommentSubmitService" />
     <bean id="digglike.transactionManager"  class="fr.paris.lutece.portal.service.database.DAOUtilTransactionManager">
 	 	<property name="pluginName" value="digglike" />
 	 </bean>

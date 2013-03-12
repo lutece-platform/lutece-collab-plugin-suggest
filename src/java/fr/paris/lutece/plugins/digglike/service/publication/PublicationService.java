@@ -33,23 +33,22 @@
  */
 package fr.paris.lutece.plugins.digglike.service.publication;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggFilter;
 import fr.paris.lutece.plugins.digglike.business.DiggHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
-import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitState;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitStateHome;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
+import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
 import fr.paris.lutece.plugins.digglike.service.DigglikePlugin;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-
-import java.sql.Timestamp;
-
-import java.util.List;
 
 
 /**
@@ -98,13 +97,13 @@ public final class PublicationService
                 dateCreationMin = DiggUtils.getDateAfterNDay( currentDate, -digg.getNumberDayRequired(  ) );
                 submitFilter.setIdDigg( digg.getIdDigg(  ) );
                 submitFilter.setDateLast( dateCreationMin );
-                listDiggSubmit = DiggSubmitHome.getDiggSubmitList( submitFilter, plugin );
+                listDiggSubmit = DiggSubmitService.getService().getDiggSubmitList( submitFilter, plugin );
 
                 for ( DiggSubmit diggSubmit : listDiggSubmit )
                 {
-                    diggSubmit = DiggSubmitHome.findByPrimaryKey( diggSubmit.getIdDiggSubmit(  ), plugin );
+                    diggSubmit = DiggSubmitService.getService().findByPrimaryKey( diggSubmit.getIdDiggSubmit(  ),false, plugin );
                     diggSubmit.setDiggSubmitState( diggSubmitStateDisable );
-                    DiggSubmitHome.update( diggSubmit, plugin );
+                    DiggSubmitService.getService().update( diggSubmit, plugin );
                     DiggUtils.sendNotificationNewDiggSubmitDisable( digg, diggSubmit, I18nService.getDefaultLocale(  ) );
                 }
             }

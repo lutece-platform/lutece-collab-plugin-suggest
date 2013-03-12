@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -310,7 +311,7 @@ public class EntryTypeVideo extends Entry
             catch ( com.mysql.jdbc.PacketTooBigException e )
             {
                 //Remove the digg submit potentially created
-                DiggSubmitHome.remove( nIdDiggSubmit, plugin );
+            	DiggSubmitService.getService().remove( nIdDiggSubmit, plugin );
                 //Remove the video potentially created
                 VideoTypeHome.remove( nIdDiggSubmit, plugin );
 

@@ -402,7 +402,7 @@ public class DiggSubmit
 
         XmlUtil.beginElement( strXml, TAG_DIGGS_SUBMIT_COMMENTS );
 
-        if ( getComments(  ).size(  ) != 0 )
+        if (  getComments( ) != null && getComments(  ).size(  ) != 0 )
         {
             for ( CommentSubmit commentSubmit : getComments(  ) )
             {

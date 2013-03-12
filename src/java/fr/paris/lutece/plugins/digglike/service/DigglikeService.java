@@ -33,8 +33,10 @@
  */
 package fr.paris.lutece.plugins.digglike.service;
 
+import java.util.List;
+import java.util.Locale;
+
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
-import fr.paris.lutece.plugins.digglike.business.CommentSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
@@ -44,9 +46,6 @@ import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import java.util.List;
-import java.util.Locale;
 
 
 /**
@@ -105,7 +104,7 @@ public class DigglikeService
      */
     public void updateDisplayDiggSubmit( Integer nIdDiggSubmit, Plugin plugin, Locale locale, Digg digg )
     {
-        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit, plugin );
+        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit,false, plugin );
         diggSubmit.setDigg( digg );
 
         SubmitFilter filter = new SubmitFilter(  );
@@ -113,10 +112,10 @@ public class DigglikeService
         // add responses
         diggSubmit.setResponses( ResponseHome.getResponseList( filter, plugin ) );
         // update Number of comment
-        diggSubmit.setNumberComment( CommentSubmitHome.getCountCommentSubmit( filter, plugin ) );
+        diggSubmit.setNumberComment( CommentSubmitService.getService().getCountCommentSubmit( filter, plugin ) );
         // update Number of Comment Enable
         filter.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
-        diggSubmit.setNumberCommentEnable( CommentSubmitHome.getCountCommentSubmit( filter, plugin ) );
+        diggSubmit.setNumberCommentEnable( CommentSubmitService.getService().getCountCommentSubmit( filter, plugin ) );
         // update DiggSubmitValue
         diggSubmit.setDiggSubmitValue( DiggUtils.getHtmlDiggSubmitValue( diggSubmit, locale ) );
         // update DiggSubmitValue show in the list

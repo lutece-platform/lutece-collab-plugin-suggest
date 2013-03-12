@@ -493,6 +493,10 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         {
             listStrFilter.add( SQL_FILTER_ID_DIGG );
         }
+        if ( filter.containsIdDiggSubmit(  ) )
+        {
+            listStrFilter.add( SQL_FILTER_ID_DIGG_SUBMIT);
+        }
 
         if ( filter.containsIdDiggSubmitState(  ) )
         {
@@ -549,6 +553,11 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         if ( filter.containsIdDigg(  ) )
         {
             daoUtil.setInt( nIndex, filter.getIdDigg(  ) );
+            nIndex++;
+        }
+        if ( filter.containsIdDiggSubmit(  ) )
+        {
+            daoUtil.setInt( nIndex, filter.getIdDiggSubmit(  ) );
             nIndex++;
         }
 
@@ -615,6 +624,10 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         {
             listStrFilter.add( SQL_FILTER_ID_DIGG );
         }
+        if ( filter.containsIdDiggSubmit(  ) )
+        {
+            listStrFilter.add( SQL_FILTER_ID_DIGG_SUBMIT);
+        }
 
         if ( filter.containsIdDiggSubmitState(  ) )
         {
@@ -658,6 +671,11 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         if ( filter.containsIdDigg(  ) )
         {
             daoUtil.setInt( nIndex, filter.getIdDigg(  ) );
+            nIndex++;
+        }
+        if ( filter.containsIdDiggSubmit(  ) )
+        {
+            daoUtil.setInt( nIndex, filter.getIdDiggSubmit(  ) );
             nIndex++;
         }
 

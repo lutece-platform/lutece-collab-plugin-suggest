@@ -33,6 +33,14 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
+
+import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
 import fr.paris.lutece.plugins.digglike.service.ImageService;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -43,13 +51,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.web.constants.Parameters;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.url.UrlItem;
-
-import org.apache.commons.fileupload.FileItem;
-
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -219,7 +220,7 @@ public class EntryTypeImage extends Entry
 
             try
             {
-                int nImageId = DiggSubmitHome.createImage( nIdDiggSubmit, image, plugin );
+                int nImageId = DiggSubmitService.getService().createImage( nIdDiggSubmit, image, plugin );
                 String strResourceType = ImageService.getInstance(  ).getResourceTypeId(  );
                 UrlItem url = new UrlItem( Parameters.IMAGE_SERVLET );
                 url.addParameter( Parameters.RESOURCE_TYPE, strResourceType );

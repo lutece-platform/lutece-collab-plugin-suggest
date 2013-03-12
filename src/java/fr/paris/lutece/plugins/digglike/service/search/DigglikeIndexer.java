@@ -33,14 +33,24 @@
  */
 package fr.paris.lutece.plugins.digglike.service.search;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.lucene.demo.html.HTMLParser;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
-import fr.paris.lutece.plugins.digglike.business.CommentSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggFilter;
 import fr.paris.lutece.plugins.digglike.business.DiggHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
-import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
+import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
 import fr.paris.lutece.plugins.digglike.service.DigglikePlugin;
 import fr.paris.lutece.plugins.digglike.service.digglikesearch.DigglikeSearchItem;
 import fr.paris.lutece.plugins.digglike.web.DiggApp;
@@ -54,18 +64,6 @@ import fr.paris.lutece.portal.service.search.SearchItem;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.url.UrlItem;
-
-import org.apache.lucene.demo.html.HTMLParser;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -122,7 +120,7 @@ public class DigglikeIndexer implements SearchIndexer
         for ( Digg digg : diggActivatedList )
         {
             submitFilter.setIdDigg( digg.getIdDigg(  ) );
-            diggSubmitActivatedList = DiggSubmitHome.getDiggSubmitListId( submitFilter, plugin );
+            diggSubmitActivatedList = DiggSubmitService.getService().getDiggSubmitListId( submitFilter, plugin );
 
             for ( Integer idDiggSubmit : diggSubmitActivatedList )
             {
@@ -166,7 +164,7 @@ public class DigglikeIndexer implements SearchIndexer
         String strPortalUrl = AppPathService.getPortalUrl(  );
         Integer nIdDiggSubmit = Integer.parseInt( strIdDiggSubmit );
         Plugin plugin = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
-        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit, plugin );
+        DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit,true, plugin );
 
         //
         //SubmitFilter commentFilter=new SubmitFilter();

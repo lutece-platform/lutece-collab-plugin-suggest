@@ -33,10 +33,21 @@
  */
 package fr.paris.lutece.plugins.digglike.web;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.digglike.business.Category;
 import fr.paris.lutece.plugins.digglike.business.CategoryHome;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
-import fr.paris.lutece.plugins.digglike.business.CommentSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggFilter;
 import fr.paris.lutece.plugins.digglike.business.DiggHome;
@@ -55,7 +66,9 @@ import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.business.VoteHome;
 import fr.paris.lutece.plugins.digglike.business.VoteType;
 import fr.paris.lutece.plugins.digglike.business.VoteTypeHome;
+import fr.paris.lutece.plugins.digglike.service.CommentSubmitService;
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
+import fr.paris.lutece.plugins.digglike.service.ICommentSubmitService;
 import fr.paris.lutece.plugins.digglike.service.IDiggSubmitService;
 import fr.paris.lutece.plugins.digglike.service.digglikesearch.DigglikeSearchService;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
@@ -70,7 +83,6 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
@@ -82,18 +94,6 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 
 /**
@@ -233,7 +233,8 @@ public class DiggApp implements XPageApplication
     private static final String PROPERTY_MAX_AMOUNT_COMMENTS_CHAR = "digglike.comments.max.char.qty";
     private String _strFullUrl; //ex : http://toto:90/digg/jsp/site/Portal.jsp
     private int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_ITEM_PER_PAGE, 50 );
-    private IDiggSubmitService _diggSubmitService = SpringContextService.getBean( DiggSubmitService.BEAN_SERVICE );
+    private IDiggSubmitService _diggSubmitService = DiggSubmitService.getService();
+    private ICommentSubmitService _commentSubmitService = CommentSubmitService.getService();
 
     /**
      * Returns the Form XPage result content depending on the request parameters and the current mode.
@@ -492,7 +493,7 @@ public class DiggApp implements XPageApplication
                             SiteMessageService.setMessage( request, MESSAGE_MANDATORY_REPORTED, SiteMessage.TYPE_STOP );
                         }
 
-                        DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey( nIdSubmitDigg, plugin );
+                        DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey( nIdSubmitDigg,true, plugin );
 
                         if ( diggSubmit == null )
                         {
@@ -866,9 +867,13 @@ public class DiggApp implements XPageApplication
         model.put( MARK_AUTHORIZED_COMMENT, digg.isAuthorizedComment(  ) );
         model.put( MARK_DIGG_SUBMIT_MODERATE, digg.isDisableNewDiggSubmit(  ) );
         model.put( MARK_ID_DIGG, digg.getIdDigg(  ) );
-        model.put( MARK_MAX_AMOUNT_COMMENTS, AppPropertiesService.getPropertyInt( PROPERTY_MAX_AMOUNT_COMMENTS, 20 ) );
-        model.put( MARK_MAX_AMOUNT_COMMENTS_CHAR,
+        String strMaxAmountComments=AppPropertiesService.getProperty( PROPERTY_MAX_AMOUNT_COMMENTS); 
+        if(!StringUtils.isEmpty(strMaxAmountComments))
+        {
+        	model.put( MARK_MAX_AMOUNT_COMMENTS, DiggUtils.getIntegerParameter(strMaxAmountComments));
+        	model.put( MARK_MAX_AMOUNT_COMMENTS_CHAR,
             AppPropertiesService.getPropertyInt( PROPERTY_MAX_AMOUNT_COMMENTS_CHAR, 20 ) );
+        }
 
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
 
@@ -927,13 +932,13 @@ public class DiggApp implements XPageApplication
         LuteceUser luteceUser;
         DiggSubmit diggSubmit;
         Collection<HashMap> listHashDigg = new ArrayList<HashMap>(  );
-
+        String strPropertyMaxAmountComments= AppPropertiesService.getProperty( PROPERTY_MAX_AMOUNT_COMMENTS );
         for ( Integer idDiggSubmit : listDiggSubmit )
         {
             HashMap<String, Object> modelDigg = new HashMap<String, Object>(  );
             modelDigg.put( FULL_URL, _strFullUrl );
             luteceUser = null;
-            diggSubmit = _diggSubmitService.findByPrimaryKey( idDiggSubmit, plugin );
+            diggSubmit = _diggSubmitService.findByPrimaryKey( idDiggSubmit,!StringUtils.isEmpty(strPropertyMaxAmountComments), plugin );
             modelDigg.put( MARK_DIGG_SUBMIT, diggSubmit );
 
             if ( SecurityService.isAuthenticationEnable(  ) && ( diggSubmit.getLuteceUserKey(  ) != null ) )
@@ -1002,7 +1007,7 @@ public class DiggApp implements XPageApplication
         HashMap<String, Object> model = new HashMap<String, Object>(  );
         model.put( FULL_URL, _strFullUrl );
 
-        DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey( nIdSubmitDigg, plugin );
+        DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey( nIdSubmitDigg,true, plugin );
 
         if ( ( diggSubmit == null ) || ( diggSubmit.getDiggSubmitState(  ).getNumber(  ) == DiggSubmit.STATE_DISABLE ) )
         {
@@ -1017,7 +1022,7 @@ public class DiggApp implements XPageApplication
         submmitFilterComment.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
         submmitFilterComment.setIdCommentSubmitState( 1 );
 
-        List<CommentSubmit> listCommentSubmit = CommentSubmitHome.getCommentSubmitList( submmitFilterComment, plugin );
+        List<CommentSubmit> listCommentSubmit = _commentSubmitService.getCommentSubmitList( submmitFilterComment, plugin );
 
         if ( SecurityService.isAuthenticationEnable(  ) && ( diggSubmit.getLuteceUserKey(  ) != null ) )
         {
@@ -1089,7 +1094,7 @@ public class DiggApp implements XPageApplication
         HashMap<String, Object> model = new HashMap<String, Object>(  );
         model.put( FULL_URL, _strFullUrl );
 
-        DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey( nIdSubmitDigg, plugin );
+        DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey( nIdSubmitDigg,true, plugin );
 
         if ( ( diggSubmit == null ) || ( diggSubmit.getDiggSubmitState(  ).getNumber(  ) == DiggSubmit.STATE_DISABLE ) )
         {
@@ -1272,7 +1277,7 @@ public class DiggApp implements XPageApplication
 
         CommentSubmit commentSubmit = new CommentSubmit(  );
 
-        DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey( nIdSubmitDigg, plugin );
+        DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey( nIdSubmitDigg,false, plugin );
 
         if ( ( diggSubmit == null ) || ( diggSubmit.getDiggSubmitState(  ).getNumber(  ) == DiggSubmit.STATE_DISABLE ) )
         {
@@ -1304,7 +1309,7 @@ public class DiggApp implements XPageApplication
             commentSubmit.setLuteceUserKey( user.getName(  ) );
         }
 
-        CommentSubmitHome.create( commentSubmit, plugin );
+        _commentSubmitService.create( commentSubmit, plugin );
 
         return commentSubmit;
     }

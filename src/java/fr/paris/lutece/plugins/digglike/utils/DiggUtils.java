@@ -33,44 +33,9 @@
  */
 package fr.paris.lutece.plugins.digglike.utils;
 
-import fr.paris.lutece.plugins.digglike.business.Category;
-import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
-import fr.paris.lutece.plugins.digglike.business.Digg;
-import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
-import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
-import fr.paris.lutece.plugins.digglike.business.DiggSubmitType;
-import fr.paris.lutece.plugins.digglike.business.DiggSubmitTypeHome;
-import fr.paris.lutece.plugins.digglike.business.EntryFilter;
-import fr.paris.lutece.plugins.digglike.business.EntryHome;
-import fr.paris.lutece.plugins.digglike.business.EntryType;
-import fr.paris.lutece.plugins.digglike.business.EntryTypeHome;
-import fr.paris.lutece.plugins.digglike.business.FormError;
-import fr.paris.lutece.plugins.digglike.business.IEntry;
-import fr.paris.lutece.plugins.digglike.business.ReportedMessage;
-import fr.paris.lutece.plugins.digglike.business.Response;
-import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
-import fr.paris.lutece.plugins.digglike.business.Vote;
-import fr.paris.lutece.plugins.digglike.business.VoteHome;
-import fr.paris.lutece.plugins.digglike.web.DiggApp;
-import fr.paris.lutece.portal.business.mailinglist.Recipient;
-import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.mail.MailService;
-import fr.paris.lutece.portal.service.mailinglist.AdminMailingListService;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.template.AppTemplateService;
-import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.service.util.AppPathService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import fr.paris.lutece.util.ReferenceList;
-import fr.paris.lutece.util.html.HtmlTemplate;
-
 import java.sql.Timestamp;
-
 import java.text.DateFormat;
 import java.text.ParseException;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -85,6 +50,39 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import fr.paris.lutece.plugins.digglike.business.Category;
+import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
+import fr.paris.lutece.plugins.digglike.business.Digg;
+import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
+import fr.paris.lutece.plugins.digglike.business.DiggSubmitType;
+import fr.paris.lutece.plugins.digglike.business.DiggSubmitTypeHome;
+import fr.paris.lutece.plugins.digglike.business.EntryFilter;
+import fr.paris.lutece.plugins.digglike.business.EntryHome;
+import fr.paris.lutece.plugins.digglike.business.EntryType;
+import fr.paris.lutece.plugins.digglike.business.EntryTypeHome;
+import fr.paris.lutece.plugins.digglike.business.FormError;
+import fr.paris.lutece.plugins.digglike.business.IEntry;
+import fr.paris.lutece.plugins.digglike.business.ReportedMessage;
+import fr.paris.lutece.plugins.digglike.business.Response;
+import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
+import fr.paris.lutece.plugins.digglike.business.Vote;
+import fr.paris.lutece.plugins.digglike.business.VoteHome;
+import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
+import fr.paris.lutece.plugins.digglike.web.DiggApp;
+import fr.paris.lutece.portal.business.mailinglist.Recipient;
+import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.mail.MailService;
+import fr.paris.lutece.portal.service.mailinglist.AdminMailingListService;
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPathService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.util.ReferenceList;
+import fr.paris.lutece.util.html.HtmlTemplate;
 
 
 /**
@@ -1141,13 +1139,13 @@ public final class DiggUtils
      */
     public static void doVoteDiggSubmit( int nIdDiggSubmit, int nScore, String strLuteceUserKey, Plugin plugin )
     {
-        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit, plugin );
+        DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit,false, plugin );
 
         if ( diggSubmit != null )
         {
             diggSubmit.setNumberVote( diggSubmit.getNumberVote(  ) + 1 );
             diggSubmit.setNumberScore( diggSubmit.getNumberScore(  ) + nScore );
-            DiggSubmitHome.update( diggSubmit, plugin );
+            DiggSubmitService.getService().update( diggSubmit, plugin );
 
             if ( strLuteceUserKey != null )
             {
@@ -1166,12 +1164,12 @@ public final class DiggUtils
      */
     public static void doReportDiggSubmit( int nIdDiggSubmit, Plugin plugin )
     {
-        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit, plugin );
+        DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit,false, plugin );
 
         if ( diggSubmit != null )
         {
             diggSubmit.setReported( true );
-            DiggSubmitHome.update( diggSubmit, plugin );
+            DiggSubmitService.getService().update( diggSubmit, plugin );
         }
     }
 

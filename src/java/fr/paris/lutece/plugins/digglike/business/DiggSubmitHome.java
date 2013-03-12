@@ -33,6 +33,10 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import fr.paris.lutece.plugins.digglike.service.CommentSubmitService;
 import fr.paris.lutece.plugins.digglike.service.search.DigglikeIndexer;
 import fr.paris.lutece.plugins.digglike.utils.DiggIndexerUtils;
 import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
@@ -41,9 +45,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -130,7 +131,7 @@ public final class DiggSubmitHome
     {
         if ( bUpdateIndex )
         {
-            DiggSubmit diggSubmitStored = findByPrimaryKey( diggSubmit.getIdDiggSubmit(  ), plugin );
+            DiggSubmit diggSubmitStored = findByPrimaryKey( diggSubmit.getIdDiggSubmit(  ),false, plugin );
 
             //if state has changed
             if ( diggSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) != diggSubmitStored.getDiggSubmitState(  )
@@ -173,11 +174,11 @@ public final class DiggSubmitHome
             ResponseHome.remove( response.getIdResponse(  ), plugin );
         }
 
-        List<CommentSubmit> listComments = CommentSubmitHome.getCommentSubmitList( filter, plugin );
+        List<CommentSubmit> listComments = CommentSubmitService.getService().getCommentSubmitList( filter, plugin );
 
         for ( CommentSubmit comment : listComments )
         {
-            CommentSubmitHome.remove( comment.getIdCommentSubmit(  ), plugin );
+            CommentSubmitService.getService().remove( comment.getIdCommentSubmit(  ), plugin );
         }
 
         List<TagSubmit> listTags = TagSubmitHome.getTagSubmitList( filter, plugin );
@@ -187,7 +188,7 @@ public final class DiggSubmitHome
             TagSubmitHome.remove( tag.getIdTagSubmit(  ), plugin );
         }
 
-        DiggSubmit digg = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit, plugin );
+        DiggSubmit digg = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit,false, plugin );
 
         if ( digg.getDiggSubmitState(  ).getIdDiggSubmitState(  ) == DiggSubmit.STATE_PUBLISH )
         {
@@ -208,19 +209,20 @@ public final class DiggSubmitHome
      * Returns an instance of a DiggSubmit whose identifier is specified in parameter
      *
      * @param nKey The diggSubmit primary key
+     * @param bLoadCommentList true if the comment list must be get
      * @param plugin the Plugin
      * @return an instance of DiggSubmit
      */
-    public static DiggSubmit findByPrimaryKey( int nKey, Plugin plugin )
+    public static DiggSubmit findByPrimaryKey( int nKey,boolean bLoadCommentList, Plugin plugin )
     {
         DiggSubmit diggSubmit = _dao.load( nKey, plugin );
 
-        if ( diggSubmit != null )
+        if ( bLoadCommentList && diggSubmit != null )
         {
             SubmitFilter submmitFilterComment = new SubmitFilter(  );
             submmitFilterComment.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
             submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
-            diggSubmit.setComments( CommentSubmitHome.getCommentSubmitList( submmitFilterComment, plugin ) );
+            diggSubmit.setComments( CommentSubmitService.getService().getCommentSubmitList( submmitFilterComment, plugin ) );
         }
 
         return diggSubmit;
@@ -244,7 +246,7 @@ public final class DiggSubmitHome
             {
                 submmitFilterComment.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
                 submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
-                diggSubmit.setComments( CommentSubmitHome.getCommentSubmitList( submmitFilterComment, plugin ) );
+                diggSubmit.setComments( CommentSubmitService.getService().getCommentSubmitList( submmitFilterComment, plugin ) );
             }
         }
 
@@ -266,7 +268,7 @@ public final class DiggSubmitHome
             for ( DiggSubmit diggSubmit : listDiggSubmit )
             {
                 filter.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
-                diggSubmit.setNumberComment( CommentSubmitHome.getCountCommentSubmit( filter, plugin ) );
+                diggSubmit.setNumberComment( CommentSubmitService.getService().getCountCommentSubmit( filter, plugin ) );
             }
         }
 
@@ -302,7 +304,7 @@ public final class DiggSubmitHome
         {
             if ( cpt < nNumberMaxDiggSubmit )
             {
-                diggSubmit = findByPrimaryKey( (Integer) diggSubmitArrayId[cpt], plugin );
+                diggSubmit = findByPrimaryKey( (Integer) diggSubmitArrayId[cpt],false, plugin );
 
                 if ( diggSubmit != null )
                 {
@@ -373,7 +375,7 @@ public final class DiggSubmitHome
 
         for ( int cpt = 0; cpt < diggSubmitArrayId.length; cpt++ )
         {
-            if ( diggSubmitArrayId[cpt] == (Integer) nIdCurrentDiggSubmit )
+            if ( (Integer) diggSubmitArrayId[cpt] ==  nIdCurrentDiggSubmit )
             {
                 if ( cpt != 0 )
                 {
