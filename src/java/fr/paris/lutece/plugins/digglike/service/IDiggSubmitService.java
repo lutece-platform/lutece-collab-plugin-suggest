@@ -92,7 +92,7 @@ public interface IDiggSubmitService
      * @param plugin the Plugin
      * @return an instance of DiggSubmit
      */
-    DiggSubmit findByPrimaryKey( int nKey,boolean bLoadCommentList, Plugin plugin );
+    DiggSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList, Plugin plugin );
 
     /**
      * Load the data of all the diggSubmit who verify the filter and returns them in a  list

@@ -350,35 +350,34 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
             return AdminMessageService.getMessageUrl( multipartRequest, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
                 AdminMessage.TYPE_STOP );
         }
-        
-        if( (diggSubmitType.getIdType()== DiggUtils.CONSTANT_ID_NULL) || (strUpdateFile!=null) )
+
+        if ( ( diggSubmitType.getIdType(  ) == DiggUtils.CONSTANT_ID_NULL ) || ( strUpdateFile != null ) )
         {
-        	ImageResource image = new ImageResource(  );
-        	byte[] baImageSource = imageSource.get(  );
-        	 if ( ( strImageName != null ) && !strImageName.equals( "" ) )
-             {
-                 image.setImage( baImageSource );
-                 image.setMimeType( imageSource.getContentType(  ) );
-                 diggSubmitType.setPictogram( image );
-             }
-             else
-             {
-                 diggSubmitType.setPictogram( null );
-                 diggSubmitType.setImageUrl( "" );
-             }
-	
+            ImageResource image = new ImageResource(  );
+            byte[] baImageSource = imageSource.get(  );
+
+            if ( ( strImageName != null ) && !strImageName.equals( "" ) )
+            {
+                image.setImage( baImageSource );
+                image.setMimeType( imageSource.getContentType(  ) );
+                diggSubmitType.setPictogram( image );
+            }
+            else
+            {
+                diggSubmitType.setPictogram( null );
+                diggSubmitType.setImageUrl( "" );
+            }
         }
         else
         {
-        	diggSubmitType.setPictogram(DiggSubmitTypeHome.getImageResource(diggSubmitType.getIdType(), getPlugin()));
-        	
+            diggSubmitType.setPictogram( DiggSubmitTypeHome.getImageResource( diggSubmitType.getIdType(  ),
+                    getPlugin(  ) ) );
         }
-        
+
         diggSubmitType.setColor( strColor );
         diggSubmitType.setName( strName );
         diggSubmitType.setParameterizableInFO( bParameterizable );
 
-       
         return null;
     }
 

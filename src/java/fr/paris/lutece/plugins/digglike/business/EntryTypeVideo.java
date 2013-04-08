@@ -311,7 +311,7 @@ public class EntryTypeVideo extends Entry
             catch ( com.mysql.jdbc.PacketTooBigException e )
             {
                 //Remove the digg submit potentially created
-            	DiggSubmitService.getService().remove( nIdDiggSubmit, plugin );
+                DiggSubmitService.getService(  ).remove( nIdDiggSubmit, plugin );
                 //Remove the video potentially created
                 VideoTypeHome.remove( nIdDiggSubmit, plugin );
 

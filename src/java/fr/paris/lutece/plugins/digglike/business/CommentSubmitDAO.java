@@ -33,13 +33,14 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import java.sql.Timestamp;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -70,12 +71,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     private static final String SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_DESC = " date_modify DESC";
     private static final String SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_ASC = " date_modify ASC";
     private static final String SQL_QUERY_UPDATE_DATE_MODIFY = "UPDATE digglike_comment_submit SET date_modify=? WHERE id_comment_submit=? ";
-        
-    
-   
-    
     private static final String SQL_ORDER_BY = " ORDER BY ";
-
 
     /**
      * Generates a new primary key
@@ -120,7 +116,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
         daoUtil.setString( 6, commentSubmit.getLuteceUserKey(  ) );
         daoUtil.setBoolean( 7, commentSubmit.isOfficialAnswer(  ) );
         daoUtil.setInt( 8, commentSubmit.getIdParent(  ) );
-        daoUtil.setTimestamp( 9, commentSubmit.getDateModify() );
+        daoUtil.setTimestamp( 9, commentSubmit.getDateModify(  ) );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
@@ -199,20 +195,15 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
- 
-    
-    
-public void storeDateModify( Timestamp dateModify,int idCommentSubmit, Plugin plugin )
-{
-    DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_DATE_MODIFY, plugin );
-    daoUtil.setTimestamp( 1, dateModify );
-    daoUtil.setInt( 2, idCommentSubmit );
-    daoUtil.executeUpdate(  );
-    daoUtil.free(  );
-}
 
-
-
+    public void storeDateModify( Timestamp dateModify, int idCommentSubmit, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_DATE_MODIFY, plugin );
+        daoUtil.setTimestamp( 1, dateModify );
+        daoUtil.setInt( 2, idCommentSubmit );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
+    }
 
     /**
      * Load the data of all the commentSubmit which verify the filter and returns them in a list
@@ -237,11 +228,11 @@ public void storeDateModify( Timestamp dateModify,int idCommentSubmit, Plugin pl
         {
             listStrFilter.add( SQL_FILTER_COMMENT_SUBMIT_STATE );
         }
-        if ( filter.containsIdParent() )
+
+        if ( filter.containsIdParent(  ) )
         {
             listStrFilter.add( SQL_FILTER_ID_PARENT_COMMENT );
         }
-        
 
         if ( filter.containsSortBy(  ) )
         {
@@ -264,12 +255,12 @@ public void storeDateModify( Timestamp dateModify,int idCommentSubmit, Plugin pl
             daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdCommentSubmitState(  ) ) );
             nIndex++;
         }
+
         if ( filter.containsIdParent(  ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdParent(  )  );
+            daoUtil.setInt( nIndex, filter.getIdParent(  ) );
             nIndex++;
         }
-
 
         daoUtil.executeQuery(  );
 
@@ -294,12 +285,8 @@ public void storeDateModify( Timestamp dateModify,int idCommentSubmit, Plugin pl
 
         daoUtil.free(  );
 
-
         return commentSubmitList;
     }
-
-
-
 
     /**
      * return the number  of all the commentSubmit who verify the filter
@@ -390,6 +377,7 @@ public void storeDateModify( Timestamp dateModify,int idCommentSubmit, Plugin pl
                         strOrderBy.append( SQL_FILTER_SORT_BY_DATE_COMMENT_DESC );
 
                         break;
+
                     case SubmitFilter.SORT_BY_DATE_MODIFY_ASC:
                         strOrderBy.append( SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_ASC );
 
@@ -398,12 +386,12 @@ public void storeDateModify( Timestamp dateModify,int idCommentSubmit, Plugin pl
                     case SubmitFilter.SORT_BY_DATE_MODIFY_DESC:
                         strOrderBy.append( SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_DESC );
 
-                        break;    
+                        break;
 
                     default:
-                    	strOrderBy.append( SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_DESC );
-                    	
-                    	break;
+                        strOrderBy.append( SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_DESC );
+
+                        break;
                 }
 
                 if ( ncpt < listSortBy.size(  ) )

@@ -33,9 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.paris.lutece.plugins.digglike.service.CommentSubmitService;
 import fr.paris.lutece.plugins.digglike.service.search.DigglikeIndexer;
 import fr.paris.lutece.plugins.digglike.utils.DiggIndexerUtils;
@@ -45,6 +42,9 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -174,11 +174,11 @@ public final class DiggSubmitHome
             ResponseHome.remove( response.getIdResponse(  ), plugin );
         }
 
-        List<CommentSubmit> listComments = CommentSubmitService.getService().getCommentSubmitList( filter, plugin );
+        List<CommentSubmit> listComments = CommentSubmitService.getService(  ).getCommentSubmitList( filter, plugin );
 
         for ( CommentSubmit comment : listComments )
         {
-            CommentSubmitService.getService().remove( comment.getIdCommentSubmit(  ), plugin );
+            CommentSubmitService.getService(  ).remove( comment.getIdCommentSubmit(  ), plugin );
         }
 
         List<TagSubmit> listTags = TagSubmitHome.getTagSubmitList( filter, plugin );
@@ -215,9 +215,7 @@ public final class DiggSubmitHome
      */
     public static DiggSubmit findByPrimaryKey( int nKey, Plugin plugin )
     {
-       return  _dao.load( nKey, plugin );
-
-  
+        return _dao.load( nKey, plugin );
     }
 
     /**
@@ -238,7 +236,8 @@ public final class DiggSubmitHome
             {
                 submmitFilterComment.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
                 submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
-                diggSubmit.setComments( CommentSubmitService.getService().getCommentSubmitList( submmitFilterComment, plugin ) );
+                diggSubmit.setComments( CommentSubmitService.getService(  )
+                                                            .getCommentSubmitList( submmitFilterComment, plugin ) );
             }
         }
 
@@ -260,7 +259,7 @@ public final class DiggSubmitHome
             for ( DiggSubmit diggSubmit : listDiggSubmit )
             {
                 filter.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
-                diggSubmit.setNumberComment( CommentSubmitService.getService().getCountCommentSubmit( filter, plugin ) );
+                diggSubmit.setNumberComment( CommentSubmitService.getService(  ).getCountCommentSubmit( filter, plugin ) );
             }
         }
 
@@ -367,7 +366,7 @@ public final class DiggSubmitHome
 
         for ( int cpt = 0; cpt < diggSubmitArrayId.length; cpt++ )
         {
-            if ( (Integer) diggSubmitArrayId[cpt] ==  nIdCurrentDiggSubmit )
+            if ( (Integer) diggSubmitArrayId[cpt] == nIdCurrentDiggSubmit )
             {
                 if ( cpt != 0 )
                 {

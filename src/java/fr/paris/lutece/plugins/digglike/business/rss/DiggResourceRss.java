@@ -33,18 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.business.rss;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.digglike.business.Category;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.Digg;
@@ -76,6 +64,19 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.text.SimpleDateFormat;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -348,7 +349,9 @@ public class DiggResourceRss extends ResourceRss
 
         if ( bisSubmitRss )
         {
-            DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( Integer.parseInt( stridDiggSubmit ),false, pluginDigglike );
+            DiggSubmit diggSubmit = DiggSubmitService.getService(  )
+                                                     .findByPrimaryKey( Integer.parseInt( stridDiggSubmit ), false,
+                    pluginDigglike );
             this.setName( diggSubmit.getDiggSubmitTitle(  ) );
             this.setDescription( diggSubmit.getDiggSubmitValue(  ).replaceAll( "<div[^>]+>", "" )
                                            .replaceAll( "</div>", "" ) );
@@ -385,7 +388,8 @@ public class DiggResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter(  );
             submitFilter.setIdDigg( digg.getIdDigg(  ) );
 
-            List<DiggSubmit> diggSubmitList = DiggSubmitService.getService().getDiggSubmitList( submitFilter, pluginDigglike );
+            List<DiggSubmit> diggSubmitList = DiggSubmitService.getService(  )
+                                                               .getDiggSubmitList( submitFilter, pluginDigglike );
             ReferenceList referenceDiggSubmit = new ReferenceList(  );
 
             for ( DiggSubmit diggSubmit : diggSubmitList )
@@ -441,7 +445,8 @@ public class DiggResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter(  );
             submitFilter.setIdDigg( digg.getIdDigg(  ) );
 
-            List<DiggSubmit> diggSubmitList = DiggSubmitService.getService().getDiggSubmitList( submitFilter, pluginDigglike );
+            List<DiggSubmit> diggSubmitList = DiggSubmitService.getService(  )
+                                                               .getDiggSubmitList( submitFilter, pluginDigglike );
             ReferenceList referenceDiggSubmit = new ReferenceList(  );
 
             for ( DiggSubmit diggSubmit : diggSubmitList )
@@ -493,7 +498,9 @@ public class DiggResourceRss extends ResourceRss
         if ( config.isSubmitRss(  ) )
         {
             //Submit Rss
-            DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( config.getIdDiggSubmit(  ),false, pluginDiggglike );
+            DiggSubmit diggSubmit = DiggSubmitService.getService(  )
+                                                     .findByPrimaryKey( config.getIdDiggSubmit(  ), false,
+                    pluginDiggglike );
             DiggSubmitState diggsubmitStage = diggSubmit.getDiggSubmitState(  );
             Category category = diggSubmit.getCategory(  );
             model.put( MARK_RSS_SITE_NAME, diggSubmit.getDiggSubmitTitle(  ) );
@@ -519,7 +526,8 @@ public class DiggResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter(  );
             submitFilter.setIdDiggSubmit( config.getIdDiggSubmit(  ) );
 
-            List<CommentSubmit> listResultCommentSubmit = CommentSubmitService.getService().getCommentSubmitList( submitFilter,
+            List<CommentSubmit> listResultCommentSubmit = CommentSubmitService.getService(  )
+                                                                              .getCommentSubmitList( submitFilter,
                     pluginDiggglike );
             List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>(  );
 
@@ -581,7 +589,8 @@ public class DiggResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter(  );
             submitFilter.setIdDigg( config.getIdDigg(  ) );
 
-            List<DiggSubmit> listResultDiggSubmit = DiggSubmitService.getService().getDiggSubmitList( submitFilter, pluginDiggglike );
+            List<DiggSubmit> listResultDiggSubmit = DiggSubmitService.getService(  )
+                                                                     .getDiggSubmitList( submitFilter, pluginDiggglike );
             List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>(  );
 
             //Description of  the submits
@@ -637,7 +646,9 @@ public class DiggResourceRss extends ResourceRss
         if ( config.isSubmitRss(  ) )
         {
             //Submit Rss
-            DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( config.getIdDiggSubmit(  ),false, pluginDiggglike );
+            DiggSubmit diggSubmit = DiggSubmitService.getService(  )
+                                                     .findByPrimaryKey( config.getIdDiggSubmit(  ), false,
+                    pluginDiggglike );
             DiggSubmitState diggsubmitStage = diggSubmit.getDiggSubmitState(  );
             Category category = diggSubmit.getCategory(  );
 
@@ -685,7 +696,8 @@ public class DiggResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter(  );
             submitFilter.setIdDiggSubmit( config.getIdDiggSubmit(  ) );
 
-            List<CommentSubmit> listResultCommentSubmit = CommentSubmitService.getService().getCommentSubmitList( submitFilter,
+            List<CommentSubmit> listResultCommentSubmit = CommentSubmitService.getService(  )
+                                                                              .getCommentSubmitList( submitFilter,
                     pluginDiggglike );
             List<IFeedResourceItem> listItems = new ArrayList<IFeedResourceItem>(  );
 
@@ -771,7 +783,8 @@ public class DiggResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter(  );
             submitFilter.setIdDigg( config.getIdDigg(  ) );
 
-            List<DiggSubmit> listResultDiggSubmit = DiggSubmitService.getService().getDiggSubmitList( submitFilter, pluginDiggglike );
+            List<DiggSubmit> listResultDiggSubmit = DiggSubmitService.getService(  )
+                                                                     .getDiggSubmitList( submitFilter, pluginDiggglike );
             List<IFeedResourceItem> listItems = new ArrayList<IFeedResourceItem>(  );
 
             //Description of  the submits

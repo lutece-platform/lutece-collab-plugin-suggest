@@ -33,11 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.transaction.annotation.Transactional;
-
 import com.mysql.jdbc.PacketTooBigException;
 
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
@@ -49,11 +44,17 @@ import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class DiggSubmitService implements IDiggSubmitService
 {
     public static final String BEAN_SERVICE = "digglike.diggSubmitService";
     private static IDiggSubmitService _singleton;
+
     @Override
     @Transactional( "digglike.transactionManager" )
     public int create( DiggSubmit diggSubmit, Plugin plugin )
@@ -135,20 +136,20 @@ public class DiggSubmitService implements IDiggSubmitService
     }
 
     @Override
-    public DiggSubmit findByPrimaryKey( int nKey,boolean bLoadCommentList, Plugin plugin )
+    public DiggSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList, Plugin plugin )
     {
-        
-    	DiggSubmit diggSubmit=DiggSubmitHome.findByPrimaryKey(nKey, plugin);
-        if ( bLoadCommentList && diggSubmit != null )
+        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nKey, plugin );
+
+        if ( bLoadCommentList && ( diggSubmit != null ) )
         {
             SubmitFilter submmitFilterComment = new SubmitFilter(  );
             submmitFilterComment.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
             submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
-            diggSubmit.setComments( CommentSubmitService.getService().getCommentSubmitList( submmitFilterComment, plugin ) );
+            diggSubmit.setComments( CommentSubmitService.getService(  )
+                                                        .getCommentSubmitList( submmitFilterComment, plugin ) );
         }
 
-    	
-    	return diggSubmit;
+        return diggSubmit;
     }
 
     @Override
@@ -178,48 +179,48 @@ public class DiggSubmitService implements IDiggSubmitService
     @Override
     public List<DiggSubmit> getDiggSubmitList( SubmitFilter filter, Plugin plugin )
     {
-    	if(!filter.containsSortBy())
-    	{
-    		//use default sort
-    		DiggUtils.initSubmitFilterBySort(filter,DiggUtils.CONSTANT_ID_NULL);
-    		
-    	}	
+        if ( !filter.containsSortBy(  ) )
+        {
+            //use default sort
+            DiggUtils.initSubmitFilterBySort( filter, DiggUtils.CONSTANT_ID_NULL );
+        }
+
         return DiggSubmitHome.getDiggSubmitList( filter, plugin );
     }
 
     @Override
     public List<DiggSubmit> getDiggSubmitList( SubmitFilter filter, Plugin plugin, int nNumberMaxDiggSubmit )
     {
-    	if(!filter.containsSortBy())
-    	{
-    		//use default sort
-    		DiggUtils.initSubmitFilterBySort(filter,DiggUtils.CONSTANT_ID_NULL);
-    		
-    	}	
+        if ( !filter.containsSortBy(  ) )
+        {
+            //use default sort
+            DiggUtils.initSubmitFilterBySort( filter, DiggUtils.CONSTANT_ID_NULL );
+        }
+
         return DiggSubmitHome.getDiggSubmitList( filter, plugin, nNumberMaxDiggSubmit );
     }
 
     @Override
     public List<Integer> getDiggSubmitListId( SubmitFilter filter, Plugin plugin )
     {
-    	if(!filter.containsSortBy())
-    	{
-    		//use default sort
-    		DiggUtils.initSubmitFilterBySort(filter,DiggUtils.CONSTANT_ID_NULL);
-    		
-    	}	
+        if ( !filter.containsSortBy(  ) )
+        {
+            //use default sort
+            DiggUtils.initSubmitFilterBySort( filter, DiggUtils.CONSTANT_ID_NULL );
+        }
+
         return DiggSubmitHome.getDiggSubmitListId( filter, plugin );
     }
 
     @Override
     public List<DiggSubmit> getDiggSubmitListWithNumberComment( SubmitFilter filter, Plugin plugin )
     {
-    	if(!filter.containsSortBy())
-    	{
-    		//use default sort
-    		DiggUtils.initSubmitFilterBySort(filter,DiggUtils.CONSTANT_ID_NULL);
-    		
-    	}	
+        if ( !filter.containsSortBy(  ) )
+        {
+            //use default sort
+            DiggUtils.initSubmitFilterBySort( filter, DiggUtils.CONSTANT_ID_NULL );
+        }
+
         return DiggSubmitHome.getDiggSubmitListWithNumberComment( filter, plugin );
     }
 
@@ -235,18 +236,17 @@ public class DiggSubmitService implements IDiggSubmitService
         // TODO Auto-generated method stub
         return DiggSubmitHome.getMaxOrderContactList( nIdDigg, plugin );
     }
-    
-    
+
     /**
      * Returns the instance of the singleton
-     * 
+     *
      * @return The instance of the singleton
      */
-    public static IDiggSubmitService getService( )
+    public static IDiggSubmitService getService(  )
     {
         if ( _singleton == null )
         {
-        	_singleton = SpringContextService.getBean( BEAN_SERVICE);
+            _singleton = SpringContextService.getBean( BEAN_SERVICE );
         }
 
         return _singleton;

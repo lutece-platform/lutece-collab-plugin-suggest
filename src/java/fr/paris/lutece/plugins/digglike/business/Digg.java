@@ -762,7 +762,7 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     * @param locale la locale
     * @return the xml of this digg
     */
-    public String getXml( HttpServletRequest request, StringBuffer strListDiggSubmit,Locale locale )
+    public String getXml( HttpServletRequest request, StringBuffer strListDiggSubmit, Locale locale )
     {
         StringBuffer strXml = new StringBuffer(  );
         XmlUtil.beginElement( strXml, TAG_DIGG );

@@ -33,11 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.service.digglikesearch;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
@@ -45,6 +40,11 @@ import fr.paris.lutece.plugins.digglike.service.search.DigglikeIndexer;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -83,7 +83,7 @@ public class DigglikeSearchService
         List<Integer> listDiggSubmitResult = new ArrayList<Integer>(  );
         DigglikeSearchEngine engine = (DigglikeSearchEngine) SpringContextService.getPluginBean( plugin.getName(  ),
                 BEAN_SEARCH_ENGINE );
-        List<Integer> diggSubmitListId = DiggSubmitService.getService().getDiggSubmitListId( filter, plugin );
+        List<Integer> diggSubmitListId = DiggSubmitService.getService(  ).getDiggSubmitListId( filter, plugin );
         List<DigglikeSearchItem> listSearchesults = StringUtils.isEmpty( strQuery ) ? null
                                                                                     : engine.getSearchResults( strQuery,
                 filter );

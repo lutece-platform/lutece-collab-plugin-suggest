@@ -33,13 +33,14 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+
+import java.sql.Timestamp;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -81,8 +82,7 @@ public final class CommentSubmitHome
     {
         _dao.store( commentSubmit, plugin );
     }
-    
-    
+
     /**
      * Update of the commentSubmit which is specified in parameter
      *
@@ -90,9 +90,9 @@ public final class CommentSubmitHome
      * @param plugin the Plugin
      *
      */
-    public static void updateDateModify( Timestamp dateModify,int idCommentSubmit, Plugin plugin )
+    public static void updateDateModify( Timestamp dateModify, int idCommentSubmit, Plugin plugin )
     {
-        _dao.storeDateModify(dateModify, idCommentSubmit, plugin);
+        _dao.storeDateModify( dateModify, idCommentSubmit, plugin );
     }
 
     /**
@@ -129,12 +129,8 @@ public final class CommentSubmitHome
         */
     public static List<CommentSubmit> getCommentSubmitList( SubmitFilter filter, Plugin plugin )
     {
-        
-    	return _dao.selectListByFilter(filter, plugin);
-
+        return _dao.selectListByFilter( filter, plugin );
     }
-
-
 
     /**
      * Load the number of all the commentSubmit who verify the filter

@@ -33,10 +33,11 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.sql.Timestamp;
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
+
+import java.sql.Timestamp;
+
+import java.util.List;
 
 
 /**
@@ -79,7 +80,6 @@ public interface ICommentSubmitDAO
      */
     void store( CommentSubmit commentSubmit, Plugin plugin );
 
-    
     /**
      * Load the data of all the commentSubmit who verify the filter and returns them in a  list
      * @param filter the filter
@@ -87,9 +87,6 @@ public interface ICommentSubmitDAO
      * @return  the list of commentSubmit
      */
     List<CommentSubmit> selectListByFilter( SubmitFilter filter, Plugin plugin );
-    
-    
-    
 
     /**
      * return the number  of all the commentSubmit who verify the filter
@@ -99,12 +96,11 @@ public interface ICommentSubmitDAO
      */
     int selectCountByFilter( SubmitFilter filter, Plugin plugin );
 
-   
     /**
      * Update date modify
      * @param dateModify update the modification date
      * @param idCommentSubmit the comment id
      * @param plugin the plugin
      */
-    void storeDateModify( Timestamp dateModify,int idCommentSubmit, Plugin plugin );
+    void storeDateModify( Timestamp dateModify, int idCommentSubmit, Plugin plugin );
 }
