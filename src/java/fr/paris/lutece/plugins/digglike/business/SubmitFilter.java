@@ -57,16 +57,21 @@ public class SubmitFilter
     public final static int SORT_MANUALLY = 8;
     public final static int SORT_BY_NUMBER_VIEW_ASC = 9;
     public final static int SORT_BY_NUMBER_VIEW_DESC = 10;
+    public final static int SORT_BY_DATE_MODIFY_ASC = 11;
+    public final static int SORT_BY_DATE_MODIFY_DESC = 12;
+    
     public static final int ALL_INT = -1;
     public static final int ID_TRUE = 1;
     public static final int ID_FALSE = 0;
     public static final int ID_ASC = 1;
     public static final int ID_DESC = 0;
+    public static final int ID_PARENT_NULL= 0;
     private int _nNumberVote = ALL_INT;
     private int _nIdDigg = ALL_INT;
     private int _nIdDiggSubmit = ALL_INT;
     private int _nIdEntry = ALL_INT;
     private int _nIdCategory = ALL_INT;
+    private int _nIdParent = ALL_INT;
     private int _nIdReported = ALL_INT;
     private Timestamp _tDateFirst;
     private Timestamp _tDateLast;
@@ -415,4 +420,33 @@ public class SubmitFilter
     {
         return ( _strLuteceUserKey != null );
     }
+    
+    
+    /**
+    *
+    * @return  the id of the digg insert in the filter
+    */
+   public int getIdParent(  )
+   {
+       return _nIdParent;
+   }
+
+   /**
+    * set  the id of the digg in the filter
+    * @param idDigg the id of digg to insert in the filter
+    */
+   public void setIdParent( int idParent )
+   {
+       _nIdParent = idParent;
+   }
+
+   /**
+    *
+    * @return true if the filter contain an id of digg
+    */
+   public boolean containsIdParent(  )
+   {
+       return ( _nIdParent != ALL_INT );
+   }
+
 }

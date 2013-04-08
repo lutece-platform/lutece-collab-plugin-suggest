@@ -2,10 +2,10 @@
 <div class="control-group">
 <label class="control-label" for="${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> : </label>
 	<div class="controls">
-		<textarea  name="${entry.idEntry}" id="${entry.idEntry}" class="markitup" cols="${entry.width}" rows="${entry.height}"><#if entry.defaultValue?exists>${entry.defaultValue}</#if></textarea>
+		<textarea  name="${entry.idEntry}" id="${entry.idEntry}" class="richtext" cols="${entry.width}" rows="${entry.height}"><#if entry.defaultValue?exists>${entry.defaultValue}</#if></textarea>
 		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
 		<span class="help-text">${entry.helpMessage}</span>
 		</#if>	
 	</div>
 </div>
-<@initEditor type="bbcode" />
+<@initEditor />

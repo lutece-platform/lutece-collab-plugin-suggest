@@ -23,7 +23,7 @@
     <css-stylesheets>
         <css-stylesheets-scope>xpage</css-stylesheets-scope>
         <css-stylesheet>../../js/jquery/plugins/star-rating/jquery.rating.css</css-stylesheet>
-        <css-stylesheet>digglike/digglike.css</css-stylesheet>
+       	<css-stylesheet>digglike/digglike.css</css-stylesheet>
     </css-stylesheets>
     <!-- Specific plugin JAVASCRIPT -->
     <javascript-files>

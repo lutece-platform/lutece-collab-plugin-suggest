@@ -1,6 +1,6 @@
 <#assign rootId = 0>
 <#if list_comment?has_content>
-	<#list list_comment?reverse as comment_submit_lutece_user>
+	<#list list_comment as comment_submit_lutece_user>
 	<div class="well">
 	<#assign rootId = rootId + 1>
 		<!-- digg.parseBbcodeValue -->
@@ -27,11 +27,11 @@
 			
 			<a href="#" class="link-top">Haut de page</a>
 		</p>
-		<form action="${fullUrl}?page=digg" method="post" name="" id="comment-comment${rootId}" class="form-inline comment-comment">
+		<form action="jsp/site/Portal.jsp?page=digg" method="post" name="" id="comment-comment${rootId}" class="form-inline comment-comment">
+		
+		<input name="action" value="do_create_comment" type="hidden" />
 		<input name="id_digg" value="${id_digg}" type="hidden" />
 		<input name="id_digg_submit" value="${id_digg_submit}" type="hidden" />
-		<input name="digg_detail" value="1" type="hidden" />
-		<input name="digg_comment" value="${digg_comment}" type="hidden" />
 		<input name="id_digg_comment" value="${comment_submit_lutece_user.comment_submit.idCommentSubmit}" type="hidden" />
 		<label for name="comment_value">
 		#i18n{digglike.diggComment.labelComment}
@@ -46,7 +46,7 @@
 		</button>
 		</form>
 		<#if comment_submit_lutece_user.comment_submit.comments?has_content>
-			<#list comment_submit_lutece_user.comment_submit.comments?reverse as comment_comment>
+			<#list comment_submit_lutece_user.comment_submit.comments as comment_comment>
 			<div class="alert alert-info">
 				${digg.parseBbcodeValue(comment_comment.value)}
 				<p>

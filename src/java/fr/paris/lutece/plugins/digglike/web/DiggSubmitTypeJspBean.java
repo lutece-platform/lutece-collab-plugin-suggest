@@ -89,6 +89,7 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_COLOR = "color";
     private static final String PARAMETER_PARAMETERIZABLE = "parameterizable";
     private static final String PARAMETER_IMAGE_SOURCE = "image_source";
+    private static final String PARAMETER_UPDATE_FILE = "update_file";
 
     //	 other constants
     private static final String EMPTY_STRING = "";
@@ -329,6 +330,7 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
         String strFieldError = EMPTY_STRING;
         FileItem imageSource = multipartRequest.getFile( PARAMETER_IMAGE_SOURCE );
         String strImageName = FileUploadService.getFileNameOnly( imageSource );
+        String strUpdateFile = multipartRequest.getParameter( PARAMETER_UPDATE_FILE );
 
         if ( ( strName == null ) || strName.trim(  ).equals( EMPTY_STRING ) )
         {
@@ -348,26 +350,35 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
             return AdminMessageService.getMessageUrl( multipartRequest, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
                 AdminMessage.TYPE_STOP );
         }
-
-        byte[] baImageSource = imageSource.get(  );
-        ImageResource image = new ImageResource(  );
-
+        
+        if( (diggSubmitType.getIdType()== DiggUtils.CONSTANT_ID_NULL) || (strUpdateFile!=null) )
+        {
+        	ImageResource image = new ImageResource(  );
+        	byte[] baImageSource = imageSource.get(  );
+        	 if ( ( strImageName != null ) && !strImageName.equals( "" ) )
+             {
+                 image.setImage( baImageSource );
+                 image.setMimeType( imageSource.getContentType(  ) );
+                 diggSubmitType.setPictogram( image );
+             }
+             else
+             {
+                 diggSubmitType.setPictogram( null );
+                 diggSubmitType.setImageUrl( "" );
+             }
+	
+        }
+        else
+        {
+        	diggSubmitType.setPictogram(DiggSubmitTypeHome.getImageResource(diggSubmitType.getIdType(), getPlugin()));
+        	
+        }
+        
         diggSubmitType.setColor( strColor );
         diggSubmitType.setName( strName );
         diggSubmitType.setParameterizableInFO( bParameterizable );
 
-        if ( ( strImageName != null ) && !strImageName.equals( "" ) )
-        {
-            image.setImage( baImageSource );
-            image.setMimeType( imageSource.getContentType(  ) );
-            diggSubmitType.setPictogram( image );
-        }
-        else
-        {
-            diggSubmitType.setPictogram( null );
-            diggSubmitType.setImageUrl( "" );
-        }
-
+       
         return null;
     }
 

@@ -33,12 +33,13 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -48,15 +49,15 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_comment_submit ) FROM digglike_comment_submit";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_comment_submit,id_digg_submit,date_comment,comment_value,active, lutece_user_key, official_answer, id_parent_comment  " +
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_comment_submit,id_digg_submit,date_comment,comment_value,active, lutece_user_key, official_answer, id_parent_comment,date_modify  " +
         "FROM digglike_comment_submit WHERE id_comment_submit=? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_comment_submit ( id_comment_submit,id_digg_submit,date_comment,comment_value,active,lutece_user_key,official_answer,id_parent_comment ) " +
-        "VALUES(?,?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_comment_submit ( id_comment_submit,id_digg_submit,date_comment,comment_value,active,lutece_user_key,official_answer,id_parent_comment,date_modify ) " +
+        "VALUES(?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM digglike_comment_submit WHERE id_comment_submit = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE digglike_comment_submit SET " +
         "id_comment_submit=?,id_digg_submit=?,date_comment=?,comment_value=?,active=? ,lutece_user_key=? ,official_answer=? ,id_parent_comment=?" +
         " WHERE id_comment_submit=? ";
-    private static final String SQL_QUERY_SELECT_COMMENT_SUBMIT_BY_FILTER = "SELECT id_comment_submit,id_digg_submit,date_comment,comment_value,active,lutece_user_key,official_answer,id_parent_comment " +
+    private static final String SQL_QUERY_SELECT_COMMENT_SUBMIT_BY_FILTER = "SELECT id_comment_submit,id_digg_submit,date_comment,comment_value,active,lutece_user_key,official_answer,id_parent_comment,date_modify " +
         "FROM digglike_comment_submit ";
     private static final String SQL_QUERY_SELECT_COUNT_BY_FILTER = "SELECT COUNT(id_comment_submit) " +
         "FROM digglike_comment_submit INNER JOIN digglike_digg_submit ON digglike_digg_submit.id_digg_submit = digglike_comment_submit.id_digg_submit ";
@@ -66,9 +67,15 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     private static final String SQL_FILTER_COMMENT_SUBMIT_STATE = " active = ? ";
     private static final String SQL_FILTER_SORT_BY_DATE_COMMENT_DESC = " date_comment DESC";
     private static final String SQL_FILTER_SORT_BY_DATE_COMMENT_ASC = " date_comment ASC";
+    private static final String SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_DESC = " date_modify DESC";
+    private static final String SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_ASC = " date_modify ASC";
+    private static final String SQL_QUERY_UPDATE_DATE_MODIFY = "UPDATE digglike_comment_submit SET date_modify=? WHERE id_comment_submit=? ";
+        
+    
+   
+    
     private static final String SQL_ORDER_BY = " ORDER BY ";
-    private static final String SQL_FILTER_COMMENT_SUBMIT_PARENT_ID_NULL = " id_parent_comment = 0 ";
-    private static final String SQL_FILTER_COMMENT_SUBMIT_PARENT_ID_NOT_NULL = " id_parent_comment <> 0 ";
+
 
     /**
      * Generates a new primary key
@@ -113,6 +120,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
         daoUtil.setString( 6, commentSubmit.getLuteceUserKey(  ) );
         daoUtil.setBoolean( 7, commentSubmit.isOfficialAnswer(  ) );
         daoUtil.setInt( 8, commentSubmit.getIdParent(  ) );
+        daoUtil.setTimestamp( 9, commentSubmit.getDateModify() );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
@@ -148,6 +156,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
             commentSubmit.setLuteceUserKey( daoUtil.getString( 6 ) );
             commentSubmit.setOfficialAnswer( daoUtil.getBoolean( 7 ) );
             commentSubmit.setIdParent( daoUtil.getInt( 8 ) );
+            commentSubmit.setDateModify( daoUtil.getTimestamp( 9 ) );
         }
 
         daoUtil.free(  );
@@ -190,87 +199,20 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
+ 
+    
+    
+public void storeDateModify( Timestamp dateModify,int idCommentSubmit, Plugin plugin )
+{
+    DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_DATE_MODIFY, plugin );
+    daoUtil.setTimestamp( 1, dateModify );
+    daoUtil.setInt( 2, idCommentSubmit );
+    daoUtil.executeUpdate(  );
+    daoUtil.free(  );
+}
 
-    /**
-     * Load the data of all the commentSubmit which verify the filter and returns them in a list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return  the list of commentSubmit
-     */
-    public List<CommentSubmit> selectParentsListByFilter( SubmitFilter filter, Plugin plugin )
-    {
-        List<CommentSubmit> commentSubmitList = new ArrayList<CommentSubmit>(  );
-        CommentSubmit commentSubmit = null;
-        DiggSubmit diggSubmit = null;
-        List<String> listStrFilter = new ArrayList<String>(  );
-        String strOrderBy = null;
 
-        if ( filter.containsIdDiggSubmit(  ) )
-        {
-            listStrFilter.add( SQL_FILTER_ID_DIGG_SUBMIT );
-        }
 
-        if ( filter.containsIdCommentSubmitState(  ) )
-        {
-            listStrFilter.add( SQL_FILTER_COMMENT_SUBMIT_STATE );
-        }
-
-        if ( filter.containsSortBy(  ) )
-        {
-            strOrderBy = getOrderBy( filter.getSortBy(  ) );
-        }
-
-        //in order to get only the "parents" comments
-        listStrFilter.add( SQL_FILTER_COMMENT_SUBMIT_PARENT_ID_NULL );
-
-        String strSQL = DiggUtils.buildRequestWithFilter( SQL_QUERY_SELECT_COMMENT_SUBMIT_BY_FILTER, listStrFilter,
-                strOrderBy );
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
-        int nIndex = 1;
-
-        if ( filter.containsIdDiggSubmit(  ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdDiggSubmit(  ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdCommentSubmitState(  ) )
-        {
-            daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdCommentSubmitState(  ) ) );
-            nIndex++;
-        }
-
-        daoUtil.executeQuery(  );
-
-        while ( daoUtil.next(  ) )
-        {
-            commentSubmit = new CommentSubmit(  );
-            commentSubmit.setIdCommentSubmit( daoUtil.getInt( 1 ) );
-
-            diggSubmit = new DiggSubmit(  );
-            diggSubmit.setIdDiggSubmit( daoUtil.getInt( 2 ) );
-            commentSubmit.setDiggSubmit( diggSubmit );
-
-            commentSubmit.setDateComment( daoUtil.getTimestamp( 3 ) );
-            commentSubmit.setValue( daoUtil.getString( 4 ) );
-            commentSubmit.setActive( daoUtil.getBoolean( 5 ) );
-            commentSubmit.setLuteceUserKey( daoUtil.getString( 6 ) );
-            commentSubmit.setOfficialAnswer( daoUtil.getBoolean( 7 ) );
-            commentSubmit.setIdParent( daoUtil.getInt( 8 ) );
-            commentSubmitList.add( commentSubmit );
-        }
-
-        daoUtil.free(  );
-
-        for ( CommentSubmit c : commentSubmitList )
-        {
-            //in this method we gonna get the list of children of a comment
-            filter.setIdDiggSubmit( c.getIdCommentSubmit(  ) );
-            c.setComments( selectListCommentSubmitByFilter( filter, plugin ) );
-        }
-
-        return commentSubmitList;
-    }
 
     /**
      * Load the data of all the commentSubmit which verify the filter and returns them in a list
@@ -295,6 +237,11 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
         {
             listStrFilter.add( SQL_FILTER_COMMENT_SUBMIT_STATE );
         }
+        if ( filter.containsIdParent() )
+        {
+            listStrFilter.add( SQL_FILTER_ID_PARENT_COMMENT );
+        }
+        
 
         if ( filter.containsSortBy(  ) )
         {
@@ -317,6 +264,12 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
             daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdCommentSubmitState(  ) ) );
             nIndex++;
         }
+        if ( filter.containsIdParent(  ) )
+        {
+            daoUtil.setInt( nIndex, filter.getIdParent(  )  );
+            nIndex++;
+        }
+
 
         daoUtil.executeQuery(  );
 
@@ -335,153 +288,18 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
             commentSubmit.setLuteceUserKey( daoUtil.getString( 6 ) );
             commentSubmit.setOfficialAnswer( daoUtil.getBoolean( 7 ) );
             commentSubmit.setIdParent( daoUtil.getInt( 8 ) );
+            commentSubmit.setDateModify( daoUtil.getTimestamp( 9 ) );
             commentSubmitList.add( commentSubmit );
         }
 
         daoUtil.free(  );
 
-        for ( CommentSubmit c : commentSubmitList )
-        {
-            //in this method we gonna get the list of children of a comment
-            filter.setIdDiggSubmit( c.getIdCommentSubmit(  ) );
-            c.setComments( selectListCommentSubmitByFilter( filter, plugin ) );
-        }
 
         return commentSubmitList;
     }
 
-    /**
-     * Load the data of all the commentSubmit who verify the filter and returns them in a sorted list in order to show it in the back office
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return  the list of commentSubmit
-     */
-    public List<CommentSubmit> selectListCommentsBackOfficeByFilter( SubmitFilter filter, Plugin plugin )
-    {
-        List<CommentSubmit> sortedList = selectListByFilter( filter, plugin );
-        List<CommentSubmit> parentsList = new ArrayList<CommentSubmit>(  );
 
-        Boolean bAlreadyPresent;
 
-        for ( CommentSubmit c : sortedList )
-        {
-            bAlreadyPresent = false;
-
-            for ( CommentSubmit cs : parentsList )
-            {
-                if ( ( cs.getIdCommentSubmit(  ) == c.getIdParent(  ) ) ||
-                        ( ( c.getIdParent(  ) == 0 ) && ( c.getIdCommentSubmit(  ) == cs.getIdCommentSubmit(  ) ) ) )
-                {
-                    bAlreadyPresent = true;
-
-                    if ( cs.getLastDateComment(  ).before( c.getDateComment(  ) ) )
-                    {
-                        cs.setLastDateComment( c.getDateComment(  ) );
-                    }
-                }
-            }
-
-            if ( !bAlreadyPresent )
-            {
-                //add the parent to the parent list
-                for ( CommentSubmit parent : sortedList )
-                {
-                    if ( c.getIdParent(  ) != 0 )
-                    {
-                        if ( parent.getIdCommentSubmit(  ) == c.getIdParent(  ) )
-                        {
-                            parent.setLastDateComment( c.getDateComment(  ) );
-                            parentsList.add( parent );
-                        }
-                    }
-                    else
-                    {
-                        if ( parent.getIdCommentSubmit(  ) == c.getIdCommentSubmit(  ) )
-                        {
-                            parent.setLastDateComment( c.getDateComment(  ) );
-                            parentsList.add( parent );
-                        }
-                    }
-                }
-            }
-        }
-
-        return parentsList;
-    }
-
-    /**
-     * Load the data of all the commentSubmit who verify the filter and returns them in a list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return  the list of commentSubmit
-     */
-    public List<CommentSubmit> selectListCommentSubmitByFilter( SubmitFilter filter, Plugin plugin )
-    {
-        List<CommentSubmit> commentSubmitList = new ArrayList<CommentSubmit>(  );
-        CommentSubmit commentSubmit = null;
-        DiggSubmit diggSubmit = null;
-        List<String> listStrFilter = new ArrayList<String>(  );
-        String strOrderBy = null;
-
-        if ( filter.containsIdDiggSubmit(  ) )
-        {
-            listStrFilter.add( SQL_FILTER_ID_PARENT_COMMENT );
-        }
-
-        if ( filter.containsIdCommentSubmitState(  ) )
-        {
-            listStrFilter.add( SQL_FILTER_COMMENT_SUBMIT_STATE );
-        }
-
-        if ( filter.containsSortBy(  ) )
-        {
-            strOrderBy = getOrderBy( filter.getSortBy(  ) );
-        }
-
-        //in order to get only the children comments
-        listStrFilter.add( SQL_FILTER_COMMENT_SUBMIT_PARENT_ID_NOT_NULL );
-
-        String strSQL = DiggUtils.buildRequestWithFilter( SQL_QUERY_SELECT_COMMENT_SUBMIT_BY_FILTER, listStrFilter,
-                strOrderBy );
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
-        int nIndex = 1;
-
-        if ( filter.containsIdDiggSubmit(  ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdDiggSubmit(  ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdCommentSubmitState(  ) )
-        {
-            daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdCommentSubmitState(  ) ) );
-            nIndex++;
-        }
-
-        daoUtil.executeQuery(  );
-
-        while ( daoUtil.next(  ) )
-        {
-            commentSubmit = new CommentSubmit(  );
-            commentSubmit.setIdCommentSubmit( daoUtil.getInt( 1 ) );
-
-            diggSubmit = new DiggSubmit(  );
-            diggSubmit.setIdDiggSubmit( daoUtil.getInt( 2 ) );
-            commentSubmit.setDiggSubmit( diggSubmit );
-
-            commentSubmit.setDateComment( daoUtil.getTimestamp( 3 ) );
-            commentSubmit.setValue( daoUtil.getString( 4 ) );
-            commentSubmit.setActive( daoUtil.getBoolean( 5 ) );
-            commentSubmit.setLuteceUserKey( daoUtil.getString( 6 ) );
-            commentSubmit.setOfficialAnswer( daoUtil.getBoolean( 7 ) );
-
-            commentSubmitList.add( commentSubmit );
-        }
-
-        daoUtil.free(  );
-
-        return commentSubmitList;
-    }
 
     /**
      * return the number  of all the commentSubmit who verify the filter
@@ -572,9 +390,20 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
                         strOrderBy.append( SQL_FILTER_SORT_BY_DATE_COMMENT_DESC );
 
                         break;
+                    case SubmitFilter.SORT_BY_DATE_MODIFY_ASC:
+                        strOrderBy.append( SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_ASC );
+
+                        break;
+
+                    case SubmitFilter.SORT_BY_DATE_MODIFY_DESC:
+                        strOrderBy.append( SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_DESC );
+
+                        break;    
 
                     default:
-                        break;
+                    	strOrderBy.append( SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_DESC );
+                    	
+                    	break;
                 }
 
                 if ( ncpt < listSortBy.size(  ) )

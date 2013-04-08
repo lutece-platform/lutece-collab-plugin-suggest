@@ -59,16 +59,6 @@ public interface ICommentSubmitService {
 	List<CommentSubmit> getCommentSubmitList(SubmitFilter filter, Plugin plugin);
 
 	/**
-	 * Load the data of all the commentSubmit which verify the filter and returns them in a  list
-	 * @param filter the filter
-	 * @param plugin the plugin
-	 * @return  the list of commentSubmit
-	 */
-	@Transactional( "digglike.transactionManager" )
-	List<CommentSubmit> getCommentSubmitListBackOffice(SubmitFilter filter,
-			Plugin plugin);
-
-	/**
 	 * Load the number of all the commentSubmit who verify the filter
 	 * @param filter the filter
 	 * @param plugin the plugin

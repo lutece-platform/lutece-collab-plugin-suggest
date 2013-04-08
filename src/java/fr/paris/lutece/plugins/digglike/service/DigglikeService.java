@@ -104,7 +104,7 @@ public class DigglikeService
      */
     public void updateDisplayDiggSubmit( Integer nIdDiggSubmit, Plugin plugin, Locale locale, Digg digg )
     {
-        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit,false, plugin );
+        DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit,false, plugin );
         diggSubmit.setDigg( digg );
 
         SubmitFilter filter = new SubmitFilter(  );

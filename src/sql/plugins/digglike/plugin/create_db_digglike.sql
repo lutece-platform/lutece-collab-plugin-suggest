@@ -225,7 +225,8 @@ CREATE TABLE digglike_comment_submit (
 	comment_value long varchar,
 	active smallint default 0,
 	lutece_user_key varchar(100) default NULL,
-	official_answer smallint default 0, 
+	official_answer smallint default 0,
+	date_modify timestamp NULL,
 	PRIMARY KEY (id_comment_submit)
 );
 

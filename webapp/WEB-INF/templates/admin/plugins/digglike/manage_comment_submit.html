@@ -11,8 +11,8 @@
 		</p>
 		<p>
 			<#if digg_submit.diggSubmitTitle?exists>
-				<#if number_shown_characters?exists&&digg_submit.diggSubmitTitle?length &gt; number_shown_characters>
-					${digg_submit.diggSubmitTitle?substring(0,number_shown_characters)}... 
+				<#if digg_submit.diggSubmitTitle?length &gt; 100>
+					${digg_submit.diggSubmitTitle?substring(0,100)}... 
 				<#else>
 					${digg_submit.diggSubmitTitle}
 				</#if>
@@ -133,7 +133,7 @@
 			#i18n{digglike.manageCommentSubmit.rowDateCommentSubmit}: <strong>${comment_submit.dateComment}&nbsp;</strong>
 			<#if comment_submit.comments?has_content>
 			<span>			
-			&nbsp;#i18n{digglike.manageCommentSubmit.rowLastDateCommentSubmit}: <strong>${comment_submit.lastDateComment}&nbsp;</strong>
+			&nbsp;#i18n{digglike.manageCommentSubmit.rowLastDateCommentSubmit}: <strong>${comment_submit.dateModify}&nbsp;</strong>
 			</span>
 			</#if> 
 			</p>
@@ -179,7 +179,7 @@
 <script>
 $(document).ready( function () {
 	$(".popOverContent").toggle();
-    $("button[rel=popover]").popover({trigger:'hover'});
+    $("button[rel=popover]").popover({trigger:'click'});
 	$("div.commentComments").toggle();
 	doToggle( ".comment_toggle" );
 });

@@ -3,32 +3,28 @@
 	<#if unavailability_message?exists>
 		<div class="alert alert-error">${unavailability_message}</div>    
 	<#else>
+		
+		
+	
+		
 		<div class="row-fluid">
-			<div class="span3">
-				<fieldset>
-				<legend>#i18n{digglike.diggFrame.altSearch}</legend> 
-				<form name="search" class="form" method="post" action="${fullUrl}?page=digg">
-					<input type="hidden" name="page" value="search" />
-					<input type="text" name="query" class="input-small" value=" <#if query?exists>${query}</#if>" />
-					<button class="btn btn-primary btn-small" type="submit"><i class="icon-search icon-white"></i>&nbsp;#i18n{digglike.diggFrame.altSearch}</button>
-				</form>
-				</fieldset>
-			</div>
-			<div class="span8">
+			
+			<div class="span12">
+				
 				<fieldset>
 				<legend>#i18n{digglike.diggList.title}:</legend> 
+						<#if paginator?exists>
+							#i18n{digglike.diggListSubmit.paginator.labelResultsCount} : <strong>${paginator.itemsCount}</strong> <br />
+							#i18n{digglike.diggListSubmit.paginator.labelResultsRange} : <strong>${paginator.rangeMin} - ${paginator.rangeMax}</strong> <br />
+							<@pagination paginator=paginator />
+				 		</#if>
+				
+					
 					<ul>
-					<#if content_digg?exists>
-						<#list content_digg as digg_submit>	
-						<li>
-							<a href="${fullUrl}?page=digg&amp;id_digg=${digg_submit.idDiggSubmit}">${digg_submit.diggSubmitTitle}</a>
-						</li>				
-						</#list>
-					</#if>
-					<#if list_digg?exists>
+						<#if list_digg?exists>
 						<#list list_digg as digg>	
 						<li>
-							<a href="${fullUrl}?page=digg&amp;id_digg=${digg.idDigg}">${digg.title}</a>
+							<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${digg.idDigg}&amp;action=view_digg_submit_list">${digg.title}</a>
 						</li>
 						</#list>
 					</#if>

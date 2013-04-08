@@ -40,6 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mysql.jdbc.PacketTooBigException;
 
+import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
@@ -86,7 +87,7 @@ public class DiggSubmitService implements IDiggSubmitService
     @Transactional( "digglike.transactionManager" )
     public void remove( int nIdDiggSubmit, Plugin plugin )
     {
-        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit,false, plugin );
+        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit, plugin );
 
         if ( diggSubmit != null )
         {
@@ -136,7 +137,18 @@ public class DiggSubmitService implements IDiggSubmitService
     @Override
     public DiggSubmit findByPrimaryKey( int nKey,boolean bLoadCommentList, Plugin plugin )
     {
-        return DiggSubmitHome.findByPrimaryKey( nKey,bLoadCommentList, plugin );
+        
+    	DiggSubmit diggSubmit=DiggSubmitHome.findByPrimaryKey(nKey, plugin);
+        if ( bLoadCommentList && diggSubmit != null )
+        {
+            SubmitFilter submmitFilterComment = new SubmitFilter(  );
+            submmitFilterComment.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
+            submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
+            diggSubmit.setComments( CommentSubmitService.getService().getCommentSubmitList( submmitFilterComment, plugin ) );
+        }
+
+    	
+    	return diggSubmit;
     }
 
     @Override
@@ -166,24 +178,48 @@ public class DiggSubmitService implements IDiggSubmitService
     @Override
     public List<DiggSubmit> getDiggSubmitList( SubmitFilter filter, Plugin plugin )
     {
+    	if(!filter.containsSortBy())
+    	{
+    		//use default sort
+    		DiggUtils.initSubmitFilterBySort(filter,DiggUtils.CONSTANT_ID_NULL);
+    		
+    	}	
         return DiggSubmitHome.getDiggSubmitList( filter, plugin );
     }
 
     @Override
     public List<DiggSubmit> getDiggSubmitList( SubmitFilter filter, Plugin plugin, int nNumberMaxDiggSubmit )
     {
+    	if(!filter.containsSortBy())
+    	{
+    		//use default sort
+    		DiggUtils.initSubmitFilterBySort(filter,DiggUtils.CONSTANT_ID_NULL);
+    		
+    	}	
         return DiggSubmitHome.getDiggSubmitList( filter, plugin, nNumberMaxDiggSubmit );
     }
 
     @Override
     public List<Integer> getDiggSubmitListId( SubmitFilter filter, Plugin plugin )
     {
+    	if(!filter.containsSortBy())
+    	{
+    		//use default sort
+    		DiggUtils.initSubmitFilterBySort(filter,DiggUtils.CONSTANT_ID_NULL);
+    		
+    	}	
         return DiggSubmitHome.getDiggSubmitListId( filter, plugin );
     }
 
     @Override
     public List<DiggSubmit> getDiggSubmitListWithNumberComment( SubmitFilter filter, Plugin plugin )
     {
+    	if(!filter.containsSortBy())
+    	{
+    		//use default sort
+    		DiggUtils.initSubmitFilterBySort(filter,DiggUtils.CONSTANT_ID_NULL);
+    		
+    	}	
         return DiggSubmitHome.getDiggSubmitListWithNumberComment( filter, plugin );
     }
 

@@ -56,6 +56,7 @@ public class CommentSubmit
     private static final String TAG_DIGG_SUBMIT_COMMENT = "digg-submit-comment";
     private static final String TAG_DIGG_SUBMIT_COMMENT_DATE = "digg-submit-comment-date";
     private static final String TAG_DIGG_SUBMIT_COMMENT_VALUE = "digg-submit-comment-value";
+    private static final String TAG_DIGGS_SUBMIT_COMMENTS = "diggs-submit-comments";
     private int _nIdCommentSubmit;
     private DiggSubmit _diggSubmit;
     private Timestamp _tDateComment;
@@ -65,7 +66,7 @@ public class CommentSubmit
     private boolean _bOfficialAnswer;
     private List<CommentSubmit> _listComments;
     private int _nIdParent;
-    private Timestamp _tLastDateComment;
+    private Timestamp _tDateModify;
 
     /**
      * return the id of the comment submit
@@ -228,18 +229,18 @@ public class CommentSubmit
      *  return the last comment date
      * @return the last comment date
      */
-    public Timestamp getLastDateComment(  )
+    public Timestamp getDateModify(  )
     {
-        return _tLastDateComment;
+        return _tDateModify;
     }
 
     /**
      * set the last comment date
      * @param lastCommentDate the last comment date
      */
-    public void setLastDateComment( Timestamp lastCommentDate )
+    public void setDateModify( Timestamp lastCommentDate )
     {
-        _tLastDateComment = lastCommentDate;
+        _tDateModify = lastCommentDate;
     }
 
     /**
@@ -253,10 +254,23 @@ public class CommentSubmit
     {
         StringBuffer strXml = new StringBuffer(  );
         XmlUtil.beginElement( strXml, TAG_DIGG_SUBMIT_COMMENT );
+        
         XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_COMMENT_DATE,
             DateUtil.getDateString( getDateComment(  ), locale ) );
         XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_COMMENT_VALUE, getValue(  ) );
+        	
+        XmlUtil.beginElement( strXml, TAG_DIGGS_SUBMIT_COMMENTS );
 
+        if (  getComments( ) != null && getComments(  ).size(  ) != 0 )
+        {
+            for ( CommentSubmit commentSubmit : getComments(  ) )
+            {
+                strXml.append( commentSubmit.getXml( request, locale ) );
+            }
+        }
+
+        XmlUtil.endElement( strXml, TAG_DIGGS_SUBMIT_COMMENTS );
+        
         XmlUtil.endElement( strXml, TAG_DIGG_SUBMIT_COMMENT );
 
         return strXml.toString(  );

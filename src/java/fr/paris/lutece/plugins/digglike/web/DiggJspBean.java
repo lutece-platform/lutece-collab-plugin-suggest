@@ -44,20 +44,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import javax.management.Query;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.paris.lutece.plugins.digglike.business.Category;
 import fr.paris.lutece.plugins.digglike.business.CategoryHome;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
-import fr.paris.lutece.plugins.digglike.business.CommentSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.DefaultMessage;
 import fr.paris.lutece.plugins.digglike.business.DefaultMessageHome;
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggAction;
 import fr.paris.lutece.plugins.digglike.business.DiggActionHome;
-import fr.paris.lutece.plugins.digglike.business.DiggDAO;
 import fr.paris.lutece.plugins.digglike.business.DiggFilter;
 import fr.paris.lutece.plugins.digglike.business.DiggHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
@@ -108,7 +105,6 @@ import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
@@ -714,15 +710,16 @@ public class DiggJspBean extends PluginAdminPageJspBean
         StringBuffer strBufferListDiggSubmitXml = new StringBuffer(  );
         DiggSubmit diggSubmit=null;
         List<CommentSubmit> listCommentSubmit;
-       //reinit filter for commeny
+       //reinit filter for comment
         filter = new SubmitFilter(  );
+        
         for ( Integer nIdDiggSubmit : listIdDiggSubmit )
         {
         	diggSubmit=_diggSubmitService.findByPrimaryKey(nIdDiggSubmit, false, plugin);
         	filter.setIdDiggSubmit(nIdDiggSubmit);
-        	listCommentSubmit=_commentSubmitService.getCommentSubmitListBackOffice(filter, plugin);
+        	listCommentSubmit=_commentSubmitService.getCommentSubmitList(filter, plugin);
         	diggSubmit.setComments(listCommentSubmit);
-        	diggSubmit.setNumberComment(listCommentSubmit.size());
+        	diggSubmit.setNumberComment(_commentSubmitService.getCountCommentSubmit(filter, plugin));
         	strBufferListDiggSubmitXml.append(diggSubmit.getXml(request, locale));
         }
 
@@ -731,12 +728,15 @@ public class DiggJspBean extends PluginAdminPageJspBean
         
         if ( exportFormat.getExtension(  ).equals( EXPORT_CSV_EXT ) )
         {
-            strXmlSource = strXmlSource.replaceAll( System.getProperty( "line.separator" ), "" );
+            strXmlSource = strXmlSource.replaceAll( "[\r\n]+", "" );
             strXmlSource = strXmlSource.replaceAll( "\t", "" );
             // we have to delete the html div code of the values
             strXmlSource = strXmlSource.replaceAll( "<div[^>]+>", "" );
             strXmlSource = strXmlSource.replaceAll( "</div>", "" );
         }
+        
+
+   
 
         XmlTransformerService xmlTransformerService = new XmlTransformerService(  );
 
@@ -820,7 +820,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         commentFilter.setIdReported( _nIdDiggSubmitReport );
         DiggUtils.initCommentFilterBySort( commentFilter, _nIdCommentSort );
 
-        List<CommentSubmit> listCommentSubmit = _commentSubmitService.getCommentSubmitListBackOffice( commentFilter,
+        List<CommentSubmit> listCommentSubmit = _commentSubmitService.getCommentSubmitList( commentFilter,
                 getPlugin(  ) );
 
         ReferenceList refListCommentSort = DiggUtils.getRefListCommentSort( locale );

@@ -1,4 +1,46 @@
 <fieldset>
 <legend>#i18n{digglike.diggForm.title} <#if disable_new_digg_submit>(#i18n{digglike.diggForm.titleDisableNewDiggSubmit})</#if></legend>
-${form_digg}
+<#include "/admin/util/calendar/calendar.html" />
+<div class="row-fluid">
+	<div class="span12">
+	<fieldset>
+	<legend></legend>
+	<form class="form-horizontal" action="jsp/site/Portal.jsp" method="post" name="formdigg" id="formdigg"  enctype="multipart/form-data" >
+		<input name="page" value="digg" type="hidden"/>
+		<input name="id_digg" value="${digg.idDigg}" type="hidden"/>
+		<input name="action" value="do_create_digg_submit" type="hidden" />
+		${str_entry}
+		<#if category_list?has_content>
+		<div class="control-group">
+			<label class="control-label" for="id_category">#i18n{digglike.createDigg.labelCategoryTitle} *</label>
+			<div class="controls">
+				<@combo name="id_category" items=category_list default_value="${id_default_category}" />
+			</div>
+		</div>
+		</#if>	
+		<#if types_list?has_content>
+		<div class="control-group">
+		<label class="control-label" for="id_type">#i18n{digglike.createDigg.labelTypeTitle}</label>
+			<div class="controls">
+				<@combo name="id_type" items=types_list default_value="-1" />
+			</div>
+		</div>
+		</#if>
+		<#if jcaptcha?exists>
+		<fieldset> 
+		${jcaptcha}
+		</fieldset>
+		</#if>
+		<div class="form-actions">
+			<button class="btn btn-primary btn-small" type="submit" name="submit"><i class="icon-ok icon-white"></i>&nbsp;${digg.libelleValidateButton}</button>
+		</div>
+	</form>
+	</fieldset>
+	</div>
+</div>
+
+<script language="JavaScript" type="text/javascript">
+	var tabQuestionToOpen=new Array();
+	var	tabCalendar=new Array();
+</script> 
 </fieldset>

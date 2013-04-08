@@ -48,8 +48,8 @@
 			<#else>
 				<span class="label label-important" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="icon-white icon-remove"></i></span>
 			</#if>
-				<#if digg_submit.diggSubmitTitle?length &gt; 50>
-					&nbsp;${digg_submit.diggSubmitTitle?substring(50)}...
+				<#if digg_submit.diggSubmitTitle?length &gt; 100>
+					&nbsp;${digg_submit.diggSubmitTitle?substring(0,100)}...
 				<#else>
 					&nbsp;${digg_submit.diggSubmitTitle}
 				</#if>
@@ -139,6 +139,6 @@
 <script>
 $(document).ready( function () {
 	$(".popOverContent").toggle();
-    $("button[rel=popover]").popover({trigger:'hover'});
+    $("button[rel=popover]").popover({trigger:'click'});
 });
 </script>

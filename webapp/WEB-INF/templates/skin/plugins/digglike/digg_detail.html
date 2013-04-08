@@ -24,7 +24,7 @@
 		</div>	
 	</#if>
 	<#if digg_submit_moderate>
-		<a class="btn btn-primary btn-small" href="${fullUrl}?page=digg&amp;id_digg=${id_digg}&amp;mode_digg=0&amp;id_digg_submit=${digg_submit.idDiggSubmit}&amp;report=1&amp;digg_detail=1#digg${digg_submit.idDiggSubmit}">
+		<a class="btn btn-primary btn-small" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit.idDiggSubmit}&amp;action=create_report#digg${digg_submit.idDiggSubmit}">
 			#i18n{digglike.diggListSubmit.labelReport}
 		</a>
 	</#if>
@@ -47,10 +47,9 @@
 	</p>
 	<#if authorized_comment>
 		
-	<form class="form" action="${fullUrl}?page=digg" method="post" name="form-comment" id="form-comment"  >
+	<form class="form" action="jsp/site/Portal.jsp?page=digg" method="post" name="form-comment" id="form-comment"  >
+		<input name="action" value="do_create_comment" type="hidden" />
 		<input name="id_digg" value="${id_digg}" type="hidden" />
-		<input name="digg_detail" value="1" type="hidden" />
-		<input name="digg_comment" value="1" type="hidden" />
 		<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden" />
 		<label>#i18n{digglike.diggComment.labelAddNewComment}</label>
 		<textarea name="comment_value" id="comment_value" class="markitup span6" rows="2"></textarea>

@@ -13,7 +13,7 @@
 				<div class="span8">
 				<h4>
 					<strong>
-						<a href="${fullUrl}?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;digg_comment=1&amp;digg_detail=1">${digg_submit_display.digg_submit.diggSubmitTitle}</a>
+						<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;action=view_digg_submit">${digg_submit_display.digg_submit.diggSubmitTitle}</a>
 					</strong>
 				</h4>
 				</div>
@@ -27,19 +27,17 @@
 									<img class="thumbnail" src="${digg_submit_display.digg_submit.diggSubmitType.imageUrl!''}"/>
 									${digg_submit_display.digg_submit.category.title}
 								</span> 
-							</#if>
-							<#if !digg_submit_display.digg_submit.diggSubmitType?exists>
+							
+							<#else>
 								<span class="label label-inverse" style="background-color:${digg_submit_display.digg_submit.category.color!''};">
 									${digg_submit_display.digg_submit.category.title}
 								</span> 
 							</#if>
-						<#else>
-							<#if digg_submit_display.digg_submit.diggSubmitType?exists>
-								<span class="label label-inverse" style="background-color:${digg_submit_display.digg_submit.category.color!''};">
-									${digg_submit_display.digg_submit.category.title}
-									<img class="thumb-list"  src="${digg_submit_display.digg_submit.diggSubmitType.imageUrl!''}"/>
-								</span> 
-						</#if>
+					<#elseif digg_submit_display.digg_submit.diggSubmitType?exists>
+							<span class="label label-inverse" style="background-color:${digg_submit_display.digg_submit.diggSubmitType.color!''};">
+								<img class="thumb-list"  src="${digg_submit_display.digg_submit.diggSubmitType.imageUrl!''}"/>
+							</span> 
+						
 					</#if>
 					<#if digg_submit_display.digg_submit_vote_type?exists>
 					<p>${digg_submit_display.digg_submit_vote_type}</p>
@@ -60,8 +58,27 @@
 						${digg_submit_display.digg_submit.diggSubmitValueShowInTheList}
 					</#if>
 					</div>
+					<#if authorized_comment>
+						<#assign nbComments = 1>
+						<div class="-digg-comments">
+							<ul>
+								<#list digg_submit_display.digg_submit.comments as comment>	
+									<#if nbComments <= number_comments>
+											<li>
+												<#if comment.value?length <= cumber_char_comments>
+													${comment.value[0..]}
+												<#else>
+													${comment.value[0..cumber_char_comments-1]}...
+												</#if> 
+											</li>
+									</#if> 
+									<#assign nbComments = nbComments + 1>
+								</#list>
+							</ul>
+						</div>
+					</#if> 
 					<p>
-						<a class="btn pull-right" href="${fullUrl}?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;digg_comment=1&amp;digg_detail=1">
+						<a class="btn pull-right" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;digg_comment=1&amp;action=view_digg_submit">
 							#i18n{digglike.diggListSubmit.labelReadMore} ... 
 						</a>
 					</p>
@@ -70,7 +87,7 @@
 			<div class="row">
 				<div class="span8">
 					<#if digg_submit_moderate>	
-						<a class="btn btn-link" href="${fullUrl}?page=digg&amp;id_digg=${id_digg}&amp;mode_digg=0&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;report=1#digg${digg_submit_display.digg_submit.idDiggSubmit}">
+						<a class="btn btn-link" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;action=create_report#digg${digg_submit_display.digg_submit.idDiggSubmit}">
 							<i class=""></i>&nbsp;#i18n{digglike.diggListSubmit.labelReport}
 						</a> |  
 					</#if>
@@ -86,7 +103,7 @@
 					<i class="icon-calendar"></i> ${digg_submit_display.digg_submit.dateResponse} | 
 					<#if authorized_comment>
 					<i class="icon-comment"></i>&nbsp;
-						<a href="${fullUrl}?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;digg_comment=1&amp;digg_detail=1">
+						<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;action=view_digg_submit">
 						${digg_submit_display.digg_submit.numberCommentEnable} #i18n{digglike.diggListSubmit.labelComments}
 					</a> |
 					</#if>

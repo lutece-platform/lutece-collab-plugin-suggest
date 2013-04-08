@@ -5,6 +5,7 @@ import java.util.List;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
+import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
@@ -19,7 +20,13 @@ public class CommentSubmitService implements ICommentSubmitService {
     @Override
     public  void create( CommentSubmit commentSubmit, Plugin plugin )
     {
+    	commentSubmit.setDateModify(commentSubmit.getDateComment());
     	CommentSubmitHome.create(commentSubmit, plugin);
+    	if( commentSubmit.getIdParent( ) != DiggUtils.CONSTANT_ID_NULL )
+    	{	
+    		//update parent modification date
+    		CommentSubmitHome.updateDateModify(commentSubmit.getDateComment(), commentSubmit.getIdParent(), plugin);
+    	}
     	
     }
     
@@ -62,17 +69,38 @@ public class CommentSubmitService implements ICommentSubmitService {
     @Override
     public  List<CommentSubmit> getCommentSubmitList( SubmitFilter filter, Plugin plugin )
     {
-    	return CommentSubmitHome.getCommentSubmitList(filter, plugin);
+    	
+    	if(!filter.containsSortBy())
+    	{
+    		//use default sort
+    		DiggUtils.initCommentFilterBySort(filter,DiggUtils.CONSTANT_ID_NULL);
+    		
+    	}
+    	
+     	//get All parent
+    	filter.setIdParent(SubmitFilter.ID_PARENT_NULL);
+        List<CommentSubmit> commentSubmitList=CommentSubmitHome.getCommentSubmitList(filter, plugin);
+        if(commentSubmitList!=null)
+    	{
+        	SubmitFilter subCommentFilter;
+        	for ( CommentSubmit c : commentSubmitList )
+	         {
+	        	 subCommentFilter=new SubmitFilter();
+	        	 //in this method we gonna get the list of children of a comment
+	        	 subCommentFilter.setIdParent(c.getIdCommentSubmit());
+	        	 subCommentFilter.setIdCommentSubmitState(filter.getIdCommentSubmitState());
+	        	 subCommentFilter.getSortBy().add(SubmitFilter.SORT_BY_DATE_RESPONSE_DESC);
+	        	 c.setComments(  CommentSubmitHome.getCommentSubmitList( subCommentFilter, plugin ));
+	        
+	         }
+    	}
+        filter.setIdParent(DiggUtils.CONSTANT_ID_NULL);
+        return commentSubmitList;
+    	
+    	
+    	
     }
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<CommentSubmit> getCommentSubmitListBackOffice( SubmitFilter filter, Plugin plugin )
-    {
-    	return CommentSubmitHome.getCommentSubmitListBackOffice(filter, plugin);
-    }
-  
+
 
     /**
      * {@inheritDoc}

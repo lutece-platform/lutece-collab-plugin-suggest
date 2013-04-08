@@ -69,7 +69,6 @@ import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.business.Vote;
 import fr.paris.lutece.plugins.digglike.business.VoteHome;
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
-import fr.paris.lutece.plugins.digglike.web.DiggApp;
 import fr.paris.lutece.portal.business.mailinglist.Recipient;
 import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -83,6 +82,7 @@ import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
+import fr.paris.lutece.util.string.StringUtil;
 
 
 /**
@@ -97,8 +97,7 @@ public final class DiggUtils
     public static final int CONSTANT_SUBMIT_FILTER_WEEK = 2;
     public static final int CONSTANT_SUBMIT_FILTER_MONTH = 3;
     public static final int CONSTANT_SUBMIT_FILTER_YESTERDAY = 4;
-    public static final int CONSTANT_MODE_DIGG_LIST = 0;
-    public static final int CONSTANT_MODE_DIGG_FORM = 1;
+ 
     public static final String EMPTY_STRING = "";
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_ENTRY = "entry";
@@ -118,6 +117,10 @@ public final class DiggUtils
     private static final String CONSTANT_WHERE = " WHERE ";
     private static final String CONSTANT_AND = " AND ";
     private static final String MARK_ID_DEFAULT_CATEGORY = "id_default_category";
+    private static final String CONSTANT_CHARACTER_DOUBLE_QUOTE = "\"";
+    private static final String CONSTANT_CHARACTER_SIMPLE_QUOTE = "'";
+    private static final String CONSTANTE_CHARACTERNEW_LINE = "\n";
+    private static final String CONSTANTE_CHARACTER_RETURN = "\r";
 
     //	 Xml Tags
 
@@ -146,6 +149,14 @@ public final class DiggUtils
     private static final String PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_ASC = "digglike.sorterListItemCommentAsc";
     private static final String PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_DESC = "digglike.sorterListItemCommentDesc";
     private static final String PROPERTY_SORTER_LIST_ITEM_MANUAL = "digglike.sorterListItemManualDesc";
+    
+    public static final String PROPERTY_FILTER_ALL = "digglike.diggFrame.labelFilterAll";
+    public static final String PROPERTY_FILTER_TO_DAY = "digglike.diggFrame.labelFilterTopDay";
+    public static final String PROPERTY_FILTER_WEEK = "digglike.diggFrame.labelFilterYesterday";
+    public static final String PROPERTY_FILTER_MONTH = "digglike.diggFrame.labelFilterWeek";
+    public static final String PROPERTY_FILTER_YESTERDAY = "digglike.diggFrame.labelFilterMonth";
+    
+    
     private static final String REGEX_ID = "^[\\d]+$";
     private static final String PROPERTY_CHOOSE_CATEGORY = "digglike.diggsubmit.choose.category";
     private static final String PROPERTY_CHOOSE_TYPE = "digglike.diggsubmit.choose.type";
@@ -685,19 +696,20 @@ public final class DiggUtils
         return nIndex;
     }
 
+ 
     /**
-     *  return the html code of the form
-     * @param digg the form which html code must be return
-     * @param plugin the plugin
-     * @param locale the locale
-     * @param strFullUrl the full url
-     * @return the html code of the form
+     * 
+     * @param digg
+     * @param plugin
+     * @param locale
+     * @param nIdDefaultCategory
+     * @return
      */
-    public static String getHtmlForm( Digg digg, Plugin plugin, Locale locale, String strFullUrl, int nIdDefaultCategory )
+    public static  Map<String, Object> getModelHtmlForm( Digg digg, Plugin plugin, Locale locale , int nIdDefaultCategory )
     {
         List<IEntry> listEntryFirstLevel;
         Map<String, Object> model = new HashMap<String, Object>(  );
-        model.put( DiggApp.FULL_URL, strFullUrl );
+    
 
         HtmlTemplate template;
         EntryFilter filter;
@@ -766,9 +778,9 @@ public final class DiggUtils
         model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );
         model.put( MARK_LOCALE, locale );
 
-        template = AppTemplateService.getTemplate( TEMPLATE_HTML_CODE_FORM, locale, model );
+      
 
-        return template.getHtml(  );
+        return model;
     }
 
     /**
@@ -1122,9 +1134,19 @@ public final class DiggUtils
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_MANUALLY );
 
                 break;
+                
+            case SubmitFilter.SORT_BY_DATE_MODIFY_ASC:
+                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_MODIFY_ASC );
+
+                break;
+
+            case SubmitFilter.SORT_BY_DATE_MODIFY_DESC:
+                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_MODIFY_DESC );
+
+                break;   
 
             default:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_MODIFY_DESC );
 
                 break;
         }
@@ -1162,10 +1184,9 @@ public final class DiggUtils
      * @param nIdDiggSubmit the id of the digg submit
      * @param plugin the plugin
      */
-    public static void doReportDiggSubmit( int nIdDiggSubmit, Plugin plugin )
+    public static void doReportDiggSubmit( DiggSubmit diggSubmit, Plugin plugin )
     {
-        DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit,false, plugin );
-
+       
         if ( diggSubmit != null )
         {
             diggSubmit.setReported( true );
@@ -1226,7 +1247,7 @@ public final class DiggUtils
 
         if ( bIncludeDefault )
         {
-            refListDiggs.addItem( -1, EMPTY_STRING );
+            refListDiggs.addItem( CONSTANT_ID_NULL, EMPTY_STRING );
         }
 
         for ( Digg digg : listDiggs )
@@ -1247,7 +1268,7 @@ public final class DiggUtils
     {
         ReferenceList refListSorter = new ReferenceList(  );
 
-        refListSorter.addItem( -1, EMPTY_STRING );
+        refListSorter.addItem( CONSTANT_ID_NULL, EMPTY_STRING );
         refListSorter.addItem( SubmitFilter.SORT_BY_DATE_RESPONSE_ASC,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_ASC, locale ) );
         refListSorter.addItem( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC,
@@ -1270,6 +1291,30 @@ public final class DiggUtils
 
         return refListSorter;
     }
+    
+    /**
+     * Init reference list width the different sort
+     *
+     * @param locale the locale
+     * @return reference list of sort
+     */
+    public static ReferenceList getRefListFilterByPeriod( Locale locale )
+    {
+        ReferenceList refListFilterByPeriod = new ReferenceList(  );
+        
+        refListFilterByPeriod.addItem( CONSTANT_ID_NULL,  I18nService.getLocalizedString( PROPERTY_FILTER_ALL, locale )  );
+        refListFilterByPeriod.addItem( CONSTANT_SUBMIT_FILTER_TO_DAY ,
+            I18nService.getLocalizedString( PROPERTY_FILTER_TO_DAY, locale ) );
+        refListFilterByPeriod.addItem( CONSTANT_SUBMIT_FILTER_YESTERDAY,
+            I18nService.getLocalizedString( PROPERTY_FILTER_YESTERDAY, locale ) );
+        refListFilterByPeriod.addItem( CONSTANT_SUBMIT_FILTER_WEEK,
+            I18nService.getLocalizedString( PROPERTY_FILTER_WEEK, locale ) );
+        refListFilterByPeriod.addItem( CONSTANT_SUBMIT_FILTER_MONTH,
+            I18nService.getLocalizedString( PROPERTY_FILTER_MONTH, locale ) );
+        
+        return refListFilterByPeriod;
+    }
+    
 
     /**
      * Init reference list width the different sort
@@ -1281,10 +1326,10 @@ public final class DiggUtils
     {
         ReferenceList refListSorter = new ReferenceList(  );
 
-        refListSorter.addItem( -1, EMPTY_STRING );
-        refListSorter.addItem( SubmitFilter.SORT_BY_DATE_RESPONSE_ASC,
+        refListSorter.addItem( CONSTANT_ID_NULL, EMPTY_STRING );
+        refListSorter.addItem( SubmitFilter.SORT_BY_DATE_MODIFY_ASC,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_ASC, locale ) );
-        refListSorter.addItem( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC,
+        refListSorter.addItem( SubmitFilter.SORT_BY_DATE_MODIFY_DESC,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_DESC, locale ) );
 
         return refListSorter;
@@ -1401,5 +1446,30 @@ public final class DiggUtils
         Integer element = list.get( nOldPosistion - 1 );
         list.remove( nOldPosistion - 1 );
         list.add( nNewPosition - 1, element );
+    }
+    
+    /**
+     * replace special characters in the string passed as a parameter
+     *
+     * @param strSource
+     *            the string
+     * @return substitute special in the string passed as a parameter
+     */
+    public static String substituteSpecialCaractersForExport( String strSource )
+    {
+        String strResult = EMPTY_STRING;
+
+        if ( strSource != null )
+        {
+            strResult = strSource;
+        }
+
+        strResult = StringUtil.substitute( strResult, CONSTANT_CHARACTER_SIMPLE_QUOTE, CONSTANT_CHARACTER_DOUBLE_QUOTE );
+        strResult = StringUtil.substitute( strResult, EMPTY_STRING, CONSTANTE_CHARACTER_RETURN );
+        strResult = StringUtil.substitute( strResult, EMPTY_STRING, CONSTANTE_CHARACTERNEW_LINE );
+        strResult = StringUtil.substitute(strResult,EMPTY_STRING,"<div[^>]+>" );
+        strResult = StringUtil.substitute(strResult,EMPTY_STRING, "</div>" );
+
+        return strResult;
     }
 }

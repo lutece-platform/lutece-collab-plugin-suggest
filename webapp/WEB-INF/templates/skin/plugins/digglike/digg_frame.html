@@ -13,28 +13,23 @@
 		</div>			
 		</#if>
 		<div class="well">
-		<#if mode_digg?has_content && mode_digg == 0>
-				<a class="btn btn-primary pull-left" href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=1" target="_top">
-					<i class="icon-pencil icon-white"></i>&nbsp;#i18n{digglike.diggFrame.labelProposal}
-				</a>
-			<#else>
-				<a class="btn btn-primary btn-small pull-left" href="${fullUrl}?page=digg&id_digg=${id_digg}&mode_digg=0" target="_top">
-					<i class="icon-chevron-left icon-white"></i>&nbsp;#i18n{digglike.diggFrame.backToList}
-				</a>	
+		<#if view?has_content && view == "view_digg_submit_list" >
+			<a class="btn btn-primary pull-left" href="jsp/site/Portal.jsp?page=digg&id_digg=${id_digg}&action=create_digg_submit" target="_top">
+				<i class="icon-pencil icon-white"></i>&nbsp;#i18n{digglike.diggFrame.labelProposal}
+			</a>
+		<#else>
+			<a class="btn btn-primary btn-small pull-left" href="jsp/site/Portal.jsp?page=digg&id_digg=${id_digg}&action=view_digg_submit_list" target="_top">
+				<i class="icon-chevron-left icon-white"></i>&nbsp;#i18n{digglike.diggFrame.backToList}
+			</a>	
 		</#if>
-		<#if mode_digg?has_content && mode_digg == 0>
-		<form class="form-search  pull-right" name="form_sort" id="form_sort" method="get" action="${fullUrl}">
+		<#if view?has_content && view == "view_digg_submit_list">
+		<form class="form-search  pull-right" name="form_sort" id="form_sort" method="get" action="jsp/site/Portal.jsp">
 		<input name="page" value="digg" type="hidden">
 		<input name="id_digg" value="${id_digg}" type="hidden">
-		<input name="mode_digg" value="0" type="hidden">
+		<input name="action" value="view_digg_submit_list" type="hidden">
+	
 		<label>#i18n{digglike.diggFrame.labelSorterTitle}:</label>
-			<select id="id_filter_period" name="id_filter_period" class="input-medium">
-				<option value="-1">#i18n{digglike.diggFrame.labelFilterAll}</option>
-				<option value="${filter_day_value}">#i18n{digglike.diggFrame.labelFilterTopDay}</option>
-				<option value="${filter_yesterday_value}">#i18n{digglike.diggFrame.labelFilterYesterday}</option>
-				<option value="${filter_week_value}">#i18n{digglike.diggFrame.labelFilterWeek}</option>
-				<option value="${filter_month_value}">#i18n{digglike.diggFrame.labelFilterMonth}</option>
-			</select>
+			<@combo name="id_filter_period" default_value=id_filter_period items=list_filter_by_period  />
 			<@combo name="id_digg_submit_sort" default_value=id_digg_submit_sort items=list_digg_submit_sort  />
 			<button class="btn btn-primary btn-small" type="submit" ><i class="icon-filter icon-white"></i>&nbsp;#i18n{digglike.diggFrame.buttonSorter}</button>
 		</#if>
@@ -47,18 +42,21 @@
 			<p>
 				
 			</p>
-			<fieldset>
-			<legend>#i18n{digglike.diggFrame.altSearch}</legend>
-			<#if mode_digg?has_content && mode_digg == 0>
-				<form class="form-search" name="search" method="post" action="${fullUrl}?page=digg">
-				<input name="id_digg" value="${id_digg}" type="hidden" />
-				<input type="hidden" name="page" value="search" />
-            	<input type="text" name="query" class="input-small" value="<#if query?exists>${query}</#if>" />
-				<button class="btn btn-primary btn-small" type="submit" title="#i18n{digglike.diggFrame.altSearch}">
-					<i class="icon-search icon-white"></i>
-				</button>
+			<#if view?has_content && (view == "view_digg_submit_list"||view == "view_digg_submit" )>
+				<fieldset>
+				<legend>#i18n{digglike.diggFrame.altSearch}</legend>
+				
+					<form class="form-search" name="search" method="post" action="jsp/site/Portal.jsp?page=digg">
+					<input name="action" value="view_digg_submit_list" type="hidden">
+					<input name="id_digg" value="${id_digg}" type="hidden" />
+					<input type="hidden" name="page" value="search" />
+	            	<input type="text" name="query" class="input-small" value="<#if query?exists>${query}</#if>" />
+					<button class="btn btn-primary btn-small" type="submit" title="#i18n{digglike.diggFrame.altSearch}">
+						<i class="icon-search icon-white"></i>
+					</button>
+				
+				</fieldset>
 			</#if>
-			</fieldset>
 			<#if show_category_block>
 				<#if list_categories_digg?has_content>
 				<fieldset>
@@ -66,7 +64,7 @@
 					<ul>
 					<#list list_categories_digg as digg_categories>
 						<li>
-							<a href="${fullUrl}?page=digg&amp;id_digg=${id_digg}&amp;id_filter_category=${digg_categories.idCategory}">${digg_categories.title}</a>
+							<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_filter_category=${digg_categories.idCategory}&amp;action=view_digg_submit_list">${digg_categories.title}</a>
 						</li>
 					</#list>
 					</ul>
@@ -80,7 +78,7 @@
 					<ul>
 					<#list list_top_popularity_digg as digg_popularities>
 					<li>
-						<a href="${fullUrl}?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_popularities.idDiggSubmit}&amp;digg_comment=1&amp;digg_detail=1">
+						<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_popularities.idDiggSubmit}&amp;action=view_digg_submit">
 						<#if digg_popularities.diggSubmitTitle?exists>
 							<#if number_shown_characters?exists&&digg_popularities.diggSubmitTitle?length &gt;number_shown_characters>
 								<#if digg_popularities.diggSubmitTitle?contains("resource_type")>
@@ -106,7 +104,7 @@
 			<ul>
 			<#list list_top_comment_digg as digg_top_comment>
 				<li>
-					<a href="${fullUrl}?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_top_comment.idDiggSubmit}&amp;digg_comment=1&amp;digg_detail=1">
+					<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_top_comment.idDiggSubmit}&amp;action=view_digg_submit">
 					<#if digg_top_comment.diggSubmitTitle?exists>
 						<#if number_shown_characters?exists&&digg_top_comment.diggSubmitTitle?length &gt;number_shown_characters>
 							${digg_top_comment.diggSubmitTitle?substring(0,number_shown_characters)}...

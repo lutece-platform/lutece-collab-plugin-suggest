@@ -131,7 +131,7 @@ public final class DiggSubmitHome
     {
         if ( bUpdateIndex )
         {
-            DiggSubmit diggSubmitStored = findByPrimaryKey( diggSubmit.getIdDiggSubmit(  ),false, plugin );
+            DiggSubmit diggSubmitStored = findByPrimaryKey( diggSubmit.getIdDiggSubmit(  ), plugin );
 
             //if state has changed
             if ( diggSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) != diggSubmitStored.getDiggSubmitState(  )
@@ -188,7 +188,7 @@ public final class DiggSubmitHome
             TagSubmitHome.remove( tag.getIdTagSubmit(  ), plugin );
         }
 
-        DiggSubmit digg = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit,false, plugin );
+        DiggSubmit digg = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit, plugin );
 
         if ( digg.getDiggSubmitState(  ).getIdDiggSubmitState(  ) == DiggSubmit.STATE_PUBLISH )
         {
@@ -213,19 +213,11 @@ public final class DiggSubmitHome
      * @param plugin the Plugin
      * @return an instance of DiggSubmit
      */
-    public static DiggSubmit findByPrimaryKey( int nKey,boolean bLoadCommentList, Plugin plugin )
+    public static DiggSubmit findByPrimaryKey( int nKey, Plugin plugin )
     {
-        DiggSubmit diggSubmit = _dao.load( nKey, plugin );
+       return  _dao.load( nKey, plugin );
 
-        if ( bLoadCommentList && diggSubmit != null )
-        {
-            SubmitFilter submmitFilterComment = new SubmitFilter(  );
-            submmitFilterComment.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
-            submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
-            diggSubmit.setComments( CommentSubmitService.getService().getCommentSubmitList( submmitFilterComment, plugin ) );
-        }
-
-        return diggSubmit;
+  
     }
 
     /**
@@ -304,7 +296,7 @@ public final class DiggSubmitHome
         {
             if ( cpt < nNumberMaxDiggSubmit )
             {
-                diggSubmit = findByPrimaryKey( (Integer) diggSubmitArrayId[cpt],false, plugin );
+                diggSubmit = findByPrimaryKey( (Integer) diggSubmitArrayId[cpt], plugin );
 
                 if ( diggSubmit != null )
                 {
