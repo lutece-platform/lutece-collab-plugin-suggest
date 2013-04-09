@@ -45,15 +45,15 @@
 			<i class="icon-comment icon-white"></i>&nbsp;#i18n{digglike.diggComment.labelCommentAComment}
 		</button>
 		</form>
-		<#if comment_submit_lutece_user.comment_submit.comments?has_content>
-			<#list comment_submit_lutece_user.comment_submit.comments as comment_comment>
+		<#if comment_submit_lutece_user.list_sub_comment?has_content>
+			<#list comment_submit_lutece_user.list_sub_comment as comment_comment>
 			<div class="alert alert-info">
-				${digg.parseBbcodeValue(comment_comment.value)}
+				${digg.parseBbcodeValue(comment_comment.comment_submit.value)}
 				<p>
-					<#if comment_submit_lutece_user.comment_submit.isOfficialAnswer()>
+					<#if comment_comment.comment_submit.isOfficialAnswer()>
 						<i class="icon-star"></i> <span class="badge badge-info">#i18n{digglike.manageCommentSubmit.officialAnswer}</span> |
 					</#if>
-					<#if comment_submit_lutece_user.lutece_user?exists>
+					<#if comment_comment.lutece_user?exists>
 						<i class="icon-user"></i> #i18n{digglike.diggListSubmit.postByUser} :
 						<#if comment_comment.lutece_user?exists>
 							${comment_comment.lutece_user}
@@ -62,7 +62,7 @@
 							${comment_comment.lutece_user.getUserInfo("user.name.family")}
 						</#if> |
 					</#if>		
-					<i class="icon-calendar"></i> ${comment_comment.dateComment?string("dd/MM/yyyy HH:mm:ss")} |
+					<i class="icon-calendar"></i> ${comment_comment.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")} |
 					<a href="#" class="link-top">Haut de page</a>
 				</p>
 			</div>	
