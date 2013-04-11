@@ -46,7 +46,7 @@ import java.util.List;
 public class DiggActionDAO implements IDiggActionDAO
 {
     private static final String SQL_QUERY_SELECT_ACTIONS = "SELECT a.name_key, a.description_key, a.action_url, a.icon_url, a.action_permission ,a.digg_state" +
-        " FROM digglike_action a  where a.digg_state=? ";
+        " FROM digglike_action a  where a.digg_state=?  order by id_action ASC";
 
     /**
      * Load the list of actions for a all digg by digg state
