@@ -33,6 +33,18 @@
  */
 package fr.paris.lutece.plugins.digglike.web;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.digglike.business.Category;
 import fr.paris.lutece.plugins.digglike.business.CategoryHome;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
@@ -85,18 +97,6 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 
 /**
@@ -206,6 +206,8 @@ public class DiggApp implements XPageApplication
     private static final String MESSAGE_NEW_REPORTED_SUBMIT = "digglike.message.newReportedSubmit";
     private static final String MESSAGE_NEW_COMMENT_SUBMIT_INVALID = "digglike.message.newCommentSubmitInvalid";
     private static final String MESSAGE_ERROR_NO_CATEGORY = "digglike.message.errorNoCategorySelected";
+    private static final String MESSAGE_ACCESS_DENIED = "digglike.message.accessDenied";
+    
 
     // XPAGE URL
 
@@ -394,18 +396,25 @@ public class DiggApp implements XPageApplication
         String strIdDigg = request.getParameter( PARAMETER_ID_DIGG );
 
         int nIdDigg = DiggUtils.getIntegerParameter( strIdDigg );
+        Digg digg = DiggHome.findByPrimaryKey( nIdDigg, _plugin );
         LuteceUser luteceUserConnected = SecurityService.getInstance(  ).getRegisteredUser( request );
+        
         
         Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_VIEW, CONSTANT_VIEW_LIST_DIGG_SUBMIT );
 
-        Digg digg = DiggHome.findByPrimaryKey( nIdDigg, _plugin );
+      
 
         if ( digg == null )
         {
             digg = DiggHome.findByPrimaryKey( getIdDefaultDigg(  ), _plugin );
         }
-
+        
+        
+        
+        //testAuthorizationAccess
+        testUserAuthorizationAccess(digg, request, luteceUserConnected);
+        
         UrlItem urlDiggXpage = getNewUrlItemPage(  );
         urlDiggXpage.addParameter( PARAMETER_ACTION, CONSTANT_VIEW_LIST_DIGG_SUBMIT );
         urlDiggXpage.addParameter( PARAMETER_ID_DIGG, nIdDigg );
@@ -435,6 +444,10 @@ public class DiggApp implements XPageApplication
         int nIdSubmitDigg = DiggUtils.getIntegerParameter( strIdSubmitDigg );
         DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey( nIdSubmitDigg, true, _plugin );
         diggSubmit.setDigg( DiggHome.findByPrimaryKey( diggSubmit.getDigg(  ).getIdDigg(  ), _plugin ) );
+        
+        //testAuthorizationAccess
+        testUserAuthorizationAccess(diggSubmit.getDigg(), request, luteceUserConnected);
+        
         model.put( MARK_VIEW, CONSTANT_VIEW_DIGG_SUBMIT );
 
         SearchFields searchFields = getSearchFields( request );
@@ -527,7 +540,9 @@ public class DiggApp implements XPageApplication
             {
                 throw new UserNotSignedException( );
             }
-
+            
+           //testAuthorizationAccess
+            testUserAuthorizationAccess(digg, request, luteceUserConnected);
         }
 
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY_DIGG );
@@ -601,6 +616,8 @@ public class DiggApp implements XPageApplication
             {
                 throw new UserNotSignedException( );
             }
+          //testAuthorizationAccess
+            testUserAuthorizationAccess(digg, request, luteceUserConnected);
         }
 
         String strCommentValueDigg = request.getParameter( PARAMETER_COMMENT_VALUE_DIGG );
@@ -683,6 +700,21 @@ public class DiggApp implements XPageApplication
         {
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
         }
+        
+        LuteceUser luteceUserConnected = null;
+
+        if ( digg.isActiveCommentAuthentification(  ) && SecurityService.isAuthenticationEnable(  ) )
+        {
+            luteceUserConnected = ( luteceUserConnected != null ) ? luteceUserConnected
+                                                                  : SecurityService.getInstance(  )
+                                                                                   .getRemoteUser( request );
+            if ( luteceUserConnected == null )
+            {
+                throw new UserNotSignedException( );
+            }
+          //testAuthorizationAccess
+            testUserAuthorizationAccess(digg, request, luteceUserConnected);
+        }
 
         DiggUtils.doReportDiggSubmit( diggSubmit, _plugin );
 
@@ -734,6 +766,11 @@ public class DiggApp implements XPageApplication
                 if ( luteceUserConnected == null )
                 {
                     throw new UserNotSignedException( );
+                }
+                else if(digg.getRole() != null && !SecurityService.getInstance().isUserInRole(request, digg.getRole()))
+                {
+                	SiteMessageService.setMessage( request, MESSAGE_ACCESS_DENIED, SiteMessage.TYPE_STOP );
+                	
                 }
 
                 if ( VoteHome.getUserNumberVoteOnDiggSubmit( nIdSubmitDigg, luteceUserConnected.getName(  ), _plugin ) == 0 )
@@ -1601,6 +1638,32 @@ public class DiggApp implements XPageApplication
     }
     
     
+    /**
+     * Test if a user can process action to a digg
+     * @param digg the digg
+     * @param request the {@link HttpServletRequest}
+     * @param user The LuteceUser
+     * @throws UserNotSignedException {@link UserNotSignedException}
+     * @throws SiteMessageException {@link SiteMessageException}
+     */
+    void testUserAuthorizationAccess(Digg digg,HttpServletRequest request,LuteceUser user)  throws UserNotSignedException, SiteMessageException
+    {
+    	
+    	if(digg.getRole() != null && ! Digg.ROLE_NONE.equals(digg.getRole()) )
+        {
+	        if ( user == null )
+	        {
+	            throw new UserNotSignedException( );
+	        }
+	        
+	        else if(!SecurityService.getInstance().isUserInRole(request, digg.getRole()))
+	        {
+	        	SiteMessageService.setMessage( request, MESSAGE_ACCESS_DENIED, SiteMessage.TYPE_STOP );
+	        	
+	        }
+        }
+    	
+    }
     
     
 

@@ -37,10 +37,10 @@ INSERT INTO digglike_export_format (`id_export`, `title`, `description`, `extens
 DROP TABLE IF EXISTS `digglike_digg_user_info`;
 CREATE TABLE IF NOT EXISTS `digglike_digg_user_info` (
   `lutece_user_key` varchar(255) NOT NULL,
-  `first_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `last_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `business_mail` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `home_mail` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `login` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255)  DEFAULT NULL,
+  `business_mail` varchar(255) DEFAULT NULL,
+  `home_mail` varchar(255) DEFAULT NULL,
+  `login` varchar(255)  DEFAULT NULL,
   PRIMARY KEY (`lutece_user_key`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;	
+) ;

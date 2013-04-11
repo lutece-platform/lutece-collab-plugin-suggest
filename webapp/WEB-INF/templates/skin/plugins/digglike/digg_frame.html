@@ -7,8 +7,8 @@
 	<#else>
 		<fieldset>
 		<legend>${label_digg}</legend>
-		<#if header_digg?exists>
-		<div class="alert alert-info">
+		<#if header_digg?has_content>
+		<div class="well">
 		${header_digg}  
 		</div>			
 		</#if>
