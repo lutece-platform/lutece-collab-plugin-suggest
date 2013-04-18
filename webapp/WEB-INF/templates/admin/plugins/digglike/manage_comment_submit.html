@@ -7,9 +7,10 @@
 		<p>
 		<#if digg_submit.reported>
 			<span class="label label-warning">#i18n{digglike.manageDiggSubmit.altWarning}</span>
-      	</#if>
+		</#if>
 		</p>
 		<p>
+			<a href="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp?id_digg=${digg.idDigg}#digg${digg_submit.idDiggSubmit}" title="" >
 			<#if digg_submit.diggSubmitTitle?exists>
 				<#if digg_submit.diggSubmitTitle?length &gt; 100>
 					${digg_submit.diggSubmitTitle?substring(0,100)}... 
@@ -17,15 +18,17 @@
 					${digg_submit.diggSubmitTitle}
 				</#if>
 			</#if>
+			</a>
+			
 		</p>
         <p>#i18n{digglike.manageCommentSubmit.rowDateDiggSubmit}: <strong>${digg_submit.dateResponse?date?string.short}</strong></p>
         <p>
 			#i18n{digglike.manageCommentSubmit.rowStateDiggSubmit}: <#if digg_submit.diggSubmitState.number=publish_state_number>
-				<span class="label label-success" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="icon-white icon-ok"></i></span>
+				<span class="label label-success" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="icon-white icon-ok"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altPublish}</span>
 			<#elseif digg_submit.diggSubmitState.number=waiting_for_publish_state_number>
-				<span class="label label-warning" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="icon-white icon-pause"></i></span>
+				<span class="label label-warning" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="icon-white icon-pause"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altWaitingForPublish}</span>
 			<#else>
-				<span class="label label-important" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="icon-white icon-remove"></i></span>
+				<span class="label label-important" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="icon-white icon-remove"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altDisable}</span>
 			</#if></p>
      	<p>#i18n{digglike.manageCommentSubmit.rowCategory}</p>
         <#if category_list?has_content>
@@ -42,12 +45,6 @@
     	</#if>
      	<p>#i18n{digglike.manageCommentSubmit.rowManageDiggSubmit}</p>
 		<p>
-			<#if digg_submit.diggSubmitValue?exists>
-				<button class="btn btn-primary btn-small" rel="popover" data-original-title="${digg_submit.diggSubmitTitle}" data-content="${digg_submit.diggSubmitValue?html}">
-					<i class="icon-white icon-eye-open"></i>
-				</button>
-				<span class="popOverContent"></span>
-			</#if>	
 			<a name="${digg_submit.idDiggSubmit}"></a>	 
 			<#if digg_submit.diggSubmitState.number=disable_state_number>
             <a class="btn btn-small btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${waiting_for_publish_state_number}#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
@@ -84,6 +81,9 @@
 				<i class="icon-arrow-right icon-white"></i>
 			</a>
 			</#if>
+			<a class="btn btn-small" href="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp?id_digg=${digg.idDigg}#digg${digg_submit.idDiggSubmit}" title="#i18n{portal.util.LabelBack}">
+				<i class="icon-remove-circle"></i>
+			</a>
 			</p>
 		</fieldset>
     </div>
@@ -178,8 +178,6 @@
 <#include "/util/editor/editor.html" />
 <script>
 $(document).ready( function () {
-	$(".popOverContent").toggle();
-    $("button[rel=popover]").popover({trigger:'click'});
 	$("div.commentComments").toggle();
 	doToggle( ".comment_toggle" );
 });
