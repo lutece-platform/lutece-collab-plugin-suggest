@@ -1574,6 +1574,7 @@ public class DiggApp implements XPageApplication
                 SubmitFilter submmitFilterTopComment = new SubmitFilter(  );
                 submmitFilterTopComment.setIdDigg( digg.getIdDigg(  ) );
                 submmitFilterTopComment.setIdDiggSubmitState( _nIdDiggSubmitStatePublish );
+                submmitFilterTopComment.setIdCategory(searchFields.getIdFilterCategory());
 
                 DiggUtils.initSubmitFilterBySort( submmitFilterTopComment, SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC );
 
@@ -1589,7 +1590,7 @@ public class DiggApp implements XPageApplication
             DiggUtils.initSubmitFilterBySort( submmitFilterTopPopularity, SubmitFilter.SORT_BY_SCORE_DESC );
 
             submmitFilterTopPopularity.setIdDiggSubmitState( _nIdDiggSubmitStatePublish );
-
+            submmitFilterTopPopularity.setIdCategory(searchFields.getIdFilterCategory());
             List<DiggSubmit> listDiggSubmitTopPopularity = _diggSubmitService.getDiggSubmitList( submmitFilterTopPopularity,
                     _plugin, digg.getNumberDiggSubmitInTopScore(  ) );
             ReferenceList refListDiggSort = DiggUtils.getRefListDiggSort( request.getLocale(  ) );
