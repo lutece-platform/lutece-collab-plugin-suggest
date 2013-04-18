@@ -1,23 +1,39 @@
 <div class="row" id="digg${digg_submit.idDiggSubmit}">
 	<div class="span8">
-		<h4>${digg_submit.diggSubmitTitle}</h4>
+		<h3>
+		${digg_submit.diggSubmitTitle}
+		<#if digg_submit.diggSubmitType?exists>
+			<span class="badge" style="background-color:${digg_submit.diggSubmitType.color!''};">&nbsp;</span>
+		</#if>
+		<#if digg_submit.numberScore?exists>
+		<div class="btn-group pull-right">
+			<#if digg_submit.digg_submit_vote_type?exists>
+			<!-- FIXIT: Add a way to post a vote from detail  -->
+				${digg_submit.digg_submit_vote_type}
+			</#if>
+			<button class="btn btn-primary disabled">
+				#i18n{digglike.manageDiggSubmit.rowNumberScore}&nbsp;${digg_submit.numberScore}
+			</button>
+		</div>
+		</#if>
+		
+		</h3>
 	</div>
 </div>
 <div class="row">
-	<div class="span2">
-		<div class="well well-small">
-			<#if digg_submit.diggSubmitType?exists>
-				<span class="badge" style="background-color:${digg_submit.diggSubmitType.color!''};">&nbsp;</span>
-			</#if>
-			<#if digg_submit_vote_type?exists>
-				${digg_submit_vote_type}
-			</#if>
-			<#if digg_submit.numberScore?exists>
-				#i18n{digglike.manageDiggSubmit.rowNumberScore} <span class="badge badge-info">${digg_submit.numberScore}</span>
-			</#if>
-		</div>
-	</div>
-	<div class="span6">
+	<div class="span8">
+	<p class="digg-meta">
+		<i class="icon-calendar"></i> ${digg_submit.dateResponse}&nbsp;
+		<#if lutece_user?exists>
+		<i class="icon-user"></i> #i18n{digg_submit.postByUser} :
+			<#if lutece_user?exists>
+				${lutece_user!""}
+			<#else>
+				${lutece_user.getUserInfo("user.name.given")} ${lutece_user.getUserInfo("user.name.family")}
+			</#if> 
+		</#if>	
+		
+	</p>
 	<#if digg_submit.diggSubmitValue?exists>
 		<div class="digg-list-content">	
 			${digg_submit.diggSubmitValue}
@@ -28,41 +44,46 @@
 			#i18n{digglike.diggListSubmit.labelReport}
 		</a>
 	</#if>
-	<p>
-	<#if lutece_user?exists>
-		<i class="icon-user"></i> #i18n{digg_submit.postByUser} :
-		<#if lutece_user?exists>
-			${lutece_user!""}
-		<#else>
-			${lutece_user.getUserInfo("user.name.given")} ${lutece_user.getUserInfo("user.name.family")}
-		</#if> |
-	</#if>	
-	<i class="icon-calendar"></i> ${digg_submit.dateResponse}  |
-	<#if authorized_comment>
-		<i class="icon-comment"></i>&nbsp;
-		${digg_submit.numberCommentEnable} #i18n{digglike.diggListSubmit.labelComments}
-		|
-		</#if>
-		<a href="#" class="link-top">Haut de page</a>
-	</p>
-	<#if authorized_comment>
-		
-	<form class="form" action="jsp/site/Portal.jsp?page=digg" method="post" name="form-comment" id="form-comment"  >
-		<input name="action" value="do_create_comment" type="hidden" />
-		<input name="id_digg" value="${id_digg}" type="hidden" />
-		<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden" />
-		<label>#i18n{digglike.diggComment.labelAddNewComment}</label>
-		<textarea name="comment_value" id="comment_value" class="markitup span6" rows="2"></textarea>
-		<#if jcaptcha?exists>
-		<fieldset>${jcaptcha}</fieldset>
-		</#if>
-		<button class="btn btn-primary btn-small" type="submit" name="submit_comment">
-			<i class="icon-comment icon-white"></i>&nbsp;#i18n{digglike.diggComment.labelAddNewComment}
-		</button>
-	</form><#if list_comment?has_content>
-			<h5>${digg_submit.numberCommentEnable}  #i18n{digglike.diggDetail.labelComments}</h5>
-				${list_comment}
-		</#if>
+	<hr>
+	<h5>${digg_submit.numberCommentEnable}  #i18n{digglike.diggDetail.labelComments}</h5>
+	</div>
+</div>
+<#if authorized_comment>
+<div class="row">
+	<div class="span1">
+		<span class="user">
+			<i class="icon-comment"></i>
+		</span>	
+	</div>
+	<div class="span7">	
+		<form class="form" action="jsp/site/Portal.jsp?page=digg" method="post" name="form-comment" id="form-comment"  >
+			<input name="action" value="do_create_comment" type="hidden" />
+			<input name="id_digg" value="${id_digg}" type="hidden" />
+			<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden" />
+			<label></label>
+			<textarea name="comment_value" id="comment_value" class="markitup span7" rows="2" placeholder="#i18n{digglike.diggComment.labelAddNewComment}"></textarea>
+			<#if jcaptcha?exists>
+			<fieldset>${jcaptcha}</fieldset>
+			</#if>
+			<button class="btn btn-primary btn-small" type="submit" name="submit_comment">
+				<i class="icon-comment icon-white"></i>&nbsp;#i18n{digglike.diggComment.labelAddNewComment}
+			</button>
+		</form>
+	</div>
+</div>
+<div class="row">		
+	<div class="span8">	
+	<#if list_comment?has_content>
+		${list_comment}
 	</#if>
 	</div>
 </div>
+</#if>
+<script>
+	$(document).ready( function(){
+		$(".comments-form").toggle();
+		$(".comment-link").click(function(){
+			$(this).next().toggle();
+		}); 
+	});
+</script>

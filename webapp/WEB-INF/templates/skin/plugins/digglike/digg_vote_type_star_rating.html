@@ -1,23 +1,15 @@
 <div class="digg-vote-star-rating" style="display:none;">
-	<form  id="form${id_digg_submit}" action="jsp/site/Portal.jsp#digg${id_digg_submit}"  >
+	<form id="form${id_digg_submit}" class="form-inline" action="jsp/site/Portal.jsp#digg${id_digg_submit}">
 		<input type="hidden" name="vote" value="0">
 		<input type="hidden" name="id_digg" value="${id_digg}">
 		<input type="hidden" name="page" value="digg">
 		<input type="hidden" name="id_digg_submit" value="${id_digg_submit}">
 		<input type="hidden" name="action" value="do_vote">
 		<input type="hidden" name="view" value="${view}">
-		<div class="controls">
-			<input class="star-rating" type="radio"  name="vote${id_digg_submit}" value="-2"  title="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainstMore}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainstMore}"  />
-		</div>
-		<div class="controls">
-			<input class="star-rating" type="radio"  name="vote${id_digg_submit}" value="-1" title="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainst}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainst}"/>
-		</div>
-		<div class="controls">
-			<input class="star-rating" type="radio"  name="vote${id_digg_submit}" value="1" title="#i18n{digglike.diggVoteTypeStarRating.titleVoteFor}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteFor}"/>
-		</div>
-		<div class="controls">
-			<input class="star-rating" type="radio"  name="vote${id_digg_submit}" value="2" title="#i18n{digglike.diggVoteTypeStarRating.titleVoteForMore}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteForMore}"/>
-		</div>
+		<input class="star-rating inline" type="radio" name="vote${id_digg_submit}" value="-2"  title="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainstMore}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainstMore}">
+		<input class="star-rating inline" type="radio" name="vote${id_digg_submit}" value="-1" title="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainst}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteAgainst}">
+		<input class="star-rating inline" type="radio" name="vote${id_digg_submit}" value="1" title="#i18n{digglike.diggVoteTypeStarRating.titleVoteFor}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteFor}">
+		<input class="star-rating inline" type="radio" name="vote${id_digg_submit}" value="2" title="#i18n{digglike.diggVoteTypeStarRating.titleVoteForMore}" alt="#i18n{digglike.diggVoteTypeStarRating.titleVoteForMore}">
 	</form>
 </div>
 <div class="digg-vote-star-rating-javascript-disable" >

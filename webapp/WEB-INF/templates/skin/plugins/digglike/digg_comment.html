@@ -1,18 +1,18 @@
-<#assign rootId = 0>
 <#if list_comment?has_content>
+<#assign rootId = 0>
+<ul class="unstyled digg-comments">
 	<#list list_comment as comment_submit_lutece_user>
-	<div class="well">
-	<#assign rootId = rootId + 1>
+	<li>
+		<#assign rootId = rootId + 1>
 		<!-- digg.parseBbcodeValue -->
-		${digg.parseBbcodeValue(comment_submit_lutece_user.comment_submit.value)}
-		<!-- a class="comment-link btn btn-primary" id="comment-link${rootId}" href="#">
-			<i class="icon-comment icon-white"></i>&nbsp;#i18n{digglike.diggComment.labelCommentAComment}
-		</a -->
 		<p>
 			<#if comment_submit_lutece_user.comment_submit.isOfficialAnswer()>
-				<i class="icon-star"></i> <span class="badge badge-info">
+				<span class="badge badge-warning">
+					<i class="icon-star icon-white"></i> 
 					#i18n{digglike.manageCommentSubmit.officialAnswer}
-				</span> |
+				</span>
+				
+				&nbsp;
 			</#if>
 			<#if comment_submit_lutece_user.lutece_user?exists>
 			<i class="icon-user"></i> #i18n{digglike.diggListSubmit.postByUser} :
@@ -23,33 +23,38 @@
 					${comment_submit_lutece_user.lutece_user.getUserInfo("user.name.family")}
 				</#if> |
 			</#if>
-			<i class="icon-calendar"></i> ${comment_submit_lutece_user.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}  |
-			
-			<a href="#" class="link-top">Haut de page</a>
+			<i class="icon-calendar"></i> ${comment_submit_lutece_user.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}
 		</p>
-		<form action="jsp/site/Portal.jsp?page=digg" method="post" name="" id="comment-comment${rootId}" class="form-inline comment-comment">
-		
-		<input name="action" value="do_create_comment" type="hidden" />
-		<input name="id_digg" value="${id_digg}" type="hidden" />
-		<input name="id_digg_submit" value="${id_digg_submit}" type="hidden" />
-		<input name="id_digg_comment" value="${comment_submit_lutece_user.comment_submit.idCommentSubmit}" type="hidden" />
-		<label for name="comment_value">
-		#i18n{digglike.diggComment.labelComment}
-		<#if disable_new_comment_submit>(#i18n{digglike.diggComment.labelDisableNewCommentSubmit})</#if>
-		</label>
-		<textarea name="comment_value" id="comment_value${rootId}" class="comment-value markitup span5"></textarea>
-		<#if jcaptcha?exists>
-		<fieldset>${jcaptcha}</fieldset>
-		</#if>
-		<button class="btn btn-primary btn-small" type="submit" name="submit_comment">
-			<i class="icon-comment icon-white"></i>&nbsp;#i18n{digglike.diggComment.labelCommentAComment}
+		<p class="comment-content">
+		${digg.parseBbcodeValue(comment_submit_lutece_user.comment_submit.value)}
+		</p>
+		<button class="comment-link btn btn-link">
+			&gt;&nbsp;#i18n{digglike.diggComment.labelCommentAComment}
 		</button>
-		</form>
+		<div class="comments-form">
+			<form action="jsp/site/Portal.jsp?page=digg" method="post" name="" id="comment-comment${rootId}" class="form comment-comment">
+			<input name="action" value="do_create_comment" type="hidden" />
+			<input name="id_digg" value="${id_digg}" type="hidden" />
+			<input name="id_digg_submit" value="${id_digg_submit}" type="hidden" />
+			<input name="id_digg_comment" value="${comment_submit_lutece_user.comment_submit.idCommentSubmit}" type="hidden" />
+			<label for name="comment_value">
+			#i18n{digglike.diggComment.labelComment}
+			<#if disable_new_comment_submit>(#i18n{digglike.diggComment.labelDisableNewCommentSubmit})</#if>
+			</label>
+			<textarea name="comment_value" id="comment_value${rootId}" class="comment-value markitup span8"></textarea>
+			<#if jcaptcha?exists>
+			<fieldset>${jcaptcha}</fieldset>
+			</#if>
+			<button class="btn btn-primary btn-small" type="submit" name="submit_comment">
+				<i class="icon-comment icon-white"></i>&nbsp;#i18n{digglike.diggComment.labelCommentAComment}
+			</button>
+			</form>
+		</div>
 		<#if comment_submit_lutece_user.list_sub_comment?has_content>
 			<#list comment_submit_lutece_user.list_sub_comment as comment_comment>
-			<div class="alert alert-info">
+			<blockquote>
 				${digg.parseBbcodeValue(comment_comment.comment_submit.value)}
-				<p>
+				<br>
 					<#if comment_comment.comment_submit.isOfficialAnswer()>
 						<i class="icon-star"></i> <span class="badge badge-info">#i18n{digglike.manageCommentSubmit.officialAnswer}</span> |
 					</#if>
@@ -62,12 +67,16 @@
 							${comment_comment.lutece_user.getUserInfo("user.name.family")}
 						</#if> |
 					</#if>		
-					<i class="icon-calendar"></i> ${comment_comment.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")} |
-					<a href="#" class="link-top">Haut de page</a>
-				</p>
-			</div>	
+					<i class="icon-calendar"></i> ${comment_comment.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}
+			</blockquote>
 			</#list>
 		</#if>
-	</div>
+		<p  class="clearfix">
+		<a href="http://localhost:8079/lutece/jsp/site/Portal.jsp?page=digg&id_digg=${id_digg}&id_digg_submit=${id_digg_submit}&action=view_digg_submit" class="link-top label pull-right">
+			<i class="icon-chevron-up icon-white"></i>&nbsp;#i18n{digglike.diggListSubmit.labelPageTop}
+		</a>
+		</p>
+	</li>
 	</#list>
+</ul>	
 </#if>

@@ -3,14 +3,8 @@
 	<#if unavailability_message?exists>
 		<div class="alert alert-error">${unavailability_message}</div>    
 	<#else>
-		
-		
-	
-		
 		<div class="row-fluid">
-			
 			<div class="span12">
-				
 				<fieldset>
 				<legend>#i18n{digglike.diggList.title}:</legend> 
 						<#if paginator?exists>
@@ -18,8 +12,6 @@
 							#i18n{digglike.diggListSubmit.paginator.labelResultsRange} : <strong>${paginator.rangeMin} - ${paginator.rangeMax}</strong> <br />
 							<@pagination paginator=paginator />
 				 		</#if>
-				
-					
 					<ul>
 						<#if list_digg?exists>
 						<#list list_digg as digg>	
