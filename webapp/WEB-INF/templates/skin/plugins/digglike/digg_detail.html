@@ -7,9 +7,8 @@
 		</#if>
 		<#if digg_submit.numberScore?exists>
 		<div class="btn-group pull-right">
-			<#if digg_submit.digg_submit_vote_type?exists>
-			<!-- FIXIT: Add a way to post a vote from detail  -->
-				${digg_submit.digg_submit_vote_type}
+			<#if digg_submit_vote_type?exists>
+				${digg_submit_vote_type}
 			</#if>
 			<button class="btn btn-primary disabled">
 				#i18n{digglike.manageDiggSubmit.rowNumberScore}&nbsp;${digg_submit.numberScore}

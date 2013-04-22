@@ -54,7 +54,7 @@
 						</span>	
 					</div>
 					<div id="digg_modification_content" class="well">
-						<span class="pull-right badge badge-inverse">
+						<span class="pull-right badge badge-inverse" id="digg_modification_content_toggle">
 							<i class="icon-chevron-up icon-white"></i>
 						</span>	
 						<div class="control-group">
@@ -382,9 +382,9 @@ $(document).ready( function () {
 		$(this).next().toggle();
 		$(this).toggle();
 	}); 
-	$("#digg_modification_content").click(function(){
-		$(this).prev().toggle();
-		$(this).toggle();
+	$("#digg_modification_content_toggle").click(function(){
+		$("#digg_modification_content").toggle();
+		$("#digg_modification").toggle();
 	});
 });
 
