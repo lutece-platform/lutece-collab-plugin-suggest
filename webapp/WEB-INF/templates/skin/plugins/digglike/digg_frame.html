@@ -20,14 +20,11 @@
 							</li>
 						</#list>
 						</ul>
-					</fieldset>
 					</#if>
 				</#if>
 			</#if>
 			<#if header_digg?has_content>
-			<div class="well">
-				${header_digg}  
-			</div>			
+				<div class="well">${header_digg}</div>			
 			</#if>
 			<div class="well">
 				<#if view?has_content && view == "view_digg_submit_list" >
@@ -48,13 +45,11 @@
 					<@combo name="id_filter_period" default_value=id_filter_period items=list_filter_by_period  />
 					<@combo name="id_digg_submit_sort" default_value=id_digg_submit_sort items=list_digg_submit_sort  />
 					<button class="btn btn-primary btn-small" type="submit" ><i class="icon-filter icon-white"></i>&nbsp;#i18n{digglike.diggFrame.buttonSorter}</button>
+					</form>
 				</#if>
 			</div>	
 		</fieldset>
-		<div class="span8">
-			
-			${content_digg}
-		</div>		              
+		<div class="span8">${content_digg}</div>		              
 		<div class="span3">
 			<#if view?has_content && (view == "view_digg_submit_list"||view == "view_digg_submit" )>
 				<fieldset>
@@ -69,6 +64,7 @@
 							<i class="icon-search icon-white"></i>
 						</button>
 					</div>
+					</form>
 				</fieldset>
 			</#if>
 			
