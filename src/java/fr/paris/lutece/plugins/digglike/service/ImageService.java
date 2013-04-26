@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.digglike.service;
 
-import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
+import fr.paris.lutece.plugins.digglike.business.ResponseHome;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.image.ImageResourceManager;
 import fr.paris.lutece.portal.service.image.ImageResourceProvider;
@@ -70,12 +70,12 @@ public class ImageService implements ImageResourceProvider
 
     /**
      * Get the resource for image
-     * @param nIdDiggSubmit The identifier of image or diggsubmit object
+     * @param nIdResponse The identifier of image or diggsubmit object
      * @return The ImageResource
      */
-    public ImageResource getImageResource( int nIdDiggSubmit )
+    public ImageResource getImageResource( int nIdResponse )
     {
-        return DiggSubmitHome.getImageResource( nIdDiggSubmit, PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) );
+        return ResponseHome.getImageResource( nIdResponse, PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) );
     }
 
     /**

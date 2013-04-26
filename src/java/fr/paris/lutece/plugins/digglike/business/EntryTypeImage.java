@@ -217,39 +217,8 @@ public class EntryTypeImage extends Entry
             ImageResource image = new ImageResource(  );
             image.setImage( bytes );
             image.setMimeType( item.getContentType(  ) );
-
-            try
-            {
-                int nImageId = DiggSubmitService.getService(  ).createImage( nIdDiggSubmit, image, plugin );
-                String strResourceType = ImageService.getInstance(  ).getResourceTypeId(  );
-                UrlItem url = new UrlItem( Parameters.IMAGE_SERVLET );
-                url.addParameter( Parameters.RESOURCE_TYPE, strResourceType );
-                url.addParameter( Parameters.RESOURCE_ID, Integer.toString( nImageId ) );
-
-                String strResponse = "<img";
-
-                if ( this.getHeight(  ) != -1 )
-                {
-                    strResponse += ( " height=" + this.getHeight(  ) );
-                }
-
-                if ( this.getWidth(  ) != -1 )
-                {
-                    strResponse += ( " width=" + this.getWidth(  ) );
-                }
-
-                strResponse += ( " src='" + url.getUrlWithEntity(  ) + "'" + "alt='image' />" );
-
-                response.setValueResponse( strResponse );
-            }
-            catch ( com.mysql.jdbc.PacketTooBigException e )
-            {
-                FormError formError = new FormError(  );
-                formError.setTitleQuestion( this.getTitle(  ) );
-                formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_IMAGE_TOO_HEAVY, locale ) );
-
-                return formError;
-            }
+            response.setImage(image);
+            response.setValueResponse(DiggUtils.EMPTY_STRING );
         }
         else
         {

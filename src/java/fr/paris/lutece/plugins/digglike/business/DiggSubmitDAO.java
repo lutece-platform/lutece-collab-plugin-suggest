@@ -94,12 +94,7 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
     private static final String SQL_ORDER_BY = " ORDER BY ";
     private static final String SQL_FILTER_ID_STATE = " d.id_state = s.id_state ";
 
-    // ImageResource queries
-    private static final String SQL_QUERY_SELECT_RESOURCE_IMAGE = " SELECT image_content, image_mime_type FROM digglike_image WHERE id_digg_submit = ? ";
-    private static final String SQL_QUERY_INSERT_RESOURCE_IMAGE = " INSERT INTO digglike_image (id_digg_submit, image_content, image_mime_type) VALUES (?,?,?)";
-    private static final String SQL_QUERY_DELETE_RESOURCE_IMAGE = " DELETE FROM digglike_image WHERE id_digg_submit = ? ";
-
-    //Order
+     //Order
     private static final String SQL_QUERY_SELECT_MAX_DIGG_SUBMIT_LIST_ORDER = "SELECT max(digg_submit_list_order) FROM digglike_digg_submit WHERE id_digg = ?";
     private static final String SQL_QUERY_SELECT_DIGG_SUBMIT_LIST_ID_BY_ORDER = "SELECT id_digg_submit FROM digglike_digg_submit WHERE digg_submit_list_order = ?";
     private static final String SQL_QUERY_SELECT_DIGG_SUBMIT_LIST_ORDER_BY_ID = "SELECT digg_submit_list_order FROM digglike_digg_submit WHERE id_digg_submit = ?";
@@ -826,72 +821,9 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         return strOrderBy.toString(  );
     }
 
-    /**
-     * Return the image resource corresponding to the image id
-     * @param nImageId The identifier of image object
-     * @param plugin the Plugin
-     * @return The image resource
-     */
-    public ImageResource loadImageResource( int nImageId, Plugin plugin )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_RESOURCE_IMAGE, plugin );
-        daoUtil.setInt( 1, nImageId );
-        daoUtil.executeQuery(  );
 
-        ImageResource image = null;
 
-        if ( daoUtil.next(  ) )
-        {
-            image = new ImageResource(  );
-            image.setImage( daoUtil.getBytes( 1 ) );
-            image.setMimeType( daoUtil.getString( 2 ) );
-        }
 
-        daoUtil.free(  );
-
-        return image;
-    }
-
-    /**
-     * @param nIdDiggSubmit the id of the diggSubmit
-     * @param image : the image to add
-     * @param plugin : plugin
-     * @return return the id of the image/diggsubmit
-     * @throws com.mysql.jdbc.PacketTooBigException if the image is too big
-     */
-    public int insertImageResource( int nIdDiggSubmit, ImageResource image, Plugin plugin )
-        throws com.mysql.jdbc.PacketTooBigException
-    {
-        //drop image if this id exist
-        int nId = nIdDiggSubmit;
-
-        if ( loadImageResource( nId, plugin ) != null )
-        {
-            DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_RESOURCE_IMAGE );
-            daoUtil.setInt( 1, nId );
-            daoUtil.executeUpdate(  );
-            daoUtil.free(  );
-        }
-
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_RESOURCE_IMAGE, plugin );
-
-        daoUtil.setInt( 1, nId );
-        daoUtil.setBytes( 2, image.getImage(  ) );
-        daoUtil.setString( 3, image.getMimeType(  ) );
-
-        try
-        {
-            daoUtil.executeUpdate(  );
-        }
-        catch ( Exception e )
-        {
-            throw new PacketTooBigException( 0, 0 );
-        }
-
-        daoUtil.free(  );
-
-        return nId;
-    }
 
     ////////////////////////////////////////////////////////////////////////////
     // ContactList Order management

@@ -1278,14 +1278,11 @@ public class DiggApp implements XPageApplication
 
         diggSubmit.setDigg( digg );
         doInsertResponseInDiggSubmit( request, diggSubmit, nIdCategory, nIdType, plugin );
-        diggSubmit.setDiggSubmitValue( DiggUtils.getHtmlDiggSubmitValue( diggSubmit, locale ) );
-        diggSubmit.setDiggSubmitValueShowInTheList( DiggUtils.getHtmlDiggSubmitValueShowInTheList( diggSubmit, locale ) );
-        diggSubmit.setDiggSubmitTitle( DiggUtils.getDiggSubmitTitle( diggSubmit, locale ) );
-
+       
         // Check XSS characters
         for ( Response response : diggSubmit.getResponses(  ) )
         {
-            if ( StringUtil.containsXssCharacters( response.getValueResponse(  ) ) &&
+            if ( response.getValueResponse(  ) != null && StringUtil.containsXssCharacters( response.getValueResponse(  ) ) &&
                     !response.getValueResponse(  ).contains( "<img " ) &&
                     !response.getValueResponse(  ).contains( "<div id='mediaspace" ) )
             {
@@ -1303,7 +1300,7 @@ public class DiggApp implements XPageApplication
 
         try
         {
-            _diggSubmitService.create( diggSubmit, plugin );
+            _diggSubmitService.create( diggSubmit, plugin,locale );
         }
         catch ( Exception ex )
         {

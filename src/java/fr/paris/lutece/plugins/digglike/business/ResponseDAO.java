@@ -33,12 +33,15 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.mysql.jdbc.PacketTooBigException;
 
 
 /**
@@ -65,6 +68,11 @@ public final class ResponseDAO implements IResponseDAO
     private static final String SQL_FILTER_ID_DIGG_SUBMIT = " AND resp.id_digg_submit = ? ";
     private static final String SQL_FILTER_ID_ENTRY = " AND resp.id_entry = ? ";
     private static final String SQL_ORDER_BY_ID_RESPONSE = " ORDER BY id_response ";
+    private static final String SQL_QUERY_INSERT_RESOURCE_IMAGE = " INSERT INTO digglike_image (id_digg_submit, image_content, image_mime_type) VALUES (?,?,?)";
+    private static final String SQL_QUERY_DELETE_RESOURCE_IMAGE = " DELETE FROM digglike_image WHERE id_digg_submit = ? ";
+    // ImageResource queries
+    private static final String SQL_QUERY_SELECT_RESOURCE_IMAGE = " SELECT image_content, image_mime_type FROM digglike_image WHERE id_digg_submit = ? ";
+
 
     /**
      * Generates a new primary key
@@ -309,4 +317,83 @@ public final class ResponseDAO implements IResponseDAO
 
         return responseList;
     }
+    
+    
+    /**
+     * @param nIdDiggSubmit the id of the diggSubmit
+     * @param image : the image to add
+     * @param plugin : plugin
+     * @return return the id of the image/diggsubmit
+     * @throws com.mysql.jdbc.PacketTooBigException if the image is too big
+     */
+    public int insertImageResource( int nIdDiggSubmit, ImageResource image, Plugin plugin )
+        throws com.mysql.jdbc.PacketTooBigException
+    {
+        //drop image if this id exist
+        int nId = nIdDiggSubmit;
+
+    
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_RESOURCE_IMAGE, plugin );
+
+        daoUtil.setInt( 1, nId );
+        daoUtil.setBytes( 2, image.getImage(  ) );
+        daoUtil.setString( 3, image.getMimeType(  ) );
+
+        try
+        {
+            daoUtil.executeUpdate(  );
+        }
+        catch ( Exception e )
+        {
+            throw new PacketTooBigException( 0, 0 );
+        }
+
+        daoUtil.free(  );
+
+        return nId;
+    }
+    
+
+    /**
+     * Delete   Image Reource
+     *
+     * @param nIdDiggSubmit The identifier of the digg submit
+     * @param plugin the plugin
+     */
+    public void deleteImageResource( int nIdDiggSubmit, Plugin plugin )
+    {
+  
+	    DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_RESOURCE_IMAGE );
+	    daoUtil.setInt( 1, nIdDiggSubmit );
+	    daoUtil.executeUpdate(  );
+	    daoUtil.free(  );
+    }
+    
+    /**
+     * Return the image resource corresponding to the image id
+     * @param nImageId The identifier of image object
+     * @param plugin the Plugin
+     * @return The image resource
+     */
+    public ImageResource loadImageResource( int nImageId, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_RESOURCE_IMAGE, plugin );
+        daoUtil.setInt( 1, nImageId );
+        daoUtil.executeQuery(  );
+
+        ImageResource image = null;
+
+        if ( daoUtil.next(  ) )
+        {
+            image = new ImageResource(  );
+            image.setImage( daoUtil.getBytes( 1 ) );
+            image.setMimeType( daoUtil.getString( 2 ) );
+        }
+
+        daoUtil.free(  );
+
+        return image;
+    }
+    
+    
 }

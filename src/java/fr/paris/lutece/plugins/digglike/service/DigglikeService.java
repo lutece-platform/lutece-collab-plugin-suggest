@@ -33,19 +33,25 @@
  */
 package fr.paris.lutece.plugins.digglike.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
+import fr.paris.lutece.plugins.digglike.business.EntryFilter;
+import fr.paris.lutece.plugins.digglike.business.EntryHome;
+import fr.paris.lutece.plugins.digglike.business.IEntry;
+import fr.paris.lutece.plugins.digglike.business.Response;
 import fr.paris.lutece.plugins.digglike.business.ResponseHome;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import java.util.List;
-import java.util.Locale;
 
 
 /**
@@ -82,10 +88,22 @@ public class DigglikeService
      *
      * @param nIdDigg
      *            the id digg
+     * @param plugin the plugin
+     * 
+     * @locale locale the locale
      */
     public void updateAllDisplayOfDiggSubmit( Integer nIdDigg, Plugin plugin, Locale locale )
     {
         Digg digg = DiggHome.findByPrimaryKey( nIdDigg, plugin );
+        HashMap<Integer , IEntry> mapEntry=new HashMap<Integer, IEntry>();
+        EntryFilter entryFilter=new EntryFilter();
+        entryFilter.setIdDigg(digg.getIdDigg());
+        for(IEntry entry:EntryHome.getEntryList(entryFilter, plugin))
+        {
+        	mapEntry.put(entry.getIdEntry(),EntryHome.findByPrimaryKey(entry.getIdEntry(),plugin));
+        	
+        }
+        
         SubmitFilter filter = new SubmitFilter(  );
         filter.setIdDigg( nIdDigg );
 
@@ -93,16 +111,20 @@ public class DigglikeService
 
         for ( Integer nIdDiggSubmit : listIdDiggSubmit )
         {
-            updateDisplayDiggSubmit( nIdDiggSubmit, plugin, locale, digg );
+            updateDisplayDiggSubmit( nIdDiggSubmit, plugin, locale, digg, mapEntry );
         }
     }
 
+   
     /**
-     * update the display of a diggS
-     *
-     * @param diggSubmit
+     * update the display of the diggsubmit
+     * @param nIdDiggSubmit the diggSubmit Id
+     * @param plugin the plugin	
+     * @param locale the locale
+     * @param digg the digg
+     * @param mapEntry a map of entry assocaited to the digg
      */
-    public void updateDisplayDiggSubmit( Integer nIdDiggSubmit, Plugin plugin, Locale locale, Digg digg )
+    public void updateDisplayDiggSubmit( Integer nIdDiggSubmit, Plugin plugin, Locale locale, Digg digg,Map<Integer, IEntry>mapEntry )
     {
         DiggSubmit diggSubmit = DiggSubmitService.getService(  ).findByPrimaryKey( nIdDiggSubmit, false, plugin );
         diggSubmit.setDigg( digg );
@@ -110,7 +132,13 @@ public class DigglikeService
         SubmitFilter filter = new SubmitFilter(  );
         filter.setIdDiggSubmit( nIdDiggSubmit );
         // add responses
-        diggSubmit.setResponses( ResponseHome.getResponseList( filter, plugin ) );
+        List<Response> listResponses =ResponseHome.getResponseList( filter, plugin );
+        for(Response response: listResponses)
+        {
+        	response.setEntry(mapEntry.get(response.getEntry().getIdEntry()));
+        	
+        }
+        diggSubmit.setResponses(listResponses);
         // update Number of comment
         diggSubmit.setNumberComment( CommentSubmitService.getService(  ).getCountCommentSubmit( filter, plugin ) );
         // update Number of Comment Enable

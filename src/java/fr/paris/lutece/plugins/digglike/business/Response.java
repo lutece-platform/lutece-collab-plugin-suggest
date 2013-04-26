@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import fr.paris.lutece.portal.service.image.ImageResource;
+
 
 /**
  *
@@ -45,6 +47,7 @@ public class Response
     private String _strValueResponse;
     private IEntry _entry;
     private DiggSubmit _diggSubmit;
+    private ImageResource _image;
 
     /**
      *
@@ -117,4 +120,19 @@ public class Response
     {
         _strValueResponse = strValueResponse;
     }
+
+    /**
+     * get Image
+     * @return Image Resource
+     */
+	public ImageResource getImage() {
+		return _image;
+	}
+	/**
+	 * set Image Resource
+	 * @param image  Image Resource
+	 */
+	public void setImage(ImageResource image) {
+		this._image = image;
+	}
 }

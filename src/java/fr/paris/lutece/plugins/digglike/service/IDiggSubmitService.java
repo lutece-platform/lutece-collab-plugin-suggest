@@ -33,15 +33,15 @@
  */
 package fr.paris.lutece.plugins.digglike.service;
 
-import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
-import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
-import fr.paris.lutece.portal.business.style.Theme;
-import fr.paris.lutece.portal.service.image.ImageResource;
-import fr.paris.lutece.portal.service.plugin.Plugin;
+import java.util.List;
+import java.util.Locale;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
+import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
+import fr.paris.lutece.portal.business.style.Theme;
+import fr.paris.lutece.portal.service.plugin.Plugin;
 
 
 public interface IDiggSubmitService
@@ -54,7 +54,7 @@ public interface IDiggSubmitService
     * @return the id of {@link Theme} diggsubmit
     */
     @Transactional( "digglike.transactionManager" )
-    int create( DiggSubmit diggSubmit, Plugin plugin );
+    int create( DiggSubmit diggSubmit, Plugin plugin,Locale locale );
 
     /**
      * Remove the record whose identifier is specified in parameter
@@ -153,18 +153,7 @@ public interface IDiggSubmitService
      */
     int findPrevIdDiggSubmitInTheList( int nIdCurrentDiggSubmit, SubmitFilter filter, Plugin plugin );
 
-    /**
-     * Creation of an image
-     * @param nIdDiggSubmit the id of the diggSubmit
-     * @param image the image to add to the db
-     * @param plugin the Plugin
-     * @return the id of the new digg submit
-     * @throws com.mysql.jdbc.PacketTooBigException if the image is too big
-     *
-     */
-    int createImage( int nIdDiggSubmit, ImageResource image, Plugin plugin )
-        throws com.mysql.jdbc.PacketTooBigException;
-
+   
     /**
      * Search the order number of diggSubmit
      * @return int the id by a given order

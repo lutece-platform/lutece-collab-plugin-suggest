@@ -73,41 +73,11 @@ public final class DiggSubmitHome
      */
     public static int create( DiggSubmit diggSubmit, Plugin plugin )
     {
-        int nIdDiggSubmit = _dao.insert( diggSubmit, plugin );
-        diggSubmit.setIdDiggSubmit( nIdDiggSubmit );
+    	return  _dao.insert( diggSubmit, plugin );
+       
+     }
 
-        if ( diggSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) == DiggSubmit.STATE_PUBLISH )
-        {
-            String strIdDiggSubmit = Integer.toString( nIdDiggSubmit );
-            IndexationService.addIndexerAction( strIdDiggSubmit,
-                AppPropertiesService.getProperty( DigglikeIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_CREATE );
 
-            DiggIndexerUtils.addIndexerAction( strIdDiggSubmit, IndexerAction.TASK_CREATE );
-        }
-
-        //store response
-        if ( diggSubmit.getResponses(  ) != null )
-        {
-            for ( Response response : diggSubmit.getResponses(  ) )
-            {
-                response.setDiggSubmit( diggSubmit );
-                ResponseHome.create( response, plugin );
-            }
-        }
-
-        return nIdDiggSubmit;
-    }
-
-    /**
-     * Return the image resource for the specified image id
-     * @param nImageId The identifier of image object
-     * @param plugin the plugin
-     * @return ImageResource
-     */
-    public static ImageResource getImageResource( int nImageId, Plugin plugin )
-    {
-        return _dao.loadImageResource( nImageId, plugin );
-    }
 
     /**
      * Update of the diggSubmit which is specified in parameter
@@ -172,6 +142,7 @@ public final class DiggSubmitHome
         for ( Response response : listResponses )
         {
             ResponseHome.remove( response.getIdResponse(  ), plugin );
+            ResponseHome.removeImage(response.getIdResponse(  ), plugin );
         }
 
         List<CommentSubmit> listComments = CommentSubmitService.getService(  ).getCommentSubmitList( filter, plugin );
@@ -380,20 +351,7 @@ public final class DiggSubmitHome
         return nIdDiggSubmitPrev;
     }
 
-    /**
-     * Creation of an image
-     * @param nIdDiggSubmit the id of the diggSubmit
-     * @param image the image to add to the db
-     * @param plugin the Plugin
-     * @return the id of the new digg submit
-     * @throws com.mysql.jdbc.PacketTooBigException if the image is too big
-     *
-     */
-    public static int createImage( int nIdDiggSubmit, ImageResource image, Plugin plugin )
-        throws com.mysql.jdbc.PacketTooBigException
-    {
-        return _dao.insertImageResource( nIdDiggSubmit, image, plugin );
-    }
+
 
     /**
      * Search the order number of diggSubmit

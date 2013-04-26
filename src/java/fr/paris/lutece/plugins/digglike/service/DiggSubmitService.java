@@ -33,21 +33,29 @@
  */
 package fr.paris.lutece.plugins.digglike.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import com.mysql.jdbc.PacketTooBigException;
 
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
+import fr.paris.lutece.plugins.digglike.business.Response;
+import fr.paris.lutece.plugins.digglike.business.ResponseHome;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
+import fr.paris.lutece.plugins.digglike.service.search.DigglikeIndexer;
+import fr.paris.lutece.plugins.digglike.utils.DiggIndexerUtils;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
-import fr.paris.lutece.portal.service.image.ImageResource;
+import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
 import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 
 public class DiggSubmitService implements IDiggSubmitService
@@ -57,18 +65,52 @@ public class DiggSubmitService implements IDiggSubmitService
 
     @Override
     @Transactional( "digglike.transactionManager" )
-    public int create( DiggSubmit diggSubmit, Plugin plugin )
+    public int create( DiggSubmit diggSubmit, Plugin plugin,Locale locale )
     {
-        return DiggSubmitHome.create( diggSubmit, plugin );
+    	
+    	int nIdDiggSubmit = DiggSubmitHome.create( diggSubmit, plugin );
+        diggSubmit.setIdDiggSubmit( nIdDiggSubmit );
+   
+        if ( diggSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) == DiggSubmit.STATE_PUBLISH )
+        {
+            String strIdDiggSubmit = Integer.toString( nIdDiggSubmit );
+            IndexationService.addIndexerAction( strIdDiggSubmit,
+                AppPropertiesService.getProperty( DigglikeIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_CREATE );
+
+            DiggIndexerUtils.addIndexerAction( strIdDiggSubmit, IndexerAction.TASK_CREATE );
+        }
+
+        //store response
+        if ( diggSubmit.getResponses(  ) != null )
+        {
+            for ( Response response : diggSubmit.getResponses(  ) )
+            {
+                response.setDiggSubmit( diggSubmit );
+                ResponseHome.create( response, plugin );
+                if(response.getImage()!=null)
+                {
+                	try {
+                			ResponseHome.createImage(response.getIdResponse(), response.getImage(), plugin);
+					} catch (PacketTooBigException e) {
+						
+						AppLogService.error(e);
+					}
+                	
+                }
+            }
+        }
+        
+        //update DiggSubmit 
+        diggSubmit.setDiggSubmitValue( DiggUtils.getHtmlDiggSubmitValue( diggSubmit, locale ) );
+        diggSubmit.setDiggSubmitValueShowInTheList( DiggUtils.getHtmlDiggSubmitValueShowInTheList( diggSubmit, locale ) );
+        diggSubmit.setDiggSubmitTitle( DiggUtils.getDiggSubmitTitle( diggSubmit, locale ) );
+        DiggSubmitHome.update( diggSubmit, plugin );
+
+        return nIdDiggSubmit;
+    	
     }
 
-    @Override
-    @Transactional( "digglike.transactionManager" )
-    public int createImage( int nIdDiggSubmit, ImageResource image, Plugin plugin )
-        throws PacketTooBigException
-    {
-        return DiggSubmitHome.createImage( nIdDiggSubmit, image, plugin );
-    }
+   
 
     @Override
     @Transactional( "digglike.transactionManager" )

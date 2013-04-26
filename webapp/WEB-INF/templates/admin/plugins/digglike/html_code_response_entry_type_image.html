@@ -1,4 +1,2 @@
-<#if is_title?exists && is_title><p class="lead"><#else><p></#if>	 
-${response.valueResponse}
-</p>	
+<#if is_title?exists && is_title><p class="lead"><#else><p></#if><img  src="image?resource_type=image_digg&id=${response.idResponse}" <#if response.entry.width!=-1> width="${response.entry.width}"</#if><#if response.entry.height!=-1>height="${response.entry.height}" </#if>/></p>	
 

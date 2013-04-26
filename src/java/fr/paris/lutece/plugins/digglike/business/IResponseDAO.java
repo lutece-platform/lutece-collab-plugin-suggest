@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
@@ -85,4 +86,28 @@ public interface IResponseDAO
      * @return  the list of response
      */
     List<Response> selectListByFilter( SubmitFilter filter, Plugin plugin );
+    
+    /**load image ressource
+     * @param nCategoryId the category id
+     * @param plugin the plugin
+     * @return image ressource
+     */
+    ImageResource loadImageResource( int nCategoryId, Plugin plugin );
+
+    /** insert an image
+     * @param nIdDiggSubmit the id of the diggSubmit
+     * @param image the image
+     * @param plugin the plugin
+     * @return an int
+     * @throws com.mysql.jdbc.PacketTooBigException if the image is too big
+     */
+    int insertImageResource( int nIdDiggSubmit, ImageResource image, Plugin plugin )
+        throws com.mysql.jdbc.PacketTooBigException;
+    /**
+     * Delete   Image Reource
+     *
+     * @param nIdDiggSubmit The identifier of the digg submit
+     * @param plugin the plugin
+     */
+    public void deleteImageResource( int nIdDiggSubmit, Plugin plugin );
 }

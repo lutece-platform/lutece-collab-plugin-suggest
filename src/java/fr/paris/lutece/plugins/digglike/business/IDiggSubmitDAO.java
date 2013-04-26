@@ -132,22 +132,7 @@ public interface IDiggSubmitDAO
     //        */
     //        int findPrevIdDiggSubmitInTheList(  int nIdCurrentDiggSubmit,SubmitFilter filter, Plugin plugin );
 
-    /**load image ressource
-     * @param nCategoryId the category id
-     * @param plugin the plugin
-     * @return image ressource
-     */
-    ImageResource loadImageResource( int nCategoryId, Plugin plugin );
-
-    /** insert an image
-     * @param nIdDiggSubmit the id of the diggSubmit
-     * @param image the image
-     * @param plugin the plugin
-     * @return an int
-     * @throws com.mysql.jdbc.PacketTooBigException if the image is too big
-     */
-    int insertImageResource( int nIdDiggSubmit, ImageResource image, Plugin plugin )
-        throws com.mysql.jdbc.PacketTooBigException;
+  
 
     /**
      * Returns a diggsubmit identifier in a distinct order
@@ -180,4 +165,5 @@ public interface IDiggSubmitDAO
      * @param plugin The plugin
      */
     int maxOrderDiggSubmit( int nIdDigg, Plugin plugin );
+
 }
