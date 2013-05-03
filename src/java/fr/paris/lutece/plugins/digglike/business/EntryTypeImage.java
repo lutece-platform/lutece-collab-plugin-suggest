@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.digglike.business;
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
 import fr.paris.lutece.plugins.digglike.service.ImageService;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
+import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -218,7 +219,7 @@ public class EntryTypeImage extends Entry
             image.setImage( bytes );
             image.setMimeType( item.getContentType(  ) );
             response.setImage(image);
-            response.setValueResponse(DiggUtils.EMPTY_STRING );
+            response.setValueResponse( FileUploadService.getFileNameOnly(item) );
         }
         else
         {

@@ -1279,17 +1279,6 @@ public class DiggApp implements XPageApplication
         diggSubmit.setDigg( digg );
         doInsertResponseInDiggSubmit( request, diggSubmit, nIdCategory, nIdType, plugin );
        
-        // Check XSS characters
-        for ( Response response : diggSubmit.getResponses(  ) )
-        {
-            if ( response.getValueResponse(  ) != null && StringUtil.containsXssCharacters( response.getValueResponse(  ) ) &&
-                    !response.getValueResponse(  ).contains( "<img " ) &&
-                    !response.getValueResponse(  ).contains( "<div id='mediaspace" ) )
-            {
-                SiteMessageService.setMessage( request, MESSAGE_NEW_DIGG_SUBMIT_INVALID, SiteMessage.TYPE_STOP );
-            }
-        }
-
         if ( user != null )
         {
             diggSubmit.setLuteceUserKey( user.getName(  ) );
