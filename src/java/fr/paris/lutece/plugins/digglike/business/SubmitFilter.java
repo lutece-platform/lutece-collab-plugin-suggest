@@ -59,6 +59,7 @@ public class SubmitFilter
     public final static int SORT_BY_NUMBER_VIEW_DESC = 10;
     public final static int SORT_BY_DATE_MODIFY_ASC = 11;
     public final static int SORT_BY_DATE_MODIFY_DESC = 12;
+    public final static int SORT_BY_PINNED_FIRST = 13;
     public static final int ALL_INT = -1;
     public static final int ID_TRUE = 1;
     public static final int ID_FALSE = 0;
@@ -76,6 +77,7 @@ public class SubmitFilter
     private Timestamp _tDateLast;
     private int _nIdDiggSubmitState = ALL_INT;
     private int _nIdCommentSubmitState = ALL_INT;
+    private int _nIdPinned = ALL_INT;
     private String _strLuteceUserKey = null;
     private List<Integer> _listSortBy = new ArrayList<Integer>(  );
 
@@ -296,6 +298,30 @@ public class SubmitFilter
     {
         return ( ( _listSortBy != null ) && ( _listSortBy.size(  ) != 0 ) );
     }
+    
+    /**
+    *
+    * @return true if the filter contain the sort
+    */
+    public boolean containsSortBy( Integer strSort )
+    {
+        if( (strSort!=null) && ( _listSortBy != null ) && ( _listSortBy.size(  ) != 0 ))
+        {
+        	
+        	for(Integer nSort:_listSortBy)
+        	{
+        		if (nSort.equals(strSort))
+        		{
+        			return true;
+        		}
+        				
+        	}
+        	
+        }
+        		
+        return false;		
+        		
+    }
 
     /**
      * convert a int to a boolean
@@ -446,4 +472,35 @@ public class SubmitFilter
     {
         return ( _nIdParent != ALL_INT );
     }
+    
+    
+    /**
+    *
+    * @return 1 if the diggs return must be reported
+    *         0 if the diggss return must not  be reported
+    */
+    public int getIdPinned(  )
+    {
+        return _nIdPinned;
+    }
+
+    /**
+     * set   1 if the diggs return must be pinned
+     *       0 if the diggss return must not  be pinned
+     * @param idPinned idPinned
+     */
+    public void setIdPinned( int idPinned )
+    {
+    	_nIdPinned = idPinned;
+    }
+
+    /**
+     *
+     * @return true if the filter contain reported
+     */
+    public boolean containsIdPinned(  )
+    {
+        return ( _nIdPinned != ALL_INT );
+    }
+
 }

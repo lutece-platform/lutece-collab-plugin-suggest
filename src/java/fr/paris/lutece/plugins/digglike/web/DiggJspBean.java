@@ -33,6 +33,22 @@
  */
 package fr.paris.lutece.plugins.digglike.web;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.digglike.business.Category;
 import fr.paris.lutece.plugins.digglike.business.CategoryHome;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
@@ -46,6 +62,8 @@ import fr.paris.lutece.plugins.digglike.business.DiggHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitState;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitStateHome;
+import fr.paris.lutece.plugins.digglike.business.DiggSubmitType;
+import fr.paris.lutece.plugins.digglike.business.DiggSubmitTypeHome;
 import fr.paris.lutece.plugins.digglike.business.EntryAdditionalAttribute;
 import fr.paris.lutece.plugins.digglike.business.EntryAdditionalAttributeHome;
 import fr.paris.lutece.plugins.digglike.business.EntryFilter;
@@ -53,8 +71,9 @@ import fr.paris.lutece.plugins.digglike.business.EntryHome;
 import fr.paris.lutece.plugins.digglike.business.EntryType;
 import fr.paris.lutece.plugins.digglike.business.EntryTypeHome;
 import fr.paris.lutece.plugins.digglike.business.ExportFormat;
-import fr.paris.lutece.plugins.digglike.business.ExportFormatHome;
+import fr.paris.lutece.plugins.digglike.business.FormError;
 import fr.paris.lutece.plugins.digglike.business.IEntry;
+import fr.paris.lutece.plugins.digglike.business.Response;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.business.VoteType;
 import fr.paris.lutece.plugins.digglike.business.VoteTypeHome;
@@ -72,14 +91,16 @@ import fr.paris.lutece.plugins.digglike.service.digglikesearch.DigglikeSearchSer
 import fr.paris.lutece.plugins.digglike.service.search.DigglikeIndexer;
 import fr.paris.lutece.plugins.digglike.utils.DiggIndexerUtils;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
+import fr.paris.lutece.plugins.digglike.web.action.DigglikeAdminSearchFields;
+import fr.paris.lutece.plugins.digglike.web.action.IDigglikeAction;
 import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.role.RoleHome;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.business.style.ThemeHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
-import fr.paris.lutece.portal.service.html.XmlTransformerService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.mailinglist.AdminMailingListService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -97,31 +118,15 @@ import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
 import fr.paris.lutece.portal.web.admin.PluginAdminPageJspBean;
+import fr.paris.lutece.portal.web.pluginaction.DefaultPluginActionResult;
+import fr.paris.lutece.portal.web.pluginaction.IPluginActionResult;
+import fr.paris.lutece.portal.web.pluginaction.PluginActionManager;
 import fr.paris.lutece.util.ReferenceList;
-import fr.paris.lutece.util.UniqueIDGenerator;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
-import fr.paris.lutece.util.xml.XmlUtil;
-
-import java.io.IOException;
-import java.io.OutputStream;
-
-import java.math.BigDecimal;
-
-import java.sql.Timestamp;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -137,6 +142,8 @@ public class DiggJspBean extends PluginAdminPageJspBean
     // templates
     private static final String TEMPLATE_MANAGE_DIGG = "admin/plugins/digglike/manage_digg.html";
     private static final String TEMPLATE_MANAGE_DIGG_SUBMIT = "admin/plugins/digglike/manage_digg_submit.html";
+    private static final String TEMPLATE_CREATE_DIGG_SUBMIT = "admin/plugins/digglike/create_digg_submit.html";
+    private static final String TEMPLATE_MANAGE_DIGG_SUBMIT_ORDER = "admin/plugins/digglike/manage_digg_submit_order.html";
     private static final String TEMPLATE_MANAGE_COMMENT_SUBMIT = "admin/plugins/digglike/manage_comment_submit.html";
     private static final String TEMPLATE_CREATE_DIGG = "admin/plugins/digglike/create_digg.html";
     private static final String TEMPLATE_MODIFY_DIGG = "admin/plugins/digglike/modify_digg.html";
@@ -159,9 +166,12 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String MESSAGE_ILLOGICAL_NUMBER_DIGG_SUBMIT_IN_TOP_COMMENT = "digglike.message.illogicalNumberDiggSumitInTopComment";
     private static final String MESSAGE_ILLOGICAL_NUMBER_DIGG_SUBMIT_PER_PAGE = "digglike.message.illogicalNumberDiggSumitPerPage";
     private static final String MESSAGE_ILLOGICAL_NUMBER_DAY_REQUIRED = "digglike.message.illogicalNumberDayRequired";
-    private static final String MESSAGE_ERROR_DURING_DOWNLOAD_FILE = "digglike.message.errorDuringDownloadFile";
-    private static final String MESSAGE_YOU_ARE_NOT_ALLOWED_TO_DOWLOAD_THIS_FILE = "digglike.message.youAreNotAllowedToDownloadFile";
-    private static final String MESSAGE_YOU_MUST_SELECT_EXPORT_FORMAT = "digglike.message.youMustSelectExportFormat";
+    private static final String MESSAGE_CONFIRM_CHANGE_DIGG_SUBMIT_CATEGORY="digglike.message.confirmChangeDiggSubmitCategory";
+    private static final String MESSAGE_CONFIRM_REMOVE_DIGG_SUBMIT_CATEGORY="digglike.message.confirmRemoveDiggSubmitCategory";
+    private static final String MESSAGE_ERROR_NO_CATEGORY = "digglike.message.errorNoCategorySelected";
+    private static final String MESSAGE_MANDATORY_QUESTION = "digglike.message.mandatory.question";
+    private static final String MESSAGE_FORM_ERROR = "digglike.message.formError";
+    
     private static final String FIELD_TITLE = "digglike.createDigg.labelTitle";
     private static final String FIELD_LIBELLE_CONTRIBUTION = "digglike.createDigg.labelLibelleContribution";
     private static final String FIELD_UNAVAILABILITY_MESSAGE = "digglike.createDigg.labelUnavailabilityMessage";
@@ -191,6 +201,8 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PROPERTY_MANAGE_DIGG_PAGE_TITLE = "digglike.manageDigg.pageTitle";
     private static final String PROPERTY_MANAGE_ADVANCED_PARAMETERS_PAGE_TITLE = "digglike.manageAdvancedParameters.pageTitle";
     private static final String PROPERTY_MANAGE_DIGG_SUBMIT_PAGE_TITLE = "digglike.manageDiggSubmit.pageTitle";
+    private static final String PROPERTY_MANAGE_DIGG_SUBMIT_ORDER_PAGE_TITLE = "digglike.manageDiggSubmitOrder.pageTitle";
+    private static final String PROPERTY_CREATE_DIGG_SUBMIT_PAGE_TITLE = "digglike.createDiggSubmit.pageTitle";
     private static final String PROPERTY_MANAGE_COMMENT_SUBMIT_PAGE_TITLE = "digglike.manageCommentSubmit.pageTitle";
 
     // Markers
@@ -236,12 +248,13 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String MARK_REPORT_REF_LIST = "digg_submit_report_list";
     private static final String MARK_REPORT_SELECTED = "digg_submit_report_selected";
     private static final String MARK_AUTHENTIFICATION_ENABLE = "authentification_enable";
-    private static final String MARK_EXPORT_FORMAT_REF_LIST = "export_format_list";
+    
     private static final String MARK_ROLE_LIST = "role_list";
     private static final String MARK_DEFAULT_VALUE_ROLE = "default_value_role";
     private static final String MARK_LIST_COMMENT_SORT = "comment_sort_list";
     private static final String MARK_COMMENT_SORT_SELECTED = "comment_sort_selected";
     private static final String MARK_DIGG_SUBMIT_ORDER_LIST = "order_list";
+    private static final String MARK_DIGG_SUBMIT_ORDER_LIST_PINNED = "order_list_pinned";
     private static final String MARK_FIRST_DATE_FILTER = "first_date_filter";
     private static final String MARK_LAST_DATE_FILTER = "last_date_filter";
     private static final String MARK_NUMBER_VOTES = "number_votes";
@@ -259,6 +272,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String MARK_PERMISSION_MANAGE_EXPORT_FORMAT = "permission_manage_export_format";
     private static final String MARK_ID_DEFAULT_DIGG = "id_default_digg";
     private static final String MARK_QUERY = "query";
+    private static final String MARK_DIGGLIKE_ACTIONS = "digglike_actions";
 
     // Jsp Definition
     private static final String JSP_DO_DISABLE_DIGG = "jsp/admin/plugins/digglike/DoDisableDigg.jsp";
@@ -271,9 +285,11 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String JSP_MODIFY_DIGG = "jsp/admin/plugins/digglike/ModifyDigg.jsp";
     private static final String JSP_MODIFY_ENTRY = "jsp/admin/plugins/digglike/ModifyEntry.jsp";
     private static final String JSP_MANAGE_DIGG_SUBMIT = "jsp/admin/plugins/digglike/ManageDiggSubmit.jsp";
+    private static final String JSP_MANAGE_DIGG_SUBMIT_ORDER = "jsp/admin/plugins/digglike/ManageDiggSubmitOrder.jsp";
     private static final String JSP_MANAGE_COMMENT_SUBMIT = "jsp/admin/plugins/digglike/ManageCommentSubmit.jsp";
     private static final String JSP_MANAGE_ADVANCED_PARAMETERS = "jsp/admin/plugins/digglike/ManageAdvancedParameters.jsp";
     private static final String JSP_DO_UPDATE_ALL_DIGG_SUBMIT = "jsp/admin/plugins/digglike/DoUpdateAllDiggSubmit.jsp";
+    private static final String JSP_DO_CHANGE_DIGG_SUBMIT_CATEGORY = "jsp/admin/plugins/digglike/DoMassChangeDiggSubmitCategory.jsp";
 
     // parameters form
     private static final String PARAMETER_ID_DIGG = "id_digg";
@@ -302,6 +318,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_ACTIVE_CAPTCHA = "active_captcha";
     private static final String PARAMETER_LIBELLE_VALIDATE_BUTTON = "libelle_validate_button";
     private static final String PARAMETER_ID_CATEGORY = "id_category";
+    private static final String PARAMETER_ID_TYPE_DIGG = "id_type";
     private static final String PARAMETER_ID_DIGG_SUBMIT_STATE = "id_digg_submit_state";
     private static final String PARAMETER_ID_DIGG_STATE = "id_digg_state";
     private static final String PARAMETER_ENABLE = "enable";
@@ -343,26 +360,30 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_ID_DEFAULT_SORT = "id_default_sort";
     private static final String PARAMETER_ACTIVE_DIGG_SUBMIT_TYPE = "active_digg_submit_type";
     private static final String PARAMETER_ID_DEFAULT_DIGG = "id_default_digg";
+    private static final String PARAMETER_SELECTED_DIGG_SUBMIT="selected_digg_submit";
+    private static final String PARAMETER_DISABLE_VOTE="disable_vote";
+    
 
     // other constants
     private static final String EMPTY_STRING = "";
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
-    private static final String XSL_UNIQUE_PREFIX_ID = UniqueIDGenerator.getNewId(  ) + "digg-";
 
-    // Export
-    private static final String EXPORT_CSV_EXT = "csv";
 
     // private static final String EXPORT_TMPFILE_PREFIX = "exportDigg";
     // private static final String EXPORT_TMPFILE_SUFIX = ".part";
     // private static final String CONSTANT_MIME_TYPE_CSV = "application/csv";
 
     // session fields
+    
+    private DigglikeAdminSearchFields _searchFields=new DigglikeAdminSearchFields();
     private int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_ITEM_PER_PAGE, 50 );
     private String _strCurrentPageIndexDigg;
     private int _nItemsPerPageDigg;
     private String _strCurrentPageIndexDiggSubmit;
     private String _strCurrentPageIndexCommentSubmit;
     private int _nItemsPerPageDiggSubmit;
+    private String _strCurrentPageIndexDiggSubmitOrder;
+    private int _nItemsPerPageDiggSubmitOrder;
     private int _nItemsPerPageCommentSubmit;
     private String _strCurrentPageIndexEntry;
     private int _nItemsPerPageEntry;
@@ -371,11 +392,10 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private int _nIdDiggState = -1;
     private int _nIdDigg = -1;
     private int _nIdDiggSubmit = -1;
-    private int _nIdDiggSubmitState = -1;
     private int _nIdCommentSort = -1;
-    private int _nIdDiggSubmitSort = -1;
-    private int _nIdDiggSubmitReport = -1;
-    private String _strQuery = null;
+    //private int _nIdDiggSubmitSort = -1;
+    //private int _nIdDiggSubmitReport = -1;
+    //private String _strQuery = null;
     private String _strWorkGroup = AdminWorkgroupService.ALL_GROUPS;
     private IDiggSubmitService _diggSubmitService = DiggSubmitService.getService(  );
     private ICommentSubmitService _commentSubmitService = CommentSubmitService.getService(  );
@@ -531,78 +551,101 @@ public class DiggJspBean extends PluginAdminPageJspBean
      *            The Http request
      * @return Html digg
      */
-    public String getManageDiggSubmit( HttpServletRequest request )
+	public IPluginActionResult getManageDiggSubmit( HttpServletRequest request, HttpServletResponse response ) throws AccessDeniedException
     {
-        Plugin plugin = getPlugin(  );
-        Locale locale = getLocale(  );
-        ReferenceList refListDiggSumitState = initRefListDiggSubmitState( plugin, locale );
+        
+        ReferenceList refListDiggSumitState = initRefListDiggSubmitState( getPlugin(), getLocale() );
         ReferenceList refListAllYesNo;
         int nNumberShownCharacters = AppPropertiesService.getPropertyInt( PROPERTY_NUMBER_DIGG_SUBMIT_VALUE_SHOWN_CHARACTERS,
                 100 );
-        String strIdDiggSumitState = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_STATE );
-        String strIdDiggSubmitSort = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_SORT );
-        String strIdDiggSubmitReport = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_REPORT );
-        String strQuery = request.getParameter( PARAMETER_QUERY );
+    
         String strIdDigg = request.getParameter( PARAMETER_ID_DIGG );
         List<Integer> listIdDiggSubmitResult = new ArrayList<Integer>(  );
         List<DiggSubmit> listDiggSubmitDisplay = new ArrayList<DiggSubmit>(  );
+        // display could have been an action but it's the default one an will always be here...
+        
 
-        if ( strQuery != null )
-        {
-            _strQuery = strQuery;
-        }
 
         _strCurrentPageIndexDiggSubmit = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndexDiggSubmit );
         _nItemsPerPageDiggSubmit = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE,
                 _nItemsPerPageDiggSubmit, _nDefaultItemsPerPage );
 
-        if ( ( strIdDiggSumitState != null ) && !strIdDiggSumitState.equals( EMPTY_STRING ) )
-        {
-            _nIdDiggSubmitState = DiggUtils.getIntegerParameter( strIdDiggSumitState );
-        }
+       
 
         if ( ( strIdDigg != null ) && !strIdDigg.equals( EMPTY_STRING ) )
         {
             _nIdDigg = DiggUtils.getIntegerParameter( strIdDigg );
         }
 
-        if ( ( strIdDiggSubmitSort != null ) && !strIdDiggSubmitSort.equals( EMPTY_STRING ) )
-        {
-            _nIdDiggSubmitSort = DiggUtils.getIntegerParameter( strIdDiggSubmitSort );
-        }
+        updateSearchFieldsData(request);
 
-        if ( ( strIdDiggSubmitReport != null ) && !strIdDiggSubmitReport.equals( EMPTY_STRING ) )
-        {
-            _nIdDiggSubmitReport = DiggUtils.getIntegerParameter( strIdDiggSubmitReport );
-        }
+//        if ( ( strIdDiggSubmitSort != null ) && !strIdDiggSubmitSort.equals( "-1" ) &&
+//                !strIdDiggSubmitSort.equals( EMPTY_STRING ) )
+//        {
+//            // we can update the db
+//            DiggHome.updateDiggSortField( Integer.valueOf( strIdDiggSubmitSort ), _nIdDigg, plugin );
+//        }
 
-        if ( ( strIdDiggSubmitSort != null ) && !strIdDiggSubmitSort.equals( "-1" ) &&
-                !strIdDiggSubmitSort.equals( EMPTY_STRING ) )
-        {
-            // we can update the db
-            DiggHome.updateDiggSortField( Integer.valueOf( strIdDiggSubmitSort ), _nIdDigg, plugin );
-        }
-
-        Digg digg = DiggHome.findByPrimaryKey( _nIdDigg, plugin );
+        Digg digg = DiggHome.findByPrimaryKey( _nIdDigg, getPlugin(  ) );
 
         if ( ( digg == null ) ||
                 !RBACService.isAuthorized( Digg.RESOURCE_TYPE, EMPTY_STRING + digg.getIdDigg(  ),
                     DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT, getUser(  ) ) )
         {
-            return getManageDigg( request );
+        	throw new AccessDeniedException(  );
+        }
+        
+        
+        // fill the selected records
+        String[] selectedDiggSubmit = request.getParameterValues( PARAMETER_SELECTED_DIGG_SUBMIT);
+        List<String> listSelectedDiggSubmit;
+
+        if ( selectedDiggSubmit != null )
+        {
+        	listSelectedDiggSubmit = Arrays.asList( selectedDiggSubmit );
+
+            if ( AppLogService.isDebugEnabled(  ) )
+            {
+                AppLogService.debug( "List selected diggSubmit : " + listSelectedDiggSubmit );
+            }
+        }
+        else
+        {
+        	listSelectedDiggSubmit = new ArrayList<String>(  );
         }
 
-        // build Filter
-        SubmitFilter filter = getDiggSubmitFilter(  );
+        _searchFields.setSelectedDiggSubmit( listSelectedDiggSubmit );
 
-        if ( ( _strQuery != null ) && ( _strQuery.trim(  ) != DiggUtils.EMPTY_STRING ) )
+        // first - see if there is an invoked action
+        IDigglikeAction action = PluginActionManager.getPluginAction( request, IDigglikeAction.class );
+
+        if ( action != null )
+        {
+            if ( AppLogService.isDebugEnabled(  ) )
+            {
+                AppLogService.debug( "Processing directory action " + action.getName(  ) );
+            }
+
+            return action.process( request, response, getUser(  ), _searchFields );
+        }
+        else
+        {
+        
+        
+        
+       DefaultPluginActionResult result = new DefaultPluginActionResult(  );
+
+        // build Filter
+        SubmitFilter filter = DiggUtils.getDiggSubmitFilter( getSearchFields() );
+
+        if ( ( getSearchFields().getQuery() != null ) && ( getSearchFields().getQuery().trim(  ) != DiggUtils.EMPTY_STRING ) )
         {
             int nId = 0;
 
             try
             {
-                nId = Integer.parseInt( _strQuery );
+                nId = Integer.parseInt( getSearchFields().getQuery() );
                 filter.setIdDiggSubmit( nId );
                 listIdDiggSubmitResult = _diggSubmitService.getDiggSubmitListId( filter, getPlugin(  ) );
             }
@@ -610,7 +653,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
             {
                 // the query is not the id of the digg submit
                 listIdDiggSubmitResult = DigglikeSearchService.getInstance(  )
-                                                              .getSearchResults( _strQuery, filter, plugin );
+                                                              .getSearchResults( getSearchFields().getQuery(), filter, getPlugin(  ) );
             }
         }
         else
@@ -618,9 +661,9 @@ public class DiggJspBean extends PluginAdminPageJspBean
             listIdDiggSubmitResult = _diggSubmitService.getDiggSubmitListId( filter, getPlugin(  ) );
         }
 
-        ReferenceList refCategoryList = DiggUtils.getRefListCategory( digg.getCategories(  ) );
-        ReferenceList refListDiggSort = DiggUtils.getRefListDiggSort( locale );
-        refListAllYesNo = getRefListAllYesNo( locale );
+        
+        ReferenceList refListDiggSort = DiggUtils.getRefListDiggSort( getLocale() );
+        refListAllYesNo = getRefListAllYesNo( getLocale() );
 
         HashMap model = new HashMap(  );
         Paginator paginator = new Paginator( listIdDiggSubmitResult, _nItemsPerPageDiggSubmit,
@@ -631,141 +674,250 @@ public class DiggJspBean extends PluginAdminPageJspBean
         {
             diggSubmit = _diggSubmitService.findByPrimaryKey( (Integer) idDiggSubmitDisplay, false, getPlugin(  ) );
             filter.setIdDiggSubmit( (Integer) idDiggSubmitDisplay );
-            diggSubmit.setNumberComment( _commentSubmitService.getCountCommentSubmit( filter, plugin ) );
+            diggSubmit.setNumberComment( _commentSubmitService.getCountCommentSubmit( filter, getPlugin() ) );
             listDiggSubmitDisplay.add( diggSubmit );
         }
-
-        model.put( MARK_DIGG_SUBMIT_ORDER_LIST, getDiggSubmitOrderList( _nIdDigg ) );
+       
+       
+        
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageDiggSubmit );
         model.put( MARK_DIGG_SUBMIT_STATE_REF_LIST, refListDiggSumitState );
-        model.put( MARK_DIGG_SUBMIT_STATE_SELECTED, _nIdDiggSubmitState );
+        model.put( MARK_DIGG_SUBMIT_STATE_SELECTED, getSearchFields().getIdDiggSumitState() );
         model.put( MARK_DIGG_SUBMIT_LIST, listDiggSubmitDisplay );
         model.put( MARK_DIGG, digg );
-        model.put( MARK_CATEGORY_LIST, refCategoryList );
         model.put( MARK_DISABLE_DIGG_SUBMIT_STATE_NUMBER, DiggSubmit.STATE_DISABLE );
         model.put( MARK_PUBLISH_DIGG_SUBMIT_STATE_NUMBER, DiggSubmit.STATE_PUBLISH );
         model.put( MARK_WAITING_FOR_PUBLISH_DIGG_SUBMIT_STATE_NUMBER, DiggSubmit.STATE_WAITING_FOR_PUBLISH );
         model.put( MARK_NUMBER_SHOWN_CHARACTERS, nNumberShownCharacters );
         model.put( MARK_LIST_DIGG_SUBMIT_SORT, refListDiggSort );
-        model.put( MARK_DIGG_SUBMIT_SORT_SELECTED, _nIdDiggSubmitSort );
+        model.put( MARK_DIGG_SUBMIT_SORT_SELECTED, getSearchFields().getIdDiggSubmitSort() );
         model.put( MARK_REPORT_REF_LIST, refListAllYesNo );
-        model.put( MARK_REPORT_SELECTED, _nIdDiggSubmitReport );
-        model.put( MARK_EXPORT_FORMAT_REF_LIST, ExportFormatHome.getListExport( plugin ) );
-        model.put( MARK_QUERY, _strQuery );
+        model.put( MARK_REPORT_SELECTED, getSearchFields().getIdDiggSubmitReport() );
+        model.put( MARK_QUERY, getSearchFields().getQuery() );
+        
+        PluginActionManager.fillModel( request, getUser(  ), model, IDigglikeAction.class, MARK_DIGGLIKE_ACTIONS );
+
         setPageTitleProperty( PROPERTY_MANAGE_DIGG_SUBMIT_PAGE_TITLE );
 
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_DIGG_SUBMIT, locale, model );
+        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_DIGG_SUBMIT, getLocale(), model );
 
         // ReferenceList refMailingList;
         // refMailingList=AdminMailingListService.getMailingLists(adminUser);
-        return getAdminPage( templateList.getHtml(  ) );
+        result.setHtmlContent( getAdminPage( templateList.getHtml(  ) ) );
+        
+        return result; 
+        }
     }
+	
+	
+	 /**
+	    * Returns advanced parameters form
+	    *
+	    * @param request The Http request
+	    * @return Html form
+	    */
+	    public String getManageDiggSubmitOrder( HttpServletRequest request ) throws AccessDeniedException
+	    {
+	    	
+	    	String strIdDigg = request.getParameter( PARAMETER_ID_DIGG );
+	    	int nNumberShownCharacters = AppPropertiesService.getPropertyInt( PROPERTY_NUMBER_DIGG_SUBMIT_VALUE_SHOWN_CHARACTERS,
+	                 100 );
+	     
+	    	_strCurrentPageIndexDiggSubmitOrder = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX,
+	                _strCurrentPageIndexDiggSubmitOrder );
+	        _nItemsPerPageDiggSubmitOrder = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE,
+	                _nItemsPerPageDiggSubmitOrder, _nDefaultItemsPerPage );
 
-    /**
-     * write in the http response the export file of all digg submit who verify
-     * the filter if there is no response return a error
-     *
-     * @param request
-     *            the http request
-     * @param response
-     *            The http response
-     * @return The URL to go after performing the action
-     */
-    public String doDownloadDiggExport( HttpServletRequest request, HttpServletResponse response )
-    {
-        Plugin plugin = getPlugin(  );
-        Locale locale = getLocale(  );
-        String strIdExportFormat = request.getParameter( PARAMETER_ID_EXPORT_FORMAT );
+	        List<Integer> listIdDiggSubmitResult = new ArrayList<Integer>(  );
+	        List<DiggSubmit> listDiggSubmitDisplay = new ArrayList<DiggSubmit>(  );
 
-        int nIdExportFormat = -1;
+	        if ( ( strIdDigg != null ) && !strIdDigg.equals( EMPTY_STRING ) )
+	        {
+	            _nIdDigg = DiggUtils.getIntegerParameter( strIdDigg );
+	        }
+	    	
+	    	
+	    	
+	    	Digg digg = DiggHome.findByPrimaryKey( _nIdDigg, getPlugin(  ) );
+	    	if ( ( digg == null ) ||
+	                 !RBACService.isAuthorized( Digg.RESOURCE_TYPE, EMPTY_STRING + digg.getIdDigg(  ),
+	                     DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT, getUser(  ) ) )
+	         {
+	         	throw new AccessDeniedException(  );
+	         }
+	    	
+	    	
+	    	SubmitFilter submitFilter=new SubmitFilter();
+	    	submitFilter.setIdDigg(_nIdDigg);
+	    	DiggUtils.initSubmitFilterBySort(submitFilter,SubmitFilter.SORT_MANUALLY);
+	    	DiggUtils.initSubmitFilterBySort(submitFilter,SubmitFilter.SORT_BY_PINNED_FIRST);
+	    	
+	    	listIdDiggSubmitResult = _diggSubmitService.getDiggSubmitListId( submitFilter, getPlugin(  ) );
+	        HashMap model = new HashMap(  );
+	        Paginator paginator = new Paginator( listIdDiggSubmitResult, _nItemsPerPageDiggSubmitOrder,
+	                getJspManageDiggSubmit( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexDiggSubmitOrder );
+	        DiggSubmit diggSubmit;
 
-        nIdExportFormat = DiggUtils.getIntegerParameter( strIdExportFormat );
+	        for ( Object idDiggSubmitDisplay : paginator.getPageItems(  ) )
+	        {
+	            diggSubmit = _diggSubmitService.findByPrimaryKey( (Integer) idDiggSubmitDisplay, false, getPlugin(  ) );
+	            submitFilter.setIdDiggSubmit( (Integer) idDiggSubmitDisplay );
+	            diggSubmit.setNumberComment( _commentSubmitService.getCountCommentSubmit( submitFilter, getPlugin() ) );
+	            listDiggSubmitDisplay.add( diggSubmit );
+	        }
+	        
+	        
+	        
+	        model.put( MARK_DIGG_SUBMIT_ORDER_LIST_PINNED, getDiggSubmitOrderList( _nIdDigg,true ) );
+	        model.put( MARK_DIGG_SUBMIT_ORDER_LIST, getDiggSubmitOrderList( _nIdDigg,false ) );
+	        model.put( MARK_DISABLE_DIGG_SUBMIT_STATE_NUMBER, DiggSubmit.STATE_DISABLE );
+	        model.put( MARK_PUBLISH_DIGG_SUBMIT_STATE_NUMBER, DiggSubmit.STATE_PUBLISH );
+	        model.put( MARK_WAITING_FOR_PUBLISH_DIGG_SUBMIT_STATE_NUMBER, DiggSubmit.STATE_WAITING_FOR_PUBLISH );
+	        
+	        model.put( MARK_PAGINATOR, paginator );
+	        model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageDiggSubmit );
+	        
+	        model.put( MARK_DIGG_SUBMIT_LIST, listDiggSubmitDisplay );
+	        model.put( MARK_DIGG, digg );
+	        model.put( MARK_NUMBER_SHOWN_CHARACTERS, nNumberShownCharacters );
+	        
+	        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_DIGG_SUBMIT_ORDER, getLocale(  ),
+	                model );
 
-        Digg digg = DiggHome.findByPrimaryKey( _nIdDigg, plugin );
+	        setPageTitleProperty( PROPERTY_MANAGE_DIGG_SUBMIT_ORDER_PAGE_TITLE );
 
-        if ( ( digg == null ) ||
-                !RBACService.isAuthorized( Digg.RESOURCE_TYPE, Integer.toString( digg.getIdDigg(  ) ),
-                    DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT, getUser(  ) ) )
-        {
-            return AdminMessageService.getMessageUrl( request, MESSAGE_YOU_ARE_NOT_ALLOWED_TO_DOWLOAD_THIS_FILE,
-                AdminMessage.TYPE_STOP );
-        }
+	       
+	        return getAdminPage( templateList.getHtml(  ) );
+	    }
+	    
+	    
+	    
+	    /**
+	     * Return create digg submit form
+	     *
+	     * @param request
+	     *            The Http request
+	     * @return Html comment submit
+	     */
+	    public String getCreateDiggSubmit( HttpServletRequest request ) throws AccessDeniedException
+	    {
+	    	String strIdDigg = request.getParameter( PARAMETER_ID_DIGG );
+	    	if ( ( strIdDigg != null ) && !strIdDigg.equals( EMPTY_STRING ) )
+	        {
+	            _nIdDigg = DiggUtils.getIntegerParameter( strIdDigg );
+	        }
+	    	
+	    	Digg digg = DiggHome.findByPrimaryKey( _nIdDigg, getPlugin(  ) );
+	    	if ( ( digg == null ) ||
+	                 !RBACService.isAuthorized( Digg.RESOURCE_TYPE, EMPTY_STRING + digg.getIdDigg(  ),
+	                     DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT, getUser(  ) ) )
+	         {
+	         	throw new AccessDeniedException(  );
+	         }
+	    	
+	    	 Map<String, Object> model =DiggUtils.getModelHtmlForm( digg, getPlugin(), getLocale(), DiggUtils.CONSTANT_ID_NULL,true );
+	    	
+	    	 HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_CREATE_DIGG_SUBMIT, getLocale(  ),
+		                model );
 
-        ExportFormat exportFormat;
-        exportFormat = ExportFormatHome.findByPrimaryKey( nIdExportFormat, plugin );
+		      setPageTitleProperty( PROPERTY_CREATE_DIGG_SUBMIT_PAGE_TITLE );
+		      return getAdminPage( templateList.getHtml(  ) );
+	    }
+	    
+	    
+	    
+	    /**
+	     * Perform the digg creation
+	     *
+	     * @param request
+	     *            The HTTP request
+	     * @return The URL to go after performing the action
+	     */
+	    public String doCreateDiggSubmit( HttpServletRequest request )
+	    {
+	    	String strIdDigg = request.getParameter( PARAMETER_ID_DIGG );
+	    	
+	    	if ( ( strIdDigg != null ) && !strIdDigg.equals( EMPTY_STRING ) )
+	        {
+	            _nIdDigg = DiggUtils.getIntegerParameter( strIdDigg );
+	        }
+	    	
+	    	Digg digg = DiggHome.findByPrimaryKey( _nIdDigg, getPlugin(  ) );
+	   
+	    	if ( ( request.getParameter( PARAMETER_CANCEL ) == null ) &&
+	        		RBACService.isAuthorized( Digg.RESOURCE_TYPE, EMPTY_STRING + digg.getIdDigg(  ),
+		                     DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT, getUser(  ) ) )
+	        {
+	            
+	    		List<Response> listResponse = new ArrayList<Response>(  );
+	    		String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
+	            String strIdType = request.getParameter( PARAMETER_ID_TYPE_DIGG );
+	            int nIdCategory = DiggUtils.getIntegerParameter( strIdCategory );
+	            int nIdType = DiggUtils.getIntegerParameter( strIdType );
+	            
+	          //Check if a category is selected (in the case or the digg has some categories)
+	            if ( strIdCategory != null )
+	            {
+	                if ( strIdCategory.equals( Integer.toString( Category.DEFAULT_ID_CATEGORY ) ) )
+	                {
+	                	return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_NO_CATEGORY, AdminMessage.TYPE_STOP);
+	                }
+	            }
 
-        if ( exportFormat == null )
-        {
-            return AdminMessageService.getMessageUrl( request, MESSAGE_YOU_MUST_SELECT_EXPORT_FORMAT,
-                AdminMessage.TYPE_STOP );
-        }
+	            DiggSubmit diggSubmit = new DiggSubmit(  );
+	            diggSubmit.setDigg( digg );
+	            diggSubmit.setResponses( listResponse );
+	            
+	            
+	            FormError formError = DiggUtils.getAllResponsesData(request, diggSubmit, getPlugin(), getLocale());
 
-        // build Filter
-        SubmitFilter filter = new SubmitFilter(  );
+	            if ( formError != null )
+	            {
+	                if ( formError.isMandatoryError(  ) )
+	                {
+	                    Object[] tabRequiredFields = { formError.getTitleQuestion(  ) };
+	                    return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_QUESTION, tabRequiredFields,
+	                    		AdminMessage.TYPE_STOP );
+	                }
+	                else
+	                {
+	                    Object[] tabFormError = { formError.getTitleQuestion(  ), formError.getErrorMessage(  ) };
+	                    return AdminMessageService.getMessageUrl( request,  MESSAGE_FORM_ERROR, tabFormError, AdminMessage.TYPE_STOP );
+	                }
+	             }
+	            // perform digg submit
+	            
+	            if ( nIdCategory != DiggUtils.CONSTANT_ID_NULL )
+	            {
+	                Category category = CategoryHome.findByPrimaryKey( nIdCategory, getPlugin() );
+	                diggSubmit.setCategory( category );
+	            }
 
-        filter.setIdDigg( _nIdDigg );
-        filter.setIdDiggSubmitState( _nIdDiggSubmitState );
-        filter.setIdReported( _nIdDiggSubmitReport );
-        DiggUtils.initSubmitFilterBySort( filter, _nIdDiggSubmitSort );
+	            if ( nIdType != DiggUtils.CONSTANT_ID_NULL )
+	            {
+	                DiggSubmitType type = DiggSubmitTypeHome.findByPrimaryKey( nIdType, getPlugin());
+	                diggSubmit.setDiggSubmitType( type );
+	            }
+	            
+	            
+	            _diggSubmitService.create( diggSubmit, getPlugin(),getLocale() );
+	          
+	            
+	            
+	            
+	        }
 
-        List<Integer> listIdDiggSubmit = _diggSubmitService.getDiggSubmitListId( filter, plugin );
+	        return getJspManageDiggSubmit(request);
+	    }
+	    
+	    
+	    
+	    
+	    
+	   
 
-        StringBuffer strBufferListDiggSubmitXml = new StringBuffer(  );
-        DiggSubmit diggSubmit = null;
-        List<CommentSubmit> listCommentSubmit;
-        //reinit filter for comment
-        filter = new SubmitFilter(  );
 
-        for ( Integer nIdDiggSubmit : listIdDiggSubmit )
-        {
-            diggSubmit = _diggSubmitService.findByPrimaryKey( nIdDiggSubmit, false, plugin );
-            filter.setIdDiggSubmit( nIdDiggSubmit );
-            listCommentSubmit = _commentSubmitService.getCommentSubmitList( filter, plugin );
-            diggSubmit.setComments( listCommentSubmit );
-            diggSubmit.setNumberComment( _commentSubmitService.getCountCommentSubmit( filter, plugin ) );
-            strBufferListDiggSubmitXml.append( diggSubmit.getXml( request, locale ) );
-        }
-
-        String strXmlSource = XmlUtil.getXmlHeader(  ) + digg.getXml( request, strBufferListDiggSubmitXml, locale );
-
-        if ( exportFormat.getExtension(  ).equals( EXPORT_CSV_EXT ) )
-        {
-            strXmlSource = strXmlSource.replaceAll( "[\r\n]+", "" );
-            strXmlSource = strXmlSource.replaceAll( "\t", "" );
-            // we have to delete the html div code of the values
-            strXmlSource = strXmlSource.replaceAll( "<div[^>]+>", "" );
-            strXmlSource = strXmlSource.replaceAll( "</div>", "" );
-        }
-
-        XmlTransformerService xmlTransformerService = new XmlTransformerService(  );
-
-        String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource,
-                exportFormat.getXsl(  ), XSL_UNIQUE_PREFIX_ID + nIdExportFormat, null, null );
-
-        byte[] byteFileOutPut = strFileOutPut.getBytes(  );
-
-        try
-        {
-            String strFormatExtension = exportFormat.getExtension(  ).trim(  );
-            String strFileName = digg.getTitle(  ) + "." + strFormatExtension;
-            DiggUtils.addHeaderResponse( request, response, strFileName );
-            response.setContentLength( (int) byteFileOutPut.length );
-
-            OutputStream os = response.getOutputStream(  );
-            os.write( byteFileOutPut );
-            os.close(  );
-        }
-        catch ( IOException e )
-        {
-            AppLogService.error( e );
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_DURING_DOWNLOAD_FILE,
-                AdminMessage.TYPE_STOP );
-        }
-
-        return getJspManageDigg( request );
-    }
 
     /**
      * Return management CommentSubmit( list of comment submit)
@@ -774,7 +926,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
      *            The Http request
      * @return Html comment submit
      */
-    public String getManageCommentSubmit( HttpServletRequest request )
+    public String getManageCommentSubmit( HttpServletRequest request ) throws AccessDeniedException
     {
         Plugin plugin = getPlugin(  );
         Locale locale = getLocale(  );
@@ -806,17 +958,17 @@ public class DiggJspBean extends PluginAdminPageJspBean
                 !RBACService.isAuthorized( Digg.RESOURCE_TYPE, EMPTY_STRING + diggSubmit.getDigg(  ).getIdDigg(  ),
                     DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT, getUser(  ) ) )
         {
-            return getManageDiggSubmit( request );
+        	throw new AccessDeniedException(  );
         }
 
         // build Filter
-        SubmitFilter filter = getDiggSubmitFilter(  );
+        SubmitFilter filter = DiggUtils.getDiggSubmitFilter( getSearchFields() );
 
         SubmitFilter commentFilter = new SubmitFilter(  );
         commentFilter.setIdDiggSubmit( _nIdDiggSubmit );
         commentFilter.setIdDigg( _nIdDigg );
-        commentFilter.setIdDiggSubmitState( _nIdDiggSubmitState );
-        commentFilter.setIdReported( _nIdDiggSubmitReport );
+        commentFilter.setIdDiggSubmitState( getSearchFields().getIdDiggSumitState() );
+        commentFilter.setIdReported( getSearchFields().getIdDiggSubmitReport());
         DiggUtils.initCommentFilterBySort( commentFilter, _nIdCommentSort );
 
         List<CommentSubmit> listCommentSubmit = _commentSubmitService.getCommentSubmitList( commentFilter, getPlugin(  ) );
@@ -824,7 +976,8 @@ public class DiggJspBean extends PluginAdminPageJspBean
         ReferenceList refListCommentSort = DiggUtils.getRefListCommentSort( locale );
 
         ReferenceList refCategoryList = DiggUtils.getRefListCategory( digg.getCategories(  ) );
-
+        DiggUtils.addEmptyItem(refCategoryList);
+        
         HashMap model = new HashMap(  );
         Paginator paginator = new Paginator( listCommentSubmit, _nItemsPerPageCommentSubmit,
                 getJspManageCommentSubmit( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexCommentSubmit );
@@ -980,7 +1133,130 @@ public class DiggJspBean extends PluginAdminPageJspBean
 
         return getJspManageDiggSubmit( request );
     }
+    
+    
+    /**
+     * Gets the confirmation page of delete directory record
+     * @param request The HTTP request
+     * @throws AccessDeniedException the {@link AccessDeniedException}
+     * @return the confirmation page of delete directory record
+     */
+    public String getConfirmMassChangeDiggSubmitCategory( HttpServletRequest request )
+        throws AccessDeniedException
+    {
+    	
+    	 // fill the selected records
+        String[] selectedDiggSubmit = request.getParameterValues( PARAMETER_SELECTED_DIGG_SUBMIT);
+        int nIdDiggSubmit;
+        String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
+        int nIdCategory = DiggUtils.getIntegerParameter( strIdCategory );
+        UrlItem url = new UrlItem( JSP_DO_CHANGE_DIGG_SUBMIT_CATEGORY );
+        url.addParameter(PARAMETER_ID_CATEGORY, nIdCategory);
+    	//test All ressource selected before update
+    	for ( String strIdDiggSubmit : selectedDiggSubmit )
+         {
+    	
+         	if ( StringUtils.isNotBlank( strIdDiggSubmit ) && StringUtils.isNumeric( strIdDiggSubmit ) )
+             {
+         		
+         		 nIdDiggSubmit=DiggUtils.getIntegerParameter(strIdDiggSubmit);
+             	 DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit, false, getPlugin() );
+                
 
+                  if ( ( diggSubmit == null ) ||
+                          !RBACService.isAuthorized( Digg.RESOURCE_TYPE, DiggUtils.EMPTY_STRING + diggSubmit.getDigg(  ).getIdDigg(  ),
+                              DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT,getUser()) )
+                  {
+                      throw new AccessDeniedException();
+                  }
+                  url.addParameter( PARAMETER_SELECTED_DIGG_SUBMIT, nIdDiggSubmit );
+                 
+             }
+         		
+            }
+    	
+    		
+    		if(nIdCategory != DiggUtils.CONSTANT_ID_NULL)
+    		{
+    			Category category = CategoryHome.findByPrimaryKey( nIdCategory, getPlugin() ); 
+    			Object[] args ={ (category!=null && category.getTitle() == null ) ? "" : category.getTitle() };
+    			return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_CHANGE_DIGG_SUBMIT_CATEGORY,args, url.getUrl(  ),
+    		                AdminMessage.TYPE_CONFIRMATION );
+    		       
+    		}
+    		else
+    		{
+    			
+    			return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_DIGG_SUBMIT_CATEGORY, url.getUrl(  ),
+		                AdminMessage.TYPE_CONFIRMATION );
+	
+    		}
+           
+
+         }
+
+    /**
+     * Perform the digg submit change state
+     *
+     * @param request
+     *            The HTTP request
+     * @return The URL to go after performing the action
+     * @throws AccessDeniedException 
+     */
+    public String doMassChangeDiggSubmitCategory( HttpServletRequest request ) throws AccessDeniedException
+    {
+    	 // fill the selected records
+        String[] selectedDiggSubmit = request.getParameterValues( PARAMETER_SELECTED_DIGG_SUBMIT);
+        int nIdDiggSubmit;
+        String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
+        int nIdCategory = DiggUtils.getIntegerParameter( strIdCategory );
+        Category categorySelected=null;
+       	//test All ressource selected before update
+    	for ( String strIdDiggSubmit : selectedDiggSubmit )
+         {
+    		
+         	if ( StringUtils.isNotBlank( strIdDiggSubmit ) && StringUtils.isNumeric( strIdDiggSubmit ) )
+             {
+         		
+         		 nIdDiggSubmit=DiggUtils.getIntegerParameter(strIdDiggSubmit);
+             	 DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit, false, getPlugin() );
+                
+
+                  if ( ( diggSubmit == null ) ||
+                          !RBACService.isAuthorized( Digg.RESOURCE_TYPE, DiggUtils.EMPTY_STRING + diggSubmit.getDigg(  ).getIdDigg(  ),
+                              DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT,getUser()) )
+                  {
+                      throw new AccessDeniedException();
+                  }
+
+                 
+             }
+         	
+            }
+    	
+  
+    	if(nIdCategory!=DiggUtils.CONSTANT_ID_NULL)
+    	{
+    		categorySelected = CategoryHome.findByPrimaryKey( nIdCategory, getPlugin() ); 
+    	}
+      	//update all digg submit selected
+    	for ( String strIdDiggSubmittoUpdate : selectedDiggSubmit )
+        {
+    		if ( StringUtils.isNotBlank( strIdDiggSubmittoUpdate ) && StringUtils.isNumeric( strIdDiggSubmittoUpdate ) )
+            {
+    			 nIdDiggSubmit=DiggUtils.getIntegerParameter(strIdDiggSubmittoUpdate);
+	    		 DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit, false, getPlugin() );
+	        	 diggSubmit.setCategory( categorySelected );
+	        	 DiggSubmitService.getService().update( diggSubmit, getPlugin() );
+            }
+        }
+    	
+    	
+         
+        return getJspManageDiggSubmit( request );
+    }
+    
+    
     /**
      * Perform the digg submit change state
      *
@@ -1236,10 +1512,8 @@ public class DiggJspBean extends PluginAdminPageJspBean
     public String doFindNextDiggSubmit( HttpServletRequest request )
     {
         Plugin plugin = getPlugin(  );
-        SubmitFilter filter = new SubmitFilter(  );
-        filter.setIdDigg( _nIdDigg );
-        filter.setIdDiggSubmitState( _nIdDiggSubmitState );
-        _nIdDiggSubmit = _diggSubmitService.findNextIdDiggSubmitInTheList( _nIdDiggSubmit, filter, plugin );
+        SubmitFilter filter = DiggUtils.getDiggSubmitFilter( getSearchFields() );
+         _nIdDiggSubmit = _diggSubmitService.findNextIdDiggSubmitInTheList( _nIdDiggSubmit, filter, plugin );
 
         return getJspManageCommentSubmit( request );
     }
@@ -1254,9 +1528,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
     public String doFindPrevDiggSubmit( HttpServletRequest request )
     {
         Plugin plugin = getPlugin(  );
-        SubmitFilter filter = new SubmitFilter(  );
-        filter.setIdDigg( _nIdDigg );
-        filter.setIdDiggSubmitState( _nIdDiggSubmitState );
+        SubmitFilter filter = DiggUtils.getDiggSubmitFilter( getSearchFields() );
         _nIdDiggSubmit = _diggSubmitService.findPrevIdDiggSubmitInTheList( _nIdDiggSubmit, filter, plugin );
 
         return getJspManageCommentSubmit( request );
@@ -1315,6 +1587,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         String strConfirmationMessage = request.getParameter( PARAMETER_CONFIRMATION_MESSAGE );
         String strActiveDiggSubmitType = request.getParameter( PARAMETER_ACTIVE_DIGG_SUBMIT_TYPE );
         String strIdDefaultSort = request.getParameter( PARAMETER_ID_DEFAULT_SORT );
+        String strDisableVote= request.getParameter( PARAMETER_DISABLE_VOTE );
 
         int nIdVoteType = DiggUtils.getIntegerParameter( strIdVoteType );
         int nIdMailingListDiggSubmit = DiggUtils.getIntegerParameter( strIdMailingListDiggSubmit );
@@ -1543,6 +1816,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         digg.setConfirmationMessage( strConfirmationMessage );
         digg.setActiveDiggSubmitType( strActiveDiggSubmitType != null );
         digg.setIdDefaultSort( nIdDefaultSort );
+        digg.setDisableVote( strDisableVote != null );
 
         return null; // No error
     }
@@ -2498,10 +2772,22 @@ public class DiggJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return url of the jsp manage digg submit
      */
-    private String getJspManageDiggSubmit( HttpServletRequest request )
+    public static String getJspManageDiggSubmit( HttpServletRequest request )
     {
         return AppPathService.getBaseUrl( request ) + JSP_MANAGE_DIGG_SUBMIT;
     }
+    /**
+     * return url of the jsp manage digg submit order
+     *
+     * @param request
+     *            The HTTP request
+     * @return url of the jsp manage digg submit order
+     */
+    public static String getJspManageDiggSubmitOrder( HttpServletRequest request )
+    {
+        return AppPathService.getBaseUrl( request ) + JSP_MANAGE_DIGG_SUBMIT_ORDER;
+    }
+    
 
     /**
      * return url of the jsp manage comment submit
@@ -2740,10 +3026,10 @@ public class DiggJspBean extends PluginAdminPageJspBean
             int nNewOrder = Integer.parseInt( request.getParameter( PARAMETER_DIGG_SUBMIT_ORDER ) );
 
             _diggSubmitService.updateDiggSubmitOrder( diggSubmit.getDiggSubmitOrder(  ), nNewOrder,
-                diggSubmit.getDigg(  ).getIdDigg(  ), getPlugin(  ) );
+                diggSubmit.getDigg(  ).getIdDigg(  ),diggSubmit.isPinned(), getPlugin(  ) );
         }
 
-        return getJspManageDiggSubmit( request ) + "?" + PARAMETER_ID_DIGG + "=" + nIdDigg;
+        return getJspManageDiggSubmitOrder( request ) + "?" + PARAMETER_ID_DIGG + "=" + nIdDigg;
     }
 
     /**
@@ -2753,9 +3039,9 @@ public class DiggJspBean extends PluginAdminPageJspBean
      *            the id of the Digg
      * @return the list of sequence numbers
      */
-    private ReferenceList getDiggSubmitOrderList( int nIdDigg )
+    private ReferenceList getDiggSubmitOrderList( int nIdDigg,boolean bListPinned )
     {
-        int nMax = _diggSubmitService.getMaxOrderContactList( nIdDigg, getPlugin(  ) );
+        int nMax = _diggSubmitService.getMaxOrderList( nIdDigg,bListPinned, getPlugin(  ) );
         ReferenceList list = new ReferenceList(  );
 
         for ( int i = 1; i < ( nMax + 1 ); i++ )
@@ -2906,372 +3192,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         return getAdminPage( template.getHtml(  ) );
     }
 
-    // /**
-    // * Export Directory record
-    // * @param request the Http Request
-    // * @param response the Http response
-    // * @throws AccessDeniedException the {@link AccessDeniedException}
-    // */
-    // public void doExportDiggSubmit( HttpServletRequest request,
-    // HttpServletResponse response )
-    // throws AccessDeniedException
-    // {
-    // String strIdDigg = request.getParameter( PARAMETER_ID_DIGG );
-    // int nIdDigg = DiggUtils.getIntegerParameter( strIdDigg );
-    // Digg digg = DiggHome.findByPrimaryKey( nIdDigg, getPlugin( ) );
-    // String strIdDirectoryXsl = request.getParameter( PARAMETER_ID_DIGG_XSL );
-    // int nIdDirectoryXsl = DiggUtils.getIntegerParameter( strIdDirectoryXsl );
-    // WorkflowService workflowService = WorkflowService.getInstance( );
-    // boolean bWorkflowServiceEnable = workflowService.isAvailable( );
-    // String strShotExportFinalOutPut = null;
-    //
-    // //
-    // -----------------------------------------------------------------------
-    // // DirectoryXsl directoryXsl = DirectoryXslHome.findByPrimaryKey(
-    // nIdDirectoryXsl, getPlugin( ) );
-    // // String strFileExtension = directoryXsl.getExtension( );
-    // String strFileName = digg.getTitle( ) + "." + EXPORT_CSV_EXT; //+
-    // strFileExtension;
-    // strFileName = StringUtil.replaceAccent( strFileName ).replace( " ", "_"
-    // );
-    //
-    // // boolean bIsCsvExport = strFileExtension.equals( EXPORT_CSV_EXT );
-    //
-    // if ( ( digg == null ) ||
-    // !RBACService.isAuthorized( Digg.RESOURCE_TYPE, strIdDigg,
-    // DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT, getUser( ) ) )
-    // {
-    // throw new AccessDeniedException( );
-    // }
-    //
-    // List<Integer> listResultRecordId = new ArrayList( );
-    //
-    // if ( request.getParameter( PARAMETER_EXPORT_SEARCH_RESULT ) != null )
-    // {
-    // listResultRecordId = getListResults( request, directory,
-    // bWorkflowServiceEnable, true );
-    // }
-    // else
-    // {
-    // listResultRecordId = getListResults( request, directory,
-    // bWorkflowServiceEnable, false );
-    // }
-    //
-    // // EntryFilter entryFilter = new EntryFilter( );
-    // // entryFilter.setIdDirectory( directory.getIdDirectory( ) );
-    // // entryFilter.setIsGroup( EntryFilter.FILTER_FALSE );
-    // // entryFilter.setIsComment( EntryFilter.FILTER_FALSE );
-    // //
-    // // List<IEntry> listEntryResultSearch = EntryHome.getEntryList(
-    // entryFilter, getPlugin( ) );
-    // StringBuffer strBufferListRecordXml = null;
-    //
-    // java.io.File tmpFile = null;
-    // BufferedWriter bufferedWriter = null;
-    //
-    // File fileTemplate = null;
-    // String strFileOutPut = DirectoryUtils.EMPTY_STRING;
-    //
-    // if ( directoryXsl.getFile( ) != null )
-    // {
-    // fileTemplate = FileHome.findByPrimaryKey( directoryXsl.getFile(
-    // ).getIdFile( ), getPlugin( ) );
-    // }
-    //
-    // XmlTransformerService xmlTransformerService = null;
-    // PhysicalFile physicalFile = null;
-    // String strXslId = null;
-    //
-    // // if ( ( fileTemplate != null ) && ( fileTemplate.getPhysicalFile( ) !=
-    // null ) )
-    // // {
-    // // fileTemplate.setPhysicalFile( PhysicalFileHome.findByPrimaryKey(
-    // // fileTemplate.getPhysicalFile( ).getIdPhysicalFile( ), getPlugin( ) )
-    // );
-    // //
-    // // xmlTransformerService = new XmlTransformerService( );
-    // // physicalFile = fileTemplate.getPhysicalFile( );
-    // // strXslId = XSL_UNIQUE_PREFIX_ID + physicalFile.getIdPhysicalFile( );
-    // // }
-    // xmlTransformerService = new XmlTransformerService( );
-    //
-    // int nSize = listResultRecordId.size( );
-    // boolean bIsBigExport = ( nSize > EXPORT_RECORD_STEP );
-    //
-    // if ( bIsBigExport )
-    // {
-    // try
-    // {
-    // String strPath = AppPathService.getWebAppPath( ) +
-    // AppPropertiesService.getProperty( PROPERTY_PATH_TMP );
-    // java.io.File tmpDir = new java.io.File( strPath );
-    // tmpFile = java.io.File.createTempFile( EXPORT_TMPFILE_PREFIX,
-    // EXPORT_TMPFILE_SUFIX, tmpDir );
-    // }
-    // catch ( IOException e )
-    // {
-    // AppLogService.error( "Unable to create temp file in webapp tmp dir" );
-    //
-    // try
-    // {
-    // tmpFile = java.io.File.createTempFile( EXPORT_TMPFILE_PREFIX,
-    // EXPORT_TMPFILE_SUFIX );
-    // }
-    // catch ( IOException e1 )
-    // {
-    // AppLogService.error( e1 );
-    // }
-    // }
-    //
-    // try
-    // {
-    // tmpFile.deleteOnExit( );
-    // bufferedWriter = new BufferedWriter( new FileWriter( tmpFile, true ) );
-    // }
-    // catch ( IOException e )
-    // {
-    // AppLogService.error( e );
-    // }
-    // }
-    //
-    // Plugin plugin = this.getPlugin( );
-    // Locale locale = request.getLocale( );
-    //
-    // // ---------------------------------------------------------------------
-    // StringBuffer strBufferListEntryXml = new StringBuffer( );
-    //
-    // for ( IEntry entry : listEntryResultSearch )
-    // {
-    // entry.getXml( plugin, locale, strBufferListEntryXml );
-    // }
-    //
-    // HashMap<String, String> model = new HashMap<String, String>( );
-    //
-    // if ( ( directory.getIdWorkflow( ) != DirectoryUtils.CONSTANT_ID_NULL ) &&
-    // bWorkflowServiceEnable )
-    // {
-    // model.put( TAG_DISPLAY, TAG_YES );
-    // }
-    // else
-    // {
-    // model.put( TAG_DISPLAY, TAG_NO );
-    // }
-    //
-    // XmlUtil.addEmptyElement( strBufferListEntryXml, TAG_STATUS, model );
-    //
-    // StringBuilder strBufferDirectoryXml = new StringBuilder( );
-    // strBufferDirectoryXml.append( XmlUtil.getXmlHeader( ) );
-    //
-    // if ( bIsBigExport )
-    // {
-    // strBufferDirectoryXml.append( directory.getXml( plugin, locale, new
-    // StringBuffer( ), strBufferListEntryXml ) );
-    //
-    // strBufferListRecordXml = new StringBuffer(
-    // EXPORT_STRINGBUFFER_INITIAL_SIZE );
-    //
-    // strFileOutPut = xmlTransformerService.transformBySourceWithXslCache(
-    // strBufferDirectoryXml.toString( ),
-    // physicalFile.getValue( ), strXslId, null, null );
-    //
-    // String strFinalOutPut = null;
-    //
-    //            
-    // strFinalOutPut = strFileOutPut;
-    //            
-    //
-    // try
-    // {
-    // bufferedWriter.write( strFinalOutPut );
-    // }
-    // catch ( IOException e )
-    // {
-    // AppLogService.error( e );
-    // }
-    // }
-    // else
-    // {
-    // strBufferListRecordXml = new StringBuffer( );
-    // }
-    //
-    // //
-    // -----------------------------------------------------------------------
-    // List<Integer> nTmpListId = new ArrayList<Integer>( );
-    // int idWorflow = directory.getIdWorkflow( );
-    //
-    // if ( bIsBigExport )
-    // {
-    // int nXmlHeaderLength = XmlUtil.getXmlHeader( ).length( ) - 1;
-    // int max = nSize / EXPORT_RECORD_STEP;
-    // int max1 = nSize - EXPORT_RECORD_STEP;
-    //
-    // for ( int i = 0; i < max1; i += EXPORT_RECORD_STEP )
-    // {
-    // AppLogService.debug( "Directory export progress : " + ( ( (float) i /
-    // nSize ) * 100 ) + "%" );
-    //
-    // nTmpListId = new ArrayList<Integer>( );
-    //
-    // int k = i + EXPORT_RECORD_STEP;
-    //
-    // for ( int j = i; j < k; j++ )
-    // {
-    // nTmpListId.add( listResultRecordId.get( j ) );
-    // }
-    //
-    // List<Record> nTmpListRecords = RecordHome.loadListByListId( nTmpListId,
-    // plugin );
-    //
-    // for ( Record record : nTmpListRecords )
-    // {
-    // State state = workflowService.getState( record.getIdRecord( ),
-    // Record.WORKFLOW_RESOURCE_TYPE,
-    // idWorflow, Integer.valueOf( directory.getIdDirectory( ) ), null );
-    // strBufferListRecordXml.append( record.getXml( plugin, locale, false,
-    // state, listEntryResultSearch,
-    // false, false, true ) );
-    // }
-    //
-    // strBufferListRecordXml = this.appendPartialContent(
-    // strBufferListRecordXml, bufferedWriter,
-    // physicalFile, bIsCsvExport, strXslId, nXmlHeaderLength,
-    // xmlTransformerService );
-    // }
-    //
-    // //
-    // -----------------------------------------------------------------------
-    // int max2 = EXPORT_RECORD_STEP * max;
-    // nTmpListId = new ArrayList<Integer>( );
-    //
-    // for ( int i = max2; i < nSize; i++ )
-    // {
-    // nTmpListId.add( listResultRecordId.get( ( i ) ) );
-    // }
-    //
-    // List<Record> nTmpListRecords = RecordHome.loadListByListId( nTmpListId,
-    // plugin );
-    //
-    // for ( Record record : nTmpListRecords )
-    // {
-    // State state = workflowService.getState( record.getIdRecord( ),
-    // Record.WORKFLOW_RESOURCE_TYPE,
-    // idWorflow, Integer.valueOf( directory.getIdDirectory( ) ), null );
-    // strBufferListRecordXml.append( record.getXml( plugin, locale, false,
-    // state, listEntryResultSearch,
-    // false, false, true ) );
-    // }
-    //
-    // strBufferListRecordXml = this.appendPartialContent(
-    // strBufferListRecordXml, bufferedWriter, physicalFile,
-    // bIsCsvExport, strXslId, nXmlHeaderLength, xmlTransformerService );
-    //
-    // strBufferListRecordXml.insert( 0, EXPORT_XSL_BEGIN_PARTIAL_EXPORT );
-    // strBufferListRecordXml.insert( 0, XmlUtil.getXmlHeader( ) );
-    // strBufferListRecordXml.append( EXPORT_XSL_END_PARTIAL_EXPORT );
-    // strFileOutPut = xmlTransformerService.transformBySourceWithXslCache(
-    // strBufferListRecordXml.toString( ),
-    // physicalFile.getValue( ), strXslId, null, null );
-    //
-    // try
-    // {
-    // if ( bIsCsvExport )
-    // {
-    // bufferedWriter.write( strFileOutPut );
-    // }
-    // else
-    // {
-    // bufferedWriter.write( strFileOutPut.substring( nXmlHeaderLength ) );
-    // bufferedWriter.write( EXPORT_XSL_END_LIST_RECORD + EXPORT_XSL_NEW_LINE +
-    // EXPORT_XSL_END_DIRECTORY );
-    // }
-    //
-    // bufferedWriter.flush( );
-    // bufferedWriter.close( );
-    // }
-    // catch ( IOException e )
-    // {
-    // AppLogService.error( e );
-    // }
-    // }
-    // else
-    // {
-    // List<Record> nTmpListRecords = RecordHome.loadListByListId(
-    // listResultRecordId, plugin );
-    //
-    // for ( Record record : nTmpListRecords )
-    // {
-    // State state = workflowService.getState( record.getIdRecord( ),
-    // Record.WORKFLOW_RESOURCE_TYPE,
-    // idWorflow, Integer.valueOf( directory.getIdDirectory( ) ), null );
-    // strBufferListRecordXml.append( record.getXml( plugin, locale, false,
-    // state, listEntryResultSearch,
-    // false, false, true ) );
-    // }
-    //
-    // strBufferDirectoryXml.append( directory.getXml( plugin, locale,
-    // strBufferListRecordXml,
-    // strBufferListEntryXml ) );
-    // strShotExportFinalOutPut =
-    // xmlTransformerService.transformBySourceWithXslCache(
-    // strBufferDirectoryXml.toString( ),
-    // physicalFile.getValue( ), strXslId, null, null );
-    // }
-    //
-    // //
-    // -----------------------------------------------------------------------
-    // DirectoryUtils.addHeaderResponse( request, response, strFileName );
-    //
-    // response.setContentType( CONSTANT_MIME_TYPE_CSV );
-    //
-    // if ( bIsBigExport )
-    // {
-    // FileChannel in = null;
-    // WritableByteChannel writeChannelOut = null;
-    //
-    // try
-    // {
-    // in = new FileInputStream( tmpFile ).getChannel( );
-    // writeChannelOut = Channels.newChannel( response.getOutputStream( ) );
-    // response.setContentLength( Long.valueOf( in.size( ) ).intValue( ) );
-    // in.transferTo( 0, in.size( ), writeChannelOut );
-    // response.getOutputStream( ).close( );
-    // }
-    // catch ( IOException e )
-    // {
-    // AppLogService.error( e );
-    // }
-    // finally
-    // {
-    // if ( in != null )
-    // {
-    // try
-    // {
-    // in.close( );
-    // }
-    // catch ( IOException e )
-    // {
-    // }
-    // }
-    //
-    // tmpFile.delete( );
-    // }
-    // }
-    // else
-    // {
-    // byte[] bResult = strShotExportFinalOutPut.getBytes( );
-    //
-    // try
-    // {
-    // response.setContentLength( bResult.length );
-    // response.getOutputStream( ).write( bResult );
-    // response.getOutputStream( ).close( );
-    // }
-    // catch ( IOException e )
-    // {
-    // AppLogService.error( e );
-    // }
-    // }
-    // }
+    
 
     /**
      * Gets the confirmation page of update all digg submit
@@ -3369,14 +3290,48 @@ public class DiggJspBean extends PluginAdminPageJspBean
         return getJspManageAdvancedParameters( request );
     }
 
-    private SubmitFilter getDiggSubmitFilter(  )
-    {
-        SubmitFilter filter = new SubmitFilter(  );
-        filter.setIdDigg( _nIdDigg );
-        filter.setIdDiggSubmitState( _nIdDiggSubmitState );
-        filter.setIdReported( _nIdDiggSubmitReport );
-        DiggUtils.initSubmitFilterBySort( filter, _nIdDiggSubmitSort );
 
-        return filter;
+    
+    
+    private void  updateSearchFieldsData(HttpServletRequest request)
+    {
+    	
+    	String strIdDigg = request.getParameter( PARAMETER_ID_DIGG);
+        String strIdDiggSumitState = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_STATE );
+        String strIdDiggSubmitSort = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_SORT );
+        String strIdDiggSubmitReport = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_REPORT );
+        String strQuery = request.getParameter( PARAMETER_QUERY );
+    	
+        if ( ( strIdDigg != null ) && !strIdDigg.equals( EMPTY_STRING ) )
+        {
+            getSearchFields().setIdDigg(DiggUtils.getIntegerParameter( strIdDigg ));
+        }
+    	if ( ( strIdDiggSubmitSort != null ) && !strIdDiggSubmitSort.equals( EMPTY_STRING ) )
+        {
+            getSearchFields().setIdDiggSubmitSort(DiggUtils.getIntegerParameter( strIdDiggSubmitSort ));
+        }
+
+        if ( ( strIdDiggSubmitReport != null ) && !strIdDiggSubmitReport.equals( EMPTY_STRING ) )
+        {
+        	getSearchFields().setIdDiggSubmitReport(DiggUtils.getIntegerParameter( strIdDiggSubmitReport ));
+        }
+        if ( ( strIdDiggSumitState != null ) && !strIdDiggSumitState.equals( EMPTY_STRING ) )
+        {
+        	getSearchFields().setIdDiggSumitState(DiggUtils.getIntegerParameter( strIdDiggSumitState ));
+        }
+
+        if ( strQuery != null )
+        {
+        	getSearchFields().setQuery(strQuery);
+        }
     }
+    
+    private DigglikeAdminSearchFields getSearchFields()
+    {
+    	
+    	return _searchFields;
+    	
+    }
+    
+    
 }

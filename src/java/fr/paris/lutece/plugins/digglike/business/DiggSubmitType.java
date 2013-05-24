@@ -52,6 +52,7 @@ public class DiggSubmitType implements RBACResource
     private Boolean _bParameterizableInFO;
     private int _nIdXSLStyleSheet;
     private String _strImageUrl;
+   
 
     /**
      * @param nIdType the _nIdType to set
@@ -182,4 +183,5 @@ public class DiggSubmitType implements RBACResource
     {
         return _strImageUrl;
     }
+
 }

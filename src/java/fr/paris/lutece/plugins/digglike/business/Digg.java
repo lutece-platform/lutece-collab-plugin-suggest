@@ -33,8 +33,14 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import fr.paris.lutece.plugins.digglike.business.attribute.DiggAttribute;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
-import fr.paris.lutece.plugins.digglike.utils.ProcessBBCode;
 import fr.paris.lutece.portal.service.editor.EditorBbcodeService;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionRemovalListenerService;
@@ -42,13 +48,6 @@ import fr.paris.lutece.portal.service.role.RoleRemovalListenerService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupResource;
 import fr.paris.lutece.portal.service.workgroup.WorkgroupRemovalListenerService;
 import fr.paris.lutece.util.xml.XmlUtil;
-
-import java.sql.Timestamp;
-
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -117,6 +116,10 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     private int _nIdDefaultSort = DiggUtils.CONSTANT_ID_NULL;
     private boolean _bActiveDiggSubmitType;
     private boolean _bDefaultDigg;
+    @DiggAttribute( "disableVote" )
+    private boolean _bDisableVote;
+    @DiggAttribute( "nb_comment_view") 
+    private int _nbCommentView=3;
 
     /**
     * Initialize the Digg
@@ -999,4 +1002,41 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     {
         _bDefaultDigg = bDefaultDigg;
     }
+    
+    
+    /**
+     * 
+     * @return true if the vote is disable
+     */
+    public boolean isDisableVote( )
+    {
+    	return _bDisableVote;
+    }
+    
+   
+    /**
+     * set true if the vote is disable
+     * @param bDisable true if the vote is disable
+     */
+    public void setDisableVote( boolean bDisable )
+    {
+        _bDisableVote = bDisable;
+    }
+    
+    
+    
+    public int getNbCommentView()
+    {
+     return _nbCommentView;	
+    }
+    
+    public void setNbCommentView(int nbCommentView)
+    {
+    	_nbCommentView=nbCommentView;
+    }
+    
+    
+    
+    
+    
 }

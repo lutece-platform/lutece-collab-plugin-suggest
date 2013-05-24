@@ -82,6 +82,8 @@ public class DiggSubmit
     private List<CommentSubmit> _listComments;
     private int _nDiggSubmitOrder;
     private DiggSubmitType _diggSubmitType;
+    private boolean _bDisableVote;
+    private boolean _bPinned;
 
     /**
      * true if the digg submit have been reported by people
@@ -464,4 +466,39 @@ public class DiggSubmit
     {
         return _diggSubmitType;
     }
+    /**
+     * 
+     * @return true if the vote is disable
+     */
+    public boolean isDisableVote( )
+    {
+    	return _bDisableVote;
+    }
+    
+   
+    /**
+     * set true if the vote is disable
+     * @param bDisable true if the vote is disable
+     */
+    public void setDisableVote( boolean bDisable )
+    {
+        _bDisableVote = bDisable;
+    }
+
+    /**
+     * 
+     * @return true if the diggsubmit is pinned
+     */
+	public boolean isPinned() {
+		return _bPinned;
+	}
+
+	/**
+	 * 
+	 * @param _bPinned true if the diggsubmit is pinned
+	 */
+	public void setPinned(boolean _bPinned) {
+		this._bPinned = _bPinned;
+	}
+    
 }

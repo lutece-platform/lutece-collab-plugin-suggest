@@ -25,6 +25,8 @@
     <bean id="digglike.diggSubmitService"  class="fr.paris.lutece.plugins.digglike.service.DiggSubmitService" />
     <bean id="digglike.commentSubmitService"  class="fr.paris.lutece.plugins.digglike.service.CommentSubmitService" />
     <bean id="digglike.diggUserInfoService"  class="fr.paris.lutece.plugins.digglike.service.DiggUserInfoService" />
+    <bean id="digglike.diggAttributeDAO"  class="fr.paris.lutece.plugins.digglike.business.attribute.DiggAttributeDAO" />
+    
     
     <bean id="digglike.transactionManager"  class="fr.paris.lutece.portal.service.database.DAOUtilTransactionManager">
 	 	<property name="pluginName" value="digglike" />
@@ -37,6 +39,12 @@
 		<property name="titleI18nKey" value="digglike.resource_rss_type.label" />
 		<property name="className" value="fr.paris.lutece.plugins.digglike.business.rss.DiggResourceRss"/>
 	</bean>
+	<!-- digglike digg submit actions -->
+	<bean id="digglike.exportDiggSubmitAction" class="fr.paris.lutece.plugins.digglike.web.action.ExportDiggSubmitAction" />
+	<bean id="digglike.massChangeCategoryDiggSubmitAction" class="fr.paris.lutece.plugins.digglike.web.action.MassChangeCategoryDiggSubmitAction" />
+	<bean id="digglike.massChangeVoteDiggSubmitAction" class="fr.paris.lutece.plugins.digglike.web.action.MassChangeVoteDiggSubmitAction" />
+	<bean id="digglike.massPinnedDiggSubmitAction" class="fr.paris.lutece.plugins.digglike.web.action.MassPinnedDiggSubmitAction" />
+
 
 </beans>
  	

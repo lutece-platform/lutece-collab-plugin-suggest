@@ -102,13 +102,13 @@ public interface IDiggSubmitService
      */
     List<DiggSubmit> getDiggSubmitList( SubmitFilter filter, Plugin plugin );
 
-    /**
-     * Load the data of all the diggSubmit with the number of comment by digg submit  who verify the filter and returns them in a  list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return  the list of diggSubmit
-     */
-    List<DiggSubmit> getDiggSubmitListWithNumberComment( SubmitFilter filter, Plugin plugin );
+//    /**
+//     * Load the data of all the diggSubmit with the number of comment by digg submit  who verify the filter and returns them in a  list
+//     * @param filter the filter
+//     * @param plugin the plugin
+//     * @return  the list of diggSubmit
+//     */
+//    List<DiggSubmit> getDiggSubmitListWithNumberComment( SubmitFilter filter, Plugin plugin );
 
     /**
      * Load the id of all the diggSubmit who verify the filter and returns them in a  list
@@ -154,36 +154,24 @@ public interface IDiggSubmitService
     int findPrevIdDiggSubmitInTheList( int nIdCurrentDiggSubmit, SubmitFilter filter, Plugin plugin );
 
    
-    /**
-     * Search the order number of diggSubmit
-     * @return int the id by a given order
-     * @param nDiggSubmitOrder the id of the diggSubmit
-     * @param plugin The Plugin object
-     */
-    int getDiggSubmitIdByOrder( int nDiggSubmitOrder, Plugin plugin );
 
-    /**
-     * returns the order of a diggsubmit in a list using its Id
-     * @return int  the id by a given order
-     * @param nIdDiggSubmit the id of the contactList
-     * @param plugin The Plugin object
-     */
-    int getDiggSubmitOrderById( int nIdDiggSubmit, Plugin plugin );
 
     /**
      * move an element in the list of diggSubmit and update the order
      * @param nPositionElement the position of the element to move
      * @param nNewPositionElement the new position of the element
      * @param nIdDigg the digg id
+     * @param bListPinned true if the list to update contains only pinned diggsubmit
      * @param plugin the plugin
      */
-    void updateDiggSubmitOrder( Integer nPositionElement, Integer nNewPositionElement, int nIdDigg, Plugin plugin );
+    void updateDiggSubmitOrder( Integer nPositionElement, Integer nNewPositionElement, int nIdDigg,boolean bListPinned, Plugin plugin );
 
     /**
      * Search the max order number of contacts for one list
      * @param nIdDigg the Id of the Digg
+     * @param bListPinned true if the list 
      * @return int the max order
      * @param plugin The Plugin object
      */
-    int getMaxOrderContactList( int nIdDigg, Plugin plugin );
+    int getMaxOrderList( int nIdDigg,boolean bListPinned, Plugin plugin );
 }

@@ -33,18 +33,17 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.paris.lutece.plugins.digglike.service.CommentSubmitService;
 import fr.paris.lutece.plugins.digglike.service.search.DigglikeIndexer;
 import fr.paris.lutece.plugins.digglike.utils.DiggIndexerUtils;
 import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
-import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -186,7 +185,20 @@ public final class DiggSubmitHome
      */
     public static DiggSubmit findByPrimaryKey( int nKey, Plugin plugin )
     {
-        return _dao.load( nKey, plugin );
+       DiggSubmit diggSubmit = _dao.load( nKey, plugin );
+       if( diggSubmit != null )
+       {
+    	  if(diggSubmit.getDiggSubmitType()!=null)
+           {
+           	diggSubmit.setDiggSubmitType(DiggSubmitTypeHome.findByPrimaryKey(diggSubmit.getDiggSubmitType().getIdType(), plugin));
+           }
+           if(diggSubmit.getCategory()!=null)
+           {
+           	diggSubmit.setCategory(CategoryHome.findByPrimaryKey(diggSubmit.getCategory().getIdCategory(), plugin));
+           	
+           }
+    	}
+       return diggSubmit;
     }
 
     /**
@@ -209,6 +221,16 @@ public final class DiggSubmitHome
                 submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
                 diggSubmit.setComments( CommentSubmitService.getService(  )
                                                             .getCommentSubmitList( submmitFilterComment, plugin ) );
+                if(diggSubmit.getDiggSubmitType()!=null)
+                {
+                	diggSubmit.setDiggSubmitType(DiggSubmitTypeHome.findByPrimaryKey(diggSubmit.getDiggSubmitType().getIdType(), plugin));
+                }
+                if(diggSubmit.getCategory()!=null)
+                {
+                	diggSubmit.setCategory(CategoryHome.findByPrimaryKey(diggSubmit.getCategory().getIdCategory(), plugin));
+                	
+                }
+                
             }
         }
 
@@ -231,6 +253,15 @@ public final class DiggSubmitHome
             {
                 filter.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
                 diggSubmit.setNumberComment( CommentSubmitService.getService(  ).getCountCommentSubmit( filter, plugin ) );
+                if(diggSubmit.getDiggSubmitType()!=null)
+                {
+                	diggSubmit.setDiggSubmitType(DiggSubmitTypeHome.findByPrimaryKey(diggSubmit.getDiggSubmitType().getIdType(), plugin));
+                }
+                if(diggSubmit.getCategory()!=null)
+                {
+                	diggSubmit.setCategory(CategoryHome.findByPrimaryKey(diggSubmit.getCategory().getIdCategory(), plugin));
+                	
+                }
             }
         }
 
@@ -293,87 +324,9 @@ public final class DiggSubmitHome
         return _dao.selectCountByFilter( filter, plugin );
     }
 
-    /**
-     * return the id of the next digg submit in the list
-     *  @param nIdCurrentDiggSubmit the id of the current digg submit
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return the id of the next digg submit in the list
-     */
-    public static int findNextIdDiggSubmitInTheList( int nIdCurrentDiggSubmit, SubmitFilter filter, Plugin plugin )
-    {
-        List<Integer> diggSubmitListId = getDiggSubmitListId( filter, plugin );
-        Object[] diggSubmitArrayId = diggSubmitListId.toArray(  );
-        int nIdDiggSubmitNext = -1;
-
-        for ( int cpt = 0; cpt < diggSubmitArrayId.length; cpt++ )
-        {
-            if ( (Integer) diggSubmitArrayId[cpt] == nIdCurrentDiggSubmit )
-            {
-                if ( cpt < ( diggSubmitArrayId.length - 1 ) )
-                {
-                    nIdDiggSubmitNext = (Integer) diggSubmitArrayId[cpt + 1];
-                }
-
-                break;
-            }
-        }
-
-        return nIdDiggSubmitNext;
-    }
-
-    /**
-     * return the id of the prev digg submit in the list
-     *  @param nIdCurrentDiggSubmit the id of the current digg submit
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return the id of the prev digg submit in the list
-     */
-    public static int findPrevIdDiggSubmitInTheList( int nIdCurrentDiggSubmit, SubmitFilter filter, Plugin plugin )
-    {
-        List<Integer> diggSubmitListId = getDiggSubmitListId( filter, plugin );
-        Object[] diggSubmitArrayId = diggSubmitListId.toArray(  );
-        int nIdDiggSubmitPrev = -1;
-
-        for ( int cpt = 0; cpt < diggSubmitArrayId.length; cpt++ )
-        {
-            if ( (Integer) diggSubmitArrayId[cpt] == nIdCurrentDiggSubmit )
-            {
-                if ( cpt != 0 )
-                {
-                    nIdDiggSubmitPrev = (Integer) diggSubmitArrayId[cpt - 1];
-                }
-
-                break;
-            }
-        }
-
-        return nIdDiggSubmitPrev;
-    }
 
 
 
-    /**
-     * Search the order number of diggSubmit
-     * @return int the id by a given order
-     * @param nDiggSubmitOrder the id of the diggSubmit
-     * @param plugin The Plugin object
-     */
-    public static int getDiggSubmitIdByOrder( int nDiggSubmitOrder, Plugin plugin )
-    {
-        return _dao.selectDiggSubmitIdByOrder( nDiggSubmitOrder, plugin );
-    }
-
-    /**
-     * returns the order of a diggsubmit in a list using its Id
-     * @return int  the id by a given order
-     * @param nIdDiggSubmit the id of the contactList
-     * @param plugin The Plugin object
-     */
-    public static int getDiggSubmitOrderById( int nIdDiggSubmit, Plugin plugin )
-    {
-        return _dao.selectDiggSubmitOrderById( nIdDiggSubmit, plugin );
-    }
 
     /**
      * Update the number order of diggSubmit
@@ -392,8 +345,8 @@ public final class DiggSubmitHome
      * @return int the max order
      * @param plugin The Plugin object
      */
-    public static int getMaxOrderContactList( int nIdDigg, Plugin plugin )
+    public static int getMaxOrderList( int nIdDigg,boolean bListPinned, Plugin plugin )
     {
-        return _dao.maxOrderDiggSubmit( nIdDigg, plugin );
+        return _dao.maxOrderDiggSubmit( nIdDigg,bListPinned, plugin );
     }
 }

@@ -33,12 +33,18 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
+
+import fr.paris.lutece.plugins.digglike.business.attribute.DiggAttributeHome;
+import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import java.util.List;
-import java.util.Map;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 
 /**
@@ -65,7 +71,11 @@ public final class DiggHome
      */
     public static int create( Digg digg, Plugin plugin )
     {
-        return _dao.insert( digg, plugin );
+        int nIdDigg= _dao.insert( digg, plugin );
+        // Create directory attributes associated to the directory
+        Map<String, Object> mapAttributes = DiggUtils.depopulate( digg );
+        DiggAttributeHome.create( digg.getIdDigg(), mapAttributes );
+        return nIdDigg;
     }
 
     /**
@@ -109,7 +119,15 @@ public final class DiggHome
      */
     public static void update( Digg digg, Plugin plugin )
     {
-        _dao.store( digg, plugin );
+       
+    	 // Remove directory attributes associated to the directory
+    	DiggAttributeHome.remove( digg.getIdDigg(  ) );
+
+        // Add directory Attribute
+        Map<String, Object> mapAttributes = DiggUtils.depopulate( digg );
+        DiggAttributeHome.create( digg.getIdDigg(), mapAttributes );
+    	
+    	_dao.store( digg, plugin );
 
         //store association between digg and categories
         for ( Category category : digg.getCategories(  ) )
@@ -158,6 +176,9 @@ public final class DiggHome
         {
             DiggSubmitHome.remove( diggSubmit.getIdDiggSubmit(  ), plugin );
         }
+        
+        // Remove digg attributes associated to the digg
+        DiggAttributeHome.remove( nIdDigg );
 
         _dao.delete( nIdDigg, plugin );
     }
@@ -178,6 +199,21 @@ public final class DiggHome
         if ( digg != null )
         {
             digg.setCategories( CategoryHome.getListByIdDigg( nKey, plugin ) );
+            Map<String, Object> mapAttributes = DiggAttributeHome.findByPrimaryKey( nKey );
+
+            try
+            {
+                BeanUtils.populate( digg, mapAttributes );
+            }
+            catch ( IllegalAccessException e )
+            {
+                AppLogService.error( e );
+            }
+            catch ( InvocationTargetException e )
+            {
+                AppLogService.error( e );
+            }
+
         }
 
         return digg;
@@ -191,7 +227,29 @@ public final class DiggHome
          */
     public static List<Digg> getDiggList( DiggFilter filter, Plugin plugin )
     {
-        return _dao.selectDiggList( filter, plugin );
+        List<Digg> listDigg= _dao.selectDiggList( filter, plugin );
+        
+        for(Digg digg:listDigg)
+        {
+        	
+        	Map<String, Object> mapAttributes = DiggAttributeHome.findByPrimaryKey( digg.getIdDigg() );
+
+            try
+            {
+                BeanUtils.populate( digg, mapAttributes );
+            }
+            catch ( IllegalAccessException e )
+            {
+                AppLogService.error( e );
+            }
+            catch ( InvocationTargetException e )
+            {
+                AppLogService.error( e );
+            }
+        	
+        }
+        return listDigg;
+        
     }
 
     /**

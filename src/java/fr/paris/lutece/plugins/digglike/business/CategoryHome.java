@@ -33,6 +33,10 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import fr.paris.lutece.plugins.digglike.service.DiggCategoryCacheService;
+import fr.paris.lutece.plugins.digglike.service.DiggSubmitTypeCacheService;
+import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
+import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
@@ -49,6 +53,7 @@ public final class CategoryHome
     // Static variable pointed at the DAO instance
     private static ICategoryDAO _dao = (ICategoryDAO) SpringContextService.getPluginBean( "digglike",
             "digglike.categoryDAO" );
+    private static AbstractCacheableService _cache = new DiggCategoryCacheService();
 
     /**
      * Private constructor - this class need not be instantiated
@@ -78,6 +83,7 @@ public final class CategoryHome
     public static void update( Category category, Plugin plugin )
     {
         _dao.store( category, plugin );
+        _cache.removeKey( DiggUtils.EMPTY_STRING +category.getIdCategory() );
     }
 
     /**
@@ -89,6 +95,7 @@ public final class CategoryHome
     public static void remove( int nIdCategory, Plugin plugin )
     {
         _dao.delete( nIdCategory, plugin );
+        _cache.removeKey( DiggUtils.EMPTY_STRING +nIdCategory );
     }
 
     /**
@@ -100,8 +107,14 @@ public final class CategoryHome
      */
     public static Category findByPrimaryKey( int idKey, Plugin plugin )
     {
-        return _dao.load( idKey, plugin );
-    }
+        Category category=(Category)_cache.getFromCache( DiggUtils.EMPTY_STRING +idKey);
+        if(category==null)
+    	{
+    		category=_dao.load( idKey, plugin );
+    		_cache.putInCache(  DiggUtils.EMPTY_STRING +idKey, category );
+    	}
+    	return category;
+     }
 
     /**
         * Returns a list of all category

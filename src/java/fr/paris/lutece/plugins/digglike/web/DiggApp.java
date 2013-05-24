@@ -52,15 +52,13 @@ import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggFilter;
 import fr.paris.lutece.plugins.digglike.business.DiggHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
+import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitState;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitStateHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitType;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitTypeHome;
 import fr.paris.lutece.plugins.digglike.business.DiggUserInfo;
-import fr.paris.lutece.plugins.digglike.business.EntryFilter;
-import fr.paris.lutece.plugins.digglike.business.EntryHome;
 import fr.paris.lutece.plugins.digglike.business.FormError;
-import fr.paris.lutece.plugins.digglike.business.IEntry;
 import fr.paris.lutece.plugins.digglike.business.ReportedMessage;
 import fr.paris.lutece.plugins.digglike.business.Response;
 import fr.paris.lutece.plugins.digglike.business.SearchFields;
@@ -855,7 +853,11 @@ public class DiggApp implements XPageApplication
         DiggUtils.initSubmitFilterBySort( submitFilter,
             ( searchFields.getIdDiggSubmitSort(  ) != DiggUtils.CONSTANT_ID_NULL )
             ? searchFields.getIdDiggSubmitSort(  ) : digg.getIdDefaultSort(  ) );
+        //add sort by pinned first
+        DiggUtils.initSubmitFilterBySort(submitFilter, SubmitFilter.SORT_BY_PINNED_FIRST);
+        
         submitFilter.setIdDigg( digg.getIdDigg(  ) );
+        
         submitFilter.setIdDiggSubmitState( _nIdDiggSubmitStatePublish );
         submitFilter.setIdCategory( searchFields.getIdFilterCategory(  ) );
 
@@ -973,9 +975,11 @@ public class DiggApp implements XPageApplication
             }
 
             modelDigg.put( MARK_LUTECE_USER, luteceUserInfo );
-            modelDigg.put( MARK_DIGG_SUBMIT_VOTE_TYPE,
-                getHtmlDiggSubmitVoteType( digg, diggSubmit.getIdDiggSubmit(  ), CONSTANT_VIEW_LIST_DIGG_SUBMIT, locale ) );
-
+            if(!digg.isDisableVote())
+            {
+            	modelDigg.put( MARK_DIGG_SUBMIT_VOTE_TYPE,
+            			getHtmlDiggSubmitVoteType( digg, diggSubmit, CONSTANT_VIEW_LIST_DIGG_SUBMIT, locale ) );
+            }	
             listHashDigg.add( modelDigg );
         }
 
@@ -1066,7 +1070,7 @@ public class DiggApp implements XPageApplication
         model.put( MARK_LUTECE_USER, luteceUserInfo );
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
         model.put( MARK_DIGG_SUBMIT_VOTE_TYPE,
-            getHtmlDiggSubmitVoteType( diggSubmit.getDigg(  ), diggSubmit.getIdDiggSubmit(  ),
+            getHtmlDiggSubmitVoteType( diggSubmit.getDigg(  ), diggSubmit,
                 CONSTANT_VIEW_DIGG_SUBMIT, request.getLocale(  ) ) );
         model.put( MARK_AUTHORIZED_COMMENT, diggSubmit.getDigg(  ).isAuthorizedComment(  ) );
         model.put( MARK_DIGG_SUBMIT_MODERATE, diggSubmit.getDigg(  ).isDisableNewDiggSubmit(  ) );
@@ -1100,20 +1104,25 @@ public class DiggApp implements XPageApplication
      * @throws SiteMessageException
      *             SiteMessageException
      */
-    private String getHtmlDiggSubmitVoteType( Digg digg, int nIdDiggSubmit, String strView, Locale locale )
+    private String getHtmlDiggSubmitVoteType( Digg digg, DiggSubmit diggSubmit, String strView, Locale locale )
         throws SiteMessageException
     {
-        VoteType voteType = VoteTypeHome.findByPrimaryKey( digg.getVoteType(  ).getIdVoteType(  ), _plugin );
-
-        String strFilePath = PATH_TYPE_VOTE_FOLDER + voteType.getTemplateFileName(  );
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
-        model.put( MARK_ID_DIGG, digg.getIdDigg(  ) );
-        model.put( MARK_ID_DIGG_SUBMIT, nIdDiggSubmit );
-        model.put( MARK_VIEW, strView );
-
-        HtmlTemplate template = AppTemplateService.getTemplate( strFilePath, locale, model );
-
-        return template.getHtml(  );
+        
+    	if(!digg.isDisableVote() && !diggSubmit.isDisableVote())
+    	{	
+	    	VoteType voteType = VoteTypeHome.findByPrimaryKey( digg.getVoteType(  ).getIdVoteType(  ), _plugin );
+	
+	        String strFilePath = PATH_TYPE_VOTE_FOLDER + voteType.getTemplateFileName(  );
+	        HashMap<String, Object> model = new HashMap<String, Object>(  );
+	        model.put( MARK_ID_DIGG, digg.getIdDigg(  ) );
+	        model.put( MARK_ID_DIGG_SUBMIT, diggSubmit.getIdDiggSubmit() );
+	        model.put( MARK_VIEW, strView );
+	
+	        HtmlTemplate template = AppTemplateService.getTemplate( strFilePath, locale, model );
+	
+	        return template.getHtml(  );
+    	}
+    	return null;
     }
 
     /**
@@ -1214,7 +1223,7 @@ public class DiggApp implements XPageApplication
     private String getHtmlForm( HttpServletRequest request, int nMode, Plugin plugin, Digg digg, int nIdDefaultCategory )
         throws SiteMessageException
     {
-        Map<String, Object> model = DiggUtils.getModelHtmlForm( digg, plugin, request.getLocale(  ), nIdDefaultCategory );
+        Map<String, Object> model = DiggUtils.getModelHtmlForm( digg, plugin, request.getLocale(  ), nIdDefaultCategory,false );
 
         // get form Recap
         model.put( MARK_DISABLE_NEW_DIGG_SUBMIT, digg.isDisableNewDiggSubmit(  ) );
@@ -1250,7 +1259,8 @@ public class DiggApp implements XPageApplication
         throws SiteMessageException
     {
         Locale locale = request.getLocale(  );
-
+        List<Response> listResponse = new ArrayList<Response>(  );
+      
         if ( digg.isActiveCaptcha(  ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
         {
             CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService(  );
@@ -1260,25 +1270,42 @@ public class DiggApp implements XPageApplication
                 SiteMessageService.setMessage( request, MESSAGE_CAPTCHA_ERROR, SiteMessage.TYPE_STOP );
             }
         }
-
-        // create form response
+        
+      
         DiggSubmit diggSubmit = new DiggSubmit(  );
         diggSubmit.setDigg( digg );
-        diggSubmit.setDateResponse( DiggUtils.getCurrentDate(  ) );
+        diggSubmit.setResponses( listResponse );
+        FormError formError = DiggUtils.getAllResponsesData(request, diggSubmit, plugin, locale);
 
-        if ( digg.isDisableNewDiggSubmit(  ) )
+        if ( formError != null )
         {
-            diggSubmit.setDiggSubmitState( DiggSubmitStateHome.findByNumero( DiggSubmit.STATE_WAITING_FOR_PUBLISH,
-                    plugin ) );
-        }
-        else
-        {
-            diggSubmit.setDiggSubmitState( DiggSubmitStateHome.findByNumero( DiggSubmit.STATE_PUBLISH, plugin ) );
-        }
-
-        diggSubmit.setDigg( digg );
-        doInsertResponseInDiggSubmit( request, diggSubmit, nIdCategory, nIdType, plugin );
+            if ( formError.isMandatoryError(  ) )
+            {
+                Object[] tabRequiredFields = { formError.getTitleQuestion(  ) };
+                SiteMessageService.setMessage( request, MESSAGE_MANDATORY_QUESTION, tabRequiredFields,
+                    SiteMessage.TYPE_STOP );
+            }
+            else
+            {
+                Object[] tabFormError = { formError.getTitleQuestion(  ), formError.getErrorMessage(  ) };
+                SiteMessageService.setMessage( request, MESSAGE_FORM_ERROR, tabFormError, SiteMessage.TYPE_STOP );
+            }
+         }
+        
+        // perform digg submit
        
+        if ( nIdCategory != DiggUtils.CONSTANT_ID_NULL )
+        {
+            Category category = CategoryHome.findByPrimaryKey( nIdCategory, plugin );
+            diggSubmit.setCategory( category );
+        }
+
+        if ( nIdType != DiggUtils.CONSTANT_ID_NULL )
+        {
+            DiggSubmitType type = DiggSubmitTypeHome.findByPrimaryKey( nIdType, plugin );
+            diggSubmit.setDiggSubmitType( type );
+        }
+   
         if ( user != null )
         {
             diggSubmit.setLuteceUserKey( user.getName(  ) );
@@ -1303,7 +1330,7 @@ public class DiggApp implements XPageApplication
             SiteMessageService.setMessage( request, MESSAGE_MESSAGE_SUBMIT_SAVE_ERROR, SiteMessage.TYPE_ERROR );
         }
 
-        return diggSubmit;
+    return diggSubmit;
     }
 
     /**
@@ -1369,70 +1396,7 @@ public class DiggApp implements XPageApplication
         return commentSubmit;
     }
 
-    /**
-     * Perform the digg submit
-     *
-     * @param request
-     *            request The HTTP request
-     * @param diggSubmit
-     *            diggSubmit
-     * @param nIdCategory
-     *            the category id of the digg submit
-     * @param nIdType
-     *            the type id
-     * @param plugin
-     *            the Plugin
-     * @throws SiteMessageException
-     *             the site Message exception
-     */
-    public void doInsertResponseInDiggSubmit( HttpServletRequest request, DiggSubmit diggSubmit, int nIdCategory,
-        int nIdType, Plugin plugin ) throws SiteMessageException
-    {
-        List<IEntry> listEntryFirstLevel;
-        EntryFilter filter;
-        Locale locale = request.getLocale(  );
 
-        FormError formError = null;
-
-        filter = new EntryFilter(  );
-        filter.setIdDigg( diggSubmit.getDigg(  ).getIdDigg(  ) );
-        listEntryFirstLevel = EntryHome.getEntryList( filter, plugin );
-
-        List<Response> listResponse = new ArrayList<Response>(  );
-        diggSubmit.setResponses( listResponse );
-
-        for ( IEntry entry : listEntryFirstLevel )
-        {
-            formError = DiggUtils.getResponseEntry( request, entry.getIdEntry(  ), plugin, diggSubmit, false, locale );
-
-            if ( formError != null )
-            {
-                if ( formError.isMandatoryError(  ) )
-                {
-                    Object[] tabRequiredFields = { formError.getTitleQuestion(  ) };
-                    SiteMessageService.setMessage( request, MESSAGE_MANDATORY_QUESTION, tabRequiredFields,
-                        SiteMessage.TYPE_STOP );
-                }
-                else
-                {
-                    Object[] tabFormError = { formError.getTitleQuestion(  ), formError.getErrorMessage(  ) };
-                    SiteMessageService.setMessage( request, MESSAGE_FORM_ERROR, tabFormError, SiteMessage.TYPE_STOP );
-                }
-            }
-        }
-
-        if ( nIdCategory != DiggUtils.CONSTANT_ID_NULL )
-        {
-            Category category = CategoryHome.findByPrimaryKey( nIdCategory, plugin );
-            diggSubmit.setCategory( category );
-        }
-
-        if ( nIdType != DiggUtils.CONSTANT_ID_NULL )
-        {
-            DiggSubmitType type = DiggSubmitTypeHome.findByPrimaryKey( nIdType, plugin );
-            diggSubmit.setDiggSubmitType( type );
-        }
-    }
 
     /**
      * Clear params stores in session
@@ -1561,7 +1525,7 @@ public class DiggApp implements XPageApplication
                 submmitFilterTopComment.setIdDigg( digg.getIdDigg(  ) );
                 submmitFilterTopComment.setIdDiggSubmitState( _nIdDiggSubmitStatePublish );
                 submmitFilterTopComment.setIdCategory(searchFields.getIdFilterCategory());
-
+                
                 DiggUtils.initSubmitFilterBySort( submmitFilterTopComment, SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC );
 
                 List<DiggSubmit> listDiggSubmitTopDay = _diggSubmitService.getDiggSubmitList( submmitFilterTopComment,

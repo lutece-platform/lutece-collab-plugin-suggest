@@ -33,6 +33,9 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import fr.paris.lutece.plugins.digglike.service.DiggSubmitTypeCacheService;
+import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
+import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -48,6 +51,7 @@ public final class DiggSubmitTypeHome
     // Static variable pointed at the DAO instance
     private static IDiggSubmitTypeDAO _dao = (IDiggSubmitTypeDAO) SpringContextService.getPluginBean( "digglike",
             "digglike.diggSubmitTypeDAO" );
+    private static AbstractCacheableService _cache = new DiggSubmitTypeCacheService();
 
     /**
      * Private constructor - this class need not be instantiated
@@ -79,6 +83,7 @@ public final class DiggSubmitTypeHome
     public static void update( DiggSubmitType diggSubmitType, Plugin plugin )
     {
         _dao.store( diggSubmitType, plugin );
+        _cache.removeKey( DiggUtils.EMPTY_STRING +diggSubmitType.getIdType() );
     }
 
     /**
@@ -90,6 +95,7 @@ public final class DiggSubmitTypeHome
     public static void remove( int nIdDiggSubmitType, Plugin plugin )
     {
         _dao.delete( nIdDiggSubmitType, plugin );
+        _cache.removeKey( DiggUtils.EMPTY_STRING +nIdDiggSubmitType );
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -104,7 +110,13 @@ public final class DiggSubmitTypeHome
      */
     public static DiggSubmitType findByPrimaryKey( int nKey, Plugin plugin )
     {
-        return _dao.load( nKey, plugin );
+    	DiggSubmitType diggSubmitType=(DiggSubmitType)_cache.getFromCache( DiggUtils.EMPTY_STRING +nKey);
+    	if(diggSubmitType==null)
+    	{
+    		diggSubmitType=_dao.load( nKey, plugin );
+    		_cache.putInCache( DiggUtils.EMPTY_STRING +nKey , diggSubmitType );
+    	}
+    	return diggSubmitType;
     }
 
     /**

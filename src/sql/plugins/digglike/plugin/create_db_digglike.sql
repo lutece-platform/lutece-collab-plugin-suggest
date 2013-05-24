@@ -21,8 +21,8 @@ DROP TABLE IF EXISTS digglike_digg_submit_type CASCADE;
 DROP TABLE IF EXISTS digglike_rss_cf CASCADE; 
 DROP TABLE IF EXISTS digglike_entry_attr_additional CASCADE;
 DROP TABLE IF EXISTS digglike_video CASCADE;
-DROP TABLE IF EXISTS `digglike_digg_user_info`;
-
+DROP TABLE IF EXISTS digglike_digg_user_info;
+DROP TABLE IF EXISTS digglike_digg_attribute CASCADE;
 --
 -- Table structure for table digglike_action
 --
@@ -204,6 +204,8 @@ CREATE TABLE digglike_digg_submit (
 	digg_submit_list_order int default 0,
 	digg_submit_type int default 0,
 	number_view int default 0,
+	disable_vote smallint default 0,
+	is_pinned smallint default 0,
 	PRIMARY KEY (id_digg_submit)
 );
 
@@ -399,12 +401,22 @@ CREATE TABLE digglike_video (
 -- Table structure for table digglike_digg_user_info
 --
 
-CREATE TABLE IF NOT EXISTS `digglike_digg_user_info` (
-  `lutece_user_key` varchar(255) NOT NULL,
-  `first_name` varchar(255) DEFAULT NULL,
-  `last_name` varchar(255)  DEFAULT NULL,
-  `business_mail` varchar(255) DEFAULT NULL,
-  `home_mail` varchar(255) DEFAULT NULL,
-  `login` varchar(255)  DEFAULT NULL,
-  PRIMARY KEY (`lutece_user_key`)
+CREATE TABLE IF NOT EXISTS digglike_digg_user_info (
+  lutece_user_key varchar(255) NOT NULL,
+  first_name varchar(255) DEFAULT NULL,
+  last_name varchar(255)  DEFAULT NULL,
+  business_mail varchar(255) DEFAULT NULL,
+  home_mail varchar(255) DEFAULT NULL,
+  login varchar(255)  DEFAULT NULL,
+  PRIMARY KEY (lutece_user_key)
 ) ;	
+
+--
+-- Table structure for table digglike_digg_attribute		
+--
+CREATE TABLE digglike_digg_attribute (
+	id_digg INT DEFAULT 0 NOT NULL,
+	attribute_key varchar(255) NOT NULL,
+	attribute_value varchar(255) NOT NULL,
+	PRIMARY KEY (id_digg, attribute_key)
+);

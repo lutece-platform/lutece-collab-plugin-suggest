@@ -33,7 +33,28 @@
  */
 package fr.paris.lutece.plugins.digglike.utils;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeSet;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.util.ReflectionUtils;
+
 import fr.paris.lutece.plugins.digglike.business.Category;
+import fr.paris.lutece.plugins.digglike.business.CategoryHome;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
@@ -50,42 +71,27 @@ import fr.paris.lutece.plugins.digglike.business.Response;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.business.Vote;
 import fr.paris.lutece.plugins.digglike.business.VoteHome;
+import fr.paris.lutece.plugins.digglike.business.attribute.DiggAttribute;
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
+import fr.paris.lutece.plugins.digglike.web.action.DigglikeAdminSearchFields;
 import fr.paris.lutece.portal.business.mailinglist.Recipient;
 import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.mail.MailService;
 import fr.paris.lutece.portal.service.mailinglist.AdminMailingListService;
+import fr.paris.lutece.portal.service.message.SiteMessage;
+import fr.paris.lutece.portal.service.message.SiteMessageException;
+import fr.paris.lutece.portal.service.message.SiteMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.string.StringUtil;
-
-import java.sql.Timestamp;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -153,9 +159,9 @@ public final class DiggUtils
     private static final String PROPERTY_SORTER_LIST_ITEM_MANUAL = "digglike.sorterListItemManualDesc";
     public static final String PROPERTY_FILTER_ALL = "digglike.diggFrame.labelFilterAll";
     public static final String PROPERTY_FILTER_TO_DAY = "digglike.diggFrame.labelFilterTopDay";
-    public static final String PROPERTY_FILTER_WEEK = "digglike.diggFrame.labelFilterYesterday";
-    public static final String PROPERTY_FILTER_MONTH = "digglike.diggFrame.labelFilterWeek";
-    public static final String PROPERTY_FILTER_YESTERDAY = "digglike.diggFrame.labelFilterMonth";
+    public static final String PROPERTY_FILTER_WEEK = "digglike.diggFrame.labelFilterWeek";
+    public static final String PROPERTY_FILTER_MONTH = "digglike.diggFrame.labelFilterMonth";
+    public static final String PROPERTY_FILTER_YESTERDAY = "digglike.diggFrame.labelFilterYesterday";
     private static final String REGEX_ID = "^[\\d]+$";
     private static final String PROPERTY_CHOOSE_CATEGORY = "digglike.diggsubmit.choose.category";
     private static final String PROPERTY_CHOOSE_TYPE = "digglike.diggsubmit.choose.type";
@@ -703,7 +709,7 @@ public final class DiggUtils
      * @param nIdDefaultCategory
      * @return
      */
-    public static Map<String, Object> getModelHtmlForm( Digg digg, Plugin plugin, Locale locale, int nIdDefaultCategory )
+    public static Map<String, Object> getModelHtmlForm( Digg digg, Plugin plugin, Locale locale, int nIdDefaultCategory,boolean bBackOffice )
     {
         List<IEntry> listEntryFirstLevel;
         Map<String, Object> model = new HashMap<String, Object>(  );
@@ -737,7 +743,7 @@ public final class DiggUtils
 
         for ( DiggSubmitType t : listTypes )
         {
-            if ( t.getParameterizableInFO(  ) )
+            if ( bBackOffice || t.getParameterizableInFO(  ) )
             {
                 listTypes2Show.add( t );
             }
@@ -916,20 +922,59 @@ public final class DiggUtils
 
         return strBuffer.toString(  );
     }
+    
+    
+    
 
     /**
-     * perform in the object formSubmit the responses associates with a entry specify in parameter.
+     * perform in the object diggSubmit the responses associates to the diggsubmit
+     * @param request
+     * @param diggSubmit
+     * @param plugin
+     * @param locale
+     * @return
+     * @throws SiteMessageException
+     */
+    public static FormError getAllResponsesData( HttpServletRequest request, DiggSubmit diggSubmit, Plugin plugin, Locale locale ) 
+    {
+        
+    	List<IEntry> listEntry;
+        EntryFilter filter;
+        FormError formError = null;
+
+        filter = new EntryFilter(  );
+        filter.setIdDigg( diggSubmit.getDigg(  ).getIdDigg(  ) );
+        listEntry = EntryHome.getEntryList( filter, plugin );
+
+        List<Response> listResponse = new ArrayList<Response>(  );
+        diggSubmit.setResponses( listResponse );
+
+        for ( IEntry entry : listEntry )
+        {
+            formError = getResponseEntry( request, entry.getIdEntry(  ), plugin, diggSubmit, false, locale );
+
+            if ( formError != null )
+            {
+                return formError;
+            }
+        }
+        return null;
+
+       }
+
+    /**
+     * perform in the object diggSubmit the responses associates with a entry specify in parameter.
      * return null if there is no error in the response else return a FormError Object
      * @param request the request
      * @param nIdEntry the key of the entry
      * @param plugin the plugin
-     * @param formSubmit Form Submit Object
+     * @param diggSubmit digg Submit Object
      * @param bResponseNull true if the response create must be null
      * @param locale the locale
      * @return null if there is no error in the response else return a FormError Object
      */
     public static FormError getResponseEntry( HttpServletRequest request, int nIdEntry, Plugin plugin,
-        DiggSubmit formSubmit, boolean bResponseNull, Locale locale )
+        DiggSubmit diggSubmit, boolean bResponseNull, Locale locale )
     {
         FormError formError = null;
         Response response = null;
@@ -939,7 +984,7 @@ public final class DiggUtils
 
         if ( !bResponseNull )
         {
-            formError = entry.getResponseData( formSubmit.getIdDiggSubmit(  ), request, listResponse, locale, plugin );
+            formError = entry.getResponseData( diggSubmit.getIdDiggSubmit(  ), request, listResponse, locale, plugin );
         }
         else
         {
@@ -953,7 +998,7 @@ public final class DiggUtils
             return formError;
         }
 
-        formSubmit.getResponses(  ).addAll( listResponse );
+        diggSubmit.getResponses(  ).addAll( listResponse );
 
         return null;
     }
@@ -1097,6 +1142,12 @@ public final class DiggUtils
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
                 break;
+            case SubmitFilter.SORT_BY_PINNED_FIRST:
+                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_PINNED_FIRST );
+                
+                break;
+    
+                
 
             default:
                 submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_SCORE_DESC );
@@ -1263,6 +1314,7 @@ public final class DiggUtils
         ReferenceList refListSorter = new ReferenceList(  );
 
         refListSorter.addItem( CONSTANT_ID_NULL, EMPTY_STRING );
+        addEmptyItem(refListSorter);
         refListSorter.addItem( SubmitFilter.SORT_BY_DATE_RESPONSE_ASC,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_ASC, locale ) );
         refListSorter.addItem( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC,
@@ -1464,6 +1516,84 @@ public final class DiggUtils
         strResult = StringUtil.substitute( strResult, EMPTY_STRING, "</div>" );
 
         return strResult;
+    }
+    
+    
+    public static void addEmptyItem(ReferenceList refList)
+    {
+    	ReferenceItem refEmpty=new ReferenceItem();
+    	refEmpty.setCode(EMPTY_STRING+CONSTANT_ID_NULL);
+    	refEmpty.setName(EMPTY_STRING);
+    	refList.add(0,refEmpty);
+    }
+    
+    
+    /**
+     * Depopulate the digg into a map of key - value
+     * @param digg the digg
+     * @return a map of key - value
+     */
+    public static Map<String, Object> depopulate( Digg digg )
+    {
+        Map<String, Object> mapAttributes = new HashMap<String, Object>(  );
+
+        for ( java.lang.reflect.Field field : Digg.class.getDeclaredFields(  ) )
+        {
+            DiggAttribute attribute = field.getAnnotation( DiggAttribute.class );
+
+            if ( attribute != null )
+            {
+                String strAttributeKey = attribute.value(  );
+
+                try
+                {
+                    field.setAccessible( true );
+
+                    Object attributeValue = ReflectionUtils.getField( field, digg );
+                    mapAttributes.put( strAttributeKey, attributeValue );
+                }
+                catch ( SecurityException e )
+                {
+                    AppLogService.error( e );
+                }
+            }
+        }
+
+        return mapAttributes;
+    }
+    
+    /**
+     * create a filter for getting  the list of pinned digg submit
+     * @param filter the init filter 
+     * @return a filter for getting f the list of pinned digg submit
+     */
+    public static SubmitFilter createPinnedFilter(SubmitFilter filter)
+    {
+    		SubmitFilter pinnedFilter=new SubmitFilter();
+    		pinnedFilter.setIdDigg(filter.getIdDigg());
+    		pinnedFilter.setDateFirst(filter.getDateFirst());
+    		pinnedFilter.setDateLast(filter.getDateLast());
+    		pinnedFilter.setIdCategory(filter.getIdCategory());
+    		pinnedFilter.setIdReported(filter.getIdReported());
+    		pinnedFilter.setIdDiggSubmitState(filter.getIdDiggSubmitState());
+    		pinnedFilter.setIdPinned(SubmitFilter.ID_TRUE);
+    		initSubmitFilterBySort(pinnedFilter, SubmitFilter.SORT_MANUALLY);
+    		return pinnedFilter;
+    }
+    
+    
+    
+    public static SubmitFilter getDiggSubmitFilter( DigglikeAdminSearchFields searchFields )
+    {
+        SubmitFilter filter = new SubmitFilter(  );
+        filter.setIdDigg( searchFields.getIdDigg() );
+        filter.setIdDiggSubmitState( searchFields.getIdDiggSumitState() );
+        filter.setIdReported( searchFields.getIdDiggSubmitReport() );
+        DiggUtils.initSubmitFilterBySort( filter, searchFields.getIdDiggSubmitSort() );
+        //add sort by pinned first
+        DiggUtils.initSubmitFilterBySort(filter, SubmitFilter.SORT_BY_PINNED_FIRST);
+
+        return filter;
     }
     
     

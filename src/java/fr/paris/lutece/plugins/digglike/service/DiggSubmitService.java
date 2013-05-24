@@ -44,6 +44,7 @@ import com.mysql.jdbc.PacketTooBigException;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
+import fr.paris.lutece.plugins.digglike.business.DiggSubmitStateHome;
 import fr.paris.lutece.plugins.digglike.business.Response;
 import fr.paris.lutece.plugins.digglike.business.ResponseHome;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
@@ -68,9 +69,25 @@ public class DiggSubmitService implements IDiggSubmitService
     public int create( DiggSubmit diggSubmit, Plugin plugin,Locale locale )
     {
     	
+    	//update creation date
+    	diggSubmit.setDateResponse( DiggUtils.getCurrentDate(  ) );
+        
+    	//update digg submit state
+    	if ( diggSubmit.getDigg().isDisableNewDiggSubmit(  ) )
+        {
+            diggSubmit.setDiggSubmitState( DiggSubmitStateHome.findByNumero( DiggSubmit.STATE_WAITING_FOR_PUBLISH,
+                    plugin ) );
+        }
+        else
+        {
+            diggSubmit.setDiggSubmitState( DiggSubmitStateHome.findByNumero( DiggSubmit.STATE_PUBLISH, plugin ) );
+        }
+
     	int nIdDiggSubmit = DiggSubmitHome.create( diggSubmit, plugin );
         diggSubmit.setIdDiggSubmit( nIdDiggSubmit );
    
+        
+        
         if ( diggSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) == DiggSubmit.STATE_PUBLISH )
         {
             String strIdDiggSubmit = Integer.toString( nIdDiggSubmit );
@@ -138,13 +155,13 @@ public class DiggSubmitService implements IDiggSubmitService
             //remove
             DiggSubmitHome.remove( nIdDiggSubmit, plugin );
             //update digg submit order
-            updateDiggSubmitOrder( null, null, nIdDigg, plugin );
+            updateDiggSubmitOrder( null, null, nIdDigg,diggSubmit.isPinned(), plugin );
         }
     }
 
     @Override
     @Transactional( "digglike.transactionManager" )
-    public void updateDiggSubmitOrder( Integer nPositionElement, Integer nNewPositionElement, int nIdDigg, Plugin plugin )
+    public void updateDiggSubmitOrder( Integer nPositionElement, Integer nNewPositionElement, int nIdDigg,boolean bListPinned, Plugin plugin )
     {
         SubmitFilter filter = new SubmitFilter(  );
         filter.setIdDigg( nIdDigg );
@@ -152,7 +169,9 @@ public class DiggSubmitService implements IDiggSubmitService
         List<Integer> listSortByManually = new ArrayList<Integer>(  );
         listSortByManually.add( SubmitFilter.SORT_MANUALLY );
         filter.setSortBy( listSortByManually );
-
+        //
+        filter.setIdPinned(bListPinned?SubmitFilter.ID_TRUE:SubmitFilter.ID_FALSE);
+        
         List<Integer> listIdDiggDubmit = getDiggSubmitListId( filter, plugin );
 
         if ( ( listIdDiggDubmit != null ) && ( listIdDiggDubmit.size(  ) > 0 ) )
@@ -189,6 +208,7 @@ public class DiggSubmitService implements IDiggSubmitService
             submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
             diggSubmit.setComments( CommentSubmitService.getService(  )
                                                         .getCommentSubmitList( submmitFilterComment, plugin ) );
+         
         }
 
         return diggSubmit;
@@ -197,13 +217,47 @@ public class DiggSubmitService implements IDiggSubmitService
     @Override
     public int findNextIdDiggSubmitInTheList( int nIdCurrentDiggSubmit, SubmitFilter filter, Plugin plugin )
     {
-        return DiggSubmitHome.findNextIdDiggSubmitInTheList( nIdCurrentDiggSubmit, filter, plugin );
+        List<Integer> diggSubmitListId = getDiggSubmitListId( filter, plugin );
+        Object[] diggSubmitArrayId = diggSubmitListId.toArray(  );
+        int nIdDiggSubmitNext = -1;
+
+        for ( int cpt = 0; cpt < diggSubmitArrayId.length; cpt++ )
+        {
+            if ( (Integer) diggSubmitArrayId[cpt] == nIdCurrentDiggSubmit )
+            {
+                if ( cpt < ( diggSubmitArrayId.length - 1 ) )
+                {
+                    nIdDiggSubmitNext = (Integer) diggSubmitArrayId[cpt + 1];
+                }
+
+                break;
+            }
+        }
+
+        return nIdDiggSubmitNext;
     }
 
     @Override
     public int findPrevIdDiggSubmitInTheList( int nIdCurrentDiggSubmit, SubmitFilter filter, Plugin plugin )
     {
-        return DiggSubmitHome.findPrevIdDiggSubmitInTheList( nIdCurrentDiggSubmit, filter, plugin );
+        List<Integer> diggSubmitListId = getDiggSubmitListId( filter, plugin );
+        Object[] diggSubmitArrayId = diggSubmitListId.toArray(  );
+        int nIdDiggSubmitPrev = -1;
+
+        for ( int cpt = 0; cpt < diggSubmitArrayId.length; cpt++ )
+        {
+            if ( (Integer) diggSubmitArrayId[cpt] == nIdCurrentDiggSubmit )
+            {
+                if ( cpt != 0 )
+                {
+                    nIdDiggSubmitPrev = (Integer) diggSubmitArrayId[cpt - 1];
+                }
+
+                break;
+            }
+        }
+
+        return nIdDiggSubmitPrev;
     }
 
     @Override
@@ -212,22 +266,31 @@ public class DiggSubmitService implements IDiggSubmitService
         return DiggSubmitHome.getCountDiggSubmit( filter, plugin );
     }
 
-    @Override
-    public int getDiggSubmitIdByOrder( int nDiggSubmitOrder, Plugin plugin )
-    {
-        return DiggSubmitHome.getDiggSubmitIdByOrder( nDiggSubmitOrder, plugin );
-    }
+
 
     @Override
     public List<DiggSubmit> getDiggSubmitList( SubmitFilter filter, Plugin plugin )
     {
-        if ( !filter.containsSortBy(  ) )
+    	if ( !filter.containsSortBy(  ) )
         {
             //use default sort
             DiggUtils.initSubmitFilterBySort( filter, DiggUtils.CONSTANT_ID_NULL );
         }
+    	else if(filter.containsSortBy(SubmitFilter.SORT_BY_PINNED_FIRST))
+    		
+    	{
+    		SubmitFilter filterPinned=DiggUtils.createPinnedFilter(filter);
+    		List<DiggSubmit > listDiggSubmitPinned=DiggSubmitHome.getDiggSubmitList( filterPinned, plugin );
+    		filter.setIdPinned(SubmitFilter.ID_FALSE);
+    		listDiggSubmitPinned.addAll(DiggSubmitHome.getDiggSubmitList( filter, plugin ));
+    		filter.setIdPinned(SubmitFilter.ALL_INT);
+    		return listDiggSubmitPinned;
+    	}
+    	
+    
 
-        return DiggSubmitHome.getDiggSubmitList( filter, plugin );
+    		return DiggSubmitHome.getDiggSubmitList( filter, plugin );
+    	
     }
 
     @Override
@@ -238,45 +301,70 @@ public class DiggSubmitService implements IDiggSubmitService
             //use default sort
             DiggUtils.initSubmitFilterBySort( filter, DiggUtils.CONSTANT_ID_NULL );
         }
+        
+        
+        else if(filter.containsSortBy(SubmitFilter.SORT_BY_PINNED_FIRST))
+    		
+    	{
+	    		SubmitFilter filterPinned=DiggUtils.createPinnedFilter(filter);
+	    		List<DiggSubmit > listDiggSubmitPinned=DiggSubmitHome.getDiggSubmitList( filterPinned, plugin, nNumberMaxDiggSubmit );
+	    		filter.setIdPinned(SubmitFilter.ID_FALSE);
+	    		listDiggSubmitPinned.addAll(DiggSubmitHome.getDiggSubmitList( filterPinned, plugin, nNumberMaxDiggSubmit- listDiggSubmitPinned.size()));
+	    		filter.setIdPinned(SubmitFilter.ALL_INT);
+	    		return listDiggSubmitPinned;
+		 }
+		
 
-        return DiggSubmitHome.getDiggSubmitList( filter, plugin, nNumberMaxDiggSubmit );
+			return DiggSubmitHome.getDiggSubmitList( filter, plugin, nNumberMaxDiggSubmit );
+		
     }
 
     @Override
     public List<Integer> getDiggSubmitListId( SubmitFilter filter, Plugin plugin )
     {
-        if ( !filter.containsSortBy(  ) )
+       
+    	
+    	if ( !filter.containsSortBy(  ) )
         {
             //use default sort
             DiggUtils.initSubmitFilterBySort( filter, DiggUtils.CONSTANT_ID_NULL );
         }
+    	else if(filter.containsSortBy(SubmitFilter.SORT_BY_PINNED_FIRST))
+     	{
+    		
+    	
+    		SubmitFilter filterPinned=DiggUtils.createPinnedFilter(filter);
+    		List<Integer> listDiggSubmitPinned=DiggSubmitHome.getDiggSubmitListId( filterPinned, plugin );
+    		filter.setIdPinned(SubmitFilter.ID_FALSE);
+    		listDiggSubmitPinned.addAll(DiggSubmitHome.getDiggSubmitListId( filter, plugin ));
+    		filter.setIdPinned(SubmitFilter.ALL_INT);
+    		return listDiggSubmitPinned;
+    	}
+    	
+    	
 
         return DiggSubmitHome.getDiggSubmitListId( filter, plugin );
     }
 
-    @Override
-    public List<DiggSubmit> getDiggSubmitListWithNumberComment( SubmitFilter filter, Plugin plugin )
-    {
-        if ( !filter.containsSortBy(  ) )
-        {
-            //use default sort
-            DiggUtils.initSubmitFilterBySort( filter, DiggUtils.CONSTANT_ID_NULL );
-        }
+//    @Override
+//    public List<DiggSubmit> getDiggSubmitListWithNumberComment( SubmitFilter filter, Plugin plugin )
+//    {
+//        if ( !filter.containsSortBy(  ) )
+//        {
+//            //use default sort
+//            DiggUtils.initSubmitFilterBySort( filter, DiggUtils.CONSTANT_ID_NULL );
+//        }
+//
+//        return DiggSubmitHome.getDiggSubmitListWithNumberComment( filter, plugin );
+//    }
 
-        return DiggSubmitHome.getDiggSubmitListWithNumberComment( filter, plugin );
-    }
-
-    @Override
-    public int getDiggSubmitOrderById( int nIdDiggSubmit, Plugin plugin )
-    {
-        return DiggSubmitHome.getDiggSubmitOrderById( nIdDiggSubmit, plugin );
-    }
+ 
 
     @Override
-    public int getMaxOrderContactList( int nIdDigg, Plugin plugin )
+    public int getMaxOrderList( int nIdDigg,boolean bListPinned, Plugin plugin )
     {
         // TODO Auto-generated method stub
-        return DiggSubmitHome.getMaxOrderContactList( nIdDigg, plugin );
+        return DiggSubmitHome.getMaxOrderList( nIdDigg,bListPinned, plugin );
     }
 
     /**

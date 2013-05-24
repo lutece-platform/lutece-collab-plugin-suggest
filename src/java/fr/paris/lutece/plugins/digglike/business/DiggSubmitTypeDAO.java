@@ -150,10 +150,6 @@ public final class DiggSubmitTypeDAO implements IDiggSubmitTypeDAO
             diggSubmitType.setIdType( daoUtil.getInt( 1 ) );
             diggSubmitType.setName( daoUtil.getString( 2 ) );
             diggSubmitType.setColor( daoUtil.getString( 3 ) );
-            //        	ImageResource image = new ImageResource(  );
-            //            image.setImage( daoUtil.getBytes( 4 ) );
-            //            image.setMimeType( daoUtil.getString( 5 ) );
-            //            diggSubmitType.setPictogram( image );
             diggSubmitType.setParameterizableInFO( daoUtil.getBoolean( 4 ) );
             diggSubmitType.setIdXSLStyleSheet( daoUtil.getInt( 5 ) );
             diggSubmitType.setImageUrl( daoUtil.getString( 6 ) );

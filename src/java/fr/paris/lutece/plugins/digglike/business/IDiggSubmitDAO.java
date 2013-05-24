@@ -33,10 +33,9 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import fr.paris.lutece.portal.service.image.ImageResource;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-
 import java.util.List;
+
+import fr.paris.lutece.portal.service.plugin.Plugin;
 
 
 /**
@@ -95,15 +94,7 @@ public interface IDiggSubmitDAO
      */
     List<Integer> selectIdListByFilter( SubmitFilter filter, Plugin plugin );
 
-    //       /**
-    //        * Load the data of all the diggSubmit who verify the filter and returns them in a  list
-    //        * @param filter the filter
-    //        * @param plugin the plugin
-    //        * @param nNumberMaxDiggSubmit Max Number of Diggsubmit return 
-    //        * @return  the list of diggSubmit
-    //        */
-    //        List<DiggSubmit> selectListByFilter( SubmitFilter filter, Plugin plugin ,int nNumberMaxDiggSubmit );
-    //      
+      
     /**
     *
     *
@@ -114,33 +105,6 @@ public interface IDiggSubmitDAO
     */
     int selectCountByFilter( SubmitFilter filter, Plugin plugin );
 
-    //       /**
-    //        * return the id of the next digg submit in the list
-    //        * @param nIdCurrentDiggSubmit the id of the current digg submit
-    //        * @param filter the filter
-    //        * @param plugin the plugin
-    //        * @return the id of the next digg submit in the list
-    //        */
-    //       int findNextIdDiggSubmitInTheList( int nIdCurrentDiggSubmit,SubmitFilter filter, Plugin plugin );
-    //       
-    //       /**
-    //        * return the id of the prev digg submit in the list
-    //        * @param nIdCurrentDiggSubmit the id of the current digg submit
-    //        * @param filter the filter
-    //        * @param plugin the plugin
-    //        * @return the id of the pev digg submit in the list
-    //        */
-    //        int findPrevIdDiggSubmitInTheList(  int nIdCurrentDiggSubmit,SubmitFilter filter, Plugin plugin );
-
-  
-
-    /**
-     * Returns a diggsubmit identifier in a distinct order
-     * @return The order of the DiggSubmit
-     * @param nDiggSubmitOrder The order number
-     * @param plugin The plugin
-     */
-    int selectDiggSubmitIdByOrder( int nDiggSubmitOrder, Plugin plugin );
 
     /**
     * Modify the order of a diggsubmit
@@ -151,19 +115,11 @@ public interface IDiggSubmitDAO
     void storeDiggSubmitOrder( int nNewOrder, int nId, Plugin plugin );
 
     /**
-    * Returns the order of a DiggSubmit
-    * @param nIdDiggSubmit the id of DiggSubmit
-    * @param plugin the plugin contact
-    * @return the order of the DiggSubmit
-    */
-    int selectDiggSubmitOrderById( int nIdDiggSubmit, Plugin plugin );
-
-    /**
      * Calculate the new max order in a list
      * @param nIdDigg the id of the digg
      * @return the max order of diggsubmit
      * @param plugin The plugin
      */
-    int maxOrderDiggSubmit( int nIdDigg, Plugin plugin );
+    int maxOrderDiggSubmit( int nIdDigg,boolean bListPinned, Plugin plugin );
 
 }

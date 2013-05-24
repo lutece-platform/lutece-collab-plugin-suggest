@@ -33,6 +33,14 @@
  */
 package fr.paris.lutece.plugins.digglike.web;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
+
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitType;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitTypeHome;
 import fr.paris.lutece.plugins.digglike.service.ImageServiceDiggSubmitType;
@@ -53,14 +61,6 @@ import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
-
-import org.apache.commons.fileupload.FileItem;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -308,7 +308,7 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
 
         if ( nIdDiggSubmitType != -1 )
         {
-            DiggSubmitTypeHome.remove( nIdDiggSubmitType, plugin );
+        	DiggSubmitTypeHome.remove( nIdDiggSubmitType, plugin );
         }
 
         return getJspManageDiggSubmitType( request );

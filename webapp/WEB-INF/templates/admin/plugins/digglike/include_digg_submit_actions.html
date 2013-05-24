@@ -1,0 +1,17 @@
+<label>#i18n{digglike.manageDiggSubmit.labelDiggExport}</label>        
+<@comboWithParams name="id_export_format" default_value="-1" additionalParameters="class=\"input-small\"" items=export_format_list />
+<button class="btn btn-primary btn-small" type="submit" name="export_search_all" ><i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonDiggExport}</button>
+<#if category_list?has_content> 
+	<@comboWithParams name="id_category" items=category_list default_value="-1"  additionalParameters="class=\"input-medium\"" /> 
+	<button class="btn btn-primary btn-small" type="submit" name="mass_change_category" ><i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonModify}</button>
+</#if>
+
+<#if !digg.disableVote>  
+ <button class="btn btn-primary btn-small" type="submit" name="mass_enable_vote_action" ><i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonEnableVote}</button>
+ <button class="btn btn-primary btn-small" type="submit" name="mass_disable_vote_action" ><i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonDisableVote}</button>
+</#if>
+<button class="btn btn-primary btn-small" type="submit" name="mass_pin_action" ><i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonPinDiggSubmit}</button>
+<button class="btn btn-primary btn-small" type="submit" name="mass_unpin_action" ><i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonUnPinDiggSubmit}</button>
+<a class="btn btn-danger btn-small" title="#i18n{digglike.manageDiggSubmit.buttonAddDiggSubmit}" href="jsp/admin/plugins/digglike/CreateDiggSubmit.jsp?id_digg=${digg.idDigg}">
+			<i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonAddDiggSubmit}
+</a> 
