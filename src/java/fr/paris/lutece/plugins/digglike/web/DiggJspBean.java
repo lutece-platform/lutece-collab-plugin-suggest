@@ -686,10 +686,6 @@ public class DiggJspBean extends PluginAdminPageJspBean
             diggSubmit = _diggSubmitService.findByPrimaryKey( (Integer) idDiggSubmitDisplay, false, getPlugin(  ) );
             filter.setIdDiggSubmit( (Integer) idDiggSubmitDisplay );
             diggSubmit.setNumberComment( _commentSubmitService.getCountCommentSubmit( filter, getPlugin() ) );
-            if(diggSubmit.isReported())
-            {
-            	diggSubmit.setReportedMessages(ReportedMessageHome.getReportedMessageByDiggSubmit((Integer) idDiggSubmitDisplay, getPlugin()));
-            }
             listDiggSubmitDisplay.add( diggSubmit );
         }
        
@@ -974,6 +970,11 @@ public class DiggJspBean extends PluginAdminPageJspBean
                     DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT, getUser(  ) ) )
         {
         	throw new AccessDeniedException(  );
+        }
+        //add repoted Message
+        if(diggSubmit.isReported())
+        {
+        	diggSubmit.setReportedMessages(ReportedMessageHome.getReportedMessageByDiggSubmit(diggSubmit.getIdDiggSubmit(), getPlugin()));
         }
 
         // build Filter
