@@ -73,6 +73,7 @@ import fr.paris.lutece.plugins.digglike.business.EntryTypeHome;
 import fr.paris.lutece.plugins.digglike.business.ExportFormat;
 import fr.paris.lutece.plugins.digglike.business.FormError;
 import fr.paris.lutece.plugins.digglike.business.IEntry;
+import fr.paris.lutece.plugins.digglike.business.ReportedMessageHome;
 import fr.paris.lutece.plugins.digglike.business.Response;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.business.VoteType;
@@ -675,6 +676,10 @@ public class DiggJspBean extends PluginAdminPageJspBean
             diggSubmit = _diggSubmitService.findByPrimaryKey( (Integer) idDiggSubmitDisplay, false, getPlugin(  ) );
             filter.setIdDiggSubmit( (Integer) idDiggSubmitDisplay );
             diggSubmit.setNumberComment( _commentSubmitService.getCountCommentSubmit( filter, getPlugin() ) );
+            if(diggSubmit.isReported())
+            {
+            	diggSubmit.setReportedMessages(ReportedMessageHome.getReportedMessageByDiggSubmit((Integer) idDiggSubmitDisplay, getPlugin()));
+            }
             listDiggSubmitDisplay.add( diggSubmit );
         }
        

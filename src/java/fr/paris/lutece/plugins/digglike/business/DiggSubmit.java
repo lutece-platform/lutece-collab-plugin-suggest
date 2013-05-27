@@ -84,6 +84,7 @@ public class DiggSubmit
     private DiggSubmitType _diggSubmitType;
     private boolean _bDisableVote;
     private boolean _bPinned;
+    private List<ReportedMessage> _listReportedMessages;
 
     /**
      * true if the digg submit have been reported by people
@@ -499,6 +500,23 @@ public class DiggSubmit
 	 */
 	public void setPinned(boolean _bPinned) {
 		this._bPinned = _bPinned;
+	}
+
+	
+	/**
+	 * 
+	 * @return the list of reported Messages
+	 */
+	public List<ReportedMessage> getReportedMessages() {
+		return _listReportedMessages;
+	}
+	
+	/**
+	 * set the list of reported Messages
+	 * @param _listReportedMessages the list of reported Messages
+	 */
+	public void setReportedMessages(List<ReportedMessage> _listReportedMessages) {
+		this._listReportedMessages = _listReportedMessages;
 	}
     
 }

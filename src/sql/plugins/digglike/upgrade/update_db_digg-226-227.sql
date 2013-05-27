@@ -35,3 +35,21 @@ INSERT INTO digglike_action (id_action, name_key, description_key, action_url, i
 INSERT INTO digglike_action (id_action, name_key, description_key, action_url, icon_url, action_permission, digg_state) VALUES (11, 'digglike.action.delete.name', 'digglike.action.delete.description', 'jsp/admin/plugins/digglike/ConfirmRemoveDigg.jsp', 'icon-trash icon-white', 'DELETE', 0);
 INSERT INTO digglike_action (id_action, name_key, description_key, action_url, icon_url, action_permission, digg_state) VALUES (12, 'digglike.action.updateAllDiggSubmit.name', 'digglike.action.updateAllDiggSubmit.description', 'jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp', 'icon-cog icon-white', 'UPDATE_ALL_DIGG_SUBMIT', 1);
 INSERT INTO digglike_action (id_action, name_key, description_key, action_url, icon_url, action_permission, digg_state) VALUES (13, 'digglike.action.updateAllDiggSubmit.name', 'digglike.action.updateAllDiggSubmit.description', 'jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp', 'icon-cog icon-white', 'UPDATE_ALL_DIGG_SUBMIT', 0);
+
+--
+-- Table structure for table digglike_reported_message		
+--
+DROP TABLE IF EXISTS digglike_reported_message CASCADE;
+CREATE TABLE digglike_reported_message (
+	id_reported_message int default 0 NOT NULL,
+	id_digg_submit int default NULL,
+	date_reported timestamp NULL,
+	reported_value long varchar,
+	PRIMARY KEY (id_reported_message)
+	);
+
+ 
+CREATE INDEX index_digglike_reported_message ON digglike_reported_message (id_digg_submit);
+ALTER TABLE digglike_reported_message ADD CONSTRAINT fk_digglike_reported_message FOREIGN KEY (id_digg_submit)
+	REFERENCES digglike_digg_submit (id_digg_submit);
+	

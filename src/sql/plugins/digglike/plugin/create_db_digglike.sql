@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS digglike_entry_attr_additional CASCADE;
 DROP TABLE IF EXISTS digglike_video CASCADE;
 DROP TABLE IF EXISTS digglike_digg_user_info;
 DROP TABLE IF EXISTS digglike_digg_attribute CASCADE;
+DROP TABLE IF EXISTS digglike_reported_message CASCADE;
 --
 -- Table structure for table digglike_action
 --
@@ -420,3 +421,21 @@ CREATE TABLE digglike_digg_attribute (
 	attribute_value varchar(255) NOT NULL,
 	PRIMARY KEY (id_digg, attribute_key)
 );
+
+--
+-- Table structure for table digglike_reported_message		
+--
+CREATE TABLE digglike_reported_message (
+	id_reported_message int default 0 NOT NULL,
+	id_digg_submit int default NULL,
+	date_reported timestamp NULL,
+	reported_value long varchar,
+	PRIMARY KEY (id_reported_message)
+	);
+
+ 
+CREATE INDEX index_digglike_reported_message ON digglike_reported_message (id_digg_submit);
+ALTER TABLE digglike_reported_message ADD CONSTRAINT fk_digglike_reported_message FOREIGN KEY (id_digg_submit)
+	REFERENCES digglike_digg_submit (id_digg_submit);
+	
+

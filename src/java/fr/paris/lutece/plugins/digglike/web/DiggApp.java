@@ -52,7 +52,6 @@ import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggFilter;
 import fr.paris.lutece.plugins.digglike.business.DiggHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
-import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitState;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitStateHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitType;
@@ -60,6 +59,7 @@ import fr.paris.lutece.plugins.digglike.business.DiggSubmitTypeHome;
 import fr.paris.lutece.plugins.digglike.business.DiggUserInfo;
 import fr.paris.lutece.plugins.digglike.business.FormError;
 import fr.paris.lutece.plugins.digglike.business.ReportedMessage;
+import fr.paris.lutece.plugins.digglike.business.ReportedMessageHome;
 import fr.paris.lutece.plugins.digglike.business.Response;
 import fr.paris.lutece.plugins.digglike.business.SearchFields;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
@@ -719,6 +719,9 @@ public class DiggApp implements XPageApplication
         ReportedMessage reportedMessage = new ReportedMessage(  );
         reportedMessage.setDiggSubmit( diggSubmit );
         reportedMessage.setValue( strReportedValue );
+        
+        ReportedMessageHome.create(reportedMessage, _plugin);
+        
         DiggUtils.sendNotificationNewReportedMessage( digg, reportedMessage, request.getLocale(  ), request );
 
         Map<String, Object> parameters = new HashMap<String, Object>(  );

@@ -157,10 +157,13 @@ public final class DiggSubmitHome
         {
             TagSubmitHome.remove( tag.getIdTagSubmit(  ), plugin );
         }
+        
+        //remove all reported associated to the digg submit
+        ReportedMessageHome.removeByDiggSubmit(nIdDiggSubmit, plugin);
+     
+        DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit, plugin );
 
-        DiggSubmit digg = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit, plugin );
-
-        if ( digg.getDiggSubmitState(  ).getIdDiggSubmitState(  ) == DiggSubmit.STATE_PUBLISH )
+        if ( diggSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) == DiggSubmit.STATE_PUBLISH )
         {
             String strIdDiggSubmit = Integer.toString( nIdDiggSubmit );
             IndexationService.addIndexerAction( strIdDiggSubmit + "_" + DigglikeIndexer.SHORT_NAME,

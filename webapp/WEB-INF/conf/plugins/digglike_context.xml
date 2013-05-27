@@ -26,7 +26,7 @@
     <bean id="digglike.commentSubmitService"  class="fr.paris.lutece.plugins.digglike.service.CommentSubmitService" />
     <bean id="digglike.diggUserInfoService"  class="fr.paris.lutece.plugins.digglike.service.DiggUserInfoService" />
     <bean id="digglike.diggAttributeDAO"  class="fr.paris.lutece.plugins.digglike.business.attribute.DiggAttributeDAO" />
-    
+    <bean id="digglike.reportedMessageDAO"  class="fr.paris.lutece.plugins.digglike.business.ReportedMessageDAO" />
     
     <bean id="digglike.transactionManager"  class="fr.paris.lutece.portal.service.database.DAOUtilTransactionManager">
 	 	<property name="pluginName" value="digglike" />

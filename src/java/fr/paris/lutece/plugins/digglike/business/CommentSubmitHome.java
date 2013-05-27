@@ -33,14 +33,11 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
+import java.sql.Timestamp;
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import java.sql.Timestamp;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**

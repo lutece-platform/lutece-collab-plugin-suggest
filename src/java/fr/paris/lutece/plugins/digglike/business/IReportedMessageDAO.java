@@ -33,88 +33,52 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.sql.Timestamp;
+import java.util.List;
+
+import fr.paris.lutece.portal.service.plugin.Plugin;
 
 
 /**
-*
-* class reportedMessage
-*
-*/
-public class ReportedMessage
+ *
+ *  Interface IReportedMessageDAO
+ *
+ */
+public interface IReportedMessageDAO
 {
+    /**
+     * Insert a new reportedMessage in the table.
+     *
+     * @param reportedMessage The instance of the reported Message which contains the informations to storet
+     * @param plugin the plugin
+     *          */
+    void insert( ReportedMessage reportedMessage, Plugin plugin );
+
+    /**
+     * Load the data of the ReportedMessage from the table
+     *
+     * @param nKey The identifier of the report Message
+     * @param plugin the plugin
+     * @return the instance of the ReportedMessage
+     */
+    ReportedMessage load( int nKey, Plugin plugin );
+
     
-	private int _nIdReported;
-	private DiggSubmit _diggSubmit;
-    private Timestamp _tDateReported;
-    private String _strValue;
-
     /**
-      *
-      * @return the digg submit of the reported
-      */
-    public DiggSubmit getDiggSubmit(  )
-    {
-        return _diggSubmit;
-    }
-
-    /**
-     * set the digg submit of the reported
-     * @param diggSubmit the digg submit of the reported
+     * Delete the reportedMessage whose identifier is specified in parameter
+     *
+     * @param nIdDiggSubmit The nIdDiggSubmit
+     * @param plugin the Plugin
      */
-    public void setDiggSubmit( DiggSubmit diggSubmit )
-    {
-        _diggSubmit = diggSubmit;
-    }
+    void deleteByDiggSubmit( int nIdDiggSubmit, Plugin plugin );
 
+    
     /**
-     *  return the reported date
-     * @return the reported date
+     * Load the data of all the reportedMessage who is associated to the nIdDiggSubmit
+     * @param nIdDiggSubmit the nIdDiggSubmit
+     * @param plugin the plugin
+     * @return  the list of reportedMessage
      */
-    public Timestamp getDateReported(  )
-    {
-        return _tDateReported;
-    }
+    List<ReportedMessage> selectListByDiggSubmit( int nIdDiggSubmit, Plugin plugin );
 
-    /**
-     * set the reported date
-     * @param reportedDate the reported date
-     */
-    public void setDateReported( Timestamp reportedDate )
-    {
-        _tDateReported = reportedDate;
-    }
 
-    /**
-    *
-    * @return the value of the reported
-    */
-    public String getValue(  )
-    {
-        return _strValue;
-    }
-
-    /**
-     * set the value of the reported
-     * @param value the value of the reported
-     */
-    public void setValue( String value )
-    {
-        _strValue = value;
-    }
-
-    /**
-     * 
-     * @return the reported id
-     */
-	public int getIdReported() {
-		return _nIdReported;
-	}
-	/**
-	 * 
-	 * @param _nIdReported  the reported id
-	 */
-	public void setIdReported(int _nIdReported) {
-		this._nIdReported = _nIdReported;
-	}
 }
