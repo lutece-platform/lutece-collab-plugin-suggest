@@ -118,9 +118,12 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     private boolean _bDefaultDigg;
     @DiggAttribute( "disableVote" )
     private boolean _bDisableVote;
-    @DiggAttribute( "nb_comment_view") 
-    private int _nbCommentView=3;
-
+    @DiggAttribute( "displayCommentInDiggSubmitList" )
+    private boolean _bDisplayCommentInDiggSubmitList;
+    @DiggAttribute( "numberCommentDisplayInDiggSubmitList") 
+    private Integer _nNumberCommentDisplayInDiggSubmitList;
+    @DiggAttribute( "numberCharCommentDisplayInDiggSubmitList") 
+    private Integer _nNumberCharCommentDisplayInDiggSubmitList;
     /**
     * Initialize the Digg
     */
@@ -1025,17 +1028,52 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     
     
     
-    public int getNbCommentView()
-    {
-     return _nbCommentView;	
-    }
+    /**
+     * 
+     * @return true if the list of comment must be display in digg submit list
+     */
+    public boolean isDisplayCommentInDiggSubmitList() {
+		return _bDisplayCommentInDiggSubmitList;
+	}
+    /**
+     * 
+     * @param _bDisplayCommentInDiggSubmitList true if the list of comment must be display in digg submit list
+     */
+	public void setDisplayCommentInDiggSubmitList(
+			boolean _bDisplayCommentInDiggSubmitList) {
+		this._bDisplayCommentInDiggSubmitList = _bDisplayCommentInDiggSubmitList;
+	}
+	/**
+	 * 
+	 * @return the number of comment submit display by digg submit in the list of digg submit 
+	 */
+	public Integer getNumberCommentDisplayInDiggSubmitList() {
+		return _nNumberCommentDisplayInDiggSubmitList;
+	}
+	/**
+	 * 
+	 * @param _nNumberCommentDisplayInDiggSubmitList the number of comment submit display by digg submit in the list of digg submit 
+	 */
+	public void setNumberCommentDisplayInDiggSubmitList(
+			Integer _nNumberCommentDisplayInDiggSubmitList) {
+		this._nNumberCommentDisplayInDiggSubmitList = _nNumberCommentDisplayInDiggSubmitList;
+	}
     
-    public void setNbCommentView(int nbCommentView)
-    {
-    	_nbCommentView=nbCommentView;
-    }
-    
-    
+	/**
+	 * 
+	 * @return the number of  char comment  display by digg submit in the list of digg submit 
+	 */
+	public Integer getNumberCharCommentDisplayInDiggSubmitList() {
+		return _nNumberCharCommentDisplayInDiggSubmitList;
+	}
+	/**
+	 * 
+	 * @param _nNumberCommentDisplayInDiggSubmitList the number of  char comment  display by digg submit in the list of digg submit 
+	 */
+	public void setNumberCharCommentDisplayInDiggSubmitList(
+			Integer _nNumberCommentDisplayInDiggSubmitList) {
+		this._nNumberCharCommentDisplayInDiggSubmitList = _nNumberCommentDisplayInDiggSubmitList;
+	}
     
     
     

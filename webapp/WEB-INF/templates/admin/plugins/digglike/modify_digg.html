@@ -325,12 +325,28 @@
 							<p class="help-block">#i18n{digglike.createDigg.labelDefaultSortComment}</p>
 						</div>
 						<div class="controls">
-						<label for="disable_vote">#i18n{digglike.createDigg.labelDisableVote} :</label>
-						<input name="disable_vote" value="disable_vote" type="checkbox" <#if digg.disableVote> checked="checked"</#if> >
-					</div>
-					<p class="help-block">#i18n{digglike.createDigg.labelDisableVote}</p>
+							<label for="disable_vote">#i18n{digglike.createDigg.labelDisableVote} :</label>
+							<input name="disable_vote" value="disable_vote" type="checkbox" <#if digg.disableVote> checked="checked"</#if> >
+							</div>
+							<p class="help-block">#i18n{digglike.createDigg.labelDisableVote}</p>
+					   </div>
+					   	<div class="controls">
+							<label for="display_comment_in_digg_submit_list">#i18n{digglike.createDigg.labelDisplayCommentInDiggSubmitList} :</label>
+							<input name="display_comment_in_digg_submit_list" value="display_comment_in_digg_submit_list" type="checkbox"  <#if digg.displayCommentInDiggSubmitList> checked="checked"</#if> >
+							<p class="help-block">#i18n{digglike.createDigg.labelDisplayCommentInDiggSubmitListComment}</p>
+						</div>
+						<div class="controls">
+							<label for="number_comment_display_in_digg_submit_list">#i18n{digglike.createDigg.labelNumberCommentDisplayInDiggSubmitList}</label>
+							<input type="text" name="number_comment_display_in_digg_submit_list" id="number_comment_display_in_digg_submit_list" class="input-mini" value="<#if digg.numberCommentDisplayInDiggSubmitList?has_content && digg.numberCommentDisplayInDiggSubmitList!=-1 >${digg.numberCommentDisplayInDiggSubmitList}</#if>" maxlength="10" />
+							<p class="help-block">#i18n{digglike.createDigg.labelNumberCommentDisplayInDiggSubmitListComment}</p>
+						</div>
+						<div class="controls">
+							<label for="number_char_comment_display_in_digg_submit_list">#i18n{digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitList}</label>
+							<input type="text" name="number_char_comment_display_in_digg_submit_list" id="number_char_comment_display_in_digg_submit_list" class="input-mini" value="<#if digg.numberCharCommentDisplayInDiggSubmitList?has_content && digg.numberCharCommentDisplayInDiggSubmitList!=-1 >${digg.numberCharCommentDisplayInDiggSubmitList}</#if>" maxlength="10" />
+							<p class="help-block">#i18n{digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitListComment}</p>
+						</div>
+					   
 				</div>
-			</div>
 			<div class="form-actions">   	
 				<button class="btn btn-primary btn-small" type="submit" name="save">
 					<i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createDigg.buttonSave}

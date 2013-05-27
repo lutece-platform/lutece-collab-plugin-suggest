@@ -88,6 +88,25 @@
 			#i18n{digglike.diggListSubmit.labelReadMore} &gt;
 			</a>
 		</p>
+			<#if authorized_comment && display_comment_in_list>
+				<#assign nbComments = 1>
+				<div class="-digg-comments">
+					<ul>
+					<#list digg_submit_display.digg_submit.comments as comment>	
+						<#if nbComments <= number_comments>
+								<li>
+									<#if comment.value?length <= cumber_char_comments>
+										${comment.value[0..]}
+									<#else>
+										${comment.value[0..cumber_char_comments-1]}...
+									</#if> 
+								</li>
+						</#if> 
+						<#assign nbComments = nbComments + 1>
+					</#list>
+					</ul>
+				</div>
+			</#if> 
 		</div>
 	</div>
 <hr class="clearfix">

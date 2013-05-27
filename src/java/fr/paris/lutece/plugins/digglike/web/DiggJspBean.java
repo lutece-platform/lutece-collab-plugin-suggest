@@ -166,6 +166,9 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String MESSAGE_ILLOGICAL_NUMBER_DIGG_SUBMIT_IN_TOP_SCORE = "digglike.message.illogicalNumberDiggSumitInTopScore";
     private static final String MESSAGE_ILLOGICAL_NUMBER_DIGG_SUBMIT_IN_TOP_COMMENT = "digglike.message.illogicalNumberDiggSumitInTopComment";
     private static final String MESSAGE_ILLOGICAL_NUMBER_DIGG_SUBMIT_PER_PAGE = "digglike.message.illogicalNumberDiggSumitPerPage";
+    private static final String MESSAGE_ILLOGICAL_NUMBER_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST = "digglike.message.illogicalNumberCommentDisplayInDiggSubmitList";
+    private static final String MESSAGE_ILLOGICAL_NUMBER_CHAR_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST = "digglike.message.illogicalNumberCharCommentDisplayInDiggSubmitList";
+    
     private static final String MESSAGE_ILLOGICAL_NUMBER_DAY_REQUIRED = "digglike.message.illogicalNumberDayRequired";
     private static final String MESSAGE_CONFIRM_CHANGE_DIGG_SUBMIT_CATEGORY="digglike.message.confirmChangeDiggSubmitCategory";
     private static final String MESSAGE_CONFIRM_REMOVE_DIGG_SUBMIT_CATEGORY="digglike.message.confirmRemoveDiggSubmitCategory";
@@ -182,6 +185,8 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String FIELD_NUMBER_DIGG_SUBMIT_IN_TOP_SCORE = "digglike.createDigg.labelNumberDiggSubmitInTopScore";
     private static final String FIELD_NUMBER_DIGG_SUBMIT_IN_TOP_COMMENT = "digglike.createDigg.labelNumberDiggSubmitInTopComment";
     private static final String FIELD_NUMBER_DIGG_SUBMIT_PER_PAGE = "digglike.createDigg.labelNumberDiggSubmitPerPage";
+    private static final String FIELD_NUMBER_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST = "digglike.createDigg.labelNumberCommentDisplayInDiggSubmitList";
+    private static final String FIELD_NUMBER_CHAR_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST = "digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitList";
 
     // properties
     private static final String PROPERTY_ITEM_PER_PAGE = "digglike.itemsPerPage";
@@ -363,7 +368,12 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_ID_DEFAULT_DIGG = "id_default_digg";
     private static final String PARAMETER_SELECTED_DIGG_SUBMIT="selected_digg_submit";
     private static final String PARAMETER_DISABLE_VOTE="disable_vote";
+    private static final String PARAMETER_DISPLAY_COMMENT_IN_DIGG_SUBMIT_LIST="display_comment_in_digg_submit_list";
+    private static final String PARAMETER_NUMBER_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST="number_comment_display_in_digg_submit_list";
+    private static final String PARAMETER_NUMBER_CHAR_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST="number_char_comment_display_in_digg_submit_list";
     
+    
+ 
 
     // other constants
     private static final String EMPTY_STRING = "";
@@ -1593,7 +1603,10 @@ public class DiggJspBean extends PluginAdminPageJspBean
         String strActiveDiggSubmitType = request.getParameter( PARAMETER_ACTIVE_DIGG_SUBMIT_TYPE );
         String strIdDefaultSort = request.getParameter( PARAMETER_ID_DEFAULT_SORT );
         String strDisableVote= request.getParameter( PARAMETER_DISABLE_VOTE );
-
+        String strDisplayCommentInDiggSubmitList= request.getParameter( PARAMETER_DISPLAY_COMMENT_IN_DIGG_SUBMIT_LIST );
+        String strNumberCommentDisplayInDiggSubmitList= request.getParameter( PARAMETER_NUMBER_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST );
+        String strNumberCharCommentDisplayInDiggSubmitList= request.getParameter( PARAMETER_NUMBER_CHAR_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST );
+        
         int nIdVoteType = DiggUtils.getIntegerParameter( strIdVoteType );
         int nIdMailingListDiggSubmit = DiggUtils.getIntegerParameter( strIdMailingListDiggSubmit );
         int nIdMailingListNewDiggSubmit = DiggUtils.getIntegerParameter( strIdMailingListNewDiggSubmit );
@@ -1605,7 +1618,9 @@ public class DiggJspBean extends PluginAdminPageJspBean
         int nNumberDiggSubmitInTopComment = DiggUtils.getIntegerParameter( strNumberDiggSubmitInTopComment );
         int nNumberDiggSubmitPerPage = DiggUtils.getIntegerParameter( strNumberDiggSubmitPerPage );
         int nIdDefaultSort = DiggUtils.getIntegerParameter( strIdDefaultSort );
-
+        int nNumberCommentDisplayInDiggSubmitList = DiggUtils.getIntegerParameter( strNumberCommentDisplayInDiggSubmitList );
+        int nNumberCharCommentDisplayInDiggSubmitList = DiggUtils.getIntegerParameter( strNumberCharCommentDisplayInDiggSubmitList );
+        
         String strFieldError = EMPTY_STRING;
 
         if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) )
@@ -1655,6 +1670,16 @@ public class DiggJspBean extends PluginAdminPageJspBean
         else if ( ( strLibelleValidateButton == null ) || strLibelleValidateButton.trim(  ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_LIBELE_VALIDATE_BUTTON;
+        }
+        else if ( ( ( strDisplayCommentInDiggSubmitList != null ) &&
+                ( ( strNumberCommentDisplayInDiggSubmitList == null ) || strNumberCommentDisplayInDiggSubmitList.trim(  ).equals( EMPTY_STRING )  )))
+        {
+            strFieldError = FIELD_NUMBER_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST;
+        }
+        else if ( ( ( strDisplayCommentInDiggSubmitList != null ) &&
+                ( ( strNumberCharCommentDisplayInDiggSubmitList == null ) || strNumberCharCommentDisplayInDiggSubmitList.trim(  ).equals( EMPTY_STRING )  )))
+        {
+            strFieldError = FIELD_NUMBER_CHAR_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST;
         }
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
@@ -1707,6 +1732,21 @@ public class DiggJspBean extends PluginAdminPageJspBean
             return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_NUMBER_DIGG_SUBMIT_PER_PAGE,
                 AdminMessage.TYPE_STOP );
         }
+        
+        if ( (strDisplayCommentInDiggSubmitList!=null ) && ( strNumberCommentDisplayInDiggSubmitList != null ) && !strNumberCommentDisplayInDiggSubmitList.trim(  ).equals( EMPTY_STRING ) &&
+                ( nNumberCommentDisplayInDiggSubmitList < 0 ) )
+        {
+            return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_NUMBER_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST,
+                AdminMessage.TYPE_STOP );
+        }
+        if ( (strDisplayCommentInDiggSubmitList!=null ) && ( strNumberCharCommentDisplayInDiggSubmitList != null ) && !strNumberCharCommentDisplayInDiggSubmitList.trim(  ).equals( EMPTY_STRING ) &&
+                ( nNumberCommentDisplayInDiggSubmitList < 0 ) )
+        {
+            return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_NUMBER_CHAR_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST,
+                AdminMessage.TYPE_STOP );
+        }
+        
+        
 
         digg.setTitle( strTitle );
         digg.setLibelleContribution( strLibelleContribution );
@@ -1810,6 +1850,8 @@ public class DiggJspBean extends PluginAdminPageJspBean
         {
             digg.setCodeTheme( strThemeXpage );
         }
+        
+        
 
         digg.setLibelleValidateButton( strLibelleValidateButton );
         digg.setNumberDiggSubmitInTopScore( nNumberDiggSubmitInTopScore );
@@ -1822,7 +1864,9 @@ public class DiggJspBean extends PluginAdminPageJspBean
         digg.setActiveDiggSubmitType( strActiveDiggSubmitType != null );
         digg.setIdDefaultSort( nIdDefaultSort );
         digg.setDisableVote( strDisableVote != null );
-
+        digg.setDisplayCommentInDiggSubmitList(strDisplayCommentInDiggSubmitList !=null);
+        digg.setNumberCommentDisplayInDiggSubmitList(nNumberCommentDisplayInDiggSubmitList);
+        digg.setNumberCharCommentDisplayInDiggSubmitList(nNumberCharCommentDisplayInDiggSubmitList);
         return null; // No error
     }
 

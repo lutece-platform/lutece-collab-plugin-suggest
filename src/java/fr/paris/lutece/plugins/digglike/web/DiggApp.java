@@ -123,6 +123,7 @@ public class DiggApp implements XPageApplication
     private static final String MARK_LIST_SUB_COMMENT_SUBMIT_DIGG = "list_sub_comment";
     private static final String MARK_DIGG_COMMENT = "digg_comment";
     private static final String MARK_AUTHORIZED_COMMENT = "authorized_comment";
+    private static final String MARK_DISPLAY_COMMENT_IN_LIST = "display_comment_in_list";
     private static final String MARK_DIGG_SUBMIT_MODERATE = "digg_submit_moderate";
     private static final String MARK_DIGG_SUBMIT = "digg_submit";
     private static final String MARK_COMMENT_SUBMIT = "comment_submit";
@@ -232,8 +233,7 @@ public class DiggApp implements XPageApplication
     private static final String SESSION_SEARCH_FIELDS = "search_fields";
 
     // properties
-    private static final String PROPERTY_MAX_AMOUNT_COMMENTS = "digglike.comments.max.qty";
-    private static final String PROPERTY_MAX_AMOUNT_COMMENTS_CHAR = "digglike.comments.max.char.qty";
+ 
     private int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_ITEM_PER_PAGE, 50 );
     private Plugin _plugin;
     private int _nIdDiggSubmitStatePublish = DiggUtils.CONSTANT_ID_NULL;
@@ -879,16 +879,14 @@ public class DiggApp implements XPageApplication
         model.put( MARK_LIST_DIGG_SUBMIT, getDiggSubmitDisplayList( listIdDiggSubmit, digg, locale, plugin ) );
 
         model.put( MARK_AUTHORIZED_COMMENT, digg.isAuthorizedComment(  ) );
+        model.put( MARK_DISPLAY_COMMENT_IN_LIST, digg.isDisplayCommentInDiggSubmitList() );
         model.put( MARK_DIGG_SUBMIT_MODERATE, digg.isDisableNewDiggSubmit(  ) );
         model.put( MARK_ID_DIGG, digg.getIdDigg(  ) );
 
-        String strMaxAmountComments = AppPropertiesService.getProperty( PROPERTY_MAX_AMOUNT_COMMENTS );
-
-        if ( !StringUtils.isEmpty( strMaxAmountComments ) )
+         if (  digg.isAuthorizedComment(  ) )
         {
-            model.put( MARK_MAX_AMOUNT_COMMENTS, DiggUtils.getIntegerParameter( strMaxAmountComments ) );
-            model.put( MARK_MAX_AMOUNT_COMMENTS_CHAR,
-                AppPropertiesService.getPropertyInt( PROPERTY_MAX_AMOUNT_COMMENTS_CHAR, 20 ) );
+            model.put( MARK_MAX_AMOUNT_COMMENTS,  digg.getNumberCommentDisplayInDiggSubmitList()  );
+            model.put( MARK_MAX_AMOUNT_COMMENTS_CHAR,digg.getNumberCharCommentDisplayInDiggSubmitList() );
         }
 
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
@@ -961,7 +959,7 @@ public class DiggApp implements XPageApplication
         DiggUserInfo luteceUserInfo;
         DiggSubmit diggSubmit;
         Collection<HashMap> listHashDigg = new ArrayList<HashMap>(  );
-        String strPropertyMaxAmountComments = AppPropertiesService.getProperty( PROPERTY_MAX_AMOUNT_COMMENTS );
+        
 
         for ( Integer idDiggSubmit : listDiggSubmit )
         {
@@ -969,7 +967,7 @@ public class DiggApp implements XPageApplication
 
             luteceUserInfo = null;
             diggSubmit = _diggSubmitService.findByPrimaryKey( idDiggSubmit,
-                    ( digg.isAuthorizedComment(  ) && !StringUtils.isEmpty( strPropertyMaxAmountComments ) ), plugin );
+                    ( digg.isAuthorizedComment(  ) && digg.isDisplayCommentInDiggSubmitList()), plugin );
             modelDigg.put( MARK_DIGG_SUBMIT, diggSubmit );
 
             if ( SecurityService.isAuthenticationEnable(  ) && ( diggSubmit.getLuteceUserKey(  ) != null ) )
@@ -1015,11 +1013,7 @@ public class DiggApp implements XPageApplication
             }
 
             modelComment.put( MARK_LUTECE_USER, luteceUserInfo );
-            if( commentSubmit.getComments() != null && commentSubmit.getComments().size() > 0)
-            {
-            	modelComment.put( MARK_LIST_SUB_COMMENT_SUBMIT_DIGG, getCommentSubmitDisplayList( commentSubmit.getComments(),plugin ) );
-            	
-            }
+            modelComment.put( MARK_LIST_SUB_COMMENT_SUBMIT_DIGG, getCommentSubmitDisplayList( commentSubmit.getComments(),plugin ) );
             
             
             listHashComment.add( modelComment );

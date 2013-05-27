@@ -243,15 +243,35 @@
 						<p class="help-block">#i18n{digglike.createDigg.labelActiveDiggSubmitTypeComment}</p>    
 					</div>
 					<div class="controls">
-					<label for="id_default_sort">#i18n{digglike.createDigg.labelDefaultSort} :</label>
+						<label for="id_default_sort">#i18n{digglike.createDigg.labelDefaultSort} :</label>
 						<@combo name="id_default_sort" items=digg_submit_sort_list default_value="-1" />
+						<p class="help-block">#i18n{digglike.createDigg.labelDefaultSortComment}</p>
 					</div>
-					<p class="help-block">#i18n{digglike.createDigg.labelDefaultSortComment}</p>
+				
 					<div class="controls">
 						<label for="disable_vote">#i18n{digglike.createDigg.labelDisableVote} :</label>
 						<input name="disable_vote" value="disable_vote" type="checkbox"  >
+						<p class="help-block">#i18n{digglike.createDigg.labelDisableVote}</p>
 					</div>
-					<p class="help-block">#i18n{digglike.createDigg.labelDisableVote}</p>
+					
+					<div class="controls">
+						<label for="display_comment_in_digg_submit_list">#i18n{digglike.createDigg.labelDisplayCommentInDiggSubmitList} :</label>
+						<input name="display_comment_in_digg_submit_list" value="display_comment_in_digg_submit_list" type="checkbox"  >
+						<p class="help-block">#i18n{digglike.createDigg.labelDisplayCommentInDiggSubmitListComment}</p>
+					
+					</div>
+					<div class="controls">
+						<label for="number_comment_display_in_digg_submit_list">#i18n{digglike.createDigg.labelNumberCommentDisplayInDiggSubmitList}</label>
+						<input type="text" name="number_comment_display_in_digg_submit_list" id="number_comment_display_in_digg_submit_list" class="input-mini" value="3" maxlength="10" />
+						<p class="help-block">#i18n{digglike.createDigg.labelNumberCommentDisplayInDiggSubmitListComment}</p>
+					</div>
+					<div class="controls">
+						<label for="number_char_comment_display_in_digg_submit_list">#i18n{digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitList}</label>
+						<input type="text" name="number_char_comment_display_in_digg_submit_list" id="number_char_comment_display_in_digg_submit_list" class="input-mini" value="30" maxlength="10" />
+						<p class="help-block">#i18n{digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitListComment}</p>
+					</div>
+			
+					
 			</div>
 			</fieldset>
 		</div>
