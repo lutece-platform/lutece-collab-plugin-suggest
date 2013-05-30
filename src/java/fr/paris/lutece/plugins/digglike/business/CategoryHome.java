@@ -148,4 +148,28 @@ public final class CategoryHome
     {
         return _dao.select( nIdDigg, plugin );
     }
+    
+    /**
+     * Delete an association between digg and a category
+     *
+     * @param nIdDigg The identifier of the digg
+     * @param nIdCategory The identifier of the category
+     * @param plugin the plugin
+     */
+    public static void removeDiggAssociation( int nIdDigg, int nIdCategory, Plugin plugin )
+    {
+        _dao.deleteDiggAssociation( nIdDigg, nIdCategory, plugin );
+    }
+
+    /**
+     * insert an association between digg and categories
+     *
+     * @param nIdDigg The identifier of the digg
+     * @param nIdCategory The identifier of the category
+     * @param plugin the plugin
+     */
+    public static void createDiggAssociation( int nIdDigg, int nIdCategory, Plugin plugin )
+    {
+        _dao.insertDiggAssociation( nIdDigg, nIdCategory, plugin );
+    }
 }

@@ -11,20 +11,20 @@
 		<input name="action" value="do_create_digg_submit" type="hidden" />
 		${str_entry}
 		<#if category_list?has_content>
-		<div class="control-group">
-			<label class="control-label" for="id_category">#i18n{digglike.createDigg.labelCategoryTitle} *</label>
-			<div class="controls">
-				<@combo name="id_category" items=category_list default_value="${id_default_category}" />
+			<div class="control-group">
+				<label class="control-label" for="id_category">#i18n{digglike.diggForm.labelCategoryTitle} *</label>
+				<div class="controls">
+					<@combo name="id_category" items=category_list default_value="${id_default_category}" />
+				</div>
 			</div>
-		</div>
 		</#if>	
 		<#if types_list?has_content>
-		<div class="control-group">
-		<label class="control-label" for="id_type">#i18n{digglike.createDigg.labelTypeTitle}</label>
-			<div class="controls">
-				<@combo name="id_type" items=types_list default_value="-1" />
+			<div class="control-group">
+			<label class="control-label" for="id_type">#i18n{digglike.diggForm.labelTypeTitle} *</label>
+				<div class="controls">
+					<@combo name="id_type" items=types_list default_value="-1" />
+				</div>
 			</div>
-		</div>
 		</#if>
 		<#if jcaptcha?exists>
 		<fieldset> 

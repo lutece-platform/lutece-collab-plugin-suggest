@@ -53,3 +53,25 @@ CREATE INDEX index_digglike_reported_message ON digglike_reported_message (id_di
 ALTER TABLE digglike_reported_message ADD CONSTRAINT fk_digglike_reported_message FOREIGN KEY (id_digg_submit)
 	REFERENCES digglike_digg_submit (id_digg_submit);
 	
+	
+	
+	
+--
+-- Table structure for table digglike_digg_digg_submit_type
+--
+DROP TABLE IF EXISTS digglike_digg_digg_submit_type CASCADE;
+CREATE TABLE digglike_digg_digg_submit_type (
+	id_digg int default 0 NOT NULL,
+	id_type int default 0 NOT NULL,
+	PRIMARY KEY (id_digg,id_type)
+);
+
+
+
+ALTER TABLE digglike_digg_digg_submit_type ADD CONSTRAINT fk_digglike_digg_digg_submit_type FOREIGN KEY (id_digg)
+	REFERENCES digglike_digg (id_digg);
+
+ALTER TABLE digglike_digg_digg_submit_type ADD CONSTRAINT fk_digglike_digg_submit_type FOREIGN KEY (id_type)
+	REFERENCES digglike_digg_submit_type (id_type);
+	
+	

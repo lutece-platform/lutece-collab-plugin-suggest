@@ -57,7 +57,9 @@ public class CategoryDAO implements ICategoryDAO
         " FROM digglike_digg_category WHERE id_category=? ";
     private static final String SQL_QUERY_SELECT_BY_ID_DIGG = "SELECT c.id_category,c.title,c.color FROM digglike_category c,digglike_digg_category dc " +
         "WHERE c.id_category=dc.id_category AND dc.id_digg=? ORDER BY title";
-
+    private static final String SQL_QUERY_DELETE_ASSOCIATED_CATEGORIE = "DELETE FROM digglike_digg_category WHERE id_digg = ? and id_category= ? ";
+    private static final String SQL_QUERY_INSERT_ASSOCIATED_CATEGORY = "INSERT INTO digglike_digg_category(id_digg,id_category) VALUES(?,?) ";
+  
     /**
      * Generates a new primary key
      *
@@ -236,5 +238,39 @@ public class CategoryDAO implements ICategoryDAO
         daoUtil.free(  );
 
         return listCategory;
+    }
+    
+    
+    /**
+     * Delete an association between digg and categories
+     *
+     * @param nIdDigg The identifier of the digg
+     * @param nIdCategory The identifier of the category
+     * @param plugin the plugin
+     */
+    public void deleteDiggAssociation( int nIdDigg, int nIdCategory, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_ASSOCIATED_CATEGORIE, plugin );
+        daoUtil.setInt( 1, nIdDigg );
+        daoUtil.setInt( 2, nIdCategory );
+
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
+    }
+
+    /**
+     * insert an association between  digg and a  category
+     *
+     * @param nIdDigg The identifier of the category
+     * @param nIdCategory The identifier of the category
+     * @param plugin the plugin
+     */
+    public void insertDiggAssociation( int nIdDigg, int nIdCategory, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_ASSOCIATED_CATEGORY, plugin );
+        daoUtil.setInt( 1, nIdDigg );
+        daoUtil.setInt( 2, nIdCategory );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 }

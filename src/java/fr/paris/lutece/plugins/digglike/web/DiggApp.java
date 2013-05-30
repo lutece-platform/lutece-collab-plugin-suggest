@@ -76,6 +76,8 @@ import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
 import fr.paris.lutece.portal.service.content.XPageAppService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.message.AdminMessage;
+import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.message.SiteMessage;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.message.SiteMessageService;
@@ -205,6 +207,8 @@ public class DiggApp implements XPageApplication
     private static final String MESSAGE_NEW_REPORTED_SUBMIT = "digglike.message.newReportedSubmit";
     private static final String MESSAGE_NEW_COMMENT_SUBMIT_INVALID = "digglike.message.newCommentSubmitInvalid";
     private static final String MESSAGE_ERROR_NO_CATEGORY = "digglike.message.errorNoCategorySelected";
+    private static final String MESSAGE_ERROR_NO_DIGG_SUBMIT_TYPE_SELECTED = "digglike.message.errorNoDiggSubmitTypeSelected";
+    
     private static final String MESSAGE_ACCESS_DENIED = "digglike.message.accessDenied";
     
 
@@ -549,12 +553,21 @@ public class DiggApp implements XPageApplication
         int nIdCategory = DiggUtils.getIntegerParameter( strIdCategory );
         int nIdType = DiggUtils.getIntegerParameter( strIdType );
 
-        //Check if a category is selected (in the case or the digg has some categories)
-        if ( strIdCategory != null )
+    
+      //Check if a category is selected (in the case or the digg has some categories)
+        if (  !digg.getCategories().isEmpty())
         {
-            if ( strIdCategory.equals( Integer.toString( Category.DEFAULT_ID_CATEGORY ) ) )
+            if ( strIdCategory == null || strIdCategory.equals( Integer.toString( DiggUtils.CONSTANT_ID_NULL ) ))
             {
-                SiteMessageService.setMessage( request, MESSAGE_ERROR_NO_CATEGORY, SiteMessage.TYPE_STOP );
+            	  SiteMessageService.setMessage( request, MESSAGE_ERROR_NO_CATEGORY, SiteMessage.TYPE_STOP );
+            }
+        }
+        //Check if a type is selected (in the case or the digg has some type)
+        if (  !digg.getDiggSubmitTypes().isEmpty())
+        {
+            if ( strIdType == null || strIdType.equals( Integer.toString( DiggUtils.CONSTANT_ID_NULL ) ))
+            {
+            	  SiteMessageService.setMessage( request, MESSAGE_ERROR_NO_DIGG_SUBMIT_TYPE_SELECTED, SiteMessage.TYPE_STOP );
             }
         }
 
@@ -1553,7 +1566,6 @@ public class DiggApp implements XPageApplication
             model.put( MARK_LABEL_DIGG, digg.getLibelleContribution(  ) );
             model.put( MARK_HEADER_DIGG, digg.getHeader(  ) );
             model.put( MARK_LIST_CATEGORIES_DIGG, digg.getCategories(  ) );
-            model.put( MARK_LIST_TYPES, DiggSubmitTypeHome.getList( _plugin ) );
             model.put( MARK_LIST_SUBMIT_TOP_POPULARITY_DIGG, listDiggSubmitTopPopularity );
             model.put( MARK_AUTHORIZED_COMMENT, digg.isAuthorizedComment(  ) );
             model.put( MARK_NUMBER_SHOWN_CHARACTERS, _nNumberShownCharacters );

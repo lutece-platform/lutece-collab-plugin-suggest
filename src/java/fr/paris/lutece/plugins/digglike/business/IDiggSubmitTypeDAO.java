@@ -95,5 +95,39 @@ public interface IDiggSubmitTypeDAO
      * @param plugin the plugin
      * @return the instance of the diggSubmitType
      */
-    List<DiggSubmitType> loadList( Plugin plugin );
+    List<DiggSubmitType> selectList( Plugin plugin );
+    
+    /**
+     * Load the list of the diggSubmitType from the table
+     * @param nIdDigg the id Digg
+     * @param plugin the plugin
+     * @return the instance of the diggSubmitType
+     */
+    List<DiggSubmitType> selectListByIdDigg(int nIdDigg, Plugin plugin );
+    
+    /**
+     * true if there is a  digg associate to the digg submit type
+     * @param nIdType the key of the type
+     * @param plugin the plugin
+     * @return true if there is a digg associate to the type
+     */
+    boolean isAssociateToDigg( int nIdType, Plugin plugin );
+    
+       /**
+     * Delete an association between digg and a digg submit type
+     *
+     * @param nIdDigg The identifier of the digg
+     * @param nIdDiggSubmitType nIdDiggSubmitType
+     * @param plugin the plugin
+     */
+    void deleteDiggAssociation( int nIdDigg, int nIdDiggSubmitType, Plugin plugin );
+    /**
+     * insert an association between digg and a digg submit type
+     *
+     * @param nIdDigg The identifier of the digg
+     * @param nIdDiggSubmitType nIdDiggSubmitType
+     * @param plugin the plugin
+     */
+    void insertDiggAssociation( int nIdDigg, int nIdDiggSubmitType, Plugin plugin );
+    
 }

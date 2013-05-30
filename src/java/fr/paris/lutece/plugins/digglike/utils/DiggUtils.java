@@ -133,7 +133,6 @@ public final class DiggUtils
     //	 Xml Tags
 
     //TEMPLATE
-    private static final String TEMPLATE_HTML_CODE_FORM = "admin/plugins/digglike/html_code_form.html";
     private static final String TEMPLATE_NOTIFICATION_MAIL_NEW_DIGG_SUBMIT = "skin/plugins/digglike/notification_mail_new_digg_submit.html";
     private static final String TEMPLATE_NOTIFICATION_MAIL_NEW_DIGG_SUBMIT_DISABLE = "skin/plugins/digglike/notification_mail_new_digg_submit_disable.html";
     private static final String TEMPLATE_NOTIFICATION_MAIL_NEW_COMMENT_SUBMIT = "skin/plugins/digglike/notification_mail_new_comment_submit.html";
@@ -689,7 +688,7 @@ public final class DiggUtils
         listCats.addAll( digg.getCategories(  ) );
 
         DiggSubmitType type = new DiggSubmitType(  );
-        List<DiggSubmitType> listTypes = (ArrayList<DiggSubmitType>) DiggSubmitTypeHome.getList( plugin );
+        List<DiggSubmitType> listTypes = (ArrayList<DiggSubmitType>) digg.getDiggSubmitTypes();
         List<DiggSubmitType> listTypes2Show = new ArrayList<DiggSubmitType>(  );
 
         type.setIdType( -1 );
@@ -724,12 +723,7 @@ public final class DiggUtils
         }
 
         model.put( MARK_CATEGORY_LIST, refCategoryList );
-
-        if ( digg.isActiveDiggSubmitType(  ) )
-        {
-            model.put( MARK_TYPE_LIST, refTypeList );
-        }
-
+        model.put( MARK_TYPE_LIST, refTypeList );
         model.put( MARK_ID_DEFAULT_CATEGORY, nIdDefaultCategory );
         model.put( MARK_DIGG, digg );
         model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );

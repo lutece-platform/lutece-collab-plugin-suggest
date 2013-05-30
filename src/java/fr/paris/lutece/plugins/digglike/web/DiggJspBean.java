@@ -173,6 +173,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String MESSAGE_CONFIRM_CHANGE_DIGG_SUBMIT_CATEGORY="digglike.message.confirmChangeDiggSubmitCategory";
     private static final String MESSAGE_CONFIRM_REMOVE_DIGG_SUBMIT_CATEGORY="digglike.message.confirmRemoveDiggSubmitCategory";
     private static final String MESSAGE_ERROR_NO_CATEGORY = "digglike.message.errorNoCategorySelected";
+    private static final String MESSAGE_ERROR_NO_DIGG_SUBMIT_TYPE_SELECTED = "digglike.message.errorNoDiggSubmitTypeSelected";
     private static final String MESSAGE_MANDATORY_QUESTION = "digglike.message.mandatory.question";
     private static final String MESSAGE_FORM_ERROR = "digglike.message.formError";
     
@@ -233,6 +234,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String MARK_COMMENT_SUBMIT_LIST = "comment_submit_list";
     private static final String MARK_VOTE_TYPE_LIST = "vote_type_list";
     private static final String MARK_CATEGORY_LIST = "category_list";
+    private static final String MARK_DIGG_SUBMIT_TYPE_LIST = "digg_submit_type_list";
     private static final String MARK_DIGG = "digg";
     private static final String MARK_DIGG_SUBMIT = "digg_submit";
     private static final String MARK_ID_DIGG_SUBMIT_PREV = "digg_submit_prev";
@@ -327,6 +329,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_ID_TYPE_DIGG = "id_type";
     private static final String PARAMETER_ID_DIGG_SUBMIT_STATE = "id_digg_submit_state";
     private static final String PARAMETER_ID_DIGG_STATE = "id_digg_state";
+    private static final String PARAMETER_ID_DIGG_SUBMIT_TYPE = "id_digg_submit_type";
     private static final String PARAMETER_ENABLE = "enable";
     private static final String PARAMETER_DISABLE = "disable";
     private static final String PARAMETER_COMMENT_VALUE = "comment_value";
@@ -867,12 +870,20 @@ public class DiggJspBean extends PluginAdminPageJspBean
 	            int nIdCategory = DiggUtils.getIntegerParameter( strIdCategory );
 	            int nIdType = DiggUtils.getIntegerParameter( strIdType );
 	            
-	          //Check if a category is selected (in the case or the digg has some categories)
-	            if ( strIdCategory != null )
+	           //Check if a category is selected (in the case or the digg has some categories)
+	            if (  !digg.getCategories().isEmpty())
 	            {
-	                if ( strIdCategory.equals( Integer.toString( Category.DEFAULT_ID_CATEGORY ) ) )
+	                if ( strIdCategory == null || strIdCategory.equals( Integer.toString( DiggUtils.CONSTANT_ID_NULL ) ))
 	                {
 	                	return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_NO_CATEGORY, AdminMessage.TYPE_STOP);
+	                }
+	            }
+	            //Check if a category is selected (in the case or the digg has some type)
+	            if (  !digg.getDiggSubmitTypes().isEmpty())
+	            {
+	                if ( strIdType == null || strIdType.equals( Integer.toString( DiggUtils.CONSTANT_ID_NULL ) ))
+	                {
+	                	return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_NO_DIGG_SUBMIT_TYPE_SELECTED, AdminMessage.TYPE_STOP);
 	                }
 	            }
 
@@ -1599,7 +1610,6 @@ public class DiggJspBean extends PluginAdminPageJspBean
         String strRole = request.getParameter( PARAMETER_ROLE );
         String strHeader = request.getParameter( PARAMETER_HEADER );
         String strConfirmationMessage = request.getParameter( PARAMETER_CONFIRMATION_MESSAGE );
-        String strActiveDiggSubmitType = request.getParameter( PARAMETER_ACTIVE_DIGG_SUBMIT_TYPE );
         String strIdDefaultSort = request.getParameter( PARAMETER_ID_DEFAULT_SORT );
         String strDisableVote= request.getParameter( PARAMETER_DISABLE_VOTE );
         String strDisplayCommentInDiggSubmitList= request.getParameter( PARAMETER_DISPLAY_COMMENT_IN_DIGG_SUBMIT_LIST );
@@ -1804,7 +1814,6 @@ public class DiggJspBean extends PluginAdminPageJspBean
         digg.setRole( strRole );
         digg.setHeader( strHeader );
         digg.setConfirmationMessage( strConfirmationMessage );
-        digg.setActiveDiggSubmitType( strActiveDiggSubmitType != null );
         digg.setIdDefaultSort( nIdDefaultSort );
         digg.setDisableVote( strDisableVote != null );
         digg.setDisplayCommentInDiggSubmitList(strDisplayCommentInDiggSubmitList !=null);
@@ -1984,11 +1993,14 @@ public class DiggJspBean extends PluginAdminPageJspBean
         refMailingList.addAll( AdminMailingListService.getMailingLists( adminUser ) );
 
         List<Category> listCategoriesView = CategoryHome.getList( plugin );
+        List<DiggSubmitType> listDiggSubmitTypeView = DiggSubmitTypeHome.getList( plugin );
+        
         listCategoriesView.removeAll( digg.getCategories(  ) );
-
+        listDiggSubmitTypeView.removeAll(digg.getDiggSubmitTypes());
         ReferenceList refCategoryList = DiggUtils.getRefListCategory( listCategoriesView );
         ReferenceList refVoteTypeList = initRefListVoteType( plugin, locale );
         ReferenceList refListDiggSort = DiggUtils.getRefListDiggSort( locale );
+        ReferenceList refListDiggSubmitType=DiggUtils.getRefListType(listDiggSubmitTypeView);
 
         EntryType entryTypeGroup = new EntryType(  );
         refEntryType = initRefListEntryType( plugin, locale );
@@ -2024,6 +2036,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         model.put( MARK_NO_VALUE, CONSTANTE_NO_VALUE );
         model.put( MARK_CATEGORY_LIST, refCategoryList );
         model.put( MARK_VOTE_TYPE_LIST, refVoteTypeList );
+        model.put( MARK_DIGG_SUBMIT_TYPE_LIST, refListDiggSubmitType);
         model.put( MARK_ID_ENTRY_FIRST_IN_THE_LIST, nIdEntryFistInTheList );
         model.put( MARK_ID_ENTRY_LAST_IN_THE_LIST, nIdEntryLastInTheList );
         model.put( MARK_AUTHENTIFICATION_ENABLE, SecurityService.isAuthenticationEnable(  ) );
@@ -2083,6 +2096,72 @@ public class DiggJspBean extends PluginAdminPageJspBean
 
         return getJspManageDigg( request );
     }
+    
+    
+    /**
+     * Perform add digg submit type association
+     *
+     * @param request
+     *            The HTTP request
+     * @return The URL to go after performing the action
+     */
+    public String doInsertDiggSubmitType( HttpServletRequest request )
+    {
+        Plugin plugin = getPlugin(  );
+        Digg digg;
+        String strIdDiggSubmitType = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_TYPE );
+        int nIDiggSubmitType = DiggUtils.getIntegerParameter( strIdDiggSubmitType );
+        DiggSubmitType diggSubmitType = DiggSubmitTypeHome.findByPrimaryKey( nIDiggSubmitType, plugin );
+
+        digg = DiggHome.findByPrimaryKey( _nIdDigg, plugin );
+
+        if ( ( diggSubmitType != null ) && ( digg != null ) && ( digg.getDiggSubmitTypes(  ) != null ) &&
+                !digg.getDiggSubmitTypes().contains( diggSubmitType ) &&
+                RBACService.isAuthorized( Digg.RESOURCE_TYPE, EMPTY_STRING + _nIdDigg,
+                    DigglikeResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
+        {
+        	DiggSubmitTypeHome.createDiggAssociation( _nIdDigg, nIDiggSubmitType, plugin );
+        }
+
+        if ( _nIdDigg != -1 )
+        {
+            return getJspModifyDigg( request, _nIdDigg );
+        }
+
+        return getJspManageDigg( request );
+    }
+
+    /**
+     * remove DiggSubmitType association
+     * @param request
+     *            The HTTP request
+     * @return The URL to go after performing the action
+     */
+    public String doRemoveDiggSubmitType( HttpServletRequest request )
+    {
+    	Plugin plugin = getPlugin(  );
+        Digg digg;
+        String strIdDiggSubmitType = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_TYPE );
+        int nIDiggSubmitType = DiggUtils.getIntegerParameter( strIdDiggSubmitType );
+        DiggSubmitType diggSubmitType = DiggSubmitTypeHome.findByPrimaryKey( nIDiggSubmitType, plugin );
+
+        digg = DiggHome.findByPrimaryKey( _nIdDigg, plugin );
+
+        if ( ( diggSubmitType != null ) && ( digg != null ) && 
+                RBACService.isAuthorized( Digg.RESOURCE_TYPE, EMPTY_STRING + _nIdDigg,
+                    DigglikeResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
+        {
+        	DiggSubmitTypeHome.removeDiggAssociation( _nIdDigg, nIDiggSubmitType, plugin );
+        }
+
+        if ( _nIdDigg != -1 )
+        {
+            return getJspModifyDigg( request, _nIdDigg );
+        }
+
+        return getJspManageDigg( request );
+    }
+    
 
     /**
      * Perform add a category in the digg
@@ -2107,7 +2186,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
                 RBACService.isAuthorized( Digg.RESOURCE_TYPE, EMPTY_STRING + _nIdDigg,
                     DigglikeResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
-            DiggHome.insertCategoryAssociated( _nIdDigg, nIdCategory, plugin );
+        	CategoryHome.createDiggAssociation( _nIdDigg, nIdCategory, plugin );
         }
 
         if ( _nIdDigg != -1 )
@@ -2139,7 +2218,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
                 RBACService.isAuthorized( Digg.RESOURCE_TYPE, EMPTY_STRING + _nIdDigg,
                     DigglikeResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
-            DiggHome.deleteCategoryAssociated( _nIdDigg, nIdCategory, plugin );
+        	CategoryHome.removeDiggAssociation( _nIdDigg, nIdCategory, plugin );
         }
 
         if ( _nIdDigg != -1 )

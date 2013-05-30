@@ -101,6 +101,7 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     private List<IEntry> _listEntries;
     private List<Category> _listCategories;
     private List<DiggSubmit> _listDiggsSubmit;
+    private List<DiggSubmitType> _listDiggSubmitTypes;
     private String _strRole;
     private String _strHeader;
     private int _nSortField;
@@ -108,7 +109,7 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     private String _strConfirmationMessage;
     private boolean _bActiveEditorBbcode;
     private int _nIdDefaultSort = DiggUtils.CONSTANT_ID_NULL;
-    private boolean _bActiveDiggSubmitType;
+   
     private boolean _bDefaultDigg;
     @DiggAttribute( "disableVote" )
     private boolean _bDisableVote;
@@ -940,24 +941,7 @@ public class Digg implements AdminWorkgroupResource, RBACResource
         _nIdDefaultSort = nIdDefaultSort;
     }
 
-    /**
-     *
-     * @return true if the Type of the Digg must be choosed
-     */
-    public boolean isActiveDiggSubmitType(  )
-    {
-        return _bActiveDiggSubmitType;
-    }
-
-    /**
-     * set true if the Type of the Digg must be choosed
-     * @param bActiveDiggSubmitType true if the Type of the Digg must be choosed
-     */
-    public void setActiveDiggSubmitType( boolean bActiveDiggSubmitType )
-    {
-        _bActiveDiggSubmitType = bActiveDiggSubmitType;
-    }
-
+  
     /**
      *
      * @return true if the digg is a Default digg
@@ -1082,5 +1066,23 @@ public class Digg implements AdminWorkgroupResource, RBACResource
 	{
 	   _bEnableMailNewReportedSubmit = enableMailNewReportedSubmit;
 	}
+	
+	 /**
+    *
+    * @return the digg submit type List associate to the digg
+    */
+   public List<DiggSubmitType> getDiggSubmitTypes(  )
+   {
+       return _listDiggSubmitTypes;
+   }
+
+   /**
+    * set the digg submit type  List associate to the digg
+    * @param diggsSubmit the digg submit type  List associate to the digg
+    */
+   public void setDiggSubmiTypes( List<DiggSubmitType> diggSubmitTypes )
+   {
+	   _listDiggSubmitTypes = diggSubmitTypes;
+   }
 	    
 }

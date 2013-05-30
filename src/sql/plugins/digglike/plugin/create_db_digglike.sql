@@ -18,6 +18,7 @@ DROP TABLE IF EXISTS digglike_category CASCADE;
 DROP TABLE IF EXISTS digglike_action CASCADE;
 DROP TABLE IF EXISTS digglike_image CASCADE;
 DROP TABLE IF EXISTS digglike_digg_submit_type CASCADE;
+DROP TABLE IF EXISTS digglike_digg_digg_submit_type CASCADE;
 DROP TABLE IF EXISTS digglike_rss_cf CASCADE; 
 DROP TABLE IF EXISTS digglike_entry_attr_additional CASCADE;
 DROP TABLE IF EXISTS digglike_video CASCADE;
@@ -173,7 +174,6 @@ CREATE TABLE digglike_digg (
 	active_editor_bbcode smallint default 0,
 	default_digg smallint default 0,
 	id_default_sort int,
-	active_digg_submit_type smallint default 0,
 	PRIMARY KEY (id_digg)
 );
 
@@ -373,6 +373,25 @@ CREATE TABLE digglike_digg_submit_type (
 	image_url varchar(100) DEFAULT NULL,
 	PRIMARY KEY (id_type)
 );
+
+
+--
+-- Table structure for table digglike_digg_digg_submit_type
+--
+CREATE TABLE digglike_digg_digg_submit_type (
+	id_digg int default 0 NOT NULL,
+	id_type int default 0 NOT NULL,
+	PRIMARY KEY (id_digg,id_type)
+);
+
+
+
+ALTER TABLE digglike_digg_digg_submit_type ADD CONSTRAINT fk_digglike_digg_digg_submit_type FOREIGN KEY (id_digg)
+	REFERENCES digglike_digg (id_digg);
+
+ALTER TABLE digglike_digg_digg_submit_type ADD CONSTRAINT fk_digglike_digg_submit_type FOREIGN KEY (id_type)
+	REFERENCES digglike_digg_submit_type (id_type);
+
 	
 	
 --

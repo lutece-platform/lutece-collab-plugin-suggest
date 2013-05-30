@@ -138,6 +138,52 @@ public final class DiggSubmitTypeHome
      */
     public static List<DiggSubmitType> getList( Plugin plugin )
     {
-        return _dao.loadList( plugin );
+        return _dao.selectList( plugin );
+    }
+    
+    /**
+     * Returns a list of all category associate to the digg
+     * @param nIdDigg the id digg
+     * @param plugin the plugin
+     * @return  the list of category
+     */
+    public static List<DiggSubmitType> getListByIdDigg( int nIdDigg, Plugin plugin )
+    {
+        return _dao.selectListByIdDigg( nIdDigg, plugin );
+    }
+    
+    /**
+     * true if there is a  digg associate to the DiggSubmitType
+     * @param nIdDiggSubmitType the key of the digg submit type
+     * @param plugin the plugin
+     * @return true if there is a digg associate to the DiggSubmitType
+     */
+    public static boolean isAssociateToDigg( int nIdDiggSubmitType, Plugin plugin )
+    {
+        return _dao.isAssociateToDigg( nIdDiggSubmitType, plugin );
+    }
+    
+    /**
+     * Delete an association between digg and a digg submit type
+     *
+     * @param nIdDigg The identifier of the digg
+     * @param nIdDiggSubmitType nIdDiggSubmitType
+     * @param plugin the plugin
+     */
+    public static void removeDiggAssociation( int nIdDigg, int nIdDiggSubmitType, Plugin plugin )
+    {
+        _dao.deleteDiggAssociation( nIdDigg, nIdDiggSubmitType, plugin );
+    }
+
+    /**
+     * insert an association between digg and a digg submit type
+     *
+     * @param nIdDigg The identifier of the digg
+     * @param nIdDiggSubmitType nIdDiggSubmitType
+     * @param plugin the plugin
+     */
+    public static void createDiggAssociation( int nIdDigg, int nIdDiggSubmitType, Plugin plugin )
+    {
+        _dao.insertDiggAssociation( nIdDigg, nIdDiggSubmitType, plugin );
     }
 }

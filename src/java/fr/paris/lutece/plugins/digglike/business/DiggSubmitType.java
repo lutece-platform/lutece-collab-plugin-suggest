@@ -183,5 +183,21 @@ public class DiggSubmitType implements RBACResource
     {
         return _strImageUrl;
     }
+    
+    
+    /**
+     * @param obj the Digg Submit Type  to compare
+     * @return true if Digg Submit Type  in parameter is the same object
+     *
+     */
+    public boolean equals( Object obj )
+    {
+        if ( ( (DiggSubmitType) obj ).getIdType() == _nIdType )
+        {
+            return true;
+        }
+
+        return false;
+    }
 
 }

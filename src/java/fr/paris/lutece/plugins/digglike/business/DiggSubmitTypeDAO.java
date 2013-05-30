@@ -50,17 +50,24 @@ import java.util.List;
 public final class DiggSubmitTypeDAO implements IDiggSubmitTypeDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_type ) FROM digglike_digg_submit_type";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_type, name, color, parameterizable, id_xsl, image_url FROM digglike_digg_submit_type WHERE id_type=? ";
+    private static final String SQL_ORDER_BY_NAME="ORDER BY t.name";
+	private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_type ) FROM digglike_digg_submit_type";
+	private static final String SQL_SELECT_DIGG_SUBMIT_TYPE="SELECT t.id_type, t.name, t.color, t.parameterizable, t.id_xsl, t.image_url FROM digglike_digg_submit_type t ";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_SELECT_DIGG_SUBMIT_TYPE+ "WHERE t.id_type=? ";
     private static final String SQL_QUERY_FIND_IMAGE_BY_PRIMARY_KEY = "SELECT image_content, image_mime_type FROM digglike_digg_submit_type WHERE id_type=? ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_digg_submit_type ( id_type,name,color,image_content, " +
         "image_mime_type,parameterizable, id_xsl, image_url ) VALUES(?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM digglike_digg_submit_type WHERE id_type = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE digglike_digg_submit_type SET " +
         "name=?,color=?,image_content=?,image_mime_type=?,parameterizable=?, id_xsl=?, image_url=? WHERE id_type=? ";
-    private static final String SQL_QUERY_FIND_ALL = "SELECT id_type, name, color, parameterizable, id_xsl, image_url FROM digglike_digg_submit_type ";
+    private static final String SQL_QUERY_FIND_ALL = SQL_SELECT_DIGG_SUBMIT_TYPE+SQL_ORDER_BY_NAME;
+    private static final String SQL_QUERY_FIND_BY_ID_DIGG = SQL_SELECT_DIGG_SUBMIT_TYPE+",digglike_digg_digg_submit_type dt WHERE t.id_type=dt.id_type AND dt.id_digg= ? "+SQL_ORDER_BY_NAME;
+    private static final String SQL_QUERY_COUNT_NUMBER_OF_DIGG_ASSOCIATE_TO_THE_DIGG_SUBMIT_TYPE= "select COUNT(id_digg) " +
+            " FROM digglike_digg_digg_submit_type WHERE id_type=? ";
+    private static final String SQL_QUERY_DELETE_ASSOCIATION_DIGG= "DELETE FROM digglike_digg_digg_submit_type WHERE id_digg = ? and id_type= ? ";
+    private static final String SQL_QUERY_INSERT_ASSOCIATION_DIGG = "INSERT INTO digglike_digg_digg_submit_type(id_digg,id_type) VALUES(?,?) ";
 
-    /**
+       /**
        * Generates a new primary key
        *
        * @param plugin the plugin
@@ -146,13 +153,7 @@ public final class DiggSubmitTypeDAO implements IDiggSubmitTypeDAO
 
         if ( daoUtil.next(  ) )
         {
-            diggSubmitType = new DiggSubmitType(  );
-            diggSubmitType.setIdType( daoUtil.getInt( 1 ) );
-            diggSubmitType.setName( daoUtil.getString( 2 ) );
-            diggSubmitType.setColor( daoUtil.getString( 3 ) );
-            diggSubmitType.setParameterizableInFO( daoUtil.getBoolean( 4 ) );
-            diggSubmitType.setIdXSLStyleSheet( daoUtil.getInt( 5 ) );
-            diggSubmitType.setImageUrl( daoUtil.getString( 6 ) );
+        	diggSubmitType=getRow(daoUtil);
         }
 
         daoUtil.free(  );
@@ -192,9 +193,9 @@ public final class DiggSubmitTypeDAO implements IDiggSubmitTypeDAO
      * @param plugin the plugin
      * @return the instance of the diggSubmitType
      */
-    public List<DiggSubmitType> loadList( Plugin plugin )
+    public List<DiggSubmitType> selectList( Plugin plugin )
     {
-        DiggSubmitType diggSubmitType = null;
+       
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ALL, plugin );
         daoUtil.executeQuery(  );
 
@@ -202,18 +203,8 @@ public final class DiggSubmitTypeDAO implements IDiggSubmitTypeDAO
 
         while ( daoUtil.next(  ) )
         {
-            diggSubmitType = new DiggSubmitType(  );
-            diggSubmitType.setIdType( daoUtil.getInt( 1 ) );
-            diggSubmitType.setName( daoUtil.getString( 2 ) );
-            diggSubmitType.setColor( daoUtil.getString( 3 ) );
-            //        	ImageResource image = new ImageResource(  );
-            //            image.setImage( daoUtil.getBytes( 4 ) );
-            //            image.setMimeType( daoUtil.getString( 5 ) );
-            //            diggSubmitType.setPictogram( image );
-            diggSubmitType.setParameterizableInFO( daoUtil.getBoolean( 4 ) );
-            diggSubmitType.setIdXSLStyleSheet( daoUtil.getInt( 5 ) );
-            diggSubmitType.setImageUrl( daoUtil.getString( 6 ) );
-            list.add( diggSubmitType );
+    
+            list.add( getRow(daoUtil) );
         }
 
         daoUtil.free(  );
@@ -275,4 +266,111 @@ public final class DiggSubmitTypeDAO implements IDiggSubmitTypeDAO
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
+    
+    
+    /**
+     * return DiggSubmitType
+     * @param daoUtil daoUtil
+     * @return DiggSubmitType
+     */
+   private  DiggSubmitType getRow(DAOUtil daoUtil)
+    {
+	   DiggSubmitType diggSubmitType = null;
+	   diggSubmitType = new DiggSubmitType(  );
+       diggSubmitType.setIdType( daoUtil.getInt( 1 ) );
+       diggSubmitType.setName( daoUtil.getString( 2 ) );
+       diggSubmitType.setColor( daoUtil.getString( 3 ) );
+       diggSubmitType.setParameterizableInFO( daoUtil.getBoolean( 4 ) );
+       diggSubmitType.setIdXSLStyleSheet( daoUtil.getInt( 5 ) );
+       diggSubmitType.setImageUrl( daoUtil.getString( 6 ) );
+       return diggSubmitType;
+    
+    }
+   
+   /**
+    * Load the list of the diggSubmitType from the table
+    *The images are not loaded in the DiggSubmitType Objects
+    * @param plugin the plugin
+    * @return the instance of the diggSubmitType
+    */
+   public List<DiggSubmitType> selectListByIdDigg(int nIdDigg , Plugin plugin )
+   {
+      
+       DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_DIGG, plugin );
+       daoUtil.setInt( 1, nIdDigg );
+       daoUtil.executeQuery(  );
+       
+       List<DiggSubmitType> list = new ArrayList<DiggSubmitType>(  );
+       
+       while ( daoUtil.next(  ) )
+       {
+   
+           list.add( getRow(daoUtil) );
+       }
+
+       daoUtil.free(  );
+
+       return list;
+   }
+   
+   /**
+    * true if there is a  digg associate to the digg submit type
+    * @param nIdType the key of the type
+    * @param plugin the plugin
+    * @return true if there is a digg associate to the type
+    */
+   
+   public boolean isAssociateToDigg( int nIdType, Plugin plugin )
+   {
+       DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_NUMBER_OF_DIGG_ASSOCIATE_TO_THE_DIGG_SUBMIT_TYPE, plugin );
+       daoUtil.setInt( 1, nIdType );
+       daoUtil.executeQuery(  );
+
+       if ( daoUtil.next(  ) )
+       {
+           if ( daoUtil.getInt( 1 ) != 0 )
+           {
+               daoUtil.free(  );
+
+               return true;
+           }
+       }
+
+       daoUtil.free(  );
+
+       return false;
+   }
+
+
+	 /**
+    * {@inheritDoc}
+    */
+	@Override
+public void deleteDiggAssociation(int nIdDigg, int nIdDiggSubmitType,
+		Plugin plugin) {
+		
+		DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_ASSOCIATION_DIGG, plugin );
+        daoUtil.setInt( 1, nIdDigg );
+        daoUtil.setInt( 2, nIdDiggSubmitType );
+
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
+	
+	
+	}
+		/**
+	     * {@inheritDoc}
+	     */
+		@Override
+public void insertDiggAssociation(int nIdDigg, int nIdDiggSubmitType,
+		Plugin plugin) {
+			DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_ASSOCIATION_DIGG, plugin );
+	        daoUtil.setInt( 1, nIdDigg );
+	        daoUtil.setInt( 2, nIdDiggSubmitType );
+	        daoUtil.executeUpdate(  );
+	        daoUtil.free(  );
+	
+}
+
+    
 }

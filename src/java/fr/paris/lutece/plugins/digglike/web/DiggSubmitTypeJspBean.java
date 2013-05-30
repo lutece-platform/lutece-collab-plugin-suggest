@@ -99,6 +99,7 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
     private static final String FIELD_NAME = "digglike.createDiggSubmitType.labelName";
     private static final String FIELD_PARAMETERIZABLE = "digglike.createDiggSubmitType.labelParameterizable";
     private static final String MESSAGE_CONFIRM_REMOVE_DIGG_SUBMIT_TYPE = "digglike.message.confirmRemoveDiggSubmitType";
+    private static final String MESSAGE_DIGG_SUBMIT_TYPE_ASSOCIATE_TO_DIGG = "digglike.message.diggSubmitTypeAssociateToDigg";
 
     //	properties
     private static final String PROPERTY_ITEM_PER_PAGE = "digglike.itemsPerPage";
@@ -305,7 +306,12 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
         String strIdDiggSubmitType = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_TYPE );
         Plugin plugin = getPlugin(  );
         int nIdDiggSubmitType = DiggUtils.getIntegerParameter( strIdDiggSubmitType );
-
+        
+        if ( DiggSubmitTypeHome.isAssociateToDigg( nIdDiggSubmitType, plugin ) )
+        {
+            return AdminMessageService.getMessageUrl( request, MESSAGE_DIGG_SUBMIT_TYPE_ASSOCIATE_TO_DIGG,
+                AdminMessage.TYPE_STOP );
+        }
         if ( nIdDiggSubmitType != -1 )
         {
         	DiggSubmitTypeHome.remove( nIdDiggSubmitType, plugin );

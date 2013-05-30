@@ -106,7 +106,11 @@ public final class DiggHome
 
         for ( Category category : diggCopy.getCategories(  ) )
         {
-            insertCategoryAssociated( diggCopy.getIdDigg(  ), category.getIdCategory(  ), plugin );
+            CategoryHome.createDiggAssociation( diggCopy.getIdDigg(  ), category.getIdCategory(  ), plugin );
+        }
+        for ( DiggSubmitType diggSubmitType : diggCopy.getDiggSubmitTypes())
+        {
+        	DiggSubmitTypeHome.createDiggAssociation( diggCopy.getIdDigg(  ), diggSubmitType.getIdType( ) , plugin );
         }
     }
 
@@ -129,16 +133,7 @@ public final class DiggHome
     	
     	_dao.store( digg, plugin );
 
-        //store association between digg and categories
-        for ( Category category : digg.getCategories(  ) )
-        {
-            deleteCategoryAssociated( digg.getIdDigg(  ), category.getIdCategory(  ), plugin );
-        }
-
-        for ( Category category : digg.getCategories(  ) )
-        {
-            insertCategoryAssociated( digg.getIdDigg(  ), category.getIdCategory(  ), plugin );
-        }
+   
     }
 
     /**
@@ -151,12 +146,18 @@ public final class DiggHome
     {
         Digg digg = findByPrimaryKey( nIdDigg, plugin );
         List<IEntry> listEntry;
-        List<DiggSubmit> listDiggSubmit;
+        List<Integer> listIdDiggSubmit;
 
         //delete association between digg and categories
         for ( Category category : digg.getCategories(  ) )
         {
-            deleteCategoryAssociated( digg.getIdDigg(  ), category.getIdCategory(  ), plugin );
+        	CategoryHome.removeDiggAssociation( digg.getIdDigg(  ), category.getIdCategory(  ), plugin );
+        }
+        
+        //delete association between digg and digg submit type
+        for ( DiggSubmitType diggSubmitType : digg.getDiggSubmitTypes())
+        {
+        	DiggSubmitTypeHome.removeDiggAssociation( digg.getIdDigg(  ), diggSubmitType.getIdType( ) , plugin );
         }
 
         EntryFilter entryFilter = new EntryFilter(  );
@@ -170,11 +171,11 @@ public final class DiggHome
 
         SubmitFilter responseFilter = new SubmitFilter(  );
         responseFilter.setIdDigg( nIdDigg );
-        listDiggSubmit = DiggSubmitHome.getDiggSubmitList( responseFilter, plugin );
+        listIdDiggSubmit = DiggSubmitHome.getDiggSubmitListId( responseFilter, plugin );
 
-        for ( DiggSubmit diggSubmit : listDiggSubmit )
+        for ( Integer nIdDiggSubmit : listIdDiggSubmit )
         {
-            DiggSubmitHome.remove( diggSubmit.getIdDiggSubmit(  ), plugin );
+            DiggSubmitHome.remove(nIdDiggSubmit, plugin );
         }
         
         // Remove digg attributes associated to the digg
@@ -199,6 +200,8 @@ public final class DiggHome
         if ( digg != null )
         {
             digg.setCategories( CategoryHome.getListByIdDigg( nKey, plugin ) );
+            digg.setDiggSubmiTypes(DiggSubmitTypeHome.getListByIdDigg(nKey, plugin));
+          
             Map<String, Object> mapAttributes = DiggAttributeHome.findByPrimaryKey( nKey );
 
             try
@@ -252,29 +255,7 @@ public final class DiggHome
         
     }
 
-    /**
-     * Delete an association between digg and a category
-     *
-     * @param nIdDigg The identifier of the digg
-     * @param nIdCategory The identifier of the category
-     * @param plugin the plugin
-     */
-    public static void deleteCategoryAssociated( int nIdDigg, int nIdCategory, Plugin plugin )
-    {
-        _dao.deleteCategoryAssociated( nIdDigg, nIdCategory, plugin );
-    }
-
-    /**
-     * insert an association between digg and categories
-     *
-     * @param nIdDigg The identifier of the digg
-     * @param nIdCategory The identifier of the category
-     * @param plugin the plugin
-     */
-    public static void insertCategoryAssociated( int nIdDigg, int nIdCategory, Plugin plugin )
-    {
-        _dao.insertCategoryAssociated( nIdDigg, nIdCategory, plugin );
-    }
+    
 
     /**
      * Update the value of the field which will be use to sort the diggSubmit

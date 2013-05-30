@@ -12,7 +12,7 @@
 		${str_entry}
 		<#if category_list?has_content>
 		<div class="control-group">
-			<label class="control-label" for="id_category">#i18n{digglike.createDigg.labelCategoryTitle} *</label>
+			<label class="control-label" for="id_category">#i18n{digglike.createDiggSubmit.labelCategoryTitle} *</label>
 			<div class="controls">
 				<@combo name="id_category" items=category_list default_value="${id_default_category}" />
 			</div>
@@ -20,7 +20,7 @@
 		</#if>	
 		<#if types_list?has_content>
 		<div class="control-group">
-		<label class="control-label" for="id_type">#i18n{digglike.createDigg.labelTypeTitle}</label>
+		<label class="control-label" for="id_type">#i18n{digglike.createDiggSubmit.labelTypeTitle}</label>
 			<div class="controls">
 				<@combo name="id_type" items=types_list default_value="-1" />
 			</div>

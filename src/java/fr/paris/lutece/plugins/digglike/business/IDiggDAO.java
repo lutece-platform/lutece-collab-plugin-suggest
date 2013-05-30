@@ -88,24 +88,6 @@ public interface IDiggDAO
     List<Digg> selectDiggList( DiggFilter filter, Plugin plugin );
 
     /**
-     * Delete an association between digg and categories
-     *
-     * @param nIdDigg The identifier of the digg
-     * @param nIdCategory The identifier of the category
-     * @param plugin the plugin
-     */
-    void deleteCategoryAssociated( int nIdDigg, int nIdCategory, Plugin plugin );
-
-    /**
-     * insert an association between  entry and a regular expression
-     *
-     * @param nIdDigg The identifier of the digg
-     * @param nIdCategory The identifier of the category
-     * @param plugin the plugin
-     */
-    void insertCategoryAssociated( int nIdDigg, int nIdCategory, Plugin plugin );
-
-    /**
      * Modify the order of a diggsubmit
      * @param nSortField The reference field to sort
      * @param nId The digg identifier
