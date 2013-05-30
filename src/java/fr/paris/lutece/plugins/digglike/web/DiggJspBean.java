@@ -316,11 +316,11 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_ACTIVE_COMMENT_AUTHENTIFICATION = "active_comment_authentification";
     private static final String PARAMETER_DISABLE_NEW_DIGG_SUBMIT = "disable_new_digg_submit";
     private static final String PARAMETER_ENABLE_MAIL_NEW_DIGG_SUBMIT = "enable_mail_new_digg_submit";
+    private static final String PARAMETER_ENABLE_MAIL_NEW_COMMENT_SUBMIT = "enable_mail_new_comment_submit";
+    private static final String PARAMETER_ENABLE_MAIL_NEW_REPORTED_SUBMIT = "enable_mail_new_reported_submit";
     private static final String PARAMETER_ID_MAILING_LIST_DIGG_SUBMIT = "id_mailing_list_digg_submit";
-    private static final String PARAMETER_ID_MAILING_LIST_NEW_DIGG_SUBMIT = "id_mailing_list_new_digg_submit";
     private static final String PARAMETER_AUTHORIZED_COMMENT = "authorized_comment";
     private static final String PARAMETER_DISABLE_NEW_COMMENT = "disable_new_comment";
-    private static final String PARAMETER_ID_MAILING_LIST_COMMENT = "id_mailing_list_comment";
     private static final String PARAMETER_ACTIVE_CAPTCHA = "active_captcha";
     private static final String PARAMETER_LIBELLE_VALIDATE_BUTTON = "libelle_validate_button";
     private static final String PARAMETER_ID_CATEGORY = "id_category";
@@ -1584,12 +1584,10 @@ public class DiggJspBean extends PluginAdminPageJspBean
         String strDisableNewDiggSubmit = request.getParameter( PARAMETER_DISABLE_NEW_DIGG_SUBMIT );
         String strEnableMailNewDiggSubmit = request.getParameter( PARAMETER_ENABLE_MAIL_NEW_DIGG_SUBMIT );
         String strIdMailingListDiggSubmit = request.getParameter( PARAMETER_ID_MAILING_LIST_DIGG_SUBMIT );
-        String strIdMailingListNewDiggSubmit = request.getParameter( PARAMETER_ID_MAILING_LIST_NEW_DIGG_SUBMIT );
-
+       
         String strAuthorizedComment = request.getParameter( PARAMETER_AUTHORIZED_COMMENT );
         String strActiveEditorBbcode = request.getParameter( PARAMETER_ACTIVE_EDITOR_BBCODE_ON_COMMENT );
         String strDisableNewComment = request.getParameter( PARAMETER_DISABLE_NEW_COMMENT );
-        String strIdMailingListComment = request.getParameter( PARAMETER_ID_MAILING_LIST_COMMENT );
         String strLimitNumberVote = request.getParameter( PARAMETER_LIMIT_NUMBER_VOTE );
         String strActiveCaptcha = request.getParameter( PARAMETER_ACTIVE_CAPTCHA );
         String strLibelleValidateButton = request.getParameter( PARAMETER_LIBELLE_VALIDATE_BUTTON );
@@ -1607,11 +1605,11 @@ public class DiggJspBean extends PluginAdminPageJspBean
         String strDisplayCommentInDiggSubmitList= request.getParameter( PARAMETER_DISPLAY_COMMENT_IN_DIGG_SUBMIT_LIST );
         String strNumberCommentDisplayInDiggSubmitList= request.getParameter( PARAMETER_NUMBER_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST );
         String strNumberCharCommentDisplayInDiggSubmitList= request.getParameter( PARAMETER_NUMBER_CHAR_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST );
+        String strEnableMailNewCommentSubmit = request.getParameter( PARAMETER_ENABLE_MAIL_NEW_COMMENT_SUBMIT );
+        String strEnableMailNewReportedSubmit = request.getParameter( PARAMETER_ENABLE_MAIL_NEW_REPORTED_SUBMIT );
         
         int nIdVoteType = DiggUtils.getIntegerParameter( strIdVoteType );
         int nIdMailingListDiggSubmit = DiggUtils.getIntegerParameter( strIdMailingListDiggSubmit );
-        int nIdMailingListNewDiggSubmit = DiggUtils.getIntegerParameter( strIdMailingListNewDiggSubmit );
-        int nIdMailingListComment = DiggUtils.getIntegerParameter( strIdMailingListComment );
         int nNumberDayRequired = DiggUtils.getIntegerParameter( strNumberDayRequired );
         int nNumberVoteRequired = DiggUtils.getIntegerParameter( strNumberVoteRequired );
         int nNumberDiggSubmitInTopScore = DiggUtils.getIntegerParameter( strNumberDiggSubmitInTopScore );
@@ -1777,71 +1775,15 @@ public class DiggJspBean extends PluginAdminPageJspBean
         digg.setActiveVoteAuthentification( strActiveVoteAuthentification != null );
         digg.setActiveCommentAuthentification( strActiveCommentAuthentification != null );
         digg.setActiveCaptcha( strActiveCaptcha != null );
-
-        if ( ( strDisableNewDiggSubmit != null ) && strDisableNewDiggSubmit.trim(  ).equals( CONSTANTE_YES_VALUE ) )
-        {
-            digg.setDisableNewDiggSubmit( true );
-            digg.setIdMailingListDiggSubmit( nIdMailingListDiggSubmit );
-        }
-        else
-        {
-            digg.setDisableNewDiggSubmit( false );
-            digg.setIdMailingListDiggSubmit( -1 );
-        }
-
-        if ( ( strEnableMailNewDiggSubmit != null ) &&
-                strEnableMailNewDiggSubmit.trim(  ).equals( CONSTANTE_YES_VALUE ) )
-        {
-            digg.setEnableMailNewDiggSubmit( true );
-            digg.setIdMailingListNewDiggSubmit( nIdMailingListNewDiggSubmit );
-        }
-        else
-        {
-            digg.setEnableMailNewDiggSubmit( false );
-            digg.setIdMailingListNewDiggSubmit( -1 );
-        }
-
-        if ( ( strAuthorizedComment != null ) && strAuthorizedComment.trim(  ).equals( CONSTANTE_YES_VALUE ) )
-        {
-            digg.setAuthorizedComment( true );
-
-            if ( ( strDisableNewComment != null ) && strDisableNewComment.trim(  ).equals( CONSTANTE_YES_VALUE ) )
-            {
-                digg.setDisableNewComment( true );
-                digg.setIdMailingListComment( nIdMailingListComment );
-            }
-            else
-            {
-                digg.setDisableNewComment( false );
-                digg.setIdMailingListComment( -1 );
-            }
-
-            if ( ( strActiveEditorBbcode != null ) && strActiveEditorBbcode.trim(  ).equals( CONSTANTE_YES_VALUE ) )
-            {
-                digg.setActiveEditorBbcode( true );
-            }
-            else
-            {
-                digg.setActiveEditorBbcode( false );
-            }
-        }
-        else
-        {
-            digg.setAuthorizedComment( false );
-            digg.setDisableNewDiggSubmit( false );
-            digg.setIdMailingListDiggSubmit( -1 );
-            digg.setActiveEditorBbcode( false );
-        }
-
-        if ( ( strLimitNumberVote != null ) && strLimitNumberVote.trim(  ).equals( CONSTANTE_YES_VALUE ) )
-        {
-            digg.setLimitNumberVote( true );
-        }
-        else
-        {
-            digg.setLimitNumberVote( false );
-        }
-
+        digg.setDisableNewDiggSubmit( strDisableNewDiggSubmit != null );
+        digg.setEnableMailNewDiggSubmit( strEnableMailNewDiggSubmit!=null );
+        digg.setEnableMailNewCommentSubmit( strEnableMailNewCommentSubmit!=null );
+        digg.setEnableMailNewReportedSubmit( strEnableMailNewReportedSubmit!=null );
+        digg.setIdMailingListDiggSubmit(nIdMailingListDiggSubmit);
+        digg.setAuthorizedComment(strAuthorizedComment != null );
+        digg.setDisableNewComment( strDisableNewComment !=null );
+        digg.setActiveEditorBbcode(strActiveEditorBbcode != null  );
+        digg.setLimitNumberVote( strLimitNumberVote != null  );
         digg.setShowCategoryBlock( strShowCategoryBlock != null );
         digg.setShowTopScoreBlock( strShowTopScoreBlock != null );
         digg.setShowTopCommentBlock( strShowTopCommentBlock != null );

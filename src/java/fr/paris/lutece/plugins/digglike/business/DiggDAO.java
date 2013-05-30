@@ -58,44 +58,44 @@ public final class DiggDAO implements IDiggDAO
         "unavailability_message,workgroup," +
         "id_vote_type,number_vote_required,number_day_required,active_digg_submit_authentification, " +
         "active_vote_authentification,active_comment_authentification,disable_new_digg_submit, " +
-        "authorized_comment, disable_new_comment ,id_mailing_list_digg_submit,id_mailing_list_comment, " +
+        "authorized_comment, disable_new_comment ,id_mailing_list_digg_submit, " +
         "active_captcha,active, date_creation, libelle_validate_button,active_digg_proposition_state,libelle_contribution, " +
         "number_digg_submit_in_top_score,number_digg_submit_in_top_comment,limit_number_vote,number_digg_submit_caracters_shown, " +
         "show_category_block,show_top_score_block,show_top_comment_block,active_digg_submit_paginator,number_digg_submit_per_page,role, " +
-        "enable_new_digg_submit_mail,id_mailing_list_new_digg_submit,header,sort_field,code_theme,confirmation_message,active_editor_bbcode, " +
+        "enable_new_digg_submit_mail,header,sort_field,code_theme,confirmation_message,active_editor_bbcode, " +
         "default_digg,id_default_sort,active_digg_submit_type " + "FROM digglike_digg WHERE id_digg = ?";
     private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_digg ( id_digg,title," +
         "unavailability_message,workgroup," +
         "id_vote_type,number_vote_required,number_day_required,active_digg_submit_authentification, " +
         "active_vote_authentification,active_comment_authentification,disable_new_digg_submit, " +
-        "authorized_comment, disable_new_comment ,id_mailing_list_digg_submit,id_mailing_list_comment, " +
+        "authorized_comment, disable_new_comment ,id_mailing_list_digg_submit, " +
         "active_captcha,active, date_creation, libelle_validate_button,active_digg_proposition_state, " +
         "libelle_contribution,number_digg_submit_in_top_score,number_digg_submit_in_top_comment,limit_number_vote, " +
         "number_digg_submit_caracters_shown,show_category_block,show_top_score_block,show_top_comment_block ,active_digg_submit_paginator,number_digg_submit_per_page,role," +
-        "enable_new_digg_submit_mail,id_mailing_list_new_digg_submit,header,sort_field,code_theme,confirmation_message,active_editor_bbcode,default_digg,id_default_sort,active_digg_submit_type)" +
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        "enable_new_digg_submit_mail,header,sort_field,code_theme,confirmation_message,active_editor_bbcode,default_digg,id_default_sort,active_digg_submit_type)" +
+        "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM digglike_digg WHERE id_digg = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE digglike_digg SET  id_digg=?,title=?," +
         "unavailability_message=?,workgroup=?," +
         "id_vote_type=?,number_vote_required=?,number_day_required=?,active_digg_submit_authentification=?, " +
         "active_vote_authentification=?,active_comment_authentification=?,disable_new_digg_submit=?, " +
-        "authorized_comment=?, disable_new_comment=? ,id_mailing_list_digg_submit=?,id_mailing_list_comment=?, " +
+        "authorized_comment=?, disable_new_comment=? ,id_mailing_list_digg_submit=?, " +
         "active_captcha=?,active=?, date_creation=?, libelle_validate_button=? ,active_digg_proposition_state=?," +
         "libelle_contribution=? ,number_digg_submit_in_top_score=?,number_digg_submit_in_top_comment=?," +
         "limit_number_vote=?,number_digg_submit_caracters_shown=?,  " +
         "show_category_block=?,show_top_score_block=?,show_top_comment_block=?  ," +
         "active_digg_submit_paginator=?,number_digg_submit_per_page=? ,role=? ," +
-        "enable_new_digg_submit_mail=?,id_mailing_list_new_digg_submit=? ,header=? ,sort_field=? ,code_theme=?, confirmation_message=?,active_editor_bbcode=? ," +
+        "enable_new_digg_submit_mail=?,header=? ,sort_field=? ,code_theme=?, confirmation_message=?,active_editor_bbcode=? ," +
         "default_digg=?,id_default_sort=?,active_digg_submit_type=? " + "WHERE id_digg=?";
     private static final String SQL_QUERY_SELECT_DIGG_BY_FILTER = "SELECT id_digg,title," +
         "unavailability_message,workgroup," +
         "id_vote_type,number_vote_required,number_day_required,active_digg_submit_authentification, " +
         "active_vote_authentification,active_comment_authentification,disable_new_digg_submit, " +
-        "authorized_comment, disable_new_comment ,id_mailing_list_digg_submit,id_mailing_list_comment, " +
+        "authorized_comment, disable_new_comment ,id_mailing_list_digg_submit, " +
         "active_captcha,active, date_creation, libelle_validate_button,active_digg_proposition_state,libelle_contribution, " +
         "number_digg_submit_in_top_score,number_digg_submit_in_top_comment,limit_number_vote,number_digg_submit_caracters_shown, " +
         "show_category_block,show_top_score_block,show_top_comment_block, active_digg_submit_paginator,number_digg_submit_per_page,role,  " +
-        "enable_new_digg_submit_mail,id_mailing_list_new_digg_submit,header, sort_field, code_theme, confirmation_message,active_editor_bbcode, " +
+        "enable_new_digg_submit_mail,header, sort_field, code_theme, confirmation_message,active_editor_bbcode, " +
         "default_digg,id_default_sort,active_digg_submit_type " + " FROM digglike_digg ";
     private static final String SQL_QUERY_SELECT_ALL_THEMES = "SELECT id_digg, code_theme FROM digglike_digg";
     private static final String SQL_QUERY_DELETE_ASSOCIATED_CATEGORIE = "DELETE FROM digglike_digg_category WHERE id_digg = ? and id_category= ? ";
@@ -145,47 +145,46 @@ public final class DiggDAO implements IDiggDAO
         Timestamp timestamp = new java.sql.Timestamp( new java.util.Date(  ).getTime(  ) );
 
         digg.setIdDigg( newPrimaryKey( plugin ) );
-        daoUtil.setInt( 1, digg.getIdDigg(  ) );
-        daoUtil.setString( 2, digg.getTitle(  ) );
-        daoUtil.setString( 3, digg.getUnavailabilityMessage(  ) );
-        daoUtil.setString( 4, digg.getWorkgroup(  ) );
-        daoUtil.setInt( 5, digg.getVoteType(  ).getIdVoteType(  ) );
-        daoUtil.setInt( 6, digg.getNumberVoteRequired(  ) );
-        daoUtil.setInt( 7, digg.getNumberDayRequired(  ) );
-        daoUtil.setBoolean( 8, digg.isActiveDiggSubmitAuthentification(  ) );
-        daoUtil.setBoolean( 9, digg.isActiveVoteAuthentification(  ) );
-        daoUtil.setBoolean( 10, digg.isActiveCommentAuthentification(  ) );
-        daoUtil.setBoolean( 11, digg.isDisableNewDiggSubmit(  ) );
-        daoUtil.setBoolean( 12, digg.isAuthorizedComment(  ) );
-        daoUtil.setBoolean( 13, digg.isDisableNewComment(  ) );
-        daoUtil.setInt( 14, digg.getIdMailingListDiggSubmit(  ) );
-        daoUtil.setInt( 15, digg.getIdMailingListComment(  ) );
-        daoUtil.setBoolean( 16, digg.isActiveCaptcha(  ) );
-        daoUtil.setBoolean( 17, digg.isActive(  ) );
-        daoUtil.setTimestamp( 18, timestamp );
-        daoUtil.setString( 19, digg.getLibelleValidateButton(  ) );
-        daoUtil.setBoolean( 20, digg.isActiveDiggPropositionState(  ) );
-        daoUtil.setString( 21, digg.getLibelleContribution(  ) );
-        daoUtil.setInt( 22, digg.getNumberDiggSubmitInTopScore(  ) );
-        daoUtil.setInt( 23, digg.getNumberDiggSubmitInTopComment(  ) );
-        daoUtil.setBoolean( 24, digg.isLimitNumberVote(  ) );
-        daoUtil.setInt( 25, digg.getNumberDiggSubmitCaractersShown(  ) );
-        daoUtil.setBoolean( 26, digg.isShowCategoryBlock(  ) );
-        daoUtil.setBoolean( 27, digg.isShowTopScoreBlock(  ) );
-        daoUtil.setBoolean( 28, digg.isShowTopCommentBlock(  ) );
-        daoUtil.setBoolean( 29, digg.isActiveDiggSubmitPaginator(  ) );
-        daoUtil.setInt( 30, digg.getNumberDiggSubmitPerPage(  ) );
-        daoUtil.setString( 31, digg.getRole(  ) );
-        daoUtil.setBoolean( 32, digg.isEnableMailNewDiggSubmit(  ) );
-        daoUtil.setInt( 33, digg.getIdMailingListNewDiggSubmit(  ) );
-        daoUtil.setString( 34, digg.getHeader(  ) );
-        daoUtil.setInt( 35, digg.getSortField(  ) );
-        daoUtil.setString( 36, digg.getCodeTheme(  ) );
-        daoUtil.setString( 37, digg.getConfirmationMessage(  ) );
-        daoUtil.setBoolean( 38, digg.isActiveEditorBbcode(  ) );
-        daoUtil.setBoolean( 39, digg.isDefaultDigg(  ) );
-        daoUtil.setInt( 40, digg.getIdDefaultSort(  ) );
-        daoUtil.setBoolean( 41, digg.isActiveDiggSubmitType(  ) );
+        int ncpt=1;
+        daoUtil.setInt( ncpt++, digg.getIdDigg(  ) );
+        daoUtil.setString( ncpt++, digg.getTitle(  ) );
+        daoUtil.setString( ncpt++, digg.getUnavailabilityMessage(  ) );
+        daoUtil.setString( ncpt++, digg.getWorkgroup(  ) );
+        daoUtil.setInt( ncpt++, digg.getVoteType(  ).getIdVoteType(  ) );
+        daoUtil.setInt( ncpt++, digg.getNumberVoteRequired(  ) );
+        daoUtil.setInt( ncpt++, digg.getNumberDayRequired(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveDiggSubmitAuthentification(  ) );
+        daoUtil.setBoolean(ncpt++, digg.isActiveVoteAuthentification(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveCommentAuthentification(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isDisableNewDiggSubmit(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isAuthorizedComment(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isDisableNewComment(  ) );
+        daoUtil.setInt( ncpt++, digg.getIdMailingListDiggSubmit(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveCaptcha(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActive(  ) );
+        daoUtil.setTimestamp( ncpt++, timestamp );
+        daoUtil.setString( ncpt++, digg.getLibelleValidateButton(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveDiggPropositionState(  ) );
+        daoUtil.setString( ncpt++, digg.getLibelleContribution(  ) );
+        daoUtil.setInt( ncpt++, digg.getNumberDiggSubmitInTopScore(  ) );
+        daoUtil.setInt( ncpt++, digg.getNumberDiggSubmitInTopComment(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isLimitNumberVote(  ) );
+        daoUtil.setInt( ncpt++, digg.getNumberDiggSubmitCaractersShown(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isShowCategoryBlock(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isShowTopScoreBlock(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isShowTopCommentBlock(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveDiggSubmitPaginator(  ) );
+        daoUtil.setInt( ncpt++, digg.getNumberDiggSubmitPerPage(  ) );
+        daoUtil.setString( ncpt++, digg.getRole(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isEnableMailNewDiggSubmit(  ) );
+        daoUtil.setString( ncpt++, digg.getHeader(  ) );
+        daoUtil.setInt( ncpt++, digg.getSortField(  ) );
+        daoUtil.setString( ncpt++, digg.getCodeTheme(  ) );
+        daoUtil.setString( ncpt++, digg.getConfirmationMessage(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveEditorBbcode(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isDefaultDigg(  ) );
+        daoUtil.setInt( ncpt++, digg.getIdDefaultSort(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveDiggSubmitType(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -211,52 +210,51 @@ public final class DiggDAO implements IDiggDAO
 
         if ( daoUtil.next(  ) )
         {
+        	int ncpt=1;
             digg = new Digg(  );
-            digg.setIdDigg( daoUtil.getInt( 1 ) );
-            digg.setTitle( daoUtil.getString( 2 ) );
-            digg.setUnavailabilityMessage( daoUtil.getString( 3 ) );
-            digg.setWorkgroup( daoUtil.getString( 4 ) );
+            digg.setIdDigg( daoUtil.getInt( ncpt++ ) );
+            digg.setTitle( daoUtil.getString( ncpt++ ) );
+            digg.setUnavailabilityMessage( daoUtil.getString( ncpt++ ) );
+            digg.setWorkgroup( daoUtil.getString( ncpt++ ) );
 
             voteType = new VoteType(  );
-            voteType.setIdVoteType( daoUtil.getInt( 5 ) );
+            voteType.setIdVoteType( daoUtil.getInt( ncpt++ ) );
             digg.setVoteType( voteType );
-
-            digg.setNumberVoteRequired( daoUtil.getInt( 6 ) );
-            digg.setNumberDayRequired( daoUtil.getInt( 7 ) );
-            digg.setActiveDiggSubmitAuthentification( daoUtil.getBoolean( 8 ) );
-            digg.setActiveVoteAuthentification( daoUtil.getBoolean( 9 ) );
-            digg.setActiveCommentAuthentification( daoUtil.getBoolean( 10 ) );
-            digg.setDisableNewDiggSubmit( daoUtil.getBoolean( 11 ) );
-            digg.setAuthorizedComment( daoUtil.getBoolean( 12 ) );
-            digg.setDisableNewComment( daoUtil.getBoolean( 13 ) );
-            digg.setIdMailingListDiggSubmit( daoUtil.getInt( 14 ) );
-            digg.setIdMailingListComment( daoUtil.getInt( 15 ) );
-            digg.setActiveCaptcha( daoUtil.getBoolean( 16 ) );
-            digg.setActive( daoUtil.getBoolean( 17 ) );
-            digg.setDateCreation( daoUtil.getTimestamp( 18 ) );
-            digg.setLibelleValidateButton( daoUtil.getString( 19 ) );
-            digg.setActiveDiggPropositionState( daoUtil.getBoolean( 20 ) );
-            digg.setLibelleContribution( daoUtil.getString( 21 ) );
-            digg.setNumberDiggSubmitInTopScore( daoUtil.getInt( 22 ) );
-            digg.setNumberDiggSubmitInTopComment( daoUtil.getInt( 23 ) );
-            digg.setLimitNumberVote( daoUtil.getBoolean( 24 ) );
-            digg.setNumberDiggSubmitCaractersShown( daoUtil.getInt( 25 ) );
-            digg.setShowCategoryBlock( daoUtil.getBoolean( 26 ) );
-            digg.setShowTopScoreBlock( daoUtil.getBoolean( 27 ) );
-            digg.setShowTopCommentBlock( daoUtil.getBoolean( 28 ) );
-            digg.setActiveDiggSubmitPaginator( daoUtil.getBoolean( 29 ) );
-            digg.setNumberDiggSubmitPerPage( daoUtil.getInt( 30 ) );
-            digg.setRole( daoUtil.getString( 31 ) );
-            digg.setEnableMailNewDiggSubmit( daoUtil.getBoolean( 32 ) );
-            digg.setIdMailingListNewDiggSubmit( daoUtil.getInt( 33 ) );
-            digg.setHeader( daoUtil.getString( 34 ) );
-            digg.setSortField( daoUtil.getInt( 35 ) );
-            digg.setCodeTheme( daoUtil.getString( 36 ) );
-            digg.setConfirmationMessage( daoUtil.getString( 37 ) );
-            digg.setActiveEditorBbcode( daoUtil.getBoolean( 38 ) );
-            digg.setDefaultDigg( daoUtil.getBoolean( 39 ) );
-            digg.setIdDefaultSort( daoUtil.getInt( 40 ) );
-            digg.setActiveDiggSubmitType( daoUtil.getBoolean( 41 ) );
+            
+            digg.setNumberVoteRequired( daoUtil.getInt( ncpt++) );
+            digg.setNumberDayRequired( daoUtil.getInt(ncpt++ ) );
+            digg.setActiveDiggSubmitAuthentification( daoUtil.getBoolean(ncpt++ ) );
+            digg.setActiveVoteAuthentification( daoUtil.getBoolean( ncpt++ ) );
+            digg.setActiveCommentAuthentification( daoUtil.getBoolean( ncpt++ ) );
+            digg.setDisableNewDiggSubmit( daoUtil.getBoolean( ncpt++ ) );
+            digg.setAuthorizedComment( daoUtil.getBoolean( ncpt++ ) );
+            digg.setDisableNewComment( daoUtil.getBoolean( ncpt++ ) );
+            digg.setIdMailingListDiggSubmit( daoUtil.getInt( ncpt++ ) );
+            digg.setActiveCaptcha( daoUtil.getBoolean( ncpt++ ) );
+            digg.setActive( daoUtil.getBoolean(  ncpt++ ) );
+            digg.setDateCreation( daoUtil.getTimestamp(  ncpt++ ) );
+            digg.setLibelleValidateButton( daoUtil.getString(  ncpt++ ) );
+            digg.setActiveDiggPropositionState( daoUtil.getBoolean(  ncpt++ ) );
+            digg.setLibelleContribution( daoUtil.getString(  ncpt++ ) );
+            digg.setNumberDiggSubmitInTopScore( daoUtil.getInt(  ncpt++ ) );
+            digg.setNumberDiggSubmitInTopComment( daoUtil.getInt(  ncpt++ ) );
+            digg.setLimitNumberVote( daoUtil.getBoolean(  ncpt++ ) );
+            digg.setNumberDiggSubmitCaractersShown( daoUtil.getInt(  ncpt++ ) );
+            digg.setShowCategoryBlock( daoUtil.getBoolean(  ncpt++ ) );
+            digg.setShowTopScoreBlock( daoUtil.getBoolean(  ncpt++ ) );
+            digg.setShowTopCommentBlock( daoUtil.getBoolean(  ncpt++ ) );
+            digg.setActiveDiggSubmitPaginator( daoUtil.getBoolean(  ncpt++ ) );
+            digg.setNumberDiggSubmitPerPage( daoUtil.getInt(  ncpt++ ) );
+            digg.setRole( daoUtil.getString(  ncpt++ ) );
+            digg.setEnableMailNewDiggSubmit( daoUtil.getBoolean(  ncpt++ ) );
+            digg.setHeader( daoUtil.getString(  ncpt++ ) );
+            digg.setSortField( daoUtil.getInt(  ncpt++ ) );
+            digg.setCodeTheme( daoUtil.getString(  ncpt++ ) );
+            digg.setConfirmationMessage( daoUtil.getString(  ncpt++ ) );
+            digg.setActiveEditorBbcode( daoUtil.getBoolean(  ncpt++ ) );
+            digg.setDefaultDigg( daoUtil.getBoolean(  ncpt++ ) );
+            digg.setIdDefaultSort( daoUtil.getInt(  ncpt++ ) );
+            digg.setActiveDiggSubmitType( daoUtil.getBoolean(  ncpt++ ) );
         }
 
         daoUtil.free(  );
@@ -287,50 +285,48 @@ public final class DiggDAO implements IDiggDAO
     public void store( Digg digg, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-
+        int ncpt=1;
         digg.setIdDigg( digg.getIdDigg(  ) );
-        daoUtil.setInt( 1, digg.getIdDigg(  ) );
-        daoUtil.setString( 2, digg.getTitle(  ) );
-        daoUtil.setString( 3, digg.getUnavailabilityMessage(  ) );
-        daoUtil.setString( 4, digg.getWorkgroup(  ) );
-        daoUtil.setInt( 5, digg.getVoteType(  ).getIdVoteType(  ) );
-        daoUtil.setInt( 6, digg.getNumberVoteRequired(  ) );
-        daoUtil.setInt( 7, digg.getNumberDayRequired(  ) );
-        daoUtil.setBoolean( 8, digg.isActiveDiggSubmitAuthentification(  ) );
-        daoUtil.setBoolean( 9, digg.isActiveVoteAuthentification(  ) );
-        daoUtil.setBoolean( 10, digg.isActiveCommentAuthentification(  ) );
-        daoUtil.setBoolean( 11, digg.isDisableNewDiggSubmit(  ) );
-        daoUtil.setBoolean( 12, digg.isAuthorizedComment(  ) );
-        daoUtil.setBoolean( 13, digg.isDisableNewComment(  ) );
-        daoUtil.setInt( 14, digg.getIdMailingListDiggSubmit(  ) );
-        daoUtil.setInt( 15, digg.getIdMailingListComment(  ) );
-        daoUtil.setBoolean( 16, digg.isActiveCaptcha(  ) );
-        daoUtil.setBoolean( 17, digg.isActive(  ) );
-        daoUtil.setTimestamp( 18, digg.getDateCreation(  ) );
-        daoUtil.setString( 19, digg.getLibelleValidateButton(  ) );
-        daoUtil.setBoolean( 20, digg.isActiveDiggPropositionState(  ) );
-        daoUtil.setString( 21, digg.getLibelleContribution(  ) );
-        daoUtil.setInt( 22, digg.getNumberDiggSubmitInTopScore(  ) );
-        daoUtil.setInt( 23, digg.getNumberDiggSubmitInTopComment(  ) );
-        daoUtil.setBoolean( 24, digg.isLimitNumberVote(  ) );
-        daoUtil.setInt( 25, digg.getNumberDiggSubmitCaractersShown(  ) );
-        daoUtil.setBoolean( 26, digg.isShowCategoryBlock(  ) );
-        daoUtil.setBoolean( 27, digg.isShowTopScoreBlock(  ) );
-        daoUtil.setBoolean( 28, digg.isShowTopCommentBlock(  ) );
-        daoUtil.setBoolean( 29, digg.isActiveDiggSubmitPaginator(  ) );
-        daoUtil.setInt( 30, digg.getNumberDiggSubmitPerPage(  ) );
-        daoUtil.setString( 31, digg.getRole(  ) );
-        daoUtil.setBoolean( 32, digg.isEnableMailNewDiggSubmit(  ) );
-        daoUtil.setInt( 33, digg.getIdMailingListNewDiggSubmit(  ) );
-        daoUtil.setString( 34, digg.getHeader(  ) );
-        daoUtil.setInt( 35, digg.getSortField(  ) );
-        daoUtil.setString( 36, digg.getCodeTheme(  ) );
-        daoUtil.setString( 37, digg.getConfirmationMessage(  ) );
-        daoUtil.setBoolean( 38, digg.isActiveEditorBbcode(  ) );
-        daoUtil.setBoolean( 39, digg.isDefaultDigg(  ) );
-        daoUtil.setInt( 40, digg.getIdDefaultSort(  ) );
-        daoUtil.setBoolean( 41, digg.isActiveDiggSubmitType(  ) );
-        daoUtil.setInt( 42, digg.getIdDigg(  ) );
+        daoUtil.setInt( ncpt++, digg.getIdDigg(  ) );
+        daoUtil.setString( ncpt++, digg.getTitle(  ) );
+        daoUtil.setString( ncpt++, digg.getUnavailabilityMessage(  ) );
+        daoUtil.setString( ncpt++, digg.getWorkgroup(  ) );
+        daoUtil.setInt( ncpt++, digg.getVoteType(  ).getIdVoteType(  ) );
+        daoUtil.setInt( ncpt++, digg.getNumberVoteRequired(  ) );
+        daoUtil.setInt( ncpt++, digg.getNumberDayRequired(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveDiggSubmitAuthentification(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveVoteAuthentification(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveCommentAuthentification(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isDisableNewDiggSubmit(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isAuthorizedComment(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isDisableNewComment(  ) );
+        daoUtil.setInt( ncpt++, digg.getIdMailingListDiggSubmit(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveCaptcha(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActive(  ) );
+        daoUtil.setTimestamp( ncpt++, digg.getDateCreation(  ) );
+        daoUtil.setString( ncpt++, digg.getLibelleValidateButton(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveDiggPropositionState(  ) );
+        daoUtil.setString( ncpt++, digg.getLibelleContribution(  ) );
+        daoUtil.setInt( ncpt++, digg.getNumberDiggSubmitInTopScore(  ) );
+        daoUtil.setInt( ncpt++, digg.getNumberDiggSubmitInTopComment(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isLimitNumberVote(  ) );
+        daoUtil.setInt( ncpt++, digg.getNumberDiggSubmitCaractersShown(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isShowCategoryBlock(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isShowTopScoreBlock(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isShowTopCommentBlock(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveDiggSubmitPaginator(  ) );
+        daoUtil.setInt( ncpt++, digg.getNumberDiggSubmitPerPage(  ) );
+        daoUtil.setString( ncpt++, digg.getRole(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isEnableMailNewDiggSubmit(  ) );
+        daoUtil.setString( ncpt++, digg.getHeader(  ) );
+        daoUtil.setInt( ncpt++, digg.getSortField(  ) );
+        daoUtil.setString( ncpt++, digg.getCodeTheme(  ) );
+        daoUtil.setString( ncpt++, digg.getConfirmationMessage(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveEditorBbcode(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isDefaultDigg(  ) );
+        daoUtil.setInt( ncpt++, digg.getIdDefaultSort(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveDiggSubmitType(  ) );
+        daoUtil.setInt( ncpt++, digg.getIdDigg(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -348,6 +344,7 @@ public final class DiggDAO implements IDiggDAO
         Digg digg = null;
         VoteType voteType = null;
         List<String> listStrFilter = new ArrayList<String>(  );
+        int ncpt=1;
 
         if ( filter.containsWorkgroupCriteria(  ) )
         {
@@ -399,55 +396,54 @@ public final class DiggDAO implements IDiggDAO
         }
 
         daoUtil.executeQuery(  );
-
+        
         while ( daoUtil.next(  ) )
         {
+        	ncpt=1;
             digg = new Digg(  );
-            digg.setIdDigg( daoUtil.getInt( 1 ) );
-            digg.setTitle( daoUtil.getString( 2 ) );
-            digg.setUnavailabilityMessage( daoUtil.getString( 3 ) );
-            digg.setWorkgroup( daoUtil.getString( 4 ) );
+            digg.setIdDigg( daoUtil.getInt( ncpt++ ) );
+            digg.setTitle( daoUtil.getString( ncpt++ ) );
+            digg.setUnavailabilityMessage( daoUtil.getString( ncpt++ ) );
+            digg.setWorkgroup( daoUtil.getString( ncpt++ ) );
 
             voteType = new VoteType(  );
-            voteType.setIdVoteType( daoUtil.getInt( 5 ) );
+            voteType.setIdVoteType( daoUtil.getInt( ncpt++ ) );
             digg.setVoteType( voteType );
 
-            digg.setNumberVoteRequired( daoUtil.getInt( 6 ) );
-            digg.setNumberDayRequired( daoUtil.getInt( 7 ) );
-            digg.setActiveDiggSubmitAuthentification( daoUtil.getBoolean( 8 ) );
-            digg.setActiveVoteAuthentification( daoUtil.getBoolean( 9 ) );
-            digg.setActiveCommentAuthentification( daoUtil.getBoolean( 10 ) );
-            digg.setDisableNewDiggSubmit( daoUtil.getBoolean( 11 ) );
-            digg.setAuthorizedComment( daoUtil.getBoolean( 12 ) );
-            digg.setDisableNewComment( daoUtil.getBoolean( 13 ) );
-            digg.setIdMailingListDiggSubmit( daoUtil.getInt( 14 ) );
-            digg.setIdMailingListComment( daoUtil.getInt( 15 ) );
-            digg.setActiveCaptcha( daoUtil.getBoolean( 16 ) );
-            digg.setActive( daoUtil.getBoolean( 17 ) );
-            digg.setDateCreation( daoUtil.getTimestamp( 18 ) );
-            digg.setLibelleValidateButton( daoUtil.getString( 19 ) );
-            digg.setActiveDiggPropositionState( daoUtil.getBoolean( 20 ) );
-            digg.setLibelleContribution( daoUtil.getString( 21 ) );
-            digg.setNumberDiggSubmitInTopScore( daoUtil.getInt( 22 ) );
-            digg.setNumberDiggSubmitInTopComment( daoUtil.getInt( 23 ) );
-            digg.setLimitNumberVote( daoUtil.getBoolean( 24 ) );
-            digg.setNumberDiggSubmitCaractersShown( daoUtil.getInt( 25 ) );
-            digg.setShowCategoryBlock( daoUtil.getBoolean( 26 ) );
-            digg.setShowTopScoreBlock( daoUtil.getBoolean( 27 ) );
-            digg.setShowTopCommentBlock( daoUtil.getBoolean( 28 ) );
-            digg.setActiveDiggSubmitPaginator( daoUtil.getBoolean( 29 ) );
-            digg.setNumberDiggSubmitPerPage( daoUtil.getInt( 30 ) );
-            digg.setRole( daoUtil.getString( 31 ) );
-            digg.setEnableMailNewDiggSubmit( daoUtil.getBoolean( 32 ) );
-            digg.setIdMailingListNewDiggSubmit( daoUtil.getInt( 33 ) );
-            digg.setHeader( daoUtil.getString( 34 ) );
-            digg.setSortField( daoUtil.getInt( 35 ) );
-            digg.setCodeTheme( daoUtil.getString( 36 ) );
-            digg.setConfirmationMessage( daoUtil.getString( 37 ) );
-            digg.setActiveEditorBbcode( daoUtil.getBoolean( 38 ) );
-            digg.setDefaultDigg( daoUtil.getBoolean( 39 ) );
-            digg.setIdDefaultSort( daoUtil.getInt( 40 ) );
-            digg.setActiveDiggSubmitType( daoUtil.getBoolean( 41 ) );
+            digg.setNumberVoteRequired( daoUtil.getInt( ncpt++ ) );
+            digg.setNumberDayRequired( daoUtil.getInt( ncpt++ ) );
+            digg.setActiveDiggSubmitAuthentification( daoUtil.getBoolean( ncpt++ ) );
+            digg.setActiveVoteAuthentification( daoUtil.getBoolean( ncpt++ ) );
+            digg.setActiveCommentAuthentification( daoUtil.getBoolean( ncpt++ ) );
+            digg.setDisableNewDiggSubmit( daoUtil.getBoolean( ncpt++ ) );
+            digg.setAuthorizedComment( daoUtil.getBoolean( ncpt++ ) );
+            digg.setDisableNewComment( daoUtil.getBoolean( ncpt++ ) );
+            digg.setIdMailingListDiggSubmit( daoUtil.getInt( ncpt++ ) );
+            digg.setActiveCaptcha( daoUtil.getBoolean( ncpt++ ) );
+            digg.setActive( daoUtil.getBoolean( ncpt++ ) );
+            digg.setDateCreation( daoUtil.getTimestamp( ncpt++ ) );
+            digg.setLibelleValidateButton( daoUtil.getString( ncpt++ ) );
+            digg.setActiveDiggPropositionState( daoUtil.getBoolean( ncpt++ ) );
+            digg.setLibelleContribution( daoUtil.getString( ncpt++ ) );
+            digg.setNumberDiggSubmitInTopScore( daoUtil.getInt( ncpt++ ) );
+            digg.setNumberDiggSubmitInTopComment( daoUtil.getInt( ncpt++ ) );
+            digg.setLimitNumberVote( daoUtil.getBoolean( ncpt++ ) );
+            digg.setNumberDiggSubmitCaractersShown( daoUtil.getInt( ncpt++ ) );
+            digg.setShowCategoryBlock( daoUtil.getBoolean( ncpt++ ) );
+            digg.setShowTopScoreBlock( daoUtil.getBoolean( ncpt++ ) );
+            digg.setShowTopCommentBlock( daoUtil.getBoolean( ncpt++ ) );
+            digg.setActiveDiggSubmitPaginator( daoUtil.getBoolean( ncpt++ ) );
+            digg.setNumberDiggSubmitPerPage( daoUtil.getInt( ncpt++ ) );
+            digg.setRole( daoUtil.getString( ncpt++ ) );
+            digg.setEnableMailNewDiggSubmit( daoUtil.getBoolean( ncpt++ ) );
+            digg.setHeader( daoUtil.getString( ncpt++ ) );
+            digg.setSortField( daoUtil.getInt( ncpt++ ) );
+            digg.setCodeTheme( daoUtil.getString( ncpt++ ) );
+            digg.setConfirmationMessage( daoUtil.getString( ncpt++ ) );
+            digg.setActiveEditorBbcode( daoUtil.getBoolean( ncpt++ ) );
+            digg.setDefaultDigg( daoUtil.getBoolean( ncpt++ ) );
+            digg.setIdDefaultSort( daoUtil.getInt( ncpt++ ) );
+            digg.setActiveDiggSubmitType( daoUtil.getBoolean( ncpt++ ) );
 
             diggList.add( digg );
         }

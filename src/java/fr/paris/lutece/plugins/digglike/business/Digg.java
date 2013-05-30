@@ -64,10 +64,6 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     private static final String TAG_DIGG = "digg";
     private static final String TAG_DIGG_TITLE = "digg-title";
     private static final String TAG_DIGGS_SUBMIT = "diggs-submit";
-    private static final int SORT_BY_DATE = 0;
-    private static final int SORT_BY_SCORE = 1;
-    private static final int SORT_BY_VOTE = 2;
-    private static final int SORT_MANUALLY = 3;
     private static DiggWorkgroupRemovalListener _listenerWorkgroup;
     private static DiggRegularExpressionRemovalListener _listenerRegularExpression;
     private static DiggRoleRemovalListener _listenerRole;
@@ -76,8 +72,6 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     private String _strUnavailabilityMessage;
     private String _strWorkgroup;
     private int _nIdMailingListDiggSubmit;
-    private int _nIdMailingListNewDiggSubmit;
-    private int _nIdMailingListComment;
     private int _nNumberVoteRequired = -1;
     private int _nNumberDayRequired = -1;
     private int _nNumberDiggSubmitInTopScore = -1;
@@ -124,6 +118,12 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     private Integer _nNumberCommentDisplayInDiggSubmitList;
     @DiggAttribute( "numberCharCommentDisplayInDiggSubmitList") 
     private Integer _nNumberCharCommentDisplayInDiggSubmitList;
+    @DiggAttribute( "enableMailNewCommentSubmit") 
+    private boolean _bEnableMailNewCommentSubmit;
+    @DiggAttribute( "enableMailNewReportedSubmit") 
+    private boolean _bEnableMailNewReportedSubmit;
+    
+    
     /**
     * Initialize the Digg
     */
@@ -167,23 +167,7 @@ public class Digg implements AdminWorkgroupResource, RBACResource
         _nIdMailingListDiggSubmit = mailingListId;
     }
 
-    /**
-    *
-    * @return the id of the mailing list associate to the comment
-    */
-    public int getIdMailingListComment(  )
-    {
-        return _nIdMailingListComment;
-    }
 
-    /**
-     * set the id of the mailing list associate to the comment
-     * @param mailingListId the id of the mailing list associate to the comment submit
-     */
-    public void setIdMailingListComment( int mailingListId )
-    {
-        _nIdMailingListComment = mailingListId;
-    }
 
     /**
      *
@@ -837,21 +821,7 @@ public class Digg implements AdminWorkgroupResource, RBACResource
         _strRole = strRole;
     }
 
-    /**
-     * @param _nIdMailingListNewDiggSubmit the _nIdMailingListNewDiggSubmit to set
-     */
-    public void setIdMailingListNewDiggSubmit( int _nIdMailingListNewDiggSubmit )
-    {
-        this._nIdMailingListNewDiggSubmit = _nIdMailingListNewDiggSubmit;
-    }
 
-    /**Gets the digg's header
-     * @return the _nIdMailingListNewDiggSubmit
-     */
-    public int getIdMailingListNewDiggSubmit(  )
-    {
-        return _nIdMailingListNewDiggSubmit;
-    }
 
     /**Sets the digg's header
      * @param strHeader the strHeader to set
@@ -1074,7 +1044,43 @@ public class Digg implements AdminWorkgroupResource, RBACResource
 			Integer _nNumberCommentDisplayInDiggSubmitList) {
 		this._nNumberCharCommentDisplayInDiggSubmitList = _nNumberCommentDisplayInDiggSubmitList;
 	}
-    
-    
-    
+	
+
+	/**
+	*
+	* @return true if a mail must be sent when the new comment is submitted
+	*/
+	public boolean isEnableMailNewCommentSubmit(  )
+	{
+	   return _bEnableMailNewCommentSubmit;
+	}
+
+	/**
+	* set true if a mail must be sent when the new comment is submitted
+	* @param enableMailNewCommentSubmit true if a mail must be sent when the new comment is submitted
+	*/
+	public void setEnableMailNewCommentSubmit( boolean enableMailNewCommentSubmit )
+	{
+	   _bEnableMailNewCommentSubmit = enableMailNewCommentSubmit;
+	}
+	
+	
+	/**
+	*
+	* @return true if a mail must be sent when the new comment is submitted
+	*/
+	public boolean isEnableMailNewReportedSubmit(  )
+	{
+	   return _bEnableMailNewReportedSubmit;
+	}
+
+	/**
+	* set true if a mail must be sent when the new reported is submitted
+	* @param enableMailNewReportedSubmit true if a mail must be sent when the new comment is submitted
+	*/
+	public void setEnableMailNewReportedSubmit( boolean enableMailNewReportedSubmit )
+	{
+	   _bEnableMailNewReportedSubmit = enableMailNewReportedSubmit;
+	}
+	    
 }

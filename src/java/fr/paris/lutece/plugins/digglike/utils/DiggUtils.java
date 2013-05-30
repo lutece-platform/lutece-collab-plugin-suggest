@@ -223,53 +223,7 @@ public final class DiggUtils
         }
     }
 
-    /**
-     * send an email of notification for new digg submit
-     * @param digg the digg
-     * @param diggSubmit the new diggSubmit
-     * @param locale the locale
-     * @param request the request
-     */
-    public static void sendMailNewDiggSubmit( Digg digg, DiggSubmit diggSubmit, Locale locale,
-        HttpServletRequest request )
-    {
-        try
-        {
-            String strSubject = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_NEW_DIGG_SUBMIT_SUBJECT,
-                    locale );
-            String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_NEW_DIGG_SUBMIT_SENDER_NAME,
-                    locale );
-            String strSenderEmail = MailService.getNoReplyEmail(  );
-
-            //we have to replace the src='image? string by a string containing the server url
-            if ( diggSubmit.getDiggSubmitValue(  ).toString(  ).contains( "src='image?" ) )
-            {
-                diggSubmit.setDiggSubmitValue( diggSubmit.getDiggSubmitValue(  ).toString(  )
-                                                         .replace( "src='image?",
-                        "src='" + AppPropertiesService.getProperty( PROPERTY_PROD_URL ) + "/image?" ) );
-            }
-
-            Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( digg.getIdMailingListNewDiggSubmit(  ) );
-            HashMap model = new HashMap(  );
-            model.put( MARK_DIGG, digg );
-            model.put( MARK_DIGG_SUBMIT, diggSubmit );
-            model.put( MARK_BASE_URL, AppPathService.getBaseUrl( request ) );
-
-            HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_NOTIFICATION_MAIL_NEW_DIGG_SUBMIT, locale, model );
-
-            // Send Mail
-            for ( Recipient recipient : listRecipients )
-            {
-                // Build the mail message
-                MailService.sendMailHtml( recipient.getEmail(  ), strSenderName, strSenderEmail, strSubject,
-                    t.getHtml(  ) );
-            }
-        }
-        catch ( Exception e )
-        {
-            AppLogService.error( "Error during Notify new digg submit  : " + e.getMessage(  ) );
-        }
-    }
+   
 
     /**
      * sendMail of notification for new digg submit disable

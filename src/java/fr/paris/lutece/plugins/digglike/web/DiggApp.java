@@ -563,16 +563,14 @@ public class DiggApp implements XPageApplication
 
         if ( digg.isDisableNewDiggSubmit(  ) )
         {
-            DiggUtils.sendNotificationNewDiggSubmit( digg, diggSubmit, request.getLocale(  ), request );
             strMessage = MESSAGE_NEW_DIGG_SUBMIT_DISABLE;
         }
 
-        //send notification to the admin
-        if ( digg.isEnableMailNewDiggSubmit(  ) )
-        {
-            DiggUtils.sendMailNewDiggSubmit( digg, diggSubmit, request.getLocale(  ), request );
+       
+        if(digg.isEnableMailNewDiggSubmit() && digg.getIdMailingListDiggSubmit()!=DiggUtils.CONSTANT_ID_NULL)
+        {	
+        	DiggUtils.sendNotificationNewDiggSubmit( digg, diggSubmit, request.getLocale(  ), request );
         }
-
         Map<String, Object> parameters = new HashMap<String, Object>(  );
         parameters.put( PARAMETER_ID_DIGG, nIdDigg );
         parameters.put( PARAMETER_ACTION, CONSTANT_VIEW_LIST_DIGG_SUBMIT );
@@ -646,7 +644,7 @@ public class DiggApp implements XPageApplication
         CommentSubmit commentSubmit = doInsertComment( request, diggSubmit, strCommentValueDigg, _plugin,
                 luteceUserConnected, nIdParentComment );
 
-        if ( digg.isDisableNewComment(  ) )
+        if(digg.isEnableMailNewCommentSubmit() && digg.getIdMailingListDiggSubmit()!=DiggUtils.CONSTANT_ID_NULL)
         {
             DiggUtils.sendNotificationNewCommentSubmit( digg, commentSubmit, request.getLocale(  ), request );
             strMessage = MESSAGE_NEW_COMMENT_SUBMIT_DISABLE;
@@ -721,9 +719,11 @@ public class DiggApp implements XPageApplication
         reportedMessage.setValue( strReportedValue );
         
         ReportedMessageHome.create(reportedMessage, _plugin);
-        
-        DiggUtils.sendNotificationNewReportedMessage( digg, reportedMessage, request.getLocale(  ), request );
-
+        if(digg.isEnableMailNewReportedSubmit() && digg.getIdMailingListDiggSubmit()!=DiggUtils.CONSTANT_ID_NULL)
+        {	
+       
+        	DiggUtils.sendNotificationNewReportedMessage( digg, reportedMessage, request.getLocale(  ), request );
+        }
         Map<String, Object> parameters = new HashMap<String, Object>(  );
         parameters.put( PARAMETER_ID_SUBMIT_DIGG, nIdSubmitDigg );
         parameters.put( PARAMETER_ID_DIGG, digg.getIdDigg(  ) );
