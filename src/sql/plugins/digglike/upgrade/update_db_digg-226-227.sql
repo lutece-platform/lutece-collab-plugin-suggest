@@ -73,5 +73,11 @@ ALTER TABLE digglike_digg_digg_submit_type ADD CONSTRAINT fk_digglike_digg_digg_
 
 ALTER TABLE digglike_digg_digg_submit_type ADD CONSTRAINT fk_digglike_digg_submit_type FOREIGN KEY (id_type)
 	REFERENCES digglike_digg_submit_type (id_type);
+
+--
+-- Drop Column  active_digg_submit_type
+--	
+ALTER TABLE  digglike_digg  DROP COLUMN active_digg_submit_type; 
+	
 	
 	
