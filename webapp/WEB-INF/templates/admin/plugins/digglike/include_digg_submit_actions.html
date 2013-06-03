@@ -1,17 +1,29 @@
-<label>#i18n{digglike.manageDiggSubmit.labelDiggExport}</label>        
-<@comboWithParams name="id_export_format" default_value="-1" additionalParameters="class=\"input-small\"" items=export_format_list />
-<button class="btn btn-primary btn-small" type="submit" name="export_search_all" ><i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonDiggExport}</button>
-<#if category_list?has_content> 
-	<@comboWithParams name="id_category" items=category_list default_value="-1"  additionalParameters="class=\"input-medium\"" /> 
-	<button class="btn btn-primary btn-small" type="submit" name="mass_change_category" ><i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonModify}</button>
-</#if>
-
-<#if !digg.disableVote>  
- <button class="btn btn-primary btn-small" type="submit" name="mass_enable_vote_action" ><i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonEnableVote}</button>
- <button class="btn btn-primary btn-small" type="submit" name="mass_disable_vote_action" ><i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonDisableVote}</button>
-</#if>
-<button class="btn btn-primary btn-small" type="submit" name="mass_pin_action" ><i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonPinDiggSubmit}</button>
-<button class="btn btn-primary btn-small" type="submit" name="mass_unpin_action" ><i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonUnPinDiggSubmit}</button>
-<a class="btn btn-danger btn-small" title="#i18n{digglike.manageDiggSubmit.buttonAddDiggSubmit}" href="jsp/admin/plugins/digglike/CreateDiggSubmit.jsp?id_digg=${digg.idDigg}">
-			<i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonAddDiggSubmit}
-</a> 
+<a class="btn btn-small btn-primary" href="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altManageComment}">
+	<i class="icon-comment icon-white"></i>
+</a>
+	 
+<#if digg_submit.diggSubmitState.number=disable_state_number>
+	<a class="btn btn-small btn-inverse" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${waiting_for_publish_state_number}#digg${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
+		<i class="icon-pause icon-white"></i>
+	</a>
+	<a class="btn btn-small btn-success" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${publish_state_number}#digg${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altPublish}">
+		<i class="icon-ok icon-white"></i>
+	</a>
+<#elseif digg_submit.diggSubmitState.number=waiting_for_publish_state_number >
+	<a class="btn btn-small btn-danger" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${disable_state_number}#digg${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altDisable}">
+		<i class="icon-remove icon-white"></i>
+	</a>
+ 	<a class="btn btn-small btn-success" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${publish_state_number}#digg${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altPublish}">
+   		<i class="icon-ok icon-white"></i>
+	</a>
+<#elseif digg_submit.diggSubmitState.number=publish_state_number >
+	<a class="btn btn-small btn-danger" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${disable_state_number}#digg${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altDisable}">
+		<i class="icon-remove icon-white"></i>
+	</a>
+	<a class="btn btn-small btn-inverse" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${waiting_for_publish_state_number}#digg${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
+		<i class="icon-pause icon-white"></i>
+	</a>
+</#if>	 
+	<a class="btn btn-small btn-danger" href="jsp/admin/plugins/digglike/ConfirmRemoveDiggSubmit.jsp?id_digg_submit=${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altDelete}">
+		<i class="icon-trash icon-white"></i>
+	</a>

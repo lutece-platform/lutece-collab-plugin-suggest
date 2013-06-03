@@ -83,6 +83,7 @@ public class DiggSubmit
     private int _nDiggSubmitOrder;
     private DiggSubmitType _diggSubmitType;
     private boolean _bDisableVote;
+    private boolean _bDisableComment;
     private boolean _bPinned;
     private List<ReportedMessage> _listReportedMessages;
 
@@ -485,6 +486,26 @@ public class DiggSubmit
     {
         _bDisableVote = bDisable;
     }
+    
+
+	/**
+	 * 
+	 * @return true if the vote is disable
+	 */
+	public boolean isDisableComment( )
+	{
+		return _bDisableComment;
+	}
+
+
+	/**
+	 * set true if the vote is disable
+	 * @param bDisable true if the comment is disable
+	 */
+	public void setDisableComment( boolean bDisable )
+	{
+	    _bDisableComment = bDisable;
+	}
 
     /**
      * 

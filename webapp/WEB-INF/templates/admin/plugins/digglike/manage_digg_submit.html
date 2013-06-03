@@ -7,10 +7,15 @@
 				<input name="page" value="digglike" type="hidden" />
 				<div class="row-fluid">
 					<div class="span12">
-						
+						<ul class="nav nav-tabs">
+							<li class="active"><a href="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp?id_digg=${digg.idDigg}">#i18n{digglike.manageDiggSubmit.title}</a></li>
+							<li><a href="jsp/admin/plugins/digglike/ManageDiggSubmitOrder.jsp?id_digg=${digg.idDigg}">#i18n{digglike.manageDiggSubmitOrder.title}</a></li>
+						</ul>
 						<legend>
-							&nbsp;#i18n{digglike.manageDiggSubmit.title} 
-							<#include "include_digg_submit_actions.html">	
+							&nbsp;
+							<#include "include_digg_submit_mass_actions.html">
+							<#assign include_digg_submit_actions ="include_digg_submit_actions.html">
+							<#assign display_check_actions =true>
 						</legend>
 						<div class="well">
 						

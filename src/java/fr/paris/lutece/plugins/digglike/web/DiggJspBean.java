@@ -367,10 +367,13 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_CONFIRMATION_MESSAGE = "confirmation_message";
     private static final String PARAMETER_ACTIVE_EDITOR_BBCODE_ON_COMMENT = "active_editor_bbcode_on_comment";
     private static final String PARAMETER_ID_DEFAULT_SORT = "id_default_sort";
-    private static final String PARAMETER_ACTIVE_DIGG_SUBMIT_TYPE = "active_digg_submit_type";
+ 
     private static final String PARAMETER_ID_DEFAULT_DIGG = "id_default_digg";
     private static final String PARAMETER_SELECTED_DIGG_SUBMIT="selected_digg_submit";
     private static final String PARAMETER_DISABLE_VOTE="disable_vote";
+    private static final String PARAMETER_DISABLE_COMMENT="disable_vote";
+    private static final String PARAMETER_ENABLE_PIN="enable_pin";
+    
     private static final String PARAMETER_DISPLAY_COMMENT_IN_DIGG_SUBMIT_LIST="display_comment_in_digg_submit_list";
     private static final String PARAMETER_NUMBER_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST="number_comment_display_in_digg_submit_list";
     private static final String PARAMETER_NUMBER_CHAR_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST="number_char_comment_display_in_digg_submit_list";
@@ -762,22 +765,24 @@ public class DiggJspBean extends PluginAdminPageJspBean
 	         }
 	    	
 	    	
-	    	SubmitFilter submitFilter=new SubmitFilter();
-	    	submitFilter.setIdDigg(_nIdDigg);
-	    	DiggUtils.initSubmitFilterBySort(submitFilter,SubmitFilter.SORT_MANUALLY);
-	    	DiggUtils.initSubmitFilterBySort(submitFilter,SubmitFilter.SORT_BY_PINNED_FIRST);
+	    	// build Filter
+	        SubmitFilter filter = DiggUtils.getDiggSubmitFilter( getSearchFields() );
+	        //reinit order
+	        filter.setSortBy(new ArrayList<Integer>());
+	        DiggUtils.initSubmitFilterBySort(filter,SubmitFilter.SORT_MANUALLY);
+	    	DiggUtils.initSubmitFilterBySort(filter,SubmitFilter.SORT_BY_PINNED_FIRST);
 	    	
-	    	listIdDiggSubmitResult = _diggSubmitService.getDiggSubmitListId( submitFilter, getPlugin(  ) );
+	    	listIdDiggSubmitResult = _diggSubmitService.getDiggSubmitListId( filter, getPlugin(  ) );
 	        HashMap model = new HashMap(  );
 	        Paginator paginator = new Paginator( listIdDiggSubmitResult, _nItemsPerPageDiggSubmitOrder,
-	                getJspManageDiggSubmit( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexDiggSubmitOrder );
+	                getJspManageDiggSubmitOrder( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexDiggSubmitOrder );
 	        DiggSubmit diggSubmit;
 
 	        for ( Object idDiggSubmitDisplay : paginator.getPageItems(  ) )
 	        {
 	            diggSubmit = _diggSubmitService.findByPrimaryKey( (Integer) idDiggSubmitDisplay, false, getPlugin(  ) );
-	            submitFilter.setIdDiggSubmit( (Integer) idDiggSubmitDisplay );
-	            diggSubmit.setNumberComment( _commentSubmitService.getCountCommentSubmit( submitFilter, getPlugin() ) );
+	            filter.setIdDiggSubmit( (Integer) idDiggSubmitDisplay );
+	            diggSubmit.setNumberComment( _commentSubmitService.getCountCommentSubmit( filter, getPlugin() ) );
 	            listDiggSubmitDisplay.add( diggSubmit );
 	        }
 	        
@@ -867,6 +872,9 @@ public class DiggJspBean extends PluginAdminPageJspBean
 	    		List<Response> listResponse = new ArrayList<Response>(  );
 	    		String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
 	            String strIdType = request.getParameter( PARAMETER_ID_TYPE_DIGG );
+	            String strDisableVote = request.getParameter( PARAMETER_DISABLE_VOTE);
+	            String strDisableComment = request.getParameter( PARAMETER_DISABLE_COMMENT );
+	            String strEnablePin = request.getParameter(PARAMETER_ENABLE_PIN );
 	            int nIdCategory = DiggUtils.getIntegerParameter( strIdCategory );
 	            int nIdType = DiggUtils.getIntegerParameter( strIdType );
 	            
@@ -922,7 +930,9 @@ public class DiggJspBean extends PluginAdminPageJspBean
 	                diggSubmit.setDiggSubmitType( type );
 	            }
 	            
-	            
+	            diggSubmit.setDisableComment( strDisableComment != null);
+	            diggSubmit.setDisableVote( strDisableVote != null );
+	            diggSubmit.setPinned( strEnablePin !=null );
 	            _diggSubmitService.create( diggSubmit, getPlugin(),getLocale() );
 	          
 	            

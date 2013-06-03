@@ -43,6 +43,7 @@
 	<bean id="digglike.exportDiggSubmitAction" class="fr.paris.lutece.plugins.digglike.web.action.ExportDiggSubmitAction" />
 	<bean id="digglike.massChangeCategoryDiggSubmitAction" class="fr.paris.lutece.plugins.digglike.web.action.MassChangeCategoryDiggSubmitAction" />
 	<bean id="digglike.massChangeVoteDiggSubmitAction" class="fr.paris.lutece.plugins.digglike.web.action.MassChangeVoteDiggSubmitAction" />
+	<bean id="digglike.massChangeCommentDiggSubmitAction" class="fr.paris.lutece.plugins.digglike.web.action.MassChangeCommentDiggSubmitAction" />
 	<bean id="digglike.massPinnedDiggSubmitAction" class="fr.paris.lutece.plugins.digglike.web.action.MassPinnedDiggSubmitAction" />
 
 

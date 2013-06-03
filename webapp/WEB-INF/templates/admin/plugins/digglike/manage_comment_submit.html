@@ -31,7 +31,7 @@
 				<span class="label label-important" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="icon-white icon-remove"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altDisable}</span>
 			</#if></p>
      	
-     	<#if digg.activeDiggSubmitType>
+     	<#if digg.diggSubmitTypes?has_content && digg.diggSubmitTypes?size &gt; 0 >
      		<p>#i18n{digglike.manageCommentSubmit.rowDiggSubmitType}:
      			<#if digg_submit.diggSubmitType?has_content>
      				<strong>${digg_submit.diggSubmitType.name}</strong>

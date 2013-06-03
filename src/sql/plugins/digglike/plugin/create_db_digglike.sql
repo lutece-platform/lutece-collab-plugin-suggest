@@ -205,6 +205,7 @@ CREATE TABLE digglike_digg_submit (
 	number_view int default 0,
 	disable_vote smallint default 0,
 	is_pinned smallint default 0,
+	disable_comment smallint default 0,
 	PRIMARY KEY (id_digg_submit)
 );
 
