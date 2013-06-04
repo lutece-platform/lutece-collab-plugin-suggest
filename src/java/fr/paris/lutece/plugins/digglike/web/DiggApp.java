@@ -1538,7 +1538,7 @@ public class DiggApp implements XPageApplication
         if ( digg.isActive(  ) )
         {
             //Filter by comment
-            if ( digg.isAuthorizedComment(  ) )
+            if ( digg.isAuthorizedComment(  )  && digg.isShowTopCommentBlock())
             {
                 SubmitFilter submmitFilterTopComment = new SubmitFilter(  );
                 submmitFilterTopComment.setIdDigg( digg.getIdDigg(  ) );
@@ -1547,21 +1547,33 @@ public class DiggApp implements XPageApplication
                 
                 DiggUtils.initSubmitFilterBySort( submmitFilterTopComment, SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC );
 
-                List<DiggSubmit> listDiggSubmitTopDay = _diggSubmitService.getDiggSubmitList( submmitFilterTopComment,
+                List<DiggSubmit> listDiggSubmitTopComment = _diggSubmitService.getDiggSubmitList( submmitFilterTopComment,
                         _plugin, digg.getNumberDiggSubmitInTopComment(  ) );
-                model.put( MARK_LIST_SUBMIT_TOP_COMMENT, listDiggSubmitTopDay );
+                model.put( MARK_LIST_SUBMIT_TOP_COMMENT, listDiggSubmitTopComment );
             }
 
             //Filter by popularity
-            SubmitFilter submmitFilterTopPopularity = new SubmitFilter(  );
-            submmitFilterTopPopularity.setIdDigg( digg.getIdDigg(  ) );
-
-            DiggUtils.initSubmitFilterBySort( submmitFilterTopPopularity, SubmitFilter.SORT_BY_SCORE_DESC );
-
-            submmitFilterTopPopularity.setIdDiggSubmitState( _nIdDiggSubmitStatePublish );
-            submmitFilterTopPopularity.setIdCategory(searchFields.getIdFilterCategory());
-            List<DiggSubmit> listDiggSubmitTopPopularity = _diggSubmitService.getDiggSubmitList( submmitFilterTopPopularity,
-                    _plugin, digg.getNumberDiggSubmitInTopScore(  ) );
+            if ( digg.isShowTopScoreBlock())
+            {
+	            SubmitFilter submmitFilterTopPopularity = new SubmitFilter(  );
+	            submmitFilterTopPopularity.setIdDigg( digg.getIdDigg(  ) );
+	
+	            DiggUtils.initSubmitFilterBySort( submmitFilterTopPopularity, SubmitFilter.SORT_BY_SCORE_DESC );
+	
+	            submmitFilterTopPopularity.setIdDiggSubmitState( _nIdDiggSubmitStatePublish );
+	            submmitFilterTopPopularity.setIdCategory(searchFields.getIdFilterCategory());
+	            List<DiggSubmit> listDiggSubmitTopPopularity = _diggSubmitService.getDiggSubmitList( submmitFilterTopPopularity,
+	                    _plugin, digg.getNumberDiggSubmitInTopScore(  ) );
+	            model.put( MARK_LIST_SUBMIT_TOP_POPULARITY_DIGG, listDiggSubmitTopPopularity );
+            }
+            
+            //category Block
+            if(digg.isShowCategoryBlock())
+            {
+            
+            	model.put( MARK_LIST_CATEGORIES_DIGG, digg.getCategories(  ) );
+            }
+            
             ReferenceList refListDiggSort = DiggUtils.getRefListDiggSort( request.getLocale(  ) );
             ReferenceList refListFilterByPeriod = DiggUtils.getRefListFilterByPeriod( request.getLocale(  ) );
 
@@ -1574,8 +1586,8 @@ public class DiggApp implements XPageApplication
             model.put( MARK_CONTENT_DIGG, strContentDigg );
             model.put( MARK_LABEL_DIGG, digg.getLibelleContribution(  ) );
             model.put( MARK_HEADER_DIGG, digg.getHeader(  ) );
-            model.put( MARK_LIST_CATEGORIES_DIGG, digg.getCategories(  ) );
-            model.put( MARK_LIST_SUBMIT_TOP_POPULARITY_DIGG, listDiggSubmitTopPopularity );
+          
+            
             model.put( MARK_AUTHORIZED_COMMENT, digg.isAuthorizedComment(  ) );
             model.put( MARK_AUTHORIZED_VOTE, !digg.isDisableVote() );
             model.put( MARK_NUMBER_SHOWN_CHARACTERS, _nNumberShownCharacters );
