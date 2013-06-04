@@ -253,6 +253,11 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String MARK_NUMBER_SHOWN_CHARACTERS = "number_shown_characters";
     private static final String MARK_LIST_DIGG_SUBMIT_SORT = "digg_submit_sort_list";
     private static final String MARK_DIGG_SUBMIT_SORT_SELECTED = "digg_submit_sort_selected";
+    private static final String MARK_DIGG_SUBMIT_CATEGORY_SELECTED = "digg_submit_category_selected";
+    private static final String MARK_DIGG_SUBMIT_TYPE_SELECTED = "digg_submit_type_selected";
+    private static final String MARK_CATEGORY_FILTER = "category_filter";
+    private static final String MARK_TYPE_FILTER = "type_filter";
+    
     private static final String MARK_REPORT_REF_LIST = "digg_submit_report_list";
     private static final String MARK_REPORT_SELECTED = "digg_submit_report_selected";
     private static final String MARK_AUTHENTIFICATION_ENABLE = "authentification_enable";
@@ -326,6 +331,8 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_ACTIVE_CAPTCHA = "active_captcha";
     private static final String PARAMETER_LIBELLE_VALIDATE_BUTTON = "libelle_validate_button";
     private static final String PARAMETER_ID_CATEGORY = "id_category";
+    private static final String PARAMETER_ID_CATEGORY_FILTER = "id_category_filter";
+     
     private static final String PARAMETER_ID_TYPE_DIGG = "id_type";
     private static final String PARAMETER_ID_DIGG_SUBMIT_STATE = "id_digg_submit_state";
     private static final String PARAMETER_ID_DIGG_STATE = "id_digg_state";
@@ -695,6 +702,21 @@ public class DiggJspBean extends PluginAdminPageJspBean
             listDiggSubmitDisplay.add( diggSubmit );
         }
        
+        
+     	if(  digg.getCategories()!=null && !digg.getCategories().isEmpty() )
+    	{
+    		ReferenceList refCategoryList = DiggUtils.getRefListCategory( digg.getCategories(  ) );
+    		DiggUtils.addEmptyItem(refCategoryList);
+    		model.put( MARK_CATEGORY_LIST, refCategoryList );
+    	 model.put( MARK_DIGG_SUBMIT_CATEGORY_SELECTED, getSearchFields().getIdCategory() );
+    	}
+     	if(  digg.getDiggSubmitTypes()!=null && !digg.getDiggSubmitTypes().isEmpty() )
+    	{
+    		ReferenceList refDiggSubmitTypes = DiggUtils.getRefListType(digg.getDiggSubmitTypes() );
+    		DiggUtils.addEmptyItem(refDiggSubmitTypes);
+    		model.put( MARK_DIGG_SUBMIT_TYPE_LIST, refDiggSubmitTypes );
+    		model.put( MARK_DIGG_SUBMIT_TYPE_SELECTED, getSearchFields().getIdType() );
+    	}
        
         
         model.put( MARK_PAGINATOR, paginator );
@@ -3154,6 +3176,11 @@ public class DiggJspBean extends PluginAdminPageJspBean
         String strIdDigg = request.getParameter( PARAMETER_ID_DIGG );
         String strFirstDateFilter = request.getParameter( PARAMETER_FIRST_DATE_FILTER );
         String strLastDateFilter = request.getParameter( PARAMETER_LAST_DATE_FILTER );
+        String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY_FILTER);
+    	String strIdType = request.getParameter( PARAMETER_ID_TYPE_DIGG);
+    
+    	int nIdCategory=DiggUtils.getIntegerParameter(strIdCategory);
+    	int nIdType=DiggUtils.getIntegerParameter(strIdType);
 
         if ( ( strIdDigg != null ) && !strIdDigg.equals( EMPTY_STRING ) )
         {
@@ -3195,6 +3222,8 @@ public class DiggJspBean extends PluginAdminPageJspBean
         filter.setIdDigg( _nIdDigg );
         filter.setDateFirst( tFirstDateFilter );
         filter.setDateLast( tLastDateFilter );
+        filter.setIdCategory(nIdCategory);
+        filter.setIdType(nIdType);
 
         // number of comments
         filter.setIdDiggSubmitState( DiggSubmit.STATE_PUBLISH );
@@ -3259,6 +3288,35 @@ public class DiggJspBean extends PluginAdminPageJspBean
             model.put( MARK_NUMBER_VOTES, bd.toString(  ) );
             model.put( MARK_NUMBER_COMMENTS, bd2.toString(  ) );
         }
+        
+      	if(  digg.getCategories()!=null && !digg.getCategories().isEmpty() )
+    	{
+    		ReferenceList refCategoryList = DiggUtils.getRefListCategory( digg.getCategories(  ) );
+    		DiggUtils.addEmptyItem(refCategoryList);
+    		model.put( MARK_CATEGORY_LIST, refCategoryList );
+    		model.put( MARK_DIGG_SUBMIT_CATEGORY_SELECTED, nIdCategory );
+    		if(nIdCategory!=DiggUtils.CONSTANT_ID_NULL)
+    		{
+    			model.put( MARK_CATEGORY_FILTER, CategoryHome.findByPrimaryKey(nIdCategory, plugin));
+    			
+    		}
+    	
+    			
+    	}
+     	if(  digg.getDiggSubmitTypes()!=null && !digg.getDiggSubmitTypes().isEmpty() )
+    	{
+    		ReferenceList refDiggSubmitTypes = DiggUtils.getRefListType(digg.getDiggSubmitTypes() );
+    		DiggUtils.addEmptyItem(refDiggSubmitTypes);
+    		model.put( MARK_DIGG_SUBMIT_TYPE_LIST, refDiggSubmitTypes );
+    		model.put( MARK_DIGG_SUBMIT_TYPE_SELECTED,nIdType);
+    		if(nIdType!=DiggUtils.CONSTANT_ID_NULL)
+    		{
+    			model.put( MARK_TYPE_FILTER, DiggSubmitTypeHome.findByPrimaryKey(nIdType, plugin));
+    			
+    		}
+    	}
+       
+       
 
         model.put( MARK_NUMBER_DIGGSUBMIT_DISABLED, nNbDiggSubmitDisabled );
         model.put( MARK_NUMBER_DIGGSUBMIT_WAITING, nNbDiggSubmitWaiting );
@@ -3378,9 +3436,12 @@ public class DiggJspBean extends PluginAdminPageJspBean
     {
     	
     	String strIdDigg = request.getParameter( PARAMETER_ID_DIGG);
-        String strIdDiggSumitState = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_STATE );
+    	String strIdDiggSumitState = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_STATE );
         String strIdDiggSubmitSort = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_SORT );
         String strIdDiggSubmitReport = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_REPORT );
+        String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY_FILTER);
+    	String strIdType = request.getParameter( PARAMETER_ID_TYPE_DIGG);
+    
         String strQuery = request.getParameter( PARAMETER_QUERY );
     	
         if ( ( strIdDigg != null ) && !strIdDigg.equals( EMPTY_STRING ) )
@@ -3399,6 +3460,14 @@ public class DiggJspBean extends PluginAdminPageJspBean
         if ( ( strIdDiggSumitState != null ) && !strIdDiggSumitState.equals( EMPTY_STRING ) )
         {
         	getSearchFields().setIdDiggSumitState(DiggUtils.getIntegerParameter( strIdDiggSumitState ));
+        }
+        if ( ( strIdCategory != null ) && !strIdCategory.equals( EMPTY_STRING ) )
+        {
+        	getSearchFields().setIdCategory(DiggUtils.getIntegerParameter( strIdCategory ));
+        }
+        if ( ( strIdType != null ) && !strIdType.equals( EMPTY_STRING ) )
+        {
+        	getSearchFields().setIdType(DiggUtils.getIntegerParameter( strIdType ));
         }
 
         if ( strQuery != null )

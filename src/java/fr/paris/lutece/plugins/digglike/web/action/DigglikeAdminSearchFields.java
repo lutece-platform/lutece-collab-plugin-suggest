@@ -36,6 +36,8 @@ package fr.paris.lutece.plugins.digglike.web.action;
 import java.io.Serializable;
 import java.util.List;
 
+import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
+
 /**
  * Visualization of all needed session values. Many features depends on search
  * result or paginator. Those fields may be required for actions.
@@ -49,9 +51,11 @@ public final class DigglikeAdminSearchFields implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private int _nIdDigg;
-	private int _nIdDiggSumitState=-1;
-	private int _nIdDiggSubmitSort=-1;
-	private int _nIdDiggSubmitReport=-1;
+	private int _nIdDiggSumitState=DiggUtils.CONSTANT_ID_NULL;
+	private int _nIdDiggSubmitSort=DiggUtils.CONSTANT_ID_NULL;
+	private int _nIdDiggSubmitReport=DiggUtils.CONSTANT_ID_NULL;
+	private int _nIdCategory=DiggUtils.CONSTANT_ID_NULL;
+	private int _nIdType=DiggUtils.CONSTANT_ID_NULL;
 	private String _strQuery;
 	private  List<String> _selectedDiggSubmit;
 
@@ -101,6 +105,22 @@ public final class DigglikeAdminSearchFields implements Serializable {
 
 	public void setIdDigg(int _nIdDigg) {
 		this._nIdDigg = _nIdDigg;
+	}
+
+	public int getIdCategory() {
+		return _nIdCategory;
+	}
+
+	public void setIdCategory(int _nIdCategory) {
+		this._nIdCategory = _nIdCategory;
+	}
+
+	public int getIdType() {
+		return _nIdType;
+	}
+
+	public void setIdType(int _nIdType) {
+		this._nIdType = _nIdType;
 	}
 
 }

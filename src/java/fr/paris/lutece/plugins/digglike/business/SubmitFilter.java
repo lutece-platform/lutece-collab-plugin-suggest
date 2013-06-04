@@ -71,6 +71,7 @@ public class SubmitFilter
     private int _nIdDiggSubmit = ALL_INT;
     private int _nIdEntry = ALL_INT;
     private int _nIdCategory = ALL_INT;
+    private int _nIdType = ALL_INT;
     private int _nIdParent = ALL_INT;
     private int _nIdReported = ALL_INT;
     private Timestamp _tDateFirst;
@@ -502,5 +503,35 @@ public class SubmitFilter
     {
         return ( _nIdPinned != ALL_INT );
     }
+    
+    
+    
+    /**
+    *
+    * @return  the id of the type insert in the filter
+    */
+   public int getIdType(  )
+   {
+       return _nIdType;
+   }
+
+   /**
+    * set  the id of the type in the filter
+    * @param idType the id of the type  to insert in the filter
+    */
+   public void setIdType( int idType )
+   {
+       _nIdType = idType;
+   }
+
+   /**
+    *
+    * @return true if the filter contain an id of type
+    */
+   public boolean containsIdType(  )
+   {
+       return ( _nIdType != ALL_INT );
+   }
+
 
 }

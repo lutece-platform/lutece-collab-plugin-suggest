@@ -85,13 +85,7 @@ public class MassChangeCategoryDiggSubmitAction extends AbstractPluginAction<Dig
     @Override
     public void fillModel( HttpServletRequest request, AdminUser adminUser, Map<String, Object> model )
     {
-    	Digg digg= model.containsKey(MARK_DIGG)?(Digg)model.get(MARK_DIGG):null;
-    	if( digg!=null && digg.getCategories()!=null && !digg.getCategories().isEmpty() )
-    	{
-    		ReferenceList refCategoryList = DiggUtils.getRefListCategory( digg.getCategories(  ) );
-    		DiggUtils.addEmptyItem(refCategoryList);
-    		model.put( MARK_CATEGORY_LIST, refCategoryList );
-    	}
+   
     }
 
     /**

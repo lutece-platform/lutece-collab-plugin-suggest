@@ -57,6 +57,7 @@ public class DiggSubmit
     public static final int STATE_PUBLISH = 3;
     private static final String TAG_DIGG_SUBMIT = "digg-submit";
     private static final String TAG_DIGG_SUBMIT_CATEGORY = "digg-submit-category";
+    private static final String TAG_DIGG_SUBMIT_TYPE = "digg-submit-type";
     private static final String TAG_DIGG_SUBMIT_DATE_RESPONSE = "digg-submit-date-response";
     private static final String TAG_DIGG_SUBMIT_NUMBER_VOTE = "digg-submit-number-vote";
     private static final String TAG_DIGG_SUBMIT_NUMBER_COMMENT = "digg-submit-number-comment";
@@ -394,16 +395,9 @@ public class DiggSubmit
         XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_NUMBER_VOTE, Integer.toString( getNumberVote(  ) ) );
         XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_NUMBER_COMMENT, Integer.toString( getNumberComment(  ) ) );
         XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_VALUE, getDiggSubmitValue(  ) );
-
-        if ( getCategory(  ) != null )
-        {
-            XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_CATEGORY, getCategory(  ).getTitle(  ) );
-        }
-        else
-        {
-            XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_CATEGORY, DiggUtils.EMPTY_STRING );
-        }
-
+        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_CATEGORY, getCategory(  ) != null?getCategory(  ).getTitle(  ): DiggUtils.EMPTY_STRING);
+        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_TYPE, getDiggSubmitType(  ) != null?getDiggSubmitType(  ).getName(  ): DiggUtils.EMPTY_STRING );
+        
         XmlUtil.beginElement( strXml, TAG_DIGGS_SUBMIT_COMMENTS );
 
         if ( ( getComments(  ) != null ) && ( getComments(  ).size(  ) != 0 ) )

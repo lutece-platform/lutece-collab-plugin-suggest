@@ -47,6 +47,14 @@
 					<input type="text" name="first_date_filter" id="first_date_filter" class="input-small" value="<#if first_date_filter?has_content>${first_date_filter?date}</#if>" />
 					<span class="help-text">#i18n{digglike.statistics.labelAnd}</span>
 					<input type="text" name="last_date_filter" id="last_date_filter" class="input-small" value="<#if last_date_filter?has_content>${last_date_filter?if_exists?date}</#if>" />
+					<#if category_list?has_content>
+						<label for="id_category">#i18n{digglike.statistics.labelDiggSubmitCategory}</label>
+						<@comboWithParams name="id_category_filter" default_value="${digg_submit_category_selected}" additionalParameters="class=\"input-small\"" items=category_list />
+					</#if>
+					<#if digg_submit_type_list?has_content>
+						<label for="id_type">#i18n{digglike.statistics.labelDiggSubmitType}</label>
+						 <@comboWithParams name="id_type" default_value="${digg_submit_type_selected}" additionalParameters="class=\"input-small\"" items=digg_submit_type_list />
+					</#if>
 					<div class="form-actions">
 						<button class="btn btn-primary btn-small" type="submit" >
 							<i class="icon-search icon-white"></i>&nbsp;#i18n{digglike.statistics.buttonSearch}
@@ -59,6 +67,12 @@
 					<#if digg?exists>
 					<fieldset>
 					<legend> #i18n{digglike.statistics.title}: ${digg.title}</legend>
+					<#if category_filter?has_content>	
+						<p><strong>#i18n{digglike.statistics.DiggSubmitCategory}</strong>: ${category_filter.title}</p>
+					</#if>	
+					<#if type_filter?has_content>
+						<p><strong>#i18n{digglike.statistics.DiggSubmitType}</strong>: ${type_filter.name}</p>
+					</#if>
 					<p><strong>#i18n{digglike.statistics.DiggSubmitNumber}</strong>: ${number_diggsubmit_published} / ${number_diggsubmit_waiting} / ${number_diggsubmit_disabled}</p> 
 					<p><strong>#i18n{digglike.statistics.labelNbCommentsPerDiggsubmit}</strong>: ${number_comments!0}</p> 
 					<p><strong>#i18n{digglike.statistics.labelNbVotesPerDiggsubmit}</strong>: ${number_votes!0}</p> 

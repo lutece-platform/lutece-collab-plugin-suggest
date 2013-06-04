@@ -19,7 +19,16 @@
 						</legend>
 						<div class="well">
 						
-							
+								<#if category_list?has_content>
+									<label for="id_category">#i18n{digglike.manageDiggSubmit.labelDiggSubmitCategory}</label>
+									<@comboWithParams name="id_category_filter" default_value="${digg_submit_category_selected}" additionalParameters="class=\"input-small\"" items=category_list />
+								</#if>
+								<#if digg_submit_type_list?has_content>
+									<label for="id_type">#i18n{digglike.manageDiggSubmit.labelDiggSubmitType}</label>
+									<@comboWithParams name="id_type" default_value="${digg_submit_type_selected}" additionalParameters="class=\"input-small\"" items=digg_submit_type_list />
+								</#if>
+		
+								
 								<label for="id_digg_submit_state">#i18n{digglike.manageDiggSubmit.labelDiggSubmitState}</label>
 								<@comboWithParams name="id_digg_submit_state" default_value="${digg_submit_state_selected}" additionalParameters="class=\"input-normal\"" items=digg_submit_state_list />
 								<label for="id_digg_submit_report">#i18n{digglike.manageDiggSubmit.labelDiggSubmitReport}</label>
@@ -27,7 +36,6 @@
 								<label for="id_digg_submit_report">&nbsp;</label>
 								<span class="input-append">
 									<@comboWithParams name="id_digg_submit_sort" default_value="${digg_submit_sort_selected}" additionalParameters="class=\"input-xlarge\"" items=digg_submit_sort_list />
-									<button class="btn btn-primary" type="submit" id="button_submit"><i class="icon-filter icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonSort}</button>
 								</span>
 								<label for="query"><!--#i18n{digglike.manageDiggSubmit.buttonSearch}-->&nbsp;</label>
 								<input type="hidden" name="page" value="search">

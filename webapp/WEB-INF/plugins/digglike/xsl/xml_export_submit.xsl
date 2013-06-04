@@ -41,6 +41,9 @@
 		<digg-submit-category>
 			<xsl:value-of select="digg-submit-category"/>
 		</digg-submit-category>
+		<digg-submit-type>
+			<xsl:value-of select="digg-submit-type"/>
+		</digg-submit-type>
 	</digg-submit>
 </xsl:template>
 </xsl:stylesheet>

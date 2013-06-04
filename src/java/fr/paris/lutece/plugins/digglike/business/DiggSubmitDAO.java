@@ -55,6 +55,7 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
     private static final String SQL_FILTER_ID_DIGG_SUBMIT = " d.id_digg_submit = ? ";
     private static final String SQL_FILTER_ID_DIGG = " d.id_digg = ? ";
     private static final String SQL_FILTER_ID_CATEGORY = " d.id_category = ? ";
+    private static final String SQL_FILTER_ID_TYPE = " d.digg_submit_type = ? ";
     private static final String SQL_FILTER_ID_DIGG_SUBMIT_STATE = " d.id_state = ? ";
     private static final String SQL_FILTER_DATE_FIRST_SUBMIT = " d.date_response >= ? ";
     private static final String SQL_FILTER_DATE_LAST_SUBMIT = " d.date_response <= ? ";
@@ -335,6 +336,12 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         {
             listStrFilter.add( SQL_FILTER_IS_PINNED );
         }
+        
+        if ( filter.containsIdType() )
+        {
+            listStrFilter.add( SQL_FILTER_ID_TYPE );
+        }
+
 
         if ( filter.containsSortBy(  ) )
         {
@@ -396,6 +403,11 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         if ( filter.containsIdPinned())
         {
             daoUtil.setInt( nIndex, filter.getIdPinned());
+            nIndex++;
+        }
+        if ( filter.containsIdType())
+        {
+            daoUtil.setInt( nIndex, filter.getIdType());
             nIndex++;
         }
 
@@ -465,6 +477,10 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         if ( filter.containsIdPinned(  ) )
         {
             listStrFilter.add( SQL_FILTER_IS_PINNED );
+        }
+        if ( filter.containsIdType() )
+        {
+            listStrFilter.add( SQL_FILTER_ID_TYPE );
         }
 
         if ( filter.containsSortBy(  ) )
@@ -541,6 +557,11 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
             daoUtil.setInt( nIndex, filter.getIdPinned());
             nIndex++;
         }
+        if ( filter.containsIdType())
+        {
+            daoUtil.setInt( nIndex, filter.getIdType());
+            nIndex++;
+        }
 
         daoUtil.executeQuery(  );
 
@@ -613,6 +634,10 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         {
             listStrFilter.add( SQL_FILTER_LUTECE_USER_KEY );
         }
+        if ( filter.containsIdType() )
+        {
+            listStrFilter.add( SQL_FILTER_ID_TYPE );
+        }
 
         String strSQL = DiggUtils.buildRequestWithFilter( SQL_QUERY_SELECT_COUNT_BY_FILTER, listStrFilter, null );
         DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
@@ -674,6 +699,11 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         if ( filter.containsLuteceUserKey(  ) )
         {
             daoUtil.setString( nIndex, filter.getLuteceUserKey(  ) );
+            nIndex++;
+        }
+        if ( filter.containsIdType())
+        {
+            daoUtil.setInt( nIndex, filter.getIdType());
             nIndex++;
         }
 

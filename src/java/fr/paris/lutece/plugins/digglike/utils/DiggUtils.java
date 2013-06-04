@@ -1522,6 +1522,7 @@ public final class DiggUtils
     		pinnedFilter.setDateFirst(filter.getDateFirst());
     		pinnedFilter.setDateLast(filter.getDateLast());
     		pinnedFilter.setIdCategory(filter.getIdCategory());
+    		pinnedFilter.setIdType(filter.getIdType());
     		pinnedFilter.setIdReported(filter.getIdReported());
     		pinnedFilter.setIdDiggSubmitState(filter.getIdDiggSubmitState());
     		pinnedFilter.setIdPinned(SubmitFilter.ID_TRUE);
@@ -1537,6 +1538,8 @@ public final class DiggUtils
         filter.setIdDigg( searchFields.getIdDigg() );
         filter.setIdDiggSubmitState( searchFields.getIdDiggSumitState() );
         filter.setIdReported( searchFields.getIdDiggSubmitReport() );
+        filter.setIdCategory(searchFields.getIdCategory());
+        filter.setIdType(searchFields.getIdType());
         DiggUtils.initSubmitFilterBySort( filter, searchFields.getIdDiggSubmitSort() );
         //add sort by pinned first
         DiggUtils.initSubmitFilterBySort(filter, SubmitFilter.SORT_BY_PINNED_FIRST);
