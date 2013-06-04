@@ -93,8 +93,8 @@ INSERT INTO `digglike_action` (`id_action`, `name_key`, `description_key`, `acti
 	(7, 'digglike.action.copy.name', 'digglike.action.copy.description', 'jsp/admin/plugins/digglike/DoCopyDigg.jsp', 'icon-plus-sign icon-white', 'COPY', 0),
 	(8, 'digglike.action.copy.name', 'digglike.action.copy.description', 'jsp/admin/plugins/digglike/DoCopyDigg.jsp', 'icon-plus-sign icon-white', 'COPY', 1),
 	(9, 'digglike.action.delete.name', 'digglike.action.delete.description', 'jsp/admin/plugins/digglike/ConfirmRemoveDigg.jsp', 'icon-trash icon-white', 'DELETE', 0),
-	(10, 'digglike.action.updateAllDiggSubmit.name', 'digglike.action.updateAllDiggSubmit.description', 'jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp', 'icon-cog icon-white', 'UPDATE_ALL_DIGG_SUBMIT', 1),
-	(11, 'digglike.action.updateAllDiggSubmit.name', 'digglike.action.updateAllDiggSubmit.description', 'jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp', 'icon-cog icon-white', 'UPDATE_ALL_DIGG_SUBMIT', 0);
+	(10, 'digglike.action.updateAllDiggSubmit.name', 'digglike.action.updateAllDiggSubmit.description', 'jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp', 'icon-refresh icon-white', 'UPDATE_ALL_DIGG_SUBMIT', 1),
+	(11, 'digglike.action.updateAllDiggSubmit.name', 'digglike.action.updateAllDiggSubmit.description', 'jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp', 'icon-refresh icon-white', 'UPDATE_ALL_DIGG_SUBMIT', 0);
 	
 	
 	
