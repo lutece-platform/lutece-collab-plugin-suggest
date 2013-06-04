@@ -1,54 +1,124 @@
 <div class="row-fluid">
 	<div class="span12">
-		<fieldset>
-			<form class="form-inline pull-left" action="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp" method="post" name="" id="filter">
-				<input type="hidden" name="id_digg" value="${digg.idDigg}" />
-				<input type="hidden" name="session" value="session" />
-				<input name="page" value="digglike" type="hidden" />
-				<div class="row-fluid">
-					<div class="span12">
-						<ul class="nav nav-tabs">
-							<li class="active"><a href="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp?id_digg=${digg.idDigg}">#i18n{digglike.manageDiggSubmit.title}</a></li>
-							<li><a href="jsp/admin/plugins/digglike/ManageDiggSubmitOrder.jsp?id_digg=${digg.idDigg}">#i18n{digglike.manageDiggSubmitOrder.title}</a></li>
-						</ul>
-						<legend>
-							&nbsp;
-							<#include "include_digg_submit_mass_actions.html">
-							<#assign include_digg_submit_actions ="include_digg_submit_actions.html">
-							<#assign display_check_actions =true>
-						</legend>
-						<div class="well">
-						
-								<#if category_list?has_content>
-									<label for="id_category">#i18n{digglike.manageDiggSubmit.labelDiggSubmitCategory}</label>
-									<@comboWithParams name="id_category_filter" default_value="${digg_submit_category_selected}" additionalParameters="class=\"input-small\"" items=category_list />
-								</#if>
-								<#if digg_submit_type_list?has_content>
-									<label for="id_type">#i18n{digglike.manageDiggSubmit.labelDiggSubmitType}</label>
-									<@comboWithParams name="id_type" default_value="${digg_submit_type_selected}" additionalParameters="class=\"input-small\"" items=digg_submit_type_list />
-								</#if>
-		
-								
-								<label for="id_digg_submit_state">#i18n{digglike.manageDiggSubmit.labelDiggSubmitState}</label>
-								<@comboWithParams name="id_digg_submit_state" default_value="${digg_submit_state_selected}" additionalParameters="class=\"input-normal\"" items=digg_submit_state_list />
-								<label for="id_digg_submit_report">#i18n{digglike.manageDiggSubmit.labelDiggSubmitReport}</label>
-								<@comboWithParams name="id_digg_submit_report" default_value="${digg_submit_report_selected}" additionalParameters="class=\"input-small\"" items=digg_submit_report_list />
-								<label for="id_digg_submit_report">&nbsp;</label>
-								<span class="input-append">
-									<@comboWithParams name="id_digg_submit_sort" default_value="${digg_submit_sort_selected}" additionalParameters="class=\"input-xlarge\"" items=digg_submit_sort_list />
-								</span>
-								<label for="query"><!--#i18n{digglike.manageDiggSubmit.buttonSearch}-->&nbsp;</label>
-								<input type="hidden" name="page" value="search">
-								<span class="input-append">
-									<input type="text" name="query" placeholder="#i18n{digglike.manageDiggSubmit.labelSearch}" class="input-xlarge" value="<#if query?exists>${query}</#if>" style="margin-bottom:5px;" title="#i18n{digglike.manageDiggSubmit.buttonSearch}" />
-									<button class="btn btn-primary" type="submit"><i class="icon-search icon-white"></i></button>
-								</span>
-							
+		<ul class="nav nav-tabs">
+			<li class="active">
+				<a href="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp?id_digg=${digg.idDigg}">
+					#i18n{digglike.manageDiggSubmit.title}
+				</a>
+			</li>
+			<li>
+				<a href="jsp/admin/plugins/digglike/ManageDiggSubmitOrder.jsp?id_digg=${digg.idDigg}">
+					#i18n{digglike.manageDiggSubmitOrder.title}
+				</a>
+			</li>
+		</ul>
+		<@paginationAdmin paginator=paginator combo=1 />
+		<form class="form-inline" action="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp" method="post" name="" id="filter">
+			<input type="hidden" name="id_digg" value="${digg.idDigg}" />
+			<input type="hidden" name="session" value="session" />
+			<input name="page" value="digglike" type="hidden" />
+			<#include "include_digg_submit_mass_actions.html">
+			
+			<#assign include_digg_submit_actions ="include_digg_submit_actions.html">
+			
+			<#assign display_check_actions =true>
+			
+			<div id="myModalSearch" class="" tabindex="-1" role="dialog" aria-labelledby="myModalLabelSearch" aria-hidden="true">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+					<h3 id="myModalLabel">#i18n{digglike.manageDiggSubmit.buttonSearch}</h3>
+				</div>
+				<div class="modal-body">
+					<#if category_list?has_content>
+						<div class="control-group">
+							<label class="control-label" for="id_category">#i18n{digglike.manageDiggSubmit.labelDiggSubmitCategory}</label>
+							<div class="controls">
+							<@comboWithParams name="id_category_filter" default_value="${digg_submit_category_selected}" additionalParameters="class=\"input-xlarge\"" items=category_list />
+							</div>
+						</div>
+					</#if>
+					<#if digg_submit_type_list?has_content>
+						<div class="control-group">
+							<label class="control-label" for="id_type">#i18n{digglike.manageDiggSubmit.labelDiggSubmitType}</label>
+							<div class="controls">
+								<@comboWithParams name="id_type" default_value="${digg_submit_type_selected}" additionalParameters="class=\"input-xlarge\"" items=digg_submit_type_list />
+							</div>
+						</div>
+					</#if>
+					<div class="control-group">
+						<label class="control-label" for="id_digg_submit_state">#i18n{digglike.manageDiggSubmit.labelDiggSubmitState}</label>
+						<div class="controls">
+							<@comboWithParams name="id_digg_submit_state" default_value="${digg_submit_state_selected}" additionalParameters="class=\"input-normal\"" items=digg_submit_state_list />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="id_digg_submit_report">#i18n{digglike.manageDiggSubmit.labelDiggSubmitReport}</label>
+						<div class="controls">
+							<@comboWithParams name="id_digg_submit_report" default_value="${digg_submit_report_selected}" additionalParameters="class=\"input-xlarge\"" items=digg_submit_report_list />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="id_digg_submit_report">#i18n{digglike.manageDiggSubmit.labelDiggSubmitSort}</label>
+						<div class="controls">
+							<@comboWithParams name="id_digg_submit_sort" default_value="${digg_submit_sort_selected}" additionalParameters="class=\"input-xlarge\"" items=digg_submit_sort_list />
+						</div>	
+					</div>	
+					<div class="control-group">
+						<label class="control-label" for="query">#i18n{digglike.manageDiggSubmit.buttonSearch}</label>
+						<div class="controls">
+							<input type="hidden" name="page" value="search" />
+							<input type="text" name="query" placeholder="#i18n{digglike.manageDiggSubmit.labelSearch}" class="input-xlarge" value="<#if query?exists>${query}</#if>" title="#i18n{digglike.manageDiggSubmit.buttonSearch}">
 						</div>
 					</div>
 				</div>
-				<#include "include_digg_submit_list.html">
-			</form>
-		</fieldset>	
+				<div class="modal-footer">
+					<button class="btn" data-dismiss="modal" aria-hidden="true">
+						<i class="icon-remove-circle"></i>&nbsp;#i18n{portal.util.labelCancel}
+					</button>
+					<button class="btn btn-primary btn-small offset1" type="submit">
+						<i class="icon-search icon-white"></i>&nbsp;#i18n{directory.manage_directory_record.button_search}
+					</button>
+					<input type="hidden" name="search" value="Rechercher" />
+				</div>
+			</div>
+			<#include "include_digg_submit_list.html">
+		</form>
 	</div>
 </div>
+
+<script>
+$(document).ready(function () {
+	/* Search modal */	
+	$("#myModalSearch").addClass("modal fade");
+	$("#myModalExport").addClass("modal fade");
+	$("#myModalCategory").addClass("modal fade");
+
+	/* Mass action dropdown menu */	
+	 $('.dropdown-toggle').dropdown();	
+	
+	/* 
+		$(".full").toggle();
+		$(".preview").click(function(){
+			$(this).toggle();
+			$(this).prev().toggle();
+		}); 
+		$(".full").click(function(){
+			$(this).toggle();
+			$(this).next().toggle();
+		});
+		*/
+		/*
+		var toGo = location.hash;
+		$('html, body').animate( {'scrollTop':$(toGo).offset().top - 120 },0 );
+		*/
+		// For multi selection
+		$( 'input[type="checkbox"]#select-ids' ).click( function(  ) {
+			if ( $( this ).attr( 'checked' ) ) {
+				$( 'input[type="checkbox"].selected-id' ).attr( 'checked', true );
+			} else {
+				$( 'input[type="checkbox"].selected-id' ).attr( 'checked', false );
+			}
+		} );
+		
+	});
+</script>

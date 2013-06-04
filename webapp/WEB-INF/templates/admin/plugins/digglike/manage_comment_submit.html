@@ -4,23 +4,34 @@
 		<div class="span3">
 		<fieldset>
 		<legend>#i18n{digglike.manageCommentSubmit.rowTitleDiggSubmitTitle}</legend>
-		<p>
-		<#if digg_submit.reported>
-			<span class="label label-warning">#i18n{digglike.manageDiggSubmit.altWarning}</span>
-		</#if>
-		</p>
-		<p>
-			<a href="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp?id_digg=${digg.idDigg}#digg${digg_submit.idDiggSubmit}" title="" >
-			<#if digg_submit.diggSubmitTitle?exists>
+		<p class="lead"><#if digg_submit.diggSubmitTitle?exists>
 				<#if digg_submit.diggSubmitTitle?length &gt; 100>
 					${digg_submit.diggSubmitTitle?substring(0,100)}... 
 				<#else>
 					${digg_submit.diggSubmitTitle}
 				</#if>
 			</#if>
-			</a>
-			
 		</p>
+		<#if digg_submit.reported>
+		<div class="alert alert-error">
+			<span class="label label-important">#i18n{digglike.manageDiggSubmit.altWarning}</span>
+			<span class="pull-right">
+				<i id="display_advert" class="icon-chevron-down" title="Afficher les signalements"></i>
+			</span>
+			<div id="advert_content">
+			<#if digg_submit.reportedMessages?has_content>
+				<#list digg_submit.reportedMessages  as  reported_messages>
+				<blockquote>
+                     ${reported_messages.value}
+            		<span class="pull-right">
+						<small>${reported_messages.dateReported}</small>
+					</span>
+				</blockquote>
+                </#list>
+			</#if>
+			</div>
+		</div>
+		</#if>
         <p>#i18n{digglike.manageCommentSubmit.rowDateDiggSubmit}: <strong>${digg_submit.dateResponse?date?string.short}</strong></p>
         <p>
 			#i18n{digglike.manageCommentSubmit.rowStateDiggSubmit}: <#if digg_submit.diggSubmitState.number=publish_state_number>
@@ -52,8 +63,30 @@
 			<button type="submit" class="btn btn-primary btn-small" title="#i18n{digglike.manageDiggSubmit.buttonModify}"><i class="icon-ok icon-white"></i></button>
     		</form>
     	</#if>
-    	
-     	<p>#i18n{digglike.manageCommentSubmit.rowManageDiggSubmit}</p>
+		<#if !digg_submit.disableVote>
+			<div class="well well-small">
+				<p>	
+					<i class="icon-star"></i>&nbsp;#i18n{digglike.manageDiggSubmit.rowNumberVote} : ${digg_submit.numberVote}
+				</p>
+				<p>
+					<i class="icon-thumbs-up"></i>&nbsp;#i18n{digglike.manageDiggSubmit.rowNumberScore} : ${digg_submit.numberScore}
+				</p>
+			</div>
+		</#if>
+		<#if !digg_submit.disableComment>
+			<div class="well well-small">
+				<i class="icon-comment"></i>&nbsp;#i18n{digglike.manageDiggSubmit.rowNumberComment} : ${digg_submit.numberComment} 
+			</p>
+			<p>
+				<blockquote>
+				#i18n{digglike.manageDiggSubmit.rowNumberCommentEnable} : ${digg_submit.numberCommentEnable}
+				<br>
+				#i18n{digglike.manageDiggSubmit.rowNumberCommentIdle} : ${digg_submit.numberComment - digg_submit.numberCommentEnable}
+				</blockquote>
+			</p>
+			</div>
+		</#if>	
+		<p>#i18n{digglike.manageCommentSubmit.rowManageDiggSubmit}</p>
 		<p>
 			<a name="${digg_submit.idDiggSubmit}"></a>	 
 			<#if digg_submit.diggSubmitState.number=disable_state_number>
@@ -173,7 +206,6 @@
 					</#if>          
 					<button type="submit" class="btn btn-small btn-danger" name="delete"><i class="icon-trash icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonDelete}</button>
 					</form>
-					
 				</blockquote>
 				</#list>
 			</div>
@@ -188,8 +220,22 @@
 <#include "/util/editor/editor.html" />
 <script>
 $(document).ready( function () {
+	var addUp = true;
 	$("div.commentComments").toggle();
 	doToggle( ".comment_toggle" );
+	$("#advert_content").toggle();
+	$("#display_advert").click( function(){ 
+		$("#advert_content").toggle();
+		if ( addUp ){
+			$(this).addClass("icon-chevron-up");
+			$(this).removeClass("icon-chevron-down");
+			addUp = true;
+		} else {
+			$(this).removeClass("icon-chevron-up");
+			$(this).addClass("icon-chevron-down");
+			addUp = false;
+		}
+	});
 });
 
 function doToggle( idParent ){
