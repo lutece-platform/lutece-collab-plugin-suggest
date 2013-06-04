@@ -13,7 +13,7 @@
 		<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;action=view_digg_submit">
 			<#if digg_submit_display.digg_submit.diggSubmitTitle?length &gt;45>${digg_submit_display.digg_submit.diggSubmitTitle?substring(0,42)}...<#else>${digg_submit_display.digg_submit.diggSubmitTitle}</#if>
 		</a>
-		<#if digg_submit_display.digg_submit.numberScore?exists>
+		<#if authorized_vote && !digg_submit_display.digg_submit.disableVote && digg_submit_display.digg_submit.numberScore?exists>
 		<div class="btn-group pull-right">
 			<#if digg_submit_display.digg_submit_vote_type?exists>
 				${digg_submit_display.digg_submit_vote_type}
@@ -40,7 +40,7 @@
 				| 
 			</#if>
 			<i class="icon-calendar"></i> ${digg_submit_display.digg_submit.dateResponse} | 
-				<#if authorized_comment>
+				<#if authorized_comment && !digg_submit_display.digg_submit.disableComment>
 					<i class="icon-comment"></i>&nbsp;
 						<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;action=view_digg_submit">
 						${digg_submit_display.digg_submit.numberCommentEnable} #i18n{digglike.diggListSubmit.labelComments}
@@ -88,7 +88,7 @@
 			#i18n{digglike.diggListSubmit.labelReadMore} &gt;
 			</a>
 		</p>
-			<#if authorized_comment && display_comment_in_list>
+			<#if authorized_comment && !digg_submit_display.digg_submit.disableComment && display_comment_in_list>
 				<#assign nbComments = 1>
 				<div class="-digg-comments">
 					<ul>

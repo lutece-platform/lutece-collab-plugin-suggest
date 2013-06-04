@@ -125,6 +125,7 @@ public class DiggApp implements XPageApplication
     private static final String MARK_LIST_SUB_COMMENT_SUBMIT_DIGG = "list_sub_comment";
     private static final String MARK_DIGG_COMMENT = "digg_comment";
     private static final String MARK_AUTHORIZED_COMMENT = "authorized_comment";
+    private static final String MARK_AUTHORIZED_VOTE = "authorized_vote";
     private static final String MARK_DISPLAY_COMMENT_IN_LIST = "display_comment_in_list";
     private static final String MARK_DIGG_SUBMIT_MODERATE = "digg_submit_moderate";
     private static final String MARK_DIGG_SUBMIT = "digg_submit";
@@ -284,11 +285,7 @@ public class DiggApp implements XPageApplication
         {
             page = getViewDiggSubmit( page, nMode, request );
         }
-        else if ( ACTION_VIEW_DIGG_SUBMIT.equals( strAction ) )
-        {
-            page = getViewDiggSubmit( page, nMode, request );
-        }
-
+      
         else if ( ACTION_CREATE_DIGG_SUBMIT.equals( strAction ) )
         {
             page = getViewCreateDiggSubmit( page, nMode, request );
@@ -616,6 +613,14 @@ public class DiggApp implements XPageApplication
 
         LuteceUser luteceUserConnected = null;
 
+        
+        if( digg==null ||diggSubmit==null || !digg.isAuthorizedComment() || diggSubmit.isDisableComment())
+        {
+        	
+        	SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
+        }
+        
+        
         if ( digg.isActiveCommentAuthentification(  ) && SecurityService.isAuthenticationEnable(  ) )
         {
             luteceUserConnected = ( luteceUserConnected != null ) ? luteceUserConnected
@@ -653,6 +658,8 @@ public class DiggApp implements XPageApplication
                 SiteMessageService.setMessage( request, MESSAGE_CAPTCHA_ERROR, SiteMessage.TYPE_STOP );
             }
         }
+        
+  
 
         CommentSubmit commentSubmit = doInsertComment( request, diggSubmit, strCommentValueDigg, _plugin,
                 luteceUserConnected, nIdParentComment );
@@ -892,6 +899,7 @@ public class DiggApp implements XPageApplication
         model.put( MARK_LIST_DIGG_SUBMIT, getDiggSubmitDisplayList( listIdDiggSubmit, digg, locale, plugin ) );
 
         model.put( MARK_AUTHORIZED_COMMENT, digg.isAuthorizedComment(  ) );
+        model.put( MARK_AUTHORIZED_VOTE, !digg.isDisableVote()  );
         model.put( MARK_DISPLAY_COMMENT_IN_LIST, digg.isDisplayCommentInDiggSubmitList() );
         model.put( MARK_DIGG_SUBMIT_MODERATE, digg.isDisableNewDiggSubmit(  ) );
         model.put( MARK_ID_DIGG, digg.getIdDigg(  ) );
@@ -1082,10 +1090,11 @@ public class DiggApp implements XPageApplication
         model.put( MARK_DIGG_SUBMIT_VOTE_TYPE,
             getHtmlDiggSubmitVoteType( diggSubmit.getDigg(  ), diggSubmit,
                 CONSTANT_VIEW_DIGG_SUBMIT, request.getLocale(  ) ) );
-        model.put( MARK_AUTHORIZED_COMMENT, diggSubmit.getDigg(  ).isAuthorizedComment(  ) );
+        model.put( MARK_AUTHORIZED_COMMENT, diggSubmit.getDigg(  ).isAuthorizedComment(  )  );
+        model.put( MARK_AUTHORIZED_VOTE, !diggSubmit.getDigg(  ).isDisableVote()  );
         model.put( MARK_DIGG_SUBMIT_MODERATE, diggSubmit.getDigg(  ).isDisableNewDiggSubmit(  ) );
 
-        if ( diggSubmit.getDigg(  ).isAuthorizedComment(  ) )
+        if ( diggSubmit.getDigg(  ).isAuthorizedComment(  ) && !diggSubmit.isDisableComment() )
         {
             model.put( MARK_LIST_COMMENT_SUBMIT_DIGG,
                 getHtmlCommentSubmitList( request, diggSubmit.getComments(  ), diggSubmit.getDigg(  ),
@@ -1568,6 +1577,7 @@ public class DiggApp implements XPageApplication
             model.put( MARK_LIST_CATEGORIES_DIGG, digg.getCategories(  ) );
             model.put( MARK_LIST_SUBMIT_TOP_POPULARITY_DIGG, listDiggSubmitTopPopularity );
             model.put( MARK_AUTHORIZED_COMMENT, digg.isAuthorizedComment(  ) );
+            model.put( MARK_AUTHORIZED_VOTE, !digg.isDisableVote() );
             model.put( MARK_NUMBER_SHOWN_CHARACTERS, _nNumberShownCharacters );
 
             model.put( MARK_LIST_DIGG_SUBMIT_SORT, refListDiggSort );

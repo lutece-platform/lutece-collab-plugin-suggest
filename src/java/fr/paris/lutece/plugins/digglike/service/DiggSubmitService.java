@@ -201,7 +201,7 @@ public class DiggSubmitService implements IDiggSubmitService
     {
         DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nKey, plugin );
 
-        if ( bLoadCommentList && ( diggSubmit != null ) )
+        if (  diggSubmit != null  && !diggSubmit.isDisableComment() && bLoadCommentList )
         {
             SubmitFilter submmitFilterComment = new SubmitFilter(  );
             submmitFilterComment.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
