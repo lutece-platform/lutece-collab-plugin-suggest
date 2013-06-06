@@ -39,7 +39,7 @@
 			${digg_submit.diggSubmitValue}
 		</div>	
 	</#if>
-	<#if digg_submit_moderate>
+	<#if enable_digg_reports>
 		<a class="btn btn-primary btn-small" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit.idDiggSubmit}&amp;action=create_report#digg${digg_submit.idDiggSubmit}">
 			#i18n{digglike.diggListSubmit.labelReport}
 		</a>

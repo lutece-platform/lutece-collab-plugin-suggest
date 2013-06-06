@@ -118,7 +118,7 @@ public class CommentSubmitService implements ICommentSubmitService
             for ( CommentSubmit c : commentSubmitList )
             {
                 subCommentFilter = new SubmitFilter(  );
-                //in this method we gonna get the list of children of a comment
+                //in this  we gonna get themethod list of children of a comment
                 subCommentFilter.setIdParent( c.getIdCommentSubmit(  ) );
                 subCommentFilter.setIdCommentSubmitState( filter.getIdCommentSubmitState(  ) );
                 subCommentFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );

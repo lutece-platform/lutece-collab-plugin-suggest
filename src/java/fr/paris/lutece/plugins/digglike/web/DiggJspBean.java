@@ -380,7 +380,9 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_DISABLE_VOTE="disable_vote";
     private static final String PARAMETER_DISABLE_COMMENT="disable_vote";
     private static final String PARAMETER_ENABLE_PIN="enable_pin";
-    
+    private static final String PARAMETER_ENABLE_REPORTS="enable_reports";
+    private static final String PARAMETER_ENABLE_TERMS_OF_USE="enable_terms_of_use";
+    private static final String PARAMETER_TERMS_OF_USE="terms_of_use";
     private static final String PARAMETER_DISPLAY_COMMENT_IN_DIGG_SUBMIT_LIST="display_comment_in_digg_submit_list";
     private static final String PARAMETER_NUMBER_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST="number_comment_display_in_digg_submit_list";
     private static final String PARAMETER_NUMBER_CHAR_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST="number_char_comment_display_in_digg_submit_list";
@@ -1019,7 +1021,14 @@ public class DiggJspBean extends PluginAdminPageJspBean
         {
         	diggSubmit.setReportedMessages(ReportedMessageHome.getReportedMessageByDiggSubmit(diggSubmit.getIdDiggSubmit(), getPlugin()));
         }
-
+       
+        
+        //get number comment
+        SubmitFilter filterNumberComment=new SubmitFilter();
+        filterNumberComment.setIdDiggSubmit( _nIdDiggSubmit );
+        filterNumberComment.setIdDigg( _nIdDigg );
+        diggSubmit.setNumberComment( _commentSubmitService.getCountCommentSubmit( filterNumberComment, getPlugin() ) );
+       
         // build Filter
         SubmitFilter filter = DiggUtils.getDiggSubmitFilter( getSearchFields() );
 
@@ -1336,7 +1345,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         DiggSubmit diggSubmit = _diggSubmitService.findByPrimaryKey( nIdDiggSubmit, false, plugin );
         Category category = CategoryHome.findByPrimaryKey( nIdCategory, plugin );
 
-        if ( ( diggSubmit == null ) || ( category == null ) ||
+        if ( ( diggSubmit == null ) ||
                 !RBACService.isAuthorized( Digg.RESOURCE_TYPE, EMPTY_STRING + diggSubmit.getDigg(  ).getIdDigg(  ),
                     DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT, getUser(  ) ) )
         {
@@ -1649,6 +1658,10 @@ public class DiggJspBean extends PluginAdminPageJspBean
         String strNumberCharCommentDisplayInDiggSubmitList= request.getParameter( PARAMETER_NUMBER_CHAR_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST );
         String strEnableMailNewCommentSubmit = request.getParameter( PARAMETER_ENABLE_MAIL_NEW_COMMENT_SUBMIT );
         String strEnableMailNewReportedSubmit = request.getParameter( PARAMETER_ENABLE_MAIL_NEW_REPORTED_SUBMIT );
+        String strEnableTermsOfUse = request.getParameter( PARAMETER_ENABLE_TERMS_OF_USE );
+        String strTermsOfUse = request.getParameter( PARAMETER_TERMS_OF_USE );
+        String strEnableReports = request.getParameter( PARAMETER_ENABLE_REPORTS );
+        
         
         int nIdVoteType = DiggUtils.getIntegerParameter( strIdVoteType );
         int nIdMailingListDiggSubmit = DiggUtils.getIntegerParameter( strIdMailingListDiggSubmit );
@@ -1851,6 +1864,10 @@ public class DiggJspBean extends PluginAdminPageJspBean
         digg.setDisplayCommentInDiggSubmitList(strDisplayCommentInDiggSubmitList !=null);
         digg.setNumberCommentDisplayInDiggSubmitList(nNumberCommentDisplayInDiggSubmitList);
         digg.setNumberCharCommentDisplayInDiggSubmitList(nNumberCharCommentDisplayInDiggSubmitList);
+        digg.setEnableReports(strEnableReports !=null);
+        digg.setEnableTermsOfUse(strEnableTermsOfUse !=null);
+        digg.setTermsOfUse(strTermsOfUse);
+        
         return null; // No error
     }
 
@@ -3377,7 +3394,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         if ( RBACService.isAuthorized( Digg.RESOURCE_TYPE, EMPTY_STRING + nIdDigg,
                     DigglikeResourceIdService.PERMISSION_UPDATE_ALL_DIGG_SUBMIT, getUser(  ) ) )
         {
-            DigglikeService.getInstance(  ).updateAllDisplayOfDiggSubmit( nIdDigg, plugin, getLocale(  ) );
+            _diggSubmitService.updateAllDisplayOfDiggSubmit( nIdDigg, plugin, getLocale(  ) );
         }
 
         return getJspManageDigg( request );

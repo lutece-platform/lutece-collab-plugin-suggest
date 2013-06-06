@@ -11,14 +11,24 @@
 		<digg-title>
 			<xsl:value-of select="digg-title"/>
 		</digg-title>
-		<submits>
-			<xsl:apply-templates select="diggs-submit/digg-submit"/> 
-		</submits>
+		<digg-submits>
+			<xsl:apply-templates select="digg-submits/digg-submit"/> 
+		</digg-submits>
+		<digg-entries>
+			<xsl:apply-templates select="digg-entries/entry"/> 
+		</digg-entries>
+		
 	</digg>	
 </xsl:template>
 
 <xsl:template match="digg-submit">
 	<digg-submit>
+		
+		<digg-submit-title>
+			<xsl:value-of select="digg-submit-title"/>
+		</digg-submit-title>
+		
+		
 		<digg-submit-date-response>
 			<xsl:value-of select="digg-submit-date-response"/>
 		</digg-submit-date-response>
@@ -35,15 +45,40 @@
 			<xsl:value-of select="digg-submit-number-comment"/>
 		</digg-submit-number-comment>
 		
-	<digg-submit-value>
-			<xsl:value-of select="digg-submit-value"/>
-		</digg-submit-value>
 		<digg-submit-category>
 			<xsl:value-of select="digg-submit-category"/>
 		</digg-submit-category>
 		<digg-submit-type>
 			<xsl:value-of select="digg-submit-type"/>
 		</digg-submit-type>
+		<digg-submit-responses>
+			<xsl:apply-templates select="digg-submit-responses/response"/>
+		</digg-submit-responses>
 	</digg-submit>
 </xsl:template>
+
+
+	<xsl:template match="entry">
+		<entry>
+			<title>
+				<xsl:value-of select="title"/>
+			</title>
+			<id>
+				<xsl:value-of select="id"/>
+			</id>
+			<type-id>
+				<xsl:value-of select="type-id"/>
+			</type-id>
+		</entry>
+	</xsl:template>
+
+	<xsl:template match="response">
+	 	<response>
+	 		<response-value>
+				<xsl:value-of select="response-value"/>
+			</response-value>
+			<xsl:apply-templates select="entry"/>
+		</response>
+	</xsl:template>
+
 </xsl:stylesheet>

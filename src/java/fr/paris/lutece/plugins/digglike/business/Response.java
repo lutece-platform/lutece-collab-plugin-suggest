@@ -33,7 +33,12 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.portal.service.image.ImageResource;
+import fr.paris.lutece.util.xml.XmlUtil;
 
 
 /**
@@ -43,7 +48,12 @@ import fr.paris.lutece.portal.service.image.ImageResource;
  */
 public class Response
 {
-    private int _nIdResponse;
+    
+    private static final String TAG_RESPONSE = "response";
+    private static final String TAG_RESPONSE_VALUE = "response-value";
+
+    
+	private int _nIdResponse;
     private String _strValueResponse;
     private IEntry _entry;
     private DiggSubmit _diggSubmit;
@@ -135,4 +145,27 @@ public class Response
 	public void setImage(ImageResource image) {
 		this._image = image;
 	}
+	
+	
+	/**
+     * Returns the xml of this digg submit
+     *
+     * @param request The HTTP Servlet request
+     * @param locale the Locale
+     * @return the xml of this digg submit
+     */
+    public String getXml( HttpServletRequest request, Locale locale )
+    {
+        StringBuffer strXml = new StringBuffer(  );
+        XmlUtil.beginElement( strXml, TAG_RESPONSE );
+        XmlUtil.addElementHtml( strXml, TAG_RESPONSE_VALUE, this.getValueResponse() );
+        if(this.getEntry()!=null)
+        {
+        	this.getEntry().getXml( locale, strXml);
+        	
+        }
+        XmlUtil.endElement( strXml, TAG_RESPONSE );
+
+        return strXml.toString(  );
+    }
 }

@@ -190,10 +190,11 @@
 					<label class="control-label" for=""></label>
 					<div class="controls">
 						<label class="checkbox" for="disable_vote">
-						<input name="disable_vote" value="disable_vote" type="checkbox"  <#if digg.disableVote> checked="checked"</#if> >
-						#i18n{digglike.createDigg.labelDisableVote}
-						<p class="help-block">#i18n{digglike.createDigg.labelDisableVoteComment}</p>
+							<input name="disable_vote" value="disable_vote" type="checkbox"  <#if digg.disableVote> checked="checked"</#if> >
+							#i18n{digglike.createDigg.labelDisableVote}
 						</label>
+						<p class="help-block">#i18n{digglike.createDigg.labelDisableVoteComment}</p>
+						
 					</div>
 				</div>
 				<div class="control-group">
@@ -280,8 +281,9 @@
 							<label class="checkbox" for="display_comment_in_digg_submit_list">
 								#i18n{digglike.createDigg.labelDisplayCommentInDiggSubmitList}
 								<input name="display_comment_in_digg_submit_list" value="display_comment_in_digg_submit_list" type="checkbox" <#if digg.displayCommentInDiggSubmitList> checked="checked"</#if>  >
-								<p class="help-block">#i18n{digglike.createDigg.labelDisplayCommentInDiggSubmitListComment}</p>
 							</label>
+							<p class="help-block">#i18n{digglike.createDigg.labelDisplayCommentInDiggSubmitListComment}</p>
+				
 							</div>
 						</div>
 				</div>
@@ -299,6 +301,14 @@
 						<div class="controls">
 							<textarea name="confirmation_message" id="" rows="4"class="richtext"><#if digg.confirmationMessage?exists >${digg.confirmationMessage}</#if></textarea>
 							<p class="help-block">#i18n{digglike.createDigg.labelConfirmationMessageComment}</p>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="terms_of_use">
+						#i18n{digglike.createDigg.labelTermsOfUse}</label>
+						<div class="controls">
+							<textarea name="terms_of_use" id="terms_of_use" rows="4" class="richtext" >${digg.termsOfUse!}</textarea>
+							<p class="help-block">#i18n{digglike.createDigg.labelTermsOfUseComment}</p>
 						</div>
 					</div>
 					<div class="control-group">
@@ -341,7 +351,17 @@
 					<p class="help-block">#i18n{digglike.createDigg.labelRoleComment}</p>
 					</div>
 				</div>
-				
+					
+				<div class="control-group">
+						<label class="control-label" for=""></label>
+							<div class="controls">
+							<label class="checkbox" for="disable_new_digg_submit">
+								<input name="disable_new_digg_submit" value="${yes_value}" type="checkbox" <#if digg.disableNewDiggSubmit> checked="checked"</#if> >
+								#i18n{digglike.createDigg.labelDisableNewDiggSubmit}
+							</label>
+							<p class="help-block">#i18n{digglike.createDigg.labelDisableNewDiggSubmitComment}</p>
+						</div>
+				</div>
 				<div class="control-group">
 					<label class="control-label" for="disable_new_comment">&nbsp;</label>            
 					<div class="controls">
@@ -352,7 +372,36 @@
 						<p class="help-block">#i18n{digglike.createDigg.labelDisableNewCommentSubmitComment}</p>     
 					</div>
 				</div>
-			
+				<div class="control-group">
+					<label class="control-label" for="enable_reports"></label>            
+						<div class="controls">
+							<label class="checkbox" for="enable_reports">
+								<input name="enable_reports" value="${yes_value}" type="checkbox" <#if digg.enableReports> checked="checked"</#if> >
+								#i18n{digglike.createDigg.labelEnableReports}
+							</label>
+							<p class="help-block">#i18n{digglike.createDigg.labelEnableReportsComment}</p>
+						</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="enable_terms_of_use"></label>            
+						<div class="controls">
+							<label class="checkbox" for="enable_terms_of_use">
+							<input name="enable_terms_of_use" value="${yes_value}" type="checkbox" <#if digg.enableTermsOfUse> checked="checked"</#if> >
+								#i18n{digglike.createDigg.labelEnableTermsOfUse}
+							</label>
+							<p class="help-block">#i18n{digglike.createDigg.labelEnableTermsOfUseComment}</p>
+						</div>
+				</div>
+				<div class="control-group">
+				<label class="control-label" for=""></label>            
+					<div class="controls">
+						<label class="checkbox" for="limit_number_vote">
+							<input name="limit_number_vote" value="${yes_value}" type="checkbox"  <#if digg.limitNumberVote> checked='checked'</#if> >
+							#i18n{digglike.createDigg.labelLimitNumberVote}
+						</label>            
+						<p class="help-block">#i18n{digglike.createDigg.labelLimitNumberVoteComment}</p>
+					</div>
+				</div>  
 				<#if authentification_enable> 	
 							<div class="control-group">
 								<label class="control-label" for=""></label>						
@@ -380,31 +429,11 @@
 									#i18n{digglike.createDigg.labelRequiredAuthentificationCommentSubmit}   
 									<input name="active_comment_authentification" value="active_comment_authentification" type="checkbox" <#if digg.activeCommentAuthentification> checked="checked"</#if> >
 									</label>
-								<p class="help-block">#i18n{digglike.createDigg.labelRequiredAuthentificationComment}</p>            
+									<p class="help-block">#i18n{digglike.createDigg.labelRequiredAuthentificationCommentSubmitComment}</p>                   
 								</div>
 							</div>
 				</#if>
-				<div class="control-group">
-				<label class="control-label" for=""></label>            
-					<div class="controls">
-						<label class="checkbox" for="limit_number_vote">
-							<input name="limit_number_vote" value="${yes_value}" type="checkbox"  <#if digg.limitNumberVote> checked='checked'</#if> >
-							#i18n{digglike.createDigg.labelLimitNumberVote}
-						</label>            
-						<p class="help-block">#i18n{digglike.createDigg.labelLimitNumberVoteComment}</p>
-					</div>
-				</div>           
-				
-				<div class="control-group">
-						<label class="control-label" for="">#i18n{digglike.createDigg.labelDisableNewDiggSubmit}</label>
-							<div class="controls">
-							<label class="checkbox" for="disable_new_digg_submit">
-								<input name="disable_new_digg_submit" value="${yes_value}" type="checkbox" <#if digg.disableNewDiggSubmit> checked="checked"</#if> >
-								#i18n{digglike.createDigg.labelDisableNewDiggSubmit}
-							</label>
-							<p class="help-block">#i18n{digglike.createDigg.labelDisableNewDiggSubmitComment}</p>
-						</div>
-				</div> 
+			          
 			</div>
 			<div class="tab-pane" id="panel4">
 				<div class="control-group">

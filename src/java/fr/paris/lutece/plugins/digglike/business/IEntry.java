@@ -293,4 +293,13 @@ public interface IEntry
      * @param entryAdditionalAttributeList a list of additional attribute which is associate to the entry
      */
     void setEntryAdditionalAttributeList( List<EntryAdditionalAttribute> entryAdditionalAttributeList );
+    
+    /**
+     * add The Xml of the entry in the string buffer
+   
+     * @param locale loclae
+     * @param strXml the string buffer
+     *
+     */
+    void getXml( Locale locale, StringBuffer strXml );
 }

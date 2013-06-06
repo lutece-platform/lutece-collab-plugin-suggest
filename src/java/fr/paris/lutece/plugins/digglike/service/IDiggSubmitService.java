@@ -35,10 +35,13 @@ package fr.paris.lutece.plugins.digglike.service;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
+import fr.paris.lutece.plugins.digglike.business.IEntry;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -93,6 +96,17 @@ public interface IDiggSubmitService
      * @return an instance of DiggSubmit
      */
     DiggSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList, Plugin plugin );
+    
+    /**
+     * Returns an instance of a DiggSubmit whose identifier is specified in parameter
+     *
+     * @param nKey The diggSubmit primary key
+     * @param bLoadCommentList true if the comment list must be get
+     * @param bLoadResponseList true if the response list must be get
+     * @param plugin the Plugin
+     * @return an instance of DiggSubmit
+     */
+    DiggSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList, boolean bLoadResponseList,Plugin plugin );
 
     /**
      * Load the data of all the diggSubmit who verify the filter and returns them in a  list
@@ -164,6 +178,7 @@ public interface IDiggSubmitService
      * @param bListPinned true if the list to update contains only pinned diggsubmit
      * @param plugin the plugin
      */
+    @Transactional( "digglike.transactionManager" )
     void updateDiggSubmitOrder( Integer nPositionElement, Integer nNewPositionElement, int nIdDigg,boolean bListPinned, Plugin plugin );
 
     /**
@@ -174,4 +189,26 @@ public interface IDiggSubmitService
      * @param plugin The Plugin object
      */
     int getMaxOrderList( int nIdDigg,boolean bListPinned, Plugin plugin );
+    /**
+     * Update the display off all digg submit associated to a digg
+     *
+     * @param nIdDigg
+     *            the id digg
+     * @param plugin the plugin
+     * 
+     * @locale locale the locale
+     */
+    @Transactional( "digglike.transactionManager" )
+    void updateAllDisplayOfDiggSubmit( Integer nIdDigg, Plugin plugin, Locale locale );
+    
+    /**
+     * update the display of the diggsubmit
+     * @param nIdDiggSubmit the diggSubmit Id
+     * @param plugin the plugin	
+     * @param locale the locale
+     * @param digg the digg
+     * @param mapEntry a map of entry assocaited to the digg
+     */
+    @Transactional( "digglike.transactionManager" )
+   void updateDisplayDiggSubmit( Integer nIdDiggSubmit, Plugin plugin, Locale locale, Digg digg,Map<Integer, IEntry>mapEntry );
 }

@@ -34,17 +34,24 @@
 package fr.paris.lutece.plugins.digglike.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mysql.jdbc.PacketTooBigException;
 
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
+import fr.paris.lutece.plugins.digglike.business.Digg;
+import fr.paris.lutece.plugins.digglike.business.DiggHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitStateHome;
+import fr.paris.lutece.plugins.digglike.business.EntryFilter;
+import fr.paris.lutece.plugins.digglike.business.EntryHome;
+import fr.paris.lutece.plugins.digglike.business.IEntry;
 import fr.paris.lutece.plugins.digglike.business.Response;
 import fr.paris.lutece.plugins.digglike.business.ResponseHome;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
@@ -211,6 +218,19 @@ public class DiggSubmitService implements IDiggSubmitService
          
         }
 
+        return diggSubmit;
+    }
+    @Override
+    public DiggSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList, boolean bLoadResponseList,Plugin plugin )
+    {
+        DiggSubmit diggSubmit = findByPrimaryKey(nKey, bLoadCommentList, plugin);
+        if (  diggSubmit != null  && bLoadResponseList )
+        {
+            SubmitFilter submmitFilter = new SubmitFilter(  );
+            submmitFilter.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
+            diggSubmit.setResponses( ResponseHome.getResponseList(submmitFilter, plugin) );
+         
+        }
         return diggSubmit;
     }
 
@@ -381,4 +401,61 @@ public class DiggSubmitService implements IDiggSubmitService
 
         return _singleton;
     }
+    @Override
+    public void updateAllDisplayOfDiggSubmit( Integer nIdDigg, Plugin plugin, Locale locale )
+    {
+        Digg digg = DiggHome.findByPrimaryKey( nIdDigg, plugin );
+        HashMap<Integer , IEntry> mapEntry=new HashMap<Integer, IEntry>();
+        EntryFilter entryFilter=new EntryFilter();
+        entryFilter.setIdDigg(digg.getIdDigg());
+        for(IEntry entry:EntryHome.getEntryList(entryFilter, plugin))
+        {
+        	mapEntry.put(entry.getIdEntry(),EntryHome.findByPrimaryKey(entry.getIdEntry(),plugin));
+        	
+        }
+        
+        SubmitFilter filter = new SubmitFilter(  );
+        filter.setIdDigg( nIdDigg );
+
+        List<Integer> listIdDiggSubmit = getDiggSubmitListId( filter, plugin );
+
+        for ( Integer nIdDiggSubmit : listIdDiggSubmit )
+        {
+            updateDisplayDiggSubmit( nIdDiggSubmit, plugin, locale, digg, mapEntry );
+        }
+    }
+
+   
+    @Override
+    public void updateDisplayDiggSubmit( Integer nIdDiggSubmit, Plugin plugin, Locale locale, Digg digg,Map<Integer, IEntry>mapEntry )
+    {
+        DiggSubmit diggSubmit = findByPrimaryKey( nIdDiggSubmit, false, plugin );
+        diggSubmit.setDigg( digg );
+
+        SubmitFilter filter = new SubmitFilter(  );
+        filter.setIdDiggSubmit( nIdDiggSubmit );
+        // add responses
+        List<Response> listResponses =ResponseHome.getResponseList( filter, plugin );
+        for(Response response: listResponses)
+        {
+        	response.setEntry(mapEntry.get(response.getEntry().getIdEntry()));
+        	
+        }
+        diggSubmit.setResponses(listResponses);
+        // update Number of comment
+        diggSubmit.setNumberComment( CommentSubmitService.getService(  ).getCountCommentSubmit( filter, plugin ) );
+        // update Number of Comment Enable
+        filter.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
+        diggSubmit.setNumberCommentEnable( CommentSubmitService.getService(  ).getCountCommentSubmit( filter, plugin ) );
+        // update DiggSubmitValue
+        diggSubmit.setDiggSubmitValue( DiggUtils.getHtmlDiggSubmitValue( diggSubmit, locale ) );
+        // update DiggSubmitValue show in the list
+        diggSubmit.setDiggSubmitValueShowInTheList( DiggUtils.getHtmlDiggSubmitValueShowInTheList( diggSubmit, locale ) );
+        // update DiggSubmit title
+        diggSubmit.setDiggSubmitTitle( DiggUtils.getDiggSubmitTitle( diggSubmit, locale ) );
+        //update DiggSubmit
+        update( diggSubmit, plugin );
+    }
+
+    
 }

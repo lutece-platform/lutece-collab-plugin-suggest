@@ -39,6 +39,7 @@ import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.sql.Timestamp;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -56,14 +57,16 @@ public class DiggSubmit
     public static final int STATE_WAITING_FOR_PUBLISH = 2;
     public static final int STATE_PUBLISH = 3;
     private static final String TAG_DIGG_SUBMIT = "digg-submit";
+    private static final String TAG_DIGG_SUBMIT_TITLE = "digg-submit-title";
     private static final String TAG_DIGG_SUBMIT_CATEGORY = "digg-submit-category";
     private static final String TAG_DIGG_SUBMIT_TYPE = "digg-submit-type";
     private static final String TAG_DIGG_SUBMIT_DATE_RESPONSE = "digg-submit-date-response";
     private static final String TAG_DIGG_SUBMIT_NUMBER_VOTE = "digg-submit-number-vote";
     private static final String TAG_DIGG_SUBMIT_NUMBER_COMMENT = "digg-submit-number-comment";
     private static final String TAG_DIGG_SUBMIT_SCORE = "digg-submit-score";
-    private static final String TAG_DIGG_SUBMIT_VALUE = "digg-submit-value";
-    private static final String TAG_DIGGS_SUBMIT_COMMENTS = "diggs-submit-comments";
+    private static final String TAG_DIGGS_SUBMIT_COMMENTS = "digg-submit-comments";
+    private static final String TAG_DIGGS_SUBMIT_RESPONSES = "digg-submit-responses";
+    
     private int _nIdDiggSubmit;
     private Timestamp _tDateResponse;
     private Digg _digg;
@@ -390,13 +393,47 @@ public class DiggSubmit
         StringBuffer strXml = new StringBuffer(  );
         XmlUtil.beginElement( strXml, TAG_DIGG_SUBMIT );
         XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_DATE_RESPONSE,
-            DateUtil.getDateString( getDateResponse(  ), locale ) );
-        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_SCORE, Integer.toString( getNumberScore(  ) ) );
-        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_NUMBER_VOTE, Integer.toString( getNumberVote(  ) ) );
-        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_NUMBER_COMMENT, Integer.toString( getNumberComment(  ) ) );
-        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_VALUE, getDiggSubmitValue(  ) );
-        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_CATEGORY, getCategory(  ) != null?getCategory(  ).getTitle(  ): DiggUtils.EMPTY_STRING);
-        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_TYPE, getDiggSubmitType(  ) != null?getDiggSubmitType(  ).getName(  ): DiggUtils.EMPTY_STRING );
+            DateUtil.getDateString( this.getDateResponse(  ), locale ) );
+        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_SCORE, Integer.toString( this.getNumberScore(  ) ) );
+        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_NUMBER_VOTE, Integer.toString( this.getNumberVote(  ) ) );
+        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_NUMBER_COMMENT, Integer.toString( this.getNumberComment(  ) ) );
+        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_CATEGORY, this.getCategory(  ) != null?this.getCategory(  ).getTitle(  ): DiggUtils.EMPTY_STRING);
+        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_TYPE, this.getDiggSubmitType(  ) != null?this.getDiggSubmitType(  ).getName(  ): DiggUtils.EMPTY_STRING );
+        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_TITLE, this.getDiggSubmitTitle() );
+        
+        XmlUtil.beginElement( strXml, TAG_DIGGS_SUBMIT_RESPONSES );
+
+        if ( ( getResponses() != null ) && ( getResponses(  ).size(  ) != 0 ) )
+        {
+            HashMap<Integer,Response> hashResponsesEntry= new HashMap<Integer,Response>();
+        	
+            for ( Response response:getResponses() )
+            {	
+            	hashResponsesEntry.put(response.getEntry().getIdEntry(),response  );
+            }
+            
+            
+            for(IEntry entry : this.getDigg().getEntries())
+            {
+            	if(hashResponsesEntry.containsKey(entry.getIdEntry()))
+            	{
+            		strXml.append(hashResponsesEntry.get(entry.getIdEntry()).getXml(request, locale));
+            	}
+            	else
+            	{
+            		//add xml empty response for this digg submit
+            		Response responseEmpty=new Response();
+            		responseEmpty.setEntry(entry);
+            		responseEmpty.setValueResponse(DiggUtils.EMPTY_STRING);
+            		strXml.append(responseEmpty.getXml(request, locale));
+            	}	
+            }
+            
+        	
+        }
+
+        XmlUtil.endElement( strXml, TAG_DIGGS_SUBMIT_RESPONSES );
+        
         
         XmlUtil.beginElement( strXml, TAG_DIGGS_SUBMIT_COMMENTS );
 
@@ -410,6 +447,8 @@ public class DiggSubmit
 
         XmlUtil.endElement( strXml, TAG_DIGGS_SUBMIT_COMMENTS );
 
+        
+        
         XmlUtil.endElement( strXml, TAG_DIGG_SUBMIT );
 
         return strXml.toString(  );
@@ -533,5 +572,4 @@ public class DiggSubmit
 	public void setReportedMessages(List<ReportedMessage> _listReportedMessages) {
 		this._listReportedMessages = _listReportedMessages;
 	}
-    
 }

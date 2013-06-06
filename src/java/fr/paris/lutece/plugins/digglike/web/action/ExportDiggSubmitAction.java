@@ -45,8 +45,11 @@ import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
+import fr.paris.lutece.plugins.digglike.business.EntryFilter;
+import fr.paris.lutece.plugins.digglike.business.EntryHome;
 import fr.paris.lutece.plugins.digglike.business.ExportFormat;
 import fr.paris.lutece.plugins.digglike.business.ExportFormatHome;
+import fr.paris.lutece.plugins.digglike.business.IEntry;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.service.CommentSubmitService;
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
@@ -148,7 +151,8 @@ public class ExportDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSe
         int nIdDigg=DiggUtils.getIntegerParameter(strIdDigg);
        
         Digg digg = DiggHome.findByPrimaryKey( nIdDigg, plugin );
-
+       
+        
         if ( ( digg == null ) ||
                 !RBACService.isAuthorized( Digg.RESOURCE_TYPE, Integer.toString( digg.getIdDigg(  ) ),
                     DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT,adminUser ) )
@@ -173,8 +177,13 @@ public class ExportDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSe
         else
         {
 	       
-	
-	        SubmitFilter filter = DiggUtils.getDiggSubmitFilter( searchFields );
+        	
+        	EntryFilter entryfilter = new EntryFilter(  );
+        	entryfilter.setIdDigg( digg.getIdDigg(  ) );
+            //set digg entries
+        	digg.setEntries(EntryHome.getEntryList( entryfilter, plugin ));
+            
+        	SubmitFilter filter = DiggUtils.getDiggSubmitFilter( searchFields );
 	        List<Integer> listIdDiggSubmit = DiggSubmitService.getService().getDiggSubmitListId( filter, plugin );
 	
 	        StringBuffer strBufferListDiggSubmitXml = new StringBuffer(  );
@@ -185,25 +194,16 @@ public class ExportDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSe
 	
 	        for ( Integer nIdDiggSubmit : listIdDiggSubmit )
 	        {
-	            diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit, false, plugin );
+	            diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit, false,true, plugin );
 	            filter.setIdDiggSubmit( nIdDiggSubmit );
 	            listCommentSubmit = CommentSubmitService.getService().getCommentSubmitList( filter, plugin );
 	            diggSubmit.setComments( listCommentSubmit );
 	            diggSubmit.setNumberComment( CommentSubmitService.getService().getCountCommentSubmit( filter, plugin ) );
+	            diggSubmit.setDigg(digg);
 	            strBufferListDiggSubmitXml.append( diggSubmit.getXml( request, adminUser.getLocale( ) ) );
 	        }
 	
 	        String strXmlSource = XmlUtil.getXmlHeader(  ) + digg.getXml( request, strBufferListDiggSubmitXml, adminUser.getLocale( ) );
-	
-	        if ( exportFormat.getExtension(  ).equals( EXPORT_CSV_EXT ) )
-	        {
-	            strXmlSource = strXmlSource.replaceAll( "[\r\n]+", "" );
-	            strXmlSource = strXmlSource.replaceAll( "\t", "" );
-	            // we have to delete the html div code of the values
-	            strXmlSource = strXmlSource.replaceAll( "<div[^>]+>", "" );
-	            strXmlSource = strXmlSource.replaceAll( "</div>", "" );
-	        }
-	
 	        XmlTransformerService xmlTransformerService = new XmlTransformerService(  );
 	
 	        String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource,

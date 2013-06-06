@@ -127,7 +127,7 @@ public class DiggApp implements XPageApplication
     private static final String MARK_AUTHORIZED_COMMENT = "authorized_comment";
     private static final String MARK_AUTHORIZED_VOTE = "authorized_vote";
     private static final String MARK_DISPLAY_COMMENT_IN_LIST = "display_comment_in_list";
-    private static final String MARK_DIGG_SUBMIT_MODERATE = "digg_submit_moderate";
+    private static final String MARK_ENABLE_DIGG_REPORTS = "enable_digg_reports";
     private static final String MARK_DIGG_SUBMIT = "digg_submit";
     private static final String MARK_COMMENT_SUBMIT = "comment_submit";
     private static final String MARK_LUTECE_USER = "lutece_user";
@@ -191,6 +191,7 @@ public class DiggApp implements XPageApplication
     private static final String PARAMETER_COMMENT_ID_PARENT = "id_digg_comment";
     private static final String PARAMETER_ACTION = "action";
     private static final String PARAMETER_VIEW = "view";
+    private static final String PARAMETER_TERMS_OF_USE="terms_of_use";
 
     // message
     private static final String MESSAGE_FORM_ERROR = "digglike.message.formError";
@@ -209,6 +210,7 @@ public class DiggApp implements XPageApplication
     private static final String MESSAGE_NEW_COMMENT_SUBMIT_INVALID = "digglike.message.newCommentSubmitInvalid";
     private static final String MESSAGE_ERROR_NO_CATEGORY = "digglike.message.errorNoCategorySelected";
     private static final String MESSAGE_ERROR_NO_DIGG_SUBMIT_TYPE_SELECTED = "digglike.message.errorNoDiggSubmitTypeSelected";
+    private static final String MESSAGE_ERROR_MUST_SELECTED_TERMS_OF_USE = "digglike.message.youMustSelectTermsOfUse";
     
     private static final String MESSAGE_ACCESS_DENIED = "digglike.message.accessDenied";
     
@@ -549,9 +551,14 @@ public class DiggApp implements XPageApplication
         String strMessage = MESSAGE_NEW_DIGG_SUBMIT;
         int nIdCategory = DiggUtils.getIntegerParameter( strIdCategory );
         int nIdType = DiggUtils.getIntegerParameter( strIdType );
-
-    
-      //Check if a category is selected (in the case or the digg has some categories)
+        String strTermsOfUse=request.getParameter( PARAMETER_TERMS_OF_USE );
+        //Check if  terms of used is selected 
+        if (  digg.isEnableTermsOfUse() && strTermsOfUse == null )
+        {
+        	SiteMessageService.setMessage( request, MESSAGE_ERROR_MUST_SELECTED_TERMS_OF_USE, SiteMessage.TYPE_STOP );
+        }
+        
+       //Check if a category is selected (in the case or the digg has some categories)
         if (  !digg.getCategories().isEmpty())
         {
             if ( strIdCategory == null || strIdCategory.equals( Integer.toString( DiggUtils.CONSTANT_ID_NULL ) ))
@@ -712,7 +719,7 @@ public class DiggApp implements XPageApplication
             SiteMessageService.setMessage( request, MESSAGE_MANDATORY_REPORTED, SiteMessage.TYPE_STOP );
         }
 
-        if ( diggSubmit == null )
+        if ( diggSubmit == null || digg==null || !digg.isEnableReports())
         {
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
         }
@@ -901,7 +908,7 @@ public class DiggApp implements XPageApplication
         model.put( MARK_AUTHORIZED_COMMENT, digg.isAuthorizedComment(  ) );
         model.put( MARK_AUTHORIZED_VOTE, !digg.isDisableVote()  );
         model.put( MARK_DISPLAY_COMMENT_IN_LIST, digg.isDisplayCommentInDiggSubmitList() );
-        model.put( MARK_DIGG_SUBMIT_MODERATE, digg.isDisableNewDiggSubmit(  ) );
+        model.put( MARK_ENABLE_DIGG_REPORTS, digg.isEnableReports() );
         model.put( MARK_ID_DIGG, digg.getIdDigg(  ) );
 
          if (  digg.isAuthorizedComment(  ) )
@@ -1034,7 +1041,7 @@ public class DiggApp implements XPageApplication
             }
 
             modelComment.put( MARK_LUTECE_USER, luteceUserInfo );
-            modelComment.put( MARK_LIST_SUB_COMMENT_SUBMIT_DIGG, getCommentSubmitDisplayList( commentSubmit.getComments(),plugin ) );
+            modelComment.put( MARK_LIST_SUB_COMMENT_SUBMIT_DIGG, commentSubmit.getComments()!=null && !commentSubmit.getComments().isEmpty() ?getCommentSubmitDisplayList( commentSubmit.getComments(),plugin ):null );
             
             
             listHashComment.add( modelComment );
@@ -1092,7 +1099,7 @@ public class DiggApp implements XPageApplication
                 CONSTANT_VIEW_DIGG_SUBMIT, request.getLocale(  ) ) );
         model.put( MARK_AUTHORIZED_COMMENT, diggSubmit.getDigg(  ).isAuthorizedComment(  )  );
         model.put( MARK_AUTHORIZED_VOTE, !diggSubmit.getDigg(  ).isDisableVote()  );
-        model.put( MARK_DIGG_SUBMIT_MODERATE, diggSubmit.getDigg(  ).isDisableNewDiggSubmit(  ) );
+        model.put( MARK_ENABLE_DIGG_REPORTS, diggSubmit.getDigg(  ).isEnableReports());
 
         if ( diggSubmit.getDigg(  ).isAuthorizedComment(  ) && !diggSubmit.isDisableComment() )
         {

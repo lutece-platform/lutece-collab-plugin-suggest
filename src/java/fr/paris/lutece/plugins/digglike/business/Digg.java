@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.DefaultEditorKit.BeepAction;
 
 import fr.paris.lutece.plugins.digglike.business.attribute.DiggAttribute;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
@@ -63,7 +64,8 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     public static final String ROLE_NONE = "none";
     private static final String TAG_DIGG = "digg";
     private static final String TAG_DIGG_TITLE = "digg-title";
-    private static final String TAG_DIGGS_SUBMIT = "diggs-submit";
+    private static final String TAG_DIGG_SUBMITS = "digg-submits";
+    public static final String TAG_LIST_ENTRY = "digg-entries";
     private static DiggWorkgroupRemovalListener _listenerWorkgroup;
     private static DiggRegularExpressionRemovalListener _listenerRegularExpression;
     private static DiggRoleRemovalListener _listenerRole;
@@ -123,9 +125,18 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     private boolean _bEnableMailNewCommentSubmit;
     @DiggAttribute( "enableMailNewReportedSubmit") 
     private boolean _bEnableMailNewReportedSubmit;
+    @DiggAttribute( "enableTermsOfUse") 
+    private boolean _bEnableTermsOfUse;
+    @DiggAttribute( "termsOfUse") 
+    private String _strTermsOfUse;
+    @DiggAttribute( "enableReports") 
+    private boolean _bEnableReports;
     
-    
-    /**
+
+
+
+
+	/**
     * Initialize the Digg
     */
     public static void init(  )
@@ -758,9 +769,19 @@ public class Digg implements AdminWorkgroupResource, RBACResource
         StringBuffer strXml = new StringBuffer(  );
         XmlUtil.beginElement( strXml, TAG_DIGG );
         XmlUtil.addElementHtml( strXml, TAG_DIGG_TITLE, getTitle(  ) );
-        XmlUtil.beginElement( strXml, TAG_DIGGS_SUBMIT );
+        XmlUtil.beginElement( strXml, TAG_LIST_ENTRY );
+        if(this.getEntries()!=null &&! this.getEntries().isEmpty())
+        {
+            for(IEntry entry:this.getEntries())
+            {
+            	entry.getXml(locale, strXml);
+            	
+            }
+        }
+        XmlUtil.endElement( strXml, TAG_LIST_ENTRY );
+        XmlUtil.beginElement( strXml, TAG_DIGG_SUBMITS );
         strXml.append( strListDiggSubmit );
-        XmlUtil.endElement( strXml, TAG_DIGGS_SUBMIT );
+        XmlUtil.endElement( strXml, TAG_DIGG_SUBMITS );
         XmlUtil.endElement( strXml, TAG_DIGG );
 
         return strXml.toString(  );
@@ -1084,5 +1105,56 @@ public class Digg implements AdminWorkgroupResource, RBACResource
    {
 	   _listDiggSubmitTypes = diggSubmitTypes;
    }
-	    
+   
+  /**
+   *  
+   * @return true if Terms of use must be enable
+   */
+  public boolean isEnableTermsOfUse()
+  {
+	  return _bEnableTermsOfUse;
+  }  
+  
+  
+  
+  /**
+   *  
+   * @param bEnableTermsOfUse  true if Terms of use must be enable
+   */
+  public void setEnableTermsOfUse(boolean bEnableTermsOfUse)
+  {
+	  _bEnableTermsOfUse=bEnableTermsOfUse;
+  }  
+  
+  
+  /**
+   * the terms of use
+   * @return the terms of use
+   */
+  public String getTermsOfUse() {
+		return _strTermsOfUse;
+	}
+  
+  /**
+   * set Terms of use
+   * @param _strTermsOfUse the terms of use
+   */
+	public void setTermsOfUse(String strTermsOfUse) {
+		this._strTermsOfUse = strTermsOfUse;
+	}
+    /**
+     * 
+     * @return true if reports are enable
+     */
+	public boolean isEnableReports() {
+		return _bEnableReports;
+	}
+
+	/**
+	 * 
+	 * @param _bEnableReports true if reports are enable
+	 */
+	public void setEnableReports(boolean bEnableReports) {
+		this._bEnableReports = bEnableReports;
+	}
 }
