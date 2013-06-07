@@ -152,7 +152,7 @@
 		<#list comment_submit_list as comment_submit>
 		<div class="well">	
 			<#if comment_submit.isOfficialAnswer()><span class="badge badge-info pull-right">#i18n{digglike.manageCommentSubmit.officialAnswer}</span></#if>
-			<p>
+			<p id="comment${comment_submit.idCommentSubmit}">
 				<strong>#i18n{digglike.manageCommentSubmit.rowValueCommentSubmit}
 				<#if comment_submit.active>
 					<span class="label label-success">#i18n{digglike.manageCommentSubmit.stateEnable}</span>
@@ -162,7 +162,7 @@
 				</strong>
 			</p>
 			<pre>${digg.parseBbcodeValue(comment_submit.value)}</pre>
-			<form method="post" class="form-inline pull-right" action="jsp/admin/plugins/digglike/DoChangeCommentSubmit.jsp">
+			<form method="post" class="form-inline pull-right" action="jsp/admin/plugins/digglike/DoChangeCommentSubmit.jsp#comment${comment_submit.idCommentSubmit}">
 				<input name="id_comment_submit" value="${comment_submit.idCommentSubmit}" type="hidden">
 				<#if comment_submit.active>
 					<button type="submit" class="btn btn-small btn-primary" name="disable"><i class="icon-remove icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonDisable}</button>
@@ -181,10 +181,10 @@
 			</#if> 
 			</p>
 			<#if comment_submit.comments?has_content>
-			<p class="comment_toggle"><i class="icon-chevron-down"></i>&nbsp;#i18n{digglike.manageCommentSubmit.ShowSubComments}</p>
+			<p class="comment_toggle" id="comment_toggle${comment_submit.idCommentSubmit}"><i class="icon-chevron-down"></i>&nbsp;#i18n{digglike.manageCommentSubmit.ShowSubComments}</p>
 			<div class="commentComments">
 				<#list comment_submit.comments as comment_comment> 
-				<blockquote>
+				<blockquote id="comment${comment_comment.idCommentSubmit}">
 					<#if comment_comment.isOfficialAnswer()><span class="badge badge-info pull-right">#i18n{digglike.manageCommentSubmit.officialAnswer}</span></#if>
 					<p>
 					<strong>#i18n{digglike.manageCommentSubmit.rowValueCommentSubmit} 
@@ -197,8 +197,9 @@
 					</p>					
 					<pre>${digg.parseBbcodeValue(comment_comment.value)}</pre>
 					<p>#i18n{digglike.manageCommentSubmit.rowDateCommentSubmit}:  ${comment_comment.dateComment} </p> 
-					<form method="post" action="jsp/admin/plugins/digglike/DoChangeCommentSubmit.jsp">
+					<form method="post" action="jsp/admin/plugins/digglike/DoChangeCommentSubmit.jsp#comment${comment_comment.idCommentSubmit}">
 					<input name="id_comment_submit" value="${comment_comment.idCommentSubmit}" type="hidden">
+					<input name="id_parent" value="${comment_submit.idCommentSubmit}" type="hidden">
 					<#if comment_comment.active>
 						<button type="submit" class="btn btn-small btn-primary" name="disable"><i class="icon-remove icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonDisable}</button>
 					<#else>
@@ -217,8 +218,10 @@
 	</div>
 	</div>
 </div>
+
 <#include "/util/editor/editor.html" />
 <script>
+
 $(document).ready( function () {
 	var addUp = true;
 	$("div.commentComments").toggle();
@@ -236,12 +239,26 @@ $(document).ready( function () {
 			addUp = false;
 		}
 	});
+	
+	
+	if ( $(".commentComments span").hasClass("label-important") ){
+		var t = $(this).get();	
+		console.log( t );
+		console.log( "toto" );
+	}
+	
+	
+	<#if id_parent?has_content>
+		$("#comment_toggle${id_parent}").next().toggle();
+	</#if>
 });
 
 function doToggle( idParent ){
 	$( idParent ).click( function(){ 
 		$(this).next().toggle();
 	});
+	
+
 }
 </script>
 <@initEditor  />

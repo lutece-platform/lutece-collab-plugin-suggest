@@ -84,7 +84,6 @@ import fr.paris.lutece.plugins.digglike.service.DefaultMessageResourceIdService;
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
 import fr.paris.lutece.plugins.digglike.service.DigglikePlugin;
 import fr.paris.lutece.plugins.digglike.service.DigglikeResourceIdService;
-import fr.paris.lutece.plugins.digglike.service.DigglikeService;
 import fr.paris.lutece.plugins.digglike.service.ExportFormatResourceIdService;
 import fr.paris.lutece.plugins.digglike.service.ICommentSubmitService;
 import fr.paris.lutece.plugins.digglike.service.IDiggSubmitService;
@@ -286,6 +285,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String MARK_ID_DEFAULT_DIGG = "id_default_digg";
     private static final String MARK_QUERY = "query";
     private static final String MARK_DIGGLIKE_ACTIONS = "digglike_actions";
+    private static final String MARK_ID_PARENT = "id_parent";
 
     // Jsp Definition
     private static final String JSP_DO_DISABLE_DIGG = "jsp/admin/plugins/digglike/DoDisableDigg.jsp";
@@ -308,6 +308,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_ID_DIGG = "id_digg";
     private static final String PARAMETER_ID_DIGG_SUBMIT = "id_digg_submit";
     private static final String PARAMETER_ID_COMMENT_SUBMIT = "id_comment_submit";
+    private static final String PARAMETER_ID_PARENT = "id_parent";
     private static final String PARAMETER_ID_EXPORT_FORMAT = "id_export_format";
     private static final String PARAMETER_STATE_NUMBER = "state_number";
     private static final String PARAMETER_TITLE = "title";
@@ -988,7 +989,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         Locale locale = getLocale(  );
 
         String strIdCommentSort = request.getParameter( PARAMETER_ID_COMMENT_SORT );
-
+        String strCommentIdParent= request.getParameter( PARAMETER_ID_PARENT );
         if ( ( strIdCommentSort != null ) && !strIdCommentSort.equals( EMPTY_STRING ) )
         {
             _nIdCommentSort = DiggUtils.getIntegerParameter( strIdCommentSort );
@@ -1066,6 +1067,8 @@ public class DiggJspBean extends PluginAdminPageJspBean
         model.put( MARK_CATEGORY_LIST, refCategoryList );
         model.put( MARK_LIST_COMMENT_SORT, refListCommentSort );
         model.put( MARK_DIGG, digg );
+        model.put( MARK_ID_PARENT, strCommentIdParent );
+    
 
         setPageTitleProperty( PROPERTY_MANAGE_COMMENT_SUBMIT_PAGE_TITLE );
 
@@ -1373,9 +1376,13 @@ public class DiggJspBean extends PluginAdminPageJspBean
      */
     public String doChangeCommentSubmit( HttpServletRequest request )
     {
-        if ( request.getParameter( PARAMETER_DELETE ) != null )
+        
+    	String strIdParentCommentSubmit = request.getParameter( PARAMETER_ID_PARENT );
+        
+    	if ( request.getParameter( PARAMETER_DELETE ) != null )
         {
             String strIdCommentSubmit = request.getParameter( PARAMETER_ID_COMMENT_SUBMIT );
+            
             String strMessage;
             int nIdCommentSubmit = DiggUtils.getIntegerParameter( strIdCommentSubmit );
 
@@ -1388,22 +1395,21 @@ public class DiggJspBean extends PluginAdminPageJspBean
 
             UrlItem url = new UrlItem( JSP_DO_REMOVE_COMMENT_SUBMIT );
             url.addParameter( PARAMETER_ID_COMMENT_SUBMIT, nIdCommentSubmit );
-
+            url.addParameter(PARAMETER_ID_PARENT, strIdParentCommentSubmit);
             return AdminMessageService.getMessageUrl( request, strMessage, url.getUrl(  ),
                 AdminMessage.TYPE_CONFIRMATION );
         }
         else if ( request.getParameter( PARAMETER_ENABLE ) != null )
         {
-            return doEnableCommentSubmit( request );
+             doEnableCommentSubmit( request );
         }
         else if ( request.getParameter( PARAMETER_DISABLE ) != null )
         {
-            return doDisableCommentSubmit( request );
+             doDisableCommentSubmit( request );
         }
-        else
-        {
-            return getJspManageCommentSubmit( request );
-        }
+          
+        return getJspManageCommentSubmit( request,strIdParentCommentSubmit );
+        
     }
 
     /**
@@ -1532,7 +1538,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
             _diggSubmitService.update( diggSubmit, plugin );
         }
 
-        return getJspManageCommentSubmit( request );
+        return null;
     }
 
     /**
@@ -1567,7 +1573,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
             _diggSubmitService.update( diggSubmit, plugin );
         }
 
-        return getJspManageCommentSubmit( request );
+        return null;
     }
 
     /**
@@ -2914,12 +2920,30 @@ public class DiggJspBean extends PluginAdminPageJspBean
      *
      * @param request
      *            The HTTP request
+     * @param     strIdParentCommentSubmit strIdParentCommentSubmit
+     * @return url of the jsp manage comment submit
+     */
+    private String getJspManageCommentSubmit( HttpServletRequest request ,String strIdParentCommentSubmit)
+    {
+        String strUrlReturn = strIdParentCommentSubmit==null ?JSP_MANAGE_COMMENT_SUBMIT :JSP_MANAGE_COMMENT_SUBMIT+"?"+PARAMETER_ID_PARENT+"="+strIdParentCommentSubmit;
+       return  AppPathService.getBaseUrl( request ) + strUrlReturn;
+    }
+    
+    
+
+    /**
+     * return url of the jsp manage comment submit
+     *
+     * @param request
+     *            The HTTP request
+     * @param     strIdParentCommentSubmit strIdParentCommentSubmit
      * @return url of the jsp manage comment submit
      */
     private String getJspManageCommentSubmit( HttpServletRequest request )
     {
-        return AppPathService.getBaseUrl( request ) + JSP_MANAGE_COMMENT_SUBMIT;
+               return  getJspManageCommentSubmit(request, null);
     }
+    
 
     /**
      * return url of the jsp modify digg
