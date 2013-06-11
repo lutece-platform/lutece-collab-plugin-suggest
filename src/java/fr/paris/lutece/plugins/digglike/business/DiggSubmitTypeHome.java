@@ -33,14 +33,13 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import java.util.List;
+
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitTypeCacheService;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
-import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import java.util.List;
 
 
 /**
@@ -70,7 +69,12 @@ public final class DiggSubmitTypeHome
      */
     public static int create( DiggSubmitType diggSubmitType, Plugin plugin )
     {
-        return _dao.insert( diggSubmitType, plugin );
+        
+    	if(diggSubmitType.getPictogram()!=null)
+    	{
+    		diggSubmitType.setIdImageResource(ImageResourceHome.create(diggSubmitType.getPictogram(), plugin));
+    	}
+    	return _dao.insert( diggSubmitType, plugin );
     }
 
     /**
@@ -82,6 +86,24 @@ public final class DiggSubmitTypeHome
     */
     public static void update( DiggSubmitType diggSubmitType, Plugin plugin )
     {
+    	
+    	if(diggSubmitType.getPictogram()!=null)
+    	{
+    		//remove old image if exist
+    		if(diggSubmitType.getIdImageResource()!=null)
+    		{
+    			ImageResourceHome.remove(diggSubmitType.getIdImageResource(), plugin);
+    		}
+    		if(diggSubmitType.getPictogram().getImage() !=null)
+    		{
+    			diggSubmitType.setIdImageResource(ImageResourceHome.create(diggSubmitType.getPictogram(), plugin));
+    		}
+    		else
+    		{
+    			diggSubmitType.setIdImageResource(null);
+    		}
+    	}
+    	
         _dao.store( diggSubmitType, plugin );
         _cache.removeKey( DiggUtils.EMPTY_STRING +diggSubmitType.getIdType() );
     }
@@ -94,7 +116,13 @@ public final class DiggSubmitTypeHome
      */
     public static void remove( int nIdDiggSubmitType, Plugin plugin )
     {
-        _dao.delete( nIdDiggSubmitType, plugin );
+       
+    	DiggSubmitType diggSubmitType=findByPrimaryKey(nIdDiggSubmitType, plugin);
+    	if(diggSubmitType!=null && diggSubmitType.getIdImageResource()!=null)
+    	{
+    		ImageResourceHome.remove(diggSubmitType.getIdImageResource(), plugin);
+    	}
+    	_dao.delete( nIdDiggSubmitType, plugin );
         _cache.removeKey( DiggUtils.EMPTY_STRING +nIdDiggSubmitType );
     }
 
@@ -119,18 +147,7 @@ public final class DiggSubmitTypeHome
     	return diggSubmitType;
     }
 
-    /**
-     * Returns an instance of a diggSubmitType whose identifier is specified in parameter
-     *
-     * @param nKey The diggSubmitType primary key
-     * @param plugin the Plugin
-     * @return an instance of DiggSubmit
-     */
-    public static ImageResource getImageResource( int nKey, Plugin plugin )
-    {
-        return _dao.loadImage( nKey, plugin );
-    }
-
+   
     /**
      * Load the data of all the diggSubmitType who verify the filter and returns them in a  list
      * @param plugin the plugin

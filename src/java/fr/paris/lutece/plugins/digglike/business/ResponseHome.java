@@ -33,11 +33,10 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import fr.paris.lutece.portal.service.image.ImageResource;
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import java.util.List;
 
 
 /**
@@ -92,17 +91,7 @@ public final class ResponseHome
     }
     
     
-    /**
-     * Remove  an Image  associate to the response whose identifier is specified in parameter
-     *
-     * @param nIdResponse The nIdResponse
-     * @param plugin the Plugin
-     */
-    public static void removeImage( int nIdResponse, Plugin plugin )
-    {
-        _dao.deleteImageResource( nIdResponse, plugin );
-    }
-    
+   
 
     ///////////////////////////////////////////////////////////////////////////
     // Finders
@@ -130,29 +119,7 @@ public final class ResponseHome
         return _dao.selectListByFilter( filter, plugin );
     }
 
-    /**
-     * Return the image resource for the specified image id
-     * @param nImageId The identifier of image object
-     * @param plugin the plugin
-     * @return ImageResource
-     */
-    public static ImageResource getImageResource( int nImageId, Plugin plugin )
-    {
-        return _dao.loadImageResource( nImageId, plugin );
-    }
+   
     
-    /**
-     * Creation of an image
-     * @param nIdDiggSubmit the id of the diggSubmit
-     * @param image the image to add to the db
-     * @param plugin the Plugin
-     * @return the id of the new digg submit
-     * @throws com.mysql.jdbc.PacketTooBigException if the image is too big
-     *
-     */
-    public static int createImage( int nIdDiggSubmit, ImageResource image, Plugin plugin )
-        throws com.mysql.jdbc.PacketTooBigException
-    {
-        return _dao.insertImageResource( nIdDiggSubmit, image, plugin );
-    }
+   
 }

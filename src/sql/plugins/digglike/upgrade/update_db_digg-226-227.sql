@@ -1,3 +1,30 @@
+
+--
+-- Table structure for table digglike_image
+--
+DROP TABLE IF EXISTS digglike_image;
+CREATE TABLE digglike_image (
+	id_resource_image  int NOT NULL,
+	image_content LONG VARBINARY DEFAULT NULL,
+	image_mime_type varchar(100) DEFAULT NULL,
+	PRIMARY KEY (id_resource_image)
+);
+--
+-- Table structure for table digglike_response
+--
+ALTER TABLE  digglike_response ADD COLUMN id_resource_image int DEFAULT NULL;
+
+
+
+--
+-- Table structure for table digglike_digg_submit_type
+--
+
+ALTER TABLE digglike_digg_submit_type ADD COLUMN id_resource_image int DEFAULT NULL;
+ALTER TABLE digglike_digg_submit_type DROP COLUMN image_content;
+ALTER TABLE digglike_digg_submit_type DROP COLUMN image_mime_type;
+ALTER TABLE digglike_digg_submit_type DROP COLUMN image_url;
+
 --
 -- Table structure for table digglike_digg_attribute		
 --
@@ -5,24 +32,24 @@ DROP TABLE IF EXISTS digglike_digg_attribute CASCADE;
 CREATE TABLE digglike_digg_attribute (
 	id_digg INT DEFAULT 0 NOT NULL,
 	attribute_key varchar(255) NOT NULL,
-	attribute_value varchar(255) NOT NULL,
+	attribute_value varchar(255) DEFAULT NULL,
 	PRIMARY KEY (id_digg, attribute_key)
 );
 
 
 --
--- Add column disable_vote,is_pinned
+-- Add column disable_vote,is_pinned,disable_comment,id_image_resource,comment_number
 --
 
 ALTER TABLE digglike_digg_submit ADD COLUMN disable_vote int default 0;
 ALTER TABLE digglike_digg_submit ADD COLUMN is_pinned int default 0;
 ALTER TABLE digglike_digg_submit ADD COLUMN disable_comment smallint default 0;
-
-
+ALTER TABLE digglike_digg_submit ADD COLUMN id_image_resource int default NULL;
+ALTER TABLE digglike_digg_submit ADD COLUMN comment_number int default 0;
 --
 -- Table structure for table digglike_reported_message		
 --
-DROP TABLE IF EXISTS digglike_reported_message CASCADE;
+DROP TABLE IF EXISTS digglike_reported_message ;
 CREATE TABLE digglike_reported_message (
 	id_reported_message int default 0 NOT NULL,
 	id_digg_submit int default NULL,
@@ -42,7 +69,7 @@ ALTER TABLE digglike_reported_message ADD CONSTRAINT fk_digglike_reported_messag
 --
 -- Table structure for table digglike_digg_digg_submit_type
 --
-DROP TABLE IF EXISTS digglike_digg_digg_submit_type CASCADE;
+DROP TABLE IF EXISTS digglike_digg_digg_submit_type;
 CREATE TABLE digglike_digg_digg_submit_type (
 	id_digg int default 0 NOT NULL,
 	id_type int default 0 NOT NULL,
@@ -95,6 +122,8 @@ INSERT INTO `digglike_action` (`id_action`, `name_key`, `description_key`, `acti
 	(9, 'digglike.action.delete.name', 'digglike.action.delete.description', 'jsp/admin/plugins/digglike/ConfirmRemoveDigg.jsp', 'icon-trash icon-white', 'DELETE', 0),
 	(10, 'digglike.action.updateAllDiggSubmit.name', 'digglike.action.updateAllDiggSubmit.description', 'jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp', 'icon-refresh icon-white', 'UPDATE_ALL_DIGG_SUBMIT', 1),
 	(11, 'digglike.action.updateAllDiggSubmit.name', 'digglike.action.updateAllDiggSubmit.description', 'jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp', 'icon-refresh icon-white', 'UPDATE_ALL_DIGG_SUBMIT', 0);
+
+	
 	
 	
 	

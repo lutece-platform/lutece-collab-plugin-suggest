@@ -33,17 +33,17 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
-import fr.paris.lutece.util.date.DateUtil;
-import fr.paris.lutece.util.xml.XmlUtil;
-
 import java.sql.Timestamp;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+
+import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
+import fr.paris.lutece.portal.service.resource.IExtendableResource;
+import fr.paris.lutece.util.date.DateUtil;
+import fr.paris.lutece.util.xml.XmlUtil;
 
 
 /**
@@ -51,11 +51,16 @@ import javax.servlet.http.HttpServletRequest;
  * class DiggSubmit
  *
  */
-public class DiggSubmit
+public class DiggSubmit implements IExtendableResource 
 {
-    public static final int STATE_DISABLE = 1;
+    
+	
+	public static final String RESOURCE_TYPE = "DIGGLIKE_DIGG_SUBMIT_TYPE";
+	public static final int STATE_DISABLE = 1;
     public static final int STATE_WAITING_FOR_PUBLISH = 2;
     public static final int STATE_PUBLISH = 3;
+   
+    
     private static final String TAG_DIGG_SUBMIT = "digg-submit";
     private static final String TAG_DIGG_SUBMIT_TITLE = "digg-submit-title";
     private static final String TAG_DIGG_SUBMIT_CATEGORY = "digg-submit-category";
@@ -90,8 +95,10 @@ public class DiggSubmit
     private boolean _bDisableComment;
     private boolean _bPinned;
     private List<ReportedMessage> _listReportedMessages;
+    private Integer _nIdImageResource;
 
-    /**
+
+	/**
      * true if the digg submit have been reported by people
      * @return true if the digg submit have been reported by people
      */
@@ -572,4 +579,75 @@ public class DiggSubmit
 	public void setReportedMessages(List<ReportedMessage> _listReportedMessages) {
 		this._listReportedMessages = _listReportedMessages;
 	}
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getIdExtendableResource( )
+	{
+		return Integer.toString( _nIdDiggSubmit );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getExtendableResourceType( )
+	{
+		return RESOURCE_TYPE;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getExtendableResourceName( )
+	{
+		return _strDiggSubmitTitle;
+	}
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getExtendableResourceDescription( )
+    {
+        return _strDiggSubmitTitle;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getExtendableResourceImageUrl( )
+    {
+        if ( _nIdImageResource!=null )
+        {
+            StringBuilder sbUrl = new StringBuilder( DiggUtils.SERVLET_IMAGE_PATH );
+            sbUrl.append( _nIdImageResource );
+                return sbUrl.toString( );
+        }
+        return null;
+    }
+    
+    /**
+     * the image id ressource associate to the digg submit
+     * @return the image id ressource associate to the digg submit
+     */
+    public Integer getIdImageResource() {
+		return _nIdImageResource;
+	}
+    
+    /**
+     * set the image id ressource associate to the digg submit
+     * @param _nIdImageResource  the image id ressource associate to the digg submit
+     */
+	public void setIdImageResource(Integer nIdImageRessource) {
+		this._nIdImageResource = nIdImageRessource;
+	}
+
+    
+    
 }

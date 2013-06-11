@@ -102,6 +102,7 @@ public final class DiggUtils
     public static final int CONSTANT_SUBMIT_FILTER_WEEK = 2;
     public static final int CONSTANT_SUBMIT_FILTER_MONTH = 3;
     public static final int CONSTANT_SUBMIT_FILTER_YESTERDAY = 4;
+    public static final String SERVLET_IMAGE_PATH = "image?resource_type=image_digg&id=";
     public static final String EMPTY_STRING = "";
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_ENTRY = "entry";

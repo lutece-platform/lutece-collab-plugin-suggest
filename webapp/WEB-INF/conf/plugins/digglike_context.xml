@@ -27,6 +27,7 @@
     <bean id="digglike.diggUserInfoService"  class="fr.paris.lutece.plugins.digglike.service.DiggUserInfoService" />
     <bean id="digglike.diggAttributeDAO"  class="fr.paris.lutece.plugins.digglike.business.attribute.DiggAttributeDAO" />
     <bean id="digglike.reportedMessageDAO"  class="fr.paris.lutece.plugins.digglike.business.ReportedMessageDAO" />
+    <bean id="digglike.imageResourceDAO"  class="fr.paris.lutece.plugins.digglike.business.ImageResourceDAO" />
     
     <bean id="digglike.transactionManager"  class="fr.paris.lutece.portal.service.database.DAOUtilTransactionManager">
 	 	<property name="pluginName" value="digglike" />
@@ -45,6 +46,9 @@
 	<bean id="digglike.massChangeVoteDiggSubmitAction" class="fr.paris.lutece.plugins.digglike.web.action.MassChangeVoteDiggSubmitAction" />
 	<bean id="digglike.massChangeCommentDiggSubmitAction" class="fr.paris.lutece.plugins.digglike.web.action.MassChangeCommentDiggSubmitAction" />
 	<bean id="digglike.massPinnedDiggSubmitAction" class="fr.paris.lutece.plugins.digglike.web.action.MassPinnedDiggSubmitAction" />
+   <!-- Extendable Resource -->
+    <bean id="diggExtendableResourceService" class="fr.paris.lutece.plugins.digglike.service.DiggExtendableResourceService" />
+    <bean id="diggSubmitExtendableResourceService" class="fr.paris.lutece.plugins.digglike.service.DiggSubmitExtendableResourceService" />
 
 
 </beans>

@@ -58,6 +58,7 @@ public class Response
     private IEntry _entry;
     private DiggSubmit _diggSubmit;
     private ImageResource _image;
+    private Integer _nIdImageResource;
 
     /**
      *
@@ -168,4 +169,21 @@ public class Response
 
         return strXml.toString(  );
     }
+
+    
+    /**
+     * the image resource id associate to the response
+     * @return Resource Image
+     */
+	public Integer getIdImageResource() {
+		return _nIdImageResource;
+	}
+
+	/**
+	 * image resource id associate to the response
+	 * @param idImageResource image resource id associate to the response
+	 */
+	public void setIdImageResource(Integer idImageResource) {
+		_nIdImageResource = idImageResource;
+	}
 }

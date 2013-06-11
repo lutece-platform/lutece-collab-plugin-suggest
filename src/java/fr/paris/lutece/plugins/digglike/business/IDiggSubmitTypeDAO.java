@@ -33,10 +33,9 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import fr.paris.lutece.portal.service.image.ImageResource;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-
 import java.util.List;
+
+import fr.paris.lutece.portal.service.plugin.Plugin;
 
 
 /**
@@ -64,15 +63,7 @@ public interface IDiggSubmitTypeDAO
      */
     DiggSubmitType load( int nIdDiggSubmitType, Plugin plugin );
 
-    /**
-     * Load the image of the diggSubmitType from the table
-     *
-     * @param nIdDiggSubmitType The identifier of the formResponse
-     * @param plugin the plugin
-     * @return the instance of the ImageResource
-     */
-    ImageResource loadImage( int nIdDiggSubmitType, Plugin plugin );
-
+   
     /**
      * Delete   the digg submit type whose identifier is specified in parameter
      *

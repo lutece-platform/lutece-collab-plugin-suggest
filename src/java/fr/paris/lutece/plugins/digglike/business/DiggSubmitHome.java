@@ -140,8 +140,14 @@ public final class DiggSubmitHome
 
         for ( Response response : listResponses )
         {
-            ResponseHome.remove( response.getIdResponse(  ), plugin );
-            ResponseHome.removeImage(response.getIdResponse(  ), plugin );
+            
+        	if(response.getIdImageResource()!=null)
+        	{
+        		ImageResourceHome.remove(response.getIdImageResource(), plugin);
+        		
+        	}
+        	ResponseHome.remove( response.getIdResponse(  ), plugin );
+           
         }
 
         List<CommentSubmit> listComments = CommentSubmitService.getService(  ).getCommentSubmitList( filter, plugin );
@@ -240,36 +246,7 @@ public final class DiggSubmitHome
         return listDiggSubmit;
     }
 
-    /**
-     * Load the data of all the diggSubmit with the number of comment by digg submit  who verify the filter and returns them in a  list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return  the list of diggSubmit
-     */
-    public static List<DiggSubmit> getDiggSubmitListWithNumberComment( SubmitFilter filter, Plugin plugin )
-    {
-        List<DiggSubmit> listDiggSubmit = _dao.selectListByFilter( filter, plugin );
 
-        if ( listDiggSubmit != null )
-        {
-            for ( DiggSubmit diggSubmit : listDiggSubmit )
-            {
-                filter.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
-                diggSubmit.setNumberComment( CommentSubmitService.getService(  ).getCountCommentSubmit( filter, plugin ) );
-                if(diggSubmit.getDiggSubmitType()!=null)
-                {
-                	diggSubmit.setDiggSubmitType(DiggSubmitTypeHome.findByPrimaryKey(diggSubmit.getDiggSubmitType().getIdType(), plugin));
-                }
-                if(diggSubmit.getCategory()!=null)
-                {
-                	diggSubmit.setCategory(CategoryHome.findByPrimaryKey(diggSubmit.getCategory().getIdCategory(), plugin));
-                	
-                }
-            }
-        }
-
-        return listDiggSubmit;
-    }
 
     /**
      * Load the id of all the diggSubmit who verify the filter and returns them in a  list

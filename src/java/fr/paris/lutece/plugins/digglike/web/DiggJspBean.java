@@ -47,6 +47,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.digglike.business.Category;
@@ -101,7 +102,9 @@ import fr.paris.lutece.portal.business.style.ThemeHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
+import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.mailinglist.AdminMailingListService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -121,6 +124,8 @@ import fr.paris.lutece.portal.web.admin.PluginAdminPageJspBean;
 import fr.paris.lutece.portal.web.pluginaction.DefaultPluginActionResult;
 import fr.paris.lutece.portal.web.pluginaction.IPluginActionResult;
 import fr.paris.lutece.portal.web.pluginaction.PluginActionManager;
+import fr.paris.lutece.portal.web.resource.ExtendableResourcePluginActionManager;
+import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.html.HtmlTemplate;
@@ -387,7 +392,9 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_DISPLAY_COMMENT_IN_DIGG_SUBMIT_LIST="display_comment_in_digg_submit_list";
     private static final String PARAMETER_NUMBER_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST="number_comment_display_in_digg_submit_list";
     private static final String PARAMETER_NUMBER_CHAR_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST="number_char_comment_display_in_digg_submit_list";
-    
+    private static final String PARAMETER_UPDATE_FILE = "update_file";
+    private static final String PARAMETER_IMAGE_SOURCE = "image_source";
+    private static final String PARAMETER_DESCRIPTION = "description";
     
  
 
@@ -700,8 +707,6 @@ public class DiggJspBean extends PluginAdminPageJspBean
         for ( Object idDiggSubmitDisplay : paginator.getPageItems(  ) )
         {
             diggSubmit = _diggSubmitService.findByPrimaryKey( (Integer) idDiggSubmitDisplay, false, getPlugin(  ) );
-            filter.setIdDiggSubmit( (Integer) idDiggSubmitDisplay );
-            diggSubmit.setNumberComment( _commentSubmitService.getCountCommentSubmit( filter, getPlugin() ) );
             listDiggSubmitDisplay.add( diggSubmit );
         }
        
@@ -806,8 +811,6 @@ public class DiggJspBean extends PluginAdminPageJspBean
 	        for ( Object idDiggSubmitDisplay : paginator.getPageItems(  ) )
 	        {
 	            diggSubmit = _diggSubmitService.findByPrimaryKey( (Integer) idDiggSubmitDisplay, false, getPlugin(  ) );
-	            filter.setIdDiggSubmit( (Integer) idDiggSubmitDisplay );
-	            diggSubmit.setNumberComment( _commentSubmitService.getCountCommentSubmit( filter, getPlugin() ) );
 	            listDiggSubmitDisplay.add( diggSubmit );
 	        }
 	        
@@ -1024,12 +1027,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         }
        
         
-        //get number comment
-        SubmitFilter filterNumberComment=new SubmitFilter();
-        filterNumberComment.setIdDiggSubmit( _nIdDiggSubmit );
-        filterNumberComment.setIdDigg( _nIdDigg );
-        diggSubmit.setNumberComment( _commentSubmitService.getCountCommentSubmit( filterNumberComment, getPlugin() ) );
-       
+              
         // build Filter
         SubmitFilter filter = DiggUtils.getDiggSubmitFilter( getSearchFields() );
 
@@ -1438,6 +1436,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
 
         commentSubmit.setActive( true );
         diggSubmit.setNumberCommentEnable( diggSubmit.getNumberCommentEnable(  ) + 1 );
+        diggSubmit.setNumberComment(diggSubmit.getNumberComment()+ 1 );
         _diggSubmitService.update( diggSubmit, plugin );
 
         commentSubmit.setDateComment( DiggUtils.getCurrentDate(  ) );
@@ -1500,7 +1499,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         {
             diggSubmit.setNumberCommentEnable( diggSubmit.getNumberCommentEnable(  ) - 1 );
         }
-
+        diggSubmit.setNumberComment(diggSubmit.getNumberComment(  ) - 1 ); 
         _diggSubmitService.update( diggSubmit, plugin );
 
         return getJspManageCommentSubmit( request );
@@ -1620,9 +1619,13 @@ public class DiggJspBean extends PluginAdminPageJspBean
      *
      * @return null if there is no error or else return the error page url
      */
-    private String getDiggData( HttpServletRequest request, Digg digg )
+    private String getDiggData( MultipartHttpServletRequest request, Digg digg )
     {
-        String strTitle = request.getParameter( PARAMETER_TITLE );
+        
+    	
+    	
+    	String strUpdateFile = request.getParameter( PARAMETER_UPDATE_FILE );
+    	String strTitle = request.getParameter( PARAMETER_TITLE );
         String strLibelleContribution = request.getParameter( PARAMETER_LIBELLE_CONTRIBUTION );
         String strUnavailabilityMessage = request.getParameter( PARAMETER_UNAVAILABILITY_MESSAGE );
         String strWorkgroup = request.getParameter( PARAMETER_WORKGROUP );
@@ -1667,7 +1670,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         String strEnableTermsOfUse = request.getParameter( PARAMETER_ENABLE_TERMS_OF_USE );
         String strTermsOfUse = request.getParameter( PARAMETER_TERMS_OF_USE );
         String strEnableReports = request.getParameter( PARAMETER_ENABLE_REPORTS );
-        
+        String strDescription=request.getParameter( PARAMETER_DESCRIPTION );
         
         int nIdVoteType = DiggUtils.getIntegerParameter( strIdVoteType );
         int nIdMailingListDiggSubmit = DiggUtils.getIntegerParameter( strIdMailingListDiggSubmit );
@@ -1855,8 +1858,6 @@ public class DiggJspBean extends PluginAdminPageJspBean
             digg.setCodeTheme( strThemeXpage );
         }
         
-        
-
         digg.setLibelleValidateButton( strLibelleValidateButton );
         digg.setNumberDiggSubmitInTopScore( nNumberDiggSubmitInTopScore );
         digg.setNumberDiggSubmitInTopComment( nNumberDiggSubmitInTopComment );
@@ -1873,6 +1874,24 @@ public class DiggJspBean extends PluginAdminPageJspBean
         digg.setEnableReports(strEnableReports !=null);
         digg.setEnableTermsOfUse(strEnableTermsOfUse !=null);
         digg.setTermsOfUse(strTermsOfUse);
+        digg.setDescription(strDescription);
+        if ( ( digg.getIdDigg() == DiggUtils.CONSTANT_ID_NULL ) || ( strUpdateFile != null ) )
+        {
+        
+          	FileItem imageSource = request.getFile( PARAMETER_IMAGE_SOURCE );
+            String strImageName = FileUploadService.getFileNameOnly( imageSource );
+          
+        	ImageResource image = new ImageResource(  );
+            byte[] baImageSource = imageSource.get(  );
+
+            if ( ( strImageName != null ) && !strImageName.equals( "" ) )
+            {
+                image.setImage( baImageSource );
+                image.setMimeType( imageSource.getContentType(  ) );
+              }
+            digg.setImage( image );
+        }
+        
         
         return null; // No error
     }
@@ -1950,13 +1969,15 @@ public class DiggJspBean extends PluginAdminPageJspBean
      */
     public String doCreateDigg( HttpServletRequest request )
     {
-        if ( ( request.getParameter( PARAMETER_CANCEL ) == null ) &&
+    	
+    	MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        if ( ( multipartRequest.getParameter( PARAMETER_CANCEL ) == null ) &&
                 RBACService.isAuthorized( Digg.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                     DigglikeResourceIdService.PERMISSION_CREATE, getUser(  ) ) )
         {
             Plugin plugin = getPlugin(  );
             Digg digg = new Digg(  );
-            String strError = getDiggData( request, digg );
+            String strError = getDiggData( multipartRequest, digg );
 
             if ( strError != null )
             {
@@ -2099,7 +2120,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         model.put( MARK_DEFAULT_VALUE_ROLE, Digg.ROLE_NONE );
         model.put( MARK_THEME_REF_LIST, themesRefList );
         model.put( MARK_LIST_DIGG_SUBMIT_SORT, refListDiggSort );
-
+        
         setPageTitleProperty( PROPERTY_MODIFY_DIGG_TITLE );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_DIGG, locale, model );
@@ -2116,17 +2137,19 @@ public class DiggJspBean extends PluginAdminPageJspBean
      */
     public String doModifyDigg( HttpServletRequest request )
     {
-        String strIdDigg = request.getParameter( PARAMETER_ID_DIGG );
+        
+    	MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+    	String strIdDigg = multipartRequest.getParameter( PARAMETER_ID_DIGG );
         int nIdDigg = DiggUtils.getIntegerParameter( strIdDigg );
 
-        if ( ( request.getParameter( PARAMETER_CANCEL ) == null ) && ( nIdDigg != -1 ) &&
+        if ( ( multipartRequest.getParameter( PARAMETER_CANCEL ) == null ) && ( nIdDigg != -1 ) &&
                 RBACService.isAuthorized( Digg.RESOURCE_TYPE, EMPTY_STRING + nIdDigg,
                     DigglikeResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
         {
             Plugin plugin = getPlugin(  );
             Digg digg = DiggHome.findByPrimaryKey( nIdDigg, plugin );
             String strOldTheme = digg.getCodeTheme(  );
-            String strError = getDiggData( request, digg );
+            String strError = getDiggData( multipartRequest, digg );
 
             if ( strError != null )
             {

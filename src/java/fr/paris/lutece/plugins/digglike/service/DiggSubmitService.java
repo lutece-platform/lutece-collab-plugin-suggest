@@ -52,6 +52,7 @@ import fr.paris.lutece.plugins.digglike.business.DiggSubmitStateHome;
 import fr.paris.lutece.plugins.digglike.business.EntryFilter;
 import fr.paris.lutece.plugins.digglike.business.EntryHome;
 import fr.paris.lutece.plugins.digglike.business.IEntry;
+import fr.paris.lutece.plugins.digglike.business.ImageResourceHome;
 import fr.paris.lutece.plugins.digglike.business.Response;
 import fr.paris.lutece.plugins.digglike.business.ResponseHome;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
@@ -109,18 +110,17 @@ public class DiggSubmitService implements IDiggSubmitService
         {
             for ( Response response : diggSubmit.getResponses(  ) )
             {
-                response.setDiggSubmit( diggSubmit );
-                ResponseHome.create( response, plugin );
+            	
                 if(response.getImage()!=null)
                 {
-                	try {
-                			ResponseHome.createImage(response.getIdResponse(), response.getImage(), plugin);
-					} catch (PacketTooBigException e) {
-						
-						AppLogService.error(e);
-					}
+                	response.setIdImageResource(ImageResourceHome.create( response.getImage(), plugin));
+                	//update Id Image ressource associate to the digg
+                	diggSubmit.setIdImageResource(response.getIdImageResource());
                 	
                 }
+                response.setDiggSubmit( diggSubmit );
+                ResponseHome.create( response, plugin );
+                
             }
         }
         

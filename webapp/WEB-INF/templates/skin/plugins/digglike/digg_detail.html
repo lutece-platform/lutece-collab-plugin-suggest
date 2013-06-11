@@ -1,3 +1,4 @@
+
 <div class="row" id="digg${digg_submit.idDiggSubmit}">
 	<div class="span8">
 		<h3>
@@ -43,6 +44,9 @@
 		<a class="btn btn-primary btn-small" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit.idDiggSubmit}&amp;action=create_report#digg${digg_submit.idDiggSubmit}">
 			#i18n{digglike.diggListSubmit.labelReport}
 		</a>
+	</#if>
+	<#if isExtendInstalled?? && isExtendInstalled >
+				@Extender[${digg_submit.idDiggSubmit},DIGGLIKE_DIGG_SUBMIT_TYPE,opengraph,{header:false,footer:false}]@
 	</#if>
 	<hr>
 	<#if authorized_comment && !digg_submit.disableComment>

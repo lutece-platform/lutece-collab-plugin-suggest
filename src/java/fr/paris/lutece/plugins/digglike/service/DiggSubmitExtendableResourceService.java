@@ -31,60 +31,65 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.digglike.business;
+package fr.paris.lutece.plugins.digglike.service;
 
-import java.util.List;
+import java.util.Locale;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
+import org.apache.commons.lang.StringUtils;
 
+import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.resource.IExtendableResource;
+import fr.paris.lutece.portal.service.resource.IExtendableResourceService;
 
 /**
  *
- * interface IResponseDAO
+ * DocumentExtendableResourceService
  *
  */
-public interface IResponseDAO
+public class DiggSubmitExtendableResourceService implements IExtendableResourceService
 {
-    /**
-     * Insert a new record in the table.
-     *
-     * @param response instance of the Response object to insert
-     * @param plugin the plugin
-     */
-    void insert( Response response, Plugin plugin );
+    private static final String MESSAGE_DIGG_SUBMIT_RESOURCE_TYPE_DESCRIPTION = "digglike.resource.diggSubmitResourceTypeDescription";
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isInvoked( String strResourceType )
+	{
+		return DiggSubmit.RESOURCE_TYPE.equals( strResourceType );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public IExtendableResource getResource( String strIdResource, String strResourceType )
+	{
+		if ( StringUtils.isNotBlank( strIdResource ) && StringUtils.isNumeric( strIdResource ) )
+		{
+			int nIdDiggSubmit = Integer.parseInt( strIdResource );
+			return DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit,false,PluginService.getPlugin(DigglikePlugin.PLUGIN_NAME) );
+		}
+		return null;
+	}
 
     /**
-     * Load the data of the response from the table
-     *
-     * @param nIdResponse The identifier of the entry
-     * @param plugin the plugin
-     * @return the instance of the Entry
+     * {@inheritDoc}
      */
-    Response load( int nIdResponse, Plugin plugin );
+    @Override
+    public String getResourceType( )
+    {
+        return DiggSubmit.RESOURCE_TYPE;
+    }
 
     /**
-     * Delete  response   whose identifier is specified in parameter
-     *
-     * @param nIdResponse The identifier of the response
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
-    public void delete( int nIdResponse, Plugin plugin );
-
-    /**
-     * Update the the response in the table
-     *
-     * @param response instance of the response object to update
-     * @param plugin the plugin
-     */
-    void store( Response response, Plugin plugin );
-
-    /**
-     * Load the data of all the response who verify the filter and returns them in a  list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return  the list of response
-     */
-    List<Response> selectListByFilter( SubmitFilter filter, Plugin plugin );
-    
-
+    @Override
+    public String getResourceTypeDescription( Locale locale )
+    {
+        return I18nService.getLocalizedString( MESSAGE_DIGG_SUBMIT_RESOURCE_TYPE_DESCRIPTION, locale );
+    }
 }

@@ -28,7 +28,10 @@
 		<div class="controls">
 		<label for="image_source" >#i18n{digglike.createDiggSubmitType.labelImage}</label>
 			<input type="file" id="image_source" name="image_source" maxlength="100"/>
-			<span class="help-text"><img class="thumbnail" src='${type.imageUrl}' title="img"></span>
+			<#if type.idImageResource?has_content >
+				<span class="help-text"><img class="thumbnail" src='image?resource_type=image_digg&id=${type.idImageResource}' title="img"></span>
+			</#if>
+			
 		</div>
 		<div class="controls">
 			<label class="checkbox" for="update_file" >#i18n{digglike.createDiggSubmitType.labelUpdateFile} 

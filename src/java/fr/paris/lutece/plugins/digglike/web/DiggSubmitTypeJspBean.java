@@ -43,7 +43,6 @@ import org.apache.commons.fileupload.FileItem;
 
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitType;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitTypeHome;
-import fr.paris.lutece.plugins.digglike.service.ImageServiceDiggSubmitType;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -56,7 +55,6 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.admin.PluginAdminPageJspBean;
-import fr.paris.lutece.portal.web.constants.Parameters;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
@@ -213,18 +211,10 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
             return getManageDiggSubmitType( request );
         }
 
-        String strResourceType = ImageServiceDiggSubmitType.getInstance(  ).getResourceTypeId(  );
-        UrlItem url = new UrlItem( Parameters.IMAGE_SERVLET );
-        url.addParameter( Parameters.RESOURCE_TYPE, strResourceType );
-        url.addParameter( Parameters.RESOURCE_ID, Integer.toString( nIdDiggSubmitType ) );
-
-        String strImageAddress = "<img src='" + url.getUrlWithEntity(  ) + "'" + "alt='image' />";
-
         diggSubmitType = DiggSubmitTypeHome.findByPrimaryKey( nIdDiggSubmitType, plugin );
         model.put( MARK_DIGG_SUBMIT_TYPE, diggSubmitType );
         setPageTitleProperty( PROPERTY_MODIFY_DIGG_SUBMIT_TYPE_TITLE );
-        model.put( MARK_IMAGE_ADDRESS, strImageAddress );
-
+   
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_DIGG_SUBMIT_TYPE, locale, model );
 
         return getAdminPage( template.getHtml(  ) );
@@ -366,19 +356,10 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
             {
                 image.setImage( baImageSource );
                 image.setMimeType( imageSource.getContentType(  ) );
-                diggSubmitType.setPictogram( image );
-            }
-            else
-            {
-                diggSubmitType.setPictogram( null );
-                diggSubmitType.setImageUrl( "" );
-            }
+             }
+            diggSubmitType.setPictogram( image );
         }
-        else
-        {
-            diggSubmitType.setPictogram( DiggSubmitTypeHome.getImageResource( diggSubmitType.getIdType(  ),
-                    getPlugin(  ) ) );
-        }
+        
 
         diggSubmitType.setColor( strColor );
         diggSubmitType.setName( strName );

@@ -33,58 +33,65 @@
  */
 package fr.paris.lutece.plugins.digglike.service;
 
-import fr.paris.lutece.plugins.digglike.business.ImageResourceHome;
-import fr.paris.lutece.portal.service.image.ImageResource;
-import fr.paris.lutece.portal.service.image.ImageResourceManager;
-import fr.paris.lutece.portal.service.image.ImageResourceProvider;
-import fr.paris.lutece.portal.service.plugin.PluginService;
+import java.util.Locale;
 
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.digglike.business.Digg;
+import fr.paris.lutece.plugins.digglike.business.DiggHome;
+import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.resource.IExtendableResource;
+import fr.paris.lutece.portal.service.resource.IExtendableResourceService;
 
 /**
  *
- * This classe provide services for Category
+ * DocumentExtendableResourceService
  *
  */
-public class ImageService implements ImageResourceProvider
+public class DiggExtendableResourceService implements IExtendableResourceService
 {
-    private static ImageService _singleton = new ImageService(  );
-    private static final String IMAGE_RESOURCE_TYPE_ID = "image_digg";
+    private static final String MESSAGE_DIGG_RESOURCE_TYPE_DESCRIPTION = "digglike.resource.diggResourceTypeDescription";
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isInvoked( String strResourceType )
+	{
+		return Digg.RESOURCE_TYPE.equals( strResourceType );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public IExtendableResource getResource( String strIdResource, String strResourceType )
+	{
+		if ( StringUtils.isNotBlank( strIdResource ) && StringUtils.isNumeric( strIdResource ) )
+		{
+			int nIdDigg = Integer.parseInt( strIdResource );
+			return DiggHome.findByPrimaryKey( nIdDigg,PluginService.getPlugin(DigglikePlugin.PLUGIN_NAME) );
+		}
+		return null;
+	}
 
     /**
-     * Creates a new instance of CategoryService
+     * {@inheritDoc}
      */
-    ImageService(  )
+    @Override
+    public String getResourceType( )
     {
-        ImageResourceManager.registerProvider( this );
+        return Digg.RESOURCE_TYPE;
     }
 
     /**
-     * Get the unique instance of the service
-     *
-     * @return The unique instance
+     * {@inheritDoc}
      */
-    public static ImageService getInstance(  )
+    @Override
+    public String getResourceTypeDescription( Locale locale )
     {
-        return _singleton;
-    }
-
-    /**
-     * Get the resource for image
-     * @param nIdResource The identifier of image or diggsubmit object
-     * @return The ImageResource
-     */
-    public ImageResource getImageResource( int nIdResource )
-    {
-    	
-    	return ImageResourceHome.findByPrimaryKey( nIdResource, PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) );
-    }
-
-    /**
-     * Get the type of resource
-     * @return The type of resource
-     */
-    public String getResourceTypeId(  )
-    {
-        return IMAGE_RESOURCE_TYPE_ID;
+        return I18nService.getLocalizedString( MESSAGE_DIGG_RESOURCE_TYPE_DESCRIPTION, locale );
     }
 }

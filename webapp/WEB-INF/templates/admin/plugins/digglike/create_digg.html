@@ -1,6 +1,6 @@
 <div class="row-fluid">	
 	<div class="span12">
-	<form class="form" action="jsp/admin/plugins/digglike/DoCreateDigg.jsp?plugin_name=digglike" method="post" >
+	<form class="form" action="jsp/admin/plugins/digglike/DoCreateDigg.jsp?plugin_name=digglike" method="post" enctype="multipart/form-data">
 		<ul class="nav nav-tabs">
 			<li class="active">
 				<a data-toggle="tab" href="#panel1">#i18n{digglike.creatDigg.navTab.labelGeneral}</a>
@@ -77,6 +77,13 @@
 						<textarea name="unavailability_message" id="unavailability_message" rows="4" class="richtext">${default_message.unavailabilityMessage}</textarea>
 					</div>
 				</div>
+				<div class="control-group">
+					<label class="control-label" for="description">#i18n{digglike.createDigg.labelDescription}</label>
+					<div class="controls">
+						<textarea name="description" id="description" rows="4" class="richtext"></textarea>
+						<p class="help-block">#i18n{digglike.createDigg.labelDescriptionComment}</p>  
+					</div>
+				</div>
 			</div>
 			</div>
 			</div>
@@ -86,7 +93,7 @@
 					  <div class="control-group">
 						<div class="controls">
 							 <label class="control-label" class="checkbox" for="active_digg_submit_paginator">
-							 	<input name="active_digg_submit_paginator" value="${yes_value}" type="checkbox"> #i18n{digglike.createDigg.labelActiveDiggSubmitPaginator}
+							 	<input name="active_digg_submit_paginator" value="${yes_value}" type="checkbox"checked='checked'> #i18n{digglike.createDigg.labelActiveDiggSubmitPaginator}
 							 </label>
 							 <p class="help-block">#i18n{digglike.createDigg.labelActiveDiggSubmitPaginatorComment}</p>
 						</div>
@@ -94,7 +101,7 @@
 					<div class="control-group">
 						<label class="control-label" for="number_digg_submit_per_page">#i18n{digglike.createDigg.labelNumberDiggSubmitPerPage}</label> 
 						<div class="controls">
-							<input type="text" name="number_digg_submit_per_page" id="number_digg_submit_per_page" class="input-mini" value="" maxlength="10" />
+							<input type="text" name="number_digg_submit_per_page" id="number_digg_submit_per_page" class="input-mini" value="20" maxlength="10" />
 							<p class="help-block">#i18n{digglike.createDigg.labelNumberDiggSubmitPerPageComment}</p>
 						</div>
 					</div>
@@ -264,32 +271,18 @@
 		
 			<#if authentification_enable> 	
 						<div class="control-group">
-							<label class="control-label" for=""></label>						
+							<label class="control-label" for="">#i18n{digglike.createDigg.labelRequiredAuthentification}</label>						
 							<div class="controls">
-							<label class="checkbox" for="required_authentification">#i18n{digglike.createDigg.labelRequiredAuthentification}
-								<input name="active_digg_submit_authentification" value="${yes_value}" type="checkbox" >
-							</label>
-							<p class="help-block">#i18n{digglike.createDigg.labelRequiredAuthentificationCreation}</p>  
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for=""></label>	
-							<div class="controls">
-							<label class="checkbox" for="active_vote_authentification">#i18n{digglike.createDigg.labelRequiredAuthentificationVote}  
-								<input name="active_vote_authentification" value="${yes_value}" type="checkbox" >
-							</label>
-								<p class="help-block">#i18n{digglike.createDigg.labelRequiredAuthentificationVoteComment}</p>  
-							
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for=""></label>	
-							<div class="controls">
-								<label class="checkbox" for="active_comment_authentification">
-								#i18n{digglike.createDigg.labelRequiredAuthentificationCommentSubmit}   
-								<input name="active_comment_authentification" value="active_comment_authentification" type="checkbox" >
+								<label class="checkbox inline" for="required_authentification">
+									<input name="active_digg_submit_authentification" value="${yes_value}" type="checkbox" >#i18n{digglike.createDigg.labelRequiredAuthentificationCreation}
 								</label>
-							<p class="help-block">#i18n{digglike.createDigg.labelRequiredAuthentificationCommentSubmitComment}</p>            
+								<label class="checkbox inline" for="active_vote_authentification"> 
+									<input name="active_vote_authentification" value="${yes_value}" type="checkbox" >#i18n{digglike.createDigg.labelRequiredAuthentificationVote} 
+								</label>
+								<label class="checkbox inline" for="active_comment_authentification">
+									<input name="active_comment_authentification" value="active_comment_authentification" type="checkbox" >	#i18n{digglike.createDigg.labelRequiredAuthentificationCommentSubmit}   
+								</label>
+								<p class="help-block">#i18n{digglike.createDigg.labelRequiredAuthentificationComment}</p>
 							</div>
 						</div>
 			</#if>
@@ -302,14 +295,14 @@
 			<div class="control-group">
 				<label class="control-label" for="">#i18n{digglike.createDigg.labelMailDiggSubmit}</label>            
 				<div class="controls">
-					<label class="checkbox inline" for="enable_mail_new_digg_submit">#i18n{digglike.createDigg.labelMailNewDiggSubmit} 
-							<input name="enable_mail_new_digg_submit" value="${yes_value}" type="checkbox" >
+					<label class="checkbox inline" for="enable_mail_new_digg_submit">
+							<input name="enable_mail_new_digg_submit" value="${yes_value}" type="checkbox" >#i18n{digglike.createDigg.labelMailNewDiggSubmit} 
 					</label>   
-					<label class="checkbox inline" for="enable_mail_new_comment_submit">#i18n{digglike.createDigg.labelMailNewCommentSubmit} 
-							<input name="enable_mail_new_comment_submit" value="${yes_value}" type="checkbox" >
+					<label class="checkbox inline" for="enable_mail_new_comment_submit">
+							<input name="enable_mail_new_comment_submit" value="${yes_value}" type="checkbox" >#i18n{digglike.createDigg.labelMailNewCommentSubmit} 
 					</label>
-					<label class="checkbox inline" for="enable_mail_new_reported_submit">#i18n{digglike.createDigg.labelMailNewReportedSubmit} 
-							<input name="enable_mail_new_reported_submit" value="${yes_value}" type="checkbox" >
+					<label class="checkbox inline" for="enable_mail_new_reported_submit">
+							<input name="enable_mail_new_reported_submit" value="${yes_value}" type="checkbox" >#i18n{digglike.createDigg.labelMailNewReportedSubmit} 
 					</label>    
 				</div>
 			</div>
@@ -323,7 +316,14 @@
 		     
 		</div>
 		<div class="tab-pane" id="panel5">
-			<div class="control-group">
+			 <div class="control-group">
+				<label class="control-label" for="" >&nbsp;</label>
+				<div class="controls">
+					<label for="image_source" >#i18n{digglike.createDigg.labelImage}</label>
+					<input type="file" id="image_source" name="image_source" maxlength="100"/>
+				</div>
+			</div>
+				<div class="control-group">
 							<label class="control-label" for="number_day_required">#i18n{digglike.createDigg.labelNumberDayRequired}</label>    
 							<div class="controls">
 								<input type="text" name="number_day_required" id="number_day_required" class="input-mini" value="" />

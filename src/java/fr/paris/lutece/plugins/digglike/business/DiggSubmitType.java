@@ -51,7 +51,7 @@ public class DiggSubmitType implements RBACResource
     private ImageResource _imgPictogram;
     private Boolean _bParameterizableInFO;
     private int _nIdXSLStyleSheet;
-    private String _strImageUrl;
+    private Integer _nIdImageResource;
    
 
     /**
@@ -168,21 +168,7 @@ public class DiggSubmitType implements RBACResource
         return _nIdXSLStyleSheet;
     }
 
-    /**
-     * @param imageUrl the imageUrl to set
-     */
-    public void setImageUrl( String imageUrl )
-    {
-        this._strImageUrl = imageUrl;
-    }
 
-    /**
-     * @return the imageUrl
-     */
-    public String getImageUrl(  )
-    {
-        return _strImageUrl;
-    }
     
     
     /**
@@ -199,5 +185,21 @@ public class DiggSubmitType implements RBACResource
 
         return false;
     }
+    
+    /**
+     * the image resource id associate to the response
+     * @return Resource Image
+     */
+	public Integer getIdImageResource() {
+		return _nIdImageResource;
+	}
+
+	/**
+	 * image resource id associate to the response
+	 * @param idImageResource image resource id associate to the response
+	 */
+	public void setIdImageResource(Integer idImageResource) {
+		_nIdImageResource = idImageResource;
+	}
 
 }

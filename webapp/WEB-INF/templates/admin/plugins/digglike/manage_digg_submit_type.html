@@ -49,7 +49,9 @@
         <#list type_list as type>	
 	    <tr>
 			<td>
-			<img class="thumbnail pull-left" src='${type.imageUrl!''}' style="width:32px;" title="img">
+			<#if type.idImageResource?has_content >
+				<img class="thumbnail pull-left"  src="image?resource_type=image_digg&id=${type.idImageResource}" style="width:32px;" title="img">
+			</#if>	
 				&nbsp;<strong>${type.name}</strong></td>
 	        <td <#if type.color?exists>style="background-color:${type.color};width:5px;"</#if>>&nbsp;</td>
 	        <td>${type.parameterizableInFO?string("#i18n{digglike.manageDiggSubmitType.yes}","#i18n{digglike.manageDiggSubmitType.no}")}</td>

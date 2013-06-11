@@ -33,58 +33,43 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.util.List;
-
+import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 
 /**
  *
- * interface IResponseDAO
+ * ImageResourceDAO
  *
  */
-public interface IResponseDAO
+public interface IImageResourceDAO
 {
+    
     /**
      * Insert a new record in the table.
      *
-     * @param response instance of the Response object to insert
+     * @param imageResource  instance of the ImageResource object to insert
      * @param plugin the plugin
+     * @return the id of the new ImageResource file
      */
-    void insert( Response response, Plugin plugin );
+    int insert(ImageResource imageResource , Plugin plugin );
 
     /**
-     * Load the data of the response from the table
+     * Load the data of the ImageResource from the table
      *
-     * @param nIdResponse The identifier of the entry
+     * @param nId The identifier of the file
      * @param plugin the plugin
-     * @return the instance of the Entry
+     * @return the instance of the PhysicalFile
      */
-    Response load( int nIdResponse, Plugin plugin );
+    ImageResource load( int nId, Plugin plugin );
 
     /**
-     * Delete  response   whose identifier is specified in parameter
+     * Delete a ImageResource from the table
      *
-     * @param nIdResponse The identifier of the response
+     * @param nId The identifier of the ImageResource
      * @param plugin the plugin
      */
-    public void delete( int nIdResponse, Plugin plugin );
+    void delete( int nId, Plugin plugin );
 
-    /**
-     * Update the the response in the table
-     *
-     * @param response instance of the response object to update
-     * @param plugin the plugin
-     */
-    void store( Response response, Plugin plugin );
-
-    /**
-     * Load the data of all the response who verify the filter and returns them in a  list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return  the list of response
-     */
-    List<Response> selectListByFilter( SubmitFilter filter, Plugin plugin );
-    
 
 }

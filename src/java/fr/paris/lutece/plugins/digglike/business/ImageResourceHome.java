@@ -31,60 +31,66 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.digglike.service;
+package fr.paris.lutece.plugins.digglike.business;
 
-import fr.paris.lutece.plugins.digglike.business.DiggSubmitTypeHome;
 import fr.paris.lutece.portal.service.image.ImageResource;
-import fr.paris.lutece.portal.service.image.ImageResourceManager;
-import fr.paris.lutece.portal.service.image.ImageResourceProvider;
-import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 
 /**
- *
- * This classe provide services for ImageServiceDiggSubmitType
- *
+ * This class provides instances management methods (create, find, ...) for ImageResource objects
  */
-public class ImageServiceDiggSubmitType implements ImageResourceProvider
+public final class ImageResourceHome
 {
-    private static ImageServiceDiggSubmitType _singleton = new ImageServiceDiggSubmitType(  );
-    private static final String IMAGE_RESOURCE_TYPE_ID = "image_digg_type";
+    // Static variable pointed at the DAO instance
+    private static IImageResourceDAO  _dao = SpringContextService.getBean( "digglike.imageResourceDAO" );
 
     /**
-     * Creates a new instance of CategoryService
+     * Private constructor - this class need not be instantiated
      */
-    ImageServiceDiggSubmitType(  )
+    private ImageResourceHome(  )
     {
-        ImageResourceManager.registerProvider( this );
     }
 
     /**
-     * Get the unique instance of the service
+     * Creation of an instance of ImageResource
      *
-     * @return The unique instance
+     * @param imageResource The instance of the ImageResource file which contains the informations to store
+     * @param plugin the plugin
+     *
+     * @return the id of the file after creation
+     *
      */
-    public static ImageServiceDiggSubmitType getInstance(  )
+    public static int create( ImageResource imageResource, Plugin plugin )
     {
-        return _singleton;
+        return _dao.insert( imageResource, plugin );
     }
 
+   
     /**
-     * Get the resource for image
-     * @param nIdDiggSubmitType The identifier of nIdDiggSubmitType object
-     * @return The ImageResource
+     *Delete the ImageResource file whose identifier is specified in parameter
+     *
+     * @param nIdImageResource The identifier of the record physical file
+     * @param plugin the Plugin
      */
-    public ImageResource getImageResource( int nIdDiggSubmitType )
+    public static void remove( int nIdImageResource, Plugin plugin )
     {
-        return DiggSubmitTypeHome.getImageResource( nIdDiggSubmitType,
-            PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) );
+        _dao.delete( nIdImageResource, plugin );
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    // Finders
+
     /**
-     * Get the type of resource
-     * @return The type of resource
+     * Returns an instance of a ImageResource whose identifier is specified in parameter
+     *
+     * @param nKey The file  primary key
+     * @param plugin the Plugin
+     * @return an instance of ImageResource
      */
-    public String getResourceTypeId(  )
+    public static ImageResource findByPrimaryKey( int nKey, Plugin plugin )
     {
-        return IMAGE_RESOURCE_TYPE_ID;
+        return _dao.load( nKey, plugin );
     }
 }

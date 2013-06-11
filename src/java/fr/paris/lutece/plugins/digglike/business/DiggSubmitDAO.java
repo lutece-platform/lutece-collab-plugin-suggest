@@ -51,7 +51,7 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_digg_submit ) FROM digglike_digg_submit";
     private static final String SQL_QUERY_SELECT_DIGG_SUBMIT_BY_FILTER="SELECT d.id_digg_submit,d.id_digg,s.id_state,s.title,s.number,d.date_response, " +
             "d.vote_number,d.score_number,d.id_category,d.digg_submit_value,d.digg_submit_title,d.comment_enable_number,d.digg_submit_value_show_in_the_list, " +
-            "d.reported, d.lutece_user_key, d.digg_submit_list_order, d.digg_submit_type,d.number_view,d.disable_vote,d.is_pinned,d.disable_comment FROM digglike_digg_submit d,digglike_digg_submit_state s ";
+            "d.reported, d.lutece_user_key, d.digg_submit_list_order, d.digg_submit_type,d.number_view,d.disable_vote,d.is_pinned,d.disable_comment,d.id_image_resource,d.comment_number FROM digglike_digg_submit d,digglike_digg_submit_state s ";
     private static final String SQL_FILTER_ID_DIGG_SUBMIT = " d.id_digg_submit = ? ";
     private static final String SQL_FILTER_ID_DIGG = " d.id_digg = ? ";
     private static final String SQL_FILTER_ID_CATEGORY = " d.id_category = ? ";
@@ -69,8 +69,8 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
     private static final String SQL_FILTER_SORT_BY_NUMBER_VOTE_ASC = " d.vote_number ASC ";
     private static final String SQL_FILTER_SORT_BY_NUMBER_VOTE_DESC = " d.vote_number DESC ";
     private static final String SQL_FILTER_SORT_BY_SCORE_DESC = " d.score_number DESC ";
-    private static final String SQL_FILTER_SORT_BY_NUMBER_COMMENT_ASC = " d.comment_enable_number ASC ";
-    private static final String SQL_FILTER_SORT_BY_NUMBER_COMMENT_DESC = " d.comment_enable_number DESC ";
+    private static final String SQL_FILTER_SORT_BY_NUMBER_COMMENT_ENABLE_ASC = " d.comment_enable_number ASC ";
+    private static final String SQL_FILTER_SORT_BY_NUMBER_COMMENT_ENABLE_DESC = " d.comment_enable_number DESC ";
     private static final String SQL_FILTER_SORT_BY_NUMBER_VIEW_ASC = " d.number_view ASC ";
     private static final String SQL_FILTER_SORT_BY_NUMBER_VIEW_DESC = " d.number_view DESC ";
     private static final String SQL_FILTER_SORT_MANUALLY = " d.digg_submit_list_order ASC ";
@@ -83,11 +83,11 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_DIGG_SUBMIT_BY_FILTER+SQL_CONSTANTE_WHERE+SQL_JOIN_STATE+SQL_CONSTANT_AND+SQL_FILTER_ID_DIGG_SUBMIT;
     private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_digg_submit ( id_digg_submit,id_digg,id_state,date_response, " +
         "vote_number,score_number,id_category,digg_submit_value ,digg_submit_title,comment_enable_number,digg_submit_value_show_in_the_list,reported," +
-        "lutece_user_key,digg_submit_list_order,digg_submit_type,number_view,disable_vote,is_pinned,disable_comment ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        "lutece_user_key,digg_submit_list_order,digg_submit_type,number_view,disable_vote,is_pinned,disable_comment,id_image_resource,comment_number ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM digglike_digg_submit WHERE id_digg_submit = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE digglike_digg_submit SET " +
         "id_digg_submit=?,id_digg=?,id_state=?" +
-        ",vote_number=?,score_number=?,id_category=?,digg_submit_value=?,digg_submit_title=? ,comment_enable_number=? ,digg_submit_value_show_in_the_list=?,reported=?,lutece_user_key= ?,digg_submit_list_order=?,digg_submit_type=?,number_view=?,disable_vote=?,is_pinned= ?,disable_comment=? " +
+        ",vote_number=?,score_number=?,id_category=?,digg_submit_value=?,digg_submit_title=? ,comment_enable_number=? ,digg_submit_value_show_in_the_list=?,reported=?,lutece_user_key= ?,digg_submit_list_order=?,digg_submit_type=?,number_view=?,disable_vote=?,is_pinned= ?,disable_comment=?,id_image_resource= ?,comment_number = ? " +
         "WHERE id_digg_submit=? ";
 
     private static final String SQL_QUERY_SELECT_ID_DIGG_SUBMIT_BY_FILTER = "SELECT d.id_digg_submit " +
@@ -181,6 +181,16 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         daoUtil.setBoolean( 17, diggSubmit.isDisableVote() );
         daoUtil.setBoolean( 18, diggSubmit.isPinned());
         daoUtil.setBoolean( 19, diggSubmit.isDisableComment());
+        if(diggSubmit.getIdImageResource() !=null)
+        {
+        	daoUtil.setInt( 20, diggSubmit.getIdImageResource() );
+        }
+        else
+        {
+        	
+        	daoUtil.setIntNull(20);
+        }
+        daoUtil.setInt(21, diggSubmit.getNumberComment());
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
 
@@ -271,8 +281,18 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         daoUtil.setBoolean( 16, diggSubmit.isDisableVote() );
         daoUtil.setBoolean( 17, diggSubmit.isPinned());
         daoUtil.setBoolean( 18, diggSubmit.isDisableComment());
-        daoUtil.setInt( 19, diggSubmit.getIdDiggSubmit(  ) );
-        
+        if(diggSubmit.getIdImageResource() !=null)
+        {
+        	daoUtil.setInt( 19, diggSubmit.getIdImageResource() );
+        }
+        else
+        {
+        	
+        	daoUtil.setIntNull(19);
+        }
+        daoUtil.setInt(20, diggSubmit.getNumberComment());
+        daoUtil.setInt( 21, diggSubmit.getIdDiggSubmit(  ) );
+       
      
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -761,12 +781,12 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
                         break;
 
                     case SubmitFilter.SORT_BY_NUMBER_COMMENT_ASC:
-                        strOrderBy.append( SQL_FILTER_SORT_BY_NUMBER_COMMENT_ASC );
+                        strOrderBy.append( SQL_FILTER_SORT_BY_NUMBER_COMMENT_ENABLE_ASC );
 
                         break;
 
                     case SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC:
-                        strOrderBy.append( SQL_FILTER_SORT_BY_NUMBER_COMMENT_DESC );
+                        strOrderBy.append( SQL_FILTER_SORT_BY_NUMBER_COMMENT_ENABLE_DESC );
 
                         break;
 
@@ -914,6 +934,11 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         diggSubmit.setDisableVote(daoUtil.getBoolean( 19 ));
         diggSubmit.setPinned(daoUtil.getBoolean( 20));	
         diggSubmit.setDisableComment(daoUtil.getBoolean( 21));
+        if ( daoUtil.getObject( 22 ) != null )
+        {
+        	diggSubmit.setIdImageResource(daoUtil.getInt( 22 ) );
+        }
+        diggSubmit.setNumberComment( daoUtil.getInt( 23 ) );
         return diggSubmit;
     
     }

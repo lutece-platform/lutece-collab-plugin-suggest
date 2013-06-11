@@ -38,13 +38,14 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.DefaultEditorKit.BeepAction;
 
 import fr.paris.lutece.plugins.digglike.business.attribute.DiggAttribute;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.editor.EditorBbcodeService;
+import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionRemovalListenerService;
+import fr.paris.lutece.portal.service.resource.IExtendableResource;
 import fr.paris.lutece.portal.service.role.RoleRemovalListenerService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupResource;
 import fr.paris.lutece.portal.service.workgroup.WorkgroupRemovalListenerService;
@@ -56,7 +57,7 @@ import fr.paris.lutece.util.xml.XmlUtil;
  * Class Digg
  *
  */
-public class Digg implements AdminWorkgroupResource, RBACResource
+public class Digg implements IExtendableResource,AdminWorkgroupResource, RBACResource
 {
     public static final String RESOURCE_TYPE = "DIGGLIKE_DIGG_TYPE";
     public static final int STATE_ENABLE = 1;
@@ -131,7 +132,13 @@ public class Digg implements AdminWorkgroupResource, RBACResource
     private String _strTermsOfUse;
     @DiggAttribute( "enableReports") 
     private boolean _bEnableReports;
-    
+    @DiggAttribute( "idImageResource")
+    private Integer _nIdImageResource=DiggUtils.CONSTANT_ID_NULL;
+    private ImageResource _image;
+    @DiggAttribute( "description") 
+    private String _strDescription;
+
+
 
 
 
@@ -1142,6 +1149,23 @@ public class Digg implements AdminWorkgroupResource, RBACResource
 	public void setTermsOfUse(String strTermsOfUse) {
 		this._strTermsOfUse = strTermsOfUse;
 	}
+	
+	/**
+	 * 
+	 * @return the digg description
+	 */
+	public String getDescription() {
+		return _strDescription;
+	}
+	/**
+	 * 
+	 * @param _strDescription set the digg description
+	 */
+	public void setDescription(String _strDescription) {
+		this._strDescription = _strDescription;
+	}
+	
+	
     /**
      * 
      * @return true if reports are enable
@@ -1157,4 +1181,97 @@ public class Digg implements AdminWorkgroupResource, RBACResource
 	public void setEnableReports(boolean bEnableReports) {
 		this._bEnableReports = bEnableReports;
 	}
+	
+	
+    /**
+     * the image resource id associate to the digg
+     * @return Resource Image
+     */
+	public Integer getIdImageResource() {
+		return _nIdImageResource;
+	}
+
+	/**
+	 * image resource id associate to the digg
+	 * @param idImageResource image resource id associate to the digg
+	 */
+	public void setIdImageResource(Integer idImageResource) {
+		_nIdImageResource = idImageResource;
+	}
+	
+    /**
+     * get Image
+     * @return Image Resource
+     */
+	public ImageResource getImage() {
+		return _image;
+	}
+	/**
+	 * set Image Resource
+	 * @param image  Image Resource
+	 */
+	public void setImage(ImageResource image) {
+		this._image = image;
+	}
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getIdExtendableResource( )
+	{
+		return Integer.toString( _nIdDigg );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getExtendableResourceType( )
+	{
+		return RESOURCE_TYPE;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getExtendableResourceName( )
+	{
+		return _strTitle;
+	}
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getExtendableResourceDescription( )
+    {
+        return _strDescription;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getExtendableResourceImageUrl( )
+    {
+        if ( _nIdImageResource!=null )
+        {
+            StringBuilder sbUrl = new StringBuilder( DiggUtils.SERVLET_IMAGE_PATH );
+            sbUrl.append( _nIdImageResource );
+                return sbUrl.toString( );
+        }
+        return null;
+    }
+    
+    
+    
+    
+    
+ 
+	
+	
+	
 }

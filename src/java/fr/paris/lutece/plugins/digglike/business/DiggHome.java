@@ -71,7 +71,13 @@ public final class DiggHome
      */
     public static int create( Digg digg, Plugin plugin )
     {
-        int nIdDigg= _dao.insert( digg, plugin );
+        
+    	if(digg.getImage()!=null)
+    	{
+    		digg.setIdImageResource(ImageResourceHome.create(digg.getImage(), plugin));
+        }
+    	
+    	int nIdDigg= _dao.insert( digg, plugin );
         // Create directory attributes associated to the directory
         Map<String, Object> mapAttributes = DiggUtils.depopulate( digg );
         DiggAttributeHome.create( digg.getIdDigg(), mapAttributes );
@@ -124,7 +130,25 @@ public final class DiggHome
     public static void update( Digg digg, Plugin plugin )
     {
        
-    	 // Remove directory attributes associated to the directory
+    	if(digg.getImage()!=null)
+    	{
+    		//remove old image if exist
+    		if(digg.getIdImageResource()!=null && digg.getIdImageResource()!=DiggUtils.CONSTANT_ID_NULL)
+    		{
+    			ImageResourceHome.remove(digg.getIdImageResource(), plugin);
+    		}
+    		if(digg.getImage().getImage() !=null)
+    		{
+    			digg.setIdImageResource(ImageResourceHome.create(digg.getImage(), plugin));
+    		}
+    		else
+    		{
+    			digg.setIdImageResource(DiggUtils.CONSTANT_ID_NULL);
+    		}
+    	} 
+    	
+    	
+    	// Remove directory attributes associated to the directory
     	DiggAttributeHome.remove( digg.getIdDigg(  ) );
 
         // Add directory Attribute
@@ -147,7 +171,12 @@ public final class DiggHome
         Digg digg = findByPrimaryKey( nIdDigg, plugin );
         List<IEntry> listEntry;
         List<Integer> listIdDiggSubmit;
-
+      
+        //delete image resource associate
+        if(digg!=null && digg.getIdImageResource()!=null && digg.getIdImageResource()!=DiggUtils.CONSTANT_ID_NULL)
+    	{
+    		ImageResourceHome.remove(digg.getIdImageResource(), plugin);
+    	}
         //delete association between digg and categories
         for ( Category category : digg.getCategories(  ) )
         {

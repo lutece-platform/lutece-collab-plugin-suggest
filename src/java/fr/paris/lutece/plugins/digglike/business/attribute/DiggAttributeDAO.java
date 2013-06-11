@@ -83,7 +83,7 @@ public class DiggAttributeDAO implements IDiggAttributeDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         daoUtil.setInt( nIndex++, nIdDirectory );
         daoUtil.setString( nIndex++, strAttributeKey );
-        daoUtil.setString( nIndex++, attributeValue.toString(  ) );
+        daoUtil.setString( nIndex++,attributeValue!=null? attributeValue.toString(  ):null);
 
         daoUtil.executeUpdate(  );
 

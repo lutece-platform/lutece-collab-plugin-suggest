@@ -76,13 +76,12 @@ import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
 import fr.paris.lutece.portal.service.content.XPageAppService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.message.SiteMessage;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.message.SiteMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.portal.PortalService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
@@ -131,7 +130,6 @@ public class DiggApp implements XPageApplication
     private static final String MARK_DIGG_SUBMIT = "digg_submit";
     private static final String MARK_COMMENT_SUBMIT = "comment_submit";
     private static final String MARK_LUTECE_USER = "lutece_user";
-    
     private static final String MARK_LUTECE_USER_CONNECTED = "lutece_user_connected";
     private static final String MARK_UNAVAILABILITY_MESSAGE = "unavailability_message";
     private static final String MARK_NUMBER_SHOWN_CHARACTERS = "number_shown_characters";
@@ -154,6 +152,7 @@ public class DiggApp implements XPageApplication
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
     private static final String MARK_ACTIVE_EDITOR_BBCODE = "active_editor_bbcode";
     private static final String MARK_VIEW = "view";
+    private static final String MARK_IS_EXTEND_INSTALLED = "isExtendInstalled";
 
     // templates
     private static final String TEMPLATE_XPAGE_FRAME_DIGG = "skin/plugins/digglike/digg_frame.html";
@@ -918,7 +917,8 @@ public class DiggApp implements XPageApplication
         }
 
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
-
+        model.put( MARK_IS_EXTEND_INSTALLED, PortalService.isExtendActivated( ) );
+        
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_LIST_SUBMIT_DIGG, locale, model );
 
         return template.getHtml(  );
@@ -1100,7 +1100,7 @@ public class DiggApp implements XPageApplication
         model.put( MARK_AUTHORIZED_COMMENT, diggSubmit.getDigg(  ).isAuthorizedComment(  )  );
         model.put( MARK_AUTHORIZED_VOTE, !diggSubmit.getDigg(  ).isDisableVote()  );
         model.put( MARK_ENABLE_DIGG_REPORTS, diggSubmit.getDigg(  ).isEnableReports());
-
+        model.put( MARK_IS_EXTEND_INSTALLED, PortalService.isExtendActivated( ) );
         if ( diggSubmit.getDigg(  ).isAuthorizedComment(  ) && !diggSubmit.isDisableComment() )
         {
             model.put( MARK_LIST_COMMENT_SUBMIT_DIGG,
@@ -1397,11 +1397,12 @@ public class DiggApp implements XPageApplication
             SiteMessageService.setMessage( request, MESSAGE_NEW_COMMENT_SUBMIT_INVALID, SiteMessage.TYPE_STOP );
         }
 
+        diggSubmit.setNumberComment(diggSubmit.getNumberComment(  ) + 1 ); 
         if ( !diggSubmit.getDigg(  ).isDisableNewComment(  ) )
         {
             commentSubmit.setActive( true );
             diggSubmit.setNumberCommentEnable( diggSubmit.getNumberCommentEnable(  ) + 1 );
-            _diggSubmitService.update( diggSubmit, plugin );
+           _diggSubmitService.update( diggSubmit, plugin );
         }
 
         commentSubmit.setDateComment( DiggUtils.getCurrentDate(  ) );
@@ -1605,6 +1606,7 @@ public class DiggApp implements XPageApplication
             model.put( MARK_SHOW_CATEGORY_BLOCK, digg.isShowCategoryBlock(  ) );
             model.put( MARK_SHOW_TOP_SCORE_BLOCK, digg.isShowTopScoreBlock(  ) );
             model.put( MARK_SHOW_TOP_COMMENT_BLOCK, digg.isShowTopCommentBlock(  ) );
+            model.put( MARK_IS_EXTEND_INSTALLED, PortalService.isExtendActivated( ) );
         }
         else
         {

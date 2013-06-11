@@ -198,7 +198,6 @@ public class ExportDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSe
 	            filter.setIdDiggSubmit( nIdDiggSubmit );
 	            listCommentSubmit = CommentSubmitService.getService().getCommentSubmitList( filter, plugin );
 	            diggSubmit.setComments( listCommentSubmit );
-	            diggSubmit.setNumberComment( CommentSubmitService.getService().getCountCommentSubmit( filter, plugin ) );
 	            diggSubmit.setDigg(digg);
 	            strBufferListDiggSubmitXml.append( diggSubmit.getXml( request, adminUser.getLocale( ) ) );
 	        }

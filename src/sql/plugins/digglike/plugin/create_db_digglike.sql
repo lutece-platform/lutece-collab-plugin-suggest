@@ -52,10 +52,10 @@ CREATE TABLE digglike_category (
 -- Table structure for table digglike_image
 --
 CREATE TABLE digglike_image (
-	id_digg_submit int NOT NULL,
+	id_resource_image  int NOT NULL,
 	image_content LONG VARBINARY DEFAULT NULL,
 	image_mime_type varchar(100) DEFAULT NULL,
-	PRIMARY KEY (id_digg_submit)
+	PRIMARY KEY (id_resource_image)
 );
 --
 -- Table structure for table digglike_default_message
@@ -206,6 +206,8 @@ CREATE TABLE digglike_digg_submit (
 	disable_vote smallint default 0,
 	is_pinned smallint default 0,
 	disable_comment smallint default 0,
+	id_image_resource int default NULL,
+	comment_number int default 0,
 	PRIMARY KEY (id_digg_submit)
 );
 
@@ -305,6 +307,7 @@ CREATE TABLE digglike_response (
 	id_digg_submit int default NULL,
 	response_value long varchar,
 	id_entry int default NULL,
+	id_resource_image int DEFAULT NULL,
 	PRIMARY KEY (id_response)
 );
 
@@ -367,11 +370,9 @@ CREATE TABLE digglike_digg_submit_type (
 	id_type int default 0 NOT NULL,
 	name long varchar,
 	color varchar(10),
-	image_content LONG VARBINARY DEFAULT NULL,
-	image_mime_type varchar(100) DEFAULT NULL,
+	id_resource_image int DEFAULT NULL,
 	parameterizable smallint default 0,
 	id_xsl int default 0 NOT NULL,
-	image_url varchar(100) DEFAULT NULL,
 	PRIMARY KEY (id_type)
 );
 
@@ -436,7 +437,7 @@ CREATE TABLE IF NOT EXISTS digglike_digg_user_info (
 CREATE TABLE digglike_digg_attribute (
 	id_digg INT DEFAULT 0 NOT NULL,
 	attribute_key varchar(255) NOT NULL,
-	attribute_value varchar(255) NOT NULL,
+	attribute_value varchar(255) DEFAULT NULL,
 	PRIMARY KEY (id_digg, attribute_key)
 );
 

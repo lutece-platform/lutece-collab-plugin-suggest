@@ -33,15 +33,12 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import fr.paris.lutece.portal.service.image.ImageResource;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.util.sql.DAOUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.jdbc.PacketTooBigException;
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.util.sql.DAOUtil;
 
 
 /**
@@ -53,26 +50,22 @@ public final class ResponseDAO implements IResponseDAO
     private static final String EMPTY_STRING = "";
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_response ) FROM digglike_response";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT " +
-        "resp.id_response,resp.id_digg_submit,resp.response_value,type.class_name,ent.id_entry,ent.title,ent.id_type,ent.show_in_digg_submit_list " +
+        "resp.id_response,resp.id_digg_submit,resp.response_value,type.class_name,ent.id_entry,ent.title,ent.id_type,ent.show_in_digg_submit_lis,res.id_resource_image " +
         "FROM digglike_response resp,digglike_entry ent,digglike_entry_type type  " +
         "WHERE resp.id_response=? and resp.id_entry =ent.id_entry and ent.id_type=type.id_type ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_response ( " +
-        "id_response,id_digg_submit,response_value,id_entry) VALUES(?,?,?,?)";
+        "id_response,id_digg_submit,response_value,id_entry,id_resource_image) VALUES(?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM digglike_response WHERE id_response = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE  digglike_response SET " +
-        "id_response=?,id_digg_submit=?,response_value=?,id_entry=? WHERE id_response=?";
+        "id_response=?,id_digg_submit=?,response_value=?,id_entry=?,id_resource_image=? WHERE id_response=?";
     private static final String SQL_QUERY_SELECT_RESPONSE_BY_FILTER = "SELECT " +
-        "resp.id_response,resp.id_digg_submit,resp.response_value,type.class_name,ent.id_entry,ent.title,ent.id_type,ent.show_in_digg_submit_list " +
+        "resp.id_response,resp.id_digg_submit,resp.response_value,type.class_name,ent.id_entry,ent.title,ent.id_type,ent.show_in_digg_submit_list,resp.id_resource_image " +
         "FROM digglike_response resp,digglike_entry ent,digglike_entry_type type  " +
         "WHERE resp.id_entry =ent.id_entry and ent.id_type=type.id_type ";
     private static final String SQL_FILTER_ID_DIGG_SUBMIT = " AND resp.id_digg_submit = ? ";
     private static final String SQL_FILTER_ID_ENTRY = " AND resp.id_entry = ? ";
     private static final String SQL_ORDER_BY_ID_RESPONSE = " ORDER BY id_response ";
-    private static final String SQL_QUERY_INSERT_RESOURCE_IMAGE = " INSERT INTO digglike_image (id_digg_submit, image_content, image_mime_type) VALUES (?,?,?)";
-    private static final String SQL_QUERY_DELETE_RESOURCE_IMAGE = " DELETE FROM digglike_image WHERE id_digg_submit = ? ";
-    // ImageResource queries
-    private static final String SQL_QUERY_SELECT_RESOURCE_IMAGE = " SELECT image_content, image_mime_type FROM digglike_image WHERE id_digg_submit = ? ";
-
+   
 
     /**
      * Generates a new primary key
@@ -113,6 +106,15 @@ public final class ResponseDAO implements IResponseDAO
         daoUtil.setInt( 2, response.getDiggSubmit(  ).getIdDiggSubmit(  ) );
         daoUtil.setString( 3, response.getValueResponse(  ) );
         daoUtil.setInt( 4, response.getEntry(  ).getIdEntry(  ) );
+        
+        if(response.getIdImageResource()!=null)
+        {
+        	daoUtil.setInt( 5, response.getIdImageResource());
+        }
+        else
+        {
+        	daoUtil.setIntNull(5);
+        }
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
@@ -182,6 +184,11 @@ public final class ResponseDAO implements IResponseDAO
             entry.setTitle( daoUtil.getString( 6 ) );
             entry.setShowInDiggSubmitList( daoUtil.getBoolean( 8 ) );
             response.setEntry( entry );
+            if(daoUtil.getObject( 9)!=null)
+            {
+            	response.setIdImageResource(daoUtil.getInt(9));
+            }
+            
         }
 
         daoUtil.free(  );
@@ -217,7 +224,15 @@ public final class ResponseDAO implements IResponseDAO
         daoUtil.setInt( 2, response.getDiggSubmit(  ).getIdDiggSubmit(  ) );
         daoUtil.setString( 3, response.getValueResponse(  ) );
         daoUtil.setInt( 4, response.getEntry(  ).getIdEntry(  ) );
-        daoUtil.setInt( 5, response.getIdResponse(  ) );
+        if(response.getIdImageResource()!=null)
+        {
+        	daoUtil.setInt( 5, response.getIdImageResource());
+        }
+        else
+        {
+        	daoUtil.setIntNull(5);
+        }
+        daoUtil.setInt( 6, response.getIdResponse(  ) );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
@@ -309,6 +324,10 @@ public final class ResponseDAO implements IResponseDAO
             entry.setShowInDiggSubmitList( daoUtil.getBoolean( 8 ) );
 
             response.setEntry( entry );
+            if(daoUtil.getObject( 9)!=null)
+            {
+            	response.setIdImageResource(daoUtil.getInt(9));
+            }
 
             responseList.add( response );
         }
@@ -319,81 +338,7 @@ public final class ResponseDAO implements IResponseDAO
     }
     
     
-    /**
-     * @param nIdDiggSubmit the id of the diggSubmit
-     * @param image : the image to add
-     * @param plugin : plugin
-     * @return return the id of the image/diggsubmit
-     * @throws com.mysql.jdbc.PacketTooBigException if the image is too big
-     */
-    public int insertImageResource( int nIdDiggSubmit, ImageResource image, Plugin plugin )
-        throws com.mysql.jdbc.PacketTooBigException
-    {
-        //drop image if this id exist
-        int nId = nIdDiggSubmit;
-
     
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_RESOURCE_IMAGE, plugin );
-
-        daoUtil.setInt( 1, nId );
-        daoUtil.setBytes( 2, image.getImage(  ) );
-        daoUtil.setString( 3, image.getMimeType(  ) );
-
-        try
-        {
-            daoUtil.executeUpdate(  );
-        }
-        catch ( Exception e )
-        {
-            throw new PacketTooBigException( 0, 0 );
-        }
-
-        daoUtil.free(  );
-
-        return nId;
-    }
-    
-
-    /**
-     * Delete   Image Reource
-     *
-     * @param nIdDiggSubmit The identifier of the digg submit
-     * @param plugin the plugin
-     */
-    public void deleteImageResource( int nIdDiggSubmit, Plugin plugin )
-    {
-  
-	    DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_RESOURCE_IMAGE );
-	    daoUtil.setInt( 1, nIdDiggSubmit );
-	    daoUtil.executeUpdate(  );
-	    daoUtil.free(  );
-    }
-    
-    /**
-     * Return the image resource corresponding to the image id
-     * @param nImageId The identifier of image object
-     * @param plugin the Plugin
-     * @return The image resource
-     */
-    public ImageResource loadImageResource( int nImageId, Plugin plugin )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_RESOURCE_IMAGE, plugin );
-        daoUtil.setInt( 1, nImageId );
-        daoUtil.executeQuery(  );
-
-        ImageResource image = null;
-
-        if ( daoUtil.next(  ) )
-        {
-            image = new ImageResource(  );
-            image.setImage( daoUtil.getBytes( 1 ) );
-            image.setMimeType( daoUtil.getString( 2 ) );
-        }
-
-        daoUtil.free(  );
-
-        return image;
-    }
     
     
 }

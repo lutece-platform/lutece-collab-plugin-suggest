@@ -7,6 +7,9 @@
 	<#else>
 		<fieldset>
 		<legend>${label_digg}</legend>
+		<#if isExtendInstalled?? && isExtendInstalled >
+				@Extender[${id_digg},DIGGLIKE_DIGG_TYPE,opengraph,{header:false,footer:false}]@
+		</#if>
 			<#if view?has_content && view == "view_digg_submit_list" >
 				<#if show_category_block>
 					<#if list_categories_digg?has_content>
@@ -117,6 +120,9 @@
 			</#if>
 			</#if>
 		</div>
+			<#if isExtendInstalled?? && isExtendInstalled >
+				@Extender[${id_digg},DIGGLIKE_DIGG_TYPE,opengraph,{footer:true}]@
+			</#if>
 		</#if>
 	</div>
 </div>
