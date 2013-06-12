@@ -28,34 +28,33 @@
 		<p>
 			<#if enable_digg_reports>	
 				<a class="btn btn-link" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;action=create_report#digg${digg_submit_display.digg_submit.idDiggSubmit}">
-					<i class=""></i>&nbsp;#i18n{digglike.diggListSubmit.labelReport}
+						<i class=""></i>&nbsp;#i18n{digglike.diggListSubmit.labelReport}
 				</a> |  
 			</#if>
 			<#if digg_submit_display.lutece_user?exists>
 				<i class="icon-user"></i> #i18n{digglike.diggListSubmit.postByUser} :
-					<#if digg_submit_display.lutece_user?exists>
-						${digg_submit_display.lutece_user!""}
-					<#else>
-						${digg_submit_display.lutece_user.getUserInfo("user.name.given")} ${digg_submit_display.lutece_user.getUserInfo("user.name.family")}
-					</#if>
+				<#if digg_submit_display.lutece_user?exists>
+					${digg_submit_display.lutece_user!""}
+				<#else>
+					${digg_submit_display.lutece_user.getUserInfo("user.name.given")} ${digg_submit_display.lutece_user.getUserInfo("user.name.family")}
+				</#if>
 				| 
 			</#if>
 			<i class="icon-calendar"></i> ${digg_submit_display.digg_submit.dateResponse} | 
-				<#if authorized_comment && !digg_submit_display.digg_submit.disableComment>
-					<i class="icon-comment"></i>&nbsp;
-						<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;action=view_digg_submit#digg${digg_submit_display.digg_submit.idDiggSubmit}">
-						${digg_submit_display.digg_submit.numberCommentEnable} #i18n{digglike.diggListSubmit.labelComments}
-					</a> |
-				</#if>
-				<#if digg_submit_display.digg_submit.category?exists>
-					<#if digg_submit_display.digg_submit.diggSubmitType?exists>
-						<span class="span2 label label-inverse" style="background-color:${digg_submit_display.digg_submit.category.color!''};">
-							<#if digg_submit_display.digg_submit.diggSubmitType.idImageResource?has_content >
-								<img class="thumbnail" src="image?resource_type=image_digg&id=${digg_submit_display.digg_submit.diggSubmitType.idImageResource}"/>
-							</#if>	
-						</span>		
-							${digg_submit_display.digg_submit.category.title}
-						</span> 
+			<#if authorized_comment && !digg_submit_display.digg_submit.disableComment>
+				<i class="icon-comment"></i>&nbsp;
+					<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;action=view_digg_submit#digg${digg_submit_display.digg_submit.idDiggSubmit}">
+					${digg_submit_display.digg_submit.numberCommentEnable} #i18n{digglike.diggListSubmit.labelComments}
+				</a> |
+			</#if>
+			<#if digg_submit_display.digg_submit.category?exists>
+				<#if digg_submit_display.digg_submit.diggSubmitType?exists>
+					<span class="label label-inverse" style="background-color:${digg_submit_display.digg_submit.category.color!''};">
+					<#if digg_submit_display.digg_submit.diggSubmitType.idImageResource?has_content >
+							<img class="thumbnail" src="image?resource_type=image_digg&id=${digg_submit_display.digg_submit.diggSubmitType.idImageResource}"/>
+					</#if>	
+					${digg_submit_display.digg_submit.category.title}
+					</span> 
 					<#else>
 						<span class="label label-inverse" style="background-color:${digg_submit_display.digg_submit.category.color!''};">
 							${digg_submit_display.digg_submit.category.title}
@@ -66,24 +65,17 @@
 						<#if digg_submit_display.digg_submit.diggSubmitType.idImageResource?has_content>
 							<img class="thumb-list"  src="image?resource_type=image_digg&id=${digg_submit_display.digg_submit.diggSubmitType.idImageResource}"/>
 						</#if>	
+						${digg_submit_display.digg_submit.diggSubmitType.title}
 					</span> 
-				</#if>
+			</#if>
 		</p>
 		<div class="digg-list-content">				
 			<#if digg_submit_display.digg_submit.diggSubmitValueShowInTheList?exists>
 				<#if digg_submit_display.digg_submit.diggSubmitValueShowInTheList?length &gt; 500>
-					<div class="full">								
-						<span class="pull-right badge badge-inverse">
-							<i class="icon-chevron-up icon-white"></i>
-						</span>	
-						${digg_submit_display.digg_submit.diggSubmitValueShowInTheList}
-					</div>	
-					<div class="preview">
-						<span class="pull-right badge badge-inverse">
-							<i class="icon-chevron-down icon-white"></i>
-						</span>	
-						${digg_submit_display.digg_submit.diggSubmitValueShowInTheList?substring(0,500)}...
-					</div>
+					<span class="pull-right badge badge-inverse">
+						<i class="icon-chevron-up icon-white"></i>
+					</span>	
+					${digg_submit_display.digg_submit.diggSubmitValueShowInTheList}
 				<#else>
 					<div>${digg_submit_display.digg_submit.diggSubmitValueShowInTheList}</div>	
 				</#if>
@@ -122,15 +114,6 @@
 </#list>
 <script>
 $(document).ready( function () {
-	$(".full").toggle();
-	$(".preview").click(function(){
-		$(this).prev().toggle();
-		$(this).toggle();
-	}); 
-	$(".full").click(function(){
-		$(this).next().toggle();
-		$(this).toggle();
-	});
 	var toGo = location.hash;
 	if( toGo !=''){
 		$('html, body').animate( {'scrollTop':$(toGo).offset().top - 120 },0 );

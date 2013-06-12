@@ -12,15 +12,12 @@
 				<li><a data-toggle="tab" href="#panel3">#i18n{digglike.creatDigg.navTab.labelPermission}</a></li>
 				<li><a data-toggle="tab" href="#panel4">#i18n{digglike.creatDigg.navTab.labelNotification}</a></li>
 				<li><a data-toggle="tab" href="#panel5">#i18n{digglike.creatDigg.navTab.labelAdvancedParameters}</a></li>
-				
 			</ul>
-			
-	
 			<div class="tab-content">
 			   <div class="tab-pane active" id="panel6">
 				<div class="row-fluid">
 					<div class="span12">	
-						<form class="form-inline pull-right" method="post"  action="jsp/admin/plugins/digglike/CreateEntry.jsp"> 
+						<form class="form-inline pull-right" method="post" action="jsp/admin/plugins/digglike/CreateEntry.jsp"> 
 							<label>#i18n{digglike.modifyDigg.manageEnter.title}</label>
 								<@combo name="id_type"  items=entry_type_list default_value=-1 />
 								<button class="btn btn-primary btn-small" type="submit">
@@ -42,19 +39,19 @@
 											<i class="icon-edit icon-white"></i>
 										</a>
 										<#if id_entry_first_in_the_list!=entry.idEntry>
-										<a class="btn btn-primary btn-small" href="jsp/admin/plugins/digglike/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}" title="#i18n{digglike.modifyDigg.manageEnter.titleMoveUp}">
+										<a class="btn btn-primary btn-small" href="jsp/admin/plugins/digglike/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}#panel6" title="#i18n{digglike.modifyDigg.manageEnter.titleMoveUp}">
 											<i class="icon-chevron-up icon-white"></i>
 										</a>
 										</#if>
 										<#if id_entry_last_in_the_list!=entry.idEntry>
-										<a class="btn btn-primary btn-small" href="jsp/admin/plugins/digglike/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}" title="#i18n{digglike.modifyDigg.manageEnter.titleMoveDown}">
+										<a class="btn btn-primary btn-small" href="jsp/admin/plugins/digglike/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}#panel6" title="#i18n{digglike.modifyDigg.manageEnter.titleMoveDown}">
 											<i class="icon-chevron-down icon-white"></i>
 										</a>
 										</#if>
-										<a class="btn btn-primary btn-small" href="jsp/admin/plugins/digglike/DoCopyEntry.jsp?id_entry=${entry.idEntry}" title="#i18n{digglike.modifyDigg.manageEnter.titleCopy}">
+										<a class="btn btn-primary btn-small" href="jsp/admin/plugins/digglike/DoCopyEntry.jsp?id_entry=${entry.idEntry}#panel6" title="#i18n{digglike.modifyDigg.manageEnter.titleCopy}">
 											<i class="icon-move icon-white"></i>
 										</a>
-										<a class="btn btn-danger btn-small" href="jsp/admin/plugins/digglike/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}" title="#i18n{digglike.modifyDigg.manageEnter.titleDelete}">
+										<a class="btn btn-danger btn-small" href="jsp/admin/plugins/digglike/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}#panel6" title="#i18n{digglike.modifyDigg.manageEnter.titleDelete}">
 											<i class="icon-trash icon-white"></i>
 										</a>
 									</td>
@@ -69,9 +66,8 @@
 				<div class="row-fluid">
 					<div class="span12">	
 						<h3>#i18n{digglike.modifyDigg.labelCategoryTitleList}</h3>
-						<form method="post" class="form-inline" action="jsp/admin/plugins/digglike/DoInsertCategoryAssociation.jsp#list">
+						<form method="post" class="form-inline" action="jsp/admin/plugins/digglike/DoInsertCategoryAssociation.jsp">
 						<input name="id_digg" value="${digg.idDigg}" type="hidden">
-						<input name="panel" value="panel" type="hidden">
 						<a id="list">&nbsp;</a>
 						<if category_list?size &lt; 1>
 							<@combo name="id_category" items=category_list default_value="-1"  />
@@ -92,7 +88,7 @@
 									<td style="background-color:${category.color!};width:5px;">&nbsp;</td>
 									<td>${category.title}</td>
 									<td> 
-										<a class="btn btn-danger btn-small" href="jsp/admin/plugins/digglike/DoRemoveCategoryAssociation.jsp?id_digg=${digg.idDigg}&id_category=${category.idCategory}#list" title="#i18n{digglike.modifyDigg.titleDeleteCategory}">
+										<a class="btn btn-danger btn-small" href="jsp/admin/plugins/digglike/DoRemoveCategoryAssociation.jsp?id_digg=${digg.idDigg}&id_category=${category.idCategory}#panel7" title="#i18n{digglike.modifyDigg.titleDeleteCategory}">
 											<i class="icon-trash icon-white"></i>
 										</a>
 									</td>
@@ -107,7 +103,7 @@
 				<div class="row-fluid">
 					<div class="span12">	
 						<h3>#i18n{digglike.modifyDigg.labelDiggSubmitTypeTitleList}</h3>
-						<form method="post" class="form-inline" action="jsp/admin/plugins/digglike/DoInsertDiggSubmitTypeAssociation.jsp#list">
+						<form method="post" class="form-inline" action="jsp/admin/plugins/digglike/DoInsertDiggSubmitTypeAssociation.jsp">
 						<input name="id_digg" value="${digg.idDigg}" type="hidden">
 						<a id="list">&nbsp;</a>
 						<if category_list?size &lt; 1>
@@ -129,7 +125,7 @@
 									<td style="background-color:${diggSubmitType.color!};width:5px;">&nbsp;</td>
 									<td>${diggSubmitType.name}</td>
 									<td> 
-										<a class="btn btn-danger btn-small" href="jsp/admin/plugins/digglike/DoRemoveDiggSubmitTypeAssociation.jsp?id_digg=${digg.idDigg}&id_digg_submit_type=${diggSubmitType.idType}#list" title="#i18n{digglike.modifyDigg.titleDeleteDiggSubmitType}">
+										<a class="btn btn-danger btn-small" href="jsp/admin/plugins/digglike/DoRemoveDiggSubmitTypeAssociation.jsp?id_digg=${digg.idDigg}&id_digg_submit_type=${diggSubmitType.idType}#panel8" title="#i18n{digglike.modifyDigg.titleDeleteDiggSubmitType}">
 											<i class="icon-trash icon-white"></i>
 										</a>
 									</td>
@@ -144,7 +140,6 @@
 			  <form class="form" action="jsp/admin/plugins/digglike/DoModifyDigg.jsp" method="post" enctype="multipart/form-data">
 				<input name="id_digg" value="${digg.idDigg}" type="hidden">
 				<input name="plugin_name" value="digglike" type="hidden">
-				<input name="panel" value="#panel1" type="hidden">
 				<div class="row-fluid">
 					<div class="span5">
 					<div class="control-group">
@@ -523,7 +518,21 @@
 
 <script>
 $(document).ready(function() {
-    // Function to activate the tab
+    // Function to set the tab
+   $("a[data-toggle=tab]").click( function(){
+		var theHref = $(this).attr("href");
+		$("form").each(function() {
+			if ( $(this).attr("action").indexOf("#") > 0 ){
+				var splitAction = $(this).attr("action").split('#');
+				var theAction = splitAction[0];
+			} else {
+				var theAction = $(this).attr("action");
+			}
+			$(this).attr("action", theAction + theHref );
+		});
+	});
+
+	// Function to activate the tab
     function activateTab() {
         var activeTab = $('[href=' + window.location.hash.replace('/', '') + ']');
         activeTab && activeTab.tab('show');
@@ -531,45 +540,6 @@ $(document).ready(function() {
 
     // Trigger when the page loads
     activateTab();
-
+	
 });
 </script>
-
-<script>
-function displayAuthorizedComment()	{
-	displayId('p_active_editor_bbcode_on_comment');
-	displayId('p_disable_new_comment');
-	if(document.getElementById('disable_new_comment').checked){
-		 	displayId('p_id_mailing_list_comment');
-		}
-	}
-
-function doDisplayDiggAdvancedSettings(isChecked){
-	if (isChecked){
-		displayId('advanced_settings');			
-		hideId('settings');
-		displayId('button_back');
-		hideId('button_advanced_settings');
-	} else {
-		hideId('advanced_settings');
-		displayId('settings');			
-		hideId('button_back');
-		displayId('button_advanced_settings');		
-		//for ie6
-	    if(typeof(xinha_editors.unavailability_message) != 'undefined'){			    
-				xinha_editors.unavailability_message.sizeEditor( );
-		    }
-		}
-}
-
-window.onload = function() {
-	doDisplayDiggAdvancedSettings( false );
-		hideId('p_number_vote_required'); 
-		hideId('p_id_mailing_list_digg_submit');
-		hideId('p_id_mailing_list_new_digg_submit');
-		hideId('p_disable_new_comment');
-		hideId('p_id_mailing_list_comment');
-		hideId('show_manage_display');
-	}
-	
-</script> 

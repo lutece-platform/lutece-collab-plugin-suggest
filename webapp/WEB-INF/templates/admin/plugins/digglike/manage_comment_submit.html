@@ -4,13 +4,14 @@
 		<div class="span3">
 		<fieldset>
 		<legend>#i18n{digglike.manageCommentSubmit.rowTitleDiggSubmitTitle}</legend>
-		<p class="lead"><#if digg_submit.diggSubmitTitle?exists>
-				<#if digg_submit.diggSubmitTitle?length &gt; 100>
-					${digg_submit.diggSubmitTitle?substring(0,100)}... 
-				<#else>
-					${digg_submit.diggSubmitTitle}
-				</#if>
+		<p class="lead">
+		<#if digg_submit.diggSubmitTitle?exists>
+			<#if digg_submit.diggSubmitTitle?length &gt; 100>
+				${digg_submit.diggSubmitTitle?substring(0,100)}... 
+			<#else>
+				${digg_submit.diggSubmitTitle}
 			</#if>
+		</#if>
 		</p>
 		<#if digg_submit.reported>
 		<div class="alert alert-error">
@@ -56,9 +57,9 @@
        		<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden">
        		<input name="comment" value="comment" type="hidden">
        		<#if digg_submit.category?exists>
-				<@combo name="id_category"   items=category_list default_value="${digg_submit.category.idCategory}" />
+				<@combo name="id_category" items=category_list default_value="${digg_submit.category.idCategory}" />
        		<#else>
-				<@combo name="id_category"   items=category_list default_value="-1" />
+				<@combo name="id_category" items=category_list default_value="-1" />
        		</#if>	
 			<button type="submit" class="btn btn-primary btn-small" title="#i18n{digglike.manageDiggSubmit.buttonModify}"><i class="icon-ok icon-white"></i></button>
     		</form>
@@ -157,7 +158,7 @@
 				<#if comment_submit.active>
 					<span class="label label-success">#i18n{digglike.manageCommentSubmit.stateEnable}</span>
 				<#else>
-					<span class="label label-important">#i18n{digglike.manageCommentSubmit.stateDisable}</span>
+					<span class="label label-important" id="not_published_${comment_submit.idCommentSubmit}">#i18n{digglike.manageCommentSubmit.stateDisable}</span>
 				</#if>
 				</strong>
 			</p>
@@ -240,13 +241,17 @@ $(document).ready( function () {
 		}
 	});
 	
-	
-	if ( $(".commentComments span").hasClass("label-important") ){
-		var t = $(this).get();	
-		console.log( t );
-		console.log( "toto" );
-	}
-	
+	$(".comment_toggle").each( function(){
+		var cId= $(this).attr("id");
+		var n = $(this).next().find("span").hasClass("label-important");
+		console.log( n  );
+			if( $(this).next().find("span").hasClass("label-important") ){
+				// Add all unpublished comments info 
+				$(this).append(" <span class=\"badge badge-warning\"><i class=\"icon-exclamation-sign icon-white\"></i> Contient un lien non publié</span>")
+			};
+
+		}
+	);
 	
 	<#if id_parent?has_content>
 		$("#comment_toggle${id_parent}").next().toggle();

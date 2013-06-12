@@ -30,13 +30,16 @@
 			<div class="control-group">
 					<label class="control-label" for="terms_of_use"></label>            
 					<div class="controls">
-						<label class="checkbox" for="terms_of_use">
-							<input name="terms_of_use" value="terms_of_use" type="checkbox" >
+						<label class="checkbox  inline" for="terms_of_use">
+							<input name="terms_of_use" value="terms_of_use" type="checkbox">
+								#i18n{digglike.diggForm.labelSelectTermsOfUse} *
+								<a href="#" id="btn-tou" class="btn btn-link" title="#i18n{portal.util.labelMore}">
+									#i18n{portal.util.labelMore}								
+								</a>
 						</label>
-						<p class="help-block">#i18n{digglike.diggForm.labelSelectTermsOfUse} *</p>
+						<div id="text-tou" class="alert alert-info">${digg.termsOfUse}</div>			
 					</div>
 			</div>
-				<div class="well">${digg.termsOfUse}</div>			
 		</#if>
 		
 		<#if jcaptcha?exists>
@@ -52,8 +55,19 @@
 	</div>
 </div>
 
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
+	/*
 	var tabQuestionToOpen=new Array();
 	var	tabCalendar=new Array();
+	*/
+	
+	$(document).ready( function(){
+        $("#text-tou").toggle();
+        $("#btn-tou").click( function(){
+			$("#text-tou").toggle();
+			return false;
+		});
+    });
+	
 </script> 
 </fieldset>

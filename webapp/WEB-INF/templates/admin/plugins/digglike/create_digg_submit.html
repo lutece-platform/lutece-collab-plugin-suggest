@@ -28,26 +28,35 @@
 		</#if>
 		<#if !digg.disableVote>  
 			<div class="control-group">
-				<label class="control-label" for="disable_vote">#i18n{digglike.createDiggSubmit.labelDisableVote}</label>     
+				<label class="control-label" for=""></label>     
 				<div class="controls">
-					<input id="disable_vote" name="disable_vote" type="checkbox" >
+					<label class="checkbox" for="disable_vote">
+						<input id="disable_vote" name="disable_vote" type="checkbox" >
+						#i18n{digglike.createDiggSubmit.labelDisableVote}
+					</label>     
 					<p class="help-block">#i18n{digglike.createDiggSubmit.labelDisableVoteComment}</p>  
 				</div>
 			</div>
 		</#if>	
 		<#if digg.authorizedComment>
 			<div class="control-group">
-				<label class="control-label" for="disable_comment">#i18n{digglike.createDiggSubmit.labelDisableComment}</label>     
+				<label class="control-label" for=""></label>     
 				<div class="controls">
-					<input id="disable_comment" name="disable_comment" type="checkbox" >
+					<label class="checkbox" for="disable_comment">
+						#i18n{digglike.createDiggSubmit.labelDisableComment}
+						<input id="disable_comment" name="disable_comment" type="checkbox" >
+					</label>     
 					<p class="help-block">#i18n{digglike.createDiggSubmit.labelDisableCommentComment}</p>  
 				</div>
 			</div>
 		</#if>
 		<div class="control-group">
-				<label class="control-label" for="enable_pin">#i18n{digglike.createDiggSubmit.labelEnablePin}</label>     
+				<label class="control-label" for=""></label>     
 				<div class="controls">
-					<input id="enable_pin" name="enable_pin" type="checkbox" >
+					<label class="checkbox" for="enable_pin">
+						#i18n{digglike.createDiggSubmit.labelEnablePin}
+						<input id="enable_pin" name="enable_pin" type="checkbox" >
+					</label>     
 					<p class="help-block">#i18n{digglike.createDiggSubmit.labelEnablePinComment}</p>  
 				</div>
 			</div>	
@@ -62,7 +71,8 @@
 </div>
 
 <script language="JavaScript" type="text/javascript">
-	var tabQuestionToOpen=new Array();
+/*	var tabQuestionToOpen=new Array();
 	var	tabCalendar=new Array();
+	*/
 </script> 
 </fieldset>
