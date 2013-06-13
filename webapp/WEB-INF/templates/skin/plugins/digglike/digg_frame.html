@@ -10,6 +10,11 @@
 		<#if isExtendInstalled?? && isExtendInstalled >
 				@Extender[${id_digg},DIGGLIKE_DIGG_TYPE,opengraph,{header:false,footer:false}]@
 		</#if>
+		
+			<#if header_digg?has_content>
+				<div class="well">${header_digg}</div>			
+			</#if>
+		
 			<#if view?has_content && view == "view_digg_submit_list" >
 				<#if show_category_block>
 					<#if list_categories_digg?has_content>
@@ -26,9 +31,7 @@
 					</#if>
 				</#if>
 			</#if>
-			<#if header_digg?has_content>
-				<div class="well">${header_digg}</div>			
-			</#if>
+			
 			<div class="well">
 				<#if view?has_content && view == "view_digg_submit_list" >
 					<a class="btn btn-primary pull-left" href="jsp/site/Portal.jsp?page=digg&id_digg=${id_digg}&action=create_digg_submit" target="_top">
