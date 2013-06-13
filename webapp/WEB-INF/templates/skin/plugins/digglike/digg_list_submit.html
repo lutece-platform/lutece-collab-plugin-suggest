@@ -12,7 +12,7 @@
 	<div class="span8">
 		<h3>
 		<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;action=view_digg_submit#digg${digg_submit_display.digg_submit.idDiggSubmit}">
-			<#if digg_submit_display.digg_submit.diggSubmitTitle?length &gt;45>${digg_submit_display.digg_submit.diggSubmitTitle?substring(0,42)}...<#else>${digg_submit_display.digg_submit.diggSubmitTitle}</#if>
+		<#if digg_submit_display.digg_submit.diggSubmitTitle?length &gt;45>${digg_submit_display.digg_submit.diggSubmitTitle?substring(0,42)}...<#else>${digg_submit_display.digg_submit.diggSubmitTitle}</#if>
 		</a>
 		<#if authorized_vote && !digg_submit_display.digg_submit.disableVote && digg_submit_display.digg_submit.numberScore?exists>
 		<div class="btn-group pull-right">
@@ -48,24 +48,16 @@
 				</a> |
 			</#if>
 			<#if digg_submit_display.digg_submit.category?exists>
-				<#if digg_submit_display.digg_submit.diggSubmitType?exists>
 					<span class="label label-inverse" style="background-color:${digg_submit_display.digg_submit.category.color!''};">
-					<#if digg_submit_display.digg_submit.diggSubmitType.idImageResource?has_content >
-							<img class="thumbnail" src="image?resource_type=image_digg&id=${digg_submit_display.digg_submit.diggSubmitType.idImageResource}"/>
-					</#if>	
 					${digg_submit_display.digg_submit.category.title}
 					</span> 
-					<#else>
-						<span class="label label-inverse" style="background-color:${digg_submit_display.digg_submit.category.color!''};">
-							${digg_submit_display.digg_submit.category.title}
-						</span> 
-					</#if>
-				<#elseif digg_submit_display.digg_submit.diggSubmitType?exists>
-					<span class="label label-inverse" style="background-color:${digg_submit_display.digg_submit.diggSubmitType.color!''};">
+			</#if>
+			<#if digg_submit_display.digg_submit.diggSubmitType?exists>
+					<span class="label label-inverse spaced" style="background-color:${digg_submit_display.digg_submit.diggSubmitType.color!''};">
 						<#if digg_submit_display.digg_submit.diggSubmitType.idImageResource?has_content>
-							<img class="thumb-list"  src="image?resource_type=image_digg&id=${digg_submit_display.digg_submit.diggSubmitType.idImageResource}"/>
-						</#if>	
-						${digg_submit_display.digg_submit.diggSubmitType.title}
+							<img class="thumb-list"  src="image?resource_type=image_digg&id=${digg_submit_display.digg_submit.diggSubmitType.idImageResource}" title="${digg_submit_display.digg_submit.diggSubmitType.name} " alt="${digg_submit_display.digg_submit.diggSubmitType.name} ">
+						</#if>
+						${digg_submit_display.digg_submit.diggSubmitType.name}
 					</span> 
 			</#if>
 		</p>

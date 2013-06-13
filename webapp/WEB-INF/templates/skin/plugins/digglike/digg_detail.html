@@ -4,7 +4,12 @@
 		<h3>
 		${digg_submit.diggSubmitTitle}
 		<#if digg_submit.diggSubmitType?exists>
-			<span class="badge" style="background-color:${digg_submit.diggSubmitType.color!''};">&nbsp;</span>
+			<span class="badge" style="background-color:${digg_submit.diggSubmitType.color!''};">
+				<#if digg_submit.diggSubmitType.idImageResource?has_content>
+							<img class="thumb-list"  src="image?resource_type=image_digg&id=${digg_submit.diggSubmitType.idImageResource}" title="${digg_submit.diggSubmitType.name} " alt="${digg_submit.diggSubmitType.name} ">
+						</#if>
+			${digg_submit.diggSubmitType.name}
+			</span>
 		</#if>
 		
 		<#if  authorized_vote && !digg_submit.disableVote && digg_submit.numberScore?exists>

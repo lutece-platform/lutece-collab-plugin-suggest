@@ -15,8 +15,9 @@
 		<@paginationAdmin paginator=paginator combo=1 />
 		<form class="form-inline" action="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp" method="post" name="" id="filter">
 			<input type="hidden" name="id_digg" value="${digg.idDigg}" />
-			<input type="hidden" name="session" value="session" />
-			<input name="page" value="digglike" type="hidden" />
+			<input type="hidden" name="session" id="session" value="session">
+			<input name="page" value="digglike" type="hidden">
+			
 			<#include "include_digg_submit_mass_actions.html">
 			
 			<#assign include_digg_submit_actions ="include_digg_submit_actions.html">
@@ -67,7 +68,7 @@
 						<label class="control-label" for="query">#i18n{digglike.manageDiggSubmit.buttonSearch}</label>
 						<div class="controls">
 							<input type="hidden" name="page" value="search" />
-							<input type="text" name="query" placeholder="#i18n{digglike.manageDiggSubmit.labelSearch}" class="input-xlarge" value="<#if query?exists>${query}</#if>" title="#i18n{digglike.manageDiggSubmit.buttonSearch}">
+							<input type="text" name="query" id="query" placeholder="#i18n{digglike.manageDiggSubmit.labelSearch}" class="input-xlarge" value="<#if query?exists>${query}</#if>" title="#i18n{digglike.manageDiggSubmit.buttonSearch}">
 						</div>
 					</div>
 				</div>
@@ -89,14 +90,41 @@
 <script>
 $(document).ready(function () {
 	/* Search modal */	
-	$("#myModalSearch").addClass("modal fade");
-	$("#myModalExport").addClass("modal fade");
-	$("#myModalCategory").addClass("modal fade");
+	$("#myModalSearch").addClass("modal hide fade");
+	
+	/* Add reinit button if a query has been set */
+	var nQuery=0;
+	$("#myModalSearch select option:selected").each( function(){
+		if( $(this).val() > 0  ){	nQuery++;}
+	});
+	
+	if ( $("#myModalSearch input#query").val() !="" ){ nQuery++; }
+	
+	if( nQuery > 0){
+		$('a[href="#myModalSearch"]').after('<a href="#" id="init" class="btn btn-small btn-danger spaced"><i class="icon-refresh icon-white"></i> Réinitialiser la recherche </a>');
+		$("a#init").click( function(){
+			$("#myModalSearch select option:selected").each( function(){
+				$(this).val(-1);
+			});
+			$("#myModalSearch input#query").val("");
+			$("input#session").val("");
+			$("form#filter").submit();
+			return false;
+		});
+	}
+	
+	/* Export modal */	
+	$("#myModalExport").addClass("modal hide fade");
+	
+	/* Category modal */	
+	$("#myModalCategory").addClass("modal hide fade");
 
 	/* Mass action dropdown menu */	
 	 $('.dropdown-toggle').dropdown();	
 	
-	/* 
+	
+	
+		/* 
 		$(".full").toggle();
 		$(".preview").click(function(){
 			$(this).toggle();
