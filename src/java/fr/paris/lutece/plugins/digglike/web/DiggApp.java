@@ -33,18 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.web;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.digglike.business.Category;
 import fr.paris.lutece.plugins.digglike.business.CategoryHome;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
@@ -97,6 +85,18 @@ import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+
 
 /**
  * This class manages Form page.
@@ -106,6 +106,7 @@ public class DiggApp implements XPageApplication
     public static final String ANCHOR_DIGG_SUBMIT = "digg";
     public static final String PARAMETER_CLEAR_FILTER = "clear_filter";
     public static final String PARAMETER_DIGG_DETAIL = "digg_detail";
+    public static final String ACTION_VIEW_DIGG_SUBMIT = "view_digg_submit";
 
     // markers
     private static final String MARK_DIGG = "digg";
@@ -228,7 +229,6 @@ public class DiggApp implements XPageApplication
     private static final String ACTION_DO_CREATE_COMMENT = "do_create_comment";
     private static final String ACTION_DO_CREATE_REPORT = "do_create_report";
     private static final String ACTION_DO_VOTE = "do_vote";
-    private static final String ACTION_VIEW_DIGG_SUBMIT = "view_digg_submit";
     private static final String ACTION_CREATE_REPORT = "create_report";
     private static final String CONSTANT_VIEW_LIST_DIGG_SUBMIT = "view_digg_submit_list";
     private static final String CONSTANT_VIEW_DIGG_SUBMIT = "view_digg_submit";
