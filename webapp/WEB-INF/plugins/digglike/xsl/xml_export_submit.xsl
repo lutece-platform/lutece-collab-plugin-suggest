@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-<xsl:output method="xml" version="1.0" encoding="ISO-8859-1" indent="yes" cdata-section-elements="digg-submit-value digg-submit-category"/>
+<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" cdata-section-elements="digg-submit-value digg-submit-category"/>
 <xsl:template match="/">
  <xsl:apply-templates select="digg"/> 
 </xsl:template>

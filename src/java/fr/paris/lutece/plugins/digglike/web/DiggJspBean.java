@@ -264,6 +264,8 @@ public class DiggJspBean extends PluginAdminPageJspBean
     
     private static final String MARK_REPORT_REF_LIST = "digg_submit_report_list";
     private static final String MARK_REPORT_SELECTED = "digg_submit_report_selected";
+    private static final String MARK_CONTAINS_COMMENT_DISABLE_LIST = "digg_submit_contains_comment_disable_list";
+    private static final String MARK_CONTAINS_COMMENT_DISABLE_SELECTED = "digg_submit_contains_comment_disable_selected";
     private static final String MARK_AUTHENTIFICATION_ENABLE = "authentification_enable";
     
     private static final String MARK_ROLE_LIST = "role_list";
@@ -395,6 +397,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_UPDATE_FILE = "update_file";
     private static final String PARAMETER_IMAGE_SOURCE = "image_source";
     private static final String PARAMETER_DESCRIPTION = "description";
+    private static final String PARAMETER_ID_CONTAINS_COMMENT_DISABLE = "id_contains_comment_disable";
     
  
 
@@ -671,7 +674,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
        DefaultPluginActionResult result = new DefaultPluginActionResult(  );
 
         // build Filter
-        SubmitFilter filter = DiggUtils.getDiggSubmitFilter( getSearchFields() );
+        SubmitFilter filter = DiggUtils.getDiggSubmitFilter( getSearchFields(),digg.getIdDefaultSort() );
 
         if ( ( getSearchFields().getQuery() != null ) && ( getSearchFields().getQuery().trim(  ) != DiggUtils.EMPTY_STRING ) )
         {
@@ -716,7 +719,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
     		ReferenceList refCategoryList = DiggUtils.getRefListCategory( digg.getCategories(  ) );
     		DiggUtils.addEmptyItem(refCategoryList);
     		model.put( MARK_CATEGORY_LIST, refCategoryList );
-    	 model.put( MARK_DIGG_SUBMIT_CATEGORY_SELECTED, getSearchFields().getIdCategory() );
+    		model.put( MARK_DIGG_SUBMIT_CATEGORY_SELECTED, getSearchFields().getIdCategory() );
     	}
      	if(  digg.getDiggSubmitTypes()!=null && !digg.getDiggSubmitTypes().isEmpty() )
     	{
@@ -741,6 +744,8 @@ public class DiggJspBean extends PluginAdminPageJspBean
         model.put( MARK_DIGG_SUBMIT_SORT_SELECTED, getSearchFields().getIdDiggSubmitSort() );
         model.put( MARK_REPORT_REF_LIST, refListAllYesNo );
         model.put( MARK_REPORT_SELECTED, getSearchFields().getIdDiggSubmitReport() );
+        model.put( MARK_CONTAINS_COMMENT_DISABLE_LIST, refListAllYesNo );
+        model.put( MARK_CONTAINS_COMMENT_DISABLE_SELECTED, getSearchFields().getIdDiggSubmitContainsCommentDisable() );
         model.put( MARK_QUERY, getSearchFields().getQuery() );
         
         PluginActionManager.fillModel( request, getUser(  ), model, IDigglikeAction.class, MARK_DIGGLIKE_ACTIONS );
@@ -3505,6 +3510,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         String strIdDiggSubmitReport = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_REPORT );
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY_FILTER);
     	String strIdType = request.getParameter( PARAMETER_ID_TYPE_DIGG);
+    	String strIdContainsCommentDisable = request.getParameter( PARAMETER_ID_CONTAINS_COMMENT_DISABLE);
     
         String strQuery = request.getParameter( PARAMETER_QUERY );
     	
@@ -3532,6 +3538,10 @@ public class DiggJspBean extends PluginAdminPageJspBean
         if ( ( strIdType != null ) && !strIdType.equals( EMPTY_STRING ) )
         {
         	getSearchFields().setIdType(DiggUtils.getIntegerParameter( strIdType ));
+        }
+        if ( ( strIdContainsCommentDisable != null ) && !strIdContainsCommentDisable.equals( EMPTY_STRING ) )
+        {
+            getSearchFields().setIdDiggSubmitContainsCommentDisable(DiggUtils.getIntegerParameter( strIdContainsCommentDisable ));
         }
 
         if ( strQuery != null )

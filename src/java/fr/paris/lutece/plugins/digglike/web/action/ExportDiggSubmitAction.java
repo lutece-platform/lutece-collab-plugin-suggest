@@ -49,7 +49,6 @@ import fr.paris.lutece.plugins.digglike.business.EntryFilter;
 import fr.paris.lutece.plugins.digglike.business.EntryHome;
 import fr.paris.lutece.plugins.digglike.business.ExportFormat;
 import fr.paris.lutece.plugins.digglike.business.ExportFormatHome;
-import fr.paris.lutece.plugins.digglike.business.IEntry;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.service.CommentSubmitService;
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
@@ -66,10 +65,12 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.pluginaction.AbstractPluginAction;
 import fr.paris.lutece.portal.web.pluginaction.DefaultPluginActionResult;
 import fr.paris.lutece.portal.web.pluginaction.IPluginActionResult;
 import fr.paris.lutece.util.UniqueIDGenerator;
+import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.xml.XmlUtil;
 
 
@@ -81,7 +82,8 @@ import fr.paris.lutece.util.xml.XmlUtil;
 public class ExportDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSearchFields> implements IDigglikeAction
 {
     private static final String ACTION_NAME = "Export Digglike XSL";
-
+  
+    
    
     private static final String MESSAGE_YOU_ARE_NOT_ALLOWED_TO_DOWLOAD_THIS_FILE = "digglike.message.youAreNotAllowedToDownloadFile";
     private static final String MESSAGE_YOU_MUST_SELECT_EXPORT_FORMAT = "digglike.message.youMustSelectExportFormat";
@@ -93,8 +95,16 @@ public class ExportDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSe
     private static final String PARAMETER_ID_DIGG = "id_digg";
     private static final String XSL_UNIQUE_PREFIX_ID = UniqueIDGenerator.getNewId(  ) + "digg-";
     private static final String PARAMETER_ID_EXPORT_FORMAT = "id_export_format";
-    // Export
+    
     private static final String EXPORT_CSV_EXT = "csv";
+    private static final String DEAFULT_ENCODING = "UTF-8";
+    
+    private static final String CONSTANT_MIME_TYPE_CSV = "application/csv";
+    private static final String CONSTANT_MIME_TYPE_OCTETSTREAM = "application/octet-stream";
+    
+    //PROPERTY
+    private static final String PROPERTY_EXPORT_ENCODING_CSV="digglike.exportFileEncoding.csv";
+    private static final String PROPERTY_EXPORT_ENCODING_XML="digglike.exportFileEncoding.xml";
    
     /**
      * {@inheritDoc}
@@ -177,7 +187,6 @@ public class ExportDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSe
         else
         {
 	       
-        	
         	EntryFilter entryfilter = new EntryFilter(  );
         	entryfilter.setIdDigg( digg.getIdDigg(  ) );
             //set digg entries
@@ -190,8 +199,7 @@ public class ExportDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSe
 	        DiggSubmit diggSubmit = null;
 	        List<CommentSubmit> listCommentSubmit;
 	        //reinit filter for comment
-	        filter = new SubmitFilter(  );
-	
+	        filter = new SubmitFilter(  );  
 	        for ( Integer nIdDiggSubmit : listIdDiggSubmit )
 	        {
 	            diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit, false,true, plugin );
@@ -208,15 +216,33 @@ public class ExportDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSe
 	        String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource,
 	                exportFormat.getXsl(  ), XSL_UNIQUE_PREFIX_ID + nIdExportFormat, null, null );
 	
-	        byte[] byteFileOutPut = strFileOutPut.getBytes(  );
-	
+	        String strFormatExtension = exportFormat.getExtension(  ).trim(  );
+            String strFileName = digg.getTitle(  ) + "." + strFormatExtension;
+            boolean isExporTypeCSV= (strFormatExtension!=null &&  strFormatExtension.equals(EXPORT_CSV_EXT));
+            
+            String strEncoding= isExporTypeCSV?AppPropertiesService.getProperty(PROPERTY_EXPORT_ENCODING_CSV, DEAFULT_ENCODING):AppPropertiesService.getProperty(PROPERTY_EXPORT_ENCODING_XML, DEAFULT_ENCODING);
+            String strResponseContentType=null;
+            if ( isExporTypeCSV )
+            {
+            	strResponseContentType= CONSTANT_MIME_TYPE_CSV ;
+            }
+            else
+            {
+                String strMimeType = FileSystemUtil.getMIMEType( strFileName );
+                strResponseContentType=strMimeType!=null?strMimeType:CONSTANT_MIME_TYPE_OCTETSTREAM;
+            
+            }
+            
+           
+            DiggUtils.addHeaderResponse( request, response, strFileName );
+	        response.setContentType( strResponseContentType );
+            response.setCharacterEncoding( strEncoding);
+	        
 	        try
 	        {
-	            String strFormatExtension = exportFormat.getExtension(  ).trim(  );
-	            String strFileName = digg.getTitle(  ) + "." + strFormatExtension;
-	            DiggUtils.addHeaderResponse( request, response, strFileName );
+	           
+	        	byte[]byteFileOutPut=strFileOutPut.getBytes(strEncoding);
 	            response.setContentLength( (int) byteFileOutPut.length );
-	
 	            OutputStream os = response.getOutputStream(  );
 	            os.write( byteFileOutPut );
 	            os.close(  );

@@ -118,16 +118,22 @@ public final class CommentSubmitHome
         return _dao.load( nKey, plugin );
     }
 
+
+    
+
     /**
         * Load the data of all the commentSubmit who verify the filter and returns them in a  list
         * @param filter the filter
+        * @param nLimit the number limit of comment return
         * @param plugin the plugin
         * @return  the list of commentSubmit
         */
-    public static List<CommentSubmit> getCommentSubmitList( SubmitFilter filter, Plugin plugin )
+    public static List<CommentSubmit> getCommentSubmitList( SubmitFilter filter,Integer nLimit, Plugin plugin )
     {
-        return _dao.selectListByFilter( filter, plugin );
+        return  _dao.selectListByFilter( filter, nLimit,plugin );
     }
+    
+    
 
     /**
      * Load the number of all the commentSubmit who verify the filter

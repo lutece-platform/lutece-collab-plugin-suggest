@@ -59,6 +59,12 @@
 						</div>
 					</div>
 					<div class="control-group">
+						<label class="control-label" for="id_contains_comment_disable">#i18n{digglike.manageDiggSubmit.labelDiggSubmitContainsCommentDisable}</label>
+						<div class="controls">
+							<@comboWithParams name="id_contains_comment_disable" default_value="${digg_submit_contains_comment_disable_selected}" additionalParameters="class=\"input-xlarge\"" items=digg_submit_contains_comment_disable_list />
+						</div>
+					</div>
+					<div class="control-group">
 						<label class="control-label" for="id_digg_submit_report">#i18n{digglike.manageDiggSubmit.labelDiggSubmitSort}</label>
 						<div class="controls">
 							<@comboWithParams name="id_digg_submit_sort" default_value="${digg_submit_sort_selected}" additionalParameters="class=\"input-xlarge\"" items=digg_submit_sort_list />
@@ -101,7 +107,7 @@ $(document).ready(function () {
 	if ( $("#myModalSearch input#query").val() !="" ){ nQuery++; }
 	
 	if( nQuery > 0){
-		$('a[href="#myModalSearch"]').after('<a href="#" id="init" class="btn btn-small btn-danger spaced"><i class="icon-refresh icon-white"></i> Réinitialiser la recherche </a>');
+		$('a[href="#myModalSearch"]').after('<a href="#" id="init" class="btn btn-small btn-danger spaced"><i class="icon-refresh icon-white"></i> #i18n{digglike.manageDiggSubmit.buttonReinitSearch}</a>');
 		$("a#init").click( function(){
 			$("#myModalSearch select option:selected").each( function(){
 				$(this).val(-1);

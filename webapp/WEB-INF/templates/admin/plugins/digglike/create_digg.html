@@ -145,6 +145,14 @@
 						</div>
 					</div>
 					<div class="control-group">
+						<label class="control-label" class="control-label" for="id_theme_list">#i18n{digglike.createDigg.labelThemeXpage}</label>
+						<div class="controls">
+							<@combo name="id_theme_list" items=theme_list default_value=default_theme />
+							<p class="help-block">#i18n{digglike.createDigg.labelThemeXpageComment}</p>
+						</div>
+					</div>
+				
+					<div class="control-group">
 						<label class="control-label" for=""></label>
 						<div class="controls">
 							<label class="checkbox" for="display_comment_in_digg_submit_list">
@@ -154,6 +162,21 @@
 							<p class="help-block">#i18n{digglike.createDigg.labelDisplayCommentInDiggSubmitListComment}</p>
 						</div>
 					</div>
+				
+				<div class="control-group">
+					<label class="control-label" for="number_comment_display_in_digg_submit_list">#i18n{digglike.createDigg.labelNumberCommentDisplayInDiggSubmitList}</label>
+					<div class="controls">
+						<input type="text" name="number_comment_display_in_digg_submit_list" id="number_comment_display_in_digg_submit_list" class="input-mini" value="3" maxlength="10" />
+						<p class="help-block">#i18n{digglike.createDigg.labelNumberCommentDisplayInDiggSubmitListComment}</p>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="number_char_comment_display_in_digg_submit_list">#i18n{digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitList}</label>
+					<div class="controls">
+						<input type="text" name="number_char_comment_display_in_digg_submit_list" id="number_char_comment_display_in_digg_submit_list" class="input-mini" value="30" maxlength="10" />
+					<p class="help-block">#i18n{digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitListComment}</p>
+				</div>
+				</div>
 			</div>
 			<div class="span6">
 				<div class="control-group">
@@ -179,28 +202,7 @@
 						<p class="help-block">#i18n{digglike.createDigg.labelTermsOfUseComment}</p>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" class="control-label" for="id_theme_list">#i18n{digglike.createDigg.labelThemeXpage}</label>
-						<div class="controls">
-							<@combo name="id_theme_list" items=theme_list default_value=default_theme />
-							<p class="help-block">#i18n{digglike.createDigg.labelThemeXpageComment}</p>
-						</div>
-				</div>
-				
-				<div class="control-group">
-					<label class="control-label" for="number_comment_display_in_digg_submit_list">#i18n{digglike.createDigg.labelNumberCommentDisplayInDiggSubmitList}</label>
-					<div class="controls">
-						<input type="text" name="number_comment_display_in_digg_submit_list" id="number_comment_display_in_digg_submit_list" class="input-mini" value="3" maxlength="10" />
-						<p class="help-block">#i18n{digglike.createDigg.labelNumberCommentDisplayInDiggSubmitListComment}</p>
-					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label" for="number_char_comment_display_in_digg_submit_list">#i18n{digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitList}</label>
-					<div class="controls">
-						<input type="text" name="number_char_comment_display_in_digg_submit_list" id="number_char_comment_display_in_digg_submit_list" class="input-mini" value="30" maxlength="10" />
-					<p class="help-block">#i18n{digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitListComment}</p>
-				</div>
-			</div>
+			
 				</div>
 			</div>
 		</div>

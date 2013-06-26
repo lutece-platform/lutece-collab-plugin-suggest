@@ -56,6 +56,7 @@ public final class DigglikeAdminSearchFields implements Serializable {
 	private int _nIdDiggSubmitReport=DiggUtils.CONSTANT_ID_NULL;
 	private int _nIdCategory=DiggUtils.CONSTANT_ID_NULL;
 	private int _nIdType=DiggUtils.CONSTANT_ID_NULL;
+	private int _nIdDiggSubmitContainsCommentDisable=DiggUtils.CONSTANT_ID_NULL;
 	private String _strQuery;
 	private  List<String> _selectedDiggSubmit;
 
@@ -121,6 +122,15 @@ public final class DigglikeAdminSearchFields implements Serializable {
 
 	public void setIdType(int _nIdType) {
 		this._nIdType = _nIdType;
+	}
+
+	public int getIdDiggSubmitContainsCommentDisable() {
+		return _nIdDiggSubmitContainsCommentDisable;
+	}
+
+	public void setIdDiggSubmitContainsCommentDisable(
+			int _nIdDiggSubmitContainsCommentDisable) {
+		this._nIdDiggSubmitContainsCommentDisable = _nIdDiggSubmitContainsCommentDisable;
 	}
 
 }

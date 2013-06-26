@@ -51,6 +51,7 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.admin.PluginAdminPageJspBean;
 import fr.paris.lutece.portal.web.constants.Parameters;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
+import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
@@ -101,7 +102,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
 
     //	 other constants
     private static final String EMPTY_STRING = "";
-
+    private static final String CONSTANT_MIME_TYPE_OCTETSTREAM = "application/octet-stream";
     //	message
     private static final String MESSAGE_CONFIRM_REMOVE_EXPORT = "digglike.message.confirmRemoveExportFormat";
     private static final String MESSAGE_MANDATORY_FIELD = "digglike.message.mandatory.field";
@@ -127,6 +128,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
     private int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_ITEM_PER_PAGE, 15 );
     private String _strCurrentPageIndexExport;
     private int _nItemsPerPageExportFormat;
+    
 
     /**
      * Return management export format ( list of export format )
@@ -461,15 +463,17 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
         }
 
         exportFormat = ExportFormatHome.findByPrimaryKey( nIdExport, plugin );
-
+       
         if ( exportFormat != null )
         {
-            try
+        	   
+        	try
             {
-                byte[] byteFileOutPut = exportFormat.getXsl(  );
-                DiggUtils.addHeaderResponse( request, response, exportFormat.getTitle(  ) + ".xsl" );
+                
+        		 byte[] byteFileOutPut = exportFormat.getXsl(  );
+                DiggUtils.addHeaderResponse( request, response,exportFormat.getTitle()+".xsl" );
+                response.setContentType( CONSTANT_MIME_TYPE_OCTETSTREAM );
                 response.setContentLength( (int) byteFileOutPut.length );
-
                 OutputStream os = response.getOutputStream(  );
                 os.write( byteFileOutPut );
                 os.close(  );

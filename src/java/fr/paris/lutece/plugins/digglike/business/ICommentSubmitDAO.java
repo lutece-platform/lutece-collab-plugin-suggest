@@ -80,13 +80,15 @@ public interface ICommentSubmitDAO
      */
     void store( CommentSubmit commentSubmit, Plugin plugin );
 
+
     /**
      * Load the data of all the commentSubmit who verify the filter and returns them in a  list
      * @param filter the filter
+     * @param nLimit the number limit of comment return
      * @param plugin the plugin
      * @return  the list of commentSubmit
      */
-    List<CommentSubmit> selectListByFilter( SubmitFilter filter, Plugin plugin );
+    List<CommentSubmit> selectListByFilter( SubmitFilter filter,Integer nLimit, Plugin plugin );
 
     /**
      * return the number  of all the commentSubmit who verify the filter

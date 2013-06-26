@@ -1334,30 +1334,10 @@ public final class DiggUtils
     public static void addHeaderResponse( HttpServletRequest request, HttpServletResponse response, String strFileName )
     {
         response.setHeader( "Content-Disposition", "attachment ;filename=\"" + strFileName + "\";" );
-
-        if ( ( strFileName.length(  ) > 4 ) && strFileName.substring( 0, strFileName.length(  ) - 5 ).equals( ".csv" ) )
-        {
-            response.setContentType( "application/csv" );
-        }
-
-        else
-        {
-            String strMimeType = request.getSession(  ).getServletContext(  ).getMimeType( strFileName );
-
-            if ( strMimeType != null )
-            {
-                response.setContentType( strMimeType );
-            }
-            else
-            {
-                response.setContentType( "application/octet-stream" );
-            }
-        }
-
         response.setHeader( "Pragma", "public" );
         response.setHeader( "Expires", "0" );
         response.setHeader( "Cache-Control", "must-revalidate,post-check=0,pre-check=0" );
-    }
+       }
 
     /**
      * Builds a query with filters placed in parameters
@@ -1523,13 +1503,30 @@ public final class DiggUtils
     		pinnedFilter.setIdReported(filter.getIdReported());
     		pinnedFilter.setIdDiggSubmitState(filter.getIdDiggSubmitState());
     		pinnedFilter.setIdPinned(SubmitFilter.ID_TRUE);
+    		pinnedFilter.setIdContainsCommentDisable(filter.getIdContainsCommentDisable());
     		initSubmitFilterBySort(pinnedFilter, SubmitFilter.SORT_MANUALLY);
     		return pinnedFilter;
     }
     
     
-    
+    /**
+     * 
+     * @param searchFields the search fields
+     * @return a submit Filter
+     */
     public static SubmitFilter getDiggSubmitFilter( DigglikeAdminSearchFields searchFields )
+    {
+        return getDiggSubmitFilter(searchFields, null);
+    }
+    
+    
+    /**
+     *  
+     * @param searchFields the search fields
+     * @param nDefaultIdSort the defautlt sort
+     * @return SubmitFilter
+     */
+    public static SubmitFilter getDiggSubmitFilter( DigglikeAdminSearchFields searchFields,Integer nDefaultIdSort  )
     {
         SubmitFilter filter = new SubmitFilter(  );
         filter.setIdDigg( searchFields.getIdDigg() );
@@ -1537,13 +1534,13 @@ public final class DiggUtils
         filter.setIdReported( searchFields.getIdDiggSubmitReport() );
         filter.setIdCategory(searchFields.getIdCategory());
         filter.setIdType(searchFields.getIdType());
-        DiggUtils.initSubmitFilterBySort( filter, searchFields.getIdDiggSubmitSort() );
+        filter.setIdContainsCommentDisable(searchFields.getIdDiggSubmitContainsCommentDisable());
+        DiggUtils.initSubmitFilterBySort( filter, (searchFields.getIdDiggSubmitSort()==DiggUtils.CONSTANT_ID_NULL && nDefaultIdSort!=null )? nDefaultIdSort :searchFields.getIdDiggSubmitSort()  );
         //add sort by pinned first
         DiggUtils.initSubmitFilterBySort(filter, SubmitFilter.SORT_BY_PINNED_FIRST);
 
         return filter;
     }
-    
     
     
 

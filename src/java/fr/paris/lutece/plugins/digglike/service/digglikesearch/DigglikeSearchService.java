@@ -88,11 +88,11 @@ public class DigglikeSearchService
                                                                                     : engine.getSearchResults( strQuery,
                 filter );
 
-        if ( ( listSearchesults == null ) || ( listSearchesults.size(  ) == 0 ) )
+        if ( StringUtils.isEmpty( strQuery ))
         {
             listDiggSubmitResult = diggSubmitListId;
         }
-        else
+        else if( diggSubmitListId!=null	 )
         {
             for ( Integer nDiggSubmitId : diggSubmitListId )
             {

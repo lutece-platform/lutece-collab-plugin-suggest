@@ -22,6 +22,14 @@
 				</#if>
 				<#if category_list?has_content  && digg_submit.category?exists>
 					<span class="label label-inverse spaced" style="background-color:${digg_submit.category.color!''};">${digg_submit.category.title}</span> 
+				</#if>
+				<#if digg_submit_type_list?has_content  &&  digg_submit.diggSubmitType?exists>
+					<span class="label label-inverse spaced" style="background-color:${digg_submit.diggSubmitType.color!''};">
+						<#if digg_submit.diggSubmitType.idImageResource?has_content>
+							<img class="thumb-list"  src="image?resource_type=image_digg&id=${digg_submit.diggSubmitType.idImageResource}" title="${digg_submit.diggSubmitType.name} " alt="${digg_submit.diggSubmitType.name} ">
+						</#if>
+						${digg_submit.diggSubmitType.name}
+					</span> 
 				</#if>	
 				<#if digg_submit.diggSubmitState.number=publish_state_number>
 					<span class="label label-success spaced" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState} #i18n{digglike.manageDiggSubmit.altPublish}">

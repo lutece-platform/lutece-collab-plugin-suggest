@@ -33,6 +33,18 @@
  */
 package fr.paris.lutece.plugins.digglike.web;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.digglike.business.Category;
 import fr.paris.lutece.plugins.digglike.business.CategoryHome;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
@@ -82,20 +94,7 @@ import fr.paris.lutece.portal.web.xpages.XPageApplication;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
-import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -104,10 +103,10 @@ import org.apache.commons.lang.StringUtils;
 public class DiggApp implements XPageApplication
 {
     public static final String ANCHOR_DIGG_SUBMIT = "digg";
+    public static final String ANCHOR_FRAMESET_CONTENT_DIGG= "frameset_content_digg";
     public static final String PARAMETER_CLEAR_FILTER = "clear_filter";
     public static final String PARAMETER_DIGG_DETAIL = "digg_detail";
     public static final String ACTION_VIEW_DIGG_SUBMIT = "view_digg_submit";
-
     // markers
     private static final String MARK_DIGG = "digg";
     private static final String MARK_CONTENT_DIGG = "content_digg";
@@ -418,7 +417,7 @@ public class DiggApp implements XPageApplication
         UrlItem urlDiggXpage = getNewUrlItemPage(  );
         urlDiggXpage.addParameter( PARAMETER_ACTION, CONSTANT_VIEW_LIST_DIGG_SUBMIT );
         urlDiggXpage.addParameter( PARAMETER_ID_DIGG, nIdDigg );
-
+        
         SearchFields searchFields = getSearchFields( request );
         addDiggPageFrameset( getHtmlListDiggSubmit( request.getLocale(  ), _plugin, digg, searchFields, urlDiggXpage,
                 luteceUserConnected ), request, page, digg, model, searchFields, luteceUserConnected );
@@ -643,11 +642,11 @@ public class DiggApp implements XPageApplication
         String strCommentValueDigg = request.getParameter( PARAMETER_COMMENT_VALUE_DIGG );
         String strMessage = MESSAGE_NEW_COMMENT_SUBMIT;
         String strIdParentComment = request.getParameter( PARAMETER_COMMENT_ID_PARENT );
-        int nIdParentComment = 0;
+        int nIdParentComment = DiggUtils.CONSTANT_ID_NULL;
 
         if ( ( strIdParentComment != null ) && ( !strIdParentComment.trim(  ).equals( EMPTY_STRING ) ) )
         {
-            nIdParentComment = Integer.valueOf( strIdParentComment );
+            nIdParentComment =DiggUtils.getIntegerParameter( strIdParentComment );
         }
 
         if ( ( strCommentValueDigg == null ) || strCommentValueDigg.trim(  ).equals( EMPTY_STRING ) )
@@ -950,7 +949,6 @@ public class DiggApp implements XPageApplication
         DiggFilter filter = new DiggFilter(  );
 
         List listDigg = DiggHome.getDiggList( filter, plugin );
-
         HashMap model = new HashMap(  );
         Paginator paginator = new Paginator( listDigg, nItemsPerPageDigg, urlDiggXPage.getUrl(  ),
                 PARAMETER_PAGE_INDEX, strCurrentPageIndexDigg );
@@ -995,7 +993,7 @@ public class DiggApp implements XPageApplication
 
             luteceUserInfo = null;
             diggSubmit = _diggSubmitService.findByPrimaryKey( idDiggSubmit,
-                    ( digg.isAuthorizedComment(  ) && digg.isDisplayCommentInDiggSubmitList()), plugin );
+                    ( digg.isAuthorizedComment(  ) && digg.isDisplayCommentInDiggSubmitList()),digg.getNumberCommentDisplayInDiggSubmitList(), plugin );
             modelDigg.put( MARK_DIGG_SUBMIT, diggSubmit );
 
             if ( SecurityService.isAuthenticationEnable(  ) && ( diggSubmit.getLuteceUserKey(  ) != null ) )
@@ -1390,20 +1388,14 @@ public class DiggApp implements XPageApplication
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
         }
 
-        // Check XSS characters
-        if ( StringUtil.containsXssCharacters( strCommentValueDigg ) )
-        {
-            strCommentValueDigg = "";
-            SiteMessageService.setMessage( request, MESSAGE_NEW_COMMENT_SUBMIT_INVALID, SiteMessage.TYPE_STOP );
-        }
-
         diggSubmit.setNumberComment(diggSubmit.getNumberComment(  ) + 1 ); 
         if ( !diggSubmit.getDigg(  ).isDisableNewComment(  ) )
         {
             commentSubmit.setActive( true );
             diggSubmit.setNumberCommentEnable( diggSubmit.getNumberCommentEnable(  ) + 1 );
-           _diggSubmitService.update( diggSubmit, plugin );
+         
         }
+        _diggSubmitService.update( diggSubmit, plugin );
 
         commentSubmit.setDateComment( DiggUtils.getCurrentDate(  ) );
         commentSubmit.setDiggSubmit( diggSubmit );

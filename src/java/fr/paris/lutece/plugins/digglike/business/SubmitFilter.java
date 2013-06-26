@@ -79,6 +79,7 @@ public class SubmitFilter
     private int _nIdDiggSubmitState = ALL_INT;
     private int _nIdCommentSubmitState = ALL_INT;
     private int _nIdPinned = ALL_INT;
+    private int _nIdContainsCommentDisable = ALL_INT;
     private String _strLuteceUserKey = null;
     private List<Integer> _listSortBy = new ArrayList<Integer>(  );
 
@@ -486,8 +487,8 @@ public class SubmitFilter
     }
 
     /**
-     * set   1 if the diggs return must be pinned
-     *       0 if the diggss return must not  be pinned
+     * set   1 if the diggsubmit return must be pinned
+     *       0 if the diggsubmit return must not  be pinned
      * @param idPinned idPinned
      */
     public void setIdPinned( int idPinned )
@@ -533,5 +534,33 @@ public class SubmitFilter
        return ( _nIdType != ALL_INT );
    }
 
+   
+  /**
+   *  
+   * @return 1 if the diggsubmit return must contains comment disable
+   * 		 0 if the diggsubmit return must not contains comment disable 
+   */
+public int getIdContainsCommentDisable() {
+	return _nIdContainsCommentDisable;
+}
+
+/**
+ * 
+ * @param _nIdContainsCommentDisable 1 if the diggsubmit return must contains comment disable
+ * 									  0 if the diggsubmit return must not contains comment disable 							
+ */
+public void setIdContainsCommentDisable(int _nIdContainsCommentDisable) {
+	this._nIdContainsCommentDisable = _nIdContainsCommentDisable;
+}
+
+
+/**
+*
+* @return true if the filter contains Id comment Disable
+*/
+public boolean containsIdContainsCommentDisable(  )
+{
+   return ( _nIdContainsCommentDisable != ALL_INT );
+}
 
 }

@@ -1,4 +1,7 @@
 #i18n{digglike.notificationMailNewCommentSubmit.contentTitle} '${comment_submit.diggSubmit.diggSubmitTitle}' #i18n{digglike.notificationMailNewCommentSubmit.contentTitleNewComment}
-<a href="${base_url}/jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=${comment_submit.diggSubmit.idDiggSubmit}">
+<br>
+${comment_submit.value}
+
+<a href="${base_url}/jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=${comment_submit.diggSubmit.idDiggSubmit}<#if comment_submit.idParent !=-1>&id_parent=${comment_submit.idParent}</#if>#comment${comment_submit.idCommentSubmit}">
 	#i18n{digglike.notificationMailNewCommentSubmit.contentAccesCommentSubmitList}
 </a>

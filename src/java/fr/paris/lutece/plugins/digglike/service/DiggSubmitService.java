@@ -206,6 +206,12 @@ public class DiggSubmitService implements IDiggSubmitService
     @Override
     public DiggSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList, Plugin plugin )
     {
+        return findByPrimaryKey(nKey, bLoadCommentList, null, plugin);
+    }
+    
+    @Override
+    public DiggSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList,Integer numberMaxCommentLoad, Plugin plugin )
+    {
         DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nKey, plugin );
 
         if (  diggSubmit != null  && !diggSubmit.isDisableComment() && bLoadCommentList )
@@ -214,7 +220,7 @@ public class DiggSubmitService implements IDiggSubmitService
             submmitFilterComment.setIdDiggSubmit( diggSubmit.getIdDiggSubmit(  ) );
             submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
             diggSubmit.setComments( CommentSubmitService.getService(  )
-                                                        .getCommentSubmitList( submmitFilterComment, plugin ) );
+                                                        .getCommentSubmitList( submmitFilterComment,numberMaxCommentLoad, plugin ) );
          
         }
 

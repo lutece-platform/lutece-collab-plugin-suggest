@@ -96,6 +96,16 @@ public interface IDiggSubmitService
      * @return an instance of DiggSubmit
      */
     DiggSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList, Plugin plugin );
+    /**
+     * Returns an instance of a DiggSubmit whose identifier is specified in parameter
+     *
+     * @param nKey The diggSubmit primary key
+     * @param bLoadCommentList true if the comment list must be get
+     * @param numberMaxCommentLoad the number max of parent comment Load
+     * @param plugin the Plugin
+     * @return an instance of DiggSubmit
+     */
+    DiggSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList,Integer numberMaxCommentLoad, Plugin plugin );
     
     /**
      * Returns an instance of a DiggSubmit whose identifier is specified in parameter

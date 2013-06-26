@@ -437,7 +437,7 @@ CREATE TABLE IF NOT EXISTS digglike_digg_user_info (
 CREATE TABLE digglike_digg_attribute (
 	id_digg INT DEFAULT 0 NOT NULL,
 	attribute_key varchar(255) NOT NULL,
-	attribute_value varchar(255) DEFAULT NULL,
+	attribute_value long varchar DEFAULT NULL,
 	PRIMARY KEY (id_digg, attribute_key)
 );
 

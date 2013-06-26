@@ -16,6 +16,24 @@
 			<#assign include_digg_submit_actions ="include_digg_submit_actions_change_order.html">
 			<#assign display_check_actions =false>
 			<#include "include_digg_submit_list.html">
-		</form>
+		
 	</div>
 </div>
+
+
+<script>
+$(document).ready(function () {
+	
+	/* Toggle submit list */
+	$(".full").toggle();
+	$(".preview").click(function(){
+		$(this).toggle();
+		$(this).prev().toggle();
+	}); 
+	$(".full").click(function(){
+		$(this).toggle();
+		$(this).next().toggle();
+	});
+	
+});
+</script>

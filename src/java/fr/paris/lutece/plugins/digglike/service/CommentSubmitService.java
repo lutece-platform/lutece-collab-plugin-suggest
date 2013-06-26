@@ -109,7 +109,7 @@ public class CommentSubmitService implements ICommentSubmitService
         //get All parent
         filter.setIdParent( SubmitFilter.ID_PARENT_NULL );
 
-        List<CommentSubmit> commentSubmitList = CommentSubmitHome.getCommentSubmitList( filter, plugin );
+        List<CommentSubmit> commentSubmitList = CommentSubmitHome.getCommentSubmitList( filter,null, plugin );
 
         if ( commentSubmitList != null )
         {
@@ -122,12 +122,38 @@ public class CommentSubmitService implements ICommentSubmitService
                 subCommentFilter.setIdParent( c.getIdCommentSubmit(  ) );
                 subCommentFilter.setIdCommentSubmitState( filter.getIdCommentSubmitState(  ) );
                 subCommentFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
-                c.setComments( CommentSubmitHome.getCommentSubmitList( subCommentFilter, plugin ) );
+                c.setComments( CommentSubmitHome.getCommentSubmitList( subCommentFilter,null, plugin ) );
             }
         }
 
         filter.setIdParent( DiggUtils.CONSTANT_ID_NULL );
 
+        return commentSubmitList;
+    }
+    
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<CommentSubmit> getCommentSubmitList( SubmitFilter filter,Integer nLimitParentNumber,  Plugin plugin )
+    {
+        if(nLimitParentNumber == null || nLimitParentNumber== DiggUtils.CONSTANT_ID_NULL)
+        {
+        	//if the number of comment parent are not limited used getCommentSubmitList(filter, plugin)
+        	return getCommentSubmitList(filter, plugin);
+        }
+        
+    	
+    	if ( !filter.containsSortBy(  ) )
+        {
+            //use default sort
+            DiggUtils.initCommentFilterBySort( filter, DiggUtils.CONSTANT_ID_NULL );
+        }
+
+        //get All parent
+        filter.setIdParent( SubmitFilter.ID_PARENT_NULL );
+        List<CommentSubmit> commentSubmitList = CommentSubmitHome.getCommentSubmitList( filter,nLimitParentNumber, plugin );
         return commentSubmitList;
     }
 

@@ -72,6 +72,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     private static final String SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_ASC = " date_modify ASC";
     private static final String SQL_QUERY_UPDATE_DATE_MODIFY = "UPDATE digglike_comment_submit SET date_modify=? WHERE id_comment_submit=? ";
     private static final String SQL_ORDER_BY = " ORDER BY ";
+    private static final String SQL_LIMIT = " LIMIT ";
 
     /**
      * Generates a new primary key
@@ -204,14 +205,16 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
-
+    
+    
     /**
      * Load the data of all the commentSubmit which verify the filter and returns them in a list
      * @param filter the filter
+     * @param nLimit the number max of comment return
      * @param plugin the plugin
      * @return  the list of commentSubmit
      */
-    public List<CommentSubmit> selectListByFilter( SubmitFilter filter, Plugin plugin )
+    public List<CommentSubmit> selectListByFilter( SubmitFilter filter,Integer nLimit, Plugin plugin )
     {
         List<CommentSubmit> commentSubmitList = new ArrayList<CommentSubmit>(  );
         CommentSubmit commentSubmit = null;
@@ -241,6 +244,14 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
 
         String strSQL = DiggUtils.buildRequestWithFilter( SQL_QUERY_SELECT_COMMENT_SUBMIT_BY_FILTER, listStrFilter,
                 strOrderBy );
+        
+        if ( nLimit !=null && nLimit != DiggUtils.CONSTANT_ID_NULL)
+        {
+        	
+        	strSQL= strSQL+SQL_LIMIT +nLimit;
+        	
+        }
+        
         DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
         int nIndex = 1;
 
@@ -287,6 +298,8 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
 
         return commentSubmitList;
     }
+
+ 
 
     /**
      * return the number  of all the commentSubmit who verify the filter

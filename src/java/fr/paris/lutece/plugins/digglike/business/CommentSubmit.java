@@ -56,7 +56,7 @@ public class CommentSubmit
     private static final String TAG_DIGG_SUBMIT_COMMENT = "digg-submit-comment";
     private static final String TAG_DIGG_SUBMIT_COMMENT_DATE = "digg-submit-comment-date";
     private static final String TAG_DIGG_SUBMIT_COMMENT_VALUE = "digg-submit-comment-value";
-    private static final String TAG_DIGGS_SUBMIT_COMMENTS = "diggs-submit-comments";
+    private static final String TAG_DIGGS_SUBMIT_COMMENTS = "digg-submit-comments";
     private int _nIdCommentSubmit;
     private DiggSubmit _diggSubmit;
     private Timestamp _tDateComment;

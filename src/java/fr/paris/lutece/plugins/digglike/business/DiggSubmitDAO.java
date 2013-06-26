@@ -62,6 +62,8 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
     private static final String SQL_FILTER_REPORTED = " d.reported = ? ";
     private static final String SQL_FILTER_IS_PINNED = " d.is_pinned = ? ";
     private static final String SQL_FILTER_NUMBER_VOTE = " d.vote_number = ? ";
+    private static final String SQL_FILTER_CONTAINS_COMMENT_DISABLE = " d.comment_number <> d.comment_enable_number ";
+    private static final String SQL_FILTER_NOT_CONTAINS_COMMENT_DISABLE = " d.comment_number = d.comment_enable_number ";
     private static final String SQL_FILTER_LUTECE_USER_KEY = " d.lutece_user_key = ? ";
     private static final String SQL_FILTER_SORT_BY_DATE_RESPONSE_ASC = " d.date_response ASC ";
     private static final String SQL_FILTER_SORT_BY_DATE_RESPONSE_DESC = " d.date_response DESC ";
@@ -361,7 +363,10 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         {
             listStrFilter.add( SQL_FILTER_ID_TYPE );
         }
-
+        if(filter.containsIdContainsCommentDisable())
+        {
+        	listStrFilter.add(filter.getIdContainsCommentDisable() == SubmitFilter.ID_TRUE ? SQL_FILTER_CONTAINS_COMMENT_DISABLE : SQL_FILTER_NOT_CONTAINS_COMMENT_DISABLE );
+        }
 
         if ( filter.containsSortBy(  ) )
         {
@@ -430,6 +435,7 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
             daoUtil.setInt( nIndex, filter.getIdType());
             nIndex++;
         }
+        	
 
         daoUtil.executeQuery(  );
 
@@ -501,6 +507,10 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         if ( filter.containsIdType() )
         {
             listStrFilter.add( SQL_FILTER_ID_TYPE );
+        }
+        if(filter.containsIdContainsCommentDisable())
+        {
+        	listStrFilter.add(filter.getIdContainsCommentDisable() == SubmitFilter.ID_TRUE ? SQL_FILTER_CONTAINS_COMMENT_DISABLE : SQL_FILTER_NOT_CONTAINS_COMMENT_DISABLE );
         }
 
         if ( filter.containsSortBy(  ) )
@@ -657,6 +667,10 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         if ( filter.containsIdType() )
         {
             listStrFilter.add( SQL_FILTER_ID_TYPE );
+        }
+        if(filter.containsIdContainsCommentDisable())
+        {
+        	listStrFilter.add(filter.getIdContainsCommentDisable() == SubmitFilter.ID_TRUE ? SQL_FILTER_CONTAINS_COMMENT_DISABLE : SQL_FILTER_NOT_CONTAINS_COMMENT_DISABLE );
         }
 
         String strSQL = DiggUtils.buildRequestWithFilter( SQL_QUERY_SELECT_COUNT_BY_FILTER, listStrFilter, null );
