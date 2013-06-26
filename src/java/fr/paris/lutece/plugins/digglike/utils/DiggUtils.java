@@ -146,6 +146,9 @@ public final class DiggUtils
     private static final String PROPERTY_NOTIFICATION_MAIL_NEW_REPORTED_MESSAGE_SENDER_NAME = "digglike.notificationMailNewReportedMessage.senderName";
     private static final String PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_ASC = "digglike.sorterListItemDateResponseAsc";
     private static final String PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_DESC = "digglike.sorterListItemDateResponseDesc";
+    private static final String PROPERTY_COMMENT_STATE_ENABLE= "digglike.manageCommentSubmit.stateEnable";
+    private static final String PROPERTY_COMMENT_STATE_DISABLE = "digglike.manageCommentSubmit.stateDisable";
+    
     private static final String PROPERTY_SORTER_LIST_ITEM_SCORE_ASC = "digglike.sorterListItemScoreAsc";
     private static final String PROPERTY_SORTER_LIST_ITEM_SCORE_DESC = "digglike.sorterListItemScoreDesc";
     private static final String PROPERTY_SORTER_LIST_ITEM_VIEW_ASC = "digglike.sorterListItemViewAsc";
@@ -1324,6 +1327,27 @@ public final class DiggUtils
 
         return refListSorter;
     }
+    
+    
+    /**
+     * Init reference list width the different sort
+     *
+     * @param locale the locale
+     * @return reference list of sort
+     */
+    public static ReferenceList getRefListCommentState( Locale locale )
+    {
+        ReferenceList refListSorter = new ReferenceList(  );
+
+        refListSorter.addItem( CONSTANT_ID_NULL, EMPTY_STRING );
+        refListSorter.addItem(CommentSubmit.STATE_ENABLE,
+            I18nService.getLocalizedString( PROPERTY_COMMENT_STATE_ENABLE, locale ) );
+        refListSorter.addItem( CommentSubmit.STATE_DISABLE,
+            I18nService.getLocalizedString( PROPERTY_COMMENT_STATE_DISABLE, locale ) );
+
+        return refListSorter;
+    }
+
 
     /**
      * write the http header in the response

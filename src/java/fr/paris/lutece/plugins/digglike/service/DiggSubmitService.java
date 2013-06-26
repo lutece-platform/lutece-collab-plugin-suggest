@@ -41,8 +41,6 @@ import java.util.Map;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mysql.jdbc.PacketTooBigException;
-
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggHome;
@@ -63,7 +61,6 @@ import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 

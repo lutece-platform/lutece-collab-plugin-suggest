@@ -143,9 +143,13 @@
 		<fieldset>
 		<legend> #i18n{digglike.manageCommentSubmit.title}
 			<form class="form-inline pull-right" action="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp" method="post" name="" id="filter">
-			<label>#i18n{digglike.manageCommentSubmit.labelSort}</label>
-			<@combo name="id_comment_sort"  items=comment_sort_list default_value=comment_sort_selected  />
-			<button class="btn btn-primary btn-small" title="#i18n{digglike.manageCommentSubmit.buttonSort}" type="submit" id="button_submit"><i class="icon-filter icon-white"></i></button>
+				<label>#i18n{digglike.manageCommentSubmit.labelState}</label>
+				<@combo name="id_comment_state"  items=comment_state_list default_value=comment_state_selected  />
+				<label>#i18n{digglike.manageCommentSubmit.labelContainsSubCommentDisable}</label>
+				<@combo name="id_contains_sub_comment_disable"  items=comment_contains_sub_comment_disable_list default_value=comment_contains_sub_comment_disable_selected  />
+				<label>#i18n{digglike.manageCommentSubmit.labelSort}</label>
+				<@combo name="id_comment_sort"  items=comment_sort_list default_value=comment_sort_selected  />
+				<button class="btn btn-primary btn-small" title="#i18n{digglike.manageCommentSubmit.buttonSearch}" type="submit" id="button_submit"><i class="icon-filter icon-white"></i></button>
 			</form>
 		</legend>
 		<@paginationAdmin paginator=paginator combo=1 />

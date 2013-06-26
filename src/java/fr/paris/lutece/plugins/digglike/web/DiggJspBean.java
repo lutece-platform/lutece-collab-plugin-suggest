@@ -270,8 +270,12 @@ public class DiggJspBean extends PluginAdminPageJspBean
     
     private static final String MARK_ROLE_LIST = "role_list";
     private static final String MARK_DEFAULT_VALUE_ROLE = "default_value_role";
-    private static final String MARK_LIST_COMMENT_SORT = "comment_sort_list";
+    private static final String MARK_COMMENT_SORT_LIST = "comment_sort_list";
     private static final String MARK_COMMENT_SORT_SELECTED = "comment_sort_selected";
+    private static final String MARK_COMMENT_STATE_LIST = "comment_state_list";
+    private static final String MARK_COMMENT_STATE_SELECTED = "comment_state_selected";
+    private static final String MARK_CONTAINS_SUB_COMMENT_DISABLE_LIST ="comment_contains_sub_comment_disable_list";
+    private static final String MARK_CONTAINS_SUB_COMMENT_DISABLE_SELECTED ="comment_contains_sub_comment_disable_selected";
     private static final String MARK_DIGG_SUBMIT_ORDER_LIST = "order_list";
     private static final String MARK_DIGG_SUBMIT_ORDER_LIST_PINNED = "order_list_pinned";
     private static final String MARK_FIRST_DATE_FILTER = "first_date_filter";
@@ -316,7 +320,6 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_ID_DIGG_SUBMIT = "id_digg_submit";
     private static final String PARAMETER_ID_COMMENT_SUBMIT = "id_comment_submit";
     private static final String PARAMETER_ID_PARENT = "id_parent";
-    private static final String PARAMETER_ID_EXPORT_FORMAT = "id_export_format";
     private static final String PARAMETER_STATE_NUMBER = "state_number";
     private static final String PARAMETER_TITLE = "title";
     private static final String PARAMETER_LIBELLE_CONTRIBUTION = "libelle_contribution";
@@ -358,13 +361,13 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_NUMBER_DIGG_SUBMIT_IN_TOP_COMMENT = "number_digg_submit_in_top_comment";
     private static final String PARAMETER_NUMBER_DIGG_SUBMIT_CARACTERS_SHOWN = "number_digg_submit_caracters_shown";
     private static final String PARAMETER_LIMIT_NUMBER_VOTE = "limit_number_vote";
-    private static final String PARAMETER_INSERT_CATEGORY = "insert_category";
-    private static final String PARAMETER_VALUE = "value";
-    private static final String PARAMETER_DEFAULT_VALUE = "default_value";
+ 
     private static final String PARAMETER_COMMENT = "comment";
     private static final String PARAMETER_ID_DIGG_SUBMIT_SORT = "id_digg_submit_sort";
     private static final String PARAMETER_ID_DIGG_SUBMIT_REPORT = "id_digg_submit_report";
     private static final String PARAMETER_ID_COMMENT_SORT = "id_comment_sort";
+    private static final String PARAMETER_ID_COMMENT_STATE = "id_comment_state";
+    private static final String PARAMETER_ID_CONTAINS_SUB_COMMENT_DISABLE = "id_contains_sub_comment_disable";
     private static final String PARAMETER_SHOW_CATEGORY_BLOCK = "show_category_block";
     private static final String PARAMETER_SHOW_TOP_SCORE_BLOCK = "show_top_score_block";
     private static final String PARAMETER_SHOW_TOP_COMMENT_BLOCK = "show_top_comment_block";
@@ -426,13 +429,13 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private int _nItemsPerPageEntry;
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
-    private int _nIdDiggState = -1;
-    private int _nIdDigg = -1;
-    private int _nIdDiggSubmit = -1;
-    private int _nIdCommentSort = -1;
-    //private int _nIdDiggSubmitSort = -1;
-    //private int _nIdDiggSubmitReport = -1;
-    //private String _strQuery = null;
+    private int _nIdDiggState = DiggUtils.CONSTANT_ID_NULL;
+    private int _nIdDigg = DiggUtils.CONSTANT_ID_NULL;
+    private int _nIdDiggSubmit =DiggUtils.CONSTANT_ID_NULL;
+    private int _nIdCommentSort = DiggUtils.CONSTANT_ID_NULL;
+    private int _nIdCommentState = DiggUtils.CONSTANT_ID_NULL;
+    private int _nIdContainsSubCommentDisable = DiggUtils.CONSTANT_ID_NULL;
+ 
     private String _strWorkGroup = AdminWorkgroupService.ALL_GROUPS;
     private IDiggSubmitService _diggSubmitService = DiggSubmitService.getService(  );
     private ICommentSubmitService _commentSubmitService = CommentSubmitService.getService(  );
@@ -617,12 +620,6 @@ public class DiggJspBean extends PluginAdminPageJspBean
 
         updateSearchFieldsData(request);
 
-//        if ( ( strIdDiggSubmitSort != null ) && !strIdDiggSubmitSort.equals( "-1" ) &&
-//                !strIdDiggSubmitSort.equals( EMPTY_STRING ) )
-//        {
-//            // we can update the db
-//            DiggHome.updateDiggSortField( Integer.valueOf( strIdDiggSubmitSort ), _nIdDigg, plugin );
-//        }
 
         Digg digg = DiggHome.findByPrimaryKey( _nIdDigg, getPlugin(  ) );
 
@@ -997,12 +994,23 @@ public class DiggJspBean extends PluginAdminPageJspBean
         Locale locale = getLocale(  );
 
         String strIdCommentSort = request.getParameter( PARAMETER_ID_COMMENT_SORT );
+        String strIdCommentState = request.getParameter( PARAMETER_ID_COMMENT_STATE );
+        String strIdContainsSubCommentDisable = request.getParameter( PARAMETER_ID_CONTAINS_SUB_COMMENT_DISABLE);
+         
         String strCommentIdParent= request.getParameter( PARAMETER_ID_PARENT );
         if ( ( strIdCommentSort != null ) && !strIdCommentSort.equals( EMPTY_STRING ) )
         {
             _nIdCommentSort = DiggUtils.getIntegerParameter( strIdCommentSort );
         }
-
+        if ( ( strIdCommentState != null ) && !strIdCommentState.equals( EMPTY_STRING ) )
+        {
+            _nIdCommentState = DiggUtils.getIntegerParameter( strIdCommentState );
+        }
+        if ( ( strIdContainsSubCommentDisable != null ) && !strIdContainsSubCommentDisable.equals( EMPTY_STRING ) )
+        {
+        	_nIdContainsSubCommentDisable = DiggUtils.getIntegerParameter( strIdContainsSubCommentDisable );
+        }
+       
         int nNumberShownCharacters = AppPropertiesService.getPropertyInt( PROPERTY_NUMBER_DIGG_SUBMIT_VALUE_SHOWN_CHARACTERS,
                 100 );
         String strIdDiggSubmit = request.getParameter( PARAMETER_ID_DIGG_SUBMIT );
@@ -1039,8 +1047,9 @@ public class DiggJspBean extends PluginAdminPageJspBean
         SubmitFilter commentFilter = new SubmitFilter(  );
         commentFilter.setIdDiggSubmit( _nIdDiggSubmit );
         commentFilter.setIdDigg( _nIdDigg );
-        commentFilter.setIdDiggSubmitState( getSearchFields().getIdDiggSumitState() );
-        commentFilter.setIdReported( getSearchFields().getIdDiggSubmitReport());
+        commentFilter.setIdContainsCommentDisable(_nIdContainsSubCommentDisable);
+        commentFilter.setIdCommentSubmitState(_nIdCommentState);
+        
         DiggUtils.initCommentFilterBySort( commentFilter, _nIdCommentSort );
 
         List<CommentSubmit> listCommentSubmit = _commentSubmitService.getCommentSubmitList( commentFilter, getPlugin(  ) );
@@ -1053,8 +1062,15 @@ public class DiggJspBean extends PluginAdminPageJspBean
         HashMap model = new HashMap(  );
         Paginator paginator = new Paginator( listCommentSubmit, _nItemsPerPageCommentSubmit,
                 getJspManageCommentSubmit( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexCommentSubmit );
-
+        ReferenceList refListAllYesNo = getRefListAllYesNo( getLocale() );
+        
+        
         model.put( MARK_COMMENT_SORT_SELECTED, _nIdCommentSort );
+        model.put( MARK_COMMENT_SORT_LIST, refListCommentSort );
+        model.put( MARK_COMMENT_STATE_SELECTED, _nIdCommentState );
+        model.put( MARK_COMMENT_STATE_LIST, DiggUtils.getRefListCommentState(locale) );
+        model.put( MARK_CONTAINS_SUB_COMMENT_DISABLE_SELECTED, _nIdContainsSubCommentDisable);
+        model.put( MARK_CONTAINS_SUB_COMMENT_DISABLE_LIST, refListAllYesNo);
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageCommentSubmit );
         model.put( MARK_COMMENT_SUBMIT_LIST, paginator.getPageItems(  ) );
@@ -1068,7 +1084,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         model.put( MARK_WAITING_FOR_PUBLISH_DIGG_SUBMIT_STATE_NUMBER, DiggSubmit.STATE_WAITING_FOR_PUBLISH );
         model.put( MARK_NUMBER_SHOWN_CHARACTERS, nNumberShownCharacters );
         model.put( MARK_CATEGORY_LIST, refCategoryList );
-        model.put( MARK_LIST_COMMENT_SORT, refListCommentSort );
+    
         model.put( MARK_DIGG, digg );
         model.put( MARK_ID_PARENT, strCommentIdParent );
     

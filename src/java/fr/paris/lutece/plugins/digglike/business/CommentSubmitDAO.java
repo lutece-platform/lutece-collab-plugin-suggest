@@ -58,18 +58,22 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     private static final String SQL_QUERY_UPDATE = "UPDATE digglike_comment_submit SET " +
         "id_comment_submit=?,id_digg_submit=?,date_comment=?,comment_value=?,active=? ,lutece_user_key=? ,official_answer=? ,id_parent_comment=?" +
         " WHERE id_comment_submit=? ";
-    private static final String SQL_QUERY_SELECT_COMMENT_SUBMIT_BY_FILTER = "SELECT id_comment_submit,id_digg_submit,date_comment,comment_value,active,lutece_user_key,official_answer,id_parent_comment,date_modify " +
-        "FROM digglike_comment_submit ";
-    private static final String SQL_QUERY_SELECT_COUNT_BY_FILTER = "SELECT COUNT(id_comment_submit) " +
-        "FROM digglike_comment_submit INNER JOIN digglike_digg_submit ON digglike_digg_submit.id_digg_submit = digglike_comment_submit.id_digg_submit ";
-    private static final String SQL_FILTER_ID_DIGG_SUBMIT = " digglike_comment_submit.id_digg_submit = ? ";
-    private static final String SQL_FILTER_ID_PARENT_COMMENT = " id_parent_comment = ? ";
-    private static final String SQL_FILTER_ID_DIGG = " id_digg = ? ";
-    private static final String SQL_FILTER_COMMENT_SUBMIT_STATE = " active = ? ";
-    private static final String SQL_FILTER_SORT_BY_DATE_COMMENT_DESC = " date_comment DESC";
-    private static final String SQL_FILTER_SORT_BY_DATE_COMMENT_ASC = " date_comment ASC";
-    private static final String SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_DESC = " date_modify DESC";
-    private static final String SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_ASC = " date_modify ASC";
+    private static final String SQL_QUERY_SELECT_COMMENT_SUBMIT_BY_FILTER = "SELECT dc.id_comment_submit,dc.id_digg_submit,date_comment,dc.comment_value,dc.active,dc.lutece_user_key,dc.official_answer,dc.id_parent_comment,dc.date_modify " +
+        "FROM digglike_comment_submit dc ";
+    private static final String SQL_QUERY_SELECT_COUNT_BY_FILTER = "SELECT COUNT(dc.id_comment_submit) " +
+        "FROM digglike_comment_submit dc INNER JOIN digglike_digg_submit ds ON dc.id_digg_submit = ds.id_digg_submit ";
+    private static final String SQL_FILTER_ID_DIGG_SUBMIT = " dc.id_digg_submit = ? ";
+    private static final String SQL_FILTER_ID_PARENT_COMMENT = "dc.id_parent_comment = ? ";
+    private static final String SQL_FILTER_ID_DIGG = " ds.id_digg = ? ";
+    private static final String SQL_FILTER_COMMENT_SUBMIT_STATE = " dc.active = ? ";
+    private static final String SQL_FILTER_CONTAINS_SUB_COMMENT_DISABLE = " dc.id_digg_submit IN ( SELECT id_parent_comment FROM digglike_comment_submit WHERE id_parent_comment = dc.id_comment_submit and active=0  ) ";
+    private static final String SQL_FILTER_NOT_CONTAINS_SUB_COMMENT_DISABLE = " dc.id_digg_submit NOT IN ( SELECT id_parent_comment FROM digglike_comment_submit WHERE id_parent_comment = dc.id_comment_submit and active=0  )  ";
+    
+    
+    private static final String SQL_FILTER_SORT_BY_DATE_COMMENT_DESC = " dc.date_comment DESC";
+    private static final String SQL_FILTER_SORT_BY_DATE_COMMENT_ASC = " dc.date_comment ASC";
+    private static final String SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_DESC = " dc.date_modify DESC";
+    private static final String SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_ASC = " dc.date_modify ASC";
     private static final String SQL_QUERY_UPDATE_DATE_MODIFY = "UPDATE digglike_comment_submit SET date_modify=? WHERE id_comment_submit=? ";
     private static final String SQL_ORDER_BY = " ORDER BY ";
     private static final String SQL_LIMIT = " LIMIT ";
@@ -236,6 +240,11 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
         {
             listStrFilter.add( SQL_FILTER_ID_PARENT_COMMENT );
         }
+        if(filter.containsIdContainsCommentDisable())
+        {
+        	  listStrFilter.add(filter.getIdContainsCommentDisable() == SubmitFilter.ID_TRUE ? SQL_FILTER_CONTAINS_SUB_COMMENT_DISABLE : SQL_FILTER_NOT_CONTAINS_SUB_COMMENT_DISABLE );
+        }
+        
 
         if ( filter.containsSortBy(  ) )
         {
@@ -325,6 +334,10 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
         if ( filter.containsIdCommentSubmitState(  ) )
         {
             listStrFilter.add( SQL_FILTER_COMMENT_SUBMIT_STATE );
+        }
+        if(filter.containsIdContainsCommentDisable())
+        {
+        	  listStrFilter.add(filter.getIdContainsCommentDisable() == SubmitFilter.ID_TRUE ? SQL_FILTER_CONTAINS_SUB_COMMENT_DISABLE : SQL_FILTER_NOT_CONTAINS_SUB_COMMENT_DISABLE );
         }
 
         String strSQL = DiggUtils.buildRequestWithFilter( SQL_QUERY_SELECT_COUNT_BY_FILTER, listStrFilter, null );
