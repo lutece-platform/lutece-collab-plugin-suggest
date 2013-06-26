@@ -11,6 +11,7 @@
 					#i18n{digglike.manageDiggSubmitOrder.title}
 				</a>
 			</li>
+			
 		</ul>
 		<@paginationAdmin paginator=paginator combo=1 />
 		<form class="form-inline" action="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp" method="post" name="" id="filter">
@@ -101,13 +102,13 @@ $(document).ready(function () {
 	/* Add reinit button if a query has been set */
 	var nQuery=0;
 	$("#myModalSearch select option:selected").each( function(){
-		if( $(this).val() > 0  ){	nQuery++;}
+		if( $(this).val() > 0  ){nQuery++;}
 	});
 	
 	if ( $("#myModalSearch input#query").val() !="" ){ nQuery++; }
 	
 	if( nQuery > 0){
-		$('a[href="#myModalSearch"]').after('<a href="#" id="init" class="btn btn-small btn-danger spaced"><i class="icon-refresh icon-white"></i> #i18n{digglike.manageDiggSubmit.buttonReinitSearch}</a>');
+		$('a[href="#myModalSearch"]').after('<a href="#" id="init" class="btn btn-small btn-danger spaced"><i class="icon-refresh icon-white"></i> #i18n{digglike.manageDiggSubmit.buttonReinitSearch} </a>');
 		$("a#init").click( function(){
 			$("#myModalSearch select option:selected").each( function(){
 				$(this).val(-1);
@@ -131,18 +132,21 @@ $(document).ready(function () {
 	/* Toggle submit list */
 	$(".full").toggle();
 	$(".preview").click(function(){
-		$(this).toggle();
-		$(this).prev().toggle();
+		if( $(this).prev().hasClass("full") ){
+			$(this).toggle();
+			$(this).prev().toggle();
+		}	
 	}); 
 	$(".full").click(function(){
 		$(this).toggle();
 		$(this).next().toggle();
 	});
 	
-	/*
 	var toGo = location.hash;
-	$('html, body').animate( {'scrollTop':$(toGo).offset().top - 120 },0 );
-	*/
+	if (toGo != ""){
+		$('html, body').animate( {'scrollTop':$(toGo).offset().top - 120 },0 );
+	}
+	
 	
 	// For multi selection
 	$( 'input[type="checkbox"]#select-ids' ).click( function(  ) {
@@ -152,6 +156,15 @@ $(document).ready(function () {
 			$( 'input[type="checkbox"].selected-id' ).attr( 'checked', false );
 		}
 	});
-		
+	
+	var nav = $('.fixed-actionbar');
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 200) {
+            nav.addClass("f-nav span12");
+        } else {
+            nav.removeClass("f-nav span12");
+        }
+    });
+ 
 });
 </script>

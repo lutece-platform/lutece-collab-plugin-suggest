@@ -1,9 +1,6 @@
 <div class="row-fluid">
-	<div class="span12">
-	 <div class="row-fluid">
-		<div class="span3">
-		<fieldset>
-		<legend>#i18n{digglike.manageCommentSubmit.rowTitleDiggSubmitTitle}</legend>
+	<div class="span3 span-fixed">
+		<h3>#i18n{digglike.manageCommentSubmit.rowTitleDiggSubmitTitle}</h3>
 		<p class="lead">
 		<#if digg_submit.diggSubmitTitle?exists>
 			<#if digg_submit.diggSubmitTitle?length &gt; 100>
@@ -50,7 +47,6 @@
      			</#if>
      		</p>
      	</#if>
-     	
      	<p>#i18n{digglike.manageCommentSubmit.rowCategory}:</p>
         <#if category_list?has_content>
 			<form method="post" class="form-horizontal" action="jsp/admin/plugins/digglike/DoChangeDiggSubmitCategory.jsp">
@@ -128,32 +124,21 @@
 			<a class="btn btn-small" href="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp?id_digg=${digg.idDigg}&comment=comment#digg${digg_submit.idDiggSubmit}" title="#i18n{portal.util.labelBack}">
 				<i class="icon-remove-circle"></i>
 			</a>
-			</p>
-		</fieldset>
+		</p>
     </div>
-	<div class="span8">
-		<fieldset>	
-		<legend>#i18n{digglike.manageCommentSubmit.officialAnswer} <small>#i18n{digglike.manageCommentSubmit.labelAddOfficialAnswer}</small><legend>
+	<div class="span8 offset3">
+		<div class="fixed-actionbar">
 			<form method="post" action="jsp/admin/plugins/digglike/DoSubmitOfficialAnswer.jsp">
+				<h3>#i18n{digglike.manageCommentSubmit.officialAnswer} <small>#i18n{digglike.manageCommentSubmit.labelAddOfficialAnswer}</small></h3>
 				<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden">
 				<textarea name="comment_value" id="comment_value" rows="6" class="span12" <#if digg.activeEditorBbcode> class='markitup'</#if>></textarea>
 				<button type="submit" class="btn btn-primary btn-small" name="add"><i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonAdd}</button>
+				<a href="#myModalCommentSearch" id="myModalLabelCommentSearch" role="button" class="btn btn-primary btn-small" data-toggle="modal">
+					<i class="icon-search icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonSearch}
+				</a>
 			</form>
-			</fieldset>
-		<fieldset>
-		<legend> #i18n{digglike.manageCommentSubmit.title}
-			<form class="form-inline pull-right" action="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp" method="post" name="" id="filter">
-				<label>#i18n{digglike.manageCommentSubmit.labelState}</label>
-				<@combo name="id_comment_state"  items=comment_state_list default_value=comment_state_selected  />
-				<label>#i18n{digglike.manageCommentSubmit.labelContainsSubCommentDisable}</label>
-				<@combo name="id_contains_sub_comment_disable"  items=comment_contains_sub_comment_disable_list default_value=comment_contains_sub_comment_disable_selected  />
-				<label>#i18n{digglike.manageCommentSubmit.labelSort}</label>
-				<@combo name="id_comment_sort"  items=comment_sort_list default_value=comment_sort_selected  />
-				<button class="btn btn-primary btn-small" title="#i18n{digglike.manageCommentSubmit.buttonSearch}" type="submit" id="button_submit"><i class="icon-filter icon-white"></i></button>
-			</form>
-		</legend>
+		</div>
 		<@paginationAdmin paginator=paginator combo=1 />
-		
 		<#list comment_submit_list as comment_submit>
 		<div class="well">	
 			<#if comment_submit.isOfficialAnswer()><span class="badge badge-info pull-right">#i18n{digglike.manageCommentSubmit.officialAnswer}</span></#if>
@@ -178,10 +163,10 @@
 			</form>
 			<p>
 			<p>
-			#i18n{digglike.manageCommentSubmit.rowDateCommentSubmit}: <strong>${comment_submit.dateComment}&nbsp;</strong>
+			#i18n{digglike.manageCommentSubmit.rowDateCommentSubmit}: <strong>${comment_submit.dateComment!}&nbsp;</strong>
 			<#if comment_submit.comments?has_content>
 			<span>			
-			&nbsp;#i18n{digglike.manageCommentSubmit.rowLastDateCommentSubmit}: <strong>${comment_submit.dateModify}&nbsp;</strong>
+			&nbsp;#i18n{digglike.manageCommentSubmit.rowLastDateCommentSubmit}: <strong>${comment_submit.dateModify!}&nbsp;</strong>
 			</span>
 			</#if> 
 			</p>
@@ -201,7 +186,7 @@
 					</strong>
 					</p>					
 					<pre>${digg.parseBbcodeValue(comment_comment.value)}</pre>
-					<p>#i18n{digglike.manageCommentSubmit.rowDateCommentSubmit}:  ${comment_comment.dateComment} </p> 
+					<p>#i18n{digglike.manageCommentSubmit.rowDateCommentSubmit}:  ${comment_comment.dateComment!} </p> 
 					<form method="post" action="jsp/admin/plugins/digglike/DoChangeCommentSubmit.jsp#comment${comment_comment.idCommentSubmit}">
 					<input name="id_comment_submit" value="${comment_comment.idCommentSubmit}" type="hidden">
 					<input name="id_parent" value="${comment_submit.idCommentSubmit}" type="hidden">
@@ -218,16 +203,85 @@
 			</#if>
 		</div>
 		</#list>
-		</fieldset>
+			<div id="myModalCommentSearch" class="" tabindex="-1" role="dialog" aria-labelledby="myModalLabelCommentSearch" aria-hidden="true">
+			<form action="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp" method="post" name="" id="filter">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+					<h3 id="myModalLabel">#i18n{digglike.manageCommentSubmit.title}</h3>
+				</div>
+				<div class="modal-body">
+						<div class="control-group">
+							<label class="control-label" for="id_comment_state">#i18n{digglike.manageCommentSubmit.labelState}</label>
+							<div class="controls">
+								<@comboWithParams name="id_comment_state" default_value=comment_state_selected?string additionalParameters=" class=\"input-medium\"" items=comment_state_list />
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="id_contains_sub_comment_disable">#i18n{digglike.manageCommentSubmit.labelContainsSubCommentDisable}</label>
+							<div class="controls">
+								<@comboWithParams name="id_contains_sub_comment_disable" default_value=comment_contains_sub_comment_disable_selected?string  additionalParameters=" class=\"input-small\"" items=comment_contains_sub_comment_disable_list  />
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="id_comment_sort">#i18n{digglike.manageCommentSubmit.labelSort}</label>
+							<div class="controls">
+								<@comboWithParams name="id_comment_sort" default_value=comment_sort_selected?string additionalParameters=" class=\"input-medium\"" items=comment_sort_list />
+							</div>
+						</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn" data-dismiss="modal" aria-hidden="true">
+						<i class="icon-remove-circle"></i>&nbsp;#i18n{portal.util.labelCancel}
+					</button>
+					<button class="btn btn-primary btn-small" type="submit"  name="export_search_all">
+						<i class="icon-filter icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonSearch}
+					</button>
+				</div>
+			</form>
 		</div>
-	</div>
 	</div>
 </div>
 
+
 <#include "/util/editor/editor.html" />
 <script>
-
 $(document).ready( function () {
+	/* Search modal */	
+	$("#myModalCommentSearch").addClass("modal hide fade modal-top");
+	
+	/* Add reinit button if a query has been set */
+	var nQuery=0;
+	$("#myModalCommentSearch select option:selected").each( function(){
+		if( $(this).val() > 0  ){nQuery++;}
+	});
+	
+	if( nQuery > 0){
+		$('#myModalLabelCommentSearch').after('<a href="#" id="init" class="btn btn-small btn-danger spaced"><i class="icon-refresh icon-white"></i> #i18n{digglike.manageDiggSubmit.buttonReinitSearch} </a>');
+		$("a#init").click( function(){
+			$("#myModalCommentSearch select option:selected").each( function(){
+				$(this).val(-1);
+			});
+			$("input#session").val("");
+			$("form#filter").submit();
+			return false;
+		});
+	}
+	
+	var toGo = location.hash;
+	if (toGo != ""){
+		$('html, body').animate( {'scrollTop':$(toGo).offset().top - 120 },0 );
+	}
+	
+	var nav = $('.fixed-actionbar');
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 200) {
+            nav.addClass("f-nav offset3 span8");
+        } else {
+            nav.removeClass("f-nav offset3 span8");
+        }
+    });
+	
+	
 	var addUp = true;
 	$("div.commentComments").toggle();
 	doToggle( ".comment_toggle" );
@@ -266,8 +320,6 @@ function doToggle( idParent ){
 	$( idParent ).click( function(){ 
 		$(this).next().toggle();
 	});
-	
-
 }
 </script>
 <@initEditor  />

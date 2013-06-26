@@ -1,4 +1,4 @@
-<form method="post" class="form-inline pull-right" action="jsp/admin/plugins/digglike/DoModifyDiggSubmitOrder.jsp">	
+<form method="post" class="form-inline offset1" action="jsp/admin/plugins/digglike/DoModifyDiggSubmitOrder.jsp">	
 	<input type="hidden" name="id_digg_submit" value="${digg_submit.idDiggSubmit}" />
 	<input type="hidden" name="id_digg" value="${digg.idDigg}" />
 	<#if digg_submit.pinned>
@@ -10,9 +10,9 @@
 		</span>
 	<#else>	
 		<span class="input-append">
-			<@comboWithParams name="digg_submit_order" default_value="${digg_submit.diggSubmitOrder}" items=order_list additionalParameters="class=\"input-mini\"" />
+			<@comboWithParams name="digg_submit_order" default_value="${digg_submit.diggSubmitOrder}" items=order_list additionalParameters="class=\"input-small\"" />
 			<button type="submit" class="btn btn-primary" title="#i18n{digglike.manageDiggSubmit.buttonChangeOrder}">
-				<i class="icon-move icon-white"></i>
+				<i class="icon-ok icon-white"></i>
 			</button>
 		</span>
 	</#if>	
