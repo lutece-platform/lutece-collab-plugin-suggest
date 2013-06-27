@@ -38,6 +38,10 @@
 		<label for="height">#i18n{digglike.createEntry.labelHeight} *</label>
 			<input type="text" name="height" id="height" class="input-mini" value="<#if entry.height!=-1>${entry.height}</#if>" />
 		</div>
+		 <div class="controls">
+			<label for="max_size_enter">#i18n{digglike.createEntry.labelMaxSizeEnter} </label>
+			<input type="text" name="max_size_enter" id="max_size_enter" class="input-mini" value="<#if entry.maxSizeEnter!=-1>${entry.maxSizeEnter}</#if>" />
+		</div>
 		<div class="controls">
 			<label class="checkbox" for="mandatory">#i18n{digglike.createEntry.labelShowInDiggSubmitList}
 			<input name="show_in_digg_submit_list" value="1" type="checkbox" <#if entry.showInDiggSubmitList>checked="checked"</#if>>

@@ -44,8 +44,10 @@ public class SearchFields implements Serializable
     private int _nIdFilterPeriod = SubmitFilter.ALL_INT;
     private int _nIdDiggSubmitSort = SubmitFilter.ALL_INT;
     private int _nIdFilterCategory = SubmitFilter.ALL_INT;
+    private int _nIdFilterDiggSubmitType = SubmitFilter.ALL_INT;
 
-    public String getQuery(  )
+    
+	public String getQuery(  )
     {
         return _strQuery;
     }
@@ -94,4 +96,12 @@ public class SearchFields implements Serializable
     {
         this._strPageIndex = _strPageIndex;
     }
+    public int getIdFilterDiggSubmitType() {
+		return _nIdFilterDiggSubmitType;
+	}
+
+	public void setIdFilterDiggSubmitType(int _nIdFilterDiggSubmitType) {
+		this._nIdFilterDiggSubmitType = _nIdFilterDiggSubmitType;
+	}
+
 }

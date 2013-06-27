@@ -44,6 +44,8 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
+
 
 /**
  *
@@ -82,10 +84,12 @@ public class EntryTypeTextArea extends Entry
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strWidth = request.getParameter( PARAMETER_WIDTH );
         String strHeight = request.getParameter( PARAMETER_HEIGHT );
+        String strMaxSizeEnter = request.getParameter( PARAMETER_MAX_SIZE_ENTER );
         String strShowInDiggSubmitList = request.getParameter( PARAMETER_SHOW_IN_DIGG_SUBMIT_LIST );
 
         int nWidth = -1;
         int nHeight = -1;
+        int nMaxSizeEnter = -1;
 
         String strFieldError = EMPTY_STRING;
 
@@ -111,23 +115,25 @@ public class EntryTypeTextArea extends Entry
                 AdminMessage.TYPE_STOP );
         }
 
-        try
-        {
-            nHeight = Integer.parseInt( strHeight );
-        }
-        catch ( NumberFormatException ne )
-        {
-            strFieldError = FIELD_HEIGHT;
-        }
+       
+         nHeight = DiggUtils.getIntegerParameter(strHeight)  ;
+         if(nHeight<0)
+         {
+        	 strFieldError = FIELD_HEIGHT;
+         }
 
-        try
-        {
-            nWidth = Integer.parseInt( strWidth );
-        }
-        catch ( NumberFormatException ne )
-        {
-            strFieldError = FIELD_WIDTH;
-        }
+       
+         nWidth = DiggUtils.getIntegerParameter( strWidth );
+         if(nWidth<0)
+         {
+        	 strFieldError = FIELD_WIDTH;
+         }
+         
+         nMaxSizeEnter = DiggUtils.getIntegerParameter( strMaxSizeEnter );
+         if(!StringUtils.isEmpty(strMaxSizeEnter) && nMaxSizeEnter<0)
+         {
+        	 strFieldError = FIELD_MAX_SIZE_ENTER;
+         }
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
@@ -144,7 +150,8 @@ public class EntryTypeTextArea extends Entry
         this.setDefaultValue( strValue );
         this.setWidth( nWidth );
         this.setHeight( nHeight );
-
+        this.setMaxSizeEnter( nMaxSizeEnter );
+        
         if ( strMandatory != null )
         {
             this.setMandatory( true );

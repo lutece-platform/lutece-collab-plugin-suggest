@@ -137,6 +137,8 @@ public class DiggApp implements XPageApplication
     private static final String MARK_DISABLE_NEW_COMMENT_SUBMIT = "disable_new_comment_submit";
     private static final String MARK_QUERY = "query";
     private static final String MARK_ID_FILTER_CATEGORY_DIGG = "id_filter_category";
+    private static final String MARK_ID_FILTER_TYPE = "id_filter_type";
+    private static final String MARK_TYPE_SELECTED = "type_selected";
     private static final String MARK_ID_FILTER_PERIOD = "id_filter_period";
     private static final String MARK_LIST_DIGG_SUBMIT_SORT = "list_digg_submit_sort";
     private static final String MARK_LIST_FILTER_BY_PERIOD = "list_filter_by_period";
@@ -181,6 +183,7 @@ public class DiggApp implements XPageApplication
     private static final String PARAMETER_ID_DIGG_SUBMIT_SORT = "id_digg_submit_sort";
     private static final String PARAMETER_VOTE_DIGG = "vote";
     private static final String PARAMETER_ID_FILTER_CATEGORY_DIGG = "id_filter_category";
+    private static final String PARAMETER_ID_FILTER_DIGG_SUBMIT_TYPE = "id_filter_type";
     private static final String PARAMETER_ID_CATEGORY_DIGG = "id_category";
     private static final String PARAMETER_ID_TYPE_DIGG = "id_type";
     private static final String PARAMETER_VOTED = "voted";
@@ -201,12 +204,10 @@ public class DiggApp implements XPageApplication
     private static final String MESSAGE_CAPTCHA_ERROR = "digglike.message.captchaError";
     private static final String MESSAGE_NEW_DIGG_SUBMIT = "digglike.message.newDiggSubmit";
     private static final String MESSAGE_NEW_DIGG_SUBMIT_DISABLE = "digglike.message.newDiggSubmitDisable";
-    private static final String MESSAGE_NEW_DIGG_SUBMIT_INVALID = "digglike.message.newDiggSubmitInvalid";
-    private static final String MESSAGE_MESSAGE_SUBMIT_SAVE_ERROR = "digglike.message.submitSaveError";
+      private static final String MESSAGE_MESSAGE_SUBMIT_SAVE_ERROR = "digglike.message.submitSaveError";
     private static final String MESSAGE_NEW_COMMENT_SUBMIT = "digglike.message.newCommentSubmit";
     private static final String MESSAGE_NEW_COMMENT_SUBMIT_DISABLE = "digglike.message.newCommentSubmitDisable";
     private static final String MESSAGE_NEW_REPORTED_SUBMIT = "digglike.message.newReportedSubmit";
-    private static final String MESSAGE_NEW_COMMENT_SUBMIT_INVALID = "digglike.message.newCommentSubmitInvalid";
     private static final String MESSAGE_ERROR_NO_CATEGORY = "digglike.message.errorNoCategorySelected";
     private static final String MESSAGE_ERROR_NO_DIGG_SUBMIT_TYPE_SELECTED = "digglike.message.errorNoDiggSubmitTypeSelected";
     private static final String MESSAGE_ERROR_MUST_SELECTED_TERMS_OF_USE = "digglike.message.youMustSelectTermsOfUse";
@@ -219,7 +220,6 @@ public class DiggApp implements XPageApplication
     // constant
     private static final String EMPTY_STRING = "";
     private static final String CONSTANTE_PARAMETER_TRUE_VALUE = "1";
-    private static final String CONSTANTE_PARAMETER_FALSE_VALUE = "0";
     private static final String PATH_TYPE_VOTE_FOLDER = "skin/plugins/digglike/";
     private static final String ACTION_VIEW_DIGG_LIST = "view_digg_list";
     private static final String ACTION_VIEW_DIGG_SUBMIT_LIST = "view_digg_submit_list";
@@ -888,6 +888,7 @@ public class DiggApp implements XPageApplication
         
         submitFilter.setIdDiggSubmitState( _nIdDiggSubmitStatePublish );
         submitFilter.setIdCategory( searchFields.getIdFilterCategory(  ) );
+        submitFilter.setIdType( searchFields.getIdFilterDiggSubmitType() );
 
         listIdDiggSubmit = DigglikeSearchService.getInstance(  )
                                                 .getSearchResults( searchFields.getQuery(  ), submitFilter, plugin );
@@ -1480,11 +1481,13 @@ public class DiggApp implements XPageApplication
         String strIdDiggSubmitSort = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_SORT );
         String strIdFilterCategory = request.getParameter( PARAMETER_ID_FILTER_CATEGORY_DIGG );
         String strFilterPageIndex = request.getParameter( PARAMETER_FILTER_PAGE_INDEX );
-
+        String strIdFilterDiggSubmitType = request.getParameter( PARAMETER_ID_FILTER_DIGG_SUBMIT_TYPE );
+        
         int nIdFilterPeriod = DiggUtils.getIntegerParameter( strIdFilterPeriod );
         int nIdDiggSubmitSort = DiggUtils.getIntegerParameter( strIdDiggSubmitSort );
         int nIdFilterCategory = DiggUtils.getIntegerParameter( strIdFilterCategory );
-
+        int nIdFilterDiggSubmitType = DiggUtils.getIntegerParameter( strIdFilterDiggSubmitType );
+        
         SearchFields searchFields = ( session.getAttribute( SESSION_SEARCH_FIELDS ) != null )
             ? (SearchFields) session.getAttribute( SESSION_SEARCH_FIELDS ) : new SearchFields(  );
         searchFields.setQuery( ( strQuery != null ) ? strQuery : searchFields.getQuery(  ) );
@@ -1494,8 +1497,10 @@ public class DiggApp implements XPageApplication
                                                                           : searchFields.getIdDiggSubmitSort(  ) );
         searchFields.setIdFilterCategory( ( strIdFilterCategory != null ) ? nIdFilterCategory
                                                                           : searchFields.getIdFilterCategory(  ) );
+        searchFields.setIdFilterDiggSubmitType( ( strIdFilterDiggSubmitType != null ) ? nIdFilterDiggSubmitType :searchFields.getIdFilterDiggSubmitType( ));
         searchFields.setPageIndex( ( strFilterPageIndex != null ) ? strFilterPageIndex : searchFields.getPageIndex(  ) );
-
+        
+        
         // update search Fields in session
         session.setAttribute( SESSION_SEARCH_FIELDS, searchFields );
 
@@ -1583,6 +1588,11 @@ public class DiggApp implements XPageApplication
             model.put( MARK_ID_DIGG_SUBMIT_SORT, searchFields.getIdDiggSubmitSort(  ) );
             model.put( MARK_ID_FILTER_PERIOD, searchFields.getIdFilterPeriod(  ) );
             model.put( MARK_ID_FILTER_CATEGORY_DIGG, searchFields.getIdFilterCategory(  ) );
+            model.put( MARK_ID_FILTER_TYPE, searchFields.getIdFilterDiggSubmitType() );
+            if(searchFields.getIdFilterDiggSubmitType() != DiggUtils.CONSTANT_ID_NULL)
+            {
+            	 model.put( MARK_TYPE_SELECTED,DiggSubmitTypeHome.findByPrimaryKey(searchFields.getIdFilterDiggSubmitType(),_plugin ));
+            }
             model.put( MARK_CONTENT_DIGG, strContentDigg );
             model.put( MARK_LABEL_DIGG, digg.getLibelleContribution(  ) );
             model.put( MARK_HEADER_DIGG, digg.getHeader(  ) );
