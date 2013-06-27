@@ -1,3 +1,5 @@
+
+
 <#if list_digg_submit?has_content>
 	<#if paginator?exists>
 		#i18n{digglike.diggListSubmit.paginator.labelResultsCount} : <strong>${paginator.itemsCount}</strong> <br />
@@ -7,12 +9,11 @@
 </#if>
 
 <#list list_digg_submit as digg_submit_display>
-
 <div class="row" id="digg${digg_submit_display.digg_submit.idDiggSubmit}">
 	<div class="span8">
 		<h3>
 		<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;action=view_digg_submit#digg${digg_submit_display.digg_submit.idDiggSubmit}">
-		<#if digg_submit_display.digg_submit.diggSubmitTitle?length &gt;45>${digg_submit_display.digg_submit.diggSubmitTitle?substring(0,42)}...<#else>${digg_submit_display.digg_submit.diggSubmitTitle}</#if>
+		<#if digg_submit_display.digg_submit.diggSubmitTitle?length &gt;45>${digg_submit_display.digg_submit.diggSubmitTitle?substring(0,42)}...	<#else>${digg_submit_display.digg_submit.diggSubmitTitle}</#if>
 		</a>
 		<#if authorized_vote && !digg_submit_display.digg_submit.disableVote && digg_submit_display.digg_submit.numberScore?exists>
 		<div class="btn-group pull-right">
@@ -28,7 +29,7 @@
 		<p>
 			<#if enable_digg_reports>	
 				<a class="btn btn-link" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;action=create_report#digg${digg_submit_display.digg_submit.idDiggSubmit}">
-						<i class=""></i>&nbsp;#i18n{digglike.diggListSubmit.labelReport}
+					<i class=""></i>&nbsp;#i18n{digglike.diggListSubmit.labelReport}
 				</a> |  
 			</#if>
 			<#if digg_submit_display.lutece_user?exists>
@@ -49,16 +50,21 @@
 			</#if>
 			<#if digg_submit_display.digg_submit.category?exists>
 					<span class="label label-inverse" style="background-color:${digg_submit_display.digg_submit.category.color!''};">
-					${digg_submit_display.digg_submit.category.title}
+						<a href="jsp/site/Portal.jsp?page=digg&id_digg=${id_digg}&id_filter_category=${digg_submit_display.digg_submit.category.idCategory}&action=view_digg_submit_list" style="color:#fff;">
+						${digg_submit_display.digg_submit.category.title}
+						</a>
 					</span> 
 			</#if>
 			<#if digg_submit_display.digg_submit.diggSubmitType?exists>
-					<span class="label label-inverse spaced" style="background-color:${digg_submit_display.digg_submit.diggSubmitType.color!''};">
-						<#if digg_submit_display.digg_submit.diggSubmitType.idImageResource?has_content>
-							<img class="thumb-list"  src="image?resource_type=image_digg&id=${digg_submit_display.digg_submit.diggSubmitType.idImageResource}" title="${digg_submit_display.digg_submit.diggSubmitType.name} " alt="${digg_submit_display.digg_submit.diggSubmitType.name} ">
-						</#if>
-						${digg_submit_display.digg_submit.diggSubmitType.name}
-					</span> 
+			
+			<span class="label label-inverse" style="background-color:${digg_submit_display.digg_submit.diggSubmitType.color!};">
+				<a href="jsp/site/Portal.jsp?page=digg&id_digg=${id_digg}&id_filter_type=${digg_submit_display.digg_submit.diggSubmitType.idType}&action=view_digg_submit_list" style="color:#fff;">
+				<#if digg_submit_display.digg_submit.diggSubmitType.idImageResource?has_content>
+					<img class="thumb-list"  src="image?resource_type=image_digg&id=${digg_submit_display.digg_submit.diggSubmitType.idImageResource}" title="${digg_submit_display.digg_submit.diggSubmitType.name} " alt="${digg_submit_display.digg_submit.diggSubmitType.name} ">
+				</#if>
+				${digg_submit_display.digg_submit.diggSubmitType.name}
+				</a>
+			</span>	
 			</#if>
 		</p>
 		<div class="digg-list-content">				

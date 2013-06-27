@@ -1,9 +1,10 @@
 <div class="control-group">
 <label class="control-label" for="${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> : </label>
 	<div class="controls">
-		<textarea  name="${entry.idEntry}" id="${entry.idEntry}"  cols="${entry.width}" rows="${entry.height}"><#if entry.defaultValue?exists>${entry.defaultValue}</#if></textarea>
+		<textarea  name="${entry.idEntry}" id="${entry.idEntry}" data-limit="${entry.maxSizeEnter}" cols="${entry.width}" rows="${entry.height}"><#if entry.defaultValue?exists>${entry.defaultValue}</#if></textarea>
+		<div class="char-limit"></div>
 		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-		<span class="help-text">${entry.helpMessage}</span>
+			<span class="help-text">${entry.helpMessage}</span>&nbsp;
 		</#if>	
 	</div>
 </div>

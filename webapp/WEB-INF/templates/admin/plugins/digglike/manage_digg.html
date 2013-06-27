@@ -7,7 +7,7 @@
     		<button type="submit" class="btn btn-primary btn-small" /><i class="icon-cog icon-white"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageDigg.buttonManageAdvancedParameters}</span></button>
    		</form>
    	</#if>
-  	 <#if permission_create_digg?exists && permission_create_digg>
+  	<#if permission_create_digg?exists && permission_create_digg>
   		<form method="post" class="form-inline pull-right"  action="jsp/admin/plugins/digglike/CreateDigg.jsp">
     		<button type="submit" class="btn btn-primary btn-small" /><i class="icon-plus icon-white"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageDigg.buttonCreate}</span></button>
    		</form>
@@ -32,7 +32,19 @@
     </tr>
 	<#list digg_list as digg>	
 	<tr>
-		<td>${digg.title} &nbsp;<a href="jsp/site/Portal.jsp?page=digg&id_digg=${digg.idDigg}" target="_blank"><i class="icon-globe" title="${digg.title}"></i></a></td>
+		<td>
+			<span class="pull-left">
+				${digg.title} &nbsp;<a href="jsp/site/Portal.jsp?page=digg&id_digg=${digg.idDigg}" target="_blank"><i class="icon-globe" title="${digg.title}"></i></a>
+			</span>
+			<#if digg.active>
+				<form class="form-search" method="post" action="jsp/admin/plugins/digglike/Statistics.jsp">
+					<input type="hidden" name="id_digg" value="${digg.idDigg}" >
+					<button type="submit" class="btn-link pull-left" title="&nbsp;#i18n{digglike.manageAdvancedParameters.labelStatistics}">
+						<i class="icon-signal"></i>
+					</button>
+				</form>
+			</#if>
+		</td>
 		<td>
 		<#if digg.active>
 			<span class="label label-success"><i class="icon-ok icon-white"></i></span>
@@ -47,6 +59,7 @@
 					<i class="${action.iconUrl}"></i>
 				</a>
 			</#list>
+			
 		</#if>	
 		</td>
     </tr>

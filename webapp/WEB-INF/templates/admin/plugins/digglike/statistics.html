@@ -1,37 +1,5 @@
 <div class="row-fluid">
 	<div class="span12">
-		<ul class="nav nav-tabs">
-			<li>
-				<a href="jsp/admin/plugins/digglike/ManageAdvancedParameters.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
-					#i18n{digglike.manageAdvancedParameters.title}
-				</a>
-			</li>
-			<li>
-				<a href="jsp/admin/plugins/digglike/ManageCategory.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
-					#i18n{digglike.manageAdvancedParameters.labelCategory}
-				</a>
-			</li>
-			<li>
-				<a href="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelTypeComment}" >
-					#i18n{digglike.manageAdvancedParameters.labelType}
-				</a>
-			</li>
-			<li>
-				<a href="jsp/admin/plugins/digglike/ManageDefaultMessage.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelDefaultMessageComment}">
-					#i18n{digglike.manageAdvancedParameters.labelDefaultMessage}
-				</a>
-			</li>
-			<li>
-				<a href="jsp/admin/plugins/digglike/ManageExportFormat.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelExportFormatComment}" >
-					#i18n{digglike.manageAdvancedParameters.labelExportFormat}
-				</a>
-			</li>
-			<li class="active">
-				<a href="jsp/admin/plugins/digglike/Statistics.jsp"  title="#i18n{digglike.manageAdvancedParameters.labelStatisticsComment}">
-					#i18n{digglike.manageAdvancedParameters.labelStatistics}
-				</a>
-			</li>
-		</ul>
 		<fieldset>
 		<legend>#i18n{digglike.manageAdvancedParameters.title} - #i18n{digglike.statistics.titleStatistic}</legend>
 			<div class="row-fluid">
@@ -49,11 +17,11 @@
 					<input type="text" name="last_date_filter" id="last_date_filter" class="input-small" value="<#if last_date_filter?has_content>${last_date_filter?if_exists?date}</#if>" />
 					<#if category_list?has_content>
 						<label for="id_category">#i18n{digglike.statistics.labelDiggSubmitCategory}</label>
-						<@comboWithParams name="id_category_filter" default_value="${digg_submit_category_selected}" additionalParameters="class=\"input-small\"" items=category_list />
+						<@comboWithParams name="id_category_filter" default_value="${digg_submit_category_selected}" additionalParameters="class=\"input-large\"" items=category_list />
 					</#if>
 					<#if digg_submit_type_list?has_content>
 						<label for="id_type">#i18n{digglike.statistics.labelDiggSubmitType}</label>
-						 <@comboWithParams name="id_type" default_value="${digg_submit_type_selected}" additionalParameters="class=\"input-small\"" items=digg_submit_type_list />
+						 <@comboWithParams name="id_type" default_value="${digg_submit_type_selected}" additionalParameters="class=\"input-large\"" items=digg_submit_type_list />
 					</#if>
 					<div class="form-actions">
 						<button class="btn btn-primary btn-small" type="submit" >

@@ -18,13 +18,13 @@
 			<#if view?has_content && view == "view_digg_submit_list" >
 				<#if show_category_block>
 					<#if list_categories_digg?has_content>
-					<ul class="nav nav-tabs" id="frameset_nav_tabs">
+					<ul class="nav nav-tabs">
 						<li <#if id_filter_category==-1 >class="active"</#if>>
-							<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_filter_category=-1&amp;action=view_digg_submit_list#frameset_nav_tabs">Tout</a>
+							<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_filter_category=-1&amp;action=view_digg_submit_list">Tout</a>
 						</li>	
 						<#list list_categories_digg as digg_categories>
 							<li <#if id_filter_category==digg_categories.idCategory>class="active"</#if>>
-								<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_filter_category=${digg_categories.idCategory}&amp;action=view_digg_submit_list#frameset_nav_tabs">${digg_categories.title}</a>
+								<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_filter_category=${digg_categories.idCategory}&amp;action=view_digg_submit_list">${digg_categories.title}</a>
 							</li>
 						</#list>
 						</ul>
@@ -32,9 +32,9 @@
 				</#if>
 			</#if>
 			
-			<div class="well" id="frameset_content_digg">
+			<div class="well">
 				<#if view?has_content && view == "view_digg_submit_list" >
-					<a class="btn btn-primary pull-left" href="jsp/site/Portal.jsp?page=digg&id_digg=${id_digg}&action=create_digg_submit#frameset_content_digg" target="_top">
+					<a class="btn btn-primary pull-left" href="jsp/site/Portal.jsp?page=digg&id_digg=${id_digg}&action=create_digg_submit" target="_top">
 						<i class="icon-pencil icon-white"></i>&nbsp;#i18n{digglike.diggFrame.labelProposal}
 					</a>
 				<#else>
@@ -42,6 +42,7 @@
 						<i class="icon-chevron-left icon-white"></i>&nbsp;#i18n{digglike.diggFrame.backToList}
 					</a>	
 				</#if>
+				
 				<#if view?has_content && view == "view_digg_submit_list">
 					<form class="form-search  pull-right" name="form_sort" id="form_sort" method="get" action="jsp/site/Portal.jsp">
 					<input name="page" value="digg" type="hidden">
@@ -55,8 +56,19 @@
 				</#if>
 			</div>	
 		</fieldset>
-		<div class="span8" >${content_digg}</div>		              
+		<div class="span8">${content_digg}</div>		              
 		<div class="span3">
+			<#if type_selected??>
+			<div class="alert alert-danger">
+					 
+					<a class="btn btn-danger btn-mini" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_filter_type=-1&amp;action=view_digg_submit_list">
+						<i class="icon-remove-circle icon-white"></i>
+					</a>
+					<span class="label label-inverse" style="background-color:${type_selected.color!};">
+					${type_selected.name}
+				</span>
+			</div>	
+			</#if>
 			<#if view?has_content && (view == "view_digg_submit_list"||view == "view_digg_submit" )>
 				<fieldset>
 				<legend>#i18n{digglike.diggFrame.altSearch}</legend>
@@ -136,7 +148,7 @@ $(document).ready( function(){
 		var activeDigg = window.location.hash.replace('/', '');
         var bhref = $("#backlink").attr("href");
         $("#backlink").attr("href", bhref + activeDigg );
-   });
+  
 /*
 $(window).load(function() {
 	$(".link-top").click(function () {
@@ -145,4 +157,68 @@ $(window).load(function() {
 	});
  $(".response-element-title").toggle(); 
 });*/
-</script>
+
+		function charLimit( obj ){
+			var limit=obj.attr("data-limit");
+			if( limit > 0){
+			// Trigger KeyPress on the textarea
+				obj.keypress(function(e) {
+					if( e.charCode >= 48 ){
+						var nCar = obj.val().length
+						obj.next().html("<span class=\"label label-success\"><i class=\"icon-white icon-ok-sign\"></i>&nbsp;<strong>" + eval(nCar + 1) + " caract&egrave;res</strong></span>");
+						if( nCar >= limit){
+							obj.next().html("<span class=\"label label-important\"><i class=\"icon-white icon-minus-sign\"></i>&nbsp;<b>&nbsp;Limite atteinte ! Vous devez saisir au plus <strong>" + limit + " caract&egrave;res</strong></span>");
+							return false;
+						}
+					}
+				});
+				
+				// Trigger Blur on the textarea
+				obj.blur(function(e) {
+					var txt = obj.val();
+					if( txt.length > limit ){
+						obj.next().html("<span class=\"label label-important\"><i class=\"icon-white icon-minus-sign\"></i>&nbsp;<b>&nbsp;Limite atteinte ! Vous devez saisir au plus <strong>" + limit + " caract&egrave;res</strong></span>");
+						txt = txt.substr(0,limit);
+						obj.val( txt );
+					}
+				});
+			
+				var nKey = false;
+				obj.keyup( function(e) {
+					if ( e.keyCode==46 || e.keyCode==8 ) {
+						var nCar = obj.val().length
+						if (  nCar < limit ){
+							obj.next().html("<span class=\"label label-success\"><i class=\"icon-white icon-ok-sign\"></i>&nbsp;<strong>" + eval(nCar) + " caract&egrave;res</strong></span>");
+						} else {
+							obj.next().html("<span class=\"label label-important\"><i class=\"icon-white icon-minus-sign\"></i>&nbsp;<b>&nbsp;Limite atteinte ! Vous devez saisir au plus <strong>" + limit + " caract&egrave;res</strong></span>");
+							txt = txt.substr(0,limit);
+							obj.val( txt );
+						}
+					}
+					
+					if( e.keyCode == 86 ){
+						var nCar = obj.val().length
+						obj.next().html("<span class=\"label label-success\"><i class=\"icon-white icon-ok-sign\"></i>&nbsp;<strong>" + eval(nCar) + " caract&egrave;res</strong></span>");
+						if( nCar >= limit){
+							obj.next().html("<span class=\"label label-important\"><i class=\"icon-white icon-minus-sign\"></i>&nbsp;<b>&nbsp;Limite atteinte ! Vous devez saisir au plus <strong>" + limit + " caract&egrave;res</strong></span>");
+							return false;
+						}
+					}
+				});
+			}
+		}
+		
+		$("textarea").each( function(){
+			// Trigger the textarea
+			charLimit( $(this) );
+		});
+		
+        $("#text-tou").toggle();
+        $("#btn-tou").click( function(){
+			$("#text-tou").toggle();
+			return false;
+		});
+		
+		
+    });
+</script> 
