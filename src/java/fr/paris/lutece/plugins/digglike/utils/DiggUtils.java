@@ -1251,6 +1251,7 @@ public final class DiggUtils
         return refListDiggs;
     }
 
+    
     /**
      * Init reference list width the different sort
      *
@@ -1258,6 +1259,20 @@ public final class DiggUtils
      * @return reference list of sort
      */
     public static ReferenceList getRefListDiggSort( Locale locale )
+    {
+    	
+    	return getRefListDiggSort(locale, false);
+    	
+    }
+
+    /**
+     * Init reference list width the different sort
+     *
+     * @param locale the locale
+     * @param bFront  yes if the refList is display in front office
+     * @return reference list of sort
+     */
+    public static ReferenceList getRefListDiggSort( Locale locale, boolean bFront )
     {
         ReferenceList refListSorter = new ReferenceList(  );
 
@@ -1275,9 +1290,11 @@ public final class DiggUtils
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_ASC, locale ) );
         refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_DESC, locale ) );
-        refListSorter.addItem( SubmitFilter.SORT_MANUALLY,
-            I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_MANUAL, locale ) );
-
+        if(!bFront)
+        {
+        	refListSorter.addItem( SubmitFilter.SORT_MANUALLY,
+        			I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_MANUAL, locale ) );
+        }
         refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_VIEW_ASC,
             I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_VIEW_ASC, locale ) );
         refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_VIEW_DESC,

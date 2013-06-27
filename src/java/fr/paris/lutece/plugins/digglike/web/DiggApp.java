@@ -1579,7 +1579,7 @@ public class DiggApp implements XPageApplication
             	model.put( MARK_LIST_CATEGORIES_DIGG, digg.getCategories(  ) );
             }
             
-            ReferenceList refListDiggSort = DiggUtils.getRefListDiggSort( request.getLocale(  ) );
+            ReferenceList refListDiggSort = DiggUtils.getRefListDiggSort( request.getLocale(  ),true );
             ReferenceList refListFilterByPeriod = DiggUtils.getRefListFilterByPeriod( request.getLocale(  ) );
 
             //model
