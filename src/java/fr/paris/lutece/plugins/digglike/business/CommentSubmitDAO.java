@@ -55,6 +55,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_comment_submit ( id_comment_submit,id_digg_submit,date_comment,comment_value,active,lutece_user_key,official_answer,id_parent_comment,date_modify ) " +
         "VALUES(?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM digglike_comment_submit WHERE id_comment_submit = ? ";
+    private static final String SQL_QUERY_DELETE_BY_ID_PARENT = "DELETE FROM digglike_comment_submit WHERE id_parent_comment = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE digglike_comment_submit SET " +
         "id_comment_submit=?,id_digg_submit=?,date_comment=?,comment_value=?,active=? ,lutece_user_key=? ,official_answer=? ,id_parent_comment=?" +
         " WHERE id_comment_submit=? ";
@@ -178,6 +179,8 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
+    
+    
 
     /**
          * Update the commentSubmit in the table
@@ -429,4 +432,16 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
 
         return strOrderBy.toString(  );
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	public void deleteByIdParent(int nIdParentCommentSubmit, Plugin plugin) {
+		 	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_PARENT, plugin );
+	        daoUtil.setInt( 1, nIdParentCommentSubmit );
+	        daoUtil.executeUpdate(  );
+	        daoUtil.free(  );
+		
+	}
 }

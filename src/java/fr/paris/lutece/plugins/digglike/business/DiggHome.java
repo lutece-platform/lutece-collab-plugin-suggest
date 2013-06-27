@@ -204,7 +204,7 @@ public final class DiggHome
 
         for ( Integer nIdDiggSubmit : listIdDiggSubmit )
         {
-            DiggSubmitHome.remove(nIdDiggSubmit, plugin );
+        	DiggSubmitHome.remove(nIdDiggSubmit, plugin );
         }
         
         // Remove digg attributes associated to the digg

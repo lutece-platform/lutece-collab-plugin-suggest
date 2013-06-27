@@ -71,6 +71,14 @@ public interface ICommentSubmitDAO
      * @param plugin the plugin
      */
     void delete( int nIdCommentSubmit, Plugin plugin );
+    
+    /**
+     * Delete   the comment submit whose parent identifier is specified in parameter
+     *
+     * @param nIdParentCommentSubmit The parent identifier
+     * @param plugin the plugin
+     */
+    void deleteByIdParent( int nIdParentCommentSubmit, Plugin plugin );
 
     /**
      * Update the commentSubmit in the table

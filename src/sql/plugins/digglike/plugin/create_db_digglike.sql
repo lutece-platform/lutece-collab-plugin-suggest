@@ -236,6 +236,8 @@ CREATE TABLE digglike_comment_submit (
 );
 
 CREATE INDEX index_digglike_comment_submit ON digglike_comment_submit (id_digg_submit);
+CREATE INDEX index_digglike_id_parent_comment ON digglike_comment_submit (id_parent_comment);
+
 
 ALTER TABLE digglike_comment_submit ADD CONSTRAINT fk_digglike_comment_submit FOREIGN KEY (id_digg_submit)
 	REFERENCES digglike_digg_submit (id_digg_submit);

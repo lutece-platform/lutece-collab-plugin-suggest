@@ -79,7 +79,18 @@ public class CommentSubmitService implements ICommentSubmitService
     @Override
     public void remove( int nIdCommentSubmit, Plugin plugin )
     {
+    	
+//    	SubmitFilter filter =new SubmitFilter();
+//    	filter.setIdParent(nIdCommentSubmit);
+//    	List<CommentSubmit> listSubComment= getCommentSubmitList(filter, plugin);
+//    	for(CommentSubmit subComment:listSubComment)
+//    	{
+//    		CommentSubmitHome.remove( subComment.getIdCommentSubmit(), plugin );
+//    	}
+    	 //remove children
+        CommentSubmitHome.removeByIdParent(nIdCommentSubmit, plugin);
         CommentSubmitHome.remove( nIdCommentSubmit, plugin );
+       
     }
 
     ///////////////////////////////////////////////////////////////////////////

@@ -102,6 +102,18 @@ public final class CommentSubmitHome
     {
         _dao.delete( nIdCommentSubmit, plugin );
     }
+    
+    /**
+     * Remove the commentSubmit whose parent identifier is specified in parameter
+     *
+     * @param nIdParentCommentSubmit The parent identifier
+     * @param plugin the Plugin
+     */
+    public static void removeByIdParent( int nIdParentCommentSubmit, Plugin plugin )
+    {
+        _dao.deleteByIdParent( nIdParentCommentSubmit, plugin );
+    }
+    
 
     ///////////////////////////////////////////////////////////////////////////
     // Finders
