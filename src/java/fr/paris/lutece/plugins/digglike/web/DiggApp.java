@@ -642,7 +642,7 @@ public class DiggApp implements XPageApplication
         String strCommentValueDigg = request.getParameter( PARAMETER_COMMENT_VALUE_DIGG );
         String strMessage = MESSAGE_NEW_COMMENT_SUBMIT;
         String strIdParentComment = request.getParameter( PARAMETER_COMMENT_ID_PARENT );
-        int nIdParentComment = DiggUtils.CONSTANT_ID_NULL;
+        int nIdParentComment = SubmitFilter.ID_PARENT_NULL;
 
         if ( ( strIdParentComment != null ) && ( !strIdParentComment.trim(  ).equals( EMPTY_STRING ) ) )
         {
