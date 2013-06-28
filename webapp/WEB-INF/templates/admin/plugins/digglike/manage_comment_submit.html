@@ -47,17 +47,19 @@
      			</#if>
      		</p>
      	</#if>
-     	<p>#i18n{digglike.manageCommentSubmit.rowCategory}:</p>
+		<p>#i18n{digglike.manageCommentSubmit.rowCategory}:</p>
         <#if category_list?has_content>
 			<form method="post" class="form-horizontal" action="jsp/admin/plugins/digglike/DoChangeDiggSubmitCategory.jsp">
-       		<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden">
-       		<input name="comment" value="comment" type="hidden">
-       		<#if digg_submit.category?exists>
-				<@combo name="id_category" items=category_list default_value="${digg_submit.category.idCategory}" />
-       		<#else>
-				<@combo name="id_category" items=category_list default_value="-1" />
-       		</#if>	
-			<button type="submit" class="btn btn-primary btn-small" title="#i18n{digglike.manageDiggSubmit.buttonModify}"><i class="icon-ok icon-white"></i></button>
+				<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden">
+				<input name="comment" value="comment" type="hidden">
+				<#if digg_submit.category?exists>
+					<@combo name="id_category" items=category_list default_value="${digg_submit.category.idCategory}" />
+				<#else>
+					<@combo name="id_category" items=category_list default_value="-1" />
+				</#if>	
+				<button type="submit" class="btn btn-primary btn-small" title="#i18n{digglike.manageDiggSubmit.buttonModify}">
+					<i class="icon-ok icon-white"></i>
+				</button>
     		</form>
     	</#if>
 		<#if !digg_submit.disableVote>
@@ -127,17 +129,20 @@
 		</p>
     </div>
 	<div class="span8 offset3">
-			<form method="post" action="jsp/admin/plugins/digglike/DoSubmitOfficialAnswer.jsp">
-				<h3>#i18n{digglike.manageCommentSubmit.officialAnswer} <small>#i18n{digglike.manageCommentSubmit.labelAddOfficialAnswer}</small></h3>
+		<form method="post" action="jsp/admin/plugins/digglike/DoSubmitOfficialAnswer.jsp" id="addOfficialComment">
+			<h3>#i18n{digglike.manageCommentSubmit.officialAnswer} <small>#i18n{digglike.manageCommentSubmit.labelAddOfficialAnswer}</small></h3>
 				<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden">
 				<textarea name="comment_value" id="comment_value" rows="6" class="span12" <#if digg.activeEditorBbcode> class='markitup'</#if>></textarea>
-				<button type="submit" class="btn btn-primary btn-small" name="add"><i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonAdd}</button>
-			</form>
-			<div class="fixed-actionbar">
-				<a href="#myModalCommentSearch" id="myModalLabelCommentSearch" role="button" class="btn btn-primary btn-small" data-toggle="modal">
-					<i class="icon-search icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonSearch}
-				</a>
-			</div>
+			<button type="submit" class="btn btn-primary btn-small" name="add">
+				<i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonAdd}
+			</button>
+
+		</form>
+		<div class="fixed-actionbar">
+			<a href="#myModalCommentSearch" id="myModalLabelCommentSearch" role="button" class="btn btn-primary btn-small" data-toggle="modal">
+				<i class="icon-search icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonSearch}
+			</a>
+		</div>
 		<@paginationAdmin paginator=paginator combo=1 />
 		<#list comment_submit_list as comment_submit>
 		<div class="well">	
@@ -252,7 +257,7 @@ $(document).ready( function () {
 	/* Add reinit button if a query has been set */
 	var nQuery=0;
 	$("#myModalCommentSearch select option:selected").each( function(){
-		if( $(this).val() > 0  ){nQuery++;}
+		if( $(this).val() >= 0  ){nQuery++;}
 	});
 	
 	if( nQuery > 0){
@@ -269,18 +274,18 @@ $(document).ready( function () {
 	
 	var toGo = location.hash;
 	if (toGo != ""){
-		$('html, body').animate( {'scrollTop':$(toGo).offset().top - 120 },0 );
+		$('html, body').animate( {'scrollTop':$(toGo).offset().top - 600 },0 );
 	}
 	
 	var nav = $('.fixed-actionbar');
     $(window).scroll(function () {
         if ($(this).scrollTop() > 200) {
-            nav.addClass("f-nav offset3 span8");
+            nav.addClass("f-nav offset3 span9");
         } else {
-            nav.removeClass("f-nav offset3 span8");
+            nav.removeClass("f-nav offset3 span9");
         }
     });
-	
+
 	
 	var addUp = true;
 	$("div.commentComments").toggle();

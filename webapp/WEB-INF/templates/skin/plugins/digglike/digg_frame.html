@@ -144,30 +144,25 @@
 <script type="text/javascript" src="js/jquery/jquery.ui.totop.js"></script>
 <script>
 $(document).ready( function(){
-        // $().UItoTop({ easingType: 'easeOutQuart' });
+       /* $().UItoTop({ easingType: 'easeOutQuart' });*/
 		var activeDigg = window.location.hash.replace('/', '');
         var bhref = $("#backlink").attr("href");
         $("#backlink").attr("href", bhref + activeDigg );
-  
-/*
-$(window).load(function() {
-	$(".link-top").click(function () {
-	window.scrollTo(0,0);
-	return false;
-	});
- $(".response-element-title").toggle(); 
-});*/
 
 		function charLimit( obj ){
+			var msg_carSucces="<span class=\"label label-success\"><i class=\"icon-white icon-ok-sign\"></i>&nbsp;<strong>";
+			var msg_carFail="<span class=\"label label-important\"><i class=\"icon-white icon-minus-sign\"></i>&nbsp;<b>&nbsp;Limite atteinte ! Vous devez saisir au plus <strong>";
+			var msg_carEnd=" caract&egrave;res</strong></span>";
+
 			var limit=obj.attr("data-limit");
 			if( limit > 0){
 			// Trigger KeyPress on the textarea
 				obj.keypress(function(e) {
 					if( e.charCode >= 48 ){
 						var nCar = obj.val().length
-						obj.next().html("<span class=\"label label-success\"><i class=\"icon-white icon-ok-sign\"></i>&nbsp;<strong>" + eval(nCar + 1) + " caract&egrave;res</strong></span>");
+						obj.next().html( msg_carSucces + eval(nCar + 1) + msg_carEnd);
 						if( nCar >= limit){
-							obj.next().html("<span class=\"label label-important\"><i class=\"icon-white icon-minus-sign\"></i>&nbsp;<b>&nbsp;Limite atteinte ! Vous devez saisir au plus <strong>" + limit + " caract&egrave;res</strong></span>");
+							obj.next().html( msg_carFail + limit + msg_carEnd);
 							return false;
 						}
 					}
@@ -177,7 +172,7 @@ $(window).load(function() {
 				obj.blur(function(e) {
 					var txt = obj.val();
 					if( txt.length > limit ){
-						obj.next().html("<span class=\"label label-important\"><i class=\"icon-white icon-minus-sign\"></i>&nbsp;<b>&nbsp;Limite atteinte ! Vous devez saisir au plus <strong>" + limit + " caract&egrave;res</strong></span>");
+						obj.next().html( msg_carFail + limit + msg_carEnd);
 						txt = txt.substr(0,limit);
 						obj.val( txt );
 					}
@@ -188,9 +183,9 @@ $(window).load(function() {
 					if ( e.keyCode==46 || e.keyCode==8 ) {
 						var nCar = obj.val().length
 						if (  nCar < limit ){
-							obj.next().html("<span class=\"label label-success\"><i class=\"icon-white icon-ok-sign\"></i>&nbsp;<strong>" + eval(nCar) + " caract&egrave;res</strong></span>");
+							obj.next().html(msg_carSucces + eval(nCar) + msg_carEnd);
 						} else {
-							obj.next().html("<span class=\"label label-important\"><i class=\"icon-white icon-minus-sign\"></i>&nbsp;<b>&nbsp;Limite atteinte ! Vous devez saisir au plus <strong>" + limit + " caract&egrave;res</strong></span>");
+							obj.next().html( msg_carFail + limit + msg_carEnd);
 							txt = txt.substr(0,limit);
 							obj.val( txt );
 						}
@@ -198,9 +193,9 @@ $(window).load(function() {
 					
 					if( e.keyCode == 86 ){
 						var nCar = obj.val().length
-						obj.next().html("<span class=\"label label-success\"><i class=\"icon-white icon-ok-sign\"></i>&nbsp;<strong>" + eval(nCar) + " caract&egrave;res</strong></span>");
+						obj.next().html(msg_carSucces + eval(nCar) + msg_carEnd);
 						if( nCar >= limit){
-							obj.next().html("<span class=\"label label-important\"><i class=\"icon-white icon-minus-sign\"></i>&nbsp;<b>&nbsp;Limite atteinte ! Vous devez saisir au plus <strong>" + limit + " caract&egrave;res</strong></span>");
+							obj.next().html( msg_carFail + limit + msg_carEnd);
 							return false;
 						}
 					}
@@ -221,4 +216,12 @@ $(window).load(function() {
 		
 		
     });
+	/*
+	$(window).load(function() {
+		$(".link-top").click(function () {
+		window.scrollTo(0,0);
+		return false;
+	});
+ $(".response-element-title").toggle(); 
+});*/
 </script> 

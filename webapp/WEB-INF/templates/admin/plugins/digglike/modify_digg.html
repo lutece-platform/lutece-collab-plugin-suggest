@@ -1,23 +1,22 @@
 <div class="row-fluid">	
 	<div class="span12">
-		<fieldset>
-		<legend>${digg.title!}</legend>
-			<ul class="nav nav-tabs">
-				<li class="active"><a data-toggle="tab" href="#panel6">#i18n{digglike.modifyDigg.navTab.labelEntries}</a></li>
-				<li><a data-toggle="tab" href="#panel7">#i18n{digglike.modifyDigg.navTab.labelCategories}</a></li>
-				<li><a data-toggle="tab" href="#panel8">#i18n{digglike.modifyDigg.navTab.labelDiggSubmitTypes}</a></li>
-				<li ><a data-toggle="tab" href="#panel1">#i18n{digglike.creatDigg.navTab.labelGeneral}</a></li>
-				<li><a data-toggle="tab" href="#panel2">#i18n{digglike.creatDigg.navTab.labelPresentation}</a></li>
-				<li><a data-toggle="tab" href="#panel3">#i18n{digglike.creatDigg.navTab.labelPermission}</a></li>
-				<li><a data-toggle="tab" href="#panel4">#i18n{digglike.creatDigg.navTab.labelNotification}</a></li>
-				<li><a data-toggle="tab" href="#panel5">#i18n{digglike.creatDigg.navTab.labelAdvancedParameters}</a></li>
-			</ul>
-			<div class="tab-content">
-			   <div class="tab-pane active" id="panel6">
+		<h3>${digg.title!}</h3>
+		<ul class="nav nav-tabs">
+			<li class="active"><a data-toggle="tab" href="#panel6">#i18n{digglike.modifyDigg.navTab.labelEntries}</a></li>
+			<li><a data-toggle="tab" href="#panel7">#i18n{digglike.modifyDigg.navTab.labelCategories}</a></li>
+			<li><a data-toggle="tab" href="#panel8">#i18n{digglike.modifyDigg.navTab.labelDiggSubmitTypes}</a></li>
+			<li ><a data-toggle="tab" href="#panel1">#i18n{digglike.creatDigg.navTab.labelGeneral}</a></li>
+			<li><a data-toggle="tab" href="#panel2">#i18n{digglike.creatDigg.navTab.labelPresentation}</a></li>
+			<li><a data-toggle="tab" href="#panel3">#i18n{digglike.creatDigg.navTab.labelPermission}</a></li>
+			<li><a data-toggle="tab" href="#panel4">#i18n{digglike.creatDigg.navTab.labelNotification}</a></li>
+			<li><a data-toggle="tab" href="#panel5">#i18n{digglike.creatDigg.navTab.labelAdvancedParameters}</a></li>
+		</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="panel6">
 				<div class="row-fluid">
 					<div class="span12">	
-						<form class="form-inline pull-right" method="post" action="jsp/admin/plugins/digglike/CreateEntry.jsp"> 
-							<label>#i18n{digglike.modifyDigg.manageEnter.title}</label>
+						<form class="form-inline" method="post" action="jsp/admin/plugins/digglike/CreateEntry.jsp"> 
+							<label><strong>#i18n{digglike.modifyDigg.manageEnter.labelInsertEntry}</strong></label>
 								<@combo name="id_type"  items=entry_type_list default_value=-1 />
 								<button class="btn btn-primary btn-small" type="submit">
 								<i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.modifyDigg.manageEnter.buttonInsertEntry}
@@ -25,7 +24,7 @@
 						</form>
 						<table class="table table-striped table-condensed">
 							<tr> 
-								<th>#i18n{digglike.modifyDigg.manageEnter.rowTitle} - #i18n{digglike.modifyDigg.manageEnter.labelQuestionNumber} <b>${number_question}</b></th>
+								<th>#i18n{digglike.modifyDigg.manageEnter.rowTitle}</th>
 								<th>#i18n{digglike.modifyDigg.manageEnter.rowType}</th>
 								<th>#i18n{digglike.modifyDigg.manageEnter.rowActions}</th>
 							</tr>
@@ -59,21 +58,20 @@
 						</table>
 					</div>
 				</div>
-			 </div>	
-			
-			 <div class="tab-pane" id="panel7">
-				<div class="row-fluid">
-					<div class="span12">	
-						<h3>#i18n{digglike.modifyDigg.labelCategoryTitleList}</h3>
-						<form method="post" class="form-inline" action="jsp/admin/plugins/digglike/DoInsertCategoryAssociation.jsp">
+		</div>	
+		<div class="tab-pane" id="panel7">
+			<div class="row-fluid">
+				<div class="span12">	
+					<h3>#i18n{digglike.modifyDigg.labelCategoryTitleList}</h3>
+						<form method="post" class="form-inline" action="jsp/admin/plugins/digglike/DoInsertCategoryAssociation.jsp#panel7">
 						<input name="id_digg" value="${digg.idDigg}" type="hidden">
 						<a id="list">&nbsp;</a>
-						<if category_list?size &lt; 1>
+						<#if category_list?size &gt;= 1>
 							<@combo name="id_category" items=category_list default_value="-1"  />
 							<button type="submit"class="btn btn-primary btn-small" name="insert_category" title="&nbsp;#i18n{digglike.modifyDigg.buttonInsertCategory}">
 								<i class="icon-plus icon-white"></i>
 							</button>
-						</if>
+						</#if>
 						</form>
 						<table class="table table-striped table-condensed">
 							<tr>
@@ -97,8 +95,8 @@
 						</table>
 					</div>
 				</div>
-			 </div>	
-			 <div class="tab-pane" id="panel8">
+		 </div>	
+		 <div class="tab-pane" id="panel8">
 				<div class="row-fluid">
 					<div class="span12">	
 						<h3>#i18n{digglike.modifyDigg.labelDiggSubmitTypeTitleList}</h3>
@@ -134,386 +132,353 @@
 						</table>
 					</div>
 				</div>
-			 </div>	
-			  <div class="tab-pane " id="panel1">
-			  <form class="form" action="jsp/admin/plugins/digglike/DoModifyDigg.jsp" method="post" enctype="multipart/form-data">
-				<input name="id_digg" value="${digg.idDigg}" type="hidden">
-				<input name="plugin_name" value="digglike" type="hidden">
-				<div class="row-fluid">
-					<div class="span5">
-					<div class="control-group">
-						<label class="control-label" for="title">#i18n{digglike.createDigg.labelTitle} * </label>
-						<div class="controls">
-							<input type="text" name="title" id="" class="input-xlarge" value="${digg.title!}" maxlength="255" />
-							<span class="help-text">#i18n{digglike.createDigg.labelTitleComment}</span>
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="libelle_contribution">#i18n{digglike.createDigg.labelLibelleContribution} *</label>
-						<div class="controls">
-							<input type="text" name="libelle_contribution" id="libelle_contribution" class="input-xlarge" value="<#if digg.libelleContribution?exists>${digg.libelleContribution}<#else>${default_message.libelleContribution!}</#if>" maxlength="255" />
-						<span class="help-text">#i18n{digglike.createDigg.labelLibelleContributionComment}</span>
-					</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="libelle_validate_button">#i18n{digglike.createDigg.labelLibelleValidateButton} *</label>
-						<div class="controls">
-							<input type="text" name="libelle_validate_button" id="" class="input-xlarge" value="<#if digg.libelleValidateButton?exists>${digg.libelleValidateButton}<#else>${default_message.libelleValidateButton!}</#if>" maxlength="255">
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="number_digg_submit_caracters_shown">	#i18n{digglike.createDigg.labelNumberDiggSubmitCaractersShown} *
-						</label>
-						<div class="controls">
-							<input type="text" name="number_digg_submit_caracters_shown" id="number_digg_submit_caracters_shown" class="input-mini"  value="<#if digg.numberDiggSubmitCaractersShown!=-1>${digg.numberDiggSubmitCaractersShown}</#if>" maxlength="10" />
-							<span class="help-text">#i18n{digglike.createDigg.labelNumberDiggSubmitCaractersShownComment}</span>
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="id_vote_type">#i18n{digglike.createDigg.labelVoteType}</label>
-						<div class="controls">
-								<#if digg.voteType?exists>
-									<@combo name="id_vote_type" items=vote_type_list default_value=digg.voteType.idVoteType />
-								<#else>
-									<@combo name="id_vote_type" items=vote_type_list default_value="-1" />
-								</#if>
-							<span class="help-text">#i18n{digglike.createDigg.labelVoteTypeComment}</span>
-						</div>
-					</div>
-					<div class="control-group">
-					<label class="control-label" for=""></label>
+		</div>	
+		<div class="tab-pane" id="panel1">
+			<form class="form" action="jsp/admin/plugins/digglike/DoModifyDigg.jsp" method="post" enctype="multipart/form-data">
+			<input name="id_digg" value="${digg.idDigg}" type="hidden">
+			<input name="plugin_name" value="digglike" type="hidden">
+			<div class="row-fluid">
+				<div class="span12">
+				<div class="control-group">
+					<label class="control-label" for="title">#i18n{digglike.createDigg.labelTitle} * </label>
 					<div class="controls">
-						<label class="checkbox" for="disable_vote">
-							<input name="disable_vote" value="disable_vote" type="checkbox"  <#if digg.disableVote> checked="checked"</#if> >
-							#i18n{digglike.createDigg.labelDisableVote}
-						</label>
-							<span class="help-text">#i18n{digglike.createDigg.labelDisableVoteComment}</span>
-						
+						<input type="text" name="title" id="" class="input-xlarge" value="${digg.title!}" maxlength="255" />
+						<span class="help-text help-digg">#i18n{digglike.createDigg.labelTitleComment}</span>
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for=""></label>     
+					<label class="control-label" for="libelle_contribution">#i18n{digglike.createDigg.labelLibelleContribution} *</label>
 					<div class="controls">
-						<label class="checkbox" for="authorized_comment">
-							<input id="authorized_comment" name="authorized_comment" type="checkbox" <#if digg.authorizedComment> checked="checked"</#if>  onclick="displayAuthorizedComment()" >
-							#i18n{digglike.createDigg.labelAuthorizedCommentSubmit}
-						</label>     
-							<span class="help-text">#i18n{digglike.createDigg.labelAuthorizedCommentSubmitComment}</span>  
-					</div>
+						<input type="text" name="libelle_contribution" id="libelle_contribution" class="input-xlarge" value="<#if digg.libelleContribution?exists>${digg.libelleContribution}<#else>${default_message.libelleContribution!}</#if>" maxlength="255" />
+					<span class="help-text help-digg">#i18n{digglike.createDigg.labelLibelleContributionComment}</span>
 				</div>
 				</div>
-				<div class="span6">
-					<div class="control-group">
-					<label class="control-label" for="unavailability_message">#i18n{digglike.createDigg.labelUnavailabilityMessage} *</label>
-						<div class="controls">
-							<textarea name="unavailability_message" id="unavailability_message" rows="4" class="richtext"><#if digg.unavailabilityMessage?exists>${digg.unavailabilityMessage}<#else>${default_message.unavailabilityMessage}</#if></textarea>
-						</div>
+				<div class="control-group">
+					<label class="control-label" for="libelle_validate_button">#i18n{digglike.createDigg.labelLibelleValidateButton} *</label>
+					<div class="controls">
+						<input type="text" name="libelle_validate_button" id="" class="input-xlarge" value="<#if digg.libelleValidateButton?exists>${digg.libelleValidateButton}<#else>${default_message.libelleValidateButton!}</#if>" maxlength="255">
 					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="number_digg_submit_caracters_shown">	#i18n{digglike.createDigg.labelNumberDiggSubmitCaractersShown} *
+					</label>
+					<div class="controls">
+						<input type="text" name="number_digg_submit_caracters_shown" id="number_digg_submit_caracters_shown" class="input-mini"  value="<#if digg.numberDiggSubmitCaractersShown!=-1>${digg.numberDiggSubmitCaractersShown}</#if>" maxlength="10" />
+						<span class="help-text help-digg">#i18n{digglike.createDigg.labelNumberDiggSubmitCaractersShownComment}</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="id_vote_type">#i18n{digglike.createDigg.labelVoteType}</label>
+					<div class="controls">
+						<#if digg.voteType?exists>
+							<@combo name="id_vote_type" items=vote_type_list default_value=digg.voteType.idVoteType />
+						<#else>
+							<@combo name="id_vote_type" items=vote_type_list default_value="-1" />
+						</#if>
+						<span class="help-text help-digg">#i18n{digglike.createDigg.labelVoteTypeComment}</span>
+					</div>
+				</div>
+				<div class="control-group">
+				<label class="control-label" for=""></label>
+				<div class="controls">
+					<label class="checkbox" for="disable_vote">
+						<input name="disable_vote" value="disable_vote" type="checkbox"  <#if digg.disableVote> checked="checked"</#if>>
+						#i18n{digglike.createDigg.labelDisableVote}
+						<span class="help-text help-digg">#i18n{digglike.createDigg.labelDisableVoteComment}</span>
+					</label>
 					
 				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for=""></label>     
+				<div class="controls">
+					<label class="checkbox" for="authorized_comment">
+						<input id="authorized_comment" name="authorized_comment" type="checkbox" <#if digg.authorizedComment> checked="checked"</#if>  onclick="displayAuthorizedComment()">#i18n{digglike.createDigg.labelAuthorizedCommentSubmit}
+						<span class="help-text help-digg">#i18n{digglike.createDigg.labelAuthorizedCommentSubmitComment}</span>  
+					</label> 
 				</div>
 			</div>
-			<div class="tab-pane" id="panel2">
-				<div class="row-fluid">
-					<div class="span5">
-					  <div class="control-group">
-							<label class="control-label" for=""></label>
+			<div class="control-group">
+				<label class="control-label" for="unavailability_message">#i18n{digglike.createDigg.labelUnavailabilityMessage} *</label>
+					<div class="controls">
+						<textarea name="unavailability_message" id="unavailability_message" rows="4" class="richtext"><#if digg.unavailabilityMessage?exists>${digg.unavailabilityMessage}<#else>${default_message.unavailabilityMessage}</#if></textarea>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="tab-pane" id="panel2">
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="well well-small">
+						<div class="control-group">
+							 <label class="control-label" for=""></label>
 							<div class="controls">
-								<label class="control-label" class="checkbox" for="active_digg_submit_paginator">
+								 <label class="control-label" class="checkbox" for="active_digg_submit_paginator">
 									<input name="active_digg_submit_paginator" value="${yes_value}" type="checkbox" <#if digg.activeDiggSubmitPaginator> checked="checked"</#if> >
 									#i18n{digglike.createDigg.labelActiveDiggSubmitPaginator}
 								</label>
-								<!-- span class="help-text">#i18n{digglike.createDigg.labelActiveDiggSubmitPaginatorComment}</span -->
 							</div>
-						  </div>
+						</div>
 						<div class="control-group">
 							<label class="control-label" for="number_digg_submit_per_page">#i18n{digglike.createDigg.labelNumberDiggSubmitPerPage}</label> 
 							<div class="controls">
 								<input type="text" name="number_digg_submit_per_page" id="number_digg_submit_per_page" class="input-mini" value="<#if digg.numberDiggSubmitPerPage!=-1 >${digg.numberDiggSubmitPerPage}</#if>" maxlength="10" />
-								<!-- span class="help-text">#i18n{digglike.createDigg.labelNumberDiggSubmitPerPageComment}</span -->
+								<span class="help-text help-digg">#i18n{digglike.createDigg.labelNumberDiggSubmitPerPageComment}</span>
 							</div>
 						</div>
-						<div class="control-group">
-						<label class="control-label" for="show_category_block">#i18n{digglike.createDigg.labelShowBlock}</label>            
-							<div class="controls">
-								<label class="checkbox inline" for="show_category_block">#i18n{digglike.createDigg.labelCategoryBlock} 
-									<input name="show_category_block" value="show_category_block" type="checkbox"  <#if digg.showCategoryBlock> checked="checked"</#if> >
-								</label>            
-								<label class="checkbox inline" for="show_category_block">#i18n{digglike.createDigg.labelTopScoreBlock}
-									<input name="show_top_score_block" value="show_top_score_block"  type="checkbox"  <#if digg.showTopScoreBlock> checked="checked"</#if>>
-								</label>  
-								<label class="checkbox inline" for="show_category_block">#i18n{digglike.createDigg.labelTopCommentBlock}
-									<input name="show_top_comment_block" value="show_top_comment_block" type="checkbox" <#if digg.showTopCommentBlock> checked="checked"</#if>>
-								</label>  
-							<span class="help-text">#i18n{digglike.createDigg.labelShowBlockComment}</span>			
-							</div>
-						</div>
-						<div class="control-group">
-						<label class="control-label" for="number_digg_submit_in_top_score">	#i18n{digglike.createDigg.labelNumberDiggSubmitInTopScore}</label>
-							<div class="controls">
+					</div>
+					<div class="control-group">
+					<label class="control-label" for="show_category_block">#i18n{digglike.createDigg.labelShowBlock}</label>            
+						<div class="controls">
+							<label class="checkbox" for="show_category_block">#i18n{digglike.createDigg.labelCategoryBlock} 
+								<input name="show_category_block" value="show_category_block" type="checkbox" <#if digg.showCategoryBlock> checked="checked"</#if> >
+							</label>            
+							<label class="checkbox" for="show_category_block">#i18n{digglike.createDigg.labelTopScoreBlock}
+								<input name="show_top_score_block" value="show_top_score_block"  type="checkbox" <#if digg.showTopScoreBlock> checked="checked"</#if>>
+								<label>#i18n{digglike.createDigg.labelNumberDiggSubmitInTopScore}</label>
 								<input type="text" name="number_digg_submit_in_top_score" id="number_digg_submit_in_top_score" class="input-mini" value="<#if digg.numberDiggSubmitInTopScore!=-1>${digg.numberDiggSubmitInTopScore}</#if>" maxlength="10" />
-								<span class="help-text">#i18n{digglike.createDigg.labelNumberDiggSubmitInTopScoreComment}</span>
-							</div>
-						</div>
-						<div class="control-group">
-						<label class="control-label" for="number_digg_submit_in_top_score">&nbsp;</label>
-							<div class="controls">
+								<!-- span class="help-text help-digg">#i18n{digglike.createDigg.labelNumberDiggSubmitInTopScoreComment}</span -->
+							</label>  
+							<label class="checkbox" for="show_category_block">#i18n{digglike.createDigg.labelTopCommentBlock}
+								<input name="show_top_comment_block" value="show_top_comment_block" type="checkbox" <#if digg.showTopCommentBlock> checked="checked"</#if>>
 								<label for="number_digg_submit_in_top_comment">#i18n{digglike.createDigg.labelNumberDiggSubmitInTopComment}</label>
-								<input type="text" name="number_digg_submit_in_top_comment" id="number_digg_submit_in_top_comment" class="input-mini" value="<#if digg.numberDiggSubmitInTopComment!=-1 >${digg.numberDiggSubmitInTopComment}</#if>" maxlength="10" />
-								<span class="help-text">#i18n{digglike.createDigg.labelNumberDiggSubmitInTopCommentComment}</span>
-							</div>
+							<input type="text" name="number_digg_submit_in_top_comment" id="number_digg_submit_in_top_comment" class="input-mini" value="<#if digg.numberDiggSubmitInTopComment!=-1 >${digg.numberDiggSubmitInTopComment}</#if>" maxlength="10" />
+							<!-- span class="help-text help-digg">#i18n{digglike.createDigg.labelNumberDiggSubmitInTopCommentComment}</span -->
+							</label>  
+							<span class="help-text help-digg">#i18n{digglike.createDigg.labelShowBlockComment} </span>			
 						</div>
-						<div class="control-group">
-						<label class="control-label" for="id_default_sort">#i18n{digglike.createDigg.labelDefaultSort}</label>
-							<div class="controls">
-								<@combo name="id_default_sort" items=digg_submit_sort_list default_value=digg.idDefaultSort />
-								<span class="help-text">#i18n{digglike.createDigg.labelDefaultSortComment}</span>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for=""></label>
-							<div class="controls">
+					</div>
+					<div class="control-group">
+						<label class="control-label" for=""></label>
+						<div class="controls">
 							<label class="checkbox" for="display_comment_in_digg_submit_list">
 								#i18n{digglike.createDigg.labelDisplayCommentInDiggSubmitList}
-								<input name="display_comment_in_digg_submit_list" value="display_comment_in_digg_submit_list" type="checkbox" <#if digg.displayCommentInDiggSubmitList> checked="checked"</#if>  >
+								<input name="display_comment_in_digg_submit_list" value="display_comment_in_digg_submit_list" type="checkbox" <#if digg.displayCommentInDiggSubmitList> checked="checked"</#if>>
+								<!-- span class="help-text help-digg">#i18n{digglike.createDigg.labelDisplayCommentInDiggSubmitListComment}</span -->
 							</label>
-							<span class="help-text">#i18n{digglike.createDigg.labelDisplayCommentInDiggSubmitListComment}</span>
-				
-							</div>
-						</div>
-				</div>
-				<div class="span6">
-					<div class="control-group">
-						<label class="control-label" for="header">
-						#i18n{digglike.createDigg.labelHeader}</label>
-						<div class="controls">
-							<textarea name="header" id="header" rows="4" class="richtext" ><#if digg.header?exists>${digg.header}</#if></textarea>
-							<span class="help-text">#i18n{digglike.createDigg.labelHeaderComment}</span>
+							<label for="number_comment_display_in_digg_submit_list">#i18n{digglike.createDigg.labelNumberCommentDisplayInDiggSubmitList}</label>
+							<input type="text" name="number_comment_display_in_digg_submit_list" id="number_comment_display_in_digg_submit_list" class="input-mini" value="<#if digg.numberCommentDisplayInDiggSubmitList?has_content && digg.numberCommentDisplayInDiggSubmitList!=-1 >${digg.numberCommentDisplayInDiggSubmitList}</#if>" maxlength="10" />
+							<!-- span class="help-text help-digg">#i18n{digglike.createDigg.labelNumberCommentDisplayInDiggSubmitListComment}</span -->
+							<label for="number_char_comment_display_in_digg_submit_list">#i18n{digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitList}</label>
+							<input type="text" name="number_char_comment_display_in_digg_submit_list" id="number_char_comment_display_in_digg_submit_list" class="input-mini" value="<#if digg.numberCharCommentDisplayInDiggSubmitList?has_content && digg.numberCharCommentDisplayInDiggSubmitList!=-1 >${digg.numberCharCommentDisplayInDiggSubmitList}</#if>" maxlength="10" />
+							<!-- span class="help-text help-digg">#i18n{digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitListComment}</span -->
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="confirmation_message">#i18n{digglike.createDigg.labelConfirmationMessage}</label>
+					<label class="control-label" for="id_default_sort">#i18n{digglike.createDigg.labelDefaultSort}</label>
 						<div class="controls">
-							<textarea name="confirmation_message" id="" rows="4"class="richtext"><#if digg.confirmationMessage?exists >${digg.confirmationMessage}</#if></textarea>
-							<span class="help-text">#i18n{digglike.createDigg.labelConfirmationMessageComment}</span>
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="terms_of_use">
-						#i18n{digglike.createDigg.labelTermsOfUse}</label>
-						<div class="controls">
-							<textarea name="terms_of_use" id="terms_of_use" rows="4" class="richtext" >${digg.termsOfUse!}</textarea>
-							<span class="help-text">#i18n{digglike.createDigg.labelTermsOfUseComment}</span>
+							<@combo name="id_default_sort" items=digg_submit_sort_list default_value=digg.idDefaultSort  />
+							<span class="help-text help-digg">#i18n{digglike.createDigg.labelDefaultSortComment}</span>
 						</div>
 					</div>
 					<div class="control-group">
 						<label class="control-label" class="control-label" for="id_theme_list">#i18n{digglike.createDigg.labelThemeXpage}</label>
-							<div class="controls">
-								<@combo name="id_theme_list" items=theme_list default_value=digg.codeTheme />
-								<span class="help-text">#i18n{digglike.createDigg.labelThemeXpageComment}</span>
-							</div>
-					</div>
-					
-					<div class="control-group">
-						<label class="control-label" for="number_comment_display_in_digg_submit_list">#i18n{digglike.createDigg.labelNumberCommentDisplayInDiggSubmitList}</label>
 						<div class="controls">
-							<input type="text" name="number_comment_display_in_digg_submit_list" id="number_comment_display_in_digg_submit_list" class="input-mini" maxlength="10" value="<#if digg.numberCommentDisplayInDiggSubmitList?has_content && digg.numberCommentDisplayInDiggSubmitList!=-1 >${digg.numberCommentDisplayInDiggSubmitList}</#if>"/>
-							<span class="help-text">#i18n{digglike.createDigg.labelNumberCommentDisplayInDiggSubmitListComment}</span>
+							<@combo name="id_theme_list" items=theme_list default_value=digg.codeTheme />
+							<span class="help-text help-digg">#i18n{digglike.createDigg.labelThemeXpageComment}</span>
 						</div>
 					</div>
-					<div class="control-group">
-						<label class="control-label" for="number_char_comment_display_in_digg_submit_list">#i18n{digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitList}</label>
-						<div class="controls">
-							<input type="text" name="number_char_comment_display_in_digg_submit_list" id="number_char_comment_display_in_digg_submit_list" class="input-mini" maxlength="10" value="<#if digg.numberCharCommentDisplayInDiggSubmitList?has_content && digg.numberCharCommentDisplayInDiggSubmitList!=-1 >${digg.numberCharCommentDisplayInDiggSubmitList}</#if>" />
-						<span class="help-text">#i18n{digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitListComment}</span>
+			
+				<div class="control-group">
+					<label class="control-label" for="header">
+					#i18n{digglike.createDigg.labelHeader}</label>
+					<div class="controls">
+						<textarea name="header" id="header" rows="4" class="richtext" style="width:50%" ><#if digg.header?exists>${digg.header}</#if></textarea>
+						<span class="help-text help-digg">#i18n{digglike.createDigg.labelHeaderComment}</span>
 					</div>
 				</div>
-				
+				<div class="control-group">
+					<label class="control-label" for="confirmation_message">#i18n{digglike.createDigg.labelConfirmationMessage}</label>
+					<div class="controls">
+						<textarea name="confirmation_message" id="" rows="4"class="richtext"  style="width:50%" ><#if digg.confirmationMessage?exists >${digg.confirmationMessage}</#if></textarea>
+						<span class="help-text help-digg">#i18n{digglike.createDigg.labelConfirmationMessageComment}</span>
 					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="terms_of_use">
+					#i18n{digglike.createDigg.labelTermsOfUse}</label>
+					<div class="controls">
+						<textarea name="terms_of_use" id="terms_of_use" rows="4" class="richtext"  style="width:50%" >${digg.termsOfUse!}</textarea>
+						<span class="help-text help-digg">#i18n{digglike.createDigg.labelTermsOfUseComment}</span>
+					</div>
+				</div>
 				</div>
 			</div>
-			<div class="tab-pane" id="panel3">
-				<div class="control-group">
-					<label class="control-label" for="workgroup">#i18n{digglike.createDigg.labelWorkgroup}</label>
+		</div>
+		<div class="tab-pane" id="panel3">
+			<div class="control-group">
+				<label class="control-label" for="workgroup">#i18n{digglike.createDigg.labelWorkgroup}</label>
+				<div class="controls">
+				<@combo name="workgroup"  items=user_workgroup_list default_value="${digg.workgroup!}" />
+				<span class="help-text help-digg">#i18n{digglike.createDigg.labelWorkgroupComment}</span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="role">#i18n{digglike.createDigg.labelRole}</label>
+				<div class="controls">
+				<@combo name="role" default_value="${digg.role!}" items=role_list />
+				<span class="help-text help-digg">#i18n{digglike.createDigg.labelRoleComment}</span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label"></label>
 					<div class="controls">
-					<@combo name="workgroup"  items=user_workgroup_list default_value="${digg.workgroup!}" />
-					<span class="help-text">#i18n{digglike.createDigg.labelWorkgroupComment}</span>
+						<label class="checkbox" for="disable_new_digg_submit">
+							<input name="disable_new_digg_submit" value="${yes_value}" type="checkbox" <#if digg.disableNewDiggSubmit> checked="checked"</#if>>#i18n{digglike.createDigg.labelDisableNewDiggSubmit}
+						</label>	
+						<span class="help-text help-digg">#i18n{digglike.createDigg.labelDisableNewDiggSubmitComment}</span>
 					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label" for="role">#i18n{digglike.createDigg.labelRole}</label>
-					<div class="controls">
-					<@combo name="role" default_value="${digg.role!}" items=role_list />
-					<span class="help-text">#i18n{digglike.createDigg.labelRoleComment}</span>
-					</div>
-				</div>
-					
-				<div class="control-group">
-						<label class="control-label" for=""></label>
-							<div class="controls">
-							<label class="checkbox" for="disable_new_digg_submit">
-								<input name="disable_new_digg_submit" value="${yes_value}" type="checkbox" <#if digg.disableNewDiggSubmit> checked="checked"</#if> >
-								#i18n{digglike.createDigg.labelDisableNewDiggSubmit}
-							</label>
-							<span class="help-text">#i18n{digglike.createDigg.labelDisableNewDiggSubmitComment}</span>
-						</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label" for="disable_new_comment">&nbsp;</label>            
-					<div class="controls">
-						<label class="checkbox" for="disable_new_comment">
-						<input name="disable_new_comment" value="${yes_value}" type="checkbox"  onclick="displayId('p_id_mailing_list_comment')" <#if digg.disableNewComment> checked="checked"</#if> >
+			</div> 
+			<div class="control-group">
+				<label class="control-label" for="disable_new_comment"> </label>            
+				<div class="controls">
+					<label class="checkbox" for="disable_new_comment">
+						<input name="disable_new_comment" value="${yes_value}" type="checkbox"  onclick="displayId('p_id_mailing_list_comment')" <#if digg.disableNewComment> checked="checked"</#if>>
 						#i18n{digglike.createDigg.labelDisableNewCommentSubmit}
-						</label>            
-						<span class="help-text">#i18n{digglike.createDigg.labelDisableNewCommentSubmitComment}</span>     
+					</label>
+					<span class="help-text help-digg">#i18n{digglike.createDigg.labelDisableNewCommentSubmitComment}</span>     
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="enable_reports"></label>            
+					<div class="controls">
+						<label class="checkbox" for="enable_reports">
+							<input name="enable_reports" value="${yes_value}" type="checkbox" <#if digg.enableReports> checked="checked"</#if>>
+							#i18n{digglike.createDigg.labelEnableReports}
+						</label>
+						<span class="help-text help-digg">#i18n{digglike.createDigg.labelEnableReportsComment}</span>
 					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label" for="enable_reports"></label>            
-						<div class="controls">
-							<label class="checkbox" for="enable_reports">
-								<input name="enable_reports" value="${yes_value}" type="checkbox" <#if digg.enableReports> checked="checked"</#if> >
-								#i18n{digglike.createDigg.labelEnableReports}
-							</label>
-							<span class="help-text">#i18n{digglike.createDigg.labelEnableReportsComment}</span>
-						</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label" for="enable_terms_of_use"></label>            
-						<div class="controls">
-							<label class="checkbox" for="enable_terms_of_use">
-							<input name="enable_terms_of_use" value="${yes_value}" type="checkbox" <#if digg.enableTermsOfUse> checked="checked"</#if> >
-								#i18n{digglike.createDigg.labelEnableTermsOfUse}
-							</label>
-							<span class="help-text">#i18n{digglike.createDigg.labelEnableTermsOfUseComment}</span>
-						</div>
-				</div>
-				<div class="control-group">
-				<label class="control-label" for=""></label>            
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="enable_terms_of_use"></label>            
+					<div class="controls">
+						<label class="checkbox" for="enable_terms_of_use">
+							<input name="enable_terms_of_use" value="${yes_value}" type="checkbox" <#if digg.enableTermsOfUse>checked="checked"</#if>>
+							#i18n{digglike.createDigg.labelEnableTermsOfUse}
+						</label>
+						<span class="help-text help-digg">#i18n{digglike.createDigg.labelEnableTermsOfUseComment}</span>
+					</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="limit_number_vote"> </label>            
 					<div class="controls">
 						<label class="checkbox" for="limit_number_vote">
-							<input name="limit_number_vote" value="${yes_value}" type="checkbox"  <#if digg.limitNumberVote> checked='checked'</#if> >
+							<input name="limit_number_vote" value="${yes_value}" type="checkbox" <#if digg.limitNumberVote> checked='checked'</#if>>
 							#i18n{digglike.createDigg.labelLimitNumberVote}
-						</label>            
-						<span class="help-text">#i18n{digglike.createDigg.labelLimitNumberVoteComment}</span>
-					</div>
-				</div>  
-				
-				<#if authentification_enable> 	
-					<div class="control-group">
-						<label class="control-label" for="">#i18n{digglike.createDigg.labelRequiredAuthentification}</label>						
-						<div class="controls">
-							<label class="checkbox inline" for="required_authentification">
-								<input name="active_digg_submit_authentification" value="${yes_value}" type="checkbox" <#if digg.activeDiggSubmitAuthentification> checked="checked"</#if>>#i18n{digglike.createDigg.labelRequiredAuthentificationCreation}
-							</label>
-							<label class="checkbox inline" for="active_vote_authentification">
-								<input name="active_vote_authentification" value="${yes_value}" type="checkbox" <#if digg.activeVoteAuthentification> checked="checked"</#if> >#i18n{digglike.createDigg.labelRequiredAuthentificationVote}  
-							</label>
-							<label class="checkbox inline" for="active_comment_authentification">   
-								<input name="active_comment_authentification" value="active_comment_authentification" type="checkbox" <#if digg.activeCommentAuthentification> checked="checked"</#if>>	#i18n{digglike.createDigg.labelRequiredAuthentificationCommentSubmit}
-							</label>
-							<span class="help-text">#i18n{digglike.createDigg.labelRequiredAuthentificationComment}</span>
-						</div>
-					</div>
-				</#if>
-				
-			</div>
-			<div class="tab-pane" id="panel4">
-				<div class="control-group">
-					<label class="control-label" for="">#i18n{digglike.createDigg.labelMailDiggSubmit}</label>            
-					<div class="controls">
-						<label class="checkbox inline" for="enable_mail_new_digg_submit">
-								<input name="enable_mail_new_digg_submit" value="${yes_value}" type="checkbox" <#if digg.enableMailNewDiggSubmit> checked="checked"</#if>  >#i18n{digglike.createDigg.labelMailNewDiggSubmit} 
-						</label>   
-						<label class="checkbox inline" for="enable_mail_new_comment_submit"> 
-								<input name="enable_mail_new_comment_submit" value="${yes_value}" type="checkbox"  <#if digg.enableMailNewCommentSubmit> checked="checked"</#if>>#i18n{digglike.createDigg.labelMailNewCommentSubmit}
 						</label>
-						<label class="checkbox inline" for="enable_mail_new_reported_submit">
-								<input name="enable_mail_new_reported_submit" value="${yes_value}" type="checkbox" <#if digg.enableMailNewReportedSubmit> checked="checked"</#if> >#i18n{digglike.createDigg.labelMailNewReportedSubmit} 
-						</label>    
+						<span class="help-text help-digg">#i18n{digglike.createDigg.labelLimitNumberVoteComment}</span>
+					</div>
+			</div>   
+			<#if authentification_enable>
+					<div class="control-group">
+						<label class="control-label" for="">#i18n{digglike.createDigg.labelRequiredAuthentification}</label>
+						<div class="controls">
+						<label class="checkbox inline" for="required_authentification">
+							<input name="active_digg_submit_authentification" value="${yes_value}" type="checkbox" <#if digg.activeDiggSubmitAuthentification> checked="checked"</#if>>#i18n{digglike.createDigg.labelRequiredAuthentificationCreation}
+						</label>
+						<label class="checkbox inline" for="active_vote_authentification"> 
+							<input name="active_vote_authentification" value="${yes_value}" type="checkbox" <#if digg.activeVoteAuthentification> checked="checked"</#if>>#i18n{digglike.createDigg.labelRequiredAuthentificationVote} 
+						</label>
+						<label class="checkbox inline" for="active_comment_authentification">
+							<input name="active_comment_authentification" value="active_comment_authentification" type="checkbox" <#if digg.activeCommentAuthentification> checked="checked"</#if>>	#i18n{digglike.createDigg.labelRequiredAuthentificationCommentSubmit}   
+						</label>
+						<span class="help-text help-digg">#i18n{digglike.createDigg.labelRequiredAuthentificationComment}</span>
 					</div>
 				</div>
+			</#if>
+		</div>
+		<div class="tab-pane" id="panel4">
+			<div class="control-group">
+				<label class="control-label" for="">#i18n{digglike.createDigg.labelMailDiggSubmit}</label>            
+				<div class="controls">
+					<label class="checkbox inline" for="enable_mail_new_digg_submit">
+							<input name="enable_mail_new_digg_submit" value="${yes_value}" type="checkbox" <#if digg.enableMailNewDiggSubmit> checked="checked"</#if>>#i18n{digglike.createDigg.labelMailNewDiggSubmit} 
+					</label>   
+					<label class="checkbox inline" for="enable_mail_new_comment_submit">
+							<input name="enable_mail_new_comment_submit" value="${yes_value}" type="checkbox" <#if digg.enableMailNewCommentSubmit> checked="checked"</#if>>#i18n{digglike.createDigg.labelMailNewCommentSubmit} 
+					</label>
+					<label class="checkbox inline" for="enable_mail_new_reported_submit">
+							<input name="enable_mail_new_reported_submit" value="${yes_value}" type="checkbox" <#if digg.enableMailNewReportedSubmit> checked="checked"</#if>>#i18n{digglike.createDigg.labelMailNewReportedSubmit} 
+					</label>    
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="id_mailing_list_digg_submit">#i18n{digglike.createDigg.labelMailingList}</label>
+				<div class="controls">
+					<@combo name="id_mailing_list_digg_submit" items=mailing_list default_value=digg.idMailingListDiggSubmit />
+					<span class="help-text help-digg">#i18n{digglike.createDigg.labelMailingListComment}</span>
+					<a class="btn" href="jsp/admin/mailinglist/ModifyMailingList.jsp?id_mailinglist=${digg.idMailingListDiggSubmit}"/>
+						<i class="icon-info-sign"></i>#i18n{digglike.modifyDigg.legendGoToNotificationList}
+					</a>	
+				</div>
+			</div>
+		     
+		</div>
+		<div class="tab-pane" id="panel5">
+			<div class="well well-small">
 				<div class="control-group">
-					<label class="control-label" for="id_mailing_list_digg_submit">#i18n{digglike.createDigg.labelMailingList}</label>
+						<label class="control-label" for="description">#i18n{digglike.createDigg.labelDescription}</label>
+						<div class="controls">
+							<textarea name="description" id="description" rows="4" class="richtext">${digg.description!}</textarea>
+							<span class="help-text help-digg">#i18n{digglike.createDigg.labelDescriptionComment}</span>  
+						</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="" >&nbsp;</label>
 					<div class="controls">
-							<@combo name="id_mailing_list_digg_submit" items=mailing_list default_value=digg.idMailingListDiggSubmit />
-						<span class="help-text">#i18n{digglike.createDigg.labelMailingListComment}</span>
-					</div>
-				</div>
-			     
-			</div>
-			<div class="tab-pane" id="panel5">
-				<fieldset>
-					<legend>#i18n{digglike.modifyDigg.legendSocialNetwork}</legend>
-					<div class="control-group">
-							<label class="control-label" for="description">#i18n{digglike.createDigg.labelDescription}</label>
-							<div class="controls">
-								<textarea name="description" id="description" rows="4" class="richtext">${digg.description!}</textarea>
-								<span class="help-text">#i18n{digglike.createDigg.labelDescriptionComment}</span>  
-							</div>
-						</div>
-					<div class="control-group">
-					<label class="control-label" for="" ></label>
-						<div class="controls">
 						<label for="image_source" >#i18n{digglike.createDigg.labelImage}</label>
-							<input type="file" id="image_source" name="image_source" maxlength="100"/>
-							<#if digg.idImageResource?has_content && digg.idImageResource!=-1 >
+						<input type="file" id="image_source" name="image_source" maxlength="100">
+						<#if digg.idImageResource?has_content && digg.idImageResource!=-1 >
 								<span class="help-text"><img class="thumbnail" src='image?resource_type=image_digg&id=${digg.idImageResource}' title="img"></span>
-							</#if>
-						</div>
-						<div class="controls">
-							<label class="checkbox" for="update_file" >#i18n{digglike.createDigg.labelUpdateFile} 
+						</#if>
+						<label class="checkbox" for="update_file" >#i18n{digglike.createDigg.labelUpdateFile} 
 								<input id="update_file" name="update_file" type="checkbox"/>
-							</label>
-						</div>
+						</label>
 					</div>
-				</fieldset>
-			   <div class="control-group">
-								<label class="control-label" for="number_day_required">#i18n{digglike.createDigg.labelNumberDayRequired}</label>    
-								<div class="controls">
-									<input type="text" name="number_day_required" id="number_day_required" class="input-mini" value="<#if digg.numberDayRequired!=-1>${digg.numberDayRequired}</#if>" />
-									<span class="help-text">#i18n{digglike.createDigg.labelNumberDayRequiredComment}</span>        
-								</div>
 				</div>
-				
-				<#if is_active_captcha> 
-					<div class="control-group">
-					<label class="control-label" for="">&nbsp;</label>
-						<div class="controls">
-							<label class="checkbox" for="active_captcha">#i18n{digglike.createDigg.labelActiveCaptcha}
-								<input name="active_captcha" value="${yes_value}" type="checkbox" <#if digg.activeCaptcha> checked='checked'</#if>>
-							</label>
-							<span class="help-text">#i18n{digglike.createDigg.labelActiveCaptchaComment}</span>
-						</div>
-					</div>
-				</#if>   
-	
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="number_day_required">#i18n{digglike.createDigg.labelNumberDayRequired}</label>    
+				<div class="controls">
+					<input type="text" name="number_day_required" id="number_day_required" class="input-mini" value="<#if digg.numberDayRequired!=-1>${digg.numberDayRequired}</#if>" />
+					<span class="help-text help-digg">#i18n{digglike.createDigg.labelNumberDayRequiredComment}</span>        
+				</div>
+			</div>
+			<#if is_active_captcha> 
 				<div class="control-group">
-					<label class="control-label" for=""></label>
-						<div class="controls">
-							<label class="checkbox" for="active_editor_bbcode_on_comment">
-								<input name="active_editor_bbcode_on_comment"" value="${yes_value}" type="checkbox" <#if digg.activeEditorBbcode> 	checked="checked"</#if>>
-								#i18n{digglike.createDigg.labelActiveEditorBbcodeOnComment}
-							</label>
-							<span class="help-text">#i18n{digglike.createDigg.labelActiveEditorBbcodeOnCommentComment}</span>   
+				<label class="control-label" for="">&nbsp;</label>
+					<div class="controls">
+						<label class="checkbox" for="active_captcha">#i18n{digglike.createDigg.labelActiveCaptcha}
+							<input name="active_captcha" value="${yes_value}" type="checkbox" <#if digg.activeCaptcha> checked='checked'</#if>>
+						</label>
+						<span class="help-text help-digg">#i18n{digglike.createDigg.labelActiveCaptchaComment}</span>
 					</div>
 				</div>
+			</#if>   
+			<div class="control-group">
+				<label class="control-label" for="active_editor_bbcode_on_comment"></label>
+				<div class="controls">
+					<label class="checkbox" for="active_editor_bbcode_on_comment">
+						<input name="active_editor_bbcode_on_comment"" value="${yes_value}" type="checkbox" <#if digg.activeEditorBbcode> 	checked="checked"</#if>> #i18n{digglike.createDigg.labelActiveEditorBbcodeOnComment}
+					</label>
+					<span class="help-text help-digg">#i18n{digglike.createDigg.labelActiveEditorBbcodeOnCommentComment}</span>   
+				</div>
 			</div>
-	
-			</div>
-				<div class="form-actions">   	
-					<button class="btn btn-primary btn-small" type="submit" name="save">
-						<i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createDigg.buttonSave}
-					</button>
-					<button class="btn btn-primary btn-small" type="submit" name="apply" >
-						<i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{digglike.modifyDigg.buttonApply}
-					</button>
-					<button class="btn btn-small" type="submit" name="cancel">
-						<i class="icon-remove-circle"></i>&nbsp;#i18n{digglike.createDigg.buttonCancel}
-					</button>
-			</div>
-			</form>
-		</fieldset>
+		</div>
+	</div>
+		<div class="form-actions">   	
+			<button class="btn btn-primary btn-small" type="submit" name="save">
+				<i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createDigg.buttonSave}
+			</button>
+			<button class="btn btn-primary btn-small" type="submit" name="apply" >
+				<i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{digglike.modifyDigg.buttonApply}
+			</button>
+			<button class="btn btn-small" type="submit" name="cancel">
+				<i class="icon-remove-circle"></i>&nbsp;#i18n{digglike.createDigg.buttonCancel}
+			</button>
+		</div>
+	</form>
 	</div>
 </div>
 <#include "/admin/util/editor/editor.html" />
@@ -521,28 +486,27 @@
 
 <script>
 $(document).ready(function() {
-    // Function to set the tab
-   $("a[data-toggle=tab]").click( function(){
-		var theHref = $(this).attr("href");
-		$("form").each(function() {
-			if ( $(this).attr("action").indexOf("#") > 0 ){
-				var splitAction = $(this).attr("action").split('#');
-				var theAction = splitAction[0];
-			} else {
-				var theAction = $(this).attr("action");
-			}
-			$(this).attr("action", theAction + theHref );
-		});
+	// Function to set the tab
+	$("a[data-toggle=tab]").click( function(){
+	var theHref = $(this).attr("href");
+	$("form").each(function() {
+		if ( $(this).attr("action").indexOf("#") > 0 ){
+			var splitAction = $(this).attr("action").split('#');
+			var theAction = splitAction[0];
+		} else {
+			var theAction = $(this).attr("action");
+		}
+		$(this).attr("action", theAction + theHref );
 	});
+});
 
-	// Function to activate the tab
-    function activateTab() {
-        var activeTab = $('[href=' + window.location.hash.replace('/', '') + ']');
-        activeTab && activeTab.tab('show');
-    }
+// Function to activate the tab
+function activateTab() {
+	var activeTab = $('[href=' + window.location.hash.replace('/', '') + ']');
+	activeTab && activeTab.tab('show');
+}
 
-    // Trigger when the page loads
-    activateTab();
-	
+// Trigger when the page is loaded
+activateTab();
 });
 </script>

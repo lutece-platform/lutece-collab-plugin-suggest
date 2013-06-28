@@ -6,8 +6,8 @@
 		<#if digg_submit.diggSubmitType?exists>
 			<span class="badge" style="background-color:${digg_submit.diggSubmitType.color!''};">
 				<#if digg_submit.diggSubmitType.idImageResource?has_content>
-							<img class="thumb-list"  src="image?resource_type=image_digg&id=${digg_submit.diggSubmitType.idImageResource}" title="${digg_submit.diggSubmitType.name} " alt="${digg_submit.diggSubmitType.name} ">
-						</#if>
+					<img class="thumb-list"  src="image?resource_type=image_digg&id=${digg_submit.diggSubmitType.idImageResource}" title="${digg_submit.diggSubmitType.name} " alt="${digg_submit.diggSubmitType.name} ">
+				</#if>
 			${digg_submit.diggSubmitType.name}
 			</span>
 		</#if>
@@ -61,11 +61,6 @@
 </div>
 <#if authorized_comment && !digg_submit.disableComment>
 <div class="row">
-	<div class="span1">
-		<span class="user">
-			<i class="icon-comment"></i>
-		</span>	
-	</div>
 	<div class="span7">	
 		<form class="form" action="jsp/site/Portal.jsp?page=digg" method="post" name="form-comment" id="form-comment"  >
 			<input name="action" value="do_create_comment" type="hidden" />
@@ -76,7 +71,7 @@
 			<#if jcaptcha?exists>
 			<fieldset>${jcaptcha}</fieldset>
 			</#if>
-			<button class="btn btn-primary btn-small" type="submit" name="submit_comment">
+			<button class="btn btn-primary btn-small pull-right" type="submit" name="submit_comment">
 				<i class="icon-comment icon-white"></i>&nbsp;#i18n{digglike.diggComment.labelAddNewComment}
 			</button>
 		</form>

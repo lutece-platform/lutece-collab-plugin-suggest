@@ -44,7 +44,7 @@
 					</span>
 				</#if>
 				<#if digg_submit.diggSubmitTitle?length &gt; 100>
-					&nbsp;${digg_submit.diggSubmitTitle?substring(0,100)}...
+					&nbsp;${digg_submit.diggSubmitTitle?substring(0, 100 )}
 				<#else>
 					&nbsp;${digg_submit.diggSubmitTitle}
 				</#if>
@@ -85,8 +85,9 @@
 							<span class="pull-right badge badge-inverse">
 								<i class="icon-chevron-down icon-white" title="Lire la suite..."></i>
 							</span>	
-							${digg_submit.diggSubmitValue?substring(0,600)}...
-							
+							<#assign text=digg_submit.diggSubmitValue?substring(0,600)/>
+							<#assign limit=text?last_index_of(" ")/>
+							&nbsp;${text?substring(0, limit )}...
 						</div>
 					<#else>
 						<div class="preview">${digg_submit.diggSubmitValue}</div>

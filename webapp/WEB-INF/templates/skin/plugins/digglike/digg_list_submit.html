@@ -1,5 +1,3 @@
-
-
 <#if list_digg_submit?has_content>
 	<#if paginator?exists>
 		#i18n{digglike.diggListSubmit.paginator.labelResultsCount} : <strong>${paginator.itemsCount}</strong> <br />
@@ -13,7 +11,11 @@
 	<div class="span8">
 		<h3>
 		<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;action=view_digg_submit#digg${digg_submit_display.digg_submit.idDiggSubmit}">
-		<#if digg_submit_display.digg_submit.diggSubmitTitle?length &gt;45>${digg_submit_display.digg_submit.diggSubmitTitle?substring(0,42)}...	<#else>${digg_submit_display.digg_submit.diggSubmitTitle}</#if>
+		<#if digg_submit_display.digg_submit.diggSubmitTitle?length &gt;45>
+			${digg_submit_display.digg_submit.diggSubmitTitle?substring(0,42)}...
+		<#else>
+			${digg_submit_display.digg_submit.diggSubmitTitle}
+		</#if>
 		</a>
 		<#if authorized_vote && !digg_submit_display.digg_submit.disableVote && digg_submit_display.digg_submit.numberScore?exists>
 		<div class="btn-group pull-right">
@@ -70,16 +72,18 @@
 		<div class="digg-list-content">				
 			<#if digg_submit_display.digg_submit.diggSubmitValueShowInTheList?exists>
 				<#if digg_submit_display.digg_submit.diggSubmitValueShowInTheList?length &gt; 500>
-					<span class="pull-right badge badge-inverse">
+					<!-- span class="pull-right badge badge-inverse">
 						<i class="icon-chevron-up icon-white"></i>
-					</span>	
+					</span -->	
 					${digg_submit_display.digg_submit.diggSubmitValueShowInTheList}
 				<#else>
 					<div>${digg_submit_display.digg_submit.diggSubmitValueShowInTheList}</div>	
 				</#if>
 			</#if>
 		</div>
-		
+		<#if isExtendInstalled?? && isExtendInstalled >
+				@Extender[${digg_submit_display.digg_submit.idDiggSubmit},DIGGLIKE_DIGG_SUBMIT_TYPE,opengraph,{header:false,footer:false}]@
+		</#if>
 		<p>
 			<a class="btn btn-link pull-right" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;digg_comment=1&amp;action=view_digg_submit#digg${digg_submit_display.digg_submit.idDiggSubmit}">
 			#i18n{digglike.diggListSubmit.labelReadMore} &gt;
