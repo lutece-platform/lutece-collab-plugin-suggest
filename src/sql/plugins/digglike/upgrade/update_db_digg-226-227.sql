@@ -121,8 +121,9 @@ INSERT INTO digglike_action (id_action, name_key, description_key, action_url, i
 INSERT INTO digglike_action (id_action, name_key, description_key, action_url, icon_url, action_permission, digg_state) VALUES (9, 'digglike.action.delete.name', 'digglike.action.delete.description', 'jsp/admin/plugins/digglike/ConfirmRemoveDigg.jsp', 'icon-trash icon-white', 'DELETE', 0);
 INSERT INTO digglike_action (id_action, name_key, description_key, action_url, icon_url, action_permission, digg_state) VALUES (10, 'digglike.action.updateAllDiggSubmit.name', 'digglike.action.updateAllDiggSubmit.description', 'jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp', 'icon-refresh icon-white', 'UPDATE_ALL_DIGG_SUBMIT', 1);
 INSERT INTO digglike_action (id_action, name_key, description_key, action_url, icon_url, action_permission, digg_state) VALUES (11, 'digglike.action.updateAllDiggSubmit.name', 'digglike.action.updateAllDiggSubmit.description', 'jsp/admin/plugins/digglike/ConfirmUpdateAllDiggSubmit.jsp', 'icon-refresh icon-white', 'UPDATE_ALL_DIGG_SUBMIT', 0);
+
 --
---Add Indexdigglike_comment_submit
+-- Add Indexdigglike_comment_submit
 --
 CREATE INDEX index_digglike_id_parent_comment ON digglike_comment_submit (id_parent_comment);	
 	

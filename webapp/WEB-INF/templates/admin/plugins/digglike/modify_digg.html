@@ -336,14 +336,14 @@
 				<div class="control-group">
 					<label class="control-label" for="workgroup">#i18n{digglike.createDigg.labelWorkgroup}</label>
 					<div class="controls">
-					<@combo name="workgroup"  items=user_workgroup_list default_value="" />
+					<@combo name="workgroup"  items=user_workgroup_list default_value="${digg.workgroup!}" />
 					<span class="help-text">#i18n{digglike.createDigg.labelWorkgroupComment}</span>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="role">#i18n{digglike.createDigg.labelRole}</label>
 					<div class="controls">
-					<@combo name="role" default_value="${default_value_role}" items=role_list />
+					<@combo name="role" default_value="${digg.role!}" items=role_list />
 					<span class="help-text">#i18n{digglike.createDigg.labelRoleComment}</span>
 					</div>
 				</div>

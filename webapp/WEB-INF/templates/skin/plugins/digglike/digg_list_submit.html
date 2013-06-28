@@ -79,9 +79,7 @@
 				</#if>
 			</#if>
 		</div>
-		<#if isExtendInstalled?? && isExtendInstalled >
-				@Extender[${digg_submit_display.digg_submit.idDiggSubmit},DIGGLIKE_DIGG_SUBMIT_TYPE,opengraph,{header:false,footer:false}]@
-		</#if>
+		
 		<p>
 			<a class="btn btn-link pull-right" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;digg_comment=1&amp;action=view_digg_submit#digg${digg_submit_display.digg_submit.idDiggSubmit}">
 			#i18n{digglike.diggListSubmit.labelReadMore} &gt;
