@@ -948,7 +948,8 @@ public class DiggApp implements XPageApplication
         throws SiteMessageException
     {
         DiggFilter filter = new DiggFilter(  );
-
+        filter.setIdState( Digg.STATE_ENABLE );
+        
         List listDigg = DiggHome.getDiggList( filter, plugin );
         HashMap model = new HashMap(  );
         Paginator paginator = new Paginator( listDigg, nItemsPerPageDigg, urlDiggXPage.getUrl(  ),
