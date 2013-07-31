@@ -7,8 +7,9 @@
 	<#else>
 		<fieldset>
 		<legend>${label_digg}</legend>
-		<#if isExtendInstalled?? && isExtendInstalled >
+		<#if isExtendInstalled?? && isExtendInstalled && view?has_content && view != "view_digg_submit" >
 				@Extender[${id_digg},DIGGLIKE_DIGG_TYPE,opengraph,{header:false,footer:false}]@
+				@ExtenderParameter[${id_digg},DIGGLIKE_DIGG_TYPE,opengraph]@
 		</#if>
 		
 			<#if header_digg?has_content>

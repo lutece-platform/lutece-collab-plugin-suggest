@@ -759,13 +759,17 @@ public final class DiggUtils
      */
     public static void getHtmlResponseEntry( Response response, StringBuffer stringBuffer, Locale locale, boolean bTitle )
     {
-        HashMap model = new HashMap(  );
-        HtmlTemplate template;
-        model.put( MARK_RESPONSE, response );
-        model.put( MARK_IS_TITLE, bTitle );
-        template = AppTemplateService.getTemplate( response.getEntry(  ).getTemplateHtmlCodeResponse(  ), locale, model );
-        stringBuffer.append( template.getHtml(  ) );
-    }
+    	if( response!=null && response.getEntry( )!=null)
+        {
+        
+	    	HashMap model = new HashMap(  );
+	        HtmlTemplate template;
+	        model.put( MARK_RESPONSE, response );
+	        model.put( MARK_IS_TITLE, bTitle );
+	        	template = AppTemplateService.getTemplate( response.getEntry(  ).getTemplateHtmlCodeResponse(  ), locale, model );
+	        stringBuffer.append( template.getHtml(  ) );
+        }
+       }
 
     /**
      * return  the content of the html code of the digg submit
@@ -810,7 +814,7 @@ public final class DiggUtils
 
         for ( Response response : diggSubmit.getResponses(  ) )
         {
-            if ( ( response.getValueResponse(  ) != null ) && response.getEntry(  ).isShowInDiggSubmitList(  ) )
+            if ( ( response.getValueResponse(  ) != null ) && response.getEntry(  ) !=null &&  response.getEntry(  ).isShowInDiggSubmitList(  ) )
             {
                 if ( ( nNumberCaractersInBuffer + response.getValueResponse(  ).length(  ) ) <= nNumberCaractersShown )
                 {

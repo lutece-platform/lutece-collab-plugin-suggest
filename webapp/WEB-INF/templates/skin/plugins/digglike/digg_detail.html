@@ -51,7 +51,8 @@
 		</a>
 	</#if>
 	<#if isExtendInstalled?? && isExtendInstalled >
-				@Extender[${digg_submit.idDiggSubmit},DIGGLIKE_DIGG_SUBMIT_TYPE,opengraph,{header:false,footer:false}]@
+		@Extender[${digg_submit.idDiggSubmit},DIGGLIKE_DIGG_SUBMIT_TYPE,opengraph,{header:false,footer:false}]@
+		@ExtenderParameter[${digg_submit.idDiggSubmit},DIGGLIKE_DIGG_SUBMIT_TYPE,opengraph]@	
 	</#if>
 	<hr>
 	<#if authorized_comment && !digg_submit.disableComment>
