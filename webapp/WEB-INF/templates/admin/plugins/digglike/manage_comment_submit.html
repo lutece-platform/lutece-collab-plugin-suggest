@@ -251,7 +251,8 @@
 <#include "/util/editor/editor.html" />
 <script>
 $(document).ready( function () {
-	/* Search modal */	
+	/* Search modal */
+	$("head").append('<link href="css/admin/bootstrap-modal.css" rel="stylesheet">');
 	$("#myModalCommentSearch").addClass("modal hide fade modal-top");
 	
 	/* Add reinit button if a query has been set */
@@ -285,7 +286,6 @@ $(document).ready( function () {
             nav.removeClass("f-nav offset3 span9");
         }
     });
-
 	
 	var addUp = true;
 	$("div.commentComments").toggle();
