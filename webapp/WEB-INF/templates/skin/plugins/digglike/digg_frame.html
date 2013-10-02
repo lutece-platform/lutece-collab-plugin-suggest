@@ -6,7 +6,40 @@
 		</div>
 	<#else>
 		<fieldset>
-		<legend>${label_digg}</legend>
+		<legend>
+			${label_digg}
+			<#if lutece_user_connected?? && user_subscribed??>
+				<div class="pull-right">
+					<#if id_filter_category==-1> 
+						<#if user_subscribed>
+							<a class="btn btn-small btn-danger" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;action=unsubscribe_digg" title="#i18n{digglike.diggListSubmit.unsubscribeDiggHelp}">
+								<i class="icon-eye-close icon-white">&nbsp;</i>&nbsp;#i18n{digglike.diggListSubmit.unsubscribeDigg}
+							</a>
+						<#else>
+							<a class="btn btn-small btn-primary" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;action=subscribe_digg" title="#i18n{digglike.diggListSubmit.subscribeDiggHelp}">
+								<i class="icon-eye-open icon-white">&nbsp;</i>&nbsp;#i18n{digglike.diggListSubmit.subscribeDigg}
+							</a>
+						</#if>
+					<#else>
+						<#if list_categories_digg??>
+							<#list list_categories_digg as digg_categories>
+								<#if id_filter_category==digg_categories.idCategory>
+									<#if user_subscribed?? && user_subscribed>
+										<a class="btn btn-small btn-danger" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;action=unsubscribe_digg&amp;id_filter_category=${digg_categories.idCategory}" title="#i18n{digglike.diggListSubmit.unsubscribeCategoryHelp}">
+											<i class="icon-eye-close icon-white">&nbsp;</i>&nbsp;#i18n{digglike.diggListSubmit.unsubscribeCategory} '${digg_categories.title}'
+										</a>
+									<#else>
+										<a class="btn btn-small btn-primary" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;action=subscribe_digg&amp;id_filter_category=${digg_categories.idCategory}" title="#i18n{digglike.diggListSubmit.subscribeCategoryHelp}">
+											<i class="icon-eye-open icon-white">&nbsp;</i>&nbsp;#i18n{digglike.diggListSubmit.subscribeCategory} '${digg_categories.title}'
+										</a>
+									</#if>
+								</#if>
+							</#list>
+						</#if>
+					</#if>
+				</div>
+			</#if>
+		</legend>
 		<#if isExtendInstalled?? && isExtendInstalled && view?has_content && view != "view_digg_submit" >
 				@Extender[${id_digg},DIGGLIKE_DIGG_TYPE,opengraph,{header:false,footer:false}]@
 				@ExtenderParameter[${id_digg},DIGGLIKE_DIGG_TYPE,opengraph]@

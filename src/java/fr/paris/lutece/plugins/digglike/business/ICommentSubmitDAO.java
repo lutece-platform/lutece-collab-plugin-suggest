@@ -36,7 +36,7 @@ package fr.paris.lutece.plugins.digglike.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.sql.Timestamp;
-
+import java.util.Date;
 import java.util.List;
 
 
@@ -99,10 +99,18 @@ public interface ICommentSubmitDAO
     List<CommentSubmit> selectListByFilter( SubmitFilter filter,Integer nLimit, Plugin plugin );
 
     /**
-     * return the number  of all the commentSubmit who verify the filter
+     * Get the list of comments posted after a given date
+     * @param dateCreation The creation date of comments
+     * @param plugin The plugin
+     * @return The list of comments, or an empty list if no comments was found
+     */
+    List<CommentSubmit> findDiggCommentByDate( Date dateCreation, Plugin plugin );
+
+    /**
+     * return the number of all the commentSubmit who verify the filter
      * @param filter the filter
      * @param plugin the plugin
-     * @return  the number  of all the commentSubmit who verify the filter
+     * @return the number of all the commentSubmit who verify the filter
      */
     int selectCountByFilter( SubmitFilter filter, Plugin plugin );
 

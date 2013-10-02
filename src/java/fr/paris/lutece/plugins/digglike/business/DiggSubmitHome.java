@@ -33,9 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.paris.lutece.plugins.digglike.service.CommentSubmitService;
 import fr.paris.lutece.plugins.digglike.service.search.DigglikeIndexer;
 import fr.paris.lutece.plugins.digglike.utils.DiggIndexerUtils;
@@ -45,6 +42,9 @@ import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  *class FormSubmitHome
@@ -52,8 +52,7 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 public final class DiggSubmitHome
 {
     // Static variable pointed at the DAO instance
-    private static IDiggSubmitDAO _dao = (IDiggSubmitDAO) SpringContextService.getPluginBean( "digglike",
-            "digglike.diggSubmitDAO" );
+    private static IDiggSubmitDAO _dao = SpringContextService.getBean( "digglike.diggSubmitDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -92,9 +91,9 @@ public final class DiggSubmitHome
 
     /**
      * Update of the diggSubmit which is specified in parameter
-     * @param diggSubmit
-     * @param bUpdateIndex
-     * @param plugin
+     * @param diggSubmit The digg submit
+     * @param bUpdateIndex The update index
+     * @param plugin The plugin
      */
     public static void update( DiggSubmit diggSubmit, boolean bUpdateIndex, Plugin plugin )
     {
@@ -325,7 +324,7 @@ public final class DiggSubmitHome
      * @return int the max order
      * @param plugin The Plugin object
      */
-    public static int getMaxOrderList( int nIdDigg,boolean bListPinned, Plugin plugin )
+    public static int getMaxOrderList( int nIdDigg, boolean bListPinned, Plugin plugin )
     {
         return _dao.maxOrderDiggSubmit( nIdDigg,bListPinned, plugin );
     }

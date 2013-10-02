@@ -33,144 +33,146 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.util.List;
-
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitTypeCacheService;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
+import java.util.List;
+
 
 /**
- *class DiggSubmitTypeHome
+ * class DiggSubmitTypeHome
  */
 public final class DiggSubmitTypeHome
 {
     // Static variable pointed at the DAO instance
-    private static IDiggSubmitTypeDAO _dao = (IDiggSubmitTypeDAO) SpringContextService.getPluginBean( "digglike",
-            "digglike.diggSubmitTypeDAO" );
-    private static AbstractCacheableService _cache = new DiggSubmitTypeCacheService();
+    private static IDiggSubmitTypeDAO _dao = SpringContextService.getBean( "digglike.diggSubmitTypeDAO" );
+    private static AbstractCacheableService _cache = new DiggSubmitTypeCacheService( );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private DiggSubmitTypeHome(  )
+    private DiggSubmitTypeHome( )
     {
     }
 
     /**
      * Creation of an instance of diggSubmitType
-     *
-     * @param diggSubmitType The instance of the diggSubmitType which contains the informations to store
+     * 
+     * @param diggSubmitType The instance of the diggSubmitType which contains
+     *            the informations to store
      * @param plugin the Plugin
      * @return the id of the new diggSubmitType
-     *
+     * 
      */
     public static int create( DiggSubmitType diggSubmitType, Plugin plugin )
     {
-        
-    	if(diggSubmitType.getPictogram()!=null)
-    	{
-    		diggSubmitType.setIdImageResource(ImageResourceHome.create(diggSubmitType.getPictogram(), plugin));
-    	}
-    	return _dao.insert( diggSubmitType, plugin );
+
+        if ( diggSubmitType.getPictogram( ) != null )
+        {
+            diggSubmitType.setIdImageResource( ImageResourceHome.create( diggSubmitType.getPictogram( ), plugin ) );
+        }
+        return _dao.insert( diggSubmitType, plugin );
     }
 
     /**
-    * Update of the diggSubmitType which is specified in parameter
-    *
-    * @param diggSubmitType The instance of the diggSubmitType which contains the informations to update
-    * @param plugin the Plugin
-    *
-    */
+     * Update of the diggSubmitType which is specified in parameter
+     * 
+     * @param diggSubmitType The instance of the diggSubmitType which contains
+     *            the informations to update
+     * @param plugin the Plugin
+     * 
+     */
     public static void update( DiggSubmitType diggSubmitType, Plugin plugin )
     {
-    	
-    	if(diggSubmitType.getPictogram()!=null)
-    	{
-    		//remove old image if exist
-    		if(diggSubmitType.getIdImageResource()!=null)
-    		{
-    			ImageResourceHome.remove(diggSubmitType.getIdImageResource(), plugin);
-    		}
-    		if(diggSubmitType.getPictogram().getImage() !=null)
-    		{
-    			diggSubmitType.setIdImageResource(ImageResourceHome.create(diggSubmitType.getPictogram(), plugin));
-    		}
-    		else
-    		{
-    			diggSubmitType.setIdImageResource(null);
-    		}
-    	}
-    	
+
+        if ( diggSubmitType.getPictogram( ) != null )
+        {
+            //remove old image if exist
+            if ( diggSubmitType.getIdImageResource( ) != null )
+            {
+                ImageResourceHome.remove( diggSubmitType.getIdImageResource( ), plugin );
+            }
+            if ( diggSubmitType.getPictogram( ).getImage( ) != null )
+            {
+                diggSubmitType.setIdImageResource( ImageResourceHome.create( diggSubmitType.getPictogram( ), plugin ) );
+            }
+            else
+            {
+                diggSubmitType.setIdImageResource( null );
+            }
+        }
+
         _dao.store( diggSubmitType, plugin );
-        _cache.removeKey( DiggUtils.EMPTY_STRING +diggSubmitType.getIdType() );
+        _cache.removeKey( DiggUtils.EMPTY_STRING + diggSubmitType.getIdType( ) );
     }
 
     /**
      * Remove the diggSubmitType whose identifier is specified in parameter
-     *
+     * 
      * @param nIdDiggSubmitType The diggSubmitType
      * @param plugin the Plugin
      */
     public static void remove( int nIdDiggSubmitType, Plugin plugin )
     {
-       
-    	DiggSubmitType diggSubmitType=findByPrimaryKey(nIdDiggSubmitType, plugin);
-    	if(diggSubmitType!=null && diggSubmitType.getIdImageResource()!=null)
-    	{
-    		ImageResourceHome.remove(diggSubmitType.getIdImageResource(), plugin);
-    	}
-    	_dao.delete( nIdDiggSubmitType, plugin );
-        _cache.removeKey( DiggUtils.EMPTY_STRING +nIdDiggSubmitType );
+
+        DiggSubmitType diggSubmitType = findByPrimaryKey( nIdDiggSubmitType, plugin );
+        if ( diggSubmitType != null && diggSubmitType.getIdImageResource( ) != null )
+        {
+            ImageResourceHome.remove( diggSubmitType.getIdImageResource( ), plugin );
+        }
+        _dao.delete( nIdDiggSubmitType, plugin );
+        _cache.removeKey( DiggUtils.EMPTY_STRING + nIdDiggSubmitType );
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
-     * Returns an instance of a diggSubmitType whose identifier is specified in parameter
-     *
+     * Returns an instance of a diggSubmitType whose identifier is specified in
+     * parameter
+     * 
      * @param nKey The diggSubmitType primary key
      * @param plugin the Plugin
      * @return an instance of DiggSubmit
      */
     public static DiggSubmitType findByPrimaryKey( int nKey, Plugin plugin )
     {
-    	DiggSubmitType diggSubmitType=(DiggSubmitType)_cache.getFromCache( DiggUtils.EMPTY_STRING +nKey);
-    	if(diggSubmitType==null)
-    	{
-    		diggSubmitType=_dao.load( nKey, plugin );
-    		_cache.putInCache( DiggUtils.EMPTY_STRING +nKey , diggSubmitType );
-    	}
-    	return diggSubmitType;
+        DiggSubmitType diggSubmitType = (DiggSubmitType) _cache.getFromCache( DiggUtils.EMPTY_STRING + nKey );
+        if ( diggSubmitType == null )
+        {
+            diggSubmitType = _dao.load( nKey, plugin );
+            _cache.putInCache( DiggUtils.EMPTY_STRING + nKey, diggSubmitType );
+        }
+        return diggSubmitType;
     }
 
-   
     /**
-     * Load the data of all the diggSubmitType who verify the filter and returns them in a  list
+     * Load the data of all the diggSubmitType who verify the filter and returns
+     * them in a list
      * @param plugin the plugin
-     * @return  the list of diggSubmit
+     * @return the list of diggSubmit
      */
     public static List<DiggSubmitType> getList( Plugin plugin )
     {
         return _dao.selectList( plugin );
     }
-    
+
     /**
      * Returns a list of all category associate to the digg
      * @param nIdDigg the id digg
      * @param plugin the plugin
-     * @return  the list of category
+     * @return the list of category
      */
     public static List<DiggSubmitType> getListByIdDigg( int nIdDigg, Plugin plugin )
     {
         return _dao.selectListByIdDigg( nIdDigg, plugin );
     }
-    
+
     /**
-     * true if there is a  digg associate to the DiggSubmitType
+     * true if there is a digg associate to the DiggSubmitType
      * @param nIdDiggSubmitType the key of the digg submit type
      * @param plugin the plugin
      * @return true if there is a digg associate to the DiggSubmitType
@@ -179,10 +181,10 @@ public final class DiggSubmitTypeHome
     {
         return _dao.isAssociateToDigg( nIdDiggSubmitType, plugin );
     }
-    
+
     /**
      * Delete an association between digg and a digg submit type
-     *
+     * 
      * @param nIdDigg The identifier of the digg
      * @param nIdDiggSubmitType nIdDiggSubmitType
      * @param plugin the plugin
@@ -194,7 +196,7 @@ public final class DiggSubmitTypeHome
 
     /**
      * insert an association between digg and a digg submit type
-     *
+     * 
      * @param nIdDigg The identifier of the digg
      * @param nIdDiggSubmitType nIdDiggSubmitType
      * @param plugin the plugin

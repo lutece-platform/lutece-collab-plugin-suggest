@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.business.rss;
 
-
 //import fr.paris.lutece.plugins.digglike.service.DirectoryPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -47,19 +46,18 @@ import java.util.List;
 public final class DiggResourceRssConfigHome
 {
     // Static variable pointed at the DAO instance
-    private static IDiggResourceRssConfigDAO _dao = (IDiggResourceRssConfigDAO) SpringContextService.getPluginBean( "digglike",
-            "resourceRssDigglikeConfigDAO" );
+    private static IDiggResourceRssConfigDAO _dao = SpringContextService.getBean( "resourceRssDigglikeConfigDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private DiggResourceRssConfigHome(  )
+    private DiggResourceRssConfigHome( )
     {
     }
 
     /**
      * Insert new configuration
-     *
+     * 
      * @param config object configuration
      * @param plugin the plugin
      */
@@ -70,7 +68,7 @@ public final class DiggResourceRssConfigHome
 
     /**
      * Update a configuration
-     *
+     * 
      * @param config object configuration
      * @param plugin the plugin
      */
@@ -94,7 +92,7 @@ public final class DiggResourceRssConfigHome
      * @param nIdDiggResourceRssConfig id task
      * @param plugin the plugin
      * @return a configuration
-     *
+     * 
      */
     public static DiggResourceRssConfig findByPrimaryKey( int nIdDiggResourceRssConfig, Plugin plugin )
     {
@@ -107,7 +105,7 @@ public final class DiggResourceRssConfigHome
      * Load All DigglikeResourceRssConfig
      * @param plugin the plugin
      * @return a list of DigglikeResourceRssConfig
-     *
+     * 
      */
     public static List<DiggResourceRssConfig> getAll( Plugin plugin )
     {

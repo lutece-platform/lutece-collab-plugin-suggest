@@ -33,35 +33,36 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.sql.Timestamp;
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+
 
 /**
- *class CommentSubmitHome
+ * class CommentSubmitHome
  */
 public final class CommentSubmitHome
 {
     // Static variable pointed at the DAO instance
-    private static ICommentSubmitDAO _dao = (ICommentSubmitDAO) SpringContextService.getPluginBean( "digglike",
-            "digglike.commentSubmitDAO" );
+    private static ICommentSubmitDAO _dao = SpringContextService.getBean( "digglike.commentSubmitDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private CommentSubmitHome(  )
+    private CommentSubmitHome( )
     {
     }
 
     /**
      * Creation of an instance of commentSubmit
-     *
-     * @param commentSubmit The instance of the commentSubmit which contains the informations to store
+     * 
+     * @param commentSubmit The instance of the commentSubmit which contains the
+     *            informations to store
      * @param plugin the Plugin
-     *
+     * 
      */
     public static void create( CommentSubmit commentSubmit, Plugin plugin )
     {
@@ -70,10 +71,11 @@ public final class CommentSubmitHome
 
     /**
      * Update of the commentSubmit which is specified in parameter
-     *
-     * @param commentSubmit The instance of the commentSubmit which contains the informations to update
+     * 
+     * @param commentSubmit The instance of the commentSubmit which contains the
+     *            informations to update
      * @param plugin the Plugin
-     *
+     * 
      */
     public static void update( CommentSubmit commentSubmit, Plugin plugin )
     {
@@ -81,11 +83,12 @@ public final class CommentSubmitHome
     }
 
     /**
-     * Update of the commentSubmit which is specified in parameter
-     *
-     * @param commentSubmit The instance of the commentSubmit which contains the informations to update
+     * Update the modification date of the commentSubmit which is specified in
+     * parameter
+     * @param dateModify The new date of modification of the commentSubmit
+     * @param idCommentSubmit The id of the comment submit to update
      * @param plugin the Plugin
-     *
+     * 
      */
     public static void updateDateModify( Timestamp dateModify, int idCommentSubmit, Plugin plugin )
     {
@@ -94,7 +97,7 @@ public final class CommentSubmitHome
 
     /**
      * Remove the commentSubmit whose identifier is specified in parameter
-     *
+     * 
      * @param nIdCommentSubmit The commentSubmitId
      * @param plugin the Plugin
      */
@@ -102,10 +105,11 @@ public final class CommentSubmitHome
     {
         _dao.delete( nIdCommentSubmit, plugin );
     }
-    
+
     /**
-     * Remove the commentSubmit whose parent identifier is specified in parameter
-     *
+     * Remove the commentSubmit whose parent identifier is specified in
+     * parameter
+     * 
      * @param nIdParentCommentSubmit The parent identifier
      * @param plugin the Plugin
      */
@@ -113,14 +117,14 @@ public final class CommentSubmitHome
     {
         _dao.deleteByIdParent( nIdParentCommentSubmit, plugin );
     }
-    
 
     ///////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
-     * Returns an instance of a CommentSubmitwhose identifier is specified in parameter
-     *
+     * Returns an instance of a CommentSubmitwhose identifier is specified in
+     * parameter
+     * 
      * @param nKey The commentSubmit primary key
      * @param plugin the Plugin
      * @return an instance of commentSubmit
@@ -130,28 +134,35 @@ public final class CommentSubmitHome
         return _dao.load( nKey, plugin );
     }
 
-
-    
+    /**
+     * Load the data of all the commentSubmit who verify the filter and returns
+     * them in a list
+     * @param filter the filter
+     * @param nLimit the number limit of comment return
+     * @param plugin the plugin
+     * @return the list of commentSubmit
+     */
+    public static List<CommentSubmit> getCommentSubmitList( SubmitFilter filter, Integer nLimit, Plugin plugin )
+    {
+        return _dao.selectListByFilter( filter, nLimit, plugin );
+    }
 
     /**
-        * Load the data of all the commentSubmit who verify the filter and returns them in a  list
-        * @param filter the filter
-        * @param nLimit the number limit of comment return
-        * @param plugin the plugin
-        * @return  the list of commentSubmit
-        */
-    public static List<CommentSubmit> getCommentSubmitList( SubmitFilter filter,Integer nLimit, Plugin plugin )
+     * Get the list of comments posted after a given date
+     * @param dateCreation The creation date of comments
+     * @param plugin The plugin
+     * @return The list of comments, or an empty list if no comments was found
+     */
+    public static List<CommentSubmit> findDiggCommentByDate( Date dateCreation, Plugin plugin )
     {
-        return  _dao.selectListByFilter( filter, nLimit,plugin );
+        return _dao.findDiggCommentByDate( dateCreation, plugin );
     }
-    
-    
 
     /**
      * Load the number of all the commentSubmit who verify the filter
      * @param filter the filter
      * @param plugin the plugin
-     * @return  the number of all the commentSubmit who verify the filter
+     * @return the number of all the commentSubmit who verify the filter
      */
     public static int getCountCommentSubmit( SubmitFilter filter, Plugin plugin )
     {

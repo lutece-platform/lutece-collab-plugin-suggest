@@ -80,5 +80,11 @@
             <daemon-description>digglike.daemon.digglikePublication.description</daemon-description>
             <daemon-class>fr.paris.lutece.plugins.digglike.service.publication.DaemonPublication</daemon-class>
         </daemon>
+        <daemon>
+            <daemon-id>diggSubscribersNotificationDaemon</daemon-id>
+            <daemon-name>digglike.daemon.diggSubscribersNotificationDaemon.name</daemon-name>
+            <daemon-description>digglike.daemon.diggSubscribersNotificationDaemon.description</daemon-description>
+            <daemon-class>fr.paris.lutece.plugins.digglike.service.subscription.DiggSubscribersNotificationDaemon</daemon-class>
+        </daemon>
     </daemons>
 </plug-in>

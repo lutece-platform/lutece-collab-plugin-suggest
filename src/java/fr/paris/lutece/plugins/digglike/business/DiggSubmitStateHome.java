@@ -40,29 +40,29 @@ import java.util.List;
 
 
 /**
- *
- *class category Home
- *
+ * 
+ * class category Home
+ * 
  */
 public final class DiggSubmitStateHome
 {
     // Static variable pointed at the DAO instance
-    private static IDiggSubmitStateDAO _dao = (IDiggSubmitStateDAO) SpringContextService.getPluginBean( "digglike",
-            "digglike.diggSubmitStateDAO" );
+    private static IDiggSubmitStateDAO _dao = SpringContextService.getBean( "digglike.diggSubmitStateDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private DiggSubmitStateHome(  )
+    private DiggSubmitStateHome( )
     {
     }
 
     /**
-     * Returns an instance of a Digg submit state whose identifier is specified in parameter
-     *
-     * @param idKey The digg submit state  primary key
+     * Returns an instance of a Digg submit state whose identifier is specified
+     * in parameter
+     * 
+     * @param idKey The digg submit state primary key
      * @param plugin the Plugin
-     * @return an instance  of a Digg submit
+     * @return an instance of a Digg submit
      */
     public static DiggSubmitState findByPrimaryKey( int idKey, Plugin plugin )
     {
@@ -70,11 +70,12 @@ public final class DiggSubmitStateHome
     }
 
     /**
-     * Returns an instance of a Digg submit state whose numero is specified in parameter
-     *
+     * Returns an instance of a Digg submit state whose numero is specified in
+     * parameter
+     * 
      * @param numero The digg submit state numero
      * @param plugin the Plugin
-     * @return an instance  of a Digg submit
+     * @return an instance of a Digg submit
      */
     public static DiggSubmitState findByNumero( int numero, Plugin plugin )
     {
@@ -82,11 +83,11 @@ public final class DiggSubmitStateHome
     }
 
     /**
-        * Returns a list of all Digg submit state
-        *
-        * @param plugin the plugin
-        * @return  the list of Digg submit state
-        */
+     * Returns a list of all Digg submit state
+     * 
+     * @param plugin the plugin
+     * @return the list of Digg submit state
+     */
     public static List<DiggSubmitState> getList( Plugin plugin )
     {
         return _dao.select( plugin );

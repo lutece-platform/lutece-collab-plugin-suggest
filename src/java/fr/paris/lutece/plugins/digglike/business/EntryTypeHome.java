@@ -40,26 +40,26 @@ import java.util.List;
 
 
 /**
- *
+ * 
  * class EntryTypeHome
- *
+ * 
  */
 public final class EntryTypeHome
 {
     // Static variable pointed at the DAO instance
-    private static IEntryTypeDAO _dao = (IEntryTypeDAO) SpringContextService.getPluginBean( "digglike",
-            "digglike.entryTypeDAO" );
+    private static IEntryTypeDAO _dao = SpringContextService.getBean( "digglike.entryTypeDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private EntryTypeHome(  )
+    private EntryTypeHome( )
     {
     }
 
     /**
-     * Returns an instance of a  EntryType whose identifier is specified in parameter
-     *
+     * Returns an instance of a EntryType whose identifier is specified in
+     * parameter
+     * 
      * @param nKey The entry type primary key
      * @param plugin the Plugin
      * @return an instance of EntryType
@@ -70,11 +70,11 @@ public final class EntryTypeHome
     }
 
     /**
-         * Returns a list of all EntryType
-         *
-         * @param plugin the plugin
-         * @return  the list of entry
-         */
+     * Returns a list of all EntryType
+     * 
+     * @param plugin the plugin
+     * @return the list of entry
+     */
     public static List<EntryType> getList( Plugin plugin )
     {
         return _dao.select( plugin );

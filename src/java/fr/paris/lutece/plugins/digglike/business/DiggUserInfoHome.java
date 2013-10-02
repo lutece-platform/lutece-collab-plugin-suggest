@@ -38,51 +38,48 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 
 /**
- *class DiggUserInfoHome
+ * class DiggUserInfoHome
  */
 public final class DiggUserInfoHome
 {
     // Static variable pointed at the DAO instance
-    private static IDiggUserInfoDAO _dao = (IDiggUserInfoDAO) SpringContextService.getBean( "digglike.diggUserInfoDAO" );
+    private static IDiggUserInfoDAO _dao = SpringContextService.getBean( "digglike.diggUserInfoDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private DiggUserInfoHome(  )
+    private DiggUserInfoHome( )
     {
     }
 
-   
     /**
      * create diggUserInfo
-     * @param diggUserInfo  diggUserInfo
+     * @param diggUserInfo diggUserInfo
      * @param plugin the plugin
      */
     public static void create( DiggUserInfo diggUserInfo, Plugin plugin )
     {
-        	_dao.insert( diggUserInfo, plugin );
+        _dao.insert( diggUserInfo, plugin );
     }
 
-   
     /**
      * update diggUserInfo
      * @param diggUserInfo diggUserInfo
      * @param plugin the plugin
-     */ 
+     */
     public static void update( DiggUserInfo diggUserInfo, Plugin plugin )
     {
-        _dao.update(diggUserInfo, plugin );
+        _dao.update( diggUserInfo, plugin );
     }
 
-  
     /**
      * remove DiggUserInfo
-     * @param strLuteceUserKey the  key
+     * @param strLuteceUserKey the key
      * @param plugin the plugin
      */
     public static void remove( String strLuteceUserKey, Plugin plugin )
     {
-        _dao.delete(strLuteceUserKey, plugin);
+        _dao.delete( strLuteceUserKey, plugin );
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -99,5 +96,4 @@ public final class DiggUserInfoHome
         return _dao.load( strLuteceUserKey, plugin );
     }
 
-   
 }

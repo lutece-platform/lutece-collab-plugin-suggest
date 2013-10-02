@@ -33,34 +33,35 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
+import java.util.List;
+
 
 /**
- * This class provides instances management methods (create, find, ...) for Response objects
+ * This class provides instances management methods (create, find, ...) for
+ * Response objects
  */
 public final class ResponseHome
 {
     // Static variable pointed at the DAO instance
-    private static IResponseDAO _dao = (IResponseDAO) SpringContextService.getPluginBean( "digglike",
-            "digglike.responseDAO" );
+    private static IResponseDAO _dao = SpringContextService.getBean( "digglike.responseDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private ResponseHome(  )
+    private ResponseHome( )
     {
     }
 
     /**
      * Creation of an instance of response
-     *
-     * @param response The instance of the response which contains the informations to store
+     * 
+     * @param response The instance of the response which contains the
+     *            informations to store
      * @param plugin the Plugin
-     *
+     * 
      */
     public static void create( Response response, Plugin plugin )
     {
@@ -69,10 +70,11 @@ public final class ResponseHome
 
     /**
      * Update of the response which is specified in parameter
-     *
-     * @param response The instance of the Response which contains the informations to update
+     * 
+     * @param response The instance of the Response which contains the
+     *            informations to update
      * @param plugin the Plugin
-     *
+     * 
      */
     public static void update( Response response, Plugin plugin )
     {
@@ -80,8 +82,9 @@ public final class ResponseHome
     }
 
     /**
-     * Remove  response  associate to the digg submit whose identifier is specified in parameter
-     *
+     * Remove response associate to the digg submit whose identifier is
+     * specified in parameter
+     * 
      * @param nIdResponse The diggSubmitKey
      * @param plugin the Plugin
      */
@@ -89,16 +92,14 @@ public final class ResponseHome
     {
         _dao.delete( nIdResponse, plugin );
     }
-    
-    
-   
 
     ///////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
-     * Returns an instance of a Response whose identifier is specified in parameter
-     *
+     * Returns an instance of a Response whose identifier is specified in
+     * parameter
+     * 
      * @param nKey The entry primary key
      * @param plugin the Plugin
      * @return an instance of Response
@@ -109,17 +110,15 @@ public final class ResponseHome
     }
 
     /**
-         * Load the data of all the response who verify the filter and returns them in a  list
-         * @param filter the filter
-         * @param plugin the plugin
-         * @return  the list of response
-         */
+     * Load the data of all the response who verify the filter and returns them
+     * in a list
+     * @param filter the filter
+     * @param plugin the plugin
+     * @return the list of response
+     */
     public static List<Response> getResponseList( SubmitFilter filter, Plugin plugin )
     {
         return _dao.selectListByFilter( filter, plugin );
     }
 
-   
-    
-   
 }

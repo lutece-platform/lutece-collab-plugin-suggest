@@ -38,26 +38,26 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 
 /**
- *
- *class voteTypeHome
- *
+ * 
+ * class voteTypeHome
+ * 
  */
 public final class VideoTypeHome
 {
     // Static variable pointed at the DAO instance
-    private static IVideoTypeDAO _dao = (IVideoTypeDAO) SpringContextService.getPluginBean( "digglike",
-            "digglike.videoTypeDAO" );
+    private static IVideoTypeDAO _dao = SpringContextService.getBean( "digglike.videoTypeDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private VideoTypeHome(  )
+    private VideoTypeHome( )
     {
     }
 
     /**
-     * Returns an instance of a video Type whose identifier is specified in parameter
-     *
+     * Returns an instance of a video Type whose identifier is specified in
+     * parameter
+     * 
      * @param idKey The video type primary key
      * @param plugin the Plugin
      * @return an instance of voteType
@@ -69,24 +69,25 @@ public final class VideoTypeHome
 
     /**
      * Creation of an instance of diggSubmit
-     *
-     * @param videoType The instance of the videoType which contains the informations to store
+     * 
+     * @param videoType The instance of the videoType which contains the
+     *            informations to store
      * @param plugin the Plugin
      * @return the id of the new videoType
      * @throws com.mysql.jdbc.PacketTooBigException Exception
      */
-    public static int create( VideoType videoType, Plugin plugin )
-        throws com.mysql.jdbc.PacketTooBigException
+    public static int create( VideoType videoType, Plugin plugin ) throws com.mysql.jdbc.PacketTooBigException
     {
         return _dao.insert( videoType, plugin );
     }
 
     /**
      * Update of the diggSubmit which is specified in parameter
-     *
-     * @param video The instance of the videoType which contains the informations to update
+     * 
+     * @param video The instance of the videoType which contains the
+     *            informations to update
      * @param plugin the Plugin
-     *
+     * 
      */
     public static void update( VideoType video, Plugin plugin )
     {
@@ -95,7 +96,7 @@ public final class VideoTypeHome
 
     /**
      * Remove the video whose identifier is specified in parameter
-     *
+     * 
      * @param nIdDiggSubmit The identifier of the nIdDiggSubmit / Video
      * @param plugin the Plugin
      */

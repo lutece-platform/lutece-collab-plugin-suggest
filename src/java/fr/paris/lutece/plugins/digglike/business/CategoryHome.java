@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.digglike.business;
 
 import fr.paris.lutece.plugins.digglike.service.DiggCategoryCacheService;
-import fr.paris.lutece.plugins.digglike.service.DiggSubmitTypeCacheService;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -51,8 +50,7 @@ import java.util.List;
 public final class CategoryHome
 {
     // Static variable pointed at the DAO instance
-    private static ICategoryDAO _dao = (ICategoryDAO) SpringContextService.getPluginBean( "digglike",
-            "digglike.categoryDAO" );
+    private static ICategoryDAO _dao = SpringContextService.getBean( "digglike.categoryDAO" );
     private static AbstractCacheableService _cache = new DiggCategoryCacheService();
 
     /**

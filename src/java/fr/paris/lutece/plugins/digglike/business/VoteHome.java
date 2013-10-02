@@ -40,28 +40,29 @@ import java.util.List;
 
 
 /**
- *
- *class voteHome
- *
+ * 
+ * class voteHome
+ * 
  */
 public final class VoteHome
 {
     // Static variable pointed at the DAO instance
-    private static IVoteDAO _dao = (IVoteDAO) SpringContextService.getPluginBean( "digglike", "digglike.voteDAO" );
+    private static IVoteDAO _dao = SpringContextService.getBean( "digglike.voteDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private VoteHome(  )
+    private VoteHome( )
     {
     }
 
     /**
      * Creation of an instance of vote
-     *
-     * @param vote The instance of the Digg which contains the informations to store
+     * 
+     * @param vote The instance of the Digg which contains the informations to
+     *            store
      * @param plugin the Plugin
-     *
+     * 
      */
     public static void create( Vote vote, Plugin plugin )
     {
@@ -72,7 +73,8 @@ public final class VoteHome
      * Load the data of all vote associate to the digg submit
      * @param nIdDiggSubmit the id of the digg submit
      * @param plugin the plugin
-     * @return  the list of vote button associated to the vote type  returns them in a  list
+     * @return the list of vote button associated to the vote type returns them
+     *         in a list
      */
     public static List<Vote> getListVoteByIdDiggSubmit( int nIdDiggSubmit, Plugin plugin )
     {

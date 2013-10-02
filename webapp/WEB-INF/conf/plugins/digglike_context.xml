@@ -50,6 +50,7 @@
     <bean id="diggExtendableResourceService" class="fr.paris.lutece.plugins.digglike.service.DiggExtendableResourceService" />
     <bean id="diggSubmitExtendableResourceService" class="fr.paris.lutece.plugins.digglike.service.DiggSubmitExtendableResourceService" />
 
+	<bean id="digglike.digglikeSubscriptionProviderService" class="fr.paris.lutece.plugins.digglike.service.subscription.DigglikeSubscriptionProviderService" />
 
 </beans>
  	

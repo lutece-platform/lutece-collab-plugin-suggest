@@ -40,27 +40,27 @@ import java.util.List;
 
 
 /**
- *class TagSubmitHome
+ * class TagSubmitHome
  */
 public final class TagSubmitHome
 {
     // Static variable pointed at the DAO instance
-    private static ITagSubmitDAO _dao = (ITagSubmitDAO) SpringContextService.getPluginBean( "digglike",
-            "digglike.tagSubmitDAO" );
+    private static ITagSubmitDAO _dao = SpringContextService.getBean( "digglike.tagSubmitDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private TagSubmitHome(  )
+    private TagSubmitHome( )
     {
     }
 
     /**
      * Creation of an instance of tagSubmit
-     *
-     * @param tagSubmit The instance of the tagSubmit which contains the informations to store
+     * 
+     * @param tagSubmit The instance of the tagSubmit which contains the
+     *            informations to store
      * @param plugin the Plugin
-     *
+     * 
      */
     public static void create( TagSubmit tagSubmit, Plugin plugin )
     {
@@ -69,10 +69,11 @@ public final class TagSubmitHome
 
     /**
      * Update of the tagSubmit which is specified in parameter
-     *
-     * @param tagSubmit The instance of the tagSubmit which contains the informations to update
+     * 
+     * @param tagSubmit The instance of the tagSubmit which contains the
+     *            informations to update
      * @param plugin the Plugin
-     *
+     * 
      */
     public static void update( TagSubmit tagSubmit, Plugin plugin )
     {
@@ -81,7 +82,7 @@ public final class TagSubmitHome
 
     /**
      * Remove the tagSubmit whose identifier is specified in parameter
-     *
+     * 
      * @param nIdTagSubmit The tagSubmitId
      * @param plugin the Plugin
      */
@@ -94,8 +95,9 @@ public final class TagSubmitHome
     // Finders
 
     /**
-     * Returns an instance of a TagSubmitwhose identifier is specified in parameter
-     *
+     * Returns an instance of a TagSubmitwhose identifier is specified in
+     * parameter
+     * 
      * @param nKey The tagSubmit primary key
      * @param plugin the Plugin
      * @return an instance of TagSubmit
@@ -106,11 +108,12 @@ public final class TagSubmitHome
     }
 
     /**
-        * Load the data of all the tagSubmit who verify the filter and returns them in a  list
-        * @param filter the filter
-        * @param plugin the plugin
-        * @return  the list of tagSubmit
-        */
+     * Load the data of all the tagSubmit who verify the filter and returns them
+     * in a list
+     * @param filter the filter
+     * @param plugin the plugin
+     * @return the list of tagSubmit
+     */
     public static List<TagSubmit> getTagSubmitList( SubmitFilter filter, Plugin plugin )
     {
         return _dao.selectListByFilter( filter, plugin );
@@ -120,7 +123,7 @@ public final class TagSubmitHome
      * Load the number of all the tagSubmit who verify the filter
      * @param filter the filter
      * @param plugin the plugin
-     * @return  the number of all the tagSubmit who verify the filter
+     * @return the number of all the tagSubmit who verify the filter
      */
     public static int getCountTagSubmit( SubmitFilter filter, Plugin plugin )
     {

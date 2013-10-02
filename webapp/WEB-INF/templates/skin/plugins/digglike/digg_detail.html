@@ -37,8 +37,20 @@
 			<#else>
 				${lutece_user.getUserInfo("user.name.given")} ${lutece_user.getUserInfo("user.name.family")}
 			</#if> 
-		</#if>	
-		
+		</#if>
+		<#if lutece_user_connected??>
+			<div class="pull-right">
+				<#if user_subscribed?? && user_subscribed>
+					<a class="btn btn-small btn-danger" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit.idDiggSubmit}&amp;action=unsubscribe_digg#digg${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.unsubscribe}">
+						<i class="icon-eye-close icon-white">&nbsp;</i>&nbsp;#i18n{digglike.manageDiggSubmit.unsubscribe}
+					</a>
+				<#else>
+					<a class="btn btn-small btn-primary" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit.idDiggSubmit}&amp;action=subscribe_digg#digg${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.subscribe}">
+						<i class="icon-eye-open icon-white">&nbsp;</i>&nbsp;#i18n{digglike.manageDiggSubmit.subscribe}
+					</a>
+				</#if>
+			</div>
+		</#if>
 	</p>
 	<#if digg_submit.diggSubmitValue?exists>
 		<div class="digg-list-content">	

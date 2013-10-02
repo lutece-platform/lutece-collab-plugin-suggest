@@ -40,26 +40,26 @@ import java.util.List;
 
 
 /**
- *
- *class voteTypeHome
- *
+ * 
+ * class voteTypeHome
+ * 
  */
 public final class VoteTypeHome
 {
     // Static variable pointed at the DAO instance
-    private static IVoteTypeDAO _dao = (IVoteTypeDAO) SpringContextService.getPluginBean( "digglike",
-            "digglike.voteTypeDAO" );
+    private static IVoteTypeDAO _dao = SpringContextService.getBean( "digglike.voteTypeDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private VoteTypeHome(  )
+    private VoteTypeHome( )
     {
     }
 
     /**
-     * Returns an instance of a  vote Type whose identifier is specified in parameter
-     *
+     * Returns an instance of a vote Type whose identifier is specified in
+     * parameter
+     * 
      * @param idKey The vote type primary key
      * @param plugin the Plugin
      * @return an instance of voteType
@@ -70,11 +70,11 @@ public final class VoteTypeHome
     }
 
     /**
-        * Returns a list of all vote Type
-        *
-        * @param plugin the plugin
-        * @return  the list of vote Type
-        */
+     * Returns a list of all vote Type
+     * 
+     * @param plugin the plugin
+     * @return the list of vote Type
+     */
     public static List<VoteType> getList( Plugin plugin )
     {
         return _dao.select( plugin );

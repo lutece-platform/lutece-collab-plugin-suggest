@@ -47,8 +47,7 @@ import java.util.Locale;
 public final class DiggActionHome
 {
     // Static variable pointed at the DAO instance
-    private static IDiggActionDAO _dao = (IDiggActionDAO) SpringContextService.getPluginBean( "digglike",
-            "digglike.diggActionDAO" );
+    private static IDiggActionDAO _dao = SpringContextService.getBean( "digglike.diggActionDAO" );
 
     /**
      * Private constructor - this class need not be instantiated

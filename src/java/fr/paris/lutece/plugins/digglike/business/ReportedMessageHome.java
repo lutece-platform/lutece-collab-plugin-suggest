@@ -33,48 +33,45 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.util.List;
-
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
+import java.util.List;
+
 
 /**
- *class ReportedMessageHome
+ * class ReportedMessageHome
  */
 public final class ReportedMessageHome
 {
     // Static variable pointed at the DAO instance
-    private static IReportedMessageDAO _dao = (IReportedMessageDAO) SpringContextService.getBean(
-            "digglike.reportedMessageDAO" );
+    private static IReportedMessageDAO _dao = SpringContextService.getBean( "digglike.reportedMessageDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private ReportedMessageHome(  )
+    private ReportedMessageHome( )
     {
     }
 
     /**
      * Creation of an instance of reported Message
-     *
-     * @param reportedMessage The instance of the reported Message which contains the informations to store
+     * 
+     * @param reportedMessage The instance of the reported Message which
+     *            contains the informations to store
      * @param plugin the Plugin
-     *
+     * 
      */
     public static void create( ReportedMessage reportedMessage, Plugin plugin )
     {
-    	reportedMessage.setDateReported(DiggUtils.getCurrentDate(  ) );
+        reportedMessage.setDateReported( DiggUtils.getCurrentDate( ) );
         _dao.insert( reportedMessage, plugin );
     }
 
-  
-
-  
     /**
      * Remove the reportedMessage whose identifier is specified in parameter
-     *
+     * 
      * @param nIdDiggSubmit The nIdDiggSubmit
      * @param plugin the Plugin
      */
@@ -87,8 +84,9 @@ public final class ReportedMessageHome
     // Finders
 
     /**
-     * Returns an instance of a reportedMessage whose  identifier is specified in parameter
-     *
+     * Returns an instance of a reportedMessage whose identifier is specified in
+     * parameter
+     * 
      * @param nKey The reportedMessage primary key
      * @param plugin the Plugin
      * @return an instance of commentSubmit
@@ -99,11 +97,12 @@ public final class ReportedMessageHome
     }
 
     /**
-        * Load the data of all the reportedMessage who is associated to the nIdDiggSubmit
-        * @param nIdDiggSubmit the nIdDiggSubmit
-        * @param plugin the plugin
-        * @return  the list of reportedMessage
-        */
+     * Load the data of all the reportedMessage who is associated to the
+     * nIdDiggSubmit
+     * @param nIdDiggSubmit the nIdDiggSubmit
+     * @param plugin the plugin
+     * @return the list of reportedMessage
+     */
     public static List<ReportedMessage> getReportedMessageByDiggSubmit( int nIdDiggSubmit, Plugin plugin )
     {
         return _dao.selectListByDiggSubmit( nIdDiggSubmit, plugin );

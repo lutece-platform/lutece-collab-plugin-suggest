@@ -43,26 +43,28 @@ import java.util.List;
 
 
 /**
- * This class provides instances management methods (create, find, ...) for Entry objects
+ * This class provides instances management methods (create, find, ...) for
+ * Entry objects
  */
 public final class EntryHome
 {
     // Static variable pointed at the DAO instance
-    private static IEntryDAO _dao = (IEntryDAO) SpringContextService.getPluginBean( "digglike", "digglike.entryDAO" );
-    private static IEntryAdditionalAttributeDAO _daoAA = (IEntryAdditionalAttributeDAO) SpringContextService.getPluginBean( "digglike",
-            "digglike.entryAdditionalAttributeDAO" );
+    private static IEntryDAO _dao = SpringContextService.getBean( "digglike.entryDAO" );
+    private static IEntryAdditionalAttributeDAO _daoAA = SpringContextService
+            .getBean( "digglike.entryAdditionalAttributeDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private EntryHome(  )
+    private EntryHome( )
     {
     }
 
     /**
      * Creation of an instance of Entry
-     *
-     * @param entry The instance of the Entry which contains the informations to store
+     * 
+     * @param entry The instance of the Entry which contains the informations to
+     *            store
      * @param plugin the Plugin
      * @return The primary key of the new entry.
      */
@@ -71,9 +73,9 @@ public final class EntryHome
         int nPK;
         nPK = _dao.insert( entry, plugin );
 
-        if ( entry.getEntryAdditionalAttributeList(  ) != null )
+        if ( entry.getEntryAdditionalAttributeList( ) != null )
         {
-            for ( EntryAdditionalAttribute entryAdditionalAttribute : entry.getEntryAdditionalAttributeList(  ) )
+            for ( EntryAdditionalAttribute entryAdditionalAttribute : entry.getEntryAdditionalAttributeList( ) )
             {
                 entryAdditionalAttribute.setIdEntry( nPK );
                 _daoAA.insert( entryAdditionalAttribute, plugin );
@@ -85,38 +87,39 @@ public final class EntryHome
 
     /**
      * Copy of an instance of Entry
-     *
+     * 
      * @param entry The instance of the Entry who must copy
      * @param plugin the Plugin
-     *
+     * 
      */
     public static void copy( IEntry entry, Plugin plugin )
     {
         IEntry entryCopy = entry;
         entryCopy.setIdEntry( create( entry, plugin ) );
 
-        for ( RegularExpression regularExpression : entry.getRegularExpressionList(  ) )
+        for ( RegularExpression regularExpression : entry.getRegularExpressionList( ) )
         {
-            insertVerifyBy( entryCopy.getIdEntry(  ), regularExpression.getIdExpression(  ), plugin );
+            insertVerifyBy( entryCopy.getIdEntry( ), regularExpression.getIdExpression( ), plugin );
         }
     }
 
     /**
      * Update of the entry which is specified in parameter
-     *
-     * @param entry The instance of the Entry which contains the informations to update
+     * 
+     * @param entry The instance of the Entry which contains the informations to
+     *            update
      * @param plugin the Plugin
-     *
+     * 
      */
     public static void update( IEntry entry, Plugin plugin )
     {
         _dao.store( entry, plugin );
 
-        if ( entry.getEntryAdditionalAttributeList(  ) != null )
+        if ( entry.getEntryAdditionalAttributeList( ) != null )
         {
-            for ( EntryAdditionalAttribute entryAdditionalAttribute : entry.getEntryAdditionalAttributeList(  ) )
+            for ( EntryAdditionalAttribute entryAdditionalAttribute : entry.getEntryAdditionalAttributeList( ) )
             {
-                entryAdditionalAttribute.setIdEntry( entry.getIdEntry(  ) );
+                entryAdditionalAttribute.setIdEntry( entry.getIdEntry( ) );
                 _daoAA.store( entryAdditionalAttribute, plugin );
             }
         }
@@ -124,7 +127,7 @@ public final class EntryHome
 
     /**
      * Remove the entry whose identifier is specified in parameter
-     *
+     * 
      * @param nIdEntry The entry Id
      * @param plugin the Plugin
      */
@@ -139,7 +142,7 @@ public final class EntryHome
 
     /**
      * Returns an instance of a Entry whose identifier is specified in parameter
-     *
+     * 
      * @param nKey The entry primary key
      * @param plugin the Plugin
      * @return an instance of Entry
@@ -147,20 +150,20 @@ public final class EntryHome
     public static IEntry findByPrimaryKey( int nKey, Plugin plugin )
     {
         IEntry entry = _dao.load( nKey, plugin );
-        List<RegularExpression> listRegularExpression = new ArrayList<RegularExpression>(  );
+        List<RegularExpression> listRegularExpression = new ArrayList<RegularExpression>( );
 
-        if ( RegularExpressionService.getInstance(  ).isAvailable(  ) )
+        if ( RegularExpressionService.getInstance( ).isAvailable( ) )
         {
             List<Integer> listRegularExpressionKeyEntry = getListRegularExpressionKeyByIdEntry( nKey, plugin );
 
-            if ( ( listRegularExpressionKeyEntry != null ) && ( listRegularExpressionKeyEntry.size(  ) != 0 ) )
+            if ( ( listRegularExpressionKeyEntry != null ) && ( listRegularExpressionKeyEntry.size( ) != 0 ) )
             {
                 RegularExpression regularExpression = null;
 
                 for ( Integer regularExpressionKey : listRegularExpressionKeyEntry )
                 {
-                    regularExpression = RegularExpressionService.getInstance(  )
-                                                                .getRegularExpressionByKey( regularExpressionKey );
+                    regularExpression = RegularExpressionService.getInstance( ).getRegularExpressionByKey(
+                            regularExpressionKey );
 
                     if ( regularExpression != null )
                     {
@@ -179,10 +182,11 @@ public final class EntryHome
     }
 
     /**
-     * Load the data of all the entry who verify the filter and returns them in a  list
+     * Load the data of all the entry who verify the filter and returns them in
+     * a list
      * @param filter the filter
      * @param plugin the plugin
-     * @return  the list of entry
+     * @return the list of entry
      */
     public static List<IEntry> getEntryList( EntryFilter filter, Plugin plugin )
     {
@@ -190,17 +194,17 @@ public final class EntryHome
 
         for ( IEntry e : entries )
         {
-            e.setEntryAdditionalAttributeList( _daoAA.selectEntryAdditionalAttributeList( e.getIdEntry(  ), plugin ) );
+            e.setEntryAdditionalAttributeList( _daoAA.selectEntryAdditionalAttributeList( e.getIdEntry( ), plugin ) );
         }
 
         return entries;
     }
 
     /**
-     * Return  the number of entry who verify the filter
+     * Return the number of entry who verify the filter
      * @param filter the filter
      * @param plugin the plugin
-     * @return   the number of entry who verify the filter
+     * @return the number of entry who verify the filter
      */
     public static int getNumberEntryByFilter( EntryFilter filter, Plugin plugin )
     {
@@ -208,10 +212,10 @@ public final class EntryHome
     }
 
     /**
-     * remove  a regular expression in the entry
-     *
+     * remove a regular expression in the entry
+     * 
      * @param nIdEntry The identifier of the entry
-     *  @param nIdExpression The identifier of the regular expression
+     * @param nIdExpression The identifier of the regular expression
      * @param plugin the plugin
      */
     public static void deleteVerifyBy( int nIdEntry, int nIdExpression, Plugin plugin )
@@ -221,7 +225,7 @@ public final class EntryHome
 
     /**
      * insert a regular expression in the entry
-     *
+     * 
      * @param nIdEntry The identifier of the entry
      * @param nIdExpression The identifier of the regular expression
      * @param plugin the plugin
@@ -233,7 +237,7 @@ public final class EntryHome
 
     /**
      * verify if the regular expresssion is use
-     *
+     * 
      * @param nIdExpression The identifier of the regular expression
      * @param plugin the plugin
      * @return true if the regular expression is use
@@ -244,10 +248,11 @@ public final class EntryHome
     }
 
     /**
-     * Load the key  of all the regularExpression associate to the entry and returns them in a  list
+     * Load the key of all the regularExpression associate to the entry and
+     * returns them in a list
      * @param nIdEntry the id of entry
      * @param plugin the plugin
-     * @return  the list of  regular expression key
+     * @return the list of regular expression key
      */
     public static List<Integer> getListRegularExpressionKeyByIdEntry( int nIdEntry, Plugin plugin )
     {
