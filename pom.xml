@@ -32,7 +32,7 @@
 		    <groupId>fr.paris.lutece.plugins</groupId>
 		    <artifactId>plugin-subscribe</artifactId>
 		    <version>[0.9.9-SNAPSHOT,)</version>
-			<type>lutece-core</type>
+			<type>lutece-plugin</type>
 		</dependency>
 	</dependencies>
    
