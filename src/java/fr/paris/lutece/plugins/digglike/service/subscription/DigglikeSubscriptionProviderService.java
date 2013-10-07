@@ -1,5 +1,7 @@
 package fr.paris.lutece.plugins.digglike.service.subscription;
 
+import fr.paris.lutece.plugins.digglike.business.Category;
+import fr.paris.lutece.plugins.digglike.business.CategoryHome;
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
@@ -38,6 +40,7 @@ public class DigglikeSubscriptionProviderService implements ISubscriptionProvide
 
     private static final String MESSAGE_SUBSCRIBED_DIGG = "digglike.message.subscriptions.subscribedDigg";
     private static final String MESSAGE_SUBSCRIBED_DIGG_SUBMIT = "digglike.message.subscriptions.subscribedDiggSubmit";
+    private static final String MESSAGE_SUBSCRIBED_DIGG_CATEGORY = "digglike.message.subscriptions.subscribedCategory";
 
     private static DigglikeSubscriptionProviderService _instance;
 
@@ -96,6 +99,16 @@ public class DigglikeSubscriptionProviderService implements ISubscriptionProvide
                 {
                     Object[] params = { diggSubmit.getDiggSubmitTitle( ) };
                     return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_DIGG_SUBMIT, params, locale );
+                }
+            }
+            else if ( StringUtils.equals( SUBSCRIPTION_DIGG_CATEGORY, strSubscriptionKey ) )
+            {
+                Category category = CategoryHome.findByPrimaryKey( nId,
+                        PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) );
+                if ( category != null )
+                {
+                    Object[] params = { category.getTitle( ) };
+                    return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_DIGG_CATEGORY, params, locale );
                 }
             }
         }
