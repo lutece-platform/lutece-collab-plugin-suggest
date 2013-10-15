@@ -361,7 +361,7 @@ public class DiggSubscribersNotificationDaemon extends Daemon
     private String getEmailFromLuteceUser( LuteceUser user )
     {
         String strEmail = user.getUserInfo( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL );
-        if ( strEmail != null )
+        if ( strEmail == null )
         {
             strEmail = user.getUserInfo( LuteceUser.HOME_INFO_ONLINE_EMAIL );
         }
