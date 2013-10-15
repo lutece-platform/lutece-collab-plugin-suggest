@@ -41,13 +41,13 @@ import fr.paris.lutece.plugins.digglike.service.DefaultMessageResourceIdService;
 import fr.paris.lutece.plugins.digglike.service.ExportFormatResourceIdService;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.user.AdminUser;
-import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.web.admin.PluginAdminPageJspBean;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -58,6 +58,8 @@ import javax.servlet.http.HttpServletRequest;
 public class ManageDigglikeJspBean extends PluginAdminPageJspBean
 {
     public static final String RIGHT_MANAGE_DIGG_LIKE = "DIGGLIKE_MANAGEMENT";
+
+    private static final long serialVersionUID = -4559529824052770950L;
 
     //templates
     private static final String TEMPLATE_MANAGE_DIGGLIKE = "admin/plugins/digglike/accueil.html";
@@ -74,19 +76,18 @@ public class ManageDigglikeJspBean extends PluginAdminPageJspBean
 
     /**
      * Return management page of plugin form
-     *@param request The Http request
+     * @param request The Http request
      * @return Html management page of plugin form
      */
     public String getManageDigg( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin(  );
-        AdminUser adminUser = getUser(  );
+        AdminUser adminUser = getUser( );
         setPageTitleProperty( EMPTY_STRING );
 
-        HashMap model = new HashMap(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
 
         if ( RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    ExportFormatResourceIdService.PERMISSION_MANAGE, adminUser ) )
+                ExportFormatResourceIdService.PERMISSION_MANAGE, adminUser ) )
         {
             model.put( MARK_PERMISSION_MANAGE_EXPORT_FORMAT, true );
         }
@@ -96,7 +97,7 @@ public class ManageDigglikeJspBean extends PluginAdminPageJspBean
         }
 
         if ( RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    CategoryResourceIdService.PERMISSION_MANAGE, adminUser ) )
+                CategoryResourceIdService.PERMISSION_MANAGE, adminUser ) )
         {
             model.put( MARK_PERMISSION_MANAGE_CATEGORY, true );
         }
@@ -106,7 +107,7 @@ public class ManageDigglikeJspBean extends PluginAdminPageJspBean
         }
 
         if ( RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    DefaultMessageResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
+                DefaultMessageResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
             model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE, true );
         }
@@ -115,8 +116,8 @@ public class ManageDigglikeJspBean extends PluginAdminPageJspBean
             model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE, false );
         }
 
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_DIGGLIKE, getLocale(  ), model );
+        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_DIGGLIKE, getLocale( ), model );
 
-        return getAdminPage( templateList.getHtml(  ) );
+        return getAdminPage( templateList.getHtml( ) );
     }
 }

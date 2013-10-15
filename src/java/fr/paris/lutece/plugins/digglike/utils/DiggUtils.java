@@ -33,26 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.utils;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.util.ReflectionUtils;
-
 import fr.paris.lutece.plugins.digglike.business.Category;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.Digg;
@@ -89,11 +69,31 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.string.StringUtil;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeSet;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.util.ReflectionUtils;
+
 
 /**
- *
+ * 
  * class FormUtils
- *
+ * 
  */
 public final class DiggUtils
 {
@@ -104,6 +104,13 @@ public final class DiggUtils
     public static final int CONSTANT_SUBMIT_FILTER_YESTERDAY = 4;
     public static final String SERVLET_IMAGE_PATH = "image?resource_type=image_digg&id=";
     public static final String EMPTY_STRING = "";
+
+    public static final String PROPERTY_FILTER_ALL = "digglike.diggFrame.labelFilterAll";
+    public static final String PROPERTY_FILTER_TO_DAY = "digglike.diggFrame.labelFilterTopDay";
+    public static final String PROPERTY_FILTER_WEEK = "digglike.diggFrame.labelFilterWeek";
+    public static final String PROPERTY_FILTER_MONTH = "digglike.diggFrame.labelFilterMonth";
+    public static final String PROPERTY_FILTER_YESTERDAY = "digglike.diggFrame.labelFilterYesterday";
+
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_ENTRY = "entry";
     private static final String MARK_RESPONSE = "response";
@@ -146,9 +153,9 @@ public final class DiggUtils
     private static final String PROPERTY_NOTIFICATION_MAIL_NEW_REPORTED_MESSAGE_SENDER_NAME = "digglike.notificationMailNewReportedMessage.senderName";
     private static final String PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_ASC = "digglike.sorterListItemDateResponseAsc";
     private static final String PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_DESC = "digglike.sorterListItemDateResponseDesc";
-    private static final String PROPERTY_COMMENT_STATE_ENABLE= "digglike.manageCommentSubmit.stateEnable";
+    private static final String PROPERTY_COMMENT_STATE_ENABLE = "digglike.manageCommentSubmit.stateEnable";
     private static final String PROPERTY_COMMENT_STATE_DISABLE = "digglike.manageCommentSubmit.stateDisable";
-    
+
     private static final String PROPERTY_SORTER_LIST_ITEM_SCORE_ASC = "digglike.sorterListItemScoreAsc";
     private static final String PROPERTY_SORTER_LIST_ITEM_SCORE_DESC = "digglike.sorterListItemScoreDesc";
     private static final String PROPERTY_SORTER_LIST_ITEM_VIEW_ASC = "digglike.sorterListItemViewAsc";
@@ -156,11 +163,6 @@ public final class DiggUtils
     private static final String PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_ASC = "digglike.sorterListItemCommentAsc";
     private static final String PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_DESC = "digglike.sorterListItemCommentDesc";
     private static final String PROPERTY_SORTER_LIST_ITEM_MANUAL = "digglike.sorterListItemManualDesc";
-    public static final String PROPERTY_FILTER_ALL = "digglike.diggFrame.labelFilterAll";
-    public static final String PROPERTY_FILTER_TO_DAY = "digglike.diggFrame.labelFilterTopDay";
-    public static final String PROPERTY_FILTER_WEEK = "digglike.diggFrame.labelFilterWeek";
-    public static final String PROPERTY_FILTER_MONTH = "digglike.diggFrame.labelFilterMonth";
-    public static final String PROPERTY_FILTER_YESTERDAY = "digglike.diggFrame.labelFilterYesterday";
     private static final String REGEX_ID = "^[\\d]+$";
     private static final String PROPERTY_CHOOSE_CATEGORY = "digglike.diggsubmit.choose.category";
     private static final String PROPERTY_CHOOSE_TYPE = "digglike.diggsubmit.choose.type";
@@ -168,9 +170,9 @@ public final class DiggUtils
 
     /**
      * FormUtils
-     *
+     * 
      */
-    private DiggUtils(  )
+    private DiggUtils( )
     {
     }
 
@@ -182,26 +184,29 @@ public final class DiggUtils
      * @param request the request
      */
     public static void sendNotificationNewDiggSubmit( Digg digg, DiggSubmit diggSubmit, Locale locale,
-        HttpServletRequest request )
+            HttpServletRequest request )
     {
         try
         {
             String strSubject = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_NEW_DIGG_SUBMIT_SUBJECT,
                     locale );
-            String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_NEW_DIGG_SUBMIT_SENDER_NAME,
-                    locale );
-            String strSenderEmail = MailService.getNoReplyEmail(  );
+            String strSenderName = I18nService.getLocalizedString(
+                    PROPERTY_NOTIFICATION_MAIL_NEW_DIGG_SUBMIT_SENDER_NAME, locale );
+            String strSenderEmail = MailService.getNoReplyEmail( );
 
             //we have to replace the src='image? string by a string containing the server url
-            if ( diggSubmit.getDiggSubmitValue(  ).toString(  ).contains( "src='image?" ) )
+            if ( diggSubmit.getDiggSubmitValue( ).toString( ).contains( "src='image?" ) )
             {
-                diggSubmit.setDiggSubmitValue( diggSubmit.getDiggSubmitValue(  ).toString(  )
-                                                         .replace( "src='image?",
-                        "src='" + AppPropertiesService.getProperty( PROPERTY_PROD_URL ) + "/image?" ) );
+                diggSubmit.setDiggSubmitValue( diggSubmit
+                        .getDiggSubmitValue( )
+                        .toString( )
+                        .replace( "src='image?",
+                                "src='" + AppPropertiesService.getProperty( PROPERTY_PROD_URL ) + "/image?" ) );
             }
 
-            Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( digg.getIdMailingListDiggSubmit(  ) );
-            HashMap model = new HashMap(  );
+            Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( digg
+                    .getIdMailingListDiggSubmit( ) );
+            Map<String, Object> model = new HashMap<String, Object>( );
             model.put( MARK_DIGG, digg );
             model.put( MARK_DIGG_SUBMIT, diggSubmit );
             model.put( MARK_BASE_URL, AppPathService.getBaseUrl( request ) );
@@ -212,17 +217,15 @@ public final class DiggUtils
             for ( Recipient recipient : listRecipients )
             {
                 // Build the mail message
-                MailService.sendMailHtml( recipient.getEmail(  ), strSenderName, strSenderEmail, strSubject,
-                    t.getHtml(  ) );
+                MailService
+                        .sendMailHtml( recipient.getEmail( ), strSenderName, strSenderEmail, strSubject, t.getHtml( ) );
             }
         }
         catch ( Exception e )
         {
-            AppLogService.error( "Error during Notify new digg submit  : " + e.getMessage(  ) );
+            AppLogService.error( "Error during Notify new digg submit  : " + e.getMessage( ) );
         }
     }
-
-   
 
     /**
      * sendMail of notification for new digg submit disable
@@ -234,22 +237,25 @@ public final class DiggUtils
     {
         try
         {
-            String strSubject = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_NEW_DIGG_SUBMIT_DISABLE_SUBJECT,
-                    locale );
-            String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_NEW_DIGG_SUBMIT_DISABLE_SENDER_NAME,
-                    locale );
-            String strSenderEmail = MailService.getNoReplyEmail(  );
+            String strSubject = I18nService.getLocalizedString(
+                    PROPERTY_NOTIFICATION_MAIL_NEW_DIGG_SUBMIT_DISABLE_SUBJECT, locale );
+            String strSenderName = I18nService.getLocalizedString(
+                    PROPERTY_NOTIFICATION_MAIL_NEW_DIGG_SUBMIT_DISABLE_SENDER_NAME, locale );
+            String strSenderEmail = MailService.getNoReplyEmail( );
 
             //we have to replace the src='image? string by a string containing the server url
-            if ( diggSubmit.getDiggSubmitValue(  ).toString(  ).contains( "src='image?" ) )
+            if ( diggSubmit.getDiggSubmitValue( ).toString( ).contains( "src='image?" ) )
             {
-                diggSubmit.setDiggSubmitValue( diggSubmit.getDiggSubmitValue(  ).toString(  )
-                                                         .replace( "src='image?",
-                        "src='" + AppPropertiesService.getProperty( PROPERTY_PROD_URL ) + "/image?" ) );
+                diggSubmit.setDiggSubmitValue( diggSubmit
+                        .getDiggSubmitValue( )
+                        .toString( )
+                        .replace( "src='image?",
+                                "src='" + AppPropertiesService.getProperty( PROPERTY_PROD_URL ) + "/image?" ) );
             }
 
-            Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( digg.getIdMailingListDiggSubmit(  ) );
-            HashMap model = new HashMap(  );
+            Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( digg
+                    .getIdMailingListDiggSubmit( ) );
+            Map<String, Object> model = new HashMap<String, Object>( );
             model.put( MARK_DIGG, digg );
             model.put( MARK_DIGG_SUBMIT, diggSubmit );
 
@@ -260,37 +266,38 @@ public final class DiggUtils
             for ( Recipient recipient : listRecipients )
             {
                 // Build the mail message
-                MailService.sendMailHtml( recipient.getEmail(  ), strSenderName, strSenderEmail, strSubject,
-                    t.getHtml(  ) );
+                MailService
+                        .sendMailHtml( recipient.getEmail( ), strSenderName, strSenderEmail, strSubject, t.getHtml( ) );
             }
         }
         catch ( Exception e )
         {
-            AppLogService.error( "Error during Notify new digg submit disable  : " + e.getMessage(  ) );
+            AppLogService.error( "Error during Notify new digg submit disable  : " + e.getMessage( ) );
         }
     }
 
     /**
      * sendMail of notification for new comment submit
-     *
+     * 
      * @param digg the digg
      * @param commentSubmit the new comment submit
      * @param locale the locale
      * @param request the request
      */
     public static void sendNotificationNewCommentSubmit( Digg digg, CommentSubmit commentSubmit, Locale locale,
-        HttpServletRequest request )
+            HttpServletRequest request )
     {
         try
         {
             String strSubject = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_NEW_COMMENT_SUBMIT_SUBJECT,
                     locale );
-            String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_NEW_COMMENT_SUBMIT_SENDER_NAME,
-                    locale );
-            String strSenderEmail = MailService.getNoReplyEmail(  );
+            String strSenderName = I18nService.getLocalizedString(
+                    PROPERTY_NOTIFICATION_MAIL_NEW_COMMENT_SUBMIT_SENDER_NAME, locale );
+            String strSenderEmail = MailService.getNoReplyEmail( );
 
-            Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( digg.getIdMailingListDiggSubmit(  ) );
-            HashMap model = new HashMap(  );
+            Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( digg
+                    .getIdMailingListDiggSubmit( ) );
+            Map<String, Object> model = new HashMap<String, Object>( );
             model.put( MARK_DIGG, digg );
             model.put( MARK_COMMENT_SUBMIT, commentSubmit );
             model.put( MARK_BASE_URL, AppPathService.getBaseUrl( request ) );
@@ -302,13 +309,13 @@ public final class DiggUtils
             for ( Recipient recipient : listRecipients )
             {
                 // Build the mail message
-                MailService.sendMailHtml( recipient.getEmail(  ), strSenderName, strSenderEmail, strSubject,
-                    t.getHtml(  ) );
+                MailService
+                        .sendMailHtml( recipient.getEmail( ), strSenderName, strSenderEmail, strSubject, t.getHtml( ) );
             }
         }
         catch ( Exception e )
         {
-            AppLogService.error( "Error during Notify new comment : " + e.getMessage(  ) );
+            AppLogService.error( "Error during Notify new comment : " + e.getMessage( ) );
         }
     }
 
@@ -320,18 +327,19 @@ public final class DiggUtils
      * @param request the request
      */
     public static void sendNotificationNewReportedMessage( Digg digg, ReportedMessage reportedMessage, Locale locale,
-        HttpServletRequest request )
+            HttpServletRequest request )
     {
         try
         {
-            String strSubject = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_NEW_REPORTED_MESSAGE_SUBJECT,
-                    locale );
-            String strSenderName = I18nService.getLocalizedString( PROPERTY_NOTIFICATION_MAIL_NEW_REPORTED_MESSAGE_SENDER_NAME,
-                    locale );
-            String strSenderEmail = MailService.getNoReplyEmail(  );
+            String strSubject = I18nService.getLocalizedString(
+                    PROPERTY_NOTIFICATION_MAIL_NEW_REPORTED_MESSAGE_SUBJECT, locale );
+            String strSenderName = I18nService.getLocalizedString(
+                    PROPERTY_NOTIFICATION_MAIL_NEW_REPORTED_MESSAGE_SENDER_NAME, locale );
+            String strSenderEmail = MailService.getNoReplyEmail( );
 
-            Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( digg.getIdMailingListDiggSubmit(  ) );
-            HashMap model = new HashMap(  );
+            Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( digg
+                    .getIdMailingListDiggSubmit( ) );
+            Map<String, Object> model = new HashMap<String, Object>( );
             model.put( MARK_DIGG, digg );
             model.put( MARK_REPORTED_MESSAGE, reportedMessage );
             model.put( MARK_BASE_URL, AppPathService.getBaseUrl( request ) );
@@ -343,21 +351,23 @@ public final class DiggUtils
             for ( Recipient recipient : listRecipients )
             {
                 // Build the mail message
-                MailService.sendMailHtml( recipient.getEmail(  ), strSenderName, strSenderEmail, strSubject,
-                    t.getHtml(  ) );
+                MailService
+                        .sendMailHtml( recipient.getEmail( ), strSenderName, strSenderEmail, strSubject, t.getHtml( ) );
             }
         }
         catch ( Exception e )
         {
-            AppLogService.error( "Error during Notify new repported message  : " + e.getMessage(  ) );
+            AppLogService.error( "Error during Notify new repported message  : " + e.getMessage( ) );
         }
     }
 
     /**
-     * return a timestamp Object which correspond with the string specified in parameter.
+     * return a timestamp Object which correspond with the string specified in
+     * parameter.
      * @param strDate the date who must convert
      * @param locale the locale
-     * @return a timestamp Object which correspond with the string specified in parameter.
+     * @return a timestamp Object which correspond with the string specified in
+     *         parameter.
      */
     public static Timestamp getLastMinute( String strDate, Locale locale )
     {
@@ -366,16 +376,16 @@ public final class DiggUtils
             Date date;
             DateFormat dateFormat = DateFormat.getDateInstance( DateFormat.SHORT, locale );
             dateFormat.setLenient( false );
-            date = dateFormat.parse( strDate.trim(  ) );
+            date = dateFormat.parse( strDate.trim( ) );
 
-            Calendar caldate = new GregorianCalendar(  );
+            Calendar caldate = new GregorianCalendar( );
             caldate.setTime( date );
             caldate.set( Calendar.MILLISECOND, 0 );
             caldate.set( Calendar.SECOND, 0 );
             caldate.set( Calendar.HOUR_OF_DAY, caldate.getActualMaximum( Calendar.HOUR_OF_DAY ) );
             caldate.set( Calendar.MINUTE, caldate.getActualMaximum( Calendar.MINUTE ) );
 
-            Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis(  ) );
+            Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
 
             return timeStamp;
         }
@@ -386,10 +396,12 @@ public final class DiggUtils
     }
 
     /**
-     * return a timestamp Object which correspond with the string specified in parameter.
+     * return a timestamp Object which correspond with the string specified in
+     * parameter.
      * @param strDate the date who must convert
      * @param locale the locale
-     * @return a timestamp Object which correspond with the string specified in parameter.
+     * @return a timestamp Object which correspond with the string specified in
+     *         parameter.
      */
     public static Timestamp getFirstMinute( String strDate, Locale locale )
     {
@@ -398,16 +410,16 @@ public final class DiggUtils
             Date date;
             DateFormat dateFormat = DateFormat.getDateInstance( DateFormat.SHORT, locale );
             dateFormat.setLenient( false );
-            date = dateFormat.parse( strDate.trim(  ) );
+            date = dateFormat.parse( strDate.trim( ) );
 
-            Calendar caldate = new GregorianCalendar(  );
+            Calendar caldate = new GregorianCalendar( );
             caldate.setTime( date );
             caldate.set( Calendar.MILLISECOND, 0 );
             caldate.set( Calendar.SECOND, 0 );
             caldate.set( Calendar.HOUR_OF_DAY, caldate.getActualMinimum( Calendar.HOUR_OF_DAY ) );
             caldate.set( Calendar.MINUTE, caldate.getActualMinimum( Calendar.MINUTE ) );
 
-            Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis(  ) );
+            Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
 
             return timeStamp;
         }
@@ -424,15 +436,15 @@ public final class DiggUtils
      */
     public static Timestamp getFirstDayOfWeek( Timestamp date )
     {
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( date );
         caldate.set( Calendar.MILLISECOND, caldate.getActualMinimum( Calendar.MILLISECOND ) );
         caldate.set( Calendar.SECOND, caldate.getActualMinimum( Calendar.SECOND ) );
         caldate.set( Calendar.HOUR_OF_DAY, caldate.getActualMinimum( Calendar.HOUR_OF_DAY ) );
         caldate.set( Calendar.MINUTE, caldate.getActualMinimum( Calendar.MINUTE ) );
-        caldate.set( Calendar.DAY_OF_WEEK, caldate.getFirstDayOfWeek(  ) );
+        caldate.set( Calendar.DAY_OF_WEEK, caldate.getFirstDayOfWeek( ) );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis(  ) );
+        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
 
         return timeStamp;
     }
@@ -444,53 +456,57 @@ public final class DiggUtils
      */
     public static Timestamp getLastDayOfWeek( Timestamp date )
     {
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( date );
         caldate.set( Calendar.MILLISECOND, caldate.getActualMaximum( Calendar.MILLISECOND ) );
         caldate.set( Calendar.SECOND, caldate.getActualMaximum( Calendar.SECOND ) );
         caldate.set( Calendar.HOUR_OF_DAY, caldate.getActualMaximum( Calendar.HOUR_OF_DAY ) );
         caldate.set( Calendar.MINUTE, caldate.getActualMaximum( Calendar.MINUTE ) );
-        caldate.set( Calendar.DAY_OF_WEEK, caldate.getFirstDayOfWeek(  ) + 6 );
+        caldate.set( Calendar.DAY_OF_WEEK, caldate.getFirstDayOfWeek( ) + 6 );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis(  ) );
+        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
 
         return timeStamp;
     }
 
     /**
-     * return a timestamp Object which correspond at the fist minute of the date .
+     * return a timestamp Object which correspond at the fist minute of the date
+     * .
      * @param date the date
-     * @return  a timestamp Object which correspond at the fist minute of the date .
+     * @return a timestamp Object which correspond at the fist minute of the
+     *         date .
      */
     public static Timestamp getFirstMinute( Timestamp date )
     {
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( date );
         caldate.set( Calendar.MILLISECOND, caldate.getActualMinimum( Calendar.MILLISECOND ) );
         caldate.set( Calendar.SECOND, caldate.getActualMinimum( Calendar.SECOND ) );
         caldate.set( Calendar.HOUR_OF_DAY, caldate.getActualMinimum( Calendar.HOUR_OF_DAY ) );
         caldate.set( Calendar.MINUTE, caldate.getActualMinimum( Calendar.MINUTE ) );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis(  ) );
+        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
 
         return timeStamp;
     }
 
     /**
-     * return a timestamp Object which correspond at the last minute of the date .
+     * return a timestamp Object which correspond at the last minute of the date
+     * .
      * @param date the date
-     * @return  a timestamp Object which correspond at the last minute of the date .
+     * @return a timestamp Object which correspond at the last minute of the
+     *         date .
      */
     public static Timestamp getLastMinute( Timestamp date )
     {
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( date );
         caldate.set( Calendar.MILLISECOND, caldate.getActualMaximum( Calendar.MILLISECOND ) );
         caldate.set( Calendar.SECOND, caldate.getActualMaximum( Calendar.SECOND ) );
         caldate.set( Calendar.HOUR_OF_DAY, caldate.getActualMaximum( Calendar.HOUR_OF_DAY ) );
         caldate.set( Calendar.MINUTE, caldate.getActualMaximum( Calendar.MINUTE ) );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis(  ) );
+        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
 
         return timeStamp;
     }
@@ -502,7 +518,7 @@ public final class DiggUtils
      */
     public static Timestamp getFirstDayOfMonth( Timestamp date )
     {
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( date );
         caldate.set( Calendar.MILLISECOND, caldate.getActualMinimum( Calendar.MILLISECOND ) );
         caldate.set( Calendar.SECOND, caldate.getActualMinimum( Calendar.SECOND ) );
@@ -510,7 +526,7 @@ public final class DiggUtils
         caldate.set( Calendar.MINUTE, caldate.getActualMinimum( Calendar.MINUTE ) );
         caldate.set( Calendar.DAY_OF_MONTH, caldate.getActualMinimum( Calendar.DAY_OF_MONTH ) );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis(  ) );
+        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
 
         return timeStamp;
     }
@@ -522,7 +538,7 @@ public final class DiggUtils
      */
     public static Timestamp getLastDayOfMonth( Timestamp date )
     {
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( date );
         caldate.set( Calendar.MILLISECOND, caldate.getActualMaximum( Calendar.MILLISECOND ) );
         caldate.set( Calendar.SECOND, caldate.getActualMaximum( Calendar.SECOND ) );
@@ -530,17 +546,19 @@ public final class DiggUtils
         caldate.set( Calendar.MINUTE, caldate.getActualMaximum( Calendar.MINUTE ) );
         caldate.set( Calendar.DAY_OF_MONTH, caldate.getActualMaximum( Calendar.DAY_OF_MONTH ) );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis(  ) );
+        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
 
         return timeStamp;
     }
 
     /**
-     * Converts une java.sql.Timestamp date in a String date in a "jj/mm/aaaa" format
-     *
+     * Converts une java.sql.Timestamp date in a String date in a "jj/mm/aaaa"
+     * format
+     * 
      * @param date java.sql.Timestamp date to convert
      * @param locale the locale
-     * @return strDate The String date in the short locale format or the emmpty String if the date is null
+     * @return strDate The String date in the short locale format or the emmpty
+     *         String if the date is null
      */
     public static String getDateString( Timestamp date, Locale locale )
     {
@@ -553,24 +571,25 @@ public final class DiggUtils
      * return current date
      * @return return current date
      */
-    public static Timestamp getCurrentDate(  )
+    public static Timestamp getCurrentDate( )
     {
-        return new Timestamp( GregorianCalendar.getInstance(  ).getTimeInMillis(  ) );
+        return new Timestamp( GregorianCalendar.getInstance( ).getTimeInMillis( ) );
     }
 
     /**
-     * Return a date corresponding to the date provides in parameter add with a number of day
+     * Return a date corresponding to the date provides in parameter add with a
+     * number of day
      * @param date the date
      * @param nDay the number of day to add
-     * @return  a timestamp Object which correspond at the date + nDay .
+     * @return a timestamp Object which correspond at the date + nDay .
      */
     public static Timestamp getDateAfterNDay( Timestamp date, int nDay )
     {
-        Calendar caldate = new GregorianCalendar(  );
+        Calendar caldate = new GregorianCalendar( );
         caldate.setTime( date );
         caldate.add( Calendar.DATE, nDay );
 
-        return new Timestamp( caldate.getTimeInMillis(  ) );
+        return new Timestamp( caldate.getTimeInMillis( ) );
     }
 
     /**
@@ -609,7 +628,7 @@ public final class DiggUtils
 
         try
         {
-            entry = (IEntry) Class.forName( entryType.getClassName(  ) ).newInstance(  );
+            entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
             entry.setEntryType( entryType );
         }
         catch ( ClassNotFoundException e )
@@ -632,10 +651,12 @@ public final class DiggUtils
     }
 
     /**
-     * return the index in the list of the entry whose key is specified  in parameter
+     * return the index in the list of the entry whose key is specified in
+     * parameter
      * @param nIdEntry the key of the entry
      * @param listEntry the list of the entry
-     * @return the index in the list of the entry whose key is specified  in parameter
+     * @return the index in the list of the entry whose key is specified in
+     *         parameter
      */
     public static int getIndexEntryInTheEntryList( int nIdEntry, List<IEntry> listEntry )
     {
@@ -643,7 +664,7 @@ public final class DiggUtils
 
         for ( IEntry entry : listEntry )
         {
-            if ( entry.getIdEntry(  ) == nIdEntry )
+            if ( entry.getIdEntry( ) == nIdEntry )
             {
                 return nIndex;
             }
@@ -655,54 +676,55 @@ public final class DiggUtils
     }
 
     /**
-     *
+     * 
      * @param digg
      * @param plugin
      * @param locale
      * @param nIdDefaultCategory
+     * @param bBackOffice
      * @return
      */
-    public static Map<String, Object> getModelHtmlForm( Digg digg, Plugin plugin, Locale locale, int nIdDefaultCategory,boolean bBackOffice )
+    public static Map<String, Object> getModelHtmlForm( Digg digg, Plugin plugin, Locale locale,
+            int nIdDefaultCategory, boolean bBackOffice )
     {
         List<IEntry> listEntryFirstLevel;
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
 
-        HtmlTemplate template;
         EntryFilter filter;
-        StringBuffer strBuffer = new StringBuffer(  );
-        filter = new EntryFilter(  );
-        filter.setIdDigg( digg.getIdDigg(  ) );
+        StringBuffer strBuffer = new StringBuffer( );
+        filter = new EntryFilter( );
+        filter.setIdDigg( digg.getIdDigg( ) );
         listEntryFirstLevel = EntryHome.getEntryList( filter, plugin );
 
-        ArrayList<Category> listCats = new ArrayList<Category>(  );
-        Category category = new Category(  );
+        ArrayList<Category> listCats = new ArrayList<Category>( );
+        Category category = new Category( );
 
         category.setIdCategory( -1 );
         category.setTitle( I18nService.getLocalizedString( PROPERTY_CHOOSE_CATEGORY, locale ) );
 
-        if ( !digg.getCategories(  ).isEmpty(  ) )
+        if ( !digg.getCategories( ).isEmpty( ) )
         {
             listCats.add( category );
         }
 
-        listCats.addAll( digg.getCategories(  ) );
+        listCats.addAll( digg.getCategories( ) );
 
-        DiggSubmitType type = new DiggSubmitType(  );
-        List<DiggSubmitType> listTypes = (ArrayList<DiggSubmitType>) digg.getDiggSubmitTypes();
-        List<DiggSubmitType> listTypes2Show = new ArrayList<DiggSubmitType>(  );
+        DiggSubmitType type = new DiggSubmitType( );
+        List<DiggSubmitType> listTypes = digg.getDiggSubmitTypes( );
+        List<DiggSubmitType> listTypes2Show = new ArrayList<DiggSubmitType>( );
 
         type.setIdType( -1 );
         type.setName( I18nService.getLocalizedString( PROPERTY_CHOOSE_TYPE, locale ) );
 
         for ( DiggSubmitType t : listTypes )
         {
-            if ( bBackOffice || t.getParameterizableInFO(  ) )
+            if ( bBackOffice || t.getParameterizableInFO( ) )
             {
                 listTypes2Show.add( t );
             }
         }
 
-        if ( !listTypes2Show.isEmpty(  ) )
+        if ( !listTypes2Show.isEmpty( ) )
         {
             listTypes2Show.add( 0, type );
         }
@@ -712,21 +734,21 @@ public final class DiggUtils
 
         for ( IEntry entry : listEntryFirstLevel )
         {
-            DiggUtils.getHtmlFormEntry( entry.getIdEntry(  ), plugin, strBuffer, locale );
+            DiggUtils.getHtmlFormEntry( entry.getIdEntry( ), plugin, strBuffer, locale );
         }
 
-        CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService(  );
+        CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService( );
 
-        if ( digg.isActiveCaptcha(  ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
+        if ( digg.isActiveCaptcha( ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
         {
-            model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode(  ) );
+            model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode( ) );
         }
 
         model.put( MARK_CATEGORY_LIST, refCategoryList );
         model.put( MARK_TYPE_LIST, refTypeList );
         model.put( MARK_ID_DEFAULT_CATEGORY, nIdDefaultCategory );
         model.put( MARK_DIGG, digg );
-        model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );
+        model.put( MARK_STR_ENTRY, strBuffer.toString( ) );
         model.put( MARK_LOCALE, locale );
 
         return model;
@@ -734,55 +756,57 @@ public final class DiggUtils
 
     /**
      * insert in the string buffer the content of the html code of the entry
-     * @param nIdEntry the key of the entry which html code must be insert in the stringBuffer
+     * @param nIdEntry the key of the entry which html code must be insert in
+     *            the stringBuffer
      * @param plugin the plugin
      * @param stringBuffer the buffer which contains the html code
      * @param locale the locale
      */
     public static void getHtmlFormEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale )
     {
-        HashMap model = new HashMap(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
         HtmlTemplate template;
         IEntry entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
         model.put( MARK_ENTRY, entry );
 
-        template = AppTemplateService.getTemplate( entry.getTemplateHtmlCodeForm(  ), locale, model );
-        stringBuffer.append( template.getHtml(  ) );
+        template = AppTemplateService.getTemplate( entry.getTemplateHtmlCodeForm( ), locale, model );
+        stringBuffer.append( template.getHtml( ) );
     }
 
     /**
-     * return  the content of the html code response
+     * return the content of the html code response
      * @param response the response which html code must be generate
-     * @param  stringBuffer the stringBuffer
-     * @param bTitle  true if the response is a title
+     * @param stringBuffer the stringBuffer
+     * @param bTitle true if the response is a title
      * @param locale the locale
      */
     public static void getHtmlResponseEntry( Response response, StringBuffer stringBuffer, Locale locale, boolean bTitle )
     {
-    	if( response!=null && response.getEntry( )!=null)
+        if ( response != null && response.getEntry( ) != null )
         {
-        
-	    	HashMap model = new HashMap(  );
-	        HtmlTemplate template;
-	        model.put( MARK_RESPONSE, response );
-	        model.put( MARK_IS_TITLE, bTitle );
-	        	template = AppTemplateService.getTemplate( response.getEntry(  ).getTemplateHtmlCodeResponse(  ), locale, model );
-	        stringBuffer.append( template.getHtml(  ) );
+
+            Map<String, Object> model = new HashMap<String, Object>( );
+            HtmlTemplate template;
+            model.put( MARK_RESPONSE, response );
+            model.put( MARK_IS_TITLE, bTitle );
+            template = AppTemplateService.getTemplate( response.getEntry( ).getTemplateHtmlCodeResponse( ), locale,
+                    model );
+            stringBuffer.append( template.getHtml( ) );
         }
-       }
+    }
 
     /**
-     * return  the content of the html code of the digg submit
+     * return the content of the html code of the digg submit
      * @param diggSubmit the diggsubmit
      * @param locale the locale
-     * @return  the content of the html code of the digg submit
+     * @return the content of the html code of the digg submit
      */
     public static String getHtmlDiggSubmitValue( DiggSubmit diggSubmit, Locale locale )
     {
-        StringBuffer strBuffer = new StringBuffer(  );
+        StringBuffer strBuffer = new StringBuffer( );
         int ncptTitle = 1;
 
-        for ( Response response : diggSubmit.getResponses(  ) )
+        for ( Response response : diggSubmit.getResponses( ) )
         {
             if ( ncptTitle == 1 )
             {
@@ -796,29 +820,32 @@ public final class DiggUtils
             ncptTitle++;
         }
 
-        return strBuffer.toString(  );
+        return strBuffer.toString( );
     }
 
     /**
-     * return  the content of the html code of the digg submit show in the list of digg submit
+     * return the content of the html code of the digg submit show in the list
+     * of digg submit
      * @param diggSubmit the diggsubmit
      * @param locale the locale
-     * @return the content of the html code of the digg submit show in the list of digg submit
+     * @return the content of the html code of the digg submit show in the list
+     *         of digg submit
      */
     public static String getHtmlDiggSubmitValueShowInTheList( DiggSubmit diggSubmit, Locale locale )
     {
-        StringBuffer strBuffer = new StringBuffer(  );
-        int nNumberCaractersShown = diggSubmit.getDigg(  ).getNumberDiggSubmitCaractersShown(  );
+        StringBuffer strBuffer = new StringBuffer( );
+        int nNumberCaractersShown = diggSubmit.getDigg( ).getNumberDiggSubmitCaractersShown( );
         int nNumberCaractersInBuffer = 0;
         int ncptTitle = 1;
 
-        for ( Response response : diggSubmit.getResponses(  ) )
+        for ( Response response : diggSubmit.getResponses( ) )
         {
-            if ( ( response.getValueResponse(  ) != null ) && response.getEntry(  ) !=null &&  response.getEntry(  ).isShowInDiggSubmitList(  ) )
+            if ( ( response.getValueResponse( ) != null ) && response.getEntry( ) != null
+                    && response.getEntry( ).isShowInDiggSubmitList( ) )
             {
-                if ( ( nNumberCaractersInBuffer + response.getValueResponse(  ).length(  ) ) <= nNumberCaractersShown )
+                if ( ( nNumberCaractersInBuffer + response.getValueResponse( ).length( ) ) <= nNumberCaractersShown )
                 {
-                    nNumberCaractersInBuffer += response.getValueResponse(  ).length(  );
+                    nNumberCaractersInBuffer += response.getValueResponse( ).length( );
 
                     if ( ncptTitle == 1 )
                     {
@@ -831,11 +858,11 @@ public final class DiggUtils
                 }
                 else
                 {
-                    Response lastResponse = new Response(  );
-                    lastResponse.setEntry( response.getEntry(  ) );
-                    lastResponse.setValueResponse( response.getValueResponse(  )
-                                                           .substring( 0,
-                            nNumberCaractersShown - nNumberCaractersInBuffer ) + "..." );
+                    Response lastResponse = new Response( );
+                    lastResponse.setEntry( response.getEntry( ) );
+                    lastResponse.setValueResponse( response.getValueResponse( ).substring( 0,
+                            nNumberCaractersShown - nNumberCaractersInBuffer )
+                            + "..." );
 
                     if ( ncptTitle == 1 )
                     {
@@ -853,33 +880,31 @@ public final class DiggUtils
             ncptTitle++;
         }
 
-        return strBuffer.toString(  );
+        return strBuffer.toString( );
     }
 
     /**
-     * return  the title of the digg submit
+     * return the title of the digg submit
      * @param diggSubmit the diggsubmit
      * @param locale the locale
-     * @return  the title of the digg submit
+     * @return the title of the digg submit
      */
     public static String getDiggSubmitTitle( DiggSubmit diggSubmit, Locale locale )
     {
-        StringBuffer strBuffer = new StringBuffer(  );
+        StringBuffer strBuffer = new StringBuffer( );
 
-        if ( ( diggSubmit.getResponses(  ) != null ) && ( diggSubmit.getResponses(  ).size(  ) != 0 ) &&
-                ( diggSubmit.getResponses(  ).get( 0 ) != null ) )
+        if ( ( diggSubmit.getResponses( ) != null ) && ( diggSubmit.getResponses( ).size( ) != 0 )
+                && ( diggSubmit.getResponses( ).get( 0 ) != null ) )
         {
-            strBuffer.append( diggSubmit.getResponses(  ).get( 0 ).getValueResponse(  ) );
+            strBuffer.append( diggSubmit.getResponses( ).get( 0 ).getValueResponse( ) );
         }
 
-        return strBuffer.toString(  );
+        return strBuffer.toString( );
     }
-    
-    
-    
 
     /**
-     * perform in the object diggSubmit the responses associates to the diggsubmit
+     * perform in the object diggSubmit the responses associates to the
+     * diggsubmit
      * @param request
      * @param diggSubmit
      * @param plugin
@@ -887,23 +912,24 @@ public final class DiggUtils
      * @return
      * @throws SiteMessageException
      */
-    public static FormError getAllResponsesData( HttpServletRequest request, DiggSubmit diggSubmit, Plugin plugin, Locale locale ) 
+    public static FormError getAllResponsesData( HttpServletRequest request, DiggSubmit diggSubmit, Plugin plugin,
+            Locale locale )
     {
-        
-    	List<IEntry> listEntry;
+
+        List<IEntry> listEntry;
         EntryFilter filter;
         FormError formError = null;
 
-        filter = new EntryFilter(  );
-        filter.setIdDigg( diggSubmit.getDigg(  ).getIdDigg(  ) );
+        filter = new EntryFilter( );
+        filter.setIdDigg( diggSubmit.getDigg( ).getIdDigg( ) );
         listEntry = EntryHome.getEntryList( filter, plugin );
 
-        List<Response> listResponse = new ArrayList<Response>(  );
+        List<Response> listResponse = new ArrayList<Response>( );
         diggSubmit.setResponses( listResponse );
 
         for ( IEntry entry : listEntry )
         {
-            formError = getResponseEntry( request, entry.getIdEntry(  ), plugin, diggSubmit, false, locale );
+            formError = getResponseEntry( request, entry.getIdEntry( ), plugin, diggSubmit, false, locale );
 
             if ( formError != null )
             {
@@ -912,35 +938,38 @@ public final class DiggUtils
         }
         return null;
 
-       }
+    }
 
     /**
-     * perform in the object diggSubmit the responses associates with a entry specify in parameter.
-     * return null if there is no error in the response else return a FormError Object
+     * perform in the object diggSubmit the responses associates with a entry
+     * specify in parameter.
+     * return null if there is no error in the response else return a FormError
+     * Object
      * @param request the request
      * @param nIdEntry the key of the entry
      * @param plugin the plugin
      * @param diggSubmit digg Submit Object
      * @param bResponseNull true if the response create must be null
      * @param locale the locale
-     * @return null if there is no error in the response else return a FormError Object
+     * @return null if there is no error in the response else return a FormError
+     *         Object
      */
     public static FormError getResponseEntry( HttpServletRequest request, int nIdEntry, Plugin plugin,
-        DiggSubmit diggSubmit, boolean bResponseNull, Locale locale )
+            DiggSubmit diggSubmit, boolean bResponseNull, Locale locale )
     {
         FormError formError = null;
         Response response = null;
         IEntry entry = null;
-        List<Response> listResponse = new ArrayList<Response>(  );
+        List<Response> listResponse = new ArrayList<Response>( );
         entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
 
         if ( !bResponseNull )
         {
-            formError = entry.getResponseData( diggSubmit.getIdDiggSubmit(  ), request, listResponse, locale, plugin );
+            formError = entry.getResponseData( diggSubmit.getIdDiggSubmit( ), request, listResponse, locale, plugin );
         }
         else
         {
-            response = new Response(  );
+            response = new Response( );
             response.setEntry( entry );
             listResponse.add( response );
         }
@@ -950,7 +979,7 @@ public final class DiggUtils
             return formError;
         }
 
-        diggSubmit.getResponses(  ).addAll( listResponse );
+        diggSubmit.getResponses( ).addAll( listResponse );
 
         return null;
     }
@@ -980,63 +1009,66 @@ public final class DiggUtils
     }
 
     /**
-     *  Returns a copy of the string , with leading and trailing whitespace omitted.
+     * Returns a copy of the string , with leading and trailing whitespace
+     * omitted.
      * @param strParameter the string parameter to convert
-     * @return null if the strParameter is null other return  with leading and trailing whitespace omitted.
+     * @return null if the strParameter is null other return with leading and
+     *         trailing whitespace omitted.
      */
     public static String trim( String strParameter )
     {
         if ( strParameter != null )
         {
-            return strParameter.trim(  );
+            return strParameter.trim( );
         }
 
         return strParameter;
     }
 
     /**
-     * initialized the submit filter object  with the period specified in parameter
+     * initialized the submit filter object with the period specified in
+     * parameter
      * @param submitFilter the filter to initialized
      * @param nIdPeriod the id of the period (DAY,WEEK,MONTH)
      */
     public static void initSubmitFilterByPeriod( SubmitFilter submitFilter, int nIdPeriod )
     {
-        Timestamp date = getCurrentDate(  );
+        Timestamp date = getCurrentDate( );
 
         switch ( nIdPeriod )
         {
-            case CONSTANT_SUBMIT_FILTER_YESTERDAY:
-                date = getDateAfterNDay( date, -1 );
-                submitFilter.setDateFirst( getFirstMinute( date ) );
-                submitFilter.setDateLast( getLastMinute( date ) );
+        case CONSTANT_SUBMIT_FILTER_YESTERDAY:
+            date = getDateAfterNDay( date, -1 );
+            submitFilter.setDateFirst( getFirstMinute( date ) );
+            submitFilter.setDateLast( getLastMinute( date ) );
 
-                break;
+            break;
 
-            case CONSTANT_SUBMIT_FILTER_TO_DAY:
-                submitFilter.setDateFirst( getFirstMinute( date ) );
-                submitFilter.setDateLast( getLastMinute( date ) );
+        case CONSTANT_SUBMIT_FILTER_TO_DAY:
+            submitFilter.setDateFirst( getFirstMinute( date ) );
+            submitFilter.setDateLast( getLastMinute( date ) );
 
-                break;
+            break;
 
-            case CONSTANT_SUBMIT_FILTER_WEEK:
-                submitFilter.setDateFirst( getFirstDayOfWeek( date ) );
-                submitFilter.setDateLast( getLastDayOfWeek( date ) );
+        case CONSTANT_SUBMIT_FILTER_WEEK:
+            submitFilter.setDateFirst( getFirstDayOfWeek( date ) );
+            submitFilter.setDateLast( getLastDayOfWeek( date ) );
 
-                break;
+            break;
 
-            case CONSTANT_SUBMIT_FILTER_MONTH:
-                submitFilter.setDateFirst( getFirstDayOfMonth( date ) );
-                submitFilter.setDateLast( getLastDayOfMonth( date ) );
+        case CONSTANT_SUBMIT_FILTER_MONTH:
+            submitFilter.setDateFirst( getFirstDayOfMonth( date ) );
+            submitFilter.setDateLast( getLastDayOfMonth( date ) );
 
-                break;
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
     }
 
     /**
-     * initialized the submit filter object  with the sort specified in parameter
+     * initialized the submit filter object with the sort specified in parameter
      * @param submitFilter the filter to initialized
      * @param nIdSort the id of the sort(date response, score)
      */
@@ -1044,73 +1076,71 @@ public final class DiggUtils
     {
         switch ( nIdSort )
         {
-            case SubmitFilter.SORT_BY_DATE_RESPONSE_ASC:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_ASC );
+        case SubmitFilter.SORT_BY_DATE_RESPONSE_ASC:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_ASC );
 
-                break;
+            break;
 
-            case SubmitFilter.SORT_BY_DATE_RESPONSE_DESC:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+        case SubmitFilter.SORT_BY_DATE_RESPONSE_DESC:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
-                break;
+            break;
 
-            case SubmitFilter.SORT_BY_SCORE_ASC:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_SCORE_ASC );
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+        case SubmitFilter.SORT_BY_SCORE_ASC:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_SCORE_ASC );
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
-                break;
+            break;
 
-            case SubmitFilter.SORT_BY_SCORE_DESC:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_SCORE_DESC );
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+        case SubmitFilter.SORT_BY_SCORE_DESC:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_SCORE_DESC );
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
-                break;
+            break;
 
-            case SubmitFilter.SORT_BY_NUMBER_COMMENT_ASC:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_NUMBER_COMMENT_ASC );
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+        case SubmitFilter.SORT_BY_NUMBER_COMMENT_ASC:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_NUMBER_COMMENT_ASC );
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
-                break;
+            break;
 
-            case SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC );
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+        case SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC );
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
-                break;
+            break;
 
-            case SubmitFilter.SORT_MANUALLY:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_MANUALLY );
+        case SubmitFilter.SORT_MANUALLY:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_MANUALLY );
 
-                break;
+            break;
 
-            case SubmitFilter.SORT_BY_NUMBER_VIEW_ASC:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_NUMBER_VIEW_ASC );
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+        case SubmitFilter.SORT_BY_NUMBER_VIEW_ASC:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_NUMBER_VIEW_ASC );
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
-                break;
+            break;
 
-            case SubmitFilter.SORT_BY_NUMBER_VIEW_DESC:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_NUMBER_VIEW_DESC );
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+        case SubmitFilter.SORT_BY_NUMBER_VIEW_DESC:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_NUMBER_VIEW_DESC );
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
-                break;
-            case SubmitFilter.SORT_BY_PINNED_FIRST:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_PINNED_FIRST );
-                
-                break;
-    
-                
+            break;
+        case SubmitFilter.SORT_BY_PINNED_FIRST:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_PINNED_FIRST );
 
-            default:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_SCORE_DESC );
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+            break;
 
-                break;
+        default:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_SCORE_DESC );
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+
+            break;
         }
     }
 
     /**
-     * initialized the submit filter object  with the sort specified in parameter
+     * initialized the submit filter object with the sort specified in parameter
      * @param submitFilter the filter to initialized
      * @param nIdSort the id of the sort(date response, score)
      */
@@ -1118,58 +1148,58 @@ public final class DiggUtils
     {
         switch ( nIdSort )
         {
-            case SubmitFilter.SORT_BY_DATE_RESPONSE_ASC:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_ASC );
+        case SubmitFilter.SORT_BY_DATE_RESPONSE_ASC:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_ASC );
 
-                break;
+            break;
 
-            case SubmitFilter.SORT_BY_DATE_RESPONSE_DESC:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+        case SubmitFilter.SORT_BY_DATE_RESPONSE_DESC:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
-                break;
+            break;
 
-            case SubmitFilter.SORT_MANUALLY:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_MANUALLY );
+        case SubmitFilter.SORT_MANUALLY:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_MANUALLY );
 
-                break;
+            break;
 
-            case SubmitFilter.SORT_BY_DATE_MODIFY_ASC:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_MODIFY_ASC );
+        case SubmitFilter.SORT_BY_DATE_MODIFY_ASC:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_MODIFY_ASC );
 
-                break;
+            break;
 
-            case SubmitFilter.SORT_BY_DATE_MODIFY_DESC:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_MODIFY_DESC );
+        case SubmitFilter.SORT_BY_DATE_MODIFY_DESC:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_MODIFY_DESC );
 
-                break;
+            break;
 
-            default:
-                submitFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_MODIFY_DESC );
+        default:
+            submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_MODIFY_DESC );
 
-                break;
+            break;
         }
     }
 
     /**
      * Perform the vote on a digg submit
      * @param nIdDiggSubmit the id of the digg submit
-     * @param strLuteceUserKey the key of the lutece user  who have vote
+     * @param strLuteceUserKey the key of the lutece user who have vote
      * @param nScore the score of the vote
      * @param plugin the plugin
      */
     public static void doVoteDiggSubmit( int nIdDiggSubmit, int nScore, String strLuteceUserKey, Plugin plugin )
     {
-        DiggSubmit diggSubmit = DiggSubmitService.getService(  ).findByPrimaryKey( nIdDiggSubmit, false, plugin );
+        DiggSubmit diggSubmit = DiggSubmitService.getService( ).findByPrimaryKey( nIdDiggSubmit, false, plugin );
 
         if ( diggSubmit != null )
         {
-            diggSubmit.setNumberVote( diggSubmit.getNumberVote(  ) + 1 );
-            diggSubmit.setNumberScore( diggSubmit.getNumberScore(  ) + nScore );
-            DiggSubmitService.getService(  ).update( diggSubmit, plugin );
+            diggSubmit.setNumberVote( diggSubmit.getNumberVote( ) + 1 );
+            diggSubmit.setNumberScore( diggSubmit.getNumberScore( ) + nScore );
+            DiggSubmitService.getService( ).update( diggSubmit, plugin );
 
             if ( strLuteceUserKey != null )
             {
-                Vote vote = new Vote(  );
+                Vote vote = new Vote( );
                 vote.setLuteceUserKey( strLuteceUserKey );
                 vote.setIdDiggSubmit( nIdDiggSubmit );
                 VoteHome.create( vote, plugin );
@@ -1179,7 +1209,7 @@ public final class DiggUtils
 
     /**
      * Perform the report on a digg submit
-     * @param nIdDiggSubmit the id of the digg submit
+     * @param diggSubmit the digg submit
      * @param plugin the plugin
      */
     public static void doReportDiggSubmit( DiggSubmit diggSubmit, Plugin plugin )
@@ -1187,24 +1217,24 @@ public final class DiggUtils
         if ( diggSubmit != null )
         {
             diggSubmit.setReported( true );
-            DiggSubmitService.getService(  ).update( diggSubmit, plugin );
+            DiggSubmitService.getService( ).update( diggSubmit, plugin );
         }
     }
 
     /**
      * Init reference list with the different categories
-     *
-     *
+     * 
+     * 
      * @param listCategories the list of categories
-     * @return reference list of  category
+     * @return reference list of category
      */
     public static ReferenceList getRefListCategory( List<Category> listCategories )
     {
-        ReferenceList refListCategories = new ReferenceList(  );
+        ReferenceList refListCategories = new ReferenceList( );
 
         for ( Category category : listCategories )
         {
-            refListCategories.addItem( category.getIdCategory(  ), category.getTitle(  ) );
+            refListCategories.addItem( category.getIdCategory( ), category.getTitle( ) );
         }
 
         return refListCategories;
@@ -1212,18 +1242,18 @@ public final class DiggUtils
 
     /**
      * Init reference list with the different types
-     *
-     *
+     * 
+     * 
      * @param listTypes the list of types
-     * @return reference list of  type
+     * @return reference list of type
      */
     public static ReferenceList getRefListType( List<DiggSubmitType> listTypes )
     {
-        ReferenceList refListTypes = new ReferenceList(  );
+        ReferenceList refListTypes = new ReferenceList( );
 
         for ( DiggSubmitType type : listTypes )
         {
-            refListTypes.addItem( type.getIdType(  ), type.getName(  ) );
+            refListTypes.addItem( type.getIdType( ), type.getName( ) );
         }
 
         return refListTypes;
@@ -1231,16 +1261,16 @@ public final class DiggUtils
 
     /**
      * Init reference list with the different categories
-     *
-     *
+     * 
+     * 
      * @param listDiggs the list of categories
      * @param bIncludeDefault true if a default item must be insert
-     *
-     * @return reference list of  category
+     * 
+     * @return reference list of category
      */
     public static ReferenceList getRefListDigg( List<Digg> listDiggs, boolean bIncludeDefault )
     {
-        ReferenceList refListDiggs = new ReferenceList(  );
+        ReferenceList refListDiggs = new ReferenceList( );
 
         if ( bIncludeDefault )
         {
@@ -1249,126 +1279,123 @@ public final class DiggUtils
 
         for ( Digg digg : listDiggs )
         {
-            refListDiggs.addItem( digg.getIdDigg(  ), digg.getTitle(  ) );
+            refListDiggs.addItem( digg.getIdDigg( ), digg.getTitle( ) );
         }
 
         return refListDiggs;
     }
 
-    
     /**
      * Init reference list width the different sort
-     *
+     * 
      * @param locale the locale
      * @return reference list of sort
      */
     public static ReferenceList getRefListDiggSort( Locale locale )
     {
-    	
-    	return getRefListDiggSort(locale, false);
-    	
+
+        return getRefListDiggSort( locale, false );
+
     }
 
     /**
      * Init reference list width the different sort
-     *
+     * 
      * @param locale the locale
-     * @param bFront  yes if the refList is display in front office
+     * @param bFront yes if the refList is display in front office
      * @return reference list of sort
      */
     public static ReferenceList getRefListDiggSort( Locale locale, boolean bFront )
     {
-        ReferenceList refListSorter = new ReferenceList(  );
+        ReferenceList refListSorter = new ReferenceList( );
 
         refListSorter.addItem( CONSTANT_ID_NULL, EMPTY_STRING );
-        addEmptyItem(refListSorter);
+        addEmptyItem( refListSorter );
         refListSorter.addItem( SubmitFilter.SORT_BY_DATE_RESPONSE_ASC,
-            I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_ASC, locale ) );
+                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_ASC, locale ) );
         refListSorter.addItem( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC,
-            I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_DESC, locale ) );
+                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_DESC, locale ) );
         refListSorter.addItem( SubmitFilter.SORT_BY_SCORE_ASC,
-            I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_SCORE_ASC, locale ) );
+                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_SCORE_ASC, locale ) );
         refListSorter.addItem( SubmitFilter.SORT_BY_SCORE_DESC,
-            I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_SCORE_DESC, locale ) );
+                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_SCORE_DESC, locale ) );
         refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_COMMENT_ASC,
-            I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_ASC, locale ) );
+                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_ASC, locale ) );
         refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC,
-            I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_DESC, locale ) );
-        if(!bFront)
+                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_DESC, locale ) );
+        if ( !bFront )
         {
-        	refListSorter.addItem( SubmitFilter.SORT_MANUALLY,
-        			I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_MANUAL, locale ) );
+            refListSorter.addItem( SubmitFilter.SORT_MANUALLY,
+                    I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_MANUAL, locale ) );
         }
         refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_VIEW_ASC,
-            I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_VIEW_ASC, locale ) );
+                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_VIEW_ASC, locale ) );
         refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_VIEW_DESC,
-            I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_VIEW_DESC, locale ) );
+                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_VIEW_DESC, locale ) );
 
         return refListSorter;
     }
 
     /**
      * Init reference list width the different sort
-     *
+     * 
      * @param locale the locale
      * @return reference list of sort
      */
     public static ReferenceList getRefListFilterByPeriod( Locale locale )
     {
-        ReferenceList refListFilterByPeriod = new ReferenceList(  );
+        ReferenceList refListFilterByPeriod = new ReferenceList( );
 
         refListFilterByPeriod.addItem( CONSTANT_ID_NULL, I18nService.getLocalizedString( PROPERTY_FILTER_ALL, locale ) );
         refListFilterByPeriod.addItem( CONSTANT_SUBMIT_FILTER_TO_DAY,
-            I18nService.getLocalizedString( PROPERTY_FILTER_TO_DAY, locale ) );
+                I18nService.getLocalizedString( PROPERTY_FILTER_TO_DAY, locale ) );
         refListFilterByPeriod.addItem( CONSTANT_SUBMIT_FILTER_YESTERDAY,
-            I18nService.getLocalizedString( PROPERTY_FILTER_YESTERDAY, locale ) );
+                I18nService.getLocalizedString( PROPERTY_FILTER_YESTERDAY, locale ) );
         refListFilterByPeriod.addItem( CONSTANT_SUBMIT_FILTER_WEEK,
-            I18nService.getLocalizedString( PROPERTY_FILTER_WEEK, locale ) );
+                I18nService.getLocalizedString( PROPERTY_FILTER_WEEK, locale ) );
         refListFilterByPeriod.addItem( CONSTANT_SUBMIT_FILTER_MONTH,
-            I18nService.getLocalizedString( PROPERTY_FILTER_MONTH, locale ) );
+                I18nService.getLocalizedString( PROPERTY_FILTER_MONTH, locale ) );
 
         return refListFilterByPeriod;
     }
 
     /**
      * Init reference list width the different sort
-     *
+     * 
      * @param locale the locale
      * @return reference list of sort
      */
     public static ReferenceList getRefListCommentSort( Locale locale )
     {
-        ReferenceList refListSorter = new ReferenceList(  );
+        ReferenceList refListSorter = new ReferenceList( );
 
         refListSorter.addItem( CONSTANT_ID_NULL, EMPTY_STRING );
         refListSorter.addItem( SubmitFilter.SORT_BY_DATE_MODIFY_ASC,
-            I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_ASC, locale ) );
+                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_ASC, locale ) );
         refListSorter.addItem( SubmitFilter.SORT_BY_DATE_MODIFY_DESC,
-            I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_DESC, locale ) );
+                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_DESC, locale ) );
 
         return refListSorter;
     }
-    
-    
+
     /**
      * Init reference list width the different sort
-     *
+     * 
      * @param locale the locale
      * @return reference list of sort
      */
     public static ReferenceList getRefListCommentState( Locale locale )
     {
-        ReferenceList refListSorter = new ReferenceList(  );
+        ReferenceList refListSorter = new ReferenceList( );
 
         refListSorter.addItem( CONSTANT_ID_NULL, EMPTY_STRING );
-        refListSorter.addItem(CommentSubmit.STATE_ENABLE,
-            I18nService.getLocalizedString( PROPERTY_COMMENT_STATE_ENABLE, locale ) );
+        refListSorter.addItem( CommentSubmit.STATE_ENABLE,
+                I18nService.getLocalizedString( PROPERTY_COMMENT_STATE_ENABLE, locale ) );
         refListSorter.addItem( CommentSubmit.STATE_DISABLE,
-            I18nService.getLocalizedString( PROPERTY_COMMENT_STATE_DISABLE, locale ) );
+                I18nService.getLocalizedString( PROPERTY_COMMENT_STATE_DISABLE, locale ) );
 
         return refListSorter;
     }
-
 
     /**
      * write the http header in the response
@@ -1382,18 +1409,18 @@ public final class DiggUtils
         response.setHeader( "Pragma", "public" );
         response.setHeader( "Expires", "0" );
         response.setHeader( "Cache-Control", "must-revalidate,post-check=0,pre-check=0" );
-       }
+    }
 
     /**
      * Builds a query with filters placed in parameters
-     * @param strSelect the select of the  query
+     * @param strSelect the select of the query
      * @param listStrFilter the list of filter to add in the query
      * @param strOrder the order by of the query
      * @return a query
      */
     public static String buildRequestWithFilter( String strSelect, List<String> listStrFilter, String strOrder )
     {
-        StringBuffer strBuffer = new StringBuffer(  );
+        StringBuffer strBuffer = new StringBuffer( );
         strBuffer.append( strSelect );
 
         int nCount = 0;
@@ -1407,7 +1434,7 @@ public final class DiggUtils
 
             strBuffer.append( strFilter );
 
-            if ( nCount != listStrFilter.size(  ) )
+            if ( nCount != listStrFilter.size( ) )
             {
                 strBuffer.append( CONSTANT_AND );
             }
@@ -1418,14 +1445,14 @@ public final class DiggUtils
             strBuffer.append( strOrder );
         }
 
-        return strBuffer.toString(  );
+        return strBuffer.toString( );
     }
 
     /**
      * Like {@link List#retainAll(java.util.Collection)}, keeping first list
      * order. This method is based on the fact that list1 and list2 have unique
      * elements.
-     *
+     * 
      * @param list1
      *            the first list
      * @param list2
@@ -1434,16 +1461,16 @@ public final class DiggUtils
      */
     public static List<Integer> retainAllIdsKeepingFirstOrder( List<Integer> list1, List<Integer> list2 )
     {
-        Iterator<Integer> it = list1.iterator(  );
+        Iterator<Integer> it = list1.iterator( );
 
         // makes contains quicker
         TreeSet<Integer> ts = new TreeSet<Integer>( list2 );
 
-        while ( it.hasNext(  ) )
+        while ( it.hasNext( ) )
         {
-            if ( !ts.contains( it.next(  ) ) )
+            if ( !ts.contains( it.next( ) ) )
             {
-                it.remove(  );
+                it.remove( );
             }
         }
 
@@ -1453,8 +1480,8 @@ public final class DiggUtils
     /**
      * move a element in the list
      * @param nOldPosistion the old position
-     * @param nNewPosition the  new position
-     * @param list
+     * @param nNewPosition the new position
+     * @param list The list
      */
     public static void moveElement( int nOldPosistion, int nNewPosition, ArrayList<Integer> list )
     {
@@ -1465,7 +1492,7 @@ public final class DiggUtils
 
     /**
      * replace special characters in the string passed as a parameter
-     *
+     * 
      * @param strSource
      *            the string
      * @return substitute special in the string passed as a parameter
@@ -1487,17 +1514,19 @@ public final class DiggUtils
 
         return strResult;
     }
-    
-    
-    public static void addEmptyItem(ReferenceList refList)
+
+    /**
+     * Add an empty element to a reference list
+     * @param refList The reference list to add the empty element to
+     */
+    public static void addEmptyItem( ReferenceList refList )
     {
-    	ReferenceItem refEmpty=new ReferenceItem();
-    	refEmpty.setCode(EMPTY_STRING+CONSTANT_ID_NULL);
-    	refEmpty.setName(EMPTY_STRING);
-    	refList.add(0,refEmpty);
+        ReferenceItem refEmpty = new ReferenceItem( );
+        refEmpty.setCode( EMPTY_STRING + CONSTANT_ID_NULL );
+        refEmpty.setName( EMPTY_STRING );
+        refList.add( 0, refEmpty );
     }
-    
-    
+
     /**
      * Depopulate the digg into a map of key - value
      * @param digg the digg
@@ -1505,15 +1534,15 @@ public final class DiggUtils
      */
     public static Map<String, Object> depopulate( Digg digg )
     {
-        Map<String, Object> mapAttributes = new HashMap<String, Object>(  );
+        Map<String, Object> mapAttributes = new HashMap<String, Object>( );
 
-        for ( java.lang.reflect.Field field : Digg.class.getDeclaredFields(  ) )
+        for ( java.lang.reflect.Field field : Digg.class.getDeclaredFields( ) )
         {
             DiggAttribute attribute = field.getAnnotation( DiggAttribute.class );
 
             if ( attribute != null )
             {
-                String strAttributeKey = attribute.value(  );
+                String strAttributeKey = attribute.value( );
 
                 try
                 {
@@ -1531,29 +1560,28 @@ public final class DiggUtils
 
         return mapAttributes;
     }
-    
+
     /**
-     * create a filter for getting  the list of pinned digg submit
-     * @param filter the init filter 
+     * create a filter for getting the list of pinned digg submit
+     * @param filter the init filter
      * @return a filter for getting f the list of pinned digg submit
      */
-    public static SubmitFilter createPinnedFilter(SubmitFilter filter)
+    public static SubmitFilter createPinnedFilter( SubmitFilter filter )
     {
-    		SubmitFilter pinnedFilter=new SubmitFilter();
-    		pinnedFilter.setIdDigg(filter.getIdDigg());
-    		pinnedFilter.setDateFirst(filter.getDateFirst());
-    		pinnedFilter.setDateLast(filter.getDateLast());
-    		pinnedFilter.setIdCategory(filter.getIdCategory());
-    		pinnedFilter.setIdType(filter.getIdType());
-    		pinnedFilter.setIdReported(filter.getIdReported());
-    		pinnedFilter.setIdDiggSubmitState(filter.getIdDiggSubmitState());
-    		pinnedFilter.setIdPinned(SubmitFilter.ID_TRUE);
-    		pinnedFilter.setIdContainsCommentDisable(filter.getIdContainsCommentDisable());
-    		initSubmitFilterBySort(pinnedFilter, SubmitFilter.SORT_MANUALLY);
-    		return pinnedFilter;
+        SubmitFilter pinnedFilter = new SubmitFilter( );
+        pinnedFilter.setIdDigg( filter.getIdDigg( ) );
+        pinnedFilter.setDateFirst( filter.getDateFirst( ) );
+        pinnedFilter.setDateLast( filter.getDateLast( ) );
+        pinnedFilter.setIdCategory( filter.getIdCategory( ) );
+        pinnedFilter.setIdType( filter.getIdType( ) );
+        pinnedFilter.setIdReported( filter.getIdReported( ) );
+        pinnedFilter.setIdDiggSubmitState( filter.getIdDiggSubmitState( ) );
+        pinnedFilter.setIdPinned( SubmitFilter.ID_TRUE );
+        pinnedFilter.setIdContainsCommentDisable( filter.getIdContainsCommentDisable( ) );
+        initSubmitFilterBySort( pinnedFilter, SubmitFilter.SORT_MANUALLY );
+        return pinnedFilter;
     }
-    
-    
+
     /**
      * 
      * @param searchFields the search fields
@@ -1561,32 +1589,33 @@ public final class DiggUtils
      */
     public static SubmitFilter getDiggSubmitFilter( DigglikeAdminSearchFields searchFields )
     {
-        return getDiggSubmitFilter(searchFields, null);
+        return getDiggSubmitFilter( searchFields, null );
     }
-    
-    
+
     /**
-     *  
+     * 
      * @param searchFields the search fields
      * @param nDefaultIdSort the defautlt sort
      * @return SubmitFilter
      */
-    public static SubmitFilter getDiggSubmitFilter( DigglikeAdminSearchFields searchFields,Integer nDefaultIdSort  )
+    public static SubmitFilter getDiggSubmitFilter( DigglikeAdminSearchFields searchFields, Integer nDefaultIdSort )
     {
-        SubmitFilter filter = new SubmitFilter(  );
-        filter.setIdDigg( searchFields.getIdDigg() );
-        filter.setIdDiggSubmitState( searchFields.getIdDiggSumitState() );
-        filter.setIdReported( searchFields.getIdDiggSubmitReport() );
-        filter.setIdCategory(searchFields.getIdCategory());
-        filter.setIdType(searchFields.getIdType());
-        filter.setIdContainsCommentDisable(searchFields.getIdDiggSubmitContainsCommentDisable());
-        DiggUtils.initSubmitFilterBySort( filter, (searchFields.getIdDiggSubmitSort()==DiggUtils.CONSTANT_ID_NULL && nDefaultIdSort!=null )? nDefaultIdSort :searchFields.getIdDiggSubmitSort()  );
+        SubmitFilter filter = new SubmitFilter( );
+        filter.setIdDigg( searchFields.getIdDigg( ) );
+        filter.setIdDiggSubmitState( searchFields.getIdDiggSumitState( ) );
+        filter.setIdReported( searchFields.getIdDiggSubmitReport( ) );
+        filter.setIdCategory( searchFields.getIdCategory( ) );
+        filter.setIdType( searchFields.getIdType( ) );
+        filter.setIdContainsCommentDisable( searchFields.getIdDiggSubmitContainsCommentDisable( ) );
+        DiggUtils
+                .initSubmitFilterBySort(
+                        filter,
+                        ( searchFields.getIdDiggSubmitSort( ) == DiggUtils.CONSTANT_ID_NULL && nDefaultIdSort != null ) ? nDefaultIdSort
+                                : searchFields.getIdDiggSubmitSort( ) );
         //add sort by pinned first
-        DiggUtils.initSubmitFilterBySort(filter, SubmitFilter.SORT_BY_PINNED_FIRST);
+        DiggUtils.initSubmitFilterBySort( filter, SubmitFilter.SORT_BY_PINNED_FIRST );
 
         return filter;
     }
-    
-    
 
 }

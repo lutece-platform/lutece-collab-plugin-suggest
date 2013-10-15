@@ -213,7 +213,7 @@ public class DiggSubscribersNotificationDaemon extends Daemon
      * Register a list of comments to send to a user. If a comment has already
      * been registered for the user, then it is ignored
      * @param listComments The list of comments to send
-     * @param nSubscriberId The user to send the notification to
+     * @param strUserId The user to send the notification to
      */
     private void registerCommentNotificationToSend( List<CommentSubmit> listComments, String strUserId )
     {
@@ -331,7 +331,7 @@ public class DiggSubscribersNotificationDaemon extends Daemon
      * Send a single digg submit notification
      * @param listDiggSubmit The list of digg submit to include into the
      *            notification
-     * @param nSubscriberId The name of the lutece user to send the notification
+     * @param strUserName The name of the lutece user to send the notification
      *            to
      */
     private void sendDiggSubmitNotification( List<DiggSubmit> listDiggSubmit, String strUserName )
