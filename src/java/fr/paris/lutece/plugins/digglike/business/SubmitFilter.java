@@ -300,29 +300,25 @@ public class SubmitFilter
     {
         return ( ( _listSortBy != null ) && ( _listSortBy.size(  ) != 0 ) );
     }
-    
+
     /**
     *
     * @return true if the filter contain the sort
     */
     public boolean containsSortBy( Integer strSort )
     {
-        if( (strSort!=null) && ( _listSortBy != null ) && ( _listSortBy.size(  ) != 0 ))
+        if ( ( strSort != null ) && ( _listSortBy != null ) && ( _listSortBy.size(  ) != 0 ) )
         {
-        	
-        	for(Integer nSort:_listSortBy)
-        	{
-        		if (nSort.equals(strSort))
-        		{
-        			return true;
-        		}
-        				
-        	}
-        	
+            for ( Integer nSort : _listSortBy )
+            {
+                if ( nSort.equals( strSort ) )
+                {
+                    return true;
+                }
+            }
         }
-        		
-        return false;		
-        		
+
+        return false;
     }
 
     /**
@@ -474,8 +470,7 @@ public class SubmitFilter
     {
         return ( _nIdParent != ALL_INT );
     }
-    
-    
+
     /**
     *
     * @return 1 if the diggs return must be reported
@@ -493,7 +488,7 @@ public class SubmitFilter
      */
     public void setIdPinned( int idPinned )
     {
-    	_nIdPinned = idPinned;
+        _nIdPinned = idPinned;
     }
 
     /**
@@ -504,63 +499,60 @@ public class SubmitFilter
     {
         return ( _nIdPinned != ALL_INT );
     }
-    
-    
-    
+
     /**
     *
     * @return  the id of the type insert in the filter
     */
-   public int getIdType(  )
-   {
-       return _nIdType;
-   }
+    public int getIdType(  )
+    {
+        return _nIdType;
+    }
 
-   /**
-    * set  the id of the type in the filter
-    * @param idType the id of the type  to insert in the filter
-    */
-   public void setIdType( int idType )
-   {
-       _nIdType = idType;
-   }
+    /**
+     * set  the id of the type in the filter
+     * @param idType the id of the type  to insert in the filter
+     */
+    public void setIdType( int idType )
+    {
+        _nIdType = idType;
+    }
 
-   /**
+    /**
+     *
+     * @return true if the filter contain an id of type
+     */
+    public boolean containsIdType(  )
+    {
+        return ( _nIdType != ALL_INT );
+    }
+
+    /**
+     *
+     * @return 1 if the diggsubmit return must contains comment disable
+     *                  0 if the diggsubmit return must not contains comment disable
+     */
+    public int getIdContainsCommentDisable(  )
+    {
+        return _nIdContainsCommentDisable;
+    }
+
+    /**
+     *
+     * @param _nIdContainsCommentDisable 1 if the diggsubmit return must contains comment disable
+     *                                                                           0 if the diggsubmit return must not contains comment disable
+     */
+    public void setIdContainsCommentDisable( int _nIdContainsCommentDisable )
+    {
+        this._nIdContainsCommentDisable = _nIdContainsCommentDisable;
+    }
+
+    /**
     *
-    * @return true if the filter contain an id of type
+    * @return true if the filter contains Id comment Disable
     */
-   public boolean containsIdType(  )
-   {
-       return ( _nIdType != ALL_INT );
-   }
-
-   
-  /**
-   *  
-   * @return 1 if the diggsubmit return must contains comment disable
-   * 		 0 if the diggsubmit return must not contains comment disable 
-   */
-public int getIdContainsCommentDisable() {
-	return _nIdContainsCommentDisable;
-}
-
-/**
- * 
- * @param _nIdContainsCommentDisable 1 if the diggsubmit return must contains comment disable
- * 									  0 if the diggsubmit return must not contains comment disable 							
- */
-public void setIdContainsCommentDisable(int _nIdContainsCommentDisable) {
-	this._nIdContainsCommentDisable = _nIdContainsCommentDisable;
-}
-
-
-/**
-*
-* @return true if the filter contains Id comment Disable
-*/
-public boolean containsIdContainsCommentDisable(  )
-{
-   return ( _nIdContainsCommentDisable != ALL_INT );
-}
-
+    public boolean containsIdContainsCommentDisable(  )
+    {
+        return ( _nIdContainsCommentDisable != ALL_INT );
+    }
 }

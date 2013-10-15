@@ -33,117 +33,109 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-public class ReportedMessageDAO implements IReportedMessageDAO{
+import java.util.ArrayList;
+import java.util.List;
 
-	 
-	// Constants
-	private static final String SQL_FILTER_ID_DIGG_SUBMIT = " id_digg_submit = ? ";
-	private static final String SQL_FILTER_ID_REPORTED_MESSAGE  = " id_reported_message = ? ";
+
+public class ReportedMessageDAO implements IReportedMessageDAO
+{
+    // Constants
+    private static final String SQL_FILTER_ID_DIGG_SUBMIT = " id_digg_submit = ? ";
+    private static final String SQL_FILTER_ID_REPORTED_MESSAGE = " id_reported_message = ? ";
     private static final String SQL_ORDER_BY_DATE = " ORDER BY date_reported DESC ";
-    
-	private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_reported_message ) FROM digglike_reported_message";
-	private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_reported_message ( id_reported_message,id_digg_submit,date_reported,reported_value)" +
-		        " VALUES(?,?,?,?)";
-		 
-	private static final String SQL_QUERY_FIND = "SELECT id_reported_message,id_digg_submit,date_reported,reported_value " +
+    private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_reported_message ) FROM digglike_reported_message";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_reported_message ( id_reported_message,id_digg_submit,date_reported,reported_value)" +
+        " VALUES(?,?,?,?)";
+    private static final String SQL_QUERY_FIND = "SELECT id_reported_message,id_digg_submit,date_reported,reported_value " +
         "FROM digglike_reported_message WHERE ";
-    
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_FIND +SQL_FILTER_ID_REPORTED_MESSAGE;
-    private static final String SQL_QUERY_FIND_BY_DIGG_SUBMIT = SQL_QUERY_FIND +SQL_FILTER_ID_DIGG_SUBMIT +SQL_ORDER_BY_DATE;
-    private static final String SQL_QUERY_DELETE_BY_DIGG_SUBMIT = "DELETE FROM digglike_reported_message WHERE "+ SQL_FILTER_ID_DIGG_SUBMIT ;
-    
-  
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_FIND + SQL_FILTER_ID_REPORTED_MESSAGE;
+    private static final String SQL_QUERY_FIND_BY_DIGG_SUBMIT = SQL_QUERY_FIND + SQL_FILTER_ID_DIGG_SUBMIT +
+        SQL_ORDER_BY_DATE;
+    private static final String SQL_QUERY_DELETE_BY_DIGG_SUBMIT = "DELETE FROM digglike_reported_message WHERE " +
+        SQL_FILTER_ID_DIGG_SUBMIT;
 
-	
-	/**
-     * {@inheritDoc}
-     */
-	@Override
-	public void insert(ReportedMessage reportedMessage, Plugin plugin) {
-		
-		DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-		reportedMessage.setIdReported( newPrimaryKey( plugin ) );
-        daoUtil.setInt( 1, reportedMessage.getIdReported());
+    /**
+    * {@inheritDoc}
+    */
+    @Override
+    public void insert( ReportedMessage reportedMessage, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
+        reportedMessage.setIdReported( newPrimaryKey( plugin ) );
+        daoUtil.setInt( 1, reportedMessage.getIdReported(  ) );
         daoUtil.setInt( 2, reportedMessage.getDiggSubmit(  ).getIdDiggSubmit(  ) );
-        daoUtil.setTimestamp( 3, reportedMessage.getDateReported() );
+        daoUtil.setTimestamp( 3, reportedMessage.getDateReported(  ) );
         daoUtil.setString( 4, reportedMessage.getValue(  ) );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
+    }
 
-      
-		
-	}
+    /**
+    * {@inheritDoc}
+    */
+    @Override
+    public ReportedMessage load( int nKey, Plugin plugin )
+    {
+        // TODO Auto-generated method stub
+        ReportedMessage reportedMessage = null;
 
-	 /**
-     * {@inheritDoc}
-     */
-	@Override
-	public ReportedMessage load(int nKey, Plugin plugin) {
-		// TODO Auto-generated method stub
-			ReportedMessage reportedMessage = null;
-			
-			DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
-	        daoUtil.setInt( 1, nKey );
-	        daoUtil.executeQuery(  );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
+        daoUtil.setInt( 1, nKey );
+        daoUtil.executeQuery(  );
 
-	        if ( daoUtil.next(  ) )
-	        {
-	        	reportedMessage=getRow(daoUtil);
-	         }
+        if ( daoUtil.next(  ) )
+        {
+            reportedMessage = getRow( daoUtil );
+        }
 
-	        daoUtil.free(  );
+        daoUtil.free(  );
 
-	        return reportedMessage;
-	}
+        return reportedMessage;
+    }
 
-	 /**
-     * {@inheritDoc}
-     */
-	@Override
-	public void deleteByDiggSubmit(int nIdDiggSubmit, Plugin plugin) {
-		    DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_DIGG_SUBMIT, plugin );
-	        daoUtil.setInt( 1, nIdDiggSubmit );
-	        daoUtil.executeUpdate(  );
-	        daoUtil.free(  );
-		
-	}
-	 /**
-     * {@inheritDoc}
-     */
-	@Override
-	public List<ReportedMessage> selectListByDiggSubmit(int nIdDiggSubmit,
-			Plugin plugin) {
-		
-		List<ReportedMessage> reportedMessageList = new ArrayList<ReportedMessage>(  );
-      
+    /**
+    * {@inheritDoc}
+    */
+    @Override
+    public void deleteByDiggSubmit( int nIdDiggSubmit, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_DIGG_SUBMIT, plugin );
+        daoUtil.setInt( 1, nIdDiggSubmit );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
+    }
+
+    /**
+    * {@inheritDoc}
+    */
+    @Override
+    public List<ReportedMessage> selectListByDiggSubmit( int nIdDiggSubmit, Plugin plugin )
+    {
+        List<ReportedMessage> reportedMessageList = new ArrayList<ReportedMessage>(  );
+
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_DIGG_SUBMIT, plugin );
         daoUtil.setInt( 1, nIdDiggSubmit );
         daoUtil.executeQuery(  );
-     
 
         while ( daoUtil.next(  ) )
         {
-        	reportedMessageList.add(getRow(daoUtil));
+            reportedMessageList.add( getRow( daoUtil ) );
         }
 
         daoUtil.free(  );
 
         return reportedMessageList;
-	}
+    }
 
-	
-	  /**
-     * Generates a new primary key
-     *
-     * @param plugin the plugin
-     * @return The new primary key
-     */
+    /**
+    * Generates a new primary key
+    *
+    * @param plugin the plugin
+    * @return The new primary key
+    */
     private int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
@@ -162,20 +154,19 @@ public class ReportedMessageDAO implements IReportedMessageDAO{
 
         return nKey;
     }
-    
-    
+
     /**
      * return  ReportedMessage
      * @param daoUtil ReportedMessage
      * @return ReportedMessage
      */
-    private ReportedMessage getRow(DAOUtil daoUtil)
+    private ReportedMessage getRow( DAOUtil daoUtil )
     {
-    	ReportedMessage reportedMessage = null;
-    	DiggSubmit diggSubmit = null;  
-    	
-    	reportedMessage = new ReportedMessage(  );
-    	reportedMessage.setIdReported( daoUtil.getInt( 1 ) );
+        ReportedMessage reportedMessage = null;
+        DiggSubmit diggSubmit = null;
+
+        reportedMessage = new ReportedMessage(  );
+        reportedMessage.setIdReported( daoUtil.getInt( 1 ) );
 
         diggSubmit = new DiggSubmit(  );
         diggSubmit.setIdDiggSubmit( daoUtil.getInt( 2 ) );
@@ -183,10 +174,7 @@ public class ReportedMessageDAO implements IReportedMessageDAO{
 
         reportedMessage.setDateReported( daoUtil.getTimestamp( 3 ) );
         reportedMessage.setValue( daoUtil.getString( 4 ) );
-    	
+
         return reportedMessage;
-    	
     }
-
-
 }

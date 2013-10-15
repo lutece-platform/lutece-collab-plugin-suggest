@@ -33,17 +33,18 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.business.style.ThemeHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import java.sql.Timestamp;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -97,7 +98,7 @@ public final class DiggDAO implements IDiggDAO
         "enable_new_digg_submit_mail,header, sort_field, code_theme, confirmation_message,active_editor_bbcode, " +
         "default_digg,id_default_sort " + " FROM digglike_digg ";
     private static final String SQL_QUERY_SELECT_ALL_THEMES = "SELECT id_digg, code_theme FROM digglike_digg";
-     private static final String SQL_FILTER_WORKGROUP = " workgroup = ? ";
+    private static final String SQL_FILTER_WORKGROUP = " workgroup = ? ";
     private static final String SQL_FILTER_ROLE = " role = ? ";
     private static final String SQL_FILTER_STATE = " active = ? ";
     private static final String SQL_FILTER_DEFAULT_DIGG = " default_digg = ? ";
@@ -142,7 +143,8 @@ public final class DiggDAO implements IDiggDAO
         Timestamp timestamp = new java.sql.Timestamp( new java.util.Date(  ).getTime(  ) );
 
         digg.setIdDigg( newPrimaryKey( plugin ) );
-        int ncpt=1;
+
+        int ncpt = 1;
         daoUtil.setInt( ncpt++, digg.getIdDigg(  ) );
         daoUtil.setString( ncpt++, digg.getTitle(  ) );
         daoUtil.setString( ncpt++, digg.getUnavailabilityMessage(  ) );
@@ -151,7 +153,7 @@ public final class DiggDAO implements IDiggDAO
         daoUtil.setInt( ncpt++, digg.getNumberVoteRequired(  ) );
         daoUtil.setInt( ncpt++, digg.getNumberDayRequired(  ) );
         daoUtil.setBoolean( ncpt++, digg.isActiveDiggSubmitAuthentification(  ) );
-        daoUtil.setBoolean(ncpt++, digg.isActiveVoteAuthentification(  ) );
+        daoUtil.setBoolean( ncpt++, digg.isActiveVoteAuthentification(  ) );
         daoUtil.setBoolean( ncpt++, digg.isActiveCommentAuthentification(  ) );
         daoUtil.setBoolean( ncpt++, digg.isDisableNewDiggSubmit(  ) );
         daoUtil.setBoolean( ncpt++, digg.isAuthorizedComment(  ) );
@@ -182,7 +184,6 @@ public final class DiggDAO implements IDiggDAO
         daoUtil.setBoolean( ncpt++, digg.isDefaultDigg(  ) );
         daoUtil.setInt( ncpt++, digg.getIdDefaultSort(  ) );
 
-
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
 
@@ -207,7 +208,7 @@ public final class DiggDAO implements IDiggDAO
 
         if ( daoUtil.next(  ) )
         {
-        	int ncpt=1;
+            int ncpt = 1;
             digg = new Digg(  );
             digg.setIdDigg( daoUtil.getInt( ncpt++ ) );
             digg.setTitle( daoUtil.getString( ncpt++ ) );
@@ -217,10 +218,10 @@ public final class DiggDAO implements IDiggDAO
             voteType = new VoteType(  );
             voteType.setIdVoteType( daoUtil.getInt( ncpt++ ) );
             digg.setVoteType( voteType );
-            
-            digg.setNumberVoteRequired( daoUtil.getInt( ncpt++) );
-            digg.setNumberDayRequired( daoUtil.getInt(ncpt++ ) );
-            digg.setActiveDiggSubmitAuthentification( daoUtil.getBoolean(ncpt++ ) );
+
+            digg.setNumberVoteRequired( daoUtil.getInt( ncpt++ ) );
+            digg.setNumberDayRequired( daoUtil.getInt( ncpt++ ) );
+            digg.setActiveDiggSubmitAuthentification( daoUtil.getBoolean( ncpt++ ) );
             digg.setActiveVoteAuthentification( daoUtil.getBoolean( ncpt++ ) );
             digg.setActiveCommentAuthentification( daoUtil.getBoolean( ncpt++ ) );
             digg.setDisableNewDiggSubmit( daoUtil.getBoolean( ncpt++ ) );
@@ -228,30 +229,29 @@ public final class DiggDAO implements IDiggDAO
             digg.setDisableNewComment( daoUtil.getBoolean( ncpt++ ) );
             digg.setIdMailingListDiggSubmit( daoUtil.getInt( ncpt++ ) );
             digg.setActiveCaptcha( daoUtil.getBoolean( ncpt++ ) );
-            digg.setActive( daoUtil.getBoolean(  ncpt++ ) );
-            digg.setDateCreation( daoUtil.getTimestamp(  ncpt++ ) );
-            digg.setLibelleValidateButton( daoUtil.getString(  ncpt++ ) );
-            digg.setActiveDiggPropositionState( daoUtil.getBoolean(  ncpt++ ) );
-            digg.setLibelleContribution( daoUtil.getString(  ncpt++ ) );
-            digg.setNumberDiggSubmitInTopScore( daoUtil.getInt(  ncpt++ ) );
-            digg.setNumberDiggSubmitInTopComment( daoUtil.getInt(  ncpt++ ) );
-            digg.setLimitNumberVote( daoUtil.getBoolean(  ncpt++ ) );
-            digg.setNumberDiggSubmitCaractersShown( daoUtil.getInt(  ncpt++ ) );
-            digg.setShowCategoryBlock( daoUtil.getBoolean(  ncpt++ ) );
-            digg.setShowTopScoreBlock( daoUtil.getBoolean(  ncpt++ ) );
-            digg.setShowTopCommentBlock( daoUtil.getBoolean(  ncpt++ ) );
-            digg.setActiveDiggSubmitPaginator( daoUtil.getBoolean(  ncpt++ ) );
-            digg.setNumberDiggSubmitPerPage( daoUtil.getInt(  ncpt++ ) );
-            digg.setRole( daoUtil.getString(  ncpt++ ) );
-            digg.setEnableMailNewDiggSubmit( daoUtil.getBoolean(  ncpt++ ) );
-            digg.setHeader( daoUtil.getString(  ncpt++ ) );
-            digg.setSortField( daoUtil.getInt(  ncpt++ ) );
-            digg.setCodeTheme( daoUtil.getString(  ncpt++ ) );
-            digg.setConfirmationMessage( daoUtil.getString(  ncpt++ ) );
-            digg.setActiveEditorBbcode( daoUtil.getBoolean(  ncpt++ ) );
-            digg.setDefaultDigg( daoUtil.getBoolean(  ncpt++ ) );
-            digg.setIdDefaultSort( daoUtil.getInt(  ncpt++ ) );
-     
+            digg.setActive( daoUtil.getBoolean( ncpt++ ) );
+            digg.setDateCreation( daoUtil.getTimestamp( ncpt++ ) );
+            digg.setLibelleValidateButton( daoUtil.getString( ncpt++ ) );
+            digg.setActiveDiggPropositionState( daoUtil.getBoolean( ncpt++ ) );
+            digg.setLibelleContribution( daoUtil.getString( ncpt++ ) );
+            digg.setNumberDiggSubmitInTopScore( daoUtil.getInt( ncpt++ ) );
+            digg.setNumberDiggSubmitInTopComment( daoUtil.getInt( ncpt++ ) );
+            digg.setLimitNumberVote( daoUtil.getBoolean( ncpt++ ) );
+            digg.setNumberDiggSubmitCaractersShown( daoUtil.getInt( ncpt++ ) );
+            digg.setShowCategoryBlock( daoUtil.getBoolean( ncpt++ ) );
+            digg.setShowTopScoreBlock( daoUtil.getBoolean( ncpt++ ) );
+            digg.setShowTopCommentBlock( daoUtil.getBoolean( ncpt++ ) );
+            digg.setActiveDiggSubmitPaginator( daoUtil.getBoolean( ncpt++ ) );
+            digg.setNumberDiggSubmitPerPage( daoUtil.getInt( ncpt++ ) );
+            digg.setRole( daoUtil.getString( ncpt++ ) );
+            digg.setEnableMailNewDiggSubmit( daoUtil.getBoolean( ncpt++ ) );
+            digg.setHeader( daoUtil.getString( ncpt++ ) );
+            digg.setSortField( daoUtil.getInt( ncpt++ ) );
+            digg.setCodeTheme( daoUtil.getString( ncpt++ ) );
+            digg.setConfirmationMessage( daoUtil.getString( ncpt++ ) );
+            digg.setActiveEditorBbcode( daoUtil.getBoolean( ncpt++ ) );
+            digg.setDefaultDigg( daoUtil.getBoolean( ncpt++ ) );
+            digg.setIdDefaultSort( daoUtil.getInt( ncpt++ ) );
         }
 
         daoUtil.free(  );
@@ -282,7 +282,7 @@ public final class DiggDAO implements IDiggDAO
     public void store( Digg digg, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        int ncpt=1;
+        int ncpt = 1;
         digg.setIdDigg( digg.getIdDigg(  ) );
         daoUtil.setInt( ncpt++, digg.getIdDigg(  ) );
         daoUtil.setString( ncpt++, digg.getTitle(  ) );
@@ -322,7 +322,7 @@ public final class DiggDAO implements IDiggDAO
         daoUtil.setBoolean( ncpt++, digg.isActiveEditorBbcode(  ) );
         daoUtil.setBoolean( ncpt++, digg.isDefaultDigg(  ) );
         daoUtil.setInt( ncpt++, digg.getIdDefaultSort(  ) );
-       
+
         daoUtil.setInt( ncpt++, digg.getIdDigg(  ) );
 
         daoUtil.executeUpdate(  );
@@ -341,7 +341,7 @@ public final class DiggDAO implements IDiggDAO
         Digg digg = null;
         VoteType voteType = null;
         List<String> listStrFilter = new ArrayList<String>(  );
-        int ncpt=1;
+        int ncpt = 1;
 
         if ( filter.containsWorkgroupCriteria(  ) )
         {
@@ -393,10 +393,10 @@ public final class DiggDAO implements IDiggDAO
         }
 
         daoUtil.executeQuery(  );
-        
+
         while ( daoUtil.next(  ) )
         {
-        	ncpt=1;
+            ncpt = 1;
             digg = new Digg(  );
             digg.setIdDigg( daoUtil.getInt( ncpt++ ) );
             digg.setTitle( daoUtil.getString( ncpt++ ) );
@@ -440,7 +440,6 @@ public final class DiggDAO implements IDiggDAO
             digg.setActiveEditorBbcode( daoUtil.getBoolean( ncpt++ ) );
             digg.setDefaultDigg( daoUtil.getBoolean( ncpt++ ) );
             digg.setIdDefaultSort( daoUtil.getInt( ncpt++ ) );
-       
 
             diggList.add( digg );
         }
@@ -449,8 +448,6 @@ public final class DiggDAO implements IDiggDAO
 
         return diggList;
     }
-
-   
 
     /**
      * Modify the order of a diggsubmit

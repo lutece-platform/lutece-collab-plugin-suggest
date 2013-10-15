@@ -59,7 +59,7 @@ public class CategoryDAO implements ICategoryDAO
         "WHERE c.id_category=dc.id_category AND dc.id_digg=? ORDER BY title";
     private static final String SQL_QUERY_DELETE_ASSOCIATED_CATEGORIE = "DELETE FROM digglike_digg_category WHERE id_digg = ? and id_category= ? ";
     private static final String SQL_QUERY_INSERT_ASSOCIATED_CATEGORY = "INSERT INTO digglike_digg_category(id_digg,id_category) VALUES(?,?) ";
-  
+
     /**
      * Generates a new primary key
      *
@@ -239,8 +239,7 @@ public class CategoryDAO implements ICategoryDAO
 
         return listCategory;
     }
-    
-    
+
     /**
      * Delete an association between digg and categories
      *

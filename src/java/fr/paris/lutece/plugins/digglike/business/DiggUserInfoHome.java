@@ -48,7 +48,7 @@ public final class DiggUserInfoHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private DiggUserInfoHome( )
+    private DiggUserInfoHome(  )
     {
     }
 
@@ -95,5 +95,4 @@ public final class DiggUserInfoHome
     {
         return _dao.load( strLuteceUserKey, plugin );
     }
-
 }

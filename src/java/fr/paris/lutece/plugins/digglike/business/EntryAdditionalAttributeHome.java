@@ -40,26 +40,26 @@ import java.util.List;
 
 
 /**
- * 
+ *
  * class EntryAdditionalAttributeHome
- * 
+ *
  */
 public final class EntryAdditionalAttributeHome
 {
     // Static variable pointed at the DAO instance
-    private static IEntryAdditionalAttributeDAO _dao = SpringContextService
-            .getBean( "digglike.entryAdditionalAttributeDAO" );
+    private static IEntryAdditionalAttributeDAO _dao = SpringContextService.getBean( 
+            "digglike.entryAdditionalAttributeDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private EntryAdditionalAttributeHome( )
+    private EntryAdditionalAttributeHome(  )
     {
     }
 
     /**
      * Creation of an instance of EntryAdditionalAttribute
-     * 
+     *
      * @param entryAdditionalAttribute The instance of the
      *            EntryAdditionalAttribute which contains the informations to
      *            store
@@ -72,7 +72,7 @@ public final class EntryAdditionalAttributeHome
 
     /**
      * Returns a list of all additional attributes of an entry
-     * 
+     *
      * @param idEntry the if of the entry
      * @param plugin the plugin
      * @return the list of entry

@@ -33,16 +33,16 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.xml.XmlUtil;
+
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -52,12 +52,12 @@ import fr.paris.lutece.util.xml.XmlUtil;
  */
 public class Entry implements IEntry
 {
-	public static final String TAG_ENTRY = "entry";
-	public static final String TAG_ENTRY_ID = "id";
-	public static final String TAG_TITLE = "title";
-	public static final String TAG_TYPE = "type-id";
-	
-	//	parameters Entry 
+    public static final String TAG_ENTRY = "entry";
+    public static final String TAG_ENTRY_ID = "id";
+    public static final String TAG_TITLE = "title";
+    public static final String TAG_TYPE = "type-id";
+
+    //	parameters Entry 
     protected static final String PARAMETER_TITLE = "title";
     protected static final String PARAMETER_HELP_MESSAGE = "help_message";
     protected static final String PARAMETER_COMMENT = "comment";
@@ -467,22 +467,19 @@ public class Entry implements IEntry
     {
         _listEntryAdditionalAttribute = entryAdditionalAttributeList;
     }
-    
+
     @Override
-    public void getXml(Locale locale, StringBuffer strXml )
+    public void getXml( Locale locale, StringBuffer strXml )
     {
-        
-            XmlUtil.beginElement( strXml, TAG_ENTRY);
-            XmlUtil.addElement( strXml, TAG_ENTRY_ID, this.getIdEntry());
-            XmlUtil.addElementHtml( strXml, TAG_TITLE, this.getTitle(  ) );
-            if ( this.getEntryType(  )!=null)
-            {
-            	XmlUtil.addElement( strXml, TAG_TYPE, this.getEntryType().getIdType() );
+        XmlUtil.beginElement( strXml, TAG_ENTRY );
+        XmlUtil.addElement( strXml, TAG_ENTRY_ID, this.getIdEntry(  ) );
+        XmlUtil.addElementHtml( strXml, TAG_TITLE, this.getTitle(  ) );
 
-            }
+        if ( this.getEntryType(  ) != null )
+        {
+            XmlUtil.addElement( strXml, TAG_TYPE, this.getEntryType(  ).getIdType(  ) );
+        }
 
-            XmlUtil.endElement( strXml, TAG_ENTRY );
-     }
-    
-
+        XmlUtil.endElement( strXml, TAG_ENTRY );
+    }
 }

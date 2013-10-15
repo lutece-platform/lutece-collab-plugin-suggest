@@ -58,7 +58,6 @@ import javax.servlet.http.HttpServletRequest;
 public class ManageDigglikeJspBean extends PluginAdminPageJspBean
 {
     public static final String RIGHT_MANAGE_DIGG_LIKE = "DIGGLIKE_MANAGEMENT";
-
     private static final long serialVersionUID = -4559529824052770950L;
 
     //templates
@@ -81,13 +80,13 @@ public class ManageDigglikeJspBean extends PluginAdminPageJspBean
      */
     public String getManageDigg( HttpServletRequest request )
     {
-        AdminUser adminUser = getUser( );
+        AdminUser adminUser = getUser(  );
         setPageTitleProperty( EMPTY_STRING );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<String, Object>(  );
 
         if ( RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                ExportFormatResourceIdService.PERMISSION_MANAGE, adminUser ) )
+                    ExportFormatResourceIdService.PERMISSION_MANAGE, adminUser ) )
         {
             model.put( MARK_PERMISSION_MANAGE_EXPORT_FORMAT, true );
         }
@@ -97,7 +96,7 @@ public class ManageDigglikeJspBean extends PluginAdminPageJspBean
         }
 
         if ( RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                CategoryResourceIdService.PERMISSION_MANAGE, adminUser ) )
+                    CategoryResourceIdService.PERMISSION_MANAGE, adminUser ) )
         {
             model.put( MARK_PERMISSION_MANAGE_CATEGORY, true );
         }
@@ -107,7 +106,7 @@ public class ManageDigglikeJspBean extends PluginAdminPageJspBean
         }
 
         if ( RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                DefaultMessageResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
+                    DefaultMessageResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
         {
             model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE, true );
         }
@@ -116,8 +115,8 @@ public class ManageDigglikeJspBean extends PluginAdminPageJspBean
             model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE, false );
         }
 
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_DIGGLIKE, getLocale( ), model );
+        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_DIGGLIKE, getLocale(  ), model );
 
-        return getAdminPage( templateList.getHtml( ) );
+        return getAdminPage( templateList.getHtml(  ) );
     }
 }

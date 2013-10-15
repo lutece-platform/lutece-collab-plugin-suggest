@@ -45,7 +45,6 @@ public class DigglikeService
 {
     private static DigglikeService _singleton = new DigglikeService(  );
 
-
     /**
      * Initialize the Digg service
      *
@@ -64,5 +63,4 @@ public class DigglikeService
     {
         return _singleton;
     }
-
 }

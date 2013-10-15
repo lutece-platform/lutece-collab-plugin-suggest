@@ -33,104 +33,121 @@
  */
 package fr.paris.lutece.plugins.digglike.web.action;
 
+import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
+
 import java.io.Serializable;
+
 import java.util.List;
 
-import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 
 /**
  * Visualization of all needed session values. Many features depends on search
  * result or paginator. Those fields may be required for actions.
- * 
+ *
  */
-public final class DigglikeAdminSearchFields implements Serializable {
+public final class DigglikeAdminSearchFields implements Serializable
+{
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private int _nIdDigg;
+    private int _nIdDiggSumitState = DiggUtils.CONSTANT_ID_NULL;
+    private int _nIdDiggSubmitSort = DiggUtils.CONSTANT_ID_NULL;
+    private int _nIdDiggSubmitReport = DiggUtils.CONSTANT_ID_NULL;
+    private int _nIdCategory = DiggUtils.CONSTANT_ID_NULL;
+    private int _nIdType = DiggUtils.CONSTANT_ID_NULL;
+    private int _nIdDiggSubmitContainsCommentDisable = DiggUtils.CONSTANT_ID_NULL;
+    private String _strQuery;
+    private List<String> _selectedDiggSubmit;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    public int getIdDiggSubmitSort(  )
+    {
+        return _nIdDiggSubmitSort;
+    }
 
-	private int _nIdDigg;
-	private int _nIdDiggSumitState=DiggUtils.CONSTANT_ID_NULL;
-	private int _nIdDiggSubmitSort=DiggUtils.CONSTANT_ID_NULL;
-	private int _nIdDiggSubmitReport=DiggUtils.CONSTANT_ID_NULL;
-	private int _nIdCategory=DiggUtils.CONSTANT_ID_NULL;
-	private int _nIdType=DiggUtils.CONSTANT_ID_NULL;
-	private int _nIdDiggSubmitContainsCommentDisable=DiggUtils.CONSTANT_ID_NULL;
-	private String _strQuery;
-	private  List<String> _selectedDiggSubmit;
+    public void setIdDiggSubmitSort( int nIdDiggSubmitSort )
+    {
+        this._nIdDiggSubmitSort = nIdDiggSubmitSort;
+    }
 
-	public int getIdDiggSubmitSort() {
-		return _nIdDiggSubmitSort;
-	}
+    public int getIdDiggSubmitReport(  )
+    {
+        return _nIdDiggSubmitReport;
+    }
 
-	public void setIdDiggSubmitSort(int nIdDiggSubmitSort) {
-		this._nIdDiggSubmitSort = nIdDiggSubmitSort;
-	}
+    public void setIdDiggSubmitReport( int nIdDiggSubmitReport )
+    {
+        this._nIdDiggSubmitReport = nIdDiggSubmitReport;
+    }
 
-	public int getIdDiggSubmitReport() {
-		return _nIdDiggSubmitReport;
-	}
+    public int getIdDiggSumitState(  )
+    {
+        return _nIdDiggSumitState;
+    }
 
-	public void setIdDiggSubmitReport(int nIdDiggSubmitReport) {
-		this._nIdDiggSubmitReport = nIdDiggSubmitReport;
-	}
+    public void setIdDiggSumitState( int nIdDiggSumitState )
+    {
+        this._nIdDiggSumitState = nIdDiggSumitState;
+    }
 
-	public int getIdDiggSumitState() {
-		return _nIdDiggSumitState;
-	}
+    public String getQuery(  )
+    {
+        return _strQuery;
+    }
 
-	public void setIdDiggSumitState(int nIdDiggSumitState) {
-		this._nIdDiggSumitState = nIdDiggSumitState;
-	}
+    public void setQuery( String strQuery )
+    {
+        this._strQuery = strQuery;
+    }
 
-	public String getQuery() {
-		return _strQuery;
-	}
+    public List<String> getSelectedDiggSubmit(  )
+    {
+        return _selectedDiggSubmit;
+    }
 
-	public void setQuery(String strQuery) {
-		this._strQuery = strQuery;
-	}
+    public void setSelectedDiggSubmit( List<String> selectedDiggSubmit )
+    {
+        this._selectedDiggSubmit = selectedDiggSubmit;
+    }
 
-	public List<String>getSelectedDiggSubmit() {
-		return _selectedDiggSubmit;
-	}
+    public int getIdDigg(  )
+    {
+        return _nIdDigg;
+    }
 
-	public void setSelectedDiggSubmit(List<String> selectedDiggSubmit) {
-		this._selectedDiggSubmit = selectedDiggSubmit;
-	}
+    public void setIdDigg( int _nIdDigg )
+    {
+        this._nIdDigg = _nIdDigg;
+    }
 
-	public int getIdDigg() {
-		return _nIdDigg;
-	}
+    public int getIdCategory(  )
+    {
+        return _nIdCategory;
+    }
 
-	public void setIdDigg(int _nIdDigg) {
-		this._nIdDigg = _nIdDigg;
-	}
+    public void setIdCategory( int _nIdCategory )
+    {
+        this._nIdCategory = _nIdCategory;
+    }
 
-	public int getIdCategory() {
-		return _nIdCategory;
-	}
+    public int getIdType(  )
+    {
+        return _nIdType;
+    }
 
-	public void setIdCategory(int _nIdCategory) {
-		this._nIdCategory = _nIdCategory;
-	}
+    public void setIdType( int _nIdType )
+    {
+        this._nIdType = _nIdType;
+    }
 
-	public int getIdType() {
-		return _nIdType;
-	}
+    public int getIdDiggSubmitContainsCommentDisable(  )
+    {
+        return _nIdDiggSubmitContainsCommentDisable;
+    }
 
-	public void setIdType(int _nIdType) {
-		this._nIdType = _nIdType;
-	}
-
-	public int getIdDiggSubmitContainsCommentDisable() {
-		return _nIdDiggSubmitContainsCommentDisable;
-	}
-
-	public void setIdDiggSubmitContainsCommentDisable(
-			int _nIdDiggSubmitContainsCommentDisable) {
-		this._nIdDiggSubmitContainsCommentDisable = _nIdDiggSubmitContainsCommentDisable;
-	}
-
+    public void setIdDiggSubmitContainsCommentDisable( int _nIdDiggSubmitContainsCommentDisable )
+    {
+        this._nIdDiggSubmitContainsCommentDisable = _nIdDiggSubmitContainsCommentDisable;
+    }
 }

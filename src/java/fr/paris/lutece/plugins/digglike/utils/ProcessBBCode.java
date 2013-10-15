@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.digglike.utils;
 
 import java.io.Serializable;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -70,7 +71,6 @@ import java.util.regex.Pattern;
 public class ProcessBBCode implements Serializable
 {
     private static final long serialVersionUID = 2923413457835274235L;
-
     private static final String CR_LF = "(?:\r\n|\r|\n)?";
 
     /** */
@@ -82,7 +82,7 @@ public class ProcessBBCode implements Serializable
     /**
      * @return acceptBBCode
      */
-    public boolean getAcceptBBCode( )
+    public boolean getAcceptBBCode(  )
     {
         return acceptBBCode;
     }
@@ -98,7 +98,7 @@ public class ProcessBBCode implements Serializable
     /**
      * @return htmlAccepted
      */
-    public boolean getAcceptHTML( )
+    public boolean getAcceptHTML(  )
     {
         return acceptHTML;
     }
@@ -117,12 +117,12 @@ public class ProcessBBCode implements Serializable
      */
     public String preparePostText( String texto )
     {
-        if ( !getAcceptHTML( ) )
+        if ( !getAcceptHTML(  ) )
         {
             texto = escapeHtml( texto );
         }
 
-        if ( getAcceptBBCode( ) )
+        if ( getAcceptBBCode(  ) )
         {
             texto = process( texto );
         }
@@ -141,26 +141,23 @@ public class ProcessBBCode implements Serializable
         StringBuffer buffer = new StringBuffer( string );
         processCode( buffer );
 
-        processNestedTags(
-                buffer,
-                "quote",
-                "<table width='90%' cellspacing='1' cellpadding='1' border='0' "
-                        + "align='center'><tr><td><span class='genmed'><b>{BBCODE_PARAM}:</b></span></td></tr></table><table width='90%' cellspacing='1' cellpadding='1' border='0' align='center'><tr><td class='quote' bgcolor='#F3F5FF'>",
-                " &nbsp;</td></tr></table>",
-                "<table width='90%' cellspacing='1' cellpadding='3' border='0' "
-                        + "align='center'><tr><td><span class='genmed'><b>Quote:</b></span></td></tr><tr><td class='quote'>",
-                " &nbsp;</td></tr></table>", "[*]", false, true, true );
+        processNestedTags( buffer, "quote",
+            "<table width='90%' cellspacing='1' cellpadding='1' border='0' " +
+            "align='center'><tr><td><span class='genmed'><b>{BBCODE_PARAM}:</b></span></td></tr></table><table width='90%' cellspacing='1' cellpadding='1' border='0' align='center'><tr><td class='quote' bgcolor='#F3F5FF'>",
+            " &nbsp;</td></tr></table>",
+            "<table width='90%' cellspacing='1' cellpadding='3' border='0' " +
+            "align='center'><tr><td><span class='genmed'><b>Quote:</b></span></td></tr><tr><td class='quote'>",
+            " &nbsp;</td></tr></table>", "[*]", false, true, true );
 
         processNestedTags( buffer, "list", "<ol type=\"{BBCODE_PARAM}\">", "</ol>", "<ul>", "</ul>", "<li>", true,
-                true, false );
+            true, false );
 
-        String str = buffer.toString( );
+        String str = buffer.toString(  );
 
         //str = str.replaceAll("(\r\n|\n\r|\n|\r)", "<br>");
 
         // [color]
-        str = str.replaceAll( "\\[color=['\"]?(.*?[^'\"])['\"]?\\](.*?)\\[/color\\]",
-                "<span style='color:$1'>$2</span>" );
+        str = str.replaceAll( "\\[color=['\"]?(.*?[^'\"])['\"]?\\](.*?)\\[/color\\]", "<span style='color:$1'>$2</span>" );
 
         // [size]
         str = str.replaceAll( "\\[size=['\"]?([0-9]|[1-5][0-9])['\"]?\\](.*?)\\[/size\\]",
@@ -193,7 +190,7 @@ public class ProcessBBCode implements Serializable
         int start = buffer.indexOf( "[code]" );
         int end;
 
-        for ( ; ( start >= 0 ) && ( start < buffer.length( ) ); start = buffer.indexOf( "[code]", end ) )
+        for ( ; ( start >= 0 ) && ( start < buffer.length(  ) ); start = buffer.indexOf( "[code]", end ) )
         {
             end = buffer.indexOf( "[/code]", start );
 
@@ -202,9 +199,9 @@ public class ProcessBBCode implements Serializable
                 break;
             }
 
-            end += "[/code]".length( );
+            end += "[/code]".length(  );
 
-            String content = buffer.substring( start + "[code]".length( ), end - "[/code]".length( ) );
+            String content = buffer.substring( start + "[code]".length(  ), end - "[/code]".length(  ) );
             content = escapeBBcode( content );
 
             /*
@@ -220,13 +217,12 @@ public class ProcessBBCode implements Serializable
             content = content.replaceAll( "<br>", "\n" );
 
             String replacement = "<!-- [ -code- ] --></span>" //
-                    + "<textarea name=\"code\" id=\"code\" class=\"java\" rows=\"15\" cols=\"100\">"
-                    + content
-                    + "</textarea><span class='postbody'><!-- [/ -code- ] -->";
+                 +"<textarea name=\"code\" id=\"code\" class=\"java\" rows=\"15\" cols=\"100\">" + content +
+                "</textarea><span class='postbody'><!-- [/ -code- ] -->";
 
             buffer.replace( start, end, replacement );
 
-            end = start + replacement.length( );
+            end = start + replacement.length(  );
         }
     }
 
@@ -237,7 +233,7 @@ public class ProcessBBCode implements Serializable
     public static String escapeBBcode( String content )
     {
         // escaping single characters
-        content = replaceAll( content, "[]\t".toCharArray( ), new String[] { "&#91;", "&#93;", "&nbsp; &nbsp;" } );
+        content = replaceAll( content, "[]\t".toCharArray(  ), new String[] { "&#91;", "&#93;", "&nbsp; &nbsp;" } );
 
         // taking off start and end line breaks
         content = content.replaceAll( "\\A\r\n|\\A\r|\\A\n|\r\n\\z|\r\\z|\n\\z", "" );
@@ -256,7 +252,7 @@ public class ProcessBBCode implements Serializable
     private static String escapeHtml( String content )
     {
         // escaping single characters
-        content = replaceAll( content, "&<>".toCharArray( ), new String[] { "&amp;", "&lt;", "&gt;" } );
+        content = replaceAll( content, "&<>".toCharArray(  ), new String[] { "&amp;", "&lt;", "&gt;" } );
 
         // replacing line breaks for <br>
         //content = content.replaceAll("\r\n", "<br>");
@@ -266,9 +262,9 @@ public class ProcessBBCode implements Serializable
 
     private static String replaceAll( String str, char[] chars, String[] replacement )
     {
-        StringBuffer buffer = new StringBuffer( );
+        StringBuffer buffer = new StringBuffer(  );
 
-        for ( int i = 0; i < str.length( ); i++ )
+        for ( int i = 0; i < str.length(  ); i++ )
         {
             char c = str.charAt( i );
             boolean matched = false;
@@ -288,7 +284,7 @@ public class ProcessBBCode implements Serializable
             }
         }
 
-        return buffer.toString( );
+        return buffer.toString(  );
     }
 
     /**
@@ -304,19 +300,18 @@ public class ProcessBBCode implements Serializable
      * @param requiresQuotedParam
      */
     private static void processNestedTags( StringBuffer buffer, String tagName, String openSubstWithParam,
-            String closeSubstWithParam, String openSubstWithoutParam, String closeSubstWithoutParam,
-            String internalSubst, boolean processInternalTags, boolean acceptParam, boolean requiresQuotedParam )
+        String closeSubstWithParam, String openSubstWithoutParam, String closeSubstWithoutParam, String internalSubst,
+        boolean processInternalTags, boolean acceptParam, boolean requiresQuotedParam )
     {
-        String str = buffer.toString( );
+        String str = buffer.toString(  );
 
-        Stack<MutableCharSequence> openStack = new Stack<MutableCharSequence>( );
-        Set<MutableCharSequence> subsOpen = new HashSet<MutableCharSequence>( );
-        Set<MutableCharSequence> subsClose = new HashSet<MutableCharSequence>( );
-        Set<MutableCharSequence> subsInternal = new HashSet<MutableCharSequence>( );
+        Stack<MutableCharSequence> openStack = new Stack<MutableCharSequence>(  );
+        Set<MutableCharSequence> subsOpen = new HashSet<MutableCharSequence>(  );
+        Set<MutableCharSequence> subsClose = new HashSet<MutableCharSequence>(  );
+        Set<MutableCharSequence> subsInternal = new HashSet<MutableCharSequence>(  );
 
-        String openTag = CR_LF + "\\[" + tagName
-                + ( acceptParam ? ( requiresQuotedParam ? "(?:=\"(.*?)\")?" : "(?:=\"?(.*?)\"?)?" ) : "" ) + "\\]"
-                + CR_LF;
+        String openTag = CR_LF + "\\[" + tagName +
+            ( acceptParam ? ( requiresQuotedParam ? "(?:=\"(.*?)\")?" : "(?:=\"?(.*?)\"?)?" ) : "" ) + "\\]" + CR_LF;
         String closeTag = CR_LF + "\\[/" + tagName + "\\]" + CR_LF;
         String internTag = CR_LF + "\\[\\*\\]" + CR_LF;
 
@@ -350,10 +345,10 @@ public class ProcessBBCode implements Serializable
             internalTagGroup = 3;
         }
 
-        while ( matcher.find( ) )
+        while ( matcher.find(  ) )
         {
-            int length = matcher.end( ) - matcher.start( );
-            MutableCharSequence matchedSeq = new MutableCharSequence( str, matcher.start( ), length );
+            int length = matcher.end(  ) - matcher.start(  );
+            MutableCharSequence matchedSeq = new MutableCharSequence( str, matcher.start(  ), length );
 
             // test opening tags
             if ( matcher.group( openTagGroup ) != null )
@@ -367,9 +362,9 @@ public class ProcessBBCode implements Serializable
 
                 // test closing tags
             }
-            else if ( ( matcher.group( closeTagGroup ) != null ) && !openStack.isEmpty( ) )
+            else if ( ( matcher.group( closeTagGroup ) != null ) && !openStack.isEmpty(  ) )
             {
-                MutableCharSequence openSeq = openStack.pop( );
+                MutableCharSequence openSeq = openStack.pop(  );
 
                 if ( acceptParam )
                 {
@@ -381,7 +376,7 @@ public class ProcessBBCode implements Serializable
 
                 // test internal tags
             }
-            else if ( processInternalTags && ( matcher.group( internalTagGroup ) != null ) && ( !openStack.isEmpty( ) ) )
+            else if ( processInternalTags && ( matcher.group( internalTagGroup ) != null ) && ( !openStack.isEmpty(  ) ) )
             {
                 subsInternal.add( matchedSeq );
             }
@@ -391,26 +386,27 @@ public class ProcessBBCode implements Serializable
             }
         }
 
-        LinkedList<MutableCharSequence> subst = new LinkedList<MutableCharSequence>( );
+        LinkedList<MutableCharSequence> subst = new LinkedList<MutableCharSequence>(  );
         subst.addAll( subsOpen );
         subst.addAll( subsClose );
         subst.addAll( subsInternal );
 
-        Collections.sort( subst, new Comparator<MutableCharSequence>( )
-        {
-            public int compare( MutableCharSequence o1, MutableCharSequence o2 )
+        Collections.sort( subst,
+            new Comparator<MutableCharSequence>(  )
             {
-                return -( o1.start - o2.start );
-            }
-        } );
+                public int compare( MutableCharSequence o1, MutableCharSequence o2 )
+                {
+                    return -( o1.start - o2.start );
+                }
+            } );
 
-        buffer.delete( 0, buffer.length( ) );
+        buffer.delete( 0, buffer.length(  ) );
 
         int start = 0;
 
-        while ( !subst.isEmpty( ) )
+        while ( !subst.isEmpty(  ) )
         {
-            MutableCharSequence seq = subst.removeLast( );
+            MutableCharSequence seq = subst.removeLast(  );
             buffer.append( str.substring( start, seq.start ) );
 
             if ( subsClose.contains( seq ) )
@@ -432,12 +428,12 @@ public class ProcessBBCode implements Serializable
             {
                 Matcher m = Pattern.compile( openTag ).matcher( str.substring( seq.start, seq.start + seq.length ) );
 
-                if ( m.matches( ) )
+                if ( m.matches(  ) )
                 {
                     if ( acceptParam && ( seq.param != null ) )
                     {
-                        buffer.append( //
-                        openSubstWithParam.replaceAll( "\\{BBCODE_PARAM\\}", seq.param ) );
+                        buffer.append(  //
+                            openSubstWithParam.replaceAll( "\\{BBCODE_PARAM\\}", seq.param ) );
                     }
                     else
                     {
@@ -468,7 +464,7 @@ public class ProcessBBCode implements Serializable
 
         /**
          */
-        public MutableCharSequence( )
+        public MutableCharSequence(  )
         {
             //
         }
@@ -486,7 +482,7 @@ public class ProcessBBCode implements Serializable
         /**
          * @see java.lang.CharSequence#length()
          */
-        public int length( )
+        public int length(  )
         {
             return this.length;
         }
@@ -525,16 +521,16 @@ public class ProcessBBCode implements Serializable
         /**
          * @see java.lang.Object#toString()
          */
-        public String toString( )
+        public String toString(  )
         {
-            StringBuffer sb = new StringBuffer( );
+            StringBuffer sb = new StringBuffer(  );
 
             for ( int i = this.start; i < ( this.start + this.length ); i++ )
             {
                 sb.append( this.base.charAt( i ) );
             }
 
-            return sb.toString( );
+            return sb.toString(  );
         }
     }
 }

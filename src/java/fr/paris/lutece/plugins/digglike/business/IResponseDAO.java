@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
+
+import java.util.List;
 
 
 /**
@@ -85,6 +85,4 @@ public interface IResponseDAO
      * @return  the list of response
      */
     List<Response> selectListByFilter( SubmitFilter filter, Plugin plugin );
-    
-
 }

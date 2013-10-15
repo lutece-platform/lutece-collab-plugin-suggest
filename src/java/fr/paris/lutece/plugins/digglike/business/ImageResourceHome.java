@@ -44,7 +44,7 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public final class ImageResourceHome
 {
     // Static variable pointed at the DAO instance
-    private static IImageResourceDAO  _dao = SpringContextService.getBean( "digglike.imageResourceDAO" );
+    private static IImageResourceDAO _dao = SpringContextService.getBean( "digglike.imageResourceDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -67,7 +67,6 @@ public final class ImageResourceHome
         return _dao.insert( imageResource, plugin );
     }
 
-   
     /**
      *Delete the ImageResource file whose identifier is specified in parameter
      *

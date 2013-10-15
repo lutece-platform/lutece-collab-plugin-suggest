@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
+
+import java.util.List;
 
 
 /**
@@ -63,7 +63,6 @@ public interface IDiggSubmitTypeDAO
      */
     DiggSubmitType load( int nIdDiggSubmitType, Plugin plugin );
 
-   
     /**
      * Delete   the digg submit type whose identifier is specified in parameter
      *
@@ -87,15 +86,15 @@ public interface IDiggSubmitTypeDAO
      * @return the instance of the diggSubmitType
      */
     List<DiggSubmitType> selectList( Plugin plugin );
-    
+
     /**
      * Load the list of the diggSubmitType from the table
      * @param nIdDigg the id Digg
      * @param plugin the plugin
      * @return the instance of the diggSubmitType
      */
-    List<DiggSubmitType> selectListByIdDigg(int nIdDigg, Plugin plugin );
-    
+    List<DiggSubmitType> selectListByIdDigg( int nIdDigg, Plugin plugin );
+
     /**
      * true if there is a  digg associate to the digg submit type
      * @param nIdType the key of the type
@@ -103,15 +102,16 @@ public interface IDiggSubmitTypeDAO
      * @return true if there is a digg associate to the type
      */
     boolean isAssociateToDigg( int nIdType, Plugin plugin );
-    
-       /**
-     * Delete an association between digg and a digg submit type
-     *
-     * @param nIdDigg The identifier of the digg
-     * @param nIdDiggSubmitType nIdDiggSubmitType
-     * @param plugin the plugin
-     */
+
+    /**
+    * Delete an association between digg and a digg submit type
+    *
+    * @param nIdDigg The identifier of the digg
+    * @param nIdDiggSubmitType nIdDiggSubmitType
+    * @param plugin the plugin
+    */
     void deleteDiggAssociation( int nIdDigg, int nIdDiggSubmitType, Plugin plugin );
+
     /**
      * insert an association between digg and a digg submit type
      *
@@ -120,5 +120,4 @@ public interface IDiggSubmitTypeDAO
      * @param plugin the plugin
      */
     void insertDiggAssociation( int nIdDigg, int nIdDiggSubmitType, Plugin plugin );
-    
 }

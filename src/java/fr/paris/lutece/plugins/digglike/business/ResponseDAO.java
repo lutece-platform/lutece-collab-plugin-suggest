@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -65,7 +65,6 @@ public final class ResponseDAO implements IResponseDAO
     private static final String SQL_FILTER_ID_DIGG_SUBMIT = " AND resp.id_digg_submit = ? ";
     private static final String SQL_FILTER_ID_ENTRY = " AND resp.id_entry = ? ";
     private static final String SQL_ORDER_BY_ID_RESPONSE = " ORDER BY id_response ";
-   
 
     /**
      * Generates a new primary key
@@ -106,15 +105,16 @@ public final class ResponseDAO implements IResponseDAO
         daoUtil.setInt( 2, response.getDiggSubmit(  ).getIdDiggSubmit(  ) );
         daoUtil.setString( 3, response.getValueResponse(  ) );
         daoUtil.setInt( 4, response.getEntry(  ).getIdEntry(  ) );
-        
-        if(response.getIdImageResource()!=null)
+
+        if ( response.getIdImageResource(  ) != null )
         {
-        	daoUtil.setInt( 5, response.getIdImageResource());
+            daoUtil.setInt( 5, response.getIdImageResource(  ) );
         }
         else
         {
-        	daoUtil.setIntNull(5);
+            daoUtil.setIntNull( 5 );
         }
+
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
@@ -184,11 +184,11 @@ public final class ResponseDAO implements IResponseDAO
             entry.setTitle( daoUtil.getString( 6 ) );
             entry.setShowInDiggSubmitList( daoUtil.getBoolean( 8 ) );
             response.setEntry( entry );
-            if(daoUtil.getObject( 9)!=null)
+
+            if ( daoUtil.getObject( 9 ) != null )
             {
-            	response.setIdImageResource(daoUtil.getInt(9));
+                response.setIdImageResource( daoUtil.getInt( 9 ) );
             }
-            
         }
 
         daoUtil.free(  );
@@ -224,14 +224,16 @@ public final class ResponseDAO implements IResponseDAO
         daoUtil.setInt( 2, response.getDiggSubmit(  ).getIdDiggSubmit(  ) );
         daoUtil.setString( 3, response.getValueResponse(  ) );
         daoUtil.setInt( 4, response.getEntry(  ).getIdEntry(  ) );
-        if(response.getIdImageResource()!=null)
+
+        if ( response.getIdImageResource(  ) != null )
         {
-        	daoUtil.setInt( 5, response.getIdImageResource());
+            daoUtil.setInt( 5, response.getIdImageResource(  ) );
         }
         else
         {
-        	daoUtil.setIntNull(5);
+            daoUtil.setIntNull( 5 );
         }
+
         daoUtil.setInt( 6, response.getIdResponse(  ) );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -324,9 +326,10 @@ public final class ResponseDAO implements IResponseDAO
             entry.setShowInDiggSubmitList( daoUtil.getBoolean( 8 ) );
 
             response.setEntry( entry );
-            if(daoUtil.getObject( 9)!=null)
+
+            if ( daoUtil.getObject( 9 ) != null )
             {
-            	response.setIdImageResource(daoUtil.getInt(9));
+                response.setIdImageResource( daoUtil.getInt( 9 ) );
             }
 
             responseList.add( response );
@@ -336,9 +339,4 @@ public final class ResponseDAO implements IResponseDAO
 
         return responseList;
     }
-    
-    
-    
-    
-    
 }

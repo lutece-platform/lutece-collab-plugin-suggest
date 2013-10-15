@@ -40,9 +40,9 @@ import java.util.List;
 
 
 /**
- * 
+ *
  * class voteTypeHome
- * 
+ *
  */
 public final class VoteTypeHome
 {
@@ -52,14 +52,14 @@ public final class VoteTypeHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private VoteTypeHome( )
+    private VoteTypeHome(  )
     {
     }
 
     /**
      * Returns an instance of a vote Type whose identifier is specified in
      * parameter
-     * 
+     *
      * @param idKey The vote type primary key
      * @param plugin the Plugin
      * @return an instance of voteType
@@ -71,7 +71,7 @@ public final class VoteTypeHome
 
     /**
      * Returns a list of all vote Type
-     * 
+     *
      * @param plugin the plugin
      * @return the list of vote Type
      */

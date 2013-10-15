@@ -49,18 +49,15 @@ public final class ImageResourceDAO implements IImageResourceDAO
         " FROM digglike_image WHERE id_resource_image = ?";
     private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_image (id_resource_image, image_content, image_mime_type) VALUES (?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM digglike_image WHERE id_resource_image = ? ";
-  
-   
-    
-   
-	@Override
-	
-	public synchronized int insert(ImageResource imageResource , Plugin plugin )
+
+    @Override
+    public synchronized int insert( ImageResource imageResource, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        daoUtil.setBytes( 2, imageResource.getImage() );
-        daoUtil.setString( 3, imageResource.getMimeType() );
-        int nId=newPrimaryKey( plugin );
+        daoUtil.setBytes( 2, imageResource.getImage(  ) );
+        daoUtil.setString( 3, imageResource.getMimeType(  ) );
+
+        int nId = newPrimaryKey( plugin );
         daoUtil.setInt( 1, nId );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -68,8 +65,7 @@ public final class ImageResourceDAO implements IImageResourceDAO
         return nId;
     }
 
-	@Override
-	
+    @Override
     public ImageResource load( int nId, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
@@ -80,9 +76,9 @@ public final class ImageResourceDAO implements IImageResourceDAO
 
         if ( daoUtil.next(  ) )
         {
-        	imageResource = new ImageResource();
-        	imageResource.setImage( daoUtil.getBytes( 1 ) );
-         	imageResource.setMimeType(daoUtil.getString(2));
+            imageResource = new ImageResource(  );
+            imageResource.setImage( daoUtil.getBytes( 1 ) );
+            imageResource.setMimeType( daoUtil.getString( 2 ) );
         }
 
         daoUtil.free(  );
@@ -90,8 +86,7 @@ public final class ImageResourceDAO implements IImageResourceDAO
         return imageResource;
     }
 
-   
-	@Override
+    @Override
     public void delete( int nId, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
@@ -100,17 +95,12 @@ public final class ImageResourceDAO implements IImageResourceDAO
         daoUtil.free(  );
     }
 
-
-
-	
-	
-	
-	 /**
-     * generate new primary key
-     * @param plugin plugin
-     * @return
-     */
-      private int newPrimaryKey( Plugin plugin )
+    /**
+    * generate new primary key
+    * @param plugin plugin
+    * @return
+    */
+    private int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
         daoUtil.executeQuery(  );
@@ -128,5 +118,4 @@ public final class ImageResourceDAO implements IImageResourceDAO
 
         return nKey;
     }
-
 }

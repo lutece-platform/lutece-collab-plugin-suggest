@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.digglike.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.sql.Timestamp;
+
 import java.util.Date;
 import java.util.List;
 
@@ -71,7 +72,7 @@ public interface ICommentSubmitDAO
      * @param plugin the plugin
      */
     void delete( int nIdCommentSubmit, Plugin plugin );
-    
+
     /**
      * Delete   the comment submit whose parent identifier is specified in parameter
      *
@@ -88,7 +89,6 @@ public interface ICommentSubmitDAO
      */
     void store( CommentSubmit commentSubmit, Plugin plugin );
 
-
     /**
      * Load the data of all the commentSubmit who verify the filter and returns them in a  list
      * @param filter the filter
@@ -96,7 +96,7 @@ public interface ICommentSubmitDAO
      * @param plugin the plugin
      * @return  the list of commentSubmit
      */
-    List<CommentSubmit> selectListByFilter( SubmitFilter filter,Integer nLimit, Plugin plugin );
+    List<CommentSubmit> selectListByFilter( SubmitFilter filter, Integer nLimit, Plugin plugin );
 
     /**
      * Get the list of comments posted after a given date

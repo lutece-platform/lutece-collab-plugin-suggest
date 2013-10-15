@@ -42,9 +42,10 @@ import fr.paris.lutece.portal.service.resource.IExtendableResourceService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.Locale;
 
-import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -54,40 +55,40 @@ import org.apache.commons.lang.StringUtils;
 public class DiggExtendableResourceService implements IExtendableResourceService
 {
     private static final String MESSAGE_DIGG_RESOURCE_TYPE_DESCRIPTION = "digglike.resource.diggResourceTypeDescription";
-
     private static final String MARK_PAGE = "page";
     private static final String MARK_ID_DIGG = "id_digg";
-
     private static final String CONSTANT_DIGG = "digg";
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean isInvoked( String strResourceType )
-	{
-		return Digg.RESOURCE_TYPE.equals( strResourceType );
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public IExtendableResource getResource( String strIdResource, String strResourceType )
-	{
-		if ( StringUtils.isNotBlank( strIdResource ) && StringUtils.isNumeric( strIdResource ) )
-		{
-			int nIdDigg = Integer.parseInt( strIdResource );
-			return DiggHome.findByPrimaryKey( nIdDigg,PluginService.getPlugin(DigglikePlugin.PLUGIN_NAME) );
-		}
-		return null;
-	}
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getResourceType( )
+    public boolean isInvoked( String strResourceType )
+    {
+        return Digg.RESOURCE_TYPE.equals( strResourceType );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public IExtendableResource getResource( String strIdResource, String strResourceType )
+    {
+        if ( StringUtils.isNotBlank( strIdResource ) && StringUtils.isNumeric( strIdResource ) )
+        {
+            int nIdDigg = Integer.parseInt( strIdResource );
+
+            return DiggHome.findByPrimaryKey( nIdDigg, PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) );
+        }
+
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getResourceType(  )
     {
         return Digg.RESOURCE_TYPE;
     }
@@ -107,9 +108,10 @@ public class DiggExtendableResourceService implements IExtendableResourceService
     @Override
     public String getResourceUrl( String strIdResource, String strResourceType )
     {
-        UrlItem urlItem = new UrlItem( AppPathService.getPortalUrl( ) );
+        UrlItem urlItem = new UrlItem( AppPathService.getPortalUrl(  ) );
         urlItem.addParameter( MARK_PAGE, CONSTANT_DIGG );
         urlItem.addParameter( MARK_ID_DIGG, strIdResource );
-        return urlItem.getUrl( );
+
+        return urlItem.getUrl(  );
     }
 }

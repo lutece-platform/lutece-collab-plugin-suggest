@@ -37,6 +37,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.sql.Timestamp;
+
 import java.util.Date;
 import java.util.List;
 
@@ -52,17 +53,17 @@ public final class CommentSubmitHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private CommentSubmitHome( )
+    private CommentSubmitHome(  )
     {
     }
 
     /**
      * Creation of an instance of commentSubmit
-     * 
+     *
      * @param commentSubmit The instance of the commentSubmit which contains the
      *            informations to store
      * @param plugin the Plugin
-     * 
+     *
      */
     public static void create( CommentSubmit commentSubmit, Plugin plugin )
     {
@@ -71,11 +72,11 @@ public final class CommentSubmitHome
 
     /**
      * Update of the commentSubmit which is specified in parameter
-     * 
+     *
      * @param commentSubmit The instance of the commentSubmit which contains the
      *            informations to update
      * @param plugin the Plugin
-     * 
+     *
      */
     public static void update( CommentSubmit commentSubmit, Plugin plugin )
     {
@@ -88,7 +89,7 @@ public final class CommentSubmitHome
      * @param dateModify The new date of modification of the commentSubmit
      * @param idCommentSubmit The id of the comment submit to update
      * @param plugin the Plugin
-     * 
+     *
      */
     public static void updateDateModify( Timestamp dateModify, int idCommentSubmit, Plugin plugin )
     {
@@ -97,7 +98,7 @@ public final class CommentSubmitHome
 
     /**
      * Remove the commentSubmit whose identifier is specified in parameter
-     * 
+     *
      * @param nIdCommentSubmit The commentSubmitId
      * @param plugin the Plugin
      */
@@ -109,7 +110,7 @@ public final class CommentSubmitHome
     /**
      * Remove the commentSubmit whose parent identifier is specified in
      * parameter
-     * 
+     *
      * @param nIdParentCommentSubmit The parent identifier
      * @param plugin the Plugin
      */
@@ -124,7 +125,7 @@ public final class CommentSubmitHome
     /**
      * Returns an instance of a CommentSubmitwhose identifier is specified in
      * parameter
-     * 
+     *
      * @param nKey The commentSubmit primary key
      * @param plugin the Plugin
      * @return an instance of commentSubmit

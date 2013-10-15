@@ -33,14 +33,14 @@
  */
 package fr.paris.lutece.plugins.digglike.web.action;
 
+import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.web.pluginaction.DefaultPluginActionResult;
+import fr.paris.lutece.portal.web.pluginaction.IPluginAction;
+
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import fr.paris.lutece.portal.business.user.AdminUser;
-import fr.paris.lutece.portal.web.pluginaction.DefaultPluginActionResult;
-import fr.paris.lutece.portal.web.pluginaction.IPluginAction;
 
 
 /**

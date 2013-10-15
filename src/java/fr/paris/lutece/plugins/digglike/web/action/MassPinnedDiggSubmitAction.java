@@ -33,13 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.web.action;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
@@ -58,27 +51,33 @@ import fr.paris.lutece.portal.web.pluginaction.AbstractPluginAction;
 import fr.paris.lutece.portal.web.pluginaction.DefaultPluginActionResult;
 import fr.paris.lutece.portal.web.pluginaction.IPluginActionResult;
 
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 /**
  *
  * MassPinnedDiggSubmitAction
  *
  */
-public class MassPinnedDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSearchFields> implements IDigglikeAction
+public class MassPinnedDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSearchFields>
+    implements IDigglikeAction
 {
     private static final String ACTION_NAME = "Mass Pinned DiggSubmit ";
-   
     private static final String MESSAGE_YOU_MUST_SELECT_DIGG_SUBMIT = "digglike.message.youMustSelectDiggSubmit";
     private static final String PARAMETER_MASS_PIN_ACTION = "mass_pin_action";
     private static final String PARAMETER_MASS_UNPIN_ACTION = "mass_unpin_action";
-   
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void fillModel( HttpServletRequest request, AdminUser adminUser, Map<String, Object> model )
     {
-      
     }
 
     /**
@@ -105,7 +104,8 @@ public class MassPinnedDiggSubmitAction extends AbstractPluginAction<DigglikeAdm
     @Override
     public boolean isInvoked( HttpServletRequest request )
     {
-        return ( request.getParameter( PARAMETER_MASS_PIN_ACTION ) != null || request.getParameter( PARAMETER_MASS_UNPIN_ACTION ) != null );
+        return ( ( request.getParameter( PARAMETER_MASS_PIN_ACTION ) != null ) ||
+        ( request.getParameter( PARAMETER_MASS_UNPIN_ACTION ) != null ) );
     }
 
     /**
@@ -116,56 +116,54 @@ public class MassPinnedDiggSubmitAction extends AbstractPluginAction<DigglikeAdm
         DigglikeAdminSearchFields searchFields ) throws AccessDeniedException
     {
         IPluginActionResult result = new DefaultPluginActionResult(  );
-        
+
         int nIdDiggSubmit;
-        String strRedirect = DiggJspBean.getJspManageDiggSubmit(request);
-        
-       
-      
-        
-        if ( ( searchFields.getSelectedDiggSubmit() != null ) && !searchFields.getSelectedDiggSubmit() .isEmpty(  ) )
+        String strRedirect = DiggJspBean.getJspManageDiggSubmit( request );
+
+        if ( ( searchFields.getSelectedDiggSubmit(  ) != null ) && !searchFields.getSelectedDiggSubmit(  ).isEmpty(  ) )
         {
-            
-        	//test All ressource selected before update
-        	for ( String strIdDiggSubmit : searchFields.getSelectedDiggSubmit())
-             {
-        		
-             	if ( StringUtils.isNotBlank( strIdDiggSubmit ) && StringUtils.isNumeric( strIdDiggSubmit ) )
-                 {
-             		
-             		 nIdDiggSubmit=DiggUtils.getIntegerParameter(strIdDiggSubmit);
-                 	 DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit, false, getPlugin() );
-                    
-
-                      if ( ( diggSubmit == null ) ||
-                              !RBACService.isAuthorized( Digg.RESOURCE_TYPE, DiggUtils.EMPTY_STRING + diggSubmit.getDigg(  ).getIdDigg(  ),
-                                  DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT,adminUser) )
-                      {
-                          throw new AccessDeniedException();
-                      }
-
-                     
-                 }
-             	
-                }
-        	
-      
-        	boolean isPinned=(request.getParameter( PARAMETER_MASS_PIN_ACTION ) != null); 
-          	//update all digg submit selected
-        	for ( String strIdDiggSubmittoUpdate : searchFields.getSelectedDiggSubmit()  )
+            //test All ressource selected before update
+            for ( String strIdDiggSubmit : searchFields.getSelectedDiggSubmit(  ) )
             {
-        		if ( StringUtils.isNotBlank( strIdDiggSubmittoUpdate ) && StringUtils.isNumeric( strIdDiggSubmittoUpdate ) )
+                if ( StringUtils.isNotBlank( strIdDiggSubmit ) && StringUtils.isNumeric( strIdDiggSubmit ) )
                 {
-        			 nIdDiggSubmit=DiggUtils.getIntegerParameter(strIdDiggSubmittoUpdate);
-    	    		 DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit, false, getPlugin() );
-    	    		 diggSubmit.setPinned(isPinned);
-    	        	 DiggSubmitService.getService().update( diggSubmit, getPlugin() );
+                    nIdDiggSubmit = DiggUtils.getIntegerParameter( strIdDiggSubmit );
+
+                    DiggSubmit diggSubmit = DiggSubmitService.getService(  )
+                                                             .findByPrimaryKey( nIdDiggSubmit, false, getPlugin(  ) );
+
+                    if ( ( diggSubmit == null ) ||
+                            !RBACService.isAuthorized( Digg.RESOURCE_TYPE,
+                                DiggUtils.EMPTY_STRING + diggSubmit.getDigg(  ).getIdDigg(  ),
+                                DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT, adminUser ) )
+                    {
+                        throw new AccessDeniedException(  );
+                    }
                 }
             }
-        	//update manualy order of list digg submit
-        	DiggSubmitService.getService().updateDiggSubmitOrder(null, null, searchFields.getIdDigg(), true, getPlugin());
-        	DiggSubmitService.getService().updateDiggSubmitOrder(null, null, searchFields.getIdDigg(), false, getPlugin());
-        
+
+            boolean isPinned = ( request.getParameter( PARAMETER_MASS_PIN_ACTION ) != null );
+
+            //update all digg submit selected
+            for ( String strIdDiggSubmittoUpdate : searchFields.getSelectedDiggSubmit(  ) )
+            {
+                if ( StringUtils.isNotBlank( strIdDiggSubmittoUpdate ) &&
+                        StringUtils.isNumeric( strIdDiggSubmittoUpdate ) )
+                {
+                    nIdDiggSubmit = DiggUtils.getIntegerParameter( strIdDiggSubmittoUpdate );
+
+                    DiggSubmit diggSubmit = DiggSubmitService.getService(  )
+                                                             .findByPrimaryKey( nIdDiggSubmit, false, getPlugin(  ) );
+                    diggSubmit.setPinned( isPinned );
+                    DiggSubmitService.getService(  ).update( diggSubmit, getPlugin(  ) );
+                }
+            }
+
+            //update manualy order of list digg submit
+            DiggSubmitService.getService(  )
+                             .updateDiggSubmitOrder( null, null, searchFields.getIdDigg(  ), true, getPlugin(  ) );
+            DiggSubmitService.getService(  )
+                             .updateDiggSubmitOrder( null, null, searchFields.getIdDigg(  ), false, getPlugin(  ) );
         }
         else
         {
@@ -186,6 +184,4 @@ public class MassPinnedDiggSubmitAction extends AbstractPluginAction<DigglikeAdm
     {
         return PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
     }
-
-
 }

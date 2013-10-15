@@ -33,14 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.web.action;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggHome;
@@ -73,6 +65,15 @@ import fr.paris.lutece.util.UniqueIDGenerator;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.xml.XmlUtil;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 /**
  *
@@ -82,39 +83,31 @@ import fr.paris.lutece.util.xml.XmlUtil;
 public class ExportDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSearchFields> implements IDigglikeAction
 {
     private static final String ACTION_NAME = "Export Digglike XSL";
-  
-    
-   
     private static final String MESSAGE_YOU_ARE_NOT_ALLOWED_TO_DOWLOAD_THIS_FILE = "digglike.message.youAreNotAllowedToDownloadFile";
     private static final String MESSAGE_YOU_MUST_SELECT_EXPORT_FORMAT = "digglike.message.youMustSelectExportFormat";
     private static final String MESSAGE_ERROR_DURING_DOWNLOAD_FILE = "digglike.message.errorDuringDownloadFile";
     private static final String MARK_EXPORT_FORMAT_REF_LIST = "export_format_list";
-     
     private static final String PARAMETER_BUTTON_EXPORT_ALL = "export_search_all";
     private static final String PARAMETER_BUTTON_EXPORT_SEARCH = "export_search_result";
     private static final String PARAMETER_ID_DIGG = "id_digg";
     private static final String XSL_UNIQUE_PREFIX_ID = UniqueIDGenerator.getNewId(  ) + "digg-";
     private static final String PARAMETER_ID_EXPORT_FORMAT = "id_export_format";
-    
     private static final String EXPORT_CSV_EXT = "csv";
     private static final String DEAFULT_ENCODING = "UTF-8";
-    
     private static final String CONSTANT_MIME_TYPE_CSV = "application/csv";
     private static final String CONSTANT_MIME_TYPE_OCTETSTREAM = "application/octet-stream";
-    
+
     //PROPERTY
-    private static final String PROPERTY_EXPORT_ENCODING_CSV="digglike.exportFileEncoding.csv";
-    private static final String PROPERTY_EXPORT_ENCODING_XML="digglike.exportFileEncoding.xml";
-   
+    private static final String PROPERTY_EXPORT_ENCODING_CSV = "digglike.exportFileEncoding.csv";
+    private static final String PROPERTY_EXPORT_ENCODING_XML = "digglike.exportFileEncoding.xml";
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void fillModel( HttpServletRequest request, AdminUser adminUser, Map<String, Object> model )
     {
-    	
-    	model.put( MARK_EXPORT_FORMAT_REF_LIST, ExportFormatHome.getListExport( getPlugin() ) );
-    	
+        model.put( MARK_EXPORT_FORMAT_REF_LIST, ExportFormatHome.getListExport( getPlugin(  ) ) );
     }
 
     /**
@@ -132,7 +125,7 @@ public class ExportDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSe
     @Override
     public String getButtonTemplate(  )
     {
-       return null;
+        return null;
     }
 
     /**
@@ -152,25 +145,22 @@ public class ExportDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSe
     public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser,
         DigglikeAdminSearchFields searchFields ) throws AccessDeniedException
     {
-    	Plugin plugin = getPlugin(  );
-    	IPluginActionResult result = new DefaultPluginActionResult(  );
-        
-    	String strIdExportFormat = request.getParameter( PARAMETER_ID_EXPORT_FORMAT );
+        Plugin plugin = getPlugin(  );
+        IPluginActionResult result = new DefaultPluginActionResult(  );
+
+        String strIdExportFormat = request.getParameter( PARAMETER_ID_EXPORT_FORMAT );
         String strIdDigg = request.getParameter( PARAMETER_ID_DIGG );
         int nIdExportFormat = DiggUtils.getIntegerParameter( strIdExportFormat );
-        int nIdDigg=DiggUtils.getIntegerParameter(strIdDigg);
-       
+        int nIdDigg = DiggUtils.getIntegerParameter( strIdDigg );
+
         Digg digg = DiggHome.findByPrimaryKey( nIdDigg, plugin );
-       
-        
+
         if ( ( digg == null ) ||
                 !RBACService.isAuthorized( Digg.RESOURCE_TYPE, Integer.toString( digg.getIdDigg(  ) ),
-                    DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT,adminUser ) )
+                    DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT, adminUser ) )
         {
-            
-        	  throw new AccessDeniedException( I18nService.getLocalizedString( MESSAGE_YOU_ARE_NOT_ALLOWED_TO_DOWLOAD_THIS_FILE,
-                      request.getLocale(  ) ) );
-       
+            throw new AccessDeniedException( I18nService.getLocalizedString( 
+                    MESSAGE_YOU_ARE_NOT_ALLOWED_TO_DOWLOAD_THIS_FILE, request.getLocale(  ) ) );
         }
 
         ExportFormat exportFormat;
@@ -178,85 +168,85 @@ public class ExportDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSe
 
         if ( exportFormat == null )
         {
-        	
-        	result.setRedirect(AdminMessageService.getMessageUrl( request, MESSAGE_YOU_MUST_SELECT_EXPORT_FORMAT,
-                    AdminMessage.TYPE_STOP ));
-            
-            
+            result.setRedirect( AdminMessageService.getMessageUrl( request, MESSAGE_YOU_MUST_SELECT_EXPORT_FORMAT,
+                    AdminMessage.TYPE_STOP ) );
         }
         else
         {
-	       
-        	EntryFilter entryfilter = new EntryFilter(  );
-        	entryfilter.setIdDigg( digg.getIdDigg(  ) );
+            EntryFilter entryfilter = new EntryFilter(  );
+            entryfilter.setIdDigg( digg.getIdDigg(  ) );
             //set digg entries
-        	digg.setEntries(EntryHome.getEntryList( entryfilter, plugin ));
-            
-        	SubmitFilter filter = DiggUtils.getDiggSubmitFilter( searchFields );
-	        List<Integer> listIdDiggSubmit = DiggSubmitService.getService().getDiggSubmitListId( filter, plugin );
-	
-	        StringBuffer strBufferListDiggSubmitXml = new StringBuffer(  );
-	        DiggSubmit diggSubmit = null;
-	        List<CommentSubmit> listCommentSubmit;
-	        //reinit filter for comment
-	        filter = new SubmitFilter(  );  
-	        for ( Integer nIdDiggSubmit : listIdDiggSubmit )
-	        {
-	            diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit, false,true, plugin );
-	            filter.setIdDiggSubmit( nIdDiggSubmit );
-	            listCommentSubmit = CommentSubmitService.getService().getCommentSubmitList( filter, plugin );
-	            diggSubmit.setComments( listCommentSubmit );
-	            diggSubmit.setDigg(digg);
-	            strBufferListDiggSubmitXml.append( diggSubmit.getXml( request, adminUser.getLocale( ) ) );
-	        }
-	
-	        String strXmlSource = XmlUtil.getXmlHeader(  ) + digg.getXml( request, strBufferListDiggSubmitXml, adminUser.getLocale( ) );
-	        XmlTransformerService xmlTransformerService = new XmlTransformerService(  );
-	
-	        String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource,
-	                exportFormat.getXsl(  ), XSL_UNIQUE_PREFIX_ID + nIdExportFormat, null, null );
-	
-	        String strFormatExtension = exportFormat.getExtension(  ).trim(  );
+            digg.setEntries( EntryHome.getEntryList( entryfilter, plugin ) );
+
+            SubmitFilter filter = DiggUtils.getDiggSubmitFilter( searchFields );
+            List<Integer> listIdDiggSubmit = DiggSubmitService.getService(  ).getDiggSubmitListId( filter, plugin );
+
+            StringBuffer strBufferListDiggSubmitXml = new StringBuffer(  );
+            DiggSubmit diggSubmit = null;
+            List<CommentSubmit> listCommentSubmit;
+            //reinit filter for comment
+            filter = new SubmitFilter(  );
+
+            for ( Integer nIdDiggSubmit : listIdDiggSubmit )
+            {
+                diggSubmit = DiggSubmitService.getService(  ).findByPrimaryKey( nIdDiggSubmit, false, true, plugin );
+                filter.setIdDiggSubmit( nIdDiggSubmit );
+                listCommentSubmit = CommentSubmitService.getService(  ).getCommentSubmitList( filter, plugin );
+                diggSubmit.setComments( listCommentSubmit );
+                diggSubmit.setDigg( digg );
+                strBufferListDiggSubmitXml.append( diggSubmit.getXml( request, adminUser.getLocale(  ) ) );
+            }
+
+            String strXmlSource = XmlUtil.getXmlHeader(  ) +
+                digg.getXml( request, strBufferListDiggSubmitXml, adminUser.getLocale(  ) );
+            XmlTransformerService xmlTransformerService = new XmlTransformerService(  );
+
+            String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource,
+                    exportFormat.getXsl(  ), XSL_UNIQUE_PREFIX_ID + nIdExportFormat, null, null );
+
+            String strFormatExtension = exportFormat.getExtension(  ).trim(  );
             String strFileName = digg.getTitle(  ) + "." + strFormatExtension;
-            boolean isExporTypeCSV= (strFormatExtension!=null &&  strFormatExtension.equals(EXPORT_CSV_EXT));
-            
-            String strEncoding= isExporTypeCSV?AppPropertiesService.getProperty(PROPERTY_EXPORT_ENCODING_CSV, DEAFULT_ENCODING):AppPropertiesService.getProperty(PROPERTY_EXPORT_ENCODING_XML, DEAFULT_ENCODING);
-            String strResponseContentType=null;
+            boolean isExporTypeCSV = ( ( strFormatExtension != null ) && strFormatExtension.equals( EXPORT_CSV_EXT ) );
+
+            String strEncoding = isExporTypeCSV
+                ? AppPropertiesService.getProperty( PROPERTY_EXPORT_ENCODING_CSV, DEAFULT_ENCODING )
+                : AppPropertiesService.getProperty( PROPERTY_EXPORT_ENCODING_XML, DEAFULT_ENCODING );
+            String strResponseContentType = null;
+
             if ( isExporTypeCSV )
             {
-            	strResponseContentType= CONSTANT_MIME_TYPE_CSV ;
+                strResponseContentType = CONSTANT_MIME_TYPE_CSV;
             }
             else
             {
                 String strMimeType = FileSystemUtil.getMIMEType( strFileName );
-                strResponseContentType=strMimeType!=null?strMimeType:CONSTANT_MIME_TYPE_OCTETSTREAM;
-            
+                strResponseContentType = ( strMimeType != null ) ? strMimeType : CONSTANT_MIME_TYPE_OCTETSTREAM;
             }
-            
-           
+
             DiggUtils.addHeaderResponse( request, response, strFileName );
-	        response.setContentType( strResponseContentType );
-            response.setCharacterEncoding( strEncoding);
-	        
-	        try
-	        {
-	           
-	        	byte[]byteFileOutPut=strFileOutPut.getBytes(strEncoding);
-	            response.setContentLength( (int) byteFileOutPut.length );
-	            OutputStream os = response.getOutputStream(  );
-	            os.write( byteFileOutPut );
-	            os.close(  );
-	        }
-	        catch ( IOException e )
-	        {
-	            AppLogService.error( e );
-	            
-	            result.setRedirect(AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_DURING_DOWNLOAD_FILE,
-	                    AdminMessage.TYPE_STOP ));
-	           
-	        }
+            response.setContentType( strResponseContentType );
+            response.setCharacterEncoding( strEncoding );
+
+            try
+            {
+                byte[] byteFileOutPut = strFileOutPut.getBytes( strEncoding );
+                response.setContentLength( (int) byteFileOutPut.length );
+
+                OutputStream os = response.getOutputStream(  );
+                os.write( byteFileOutPut );
+                os.close(  );
+            }
+            catch ( IOException e )
+            {
+                AppLogService.error( e );
+
+                result.setRedirect( AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_DURING_DOWNLOAD_FILE,
+                        AdminMessage.TYPE_STOP ) );
+            }
         }
+
         result.setNoop( true );
+
         return result;
     }
 
@@ -268,5 +258,4 @@ public class ExportDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSe
     {
         return PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
     }
-
 }

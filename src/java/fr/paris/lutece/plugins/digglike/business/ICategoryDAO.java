@@ -99,7 +99,7 @@ public interface ICategoryDAO
     * @return true if there is a digg associate to the category
     */
     boolean isAssociateToDigg( int nIdCategory, Plugin plugin );
-    
+
     /**
      * Delete an association between digg and categories
      *

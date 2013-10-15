@@ -91,7 +91,7 @@ public interface ICommentSubmitService
      */
     @Transactional( "digglike.transactionManager" )
     List<CommentSubmit> getCommentSubmitList( SubmitFilter filter, Plugin plugin );
-    
+
     /**
      * Load the data of all the commentSubmit who verify the filter and returns them in a  list
      * @param filter the filter
@@ -100,8 +100,7 @@ public interface ICommentSubmitService
      * @return  the list of commentSubmit
      */
     @Transactional( "digglike.transactionManager" )
-    public List<CommentSubmit> getCommentSubmitList( SubmitFilter filter,Integer nLimitParentNumber,  Plugin plugin );
-    
+    public List<CommentSubmit> getCommentSubmitList( SubmitFilter filter, Integer nLimitParentNumber, Plugin plugin );
 
     /**
      * Load the number of all the commentSubmit who verify the filter

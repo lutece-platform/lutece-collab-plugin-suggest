@@ -40,9 +40,9 @@ import java.util.List;
 
 
 /**
- * 
+ *
  * class voteHome
- * 
+ *
  */
 public final class VoteHome
 {
@@ -52,17 +52,17 @@ public final class VoteHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private VoteHome( )
+    private VoteHome(  )
     {
     }
 
     /**
      * Creation of an instance of vote
-     * 
+     *
      * @param vote The instance of the Digg which contains the informations to
      *            store
      * @param plugin the Plugin
-     * 
+     *
      */
     public static void create( Vote vote, Plugin plugin )
     {

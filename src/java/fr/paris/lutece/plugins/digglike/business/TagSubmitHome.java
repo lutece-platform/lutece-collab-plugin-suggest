@@ -50,17 +50,17 @@ public final class TagSubmitHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private TagSubmitHome( )
+    private TagSubmitHome(  )
     {
     }
 
     /**
      * Creation of an instance of tagSubmit
-     * 
+     *
      * @param tagSubmit The instance of the tagSubmit which contains the
      *            informations to store
      * @param plugin the Plugin
-     * 
+     *
      */
     public static void create( TagSubmit tagSubmit, Plugin plugin )
     {
@@ -69,11 +69,11 @@ public final class TagSubmitHome
 
     /**
      * Update of the tagSubmit which is specified in parameter
-     * 
+     *
      * @param tagSubmit The instance of the tagSubmit which contains the
      *            informations to update
      * @param plugin the Plugin
-     * 
+     *
      */
     public static void update( TagSubmit tagSubmit, Plugin plugin )
     {
@@ -82,7 +82,7 @@ public final class TagSubmitHome
 
     /**
      * Remove the tagSubmit whose identifier is specified in parameter
-     * 
+     *
      * @param nIdTagSubmit The tagSubmitId
      * @param plugin the Plugin
      */
@@ -97,7 +97,7 @@ public final class TagSubmitHome
     /**
      * Returns an instance of a TagSubmitwhose identifier is specified in
      * parameter
-     * 
+     *
      * @param nKey The tagSubmit primary key
      * @param plugin the Plugin
      * @return an instance of TagSubmit

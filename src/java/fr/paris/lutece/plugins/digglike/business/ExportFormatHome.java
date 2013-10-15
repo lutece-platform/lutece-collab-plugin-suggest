@@ -53,17 +53,17 @@ public final class ExportFormatHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private ExportFormatHome( )
+    private ExportFormatHome(  )
     {
     }
 
     /**
      * Creation of an instance of ExportFormat
-     * 
+     *
      * @param exportFormat The instance of the ExportFormat which contains the
      *            informations to store
      * @param plugin the Plugin
-     * 
+     *
      */
     public static void create( ExportFormat exportFormat, Plugin plugin )
     {
@@ -72,28 +72,28 @@ public final class ExportFormatHome
 
     /**
      * Update of the ExportFormat which is specified in parameter
-     * 
+     *
      * @param exportFormat The instance of the ExportFormat which contains the
      *            informations to update
      * @param plugin the Plugin
-     * 
+     *
      */
     public static void update( ExportFormat exportFormat, Plugin plugin )
     {
         _dao.store( exportFormat, plugin );
-        XmlTransformerService.clearXslCache( );
+        XmlTransformerService.clearXslCache(  );
     }
 
     /**
      * Remove the ExportFormat whose identifier is specified in parameter
-     * 
+     *
      * @param nIdExport The exportFormat Id
      * @param plugin the Plugin
      */
     public static void remove( int nIdExport, Plugin plugin )
     {
         _dao.delete( nIdExport, plugin );
-        XmlTransformerService.clearXslCache( );
+        XmlTransformerService.clearXslCache(  );
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ public final class ExportFormatHome
     /**
      * Returns an instance of a ExportFormat whose identifier is specified in
      * parameter
-     * 
+     *
      * @param nKey The exportFormat primary key
      * @param plugin the Plugin
      * @return an instance of ExportFormat
@@ -114,7 +114,7 @@ public final class ExportFormatHome
 
     /**
      * Loads the data of all the exportFormat and returns them in a list
-     * 
+     *
      * @param plugin the Plugin
      * @return the list which contains the data of all the ExportFormat
      */

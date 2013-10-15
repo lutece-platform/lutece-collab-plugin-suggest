@@ -52,6 +52,8 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.fileupload.FileItem;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -59,17 +61,16 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.FileItem;
-
 
 /**
- * 
+ *
  * class DiggSubmitTypeJspBean
- * 
+ *
  */
 public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
 {
     private static final long serialVersionUID = 2466547668533718657L;
+
     //	templates
     private static final String TEMPLATE_MANAGE_DIGG_SUBMIT_TYPE = "admin/plugins/digglike/manage_digg_submit_type.html";
     private static final String TEMPLATE_CREATE_DIGG_SUBMIT_TYPE = "admin/plugins/digglike/create_digg_submit_type.html";
@@ -121,9 +122,9 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
      */
     public String getManageDiggSubmitType( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
-        Locale locale = getLocale( );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Plugin plugin = getPlugin(  );
+        Locale locale = getLocale(  );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         List<DiggSubmitType> listDiggSubmitType = DiggSubmitTypeHome.getList( plugin );
         _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
@@ -134,12 +135,12 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
 
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPage );
-        model.put( MARK_DIGG_SUBMIT_TYPE_LIST, paginator.getPageItems( ) );
+        model.put( MARK_DIGG_SUBMIT_TYPE_LIST, paginator.getPageItems(  ) );
         setPageTitleProperty( PROPERTY_MANAGE_DIGG_SUBMIT_TYPE_TITLE );
 
         HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_DIGG_SUBMIT_TYPE, locale, model );
 
-        return getAdminPage( templateList.getHtml( ) );
+        return getAdminPage( templateList.getHtml(  ) );
     }
 
     /**
@@ -149,13 +150,13 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
      */
     public String getCreateDiggSubmitType( HttpServletRequest request )
     {
-        Locale locale = getLocale( );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Locale locale = getLocale(  );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         setPageTitleProperty( PROPERTY_CREATE_DIGG_SUBMIT_TYPE_TITLE );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_DIGG_SUBMIT_TYPE, locale, model );
 
-        return getAdminPage( template.getHtml( ) );
+        return getAdminPage( template.getHtml(  ) );
     }
 
     /**
@@ -166,7 +167,7 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
     public String doCreateDiggSubmitType( HttpServletRequest request )
     {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-        DiggSubmitType diggSubmitType = new DiggSubmitType( );
+        DiggSubmitType diggSubmitType = new DiggSubmitType(  );
         String strError = getDiggSubmitTypeData( multipartRequest, diggSubmitType );
 
         if ( strError != null )
@@ -174,7 +175,7 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
             return strError;
         }
 
-        DiggSubmitTypeHome.create( diggSubmitType, getPlugin( ) );
+        DiggSubmitTypeHome.create( diggSubmitType, getPlugin(  ) );
 
         return getJspManageDiggSubmitType( request );
     }
@@ -186,11 +187,11 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
      */
     public String getModifyDiggSubmitType( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
-        Locale locale = getLocale( );
+        Plugin plugin = getPlugin(  );
+        Locale locale = getLocale(  );
         DiggSubmitType diggSubmitType;
         String strIdDiggSubmitType = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_TYPE );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         int nIdDiggSubmitType = -1;
 
         if ( ( strIdDiggSubmitType != null ) && !strIdDiggSubmitType.equals( EMPTY_STRING ) )
@@ -217,7 +218,7 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_DIGG_SUBMIT_TYPE, locale, model );
 
-        return getAdminPage( template.getHtml( ) );
+        return getAdminPage( template.getHtml(  ) );
     }
 
     /**
@@ -228,7 +229,7 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
     public String doModifyDiggSubmitType( HttpServletRequest request )
     {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
         DiggSubmitType diggSubmitType;
         String strIdDiggSubmitType = multipartRequest.getParameter( PARAMETER_ID_DIGG_SUBMIT_TYPE );
         int nIdDiggSubmitType = -1;
@@ -260,7 +261,7 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
             return strError;
         }
 
-        DiggSubmitTypeHome.update( diggSubmitType, getPlugin( ) );
+        DiggSubmitTypeHome.update( diggSubmitType, getPlugin(  ) );
 
         return getJspManageDiggSubmitType( request );
     }
@@ -282,8 +283,8 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
         UrlItem url = new UrlItem( JSP_DO_REMOVE_DIGG_SUBMIT_TYPE );
         url.addParameter( PARAMETER_ID_DIGG_SUBMIT_TYPE, strIdDiggSubmitType );
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_DIGG_SUBMIT_TYPE, url.getUrl( ),
-                AdminMessage.TYPE_CONFIRMATION );
+        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_DIGG_SUBMIT_TYPE, url.getUrl(  ),
+            AdminMessage.TYPE_CONFIRMATION );
     }
 
     /**
@@ -294,14 +295,15 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
     public String doRemoveDiggSubmitType( HttpServletRequest request )
     {
         String strIdDiggSubmitType = request.getParameter( PARAMETER_ID_DIGG_SUBMIT_TYPE );
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
         int nIdDiggSubmitType = DiggUtils.getIntegerParameter( strIdDiggSubmitType );
 
         if ( DiggSubmitTypeHome.isAssociateToDigg( nIdDiggSubmitType, plugin ) )
         {
             return AdminMessageService.getMessageUrl( request, MESSAGE_DIGG_SUBMIT_TYPE_ASSOCIATE_TO_DIGG,
-                    AdminMessage.TYPE_STOP );
+                AdminMessage.TYPE_STOP );
         }
+
         if ( nIdDiggSubmitType != -1 )
         {
             DiggSubmitTypeHome.remove( nIdDiggSubmitType, plugin );
@@ -329,12 +331,12 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
         String strImageName = FileUploadService.getFileNameOnly( imageSource );
         String strUpdateFile = multipartRequest.getParameter( PARAMETER_UPDATE_FILE );
 
-        if ( ( strName == null ) || strName.trim( ).equals( EMPTY_STRING ) )
+        if ( ( strName == null ) || strName.trim(  ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_NAME;
         }
 
-        else if ( ( strParameterizable == null ) || strParameterizable.trim( ).equals( EMPTY_STRING ) )
+        else if ( ( strParameterizable == null ) || strParameterizable.trim(  ).equals( EMPTY_STRING ) )
         {
             bParameterizable = false;
         }
@@ -342,22 +344,23 @@ public class DiggSubmitTypeJspBean extends PluginAdminPageJspBean
         //Mandatory fields
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale( ) ) };
+            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale(  ) ) };
 
             return AdminMessageService.getMessageUrl( multipartRequest, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                    AdminMessage.TYPE_STOP );
+                AdminMessage.TYPE_STOP );
         }
 
-        if ( ( diggSubmitType.getIdType( ) == DiggUtils.CONSTANT_ID_NULL ) || ( strUpdateFile != null ) )
+        if ( ( diggSubmitType.getIdType(  ) == DiggUtils.CONSTANT_ID_NULL ) || ( strUpdateFile != null ) )
         {
-            ImageResource image = new ImageResource( );
-            byte[] baImageSource = imageSource.get( );
+            ImageResource image = new ImageResource(  );
+            byte[] baImageSource = imageSource.get(  );
 
             if ( ( strImageName != null ) && !strImageName.equals( "" ) )
             {
                 image.setImage( baImageSource );
-                image.setMimeType( imageSource.getContentType( ) );
+                image.setMimeType( imageSource.getContentType(  ) );
             }
+
             diggSubmitType.setPictogram( image );
         }
 

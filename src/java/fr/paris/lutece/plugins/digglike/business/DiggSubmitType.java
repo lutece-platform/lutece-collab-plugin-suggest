@@ -52,7 +52,6 @@ public class DiggSubmitType implements RBACResource
     private Boolean _bParameterizableInFO;
     private int _nIdXSLStyleSheet;
     private Integer _nIdImageResource;
-   
 
     /**
      * @param nIdType the _nIdType to set
@@ -168,9 +167,6 @@ public class DiggSubmitType implements RBACResource
         return _nIdXSLStyleSheet;
     }
 
-
-    
-    
     /**
      * @param obj the Digg Submit Type  to compare
      * @return true if Digg Submit Type  in parameter is the same object
@@ -178,28 +174,29 @@ public class DiggSubmitType implements RBACResource
      */
     public boolean equals( Object obj )
     {
-        if ( ( (DiggSubmitType) obj ).getIdType() == _nIdType )
+        if ( ( (DiggSubmitType) obj ).getIdType(  ) == _nIdType )
         {
             return true;
         }
 
         return false;
     }
-    
+
     /**
      * the image resource id associate to the response
      * @return Resource Image
      */
-	public Integer getIdImageResource() {
-		return _nIdImageResource;
-	}
+    public Integer getIdImageResource(  )
+    {
+        return _nIdImageResource;
+    }
 
-	/**
-	 * image resource id associate to the response
-	 * @param idImageResource image resource id associate to the response
-	 */
-	public void setIdImageResource(Integer idImageResource) {
-		_nIdImageResource = idImageResource;
-	}
-
+    /**
+     * image resource id associate to the response
+     * @param idImageResource image resource id associate to the response
+     */
+    public void setIdImageResource( Integer idImageResource )
+    {
+        _nIdImageResource = idImageResource;
+    }
 }

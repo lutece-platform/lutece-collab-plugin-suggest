@@ -75,8 +75,7 @@ public class ImageService implements ImageResourceProvider
      */
     public ImageResource getImageResource( int nIdResource )
     {
-    	
-    	return ImageResourceHome.findByPrimaryKey( nIdResource, PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) );
+        return ImageResourceHome.findByPrimaryKey( nIdResource, PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) );
     }
 
     /**

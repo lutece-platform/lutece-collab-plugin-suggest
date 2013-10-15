@@ -39,12 +39,12 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -115,25 +115,26 @@ public class EntryTypeTextArea extends Entry
                 AdminMessage.TYPE_STOP );
         }
 
-       
-         nHeight = DiggUtils.getIntegerParameter(strHeight)  ;
-         if(nHeight<0)
-         {
-        	 strFieldError = FIELD_HEIGHT;
-         }
+        nHeight = DiggUtils.getIntegerParameter( strHeight );
 
-       
-         nWidth = DiggUtils.getIntegerParameter( strWidth );
-         if(nWidth<0)
-         {
-        	 strFieldError = FIELD_WIDTH;
-         }
-         
-         nMaxSizeEnter = DiggUtils.getIntegerParameter( strMaxSizeEnter );
-         if(!StringUtils.isEmpty(strMaxSizeEnter) && nMaxSizeEnter<0)
-         {
-        	 strFieldError = FIELD_MAX_SIZE_ENTER;
-         }
+        if ( nHeight < 0 )
+        {
+            strFieldError = FIELD_HEIGHT;
+        }
+
+        nWidth = DiggUtils.getIntegerParameter( strWidth );
+
+        if ( nWidth < 0 )
+        {
+            strFieldError = FIELD_WIDTH;
+        }
+
+        nMaxSizeEnter = DiggUtils.getIntegerParameter( strMaxSizeEnter );
+
+        if ( !StringUtils.isEmpty( strMaxSizeEnter ) && ( nMaxSizeEnter < 0 ) )
+        {
+            strFieldError = FIELD_MAX_SIZE_ENTER;
+        }
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
@@ -151,7 +152,7 @@ public class EntryTypeTextArea extends Entry
         this.setWidth( nWidth );
         this.setHeight( nHeight );
         this.setMaxSizeEnter( nMaxSizeEnter );
-        
+
         if ( strMandatory != null )
         {
             this.setMandatory( true );

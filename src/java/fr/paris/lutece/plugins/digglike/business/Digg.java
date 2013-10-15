@@ -33,12 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.digglike.business.attribute.DiggAttribute;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.editor.EditorBbcodeService;
@@ -51,13 +45,20 @@ import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupResource;
 import fr.paris.lutece.portal.service.workgroup.WorkgroupRemovalListenerService;
 import fr.paris.lutece.util.xml.XmlUtil;
 
+import java.sql.Timestamp;
+
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  *
  * Class Digg
  *
  */
-public class Digg implements IExtendableResource,AdminWorkgroupResource, RBACResource
+public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACResource
 {
     public static final String RESOURCE_TYPE = "DIGGLIKE_DIGG_TYPE";
     public static final int STATE_ENABLE = 1;
@@ -112,38 +113,32 @@ public class Digg implements IExtendableResource,AdminWorkgroupResource, RBACRes
     private String _strConfirmationMessage;
     private boolean _bActiveEditorBbcode;
     private int _nIdDefaultSort = DiggUtils.CONSTANT_ID_NULL;
-   
     private boolean _bDefaultDigg;
     @DiggAttribute( "disableVote" )
     private boolean _bDisableVote;
     @DiggAttribute( "displayCommentInDiggSubmitList" )
     private boolean _bDisplayCommentInDiggSubmitList;
-    @DiggAttribute( "numberCommentDisplayInDiggSubmitList") 
+    @DiggAttribute( "numberCommentDisplayInDiggSubmitList" )
     private Integer _nNumberCommentDisplayInDiggSubmitList;
-    @DiggAttribute( "numberCharCommentDisplayInDiggSubmitList") 
+    @DiggAttribute( "numberCharCommentDisplayInDiggSubmitList" )
     private Integer _nNumberCharCommentDisplayInDiggSubmitList;
-    @DiggAttribute( "enableMailNewCommentSubmit") 
+    @DiggAttribute( "enableMailNewCommentSubmit" )
     private boolean _bEnableMailNewCommentSubmit;
-    @DiggAttribute( "enableMailNewReportedSubmit") 
+    @DiggAttribute( "enableMailNewReportedSubmit" )
     private boolean _bEnableMailNewReportedSubmit;
-    @DiggAttribute( "enableTermsOfUse") 
+    @DiggAttribute( "enableTermsOfUse" )
     private boolean _bEnableTermsOfUse;
-    @DiggAttribute( "termsOfUse") 
+    @DiggAttribute( "termsOfUse" )
     private String _strTermsOfUse;
-    @DiggAttribute( "enableReports") 
+    @DiggAttribute( "enableReports" )
     private boolean _bEnableReports;
-    @DiggAttribute( "idImageResource")
-    private Integer _nIdImageResource=DiggUtils.CONSTANT_ID_NULL;
+    @DiggAttribute( "idImageResource" )
+    private Integer _nIdImageResource = DiggUtils.CONSTANT_ID_NULL;
     private ImageResource _image;
-    @DiggAttribute( "description") 
+    @DiggAttribute( "description" )
     private String _strDescription;
 
-
-
-
-
-
-	/**
+    /**
     * Initialize the Digg
     */
     public static void init(  )
@@ -185,8 +180,6 @@ public class Digg implements IExtendableResource,AdminWorkgroupResource, RBACRes
     {
         _nIdMailingListDiggSubmit = mailingListId;
     }
-
-
 
     /**
      *
@@ -777,14 +770,15 @@ public class Digg implements IExtendableResource,AdminWorkgroupResource, RBACRes
         XmlUtil.beginElement( strXml, TAG_DIGG );
         XmlUtil.addElementHtml( strXml, TAG_DIGG_TITLE, getTitle(  ) );
         XmlUtil.beginElement( strXml, TAG_LIST_ENTRY );
-        if(this.getEntries()!=null &&! this.getEntries().isEmpty())
+
+        if ( ( this.getEntries(  ) != null ) && !this.getEntries(  ).isEmpty(  ) )
         {
-            for(IEntry entry:this.getEntries())
+            for ( IEntry entry : this.getEntries(  ) )
             {
-            	entry.getXml(locale, strXml);
-            	
+                entry.getXml( locale, strXml );
             }
         }
+
         XmlUtil.endElement( strXml, TAG_LIST_ENTRY );
         XmlUtil.beginElement( strXml, TAG_DIGG_SUBMITS );
         strXml.append( strListDiggSubmit );
@@ -849,8 +843,6 @@ public class Digg implements IExtendableResource,AdminWorkgroupResource, RBACRes
     {
         _strRole = strRole;
     }
-
-
 
     /**Sets the digg's header
      * @param strHeader the strHeader to set
@@ -969,7 +961,6 @@ public class Digg implements IExtendableResource,AdminWorkgroupResource, RBACRes
         _nIdDefaultSort = nIdDefaultSort;
     }
 
-  
     /**
      *
      * @return true if the digg is a Default digg
@@ -987,18 +978,16 @@ public class Digg implements IExtendableResource,AdminWorkgroupResource, RBACRes
     {
         _bDefaultDigg = bDefaultDigg;
     }
-    
-    
+
     /**
-     * 
+     *
      * @return true if the vote is disable
      */
-    public boolean isDisableVote( )
+    public boolean isDisableVote(  )
     {
-    	return _bDisableVote;
+        return _bDisableVote;
     }
-    
-   
+
     /**
      * set true if the vote is disable
      * @param bDisable true if the vote is disable
@@ -1007,246 +996,255 @@ public class Digg implements IExtendableResource,AdminWorkgroupResource, RBACRes
     {
         _bDisableVote = bDisable;
     }
-    
-    
-    
+
     /**
-     * 
+     *
      * @return true if the list of comment must be display in digg submit list
      */
-    public boolean isDisplayCommentInDiggSubmitList() {
-		return _bDisplayCommentInDiggSubmitList;
-	}
+    public boolean isDisplayCommentInDiggSubmitList(  )
+    {
+        return _bDisplayCommentInDiggSubmitList;
+    }
+
     /**
-     * 
+     *
      * @param _bDisplayCommentInDiggSubmitList true if the list of comment must be display in digg submit list
      */
-	public void setDisplayCommentInDiggSubmitList(
-			boolean _bDisplayCommentInDiggSubmitList) {
-		this._bDisplayCommentInDiggSubmitList = _bDisplayCommentInDiggSubmitList;
-	}
-	/**
-	 * 
-	 * @return the number of comment submit display by digg submit in the list of digg submit 
-	 */
-	public Integer getNumberCommentDisplayInDiggSubmitList() {
-		return _nNumberCommentDisplayInDiggSubmitList;
-	}
-	/**
-	 * 
-	 * @param _nNumberCommentDisplayInDiggSubmitList the number of comment submit display by digg submit in the list of digg submit 
-	 */
-	public void setNumberCommentDisplayInDiggSubmitList(
-			Integer _nNumberCommentDisplayInDiggSubmitList) {
-		this._nNumberCommentDisplayInDiggSubmitList = _nNumberCommentDisplayInDiggSubmitList;
-	}
-    
-	/**
-	 * 
-	 * @return the number of  char comment  display by digg submit in the list of digg submit 
-	 */
-	public Integer getNumberCharCommentDisplayInDiggSubmitList() {
-		return _nNumberCharCommentDisplayInDiggSubmitList;
-	}
-	/**
-	 * 
-	 * @param _nNumberCommentDisplayInDiggSubmitList the number of  char comment  display by digg submit in the list of digg submit 
-	 */
-	public void setNumberCharCommentDisplayInDiggSubmitList(
-			Integer _nNumberCommentDisplayInDiggSubmitList) {
-		this._nNumberCharCommentDisplayInDiggSubmitList = _nNumberCommentDisplayInDiggSubmitList;
-	}
-	
+    public void setDisplayCommentInDiggSubmitList( boolean _bDisplayCommentInDiggSubmitList )
+    {
+        this._bDisplayCommentInDiggSubmitList = _bDisplayCommentInDiggSubmitList;
+    }
 
-	/**
-	*
-	* @return true if a mail must be sent when the new comment is submitted
-	*/
-	public boolean isEnableMailNewCommentSubmit(  )
-	{
-	   return _bEnableMailNewCommentSubmit;
-	}
+    /**
+     *
+     * @return the number of comment submit display by digg submit in the list of digg submit
+     */
+    public Integer getNumberCommentDisplayInDiggSubmitList(  )
+    {
+        return _nNumberCommentDisplayInDiggSubmitList;
+    }
 
-	/**
-	* set true if a mail must be sent when the new comment is submitted
-	* @param enableMailNewCommentSubmit true if a mail must be sent when the new comment is submitted
-	*/
-	public void setEnableMailNewCommentSubmit( boolean enableMailNewCommentSubmit )
-	{
-	   _bEnableMailNewCommentSubmit = enableMailNewCommentSubmit;
-	}
-	
-	
-	/**
-	*
-	* @return true if a mail must be sent when the new comment is submitted
-	*/
-	public boolean isEnableMailNewReportedSubmit(  )
-	{
-	   return _bEnableMailNewReportedSubmit;
-	}
+    /**
+     *
+     * @param _nNumberCommentDisplayInDiggSubmitList the number of comment submit display by digg submit in the list of digg submit
+     */
+    public void setNumberCommentDisplayInDiggSubmitList( Integer _nNumberCommentDisplayInDiggSubmitList )
+    {
+        this._nNumberCommentDisplayInDiggSubmitList = _nNumberCommentDisplayInDiggSubmitList;
+    }
 
-	/**
-	* set true if a mail must be sent when the new reported is submitted
-	* @param enableMailNewReportedSubmit true if a mail must be sent when the new comment is submitted
-	*/
-	public void setEnableMailNewReportedSubmit( boolean enableMailNewReportedSubmit )
-	{
-	   _bEnableMailNewReportedSubmit = enableMailNewReportedSubmit;
-	}
-	
-	 /**
+    /**
+     *
+     * @return the number of  char comment  display by digg submit in the list of digg submit
+     */
+    public Integer getNumberCharCommentDisplayInDiggSubmitList(  )
+    {
+        return _nNumberCharCommentDisplayInDiggSubmitList;
+    }
+
+    /**
+     *
+     * @param _nNumberCommentDisplayInDiggSubmitList the number of  char comment  display by digg submit in the list of digg submit
+     */
+    public void setNumberCharCommentDisplayInDiggSubmitList( Integer _nNumberCommentDisplayInDiggSubmitList )
+    {
+        this._nNumberCharCommentDisplayInDiggSubmitList = _nNumberCommentDisplayInDiggSubmitList;
+    }
+
+    /**
+    *
+    * @return true if a mail must be sent when the new comment is submitted
+    */
+    public boolean isEnableMailNewCommentSubmit(  )
+    {
+        return _bEnableMailNewCommentSubmit;
+    }
+
+    /**
+    * set true if a mail must be sent when the new comment is submitted
+    * @param enableMailNewCommentSubmit true if a mail must be sent when the new comment is submitted
+    */
+    public void setEnableMailNewCommentSubmit( boolean enableMailNewCommentSubmit )
+    {
+        _bEnableMailNewCommentSubmit = enableMailNewCommentSubmit;
+    }
+
+    /**
+    *
+    * @return true if a mail must be sent when the new comment is submitted
+    */
+    public boolean isEnableMailNewReportedSubmit(  )
+    {
+        return _bEnableMailNewReportedSubmit;
+    }
+
+    /**
+    * set true if a mail must be sent when the new reported is submitted
+    * @param enableMailNewReportedSubmit true if a mail must be sent when the new comment is submitted
+    */
+    public void setEnableMailNewReportedSubmit( boolean enableMailNewReportedSubmit )
+    {
+        _bEnableMailNewReportedSubmit = enableMailNewReportedSubmit;
+    }
+
+    /**
     *
     * @return the digg submit type List associate to the digg
     */
-   public List<DiggSubmitType> getDiggSubmitTypes(  )
-   {
-       return _listDiggSubmitTypes;
-   }
+    public List<DiggSubmitType> getDiggSubmitTypes(  )
+    {
+        return _listDiggSubmitTypes;
+    }
 
-   /**
-    * set the digg submit type  List associate to the digg
-    * @param diggsSubmit the digg submit type  List associate to the digg
-    */
-   public void setDiggSubmiTypes( List<DiggSubmitType> diggSubmitTypes )
-   {
-	   _listDiggSubmitTypes = diggSubmitTypes;
-   }
-   
-  /**
-   *  
-   * @return true if Terms of use must be enable
-   */
-  public boolean isEnableTermsOfUse()
-  {
-	  return _bEnableTermsOfUse;
-  }  
-  
-  
-  
-  /**
-   *  
-   * @param bEnableTermsOfUse  true if Terms of use must be enable
-   */
-  public void setEnableTermsOfUse(boolean bEnableTermsOfUse)
-  {
-	  _bEnableTermsOfUse=bEnableTermsOfUse;
-  }  
-  
-  
-  /**
-   * the terms of use
-   * @return the terms of use
-   */
-  public String getTermsOfUse() {
-		return _strTermsOfUse;
-	}
-  
-  /**
-   * set Terms of use
-   * @param _strTermsOfUse the terms of use
-   */
-	public void setTermsOfUse(String strTermsOfUse) {
-		this._strTermsOfUse = strTermsOfUse;
-	}
-	
-	/**
-	 * 
-	 * @return the digg description
-	 */
-	public String getDescription() {
-		return _strDescription;
-	}
-	/**
-	 * 
-	 * @param _strDescription set the digg description
-	 */
-	public void setDescription(String _strDescription) {
-		this._strDescription = _strDescription;
-	}
-	
-	
     /**
-     * 
+     * set the digg submit type  List associate to the digg
+     * @param diggsSubmit the digg submit type  List associate to the digg
+     */
+    public void setDiggSubmiTypes( List<DiggSubmitType> diggSubmitTypes )
+    {
+        _listDiggSubmitTypes = diggSubmitTypes;
+    }
+
+    /**
+     *
+     * @return true if Terms of use must be enable
+     */
+    public boolean isEnableTermsOfUse(  )
+    {
+        return _bEnableTermsOfUse;
+    }
+
+    /**
+     *
+     * @param bEnableTermsOfUse  true if Terms of use must be enable
+     */
+    public void setEnableTermsOfUse( boolean bEnableTermsOfUse )
+    {
+        _bEnableTermsOfUse = bEnableTermsOfUse;
+    }
+
+    /**
+     * the terms of use
+     * @return the terms of use
+     */
+    public String getTermsOfUse(  )
+    {
+        return _strTermsOfUse;
+    }
+
+    /**
+     * set Terms of use
+     * @param _strTermsOfUse the terms of use
+     */
+    public void setTermsOfUse( String strTermsOfUse )
+    {
+        this._strTermsOfUse = strTermsOfUse;
+    }
+
+    /**
+     *
+     * @return the digg description
+     */
+    public String getDescription(  )
+    {
+        return _strDescription;
+    }
+
+    /**
+     *
+     * @param _strDescription set the digg description
+     */
+    public void setDescription( String _strDescription )
+    {
+        this._strDescription = _strDescription;
+    }
+
+    /**
+     *
      * @return true if reports are enable
      */
-	public boolean isEnableReports() {
-		return _bEnableReports;
-	}
+    public boolean isEnableReports(  )
+    {
+        return _bEnableReports;
+    }
 
-	/**
-	 * 
-	 * @param _bEnableReports true if reports are enable
-	 */
-	public void setEnableReports(boolean bEnableReports) {
-		this._bEnableReports = bEnableReports;
-	}
-	
-	
+    /**
+     *
+     * @param _bEnableReports true if reports are enable
+     */
+    public void setEnableReports( boolean bEnableReports )
+    {
+        this._bEnableReports = bEnableReports;
+    }
+
     /**
      * the image resource id associate to the digg
      * @return Resource Image
      */
-	public Integer getIdImageResource() {
-		return _nIdImageResource;
-	}
+    public Integer getIdImageResource(  )
+    {
+        return _nIdImageResource;
+    }
 
-	/**
-	 * image resource id associate to the digg
-	 * @param idImageResource image resource id associate to the digg
-	 */
-	public void setIdImageResource(Integer idImageResource) {
-		_nIdImageResource = idImageResource;
-	}
-	
+    /**
+     * image resource id associate to the digg
+     * @param idImageResource image resource id associate to the digg
+     */
+    public void setIdImageResource( Integer idImageResource )
+    {
+        _nIdImageResource = idImageResource;
+    }
+
     /**
      * get Image
      * @return Image Resource
      */
-	public ImageResource getImage() {
-		return _image;
-	}
-	/**
-	 * set Image Resource
-	 * @param image  Image Resource
-	 */
-	public void setImage(ImageResource image) {
-		this._image = image;
-	}
-	
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getIdExtendableResource( )
-	{
-		return Integer.toString( _nIdDigg );
-	}
+    public ImageResource getImage(  )
+    {
+        return _image;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getExtendableResourceType( )
-	{
-		return RESOURCE_TYPE;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getExtendableResourceName( )
-	{
-		return _strTitle;
-	}
+    /**
+     * set Image Resource
+     * @param image  Image Resource
+     */
+    public void setImage( ImageResource image )
+    {
+        this._image = image;
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getExtendableResourceDescription( )
+    public String getIdExtendableResource(  )
+    {
+        return Integer.toString( _nIdDigg );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getExtendableResourceType(  )
+    {
+        return RESOURCE_TYPE;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getExtendableResourceName(  )
+    {
+        return _strTitle;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getExtendableResourceDescription(  )
     {
         return _strDescription;
     }
@@ -1255,23 +1253,16 @@ public class Digg implements IExtendableResource,AdminWorkgroupResource, RBACRes
      * {@inheritDoc}
      */
     @Override
-    public String getExtendableResourceImageUrl( )
+    public String getExtendableResourceImageUrl(  )
     {
-        if ( _nIdImageResource!=null )
+        if ( _nIdImageResource != null )
         {
             StringBuilder sbUrl = new StringBuilder( DiggUtils.SERVLET_IMAGE_PATH );
             sbUrl.append( _nIdImageResource );
-                return sbUrl.toString( );
+
+            return sbUrl.toString(  );
         }
+
         return null;
     }
-    
-    
-    
-    
-    
- 
-	
-	
-	
 }

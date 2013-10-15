@@ -33,13 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.fileupload.FileItem;
-
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -48,6 +41,13 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
+
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -214,8 +214,8 @@ public class EntryTypeImage extends Entry
             ImageResource image = new ImageResource(  );
             image.setImage( bytes );
             image.setMimeType( item.getContentType(  ) );
-            response.setImage(image);
-            response.setValueResponse( FileUploadService.getFileNameOnly(item) );
+            response.setImage( image );
+            response.setValueResponse( FileUploadService.getFileNameOnly( item ) );
         }
         else
         {

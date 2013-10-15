@@ -43,9 +43,8 @@ import java.sql.Timestamp;
 */
 public class ReportedMessage
 {
-    
-	private int _nIdReported;
-	private DiggSubmit _diggSubmit;
+    private int _nIdReported;
+    private DiggSubmit _diggSubmit;
     private Timestamp _tDateReported;
     private String _strValue;
 
@@ -104,17 +103,20 @@ public class ReportedMessage
     }
 
     /**
-     * 
+     *
      * @return the reported id
      */
-	public int getIdReported() {
-		return _nIdReported;
-	}
-	/**
-	 * 
-	 * @param _nIdReported  the reported id
-	 */
-	public void setIdReported(int _nIdReported) {
-		this._nIdReported = _nIdReported;
-	}
+    public int getIdReported(  )
+    {
+        return _nIdReported;
+    }
+
+    /**
+     *
+     * @param _nIdReported  the reported id
+     */
+    public void setIdReported( int _nIdReported )
+    {
+        this._nIdReported = _nIdReported;
+    }
 }

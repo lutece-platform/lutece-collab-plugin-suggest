@@ -79,18 +79,16 @@ public class CommentSubmitService implements ICommentSubmitService
     @Override
     public void remove( int nIdCommentSubmit, Plugin plugin )
     {
-    	
-//    	SubmitFilter filter =new SubmitFilter();
-//    	filter.setIdParent(nIdCommentSubmit);
-//    	List<CommentSubmit> listSubComment= getCommentSubmitList(filter, plugin);
-//    	for(CommentSubmit subComment:listSubComment)
-//    	{
-//    		CommentSubmitHome.remove( subComment.getIdCommentSubmit(), plugin );
-//    	}
-    	 //remove children
-        CommentSubmitHome.removeByIdParent(nIdCommentSubmit, plugin);
+        //    	SubmitFilter filter =new SubmitFilter();
+        //    	filter.setIdParent(nIdCommentSubmit);
+        //    	List<CommentSubmit> listSubComment= getCommentSubmitList(filter, plugin);
+        //    	for(CommentSubmit subComment:listSubComment)
+        //    	{
+        //    		CommentSubmitHome.remove( subComment.getIdCommentSubmit(), plugin );
+        //    	}
+        //remove children
+        CommentSubmitHome.removeByIdParent( nIdCommentSubmit, plugin );
         CommentSubmitHome.remove( nIdCommentSubmit, plugin );
-       
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -120,7 +118,7 @@ public class CommentSubmitService implements ICommentSubmitService
         //get All parent
         filter.setIdParent( SubmitFilter.ID_PARENT_NULL );
 
-        List<CommentSubmit> commentSubmitList = CommentSubmitHome.getCommentSubmitList( filter,null, plugin );
+        List<CommentSubmit> commentSubmitList = CommentSubmitHome.getCommentSubmitList( filter, null, plugin );
 
         if ( commentSubmitList != null )
         {
@@ -133,7 +131,7 @@ public class CommentSubmitService implements ICommentSubmitService
                 subCommentFilter.setIdParent( c.getIdCommentSubmit(  ) );
                 subCommentFilter.setIdCommentSubmitState( filter.getIdCommentSubmitState(  ) );
                 subCommentFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
-                c.setComments( CommentSubmitHome.getCommentSubmitList( subCommentFilter,null, plugin ) );
+                c.setComments( CommentSubmitHome.getCommentSubmitList( subCommentFilter, null, plugin ) );
             }
         }
 
@@ -141,22 +139,20 @@ public class CommentSubmitService implements ICommentSubmitService
 
         return commentSubmitList;
     }
-    
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<CommentSubmit> getCommentSubmitList( SubmitFilter filter,Integer nLimitParentNumber,  Plugin plugin )
+    public List<CommentSubmit> getCommentSubmitList( SubmitFilter filter, Integer nLimitParentNumber, Plugin plugin )
     {
-        if(nLimitParentNumber == null || nLimitParentNumber== DiggUtils.CONSTANT_ID_NULL)
+        if ( ( nLimitParentNumber == null ) || ( nLimitParentNumber == DiggUtils.CONSTANT_ID_NULL ) )
         {
-        	//if the number of comment parent are not limited used getCommentSubmitList(filter, plugin)
-        	return getCommentSubmitList(filter, plugin);
+            //if the number of comment parent are not limited used getCommentSubmitList(filter, plugin)
+            return getCommentSubmitList( filter, plugin );
         }
-        
-    	
-    	if ( !filter.containsSortBy(  ) )
+
+        if ( !filter.containsSortBy(  ) )
         {
             //use default sort
             DiggUtils.initCommentFilterBySort( filter, DiggUtils.CONSTANT_ID_NULL );
@@ -164,7 +160,10 @@ public class CommentSubmitService implements ICommentSubmitService
 
         //get All parent
         filter.setIdParent( SubmitFilter.ID_PARENT_NULL );
-        List<CommentSubmit> commentSubmitList = CommentSubmitHome.getCommentSubmitList( filter,nLimitParentNumber, plugin );
+
+        List<CommentSubmit> commentSubmitList = CommentSubmitHome.getCommentSubmitList( filter, nLimitParentNumber,
+                plugin );
+
         return commentSubmitList;
     }
 

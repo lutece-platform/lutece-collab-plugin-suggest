@@ -44,7 +44,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
  */
 public interface IImageResourceDAO
 {
-    
     /**
      * Insert a new record in the table.
      *
@@ -52,7 +51,7 @@ public interface IImageResourceDAO
      * @param plugin the plugin
      * @return the id of the new ImageResource file
      */
-    int insert(ImageResource imageResource , Plugin plugin );
+    int insert( ImageResource imageResource, Plugin plugin );
 
     /**
      * Load the data of the ImageResource from the table
@@ -70,6 +69,4 @@ public interface IImageResourceDAO
      * @param plugin the plugin
      */
     void delete( int nId, Plugin plugin );
-
-
 }

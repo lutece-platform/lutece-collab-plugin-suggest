@@ -47,7 +47,7 @@ public class DiggSubmitTypeCacheService extends AbstractCacheableService
     /** Constructor */
     public DiggSubmitTypeCacheService(  )
     {
-        initCache();
+        initCache(  );
     }
 
     /**

@@ -71,11 +71,8 @@ public final class DiggSubmitHome
      */
     public static int create( DiggSubmit diggSubmit, Plugin plugin )
     {
-    	return  _dao.insert( diggSubmit, plugin );
-       
-     }
-
-
+        return _dao.insert( diggSubmit, plugin );
+    }
 
     /**
      * Update of the diggSubmit which is specified in parameter
@@ -139,14 +136,12 @@ public final class DiggSubmitHome
 
         for ( Response response : listResponses )
         {
-            
-        	if(response.getIdImageResource()!=null)
-        	{
-        		ImageResourceHome.remove(response.getIdImageResource(), plugin);
-        		
-        	}
-        	ResponseHome.remove( response.getIdResponse(  ), plugin );
-           
+            if ( response.getIdImageResource(  ) != null )
+            {
+                ImageResourceHome.remove( response.getIdImageResource(  ), plugin );
+            }
+
+            ResponseHome.remove( response.getIdResponse(  ), plugin );
         }
 
         List<CommentSubmit> listComments = CommentSubmitService.getService(  ).getCommentSubmitList( filter, plugin );
@@ -162,10 +157,10 @@ public final class DiggSubmitHome
         {
             TagSubmitHome.remove( tag.getIdTagSubmit(  ), plugin );
         }
-        
+
         //remove all reported associated to the digg submit
-        ReportedMessageHome.removeByDiggSubmit(nIdDiggSubmit, plugin);
-     
+        ReportedMessageHome.removeByDiggSubmit( nIdDiggSubmit, plugin );
+
         DiggSubmit diggSubmit = DiggSubmitHome.findByPrimaryKey( nIdDiggSubmit, plugin );
 
         if ( diggSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) == DiggSubmit.STATE_PUBLISH )
@@ -193,20 +188,24 @@ public final class DiggSubmitHome
      */
     public static DiggSubmit findByPrimaryKey( int nKey, Plugin plugin )
     {
-       DiggSubmit diggSubmit = _dao.load( nKey, plugin );
-       if( diggSubmit != null )
-       {
-    	  if(diggSubmit.getDiggSubmitType()!=null)
-           {
-           	diggSubmit.setDiggSubmitType(DiggSubmitTypeHome.findByPrimaryKey(diggSubmit.getDiggSubmitType().getIdType(), plugin));
-           }
-           if(diggSubmit.getCategory()!=null)
-           {
-           	diggSubmit.setCategory(CategoryHome.findByPrimaryKey(diggSubmit.getCategory().getIdCategory(), plugin));
-           	
-           }
-    	}
-       return diggSubmit;
+        DiggSubmit diggSubmit = _dao.load( nKey, plugin );
+
+        if ( diggSubmit != null )
+        {
+            if ( diggSubmit.getDiggSubmitType(  ) != null )
+            {
+                diggSubmit.setDiggSubmitType( DiggSubmitTypeHome.findByPrimaryKey( 
+                        diggSubmit.getDiggSubmitType(  ).getIdType(  ), plugin ) );
+            }
+
+            if ( diggSubmit.getCategory(  ) != null )
+            {
+                diggSubmit.setCategory( CategoryHome.findByPrimaryKey( diggSubmit.getCategory(  ).getIdCategory(  ),
+                        plugin ) );
+            }
+        }
+
+        return diggSubmit;
     }
 
     /**
@@ -229,23 +228,23 @@ public final class DiggSubmitHome
                 submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
                 diggSubmit.setComments( CommentSubmitService.getService(  )
                                                             .getCommentSubmitList( submmitFilterComment, plugin ) );
-                if(diggSubmit.getDiggSubmitType()!=null)
+
+                if ( diggSubmit.getDiggSubmitType(  ) != null )
                 {
-                	diggSubmit.setDiggSubmitType(DiggSubmitTypeHome.findByPrimaryKey(diggSubmit.getDiggSubmitType().getIdType(), plugin));
+                    diggSubmit.setDiggSubmitType( DiggSubmitTypeHome.findByPrimaryKey( 
+                            diggSubmit.getDiggSubmitType(  ).getIdType(  ), plugin ) );
                 }
-                if(diggSubmit.getCategory()!=null)
+
+                if ( diggSubmit.getCategory(  ) != null )
                 {
-                	diggSubmit.setCategory(CategoryHome.findByPrimaryKey(diggSubmit.getCategory().getIdCategory(), plugin));
-                	
+                    diggSubmit.setCategory( CategoryHome.findByPrimaryKey( 
+                            diggSubmit.getCategory(  ).getIdCategory(  ), plugin ) );
                 }
-                
             }
         }
 
         return listDiggSubmit;
     }
-
-
 
     /**
      * Load the id of all the diggSubmit who verify the filter and returns them in a  list
@@ -303,10 +302,6 @@ public final class DiggSubmitHome
         return _dao.selectCountByFilter( filter, plugin );
     }
 
-
-
-
-
     /**
      * Update the number order of diggSubmit
      * @param nIdDiggSubmit the id of the diggSubmit
@@ -326,6 +321,6 @@ public final class DiggSubmitHome
      */
     public static int getMaxOrderList( int nIdDigg, boolean bListPinned, Plugin plugin )
     {
-        return _dao.maxOrderDiggSubmit( nIdDigg,bListPinned, plugin );
+        return _dao.maxOrderDiggSubmit( nIdDigg, bListPinned, plugin );
     }
 }

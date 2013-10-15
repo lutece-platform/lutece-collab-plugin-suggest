@@ -33,13 +33,13 @@
  */
 package fr.paris.lutece.plugins.digglike.business.attribute;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import fr.paris.lutece.plugins.digglike.service.DigglikePlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+
+import java.util.Map;
+import java.util.Map.Entry;
 
 
 /**
@@ -66,7 +66,7 @@ public final class DiggAttributeHome
     /**
      * create a digg Attribute
      * @param nIdDigg the id of the digg
-     * @param strAttributeKey the attribute key	
+     * @param strAttributeKey the attribute key
      * @param attributeValue the attribute value
      */
     public static void create( int nIdDigg, String strAttributeKey, Object attributeValue )

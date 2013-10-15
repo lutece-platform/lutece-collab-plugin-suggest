@@ -38,6 +38,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,28 +51,26 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_comment_submit ) FROM digglike_comment_submit";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_comment_submit,id_digg_submit,date_comment,comment_value,active, lutece_user_key, official_answer, id_parent_comment,date_modify  "
-            + "FROM digglike_comment_submit WHERE id_comment_submit=? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_comment_submit ( id_comment_submit,id_digg_submit,date_comment,comment_value,active,lutece_user_key,official_answer,id_parent_comment,date_modify ) "
-            + "VALUES(?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_comment_submit,id_digg_submit,date_comment,comment_value,active, lutece_user_key, official_answer, id_parent_comment,date_modify  " +
+        "FROM digglike_comment_submit WHERE id_comment_submit=? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_comment_submit ( id_comment_submit,id_digg_submit,date_comment,comment_value,active,lutece_user_key,official_answer,id_parent_comment,date_modify ) " +
+        "VALUES(?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM digglike_comment_submit WHERE id_comment_submit = ? ";
     private static final String SQL_QUERY_DELETE_BY_ID_PARENT = "DELETE FROM digglike_comment_submit WHERE id_parent_comment = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE digglike_comment_submit SET "
-            + "id_comment_submit=?,id_digg_submit=?,date_comment=?,comment_value=?,active=? ,lutece_user_key=? ,official_answer=? ,id_parent_comment=?"
-            + " WHERE id_comment_submit=? ";
-    private static final String SQL_QUERY_SELECT_COMMENT_SUBMIT_BY_FILTER = "SELECT dc.id_comment_submit,dc.id_digg_submit,date_comment,dc.comment_value,dc.active,dc.lutece_user_key,dc.official_answer,dc.id_parent_comment,dc.date_modify "
-            + "FROM digglike_comment_submit dc ";
-    private static final String SQL_QUERY_SELECT_COUNT_BY_FILTER = "SELECT COUNT(dc.id_comment_submit) "
-            + "FROM digglike_comment_submit dc INNER JOIN digglike_digg_submit ds ON dc.id_digg_submit = ds.id_digg_submit ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE digglike_comment_submit SET " +
+        "id_comment_submit=?,id_digg_submit=?,date_comment=?,comment_value=?,active=? ,lutece_user_key=? ,official_answer=? ,id_parent_comment=?" +
+        " WHERE id_comment_submit=? ";
+    private static final String SQL_QUERY_SELECT_COMMENT_SUBMIT_BY_FILTER = "SELECT dc.id_comment_submit,dc.id_digg_submit,date_comment,dc.comment_value,dc.active,dc.lutece_user_key,dc.official_answer,dc.id_parent_comment,dc.date_modify " +
+        "FROM digglike_comment_submit dc ";
+    private static final String SQL_QUERY_SELECT_COUNT_BY_FILTER = "SELECT COUNT(dc.id_comment_submit) " +
+        "FROM digglike_comment_submit dc INNER JOIN digglike_digg_submit ds ON dc.id_digg_submit = ds.id_digg_submit ";
     private static final String SQL_FILTER_ID_DIGG_SUBMIT = " dc.id_digg_submit = ? ";
     private static final String SQL_FILTER_ID_PARENT_COMMENT = "dc.id_parent_comment = ? ";
     private static final String SQL_FILTER_ID_DIGG = " ds.id_digg = ? ";
     private static final String SQL_FILTER_COMMENT_SUBMIT_STATE = " dc.active = ? ";
     private static final String SQL_FILTER_CONTAINS_SUB_COMMENT_DISABLE = " dc.id_digg_submit IN ( SELECT id_parent_comment FROM digglike_comment_submit WHERE id_parent_comment = dc.id_comment_submit and active=0  ) ";
     private static final String SQL_FILTER_NOT_CONTAINS_SUB_COMMENT_DISABLE = " dc.id_digg_submit NOT IN ( SELECT id_parent_comment FROM digglike_comment_submit WHERE id_parent_comment = dc.id_comment_submit and active=0  )  ";
-
     private static final String SQL_QUERY_SELECT_COMMENTED_DIGG_SUBMIT = " select id_comment_submit,id_digg_submit,date_comment,comment_value,active, lutece_user_key, official_answer, id_parent_comment,date_modify FROM digglike_comment_submit WHERE date_comment > ? ";
-
     private static final String SQL_FILTER_SORT_BY_DATE_COMMENT_DESC = " dc.date_comment DESC";
     private static final String SQL_FILTER_SORT_BY_DATE_COMMENT_ASC = " dc.date_comment ASC";
     private static final String SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_DESC = " dc.date_modify DESC";
@@ -82,25 +81,25 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
 
     /**
      * Generates a new primary key
-     * 
+     *
      * @param plugin the plugin
      * @return The new primary key
      */
     private int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery( );
+        daoUtil.executeQuery(  );
 
         int nKey;
 
-        if ( !daoUtil.next( ) )
+        if ( !daoUtil.next(  ) )
         {
             // if the table is empty
             nKey = 1;
         }
 
         nKey = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free( );
+        daoUtil.free(  );
 
         return nKey;
     }
@@ -113,17 +112,17 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         commentSubmit.setIdCommentSubmit( newPrimaryKey( plugin ) );
-        daoUtil.setInt( 1, commentSubmit.getIdCommentSubmit( ) );
-        daoUtil.setInt( 2, commentSubmit.getDiggSubmit( ).getIdDiggSubmit( ) );
-        daoUtil.setTimestamp( 3, commentSubmit.getDateComment( ) );
-        daoUtil.setString( 4, commentSubmit.getValue( ) );
-        daoUtil.setBoolean( 5, commentSubmit.isActive( ) );
-        daoUtil.setString( 6, commentSubmit.getLuteceUserKey( ) );
-        daoUtil.setBoolean( 7, commentSubmit.isOfficialAnswer( ) );
-        daoUtil.setInt( 8, commentSubmit.getIdParent( ) );
-        daoUtil.setTimestamp( 9, commentSubmit.getDateModify( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.setInt( 1, commentSubmit.getIdCommentSubmit(  ) );
+        daoUtil.setInt( 2, commentSubmit.getDiggSubmit(  ).getIdDiggSubmit(  ) );
+        daoUtil.setTimestamp( 3, commentSubmit.getDateComment(  ) );
+        daoUtil.setString( 4, commentSubmit.getValue(  ) );
+        daoUtil.setBoolean( 5, commentSubmit.isActive(  ) );
+        daoUtil.setString( 6, commentSubmit.getLuteceUserKey(  ) );
+        daoUtil.setBoolean( 7, commentSubmit.isOfficialAnswer(  ) );
+        daoUtil.setInt( 8, commentSubmit.getIdParent(  ) );
+        daoUtil.setTimestamp( 9, commentSubmit.getDateModify(  ) );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -137,14 +136,14 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, nIdCommentSubmit );
-        daoUtil.executeQuery( );
+        daoUtil.executeQuery(  );
 
-        if ( daoUtil.next( ) )
+        if ( daoUtil.next(  ) )
         {
-            commentSubmit = new CommentSubmit( );
+            commentSubmit = new CommentSubmit(  );
             commentSubmit.setIdCommentSubmit( daoUtil.getInt( 1 ) );
 
-            diggSubmit = new DiggSubmit( );
+            diggSubmit = new DiggSubmit(  );
             diggSubmit.setIdDiggSubmit( daoUtil.getInt( 2 ) );
             commentSubmit.setDiggSubmit( diggSubmit );
 
@@ -157,7 +156,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
             commentSubmit.setDateModify( daoUtil.getTimestamp( 9 ) );
         }
 
-        daoUtil.free( );
+        daoUtil.free(  );
 
         return commentSubmit;
     }
@@ -170,8 +169,8 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nIdTagSubmit );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -181,17 +180,17 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     public void store( CommentSubmit commentSubmit, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        daoUtil.setInt( 1, commentSubmit.getIdCommentSubmit( ) );
-        daoUtil.setInt( 2, commentSubmit.getDiggSubmit( ).getIdDiggSubmit( ) );
-        daoUtil.setTimestamp( 3, commentSubmit.getDateComment( ) );
-        daoUtil.setString( 4, commentSubmit.getValue( ) );
-        daoUtil.setBoolean( 5, commentSubmit.isActive( ) );
-        daoUtil.setString( 6, commentSubmit.getLuteceUserKey( ) );
-        daoUtil.setBoolean( 7, commentSubmit.isOfficialAnswer( ) );
-        daoUtil.setInt( 8, commentSubmit.getIdParent( ) );
-        daoUtil.setInt( 9, commentSubmit.getIdCommentSubmit( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.setInt( 1, commentSubmit.getIdCommentSubmit(  ) );
+        daoUtil.setInt( 2, commentSubmit.getDiggSubmit(  ).getIdDiggSubmit(  ) );
+        daoUtil.setTimestamp( 3, commentSubmit.getDateComment(  ) );
+        daoUtil.setString( 4, commentSubmit.getValue(  ) );
+        daoUtil.setBoolean( 5, commentSubmit.isActive(  ) );
+        daoUtil.setString( 6, commentSubmit.getLuteceUserKey(  ) );
+        daoUtil.setBoolean( 7, commentSubmit.isOfficialAnswer(  ) );
+        daoUtil.setInt( 8, commentSubmit.getIdParent(  ) );
+        daoUtil.setInt( 9, commentSubmit.getIdCommentSubmit(  ) );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -203,8 +202,8 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_DATE_MODIFY, plugin );
         daoUtil.setTimestamp( 1, dateModify );
         daoUtil.setInt( 2, idCommentSubmit );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -213,77 +212,75 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public List<CommentSubmit> selectListByFilter( SubmitFilter filter, Integer nLimit, Plugin plugin )
     {
-        List<CommentSubmit> commentSubmitList = new ArrayList<CommentSubmit>( );
+        List<CommentSubmit> commentSubmitList = new ArrayList<CommentSubmit>(  );
         CommentSubmit commentSubmit = null;
         DiggSubmit diggSubmit = null;
-        List<String> listStrFilter = new ArrayList<String>( );
+        List<String> listStrFilter = new ArrayList<String>(  );
         String strOrderBy = null;
 
-        if ( filter.containsIdDiggSubmit( ) )
+        if ( filter.containsIdDiggSubmit(  ) )
         {
             listStrFilter.add( SQL_FILTER_ID_DIGG_SUBMIT );
         }
 
-        if ( filter.containsIdCommentSubmitState( ) )
+        if ( filter.containsIdCommentSubmitState(  ) )
         {
             listStrFilter.add( SQL_FILTER_COMMENT_SUBMIT_STATE );
         }
 
-        if ( filter.containsIdParent( ) )
+        if ( filter.containsIdParent(  ) )
         {
             listStrFilter.add( SQL_FILTER_ID_PARENT_COMMENT );
         }
-        if ( filter.containsIdContainsCommentDisable( ) )
+
+        if ( filter.containsIdContainsCommentDisable(  ) )
         {
-            listStrFilter
-                    .add( filter.getIdContainsCommentDisable( ) == SubmitFilter.ID_TRUE ? SQL_FILTER_CONTAINS_SUB_COMMENT_DISABLE
-                            : SQL_FILTER_NOT_CONTAINS_SUB_COMMENT_DISABLE );
+            listStrFilter.add( ( filter.getIdContainsCommentDisable(  ) == SubmitFilter.ID_TRUE )
+                ? SQL_FILTER_CONTAINS_SUB_COMMENT_DISABLE : SQL_FILTER_NOT_CONTAINS_SUB_COMMENT_DISABLE );
         }
 
-        if ( filter.containsSortBy( ) )
+        if ( filter.containsSortBy(  ) )
         {
-            strOrderBy = getOrderBy( filter.getSortBy( ) );
+            strOrderBy = getOrderBy( filter.getSortBy(  ) );
         }
 
         String strSQL = DiggUtils.buildRequestWithFilter( SQL_QUERY_SELECT_COMMENT_SUBMIT_BY_FILTER, listStrFilter,
                 strOrderBy );
 
-        if ( nLimit != null && nLimit != DiggUtils.CONSTANT_ID_NULL )
+        if ( ( nLimit != null ) && ( nLimit != DiggUtils.CONSTANT_ID_NULL ) )
         {
-
             strSQL = strSQL + SQL_LIMIT + nLimit;
-
         }
 
         DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
         int nIndex = 1;
 
-        if ( filter.containsIdDiggSubmit( ) )
+        if ( filter.containsIdDiggSubmit(  ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdDiggSubmit( ) );
+            daoUtil.setInt( nIndex, filter.getIdDiggSubmit(  ) );
             nIndex++;
         }
 
-        if ( filter.containsIdCommentSubmitState( ) )
+        if ( filter.containsIdCommentSubmitState(  ) )
         {
-            daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdCommentSubmitState( ) ) );
+            daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdCommentSubmitState(  ) ) );
             nIndex++;
         }
 
-        if ( filter.containsIdParent( ) )
+        if ( filter.containsIdParent(  ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdParent( ) );
+            daoUtil.setInt( nIndex, filter.getIdParent(  ) );
             nIndex++;
         }
 
-        daoUtil.executeQuery( );
+        daoUtil.executeQuery(  );
 
-        while ( daoUtil.next( ) )
+        while ( daoUtil.next(  ) )
         {
-            commentSubmit = new CommentSubmit( );
+            commentSubmit = new CommentSubmit(  );
             commentSubmit.setIdCommentSubmit( daoUtil.getInt( 1 ) );
 
-            diggSubmit = new DiggSubmit( );
+            diggSubmit = new DiggSubmit(  );
             diggSubmit.setIdDiggSubmit( daoUtil.getInt( 2 ) );
             commentSubmit.setDiggSubmit( diggSubmit );
 
@@ -297,7 +294,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
             commentSubmitList.add( commentSubmit );
         }
 
-        daoUtil.free( );
+        daoUtil.free(  );
 
         return commentSubmitList;
     }
@@ -308,16 +305,17 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public List<CommentSubmit> findDiggCommentByDate( Date dateCreation, Plugin plugin )
     {
-        List<CommentSubmit> listComment = new ArrayList<CommentSubmit>( );
+        List<CommentSubmit> listComment = new ArrayList<CommentSubmit>(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_COMMENTED_DIGG_SUBMIT, plugin );
-        daoUtil.setTimestamp( 1, new Timestamp( dateCreation.getTime( ) ) );
-        daoUtil.executeQuery( );
-        while ( daoUtil.next( ) )
+        daoUtil.setTimestamp( 1, new Timestamp( dateCreation.getTime(  ) ) );
+        daoUtil.executeQuery(  );
+
+        while ( daoUtil.next(  ) )
         {
-            CommentSubmit commentSubmit = new CommentSubmit( );
+            CommentSubmit commentSubmit = new CommentSubmit(  );
             commentSubmit.setIdCommentSubmit( daoUtil.getInt( 1 ) );
 
-            DiggSubmit diggSubmit = new DiggSubmit( );
+            DiggSubmit diggSubmit = new DiggSubmit(  );
             diggSubmit.setIdDiggSubmit( daoUtil.getInt( 2 ) );
             commentSubmit.setDiggSubmit( diggSubmit );
 
@@ -330,7 +328,8 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
             commentSubmit.setDateModify( daoUtil.getTimestamp( 9 ) );
             listComment.add( commentSubmit );
         }
-        daoUtil.free( );
+
+        daoUtil.free(  );
 
         return listComment;
     }
@@ -342,59 +341,59 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     public int selectCountByFilter( SubmitFilter filter, Plugin plugin )
     {
         int nIdCount = 0;
-        List<String> listStrFilter = new ArrayList<String>( );
+        List<String> listStrFilter = new ArrayList<String>(  );
 
-        if ( filter.containsIdDigg( ) )
+        if ( filter.containsIdDigg(  ) )
         {
             listStrFilter.add( SQL_FILTER_ID_DIGG );
         }
 
-        if ( filter.containsIdDiggSubmit( ) )
+        if ( filter.containsIdDiggSubmit(  ) )
         {
             listStrFilter.add( SQL_FILTER_ID_DIGG_SUBMIT );
         }
 
-        if ( filter.containsIdCommentSubmitState( ) )
+        if ( filter.containsIdCommentSubmitState(  ) )
         {
             listStrFilter.add( SQL_FILTER_COMMENT_SUBMIT_STATE );
         }
-        if ( filter.containsIdContainsCommentDisable( ) )
+
+        if ( filter.containsIdContainsCommentDisable(  ) )
         {
-            listStrFilter
-                    .add( filter.getIdContainsCommentDisable( ) == SubmitFilter.ID_TRUE ? SQL_FILTER_CONTAINS_SUB_COMMENT_DISABLE
-                            : SQL_FILTER_NOT_CONTAINS_SUB_COMMENT_DISABLE );
+            listStrFilter.add( ( filter.getIdContainsCommentDisable(  ) == SubmitFilter.ID_TRUE )
+                ? SQL_FILTER_CONTAINS_SUB_COMMENT_DISABLE : SQL_FILTER_NOT_CONTAINS_SUB_COMMENT_DISABLE );
         }
 
         String strSQL = DiggUtils.buildRequestWithFilter( SQL_QUERY_SELECT_COUNT_BY_FILTER, listStrFilter, null );
         DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
         int nIndex = 1;
 
-        if ( filter.containsIdDigg( ) )
+        if ( filter.containsIdDigg(  ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdDigg( ) );
+            daoUtil.setInt( nIndex, filter.getIdDigg(  ) );
             nIndex++;
         }
 
-        if ( filter.containsIdDiggSubmit( ) )
+        if ( filter.containsIdDiggSubmit(  ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdDiggSubmit( ) );
+            daoUtil.setInt( nIndex, filter.getIdDiggSubmit(  ) );
             nIndex++;
         }
 
-        if ( filter.containsIdCommentSubmitState( ) )
+        if ( filter.containsIdCommentSubmitState(  ) )
         {
-            daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdCommentSubmitState( ) ) );
+            daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdCommentSubmitState(  ) ) );
             nIndex++;
         }
 
-        daoUtil.executeQuery( );
+        daoUtil.executeQuery(  );
 
-        if ( daoUtil.next( ) )
+        if ( daoUtil.next(  ) )
         {
             nIdCount = daoUtil.getInt( 1 );
         }
 
-        daoUtil.free( );
+        daoUtil.free(  );
 
         return nIdCount;
     }
@@ -406,10 +405,10 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
      */
     private String getOrderBy( List<Integer> listSortBy )
     {
-        StringBuffer strOrderBy = new StringBuffer( );
+        StringBuffer strOrderBy = new StringBuffer(  );
         int ncpt = 0;
 
-        if ( ( listSortBy != null ) && ( listSortBy.size( ) != 0 ) )
+        if ( ( listSortBy != null ) && ( listSortBy.size(  ) != 0 ) )
         {
             strOrderBy.append( SQL_ORDER_BY );
 
@@ -419,40 +418,40 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
 
                 switch ( sort )
                 {
-                case SubmitFilter.SORT_BY_DATE_RESPONSE_ASC:
-                    strOrderBy.append( SQL_FILTER_SORT_BY_DATE_COMMENT_ASC );
+                    case SubmitFilter.SORT_BY_DATE_RESPONSE_ASC:
+                        strOrderBy.append( SQL_FILTER_SORT_BY_DATE_COMMENT_ASC );
 
-                    break;
+                        break;
 
-                case SubmitFilter.SORT_BY_DATE_RESPONSE_DESC:
-                    strOrderBy.append( SQL_FILTER_SORT_BY_DATE_COMMENT_DESC );
+                    case SubmitFilter.SORT_BY_DATE_RESPONSE_DESC:
+                        strOrderBy.append( SQL_FILTER_SORT_BY_DATE_COMMENT_DESC );
 
-                    break;
+                        break;
 
-                case SubmitFilter.SORT_BY_DATE_MODIFY_ASC:
-                    strOrderBy.append( SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_ASC );
+                    case SubmitFilter.SORT_BY_DATE_MODIFY_ASC:
+                        strOrderBy.append( SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_ASC );
 
-                    break;
+                        break;
 
-                case SubmitFilter.SORT_BY_DATE_MODIFY_DESC:
-                    strOrderBy.append( SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_DESC );
+                    case SubmitFilter.SORT_BY_DATE_MODIFY_DESC:
+                        strOrderBy.append( SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_DESC );
 
-                    break;
+                        break;
 
-                default:
-                    strOrderBy.append( SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_DESC );
+                    default:
+                        strOrderBy.append( SQL_FILTER_SORT_BY_DATE_MODIFY_COMMENT_DESC );
 
-                    break;
+                        break;
                 }
 
-                if ( ncpt < listSortBy.size( ) )
+                if ( ncpt < listSortBy.size(  ) )
                 {
                     strOrderBy.append( "," );
                 }
             }
         }
 
-        return strOrderBy.toString( );
+        return strOrderBy.toString(  );
     }
 
     /**
@@ -463,8 +462,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_PARENT, plugin );
         daoUtil.setInt( 1, nIdParentCommentSubmit );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
-
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 }

@@ -33,18 +33,18 @@
  */
 package fr.paris.lutece.plugins.digglike.service;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
 import fr.paris.lutece.plugins.digglike.business.IEntry;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.Plugin;
+
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 
 public interface IDiggSubmitService
@@ -57,7 +57,7 @@ public interface IDiggSubmitService
     * @return the id of {@link Theme} diggsubmit
     */
     @Transactional( "digglike.transactionManager" )
-    int create( DiggSubmit diggSubmit, Plugin plugin,Locale locale );
+    int create( DiggSubmit diggSubmit, Plugin plugin, Locale locale );
 
     /**
      * Remove the record whose identifier is specified in parameter
@@ -96,6 +96,7 @@ public interface IDiggSubmitService
      * @return an instance of DiggSubmit
      */
     DiggSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList, Plugin plugin );
+
     /**
      * Returns an instance of a DiggSubmit whose identifier is specified in parameter
      *
@@ -105,8 +106,8 @@ public interface IDiggSubmitService
      * @param plugin the Plugin
      * @return an instance of DiggSubmit
      */
-    DiggSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList,Integer numberMaxCommentLoad, Plugin plugin );
-    
+    DiggSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList, Integer numberMaxCommentLoad, Plugin plugin );
+
     /**
      * Returns an instance of a DiggSubmit whose identifier is specified in parameter
      *
@@ -116,7 +117,7 @@ public interface IDiggSubmitService
      * @param plugin the Plugin
      * @return an instance of DiggSubmit
      */
-    DiggSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList, boolean bLoadResponseList,Plugin plugin );
+    DiggSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList, boolean bLoadResponseList, Plugin plugin );
 
     /**
      * Load the data of all the diggSubmit who verify the filter and returns them in a  list
@@ -126,13 +127,13 @@ public interface IDiggSubmitService
      */
     List<DiggSubmit> getDiggSubmitList( SubmitFilter filter, Plugin plugin );
 
-//    /**
-//     * Load the data of all the diggSubmit with the number of comment by digg submit  who verify the filter and returns them in a  list
-//     * @param filter the filter
-//     * @param plugin the plugin
-//     * @return  the list of diggSubmit
-//     */
-//    List<DiggSubmit> getDiggSubmitListWithNumberComment( SubmitFilter filter, Plugin plugin );
+    //    /**
+    //     * Load the data of all the diggSubmit with the number of comment by digg submit  who verify the filter and returns them in a  list
+    //     * @param filter the filter
+    //     * @param plugin the plugin
+    //     * @return  the list of diggSubmit
+    //     */
+    //    List<DiggSubmit> getDiggSubmitListWithNumberComment( SubmitFilter filter, Plugin plugin );
 
     /**
      * Load the id of all the diggSubmit who verify the filter and returns them in a  list
@@ -177,9 +178,6 @@ public interface IDiggSubmitService
      */
     int findPrevIdDiggSubmitInTheList( int nIdCurrentDiggSubmit, SubmitFilter filter, Plugin plugin );
 
-   
-
-
     /**
      * move an element in the list of diggSubmit and update the order
      * @param nPositionElement the position of the element to move
@@ -189,36 +187,39 @@ public interface IDiggSubmitService
      * @param plugin the plugin
      */
     @Transactional( "digglike.transactionManager" )
-    void updateDiggSubmitOrder( Integer nPositionElement, Integer nNewPositionElement, int nIdDigg,boolean bListPinned, Plugin plugin );
+    void updateDiggSubmitOrder( Integer nPositionElement, Integer nNewPositionElement, int nIdDigg,
+        boolean bListPinned, Plugin plugin );
 
     /**
      * Search the max order number of contacts for one list
      * @param nIdDigg the Id of the Digg
-     * @param bListPinned true if the list 
+     * @param bListPinned true if the list
      * @return int the max order
      * @param plugin The Plugin object
      */
-    int getMaxOrderList( int nIdDigg,boolean bListPinned, Plugin plugin );
+    int getMaxOrderList( int nIdDigg, boolean bListPinned, Plugin plugin );
+
     /**
      * Update the display off all digg submit associated to a digg
      *
      * @param nIdDigg
      *            the id digg
      * @param plugin the plugin
-     * 
+     *
      * @locale locale the locale
      */
     @Transactional( "digglike.transactionManager" )
     void updateAllDisplayOfDiggSubmit( Integer nIdDigg, Plugin plugin, Locale locale );
-    
+
     /**
      * update the display of the diggsubmit
      * @param nIdDiggSubmit the diggSubmit Id
-     * @param plugin the plugin	
+     * @param plugin the plugin
      * @param locale the locale
      * @param digg the digg
      * @param mapEntry a map of entry assocaited to the digg
      */
     @Transactional( "digglike.transactionManager" )
-   void updateDisplayDiggSubmit( Integer nIdDiggSubmit, Plugin plugin, Locale locale, Digg digg,Map<Integer, IEntry>mapEntry );
+    void updateDisplayDiggSubmit( Integer nIdDiggSubmit, Plugin plugin, Locale locale, Digg digg,
+        Map<Integer, IEntry> mapEntry );
 }

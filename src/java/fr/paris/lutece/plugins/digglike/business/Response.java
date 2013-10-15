@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
+import fr.paris.lutece.portal.service.image.ImageResource;
+import fr.paris.lutece.util.xml.XmlUtil;
+
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-
-import fr.paris.lutece.portal.service.image.ImageResource;
-import fr.paris.lutece.util.xml.XmlUtil;
 
 
 /**
@@ -48,12 +48,9 @@ import fr.paris.lutece.util.xml.XmlUtil;
  */
 public class Response
 {
-    
     private static final String TAG_RESPONSE = "response";
     private static final String TAG_RESPONSE_VALUE = "response-value";
-
-    
-	private int _nIdResponse;
+    private int _nIdResponse;
     private String _strValueResponse;
     private IEntry _entry;
     private DiggSubmit _diggSubmit;
@@ -136,54 +133,58 @@ public class Response
      * get Image
      * @return Image Resource
      */
-	public ImageResource getImage() {
-		return _image;
-	}
-	/**
-	 * set Image Resource
-	 * @param image  Image Resource
-	 */
-	public void setImage(ImageResource image) {
-		this._image = image;
-	}
-	
-	
-	/**
-     * Returns the xml of this digg submit
-     *
-     * @param request The HTTP Servlet request
-     * @param locale the Locale
-     * @return the xml of this digg submit
+    public ImageResource getImage(  )
+    {
+        return _image;
+    }
+
+    /**
+     * set Image Resource
+     * @param image  Image Resource
      */
+    public void setImage( ImageResource image )
+    {
+        this._image = image;
+    }
+
+    /**
+    * Returns the xml of this digg submit
+    *
+    * @param request The HTTP Servlet request
+    * @param locale the Locale
+    * @return the xml of this digg submit
+    */
     public String getXml( HttpServletRequest request, Locale locale )
     {
         StringBuffer strXml = new StringBuffer(  );
         XmlUtil.beginElement( strXml, TAG_RESPONSE );
-        XmlUtil.addElementHtml( strXml, TAG_RESPONSE_VALUE, this.getValueResponse() );
-        if(this.getEntry()!=null)
+        XmlUtil.addElementHtml( strXml, TAG_RESPONSE_VALUE, this.getValueResponse(  ) );
+
+        if ( this.getEntry(  ) != null )
         {
-        	this.getEntry().getXml( locale, strXml);
-        	
+            this.getEntry(  ).getXml( locale, strXml );
         }
+
         XmlUtil.endElement( strXml, TAG_RESPONSE );
 
         return strXml.toString(  );
     }
 
-    
     /**
      * the image resource id associate to the response
      * @return Resource Image
      */
-	public Integer getIdImageResource() {
-		return _nIdImageResource;
-	}
+    public Integer getIdImageResource(  )
+    {
+        return _nIdImageResource;
+    }
 
-	/**
-	 * image resource id associate to the response
-	 * @param idImageResource image resource id associate to the response
-	 */
-	public void setIdImageResource(Integer idImageResource) {
-		_nIdImageResource = idImageResource;
-	}
+    /**
+     * image resource id associate to the response
+     * @param idImageResource image resource id associate to the response
+     */
+    public void setIdImageResource( Integer idImageResource )
+    {
+        _nIdImageResource = idImageResource;
+    }
 }

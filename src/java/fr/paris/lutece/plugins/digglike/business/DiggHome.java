@@ -40,11 +40,12 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
+import org.apache.commons.beanutils.BeanUtils;
+
 import java.lang.reflect.InvocationTargetException;
+
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.beanutils.BeanUtils;
 
 
 /**
@@ -59,13 +60,13 @@ public final class DiggHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private DiggHome( )
+    private DiggHome(  )
     {
     }
 
     /**
      * Creation of an instance of Digg
-     * 
+     *
      * @param digg The instance of the Digg which contains the informations to
      *            store
      * @param plugin the Plugin
@@ -73,33 +74,34 @@ public final class DiggHome
      */
     public static int create( Digg digg, Plugin plugin )
     {
-
-        if ( digg.getImage( ) != null )
+        if ( digg.getImage(  ) != null )
         {
-            digg.setIdImageResource( ImageResourceHome.create( digg.getImage( ), plugin ) );
+            digg.setIdImageResource( ImageResourceHome.create( digg.getImage(  ), plugin ) );
         }
 
         int nIdDigg = _dao.insert( digg, plugin );
+
         // Create directory attributes associated to the directory
         Map<String, Object> mapAttributes = DiggUtils.depopulate( digg );
-        DiggAttributeHome.create( digg.getIdDigg( ), mapAttributes );
+        DiggAttributeHome.create( digg.getIdDigg(  ), mapAttributes );
+
         return nIdDigg;
     }
 
     /**
      * Copy of an instance of Digg
-     * 
+     *
      * @param digg The instance of the digg who must copy
      * @param plugin the Plugin
-     * 
+     *
      */
     public static void copy( Digg digg, Plugin plugin )
     {
         Digg diggCopy = digg;
 
         List<IEntry> listEntry;
-        EntryFilter filter = new EntryFilter( );
-        filter.setIdDigg( digg.getIdDigg( ) );
+        EntryFilter filter = new EntryFilter(  );
+        filter.setIdDigg( digg.getIdDigg(  ) );
         listEntry = EntryHome.getEntryList( filter, plugin );
         diggCopy.setActive( false );
         diggCopy.setDefaultDigg( false );
@@ -107,42 +109,44 @@ public final class DiggHome
 
         for ( IEntry entry : listEntry )
         {
-            entry = EntryHome.findByPrimaryKey( entry.getIdEntry( ), plugin );
+            entry = EntryHome.findByPrimaryKey( entry.getIdEntry(  ), plugin );
             entry.setDigg( diggCopy );
             EntryHome.copy( entry, plugin );
         }
 
-        for ( Category category : diggCopy.getCategories( ) )
+        for ( Category category : diggCopy.getCategories(  ) )
         {
-            CategoryHome.createDiggAssociation( diggCopy.getIdDigg( ), category.getIdCategory( ), plugin );
+            CategoryHome.createDiggAssociation( diggCopy.getIdDigg(  ), category.getIdCategory(  ), plugin );
         }
-        for ( DiggSubmitType diggSubmitType : diggCopy.getDiggSubmitTypes( ) )
+
+        for ( DiggSubmitType diggSubmitType : diggCopy.getDiggSubmitTypes(  ) )
         {
-            DiggSubmitTypeHome.createDiggAssociation( diggCopy.getIdDigg( ), diggSubmitType.getIdType( ), plugin );
+            DiggSubmitTypeHome.createDiggAssociation( diggCopy.getIdDigg(  ), diggSubmitType.getIdType(  ), plugin );
         }
     }
 
     /**
      * Update data of the digg which is specified in parameter
-     * 
+     *
      * @param digg The instance of the digg which contains the informations to
      *            update
      * @param plugin the Plugin
-     * 
+     *
      */
     public static void update( Digg digg, Plugin plugin )
     {
-
-        if ( digg.getImage( ) != null )
+        if ( digg.getImage(  ) != null )
         {
             //remove old image if exist
-            if ( digg.getIdImageResource( ) != null && digg.getIdImageResource( ) != DiggUtils.CONSTANT_ID_NULL )
+            if ( ( digg.getIdImageResource(  ) != null ) &&
+                    ( digg.getIdImageResource(  ) != DiggUtils.CONSTANT_ID_NULL ) )
             {
-                ImageResourceHome.remove( digg.getIdImageResource( ), plugin );
+                ImageResourceHome.remove( digg.getIdImageResource(  ), plugin );
             }
-            if ( digg.getImage( ).getImage( ) != null )
+
+            if ( digg.getImage(  ).getImage(  ) != null )
             {
-                digg.setIdImageResource( ImageResourceHome.create( digg.getImage( ), plugin ) );
+                digg.setIdImageResource( ImageResourceHome.create( digg.getImage(  ), plugin ) );
             }
             else
             {
@@ -151,19 +155,18 @@ public final class DiggHome
         }
 
         // Remove directory attributes associated to the directory
-        DiggAttributeHome.remove( digg.getIdDigg( ) );
+        DiggAttributeHome.remove( digg.getIdDigg(  ) );
 
         // Add directory Attribute
         Map<String, Object> mapAttributes = DiggUtils.depopulate( digg );
-        DiggAttributeHome.create( digg.getIdDigg( ), mapAttributes );
+        DiggAttributeHome.create( digg.getIdDigg(  ), mapAttributes );
 
         _dao.store( digg, plugin );
-
     }
 
     /**
      * Remove thedigg whose identifier is specified in parameter
-     * 
+     *
      * @param nIdDigg The digg Id
      * @param plugin the Plugin
      */
@@ -174,33 +177,34 @@ public final class DiggHome
         List<Integer> listIdDiggSubmit;
 
         //delete image resource associate
-        if ( digg != null && digg.getIdImageResource( ) != null
-                && digg.getIdImageResource( ) != DiggUtils.CONSTANT_ID_NULL )
+        if ( ( digg != null ) && ( digg.getIdImageResource(  ) != null ) &&
+                ( digg.getIdImageResource(  ) != DiggUtils.CONSTANT_ID_NULL ) )
         {
-            ImageResourceHome.remove( digg.getIdImageResource( ), plugin );
+            ImageResourceHome.remove( digg.getIdImageResource(  ), plugin );
         }
+
         //delete association between digg and categories
-        for ( Category category : digg.getCategories( ) )
+        for ( Category category : digg.getCategories(  ) )
         {
-            CategoryHome.removeDiggAssociation( digg.getIdDigg( ), category.getIdCategory( ), plugin );
+            CategoryHome.removeDiggAssociation( digg.getIdDigg(  ), category.getIdCategory(  ), plugin );
         }
 
         //delete association between digg and digg submit type
-        for ( DiggSubmitType diggSubmitType : digg.getDiggSubmitTypes( ) )
+        for ( DiggSubmitType diggSubmitType : digg.getDiggSubmitTypes(  ) )
         {
-            DiggSubmitTypeHome.removeDiggAssociation( digg.getIdDigg( ), diggSubmitType.getIdType( ), plugin );
+            DiggSubmitTypeHome.removeDiggAssociation( digg.getIdDigg(  ), diggSubmitType.getIdType(  ), plugin );
         }
 
-        EntryFilter entryFilter = new EntryFilter( );
-        entryFilter.setIdDigg( digg.getIdDigg( ) );
+        EntryFilter entryFilter = new EntryFilter(  );
+        entryFilter.setIdDigg( digg.getIdDigg(  ) );
         listEntry = EntryHome.getEntryList( entryFilter, plugin );
 
         for ( IEntry entry : listEntry )
         {
-            EntryHome.remove( entry.getIdEntry( ), plugin );
+            EntryHome.remove( entry.getIdEntry(  ), plugin );
         }
 
-        SubmitFilter responseFilter = new SubmitFilter( );
+        SubmitFilter responseFilter = new SubmitFilter(  );
         responseFilter.setIdDigg( nIdDigg );
         listIdDiggSubmit = DiggSubmitHome.getDiggSubmitListId( responseFilter, plugin );
 
@@ -219,7 +223,7 @@ public final class DiggHome
     // Finders
     /**
      * Returns an instance of a digg whose identifier is specified in parameter
-     * 
+     *
      * @param nKey The digg primary key
      * @param plugin the Plugin
      * @return an instance of Digg
@@ -247,7 +251,6 @@ public final class DiggHome
             {
                 AppLogService.error( e );
             }
-
         }
 
         return digg;
@@ -266,8 +269,7 @@ public final class DiggHome
 
         for ( Digg digg : listDigg )
         {
-
-            Map<String, Object> mapAttributes = DiggAttributeHome.findByPrimaryKey( digg.getIdDigg( ) );
+            Map<String, Object> mapAttributes = DiggAttributeHome.findByPrimaryKey( digg.getIdDigg(  ) );
 
             try
             {
@@ -281,10 +283,9 @@ public final class DiggHome
             {
                 AppLogService.error( e );
             }
-
         }
-        return listDigg;
 
+        return listDigg;
     }
 
     /**
@@ -302,7 +303,7 @@ public final class DiggHome
      * Load the xpage themes for all diggs
      * @param plugin the plugin
      * @return the map containing the theme
-     * 
+     *
      */
     public static Map<Integer, Theme> getXPageThemes( Plugin plugin )
     {

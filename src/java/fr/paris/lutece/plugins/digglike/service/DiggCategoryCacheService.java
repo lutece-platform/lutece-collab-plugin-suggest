@@ -47,7 +47,7 @@ public class DiggCategoryCacheService extends AbstractCacheableService
     /** Constructor */
     public DiggCategoryCacheService(  )
     {
-        initCache();
+        initCache(  );
     }
 
     /**

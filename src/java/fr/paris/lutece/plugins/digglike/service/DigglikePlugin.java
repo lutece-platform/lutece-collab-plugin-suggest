@@ -62,7 +62,7 @@ public class DigglikePlugin extends PluginDefaultImplementation implements Seria
         // Initialize the  digglike service
         DigglikeService.getInstance(  ).init(  );
         ImageService.getInstance(  );
-       
+
         if ( this.isInstalled(  ) )
         {
             _xPageTheme = DiggHome.getXPageThemes( this );

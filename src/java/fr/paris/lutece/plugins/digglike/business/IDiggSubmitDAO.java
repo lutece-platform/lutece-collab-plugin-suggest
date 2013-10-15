@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
+
+import java.util.List;
 
 
 /**
@@ -94,7 +94,6 @@ public interface IDiggSubmitDAO
      */
     List<Integer> selectIdListByFilter( SubmitFilter filter, Plugin plugin );
 
-      
     /**
     *
     *
@@ -104,7 +103,6 @@ public interface IDiggSubmitDAO
     * @return  the number  of all the diggSubmit who verify the filter
     */
     int selectCountByFilter( SubmitFilter filter, Plugin plugin );
-
 
     /**
     * Modify the order of a diggsubmit
@@ -120,6 +118,5 @@ public interface IDiggSubmitDAO
      * @return the max order of diggsubmit
      * @param plugin The plugin
      */
-    int maxOrderDiggSubmit( int nIdDigg,boolean bListPinned, Plugin plugin );
-
+    int maxOrderDiggSubmit( int nIdDigg, boolean bListPinned, Plugin plugin );
 }

@@ -51,27 +51,27 @@ public final class ReportedMessageHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private ReportedMessageHome( )
+    private ReportedMessageHome(  )
     {
     }
 
     /**
      * Creation of an instance of reported Message
-     * 
+     *
      * @param reportedMessage The instance of the reported Message which
      *            contains the informations to store
      * @param plugin the Plugin
-     * 
+     *
      */
     public static void create( ReportedMessage reportedMessage, Plugin plugin )
     {
-        reportedMessage.setDateReported( DiggUtils.getCurrentDate( ) );
+        reportedMessage.setDateReported( DiggUtils.getCurrentDate(  ) );
         _dao.insert( reportedMessage, plugin );
     }
 
     /**
      * Remove the reportedMessage whose identifier is specified in parameter
-     * 
+     *
      * @param nIdDiggSubmit The nIdDiggSubmit
      * @param plugin the Plugin
      */
@@ -86,7 +86,7 @@ public final class ReportedMessageHome
     /**
      * Returns an instance of a reportedMessage whose identifier is specified in
      * parameter
-     * 
+     *
      * @param nKey The reportedMessage primary key
      * @param plugin the Plugin
      * @return an instance of commentSubmit
@@ -107,5 +107,4 @@ public final class ReportedMessageHome
     {
         return _dao.selectListByDiggSubmit( nIdDiggSubmit, plugin );
     }
-
 }

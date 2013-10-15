@@ -39,8 +39,9 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
+
 /**
- * 
+ *
  * service DiggUserInfoService
  *
  */
@@ -49,8 +50,6 @@ public class DiggUserInfoService implements IDiggUserInfoService
     public static final String BEAN_SERVICE = "digglike.diggUserInfoService";
     private static IDiggUserInfoService _singleton;
 
-
-   
     /**
      * Returns the instance of the singleton
      *
@@ -65,55 +64,40 @@ public class DiggUserInfoService implements IDiggUserInfoService
 
         return _singleton;
     }
-    
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void updateDiggUserInfoByLuteceUser(LuteceUser luteceUserConnected,Plugin plugin)
+    public void updateDiggUserInfoByLuteceUser( LuteceUser luteceUserConnected, Plugin plugin )
     {
-    	//test if digg user info exist
-    	if( luteceUserConnected !=null && luteceUserConnected.getName() !=null )
-    	{
-    		DiggUserInfo diggUserInfo=null;
-    		diggUserInfo=DiggUserInfoHome.findByKey(luteceUserConnected.getName(), plugin); 
-    		if(diggUserInfo == null)
-    		{
-	    		diggUserInfo=new DiggUserInfo();
-	    		diggUserInfo.setLuteceUserKey(luteceUserConnected.getName());
-	    		diggUserInfo.setLastName(luteceUserConnected.getUserInfos().get(LuteceUser.NAME_FAMILY));
-	    		diggUserInfo.setFirstName(luteceUserConnected.getUserInfos().get(LuteceUser.NAME_GIVEN));
-	    		diggUserInfo.setLogin(luteceUserConnected.getName());
-	    		diggUserInfo.setBusinesMail(luteceUserConnected.getUserInfos().get(LuteceUser.BUSINESS_INFO_ONLINE_EMAIL));
-	    		diggUserInfo.setHomeMail(luteceUserConnected.getUserInfos().get(LuteceUser.HOME_INFO_ONLINE_EMAIL));
-	    		DiggUserInfoHome.create(diggUserInfo, plugin);
-    		}	
-    	}
-    	
-   
-    
+        //test if digg user info exist
+        if ( ( luteceUserConnected != null ) && ( luteceUserConnected.getName(  ) != null ) )
+        {
+            DiggUserInfo diggUserInfo = null;
+            diggUserInfo = DiggUserInfoHome.findByKey( luteceUserConnected.getName(  ), plugin );
+
+            if ( diggUserInfo == null )
+            {
+                diggUserInfo = new DiggUserInfo(  );
+                diggUserInfo.setLuteceUserKey( luteceUserConnected.getName(  ) );
+                diggUserInfo.setLastName( luteceUserConnected.getUserInfos(  ).get( LuteceUser.NAME_FAMILY ) );
+                diggUserInfo.setFirstName( luteceUserConnected.getUserInfos(  ).get( LuteceUser.NAME_GIVEN ) );
+                diggUserInfo.setLogin( luteceUserConnected.getName(  ) );
+                diggUserInfo.setBusinesMail( luteceUserConnected.getUserInfos(  )
+                                                                .get( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL ) );
+                diggUserInfo.setHomeMail( luteceUserConnected.getUserInfos(  ).get( LuteceUser.HOME_INFO_ONLINE_EMAIL ) );
+                DiggUserInfoHome.create( diggUserInfo, plugin );
+            }
+        }
     }
-    		
-    		
-    	
-    	
-    	
-    
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public DiggUserInfo findDiggUserInfoByKey(String strLuteceUserKey,Plugin plugin)
+    public DiggUserInfo findDiggUserInfoByKey( String strLuteceUserKey, Plugin plugin )
     {
-    	return DiggUserInfoHome.findByKey(strLuteceUserKey, plugin);
-    
+        return DiggUserInfoHome.findByKey( strLuteceUserKey, plugin );
     }
-    	
-    
-    
-    
-    
-    
 }

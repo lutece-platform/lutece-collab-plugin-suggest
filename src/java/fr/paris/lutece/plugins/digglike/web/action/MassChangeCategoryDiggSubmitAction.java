@@ -33,13 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.web.action;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.digglike.business.Category;
 import fr.paris.lutece.plugins.digglike.business.CategoryHome;
 import fr.paris.lutece.plugins.digglike.business.Digg;
@@ -62,13 +55,21 @@ import fr.paris.lutece.portal.web.pluginaction.IPluginActionResult;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 /**
  *
  * MassChangeCategoryDiggSubmitAction
  *
  */
-public class MassChangeCategoryDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSearchFields> implements IDigglikeAction
+public class MassChangeCategoryDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSearchFields>
+    implements IDigglikeAction
 {
     private static final String ACTION_NAME = "Mass Change Category DiggSubmit ";
     private static final String JSP_CONFIRM_CHANGE_DIGG_SUBMIT_CATEGORY = "jsp/admin/plugins/digglike/ConfirmMassChangeDiggSubmitCategory.jsp";
@@ -77,15 +78,14 @@ public class MassChangeCategoryDiggSubmitAction extends AbstractPluginAction<Dig
     private static final String MARK_DIGG = "digg";
     private static final String PARAMETER_ID_CATEGORY = "id_category";
     private static final String PARAMETER_MASS_CHANGE_CATEGORY = "mass_change_category";
-    private static final String PARAMETER_SELECTED_DIGG_SUBMIT="selected_digg_submit";
-    
+    private static final String PARAMETER_SELECTED_DIGG_SUBMIT = "selected_digg_submit";
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void fillModel( HttpServletRequest request, AdminUser adminUser, Map<String, Object> model )
     {
-   
     }
 
     /**
@@ -130,39 +130,35 @@ public class MassChangeCategoryDiggSubmitAction extends AbstractPluginAction<Dig
         int nIdCategory = DiggUtils.getIntegerParameter( strIdCategory );
         int nIdDiggSubmit;
         String strRedirect = StringUtils.EMPTY;
-        
-       
-      
-        
-        if ( ( searchFields.getSelectedDiggSubmit() != null ) && !searchFields.getSelectedDiggSubmit() .isEmpty(  ) )
-        {
-            
-        	UrlItem url = new UrlItem(AppPathService.getBaseUrl( request ) + JSP_CONFIRM_CHANGE_DIGG_SUBMIT_CATEGORY );
-            url.addParameter(PARAMETER_ID_CATEGORY, nIdCategory);
-          
-        	//test All ressource selected before update
-        	for ( String strIdDiggSubmit : searchFields.getSelectedDiggSubmit() )
-        	{
-        		
-             	if ( StringUtils.isNotBlank( strIdDiggSubmit ) && StringUtils.isNumeric( strIdDiggSubmit ) )
-                 {
-             		
-             		 nIdDiggSubmit=DiggUtils.getIntegerParameter(strIdDiggSubmit);
-                 	 DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit, false, plugin );
-                    
 
-                      if ( ( diggSubmit == null ) ||
-                              !RBACService.isAuthorized( Digg.RESOURCE_TYPE, DiggUtils.EMPTY_STRING + diggSubmit.getDigg(  ).getIdDigg(  ),
-                                  DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT,adminUser) )
-                      {
-                          throw new AccessDeniedException();
-                      }
-                      url.addParameter( PARAMETER_SELECTED_DIGG_SUBMIT, nIdDiggSubmit );
-                     
-                 }
-        	}
-        	strRedirect=url.getUrl();
-        
+        if ( ( searchFields.getSelectedDiggSubmit(  ) != null ) && !searchFields.getSelectedDiggSubmit(  ).isEmpty(  ) )
+        {
+            UrlItem url = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_CONFIRM_CHANGE_DIGG_SUBMIT_CATEGORY );
+            url.addParameter( PARAMETER_ID_CATEGORY, nIdCategory );
+
+            //test All ressource selected before update
+            for ( String strIdDiggSubmit : searchFields.getSelectedDiggSubmit(  ) )
+            {
+                if ( StringUtils.isNotBlank( strIdDiggSubmit ) && StringUtils.isNumeric( strIdDiggSubmit ) )
+                {
+                    nIdDiggSubmit = DiggUtils.getIntegerParameter( strIdDiggSubmit );
+
+                    DiggSubmit diggSubmit = DiggSubmitService.getService(  )
+                                                             .findByPrimaryKey( nIdDiggSubmit, false, plugin );
+
+                    if ( ( diggSubmit == null ) ||
+                            !RBACService.isAuthorized( Digg.RESOURCE_TYPE,
+                                DiggUtils.EMPTY_STRING + diggSubmit.getDigg(  ).getIdDigg(  ),
+                                DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT, adminUser ) )
+                    {
+                        throw new AccessDeniedException(  );
+                    }
+
+                    url.addParameter( PARAMETER_SELECTED_DIGG_SUBMIT, nIdDiggSubmit );
+                }
+            }
+
+            strRedirect = url.getUrl(  );
         }
         else
         {
@@ -183,6 +179,4 @@ public class MassChangeCategoryDiggSubmitAction extends AbstractPluginAction<Dig
     {
         return PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
     }
-
-
 }

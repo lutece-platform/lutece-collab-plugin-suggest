@@ -33,13 +33,14 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import java.sql.Timestamp;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -49,9 +50,9 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_digg_submit ) FROM digglike_digg_submit";
-    private static final String SQL_QUERY_SELECT_DIGG_SUBMIT_BY_FILTER="SELECT d.id_digg_submit,d.id_digg,s.id_state,s.title,s.number,d.date_response, " +
-            "d.vote_number,d.score_number,d.id_category,d.digg_submit_value,d.digg_submit_title,d.comment_enable_number,d.digg_submit_value_show_in_the_list, " +
-            "d.reported, d.lutece_user_key, d.digg_submit_list_order, d.digg_submit_type,d.number_view,d.disable_vote,d.is_pinned,d.disable_comment,d.id_image_resource,d.comment_number FROM digglike_digg_submit d,digglike_digg_submit_state s ";
+    private static final String SQL_QUERY_SELECT_DIGG_SUBMIT_BY_FILTER = "SELECT d.id_digg_submit,d.id_digg,s.id_state,s.title,s.number,d.date_response, " +
+        "d.vote_number,d.score_number,d.id_category,d.digg_submit_value,d.digg_submit_title,d.comment_enable_number,d.digg_submit_value_show_in_the_list, " +
+        "d.reported, d.lutece_user_key, d.digg_submit_list_order, d.digg_submit_type,d.number_view,d.disable_vote,d.is_pinned,d.disable_comment,d.id_image_resource,d.comment_number FROM digglike_digg_submit d,digglike_digg_submit_state s ";
     private static final String SQL_FILTER_ID_DIGG_SUBMIT = " d.id_digg_submit = ? ";
     private static final String SQL_FILTER_ID_DIGG = " d.id_digg = ? ";
     private static final String SQL_FILTER_ID_CATEGORY = " d.id_category = ? ";
@@ -80,9 +81,8 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
     private static final String SQL_JOIN_STATE = " d.id_state = s.id_state ";
     private static final String SQL_CONSTANTE_WHERE = " WHERE ";
     private static final String SQL_CONSTANT_AND = " AND ";
-    
-    
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_DIGG_SUBMIT_BY_FILTER+SQL_CONSTANTE_WHERE+SQL_JOIN_STATE+SQL_CONSTANT_AND+SQL_FILTER_ID_DIGG_SUBMIT;
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_DIGG_SUBMIT_BY_FILTER +
+        SQL_CONSTANTE_WHERE + SQL_JOIN_STATE + SQL_CONSTANT_AND + SQL_FILTER_ID_DIGG_SUBMIT;
     private static final String SQL_QUERY_INSERT = "INSERT INTO digglike_digg_submit ( id_digg_submit,id_digg,id_state,date_response, " +
         "vote_number,score_number,id_category,digg_submit_value ,digg_submit_title,comment_enable_number,digg_submit_value_show_in_the_list,reported," +
         "lutece_user_key,digg_submit_list_order,digg_submit_type,number_view,disable_vote,is_pinned,disable_comment,id_image_resource,comment_number ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -91,17 +91,15 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         "id_digg_submit=?,id_digg=?,id_state=?" +
         ",vote_number=?,score_number=?,id_category=?,digg_submit_value=?,digg_submit_title=? ,comment_enable_number=? ,digg_submit_value_show_in_the_list=?,reported=?,lutece_user_key= ?,digg_submit_list_order=?,digg_submit_type=?,number_view=?,disable_vote=?,is_pinned= ?,disable_comment=?,id_image_resource= ?,comment_number = ? " +
         "WHERE id_digg_submit=? ";
-
     private static final String SQL_QUERY_SELECT_ID_DIGG_SUBMIT_BY_FILTER = "SELECT d.id_digg_submit " +
         "FROM digglike_digg_submit d ";
     private static final String SQL_QUERY_SELECT_COUNT_BY_FILTER = "SELECT COUNT(d.id_digg_submit) " +
         "FROM digglike_digg_submit d ";
 
-   
-
-     //Order
-    private static final String SQL_QUERY_SELECT_MAX_DIGG_SUBMIT_LIST_ORDER = "SELECT max(d.digg_submit_list_order) FROM digglike_digg_submit d WHERE d.id_digg = ? AND "+SQL_FILTER_IS_PINNED ;
-     private static final String SQL_QUERY_UPDATE_DIGG_SUBMIT_LIST_ORDER = "UPDATE digglike_digg_submit SET digg_submit_list_order = ?  WHERE id_digg_submit = ?";
+    //Order
+    private static final String SQL_QUERY_SELECT_MAX_DIGG_SUBMIT_LIST_ORDER = "SELECT max(d.digg_submit_list_order) FROM digglike_digg_submit d WHERE d.id_digg = ? AND " +
+        SQL_FILTER_IS_PINNED;
+    private static final String SQL_QUERY_UPDATE_DIGG_SUBMIT_LIST_ORDER = "UPDATE digglike_digg_submit SET digg_submit_list_order = ?  WHERE id_digg_submit = ?";
 
     /**
      * Generates a new primary key
@@ -145,7 +143,7 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
             diggSubmit.setIdDiggSubmit( newPrimaryKey( plugin ) );
         }
 
-        diggSubmit.setDiggSubmitOrder( maxOrderDiggSubmit( diggSubmit.getDigg(  ).getIdDigg(  ),false, plugin ) + 1 );
+        diggSubmit.setDiggSubmitOrder( maxOrderDiggSubmit( diggSubmit.getDigg(  ).getIdDigg(  ), false, plugin ) + 1 );
         daoUtil.setInt( 1, diggSubmit.getIdDiggSubmit(  ) );
         daoUtil.setInt( 2, diggSubmit.getDigg(  ).getIdDigg(  ) );
         daoUtil.setInt( 3, diggSubmit.getDiggSubmitState(  ).getIdDiggSubmitState(  ) );
@@ -180,19 +178,20 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         }
 
         daoUtil.setInt( 16, diggSubmit.getNumberView(  ) );
-        daoUtil.setBoolean( 17, diggSubmit.isDisableVote() );
-        daoUtil.setBoolean( 18, diggSubmit.isPinned());
-        daoUtil.setBoolean( 19, diggSubmit.isDisableComment());
-        if(diggSubmit.getIdImageResource() !=null)
+        daoUtil.setBoolean( 17, diggSubmit.isDisableVote(  ) );
+        daoUtil.setBoolean( 18, diggSubmit.isPinned(  ) );
+        daoUtil.setBoolean( 19, diggSubmit.isDisableComment(  ) );
+
+        if ( diggSubmit.getIdImageResource(  ) != null )
         {
-        	daoUtil.setInt( 20, diggSubmit.getIdImageResource() );
+            daoUtil.setInt( 20, diggSubmit.getIdImageResource(  ) );
         }
         else
         {
-        	
-        	daoUtil.setIntNull(20);
+            daoUtil.setIntNull( 20 );
         }
-        daoUtil.setInt(21, diggSubmit.getNumberComment());
+
+        daoUtil.setInt( 21, diggSubmit.getNumberComment(  ) );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
 
@@ -209,14 +208,14 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
     public DiggSubmit load( int nIdDiggSubmit, Plugin plugin )
     {
         DiggSubmit diggSubmit = null;
-        
+
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, nIdDiggSubmit );
         daoUtil.executeQuery(  );
-        
+
         if ( daoUtil.next(  ) )
         {
-            diggSubmit =getRow(daoUtil);
+            diggSubmit = getRow( daoUtil );
         }
 
         daoUtil.free(  );
@@ -280,22 +279,22 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         }
 
         daoUtil.setInt( 15, diggSubmit.getNumberView(  ) );
-        daoUtil.setBoolean( 16, diggSubmit.isDisableVote() );
-        daoUtil.setBoolean( 17, diggSubmit.isPinned());
-        daoUtil.setBoolean( 18, diggSubmit.isDisableComment());
-        if(diggSubmit.getIdImageResource() !=null)
+        daoUtil.setBoolean( 16, diggSubmit.isDisableVote(  ) );
+        daoUtil.setBoolean( 17, diggSubmit.isPinned(  ) );
+        daoUtil.setBoolean( 18, diggSubmit.isDisableComment(  ) );
+
+        if ( diggSubmit.getIdImageResource(  ) != null )
         {
-        	daoUtil.setInt( 19, diggSubmit.getIdImageResource() );
+            daoUtil.setInt( 19, diggSubmit.getIdImageResource(  ) );
         }
         else
         {
-        	
-        	daoUtil.setIntNull(19);
+            daoUtil.setIntNull( 19 );
         }
-        daoUtil.setInt(20, diggSubmit.getNumberComment());
+
+        daoUtil.setInt( 20, diggSubmit.getNumberComment(  ) );
         daoUtil.setInt( 21, diggSubmit.getIdDiggSubmit(  ) );
-       
-     
+
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
@@ -309,7 +308,7 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
     public List<DiggSubmit> selectListByFilter( SubmitFilter filter, Plugin plugin )
     {
         List<DiggSubmit> diggSubmitList = new ArrayList<DiggSubmit>(  );
-    
+
         List<String> listStrFilter = new ArrayList<String>(  );
         String strOrderBy = null;
 
@@ -354,18 +353,21 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         {
             listStrFilter.add( SQL_FILTER_NUMBER_VOTE );
         }
+
         if ( filter.containsIdPinned(  ) )
         {
             listStrFilter.add( SQL_FILTER_IS_PINNED );
         }
-        
-        if ( filter.containsIdType() )
+
+        if ( filter.containsIdType(  ) )
         {
             listStrFilter.add( SQL_FILTER_ID_TYPE );
         }
-        if(filter.containsIdContainsCommentDisable())
+
+        if ( filter.containsIdContainsCommentDisable(  ) )
         {
-        	listStrFilter.add(filter.getIdContainsCommentDisable() == SubmitFilter.ID_TRUE ? SQL_FILTER_CONTAINS_COMMENT_DISABLE : SQL_FILTER_NOT_CONTAINS_COMMENT_DISABLE );
+            listStrFilter.add( ( filter.getIdContainsCommentDisable(  ) == SubmitFilter.ID_TRUE )
+                ? SQL_FILTER_CONTAINS_COMMENT_DISABLE : SQL_FILTER_NOT_CONTAINS_COMMENT_DISABLE );
         }
 
         if ( filter.containsSortBy(  ) )
@@ -425,23 +427,24 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
             daoUtil.setInt( nIndex, filter.getNumberVote(  ) );
             nIndex++;
         }
-        if ( filter.containsIdPinned())
+
+        if ( filter.containsIdPinned(  ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdPinned());
+            daoUtil.setInt( nIndex, filter.getIdPinned(  ) );
             nIndex++;
         }
-        if ( filter.containsIdType())
+
+        if ( filter.containsIdType(  ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdType());
+            daoUtil.setInt( nIndex, filter.getIdType(  ) );
             nIndex++;
         }
-        	
 
         daoUtil.executeQuery(  );
 
         while ( daoUtil.next(  ) )
         {
-        	diggSubmitList.add( getRow(daoUtil) );
+            diggSubmitList.add( getRow( daoUtil ) );
         }
 
         daoUtil.free(  );
@@ -500,17 +503,21 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         {
             listStrFilter.add( SQL_FILTER_NUMBER_VOTE );
         }
+
         if ( filter.containsIdPinned(  ) )
         {
             listStrFilter.add( SQL_FILTER_IS_PINNED );
         }
-        if ( filter.containsIdType() )
+
+        if ( filter.containsIdType(  ) )
         {
             listStrFilter.add( SQL_FILTER_ID_TYPE );
         }
-        if(filter.containsIdContainsCommentDisable())
+
+        if ( filter.containsIdContainsCommentDisable(  ) )
         {
-        	listStrFilter.add(filter.getIdContainsCommentDisable() == SubmitFilter.ID_TRUE ? SQL_FILTER_CONTAINS_COMMENT_DISABLE : SQL_FILTER_NOT_CONTAINS_COMMENT_DISABLE );
+            listStrFilter.add( ( filter.getIdContainsCommentDisable(  ) == SubmitFilter.ID_TRUE )
+                ? SQL_FILTER_CONTAINS_COMMENT_DISABLE : SQL_FILTER_NOT_CONTAINS_COMMENT_DISABLE );
         }
 
         if ( filter.containsSortBy(  ) )
@@ -582,14 +589,16 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
             daoUtil.setInt( nIndex, filter.getNumberVote(  ) );
             nIndex++;
         }
-        if ( filter.containsIdPinned())
+
+        if ( filter.containsIdPinned(  ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdPinned());
+            daoUtil.setInt( nIndex, filter.getIdPinned(  ) );
             nIndex++;
         }
-        if ( filter.containsIdType())
+
+        if ( filter.containsIdType(  ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdType());
+            daoUtil.setInt( nIndex, filter.getIdType(  ) );
             nIndex++;
         }
 
@@ -655,6 +664,7 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         {
             listStrFilter.add( SQL_FILTER_NUMBER_VOTE );
         }
+
         if ( filter.containsIdPinned(  ) )
         {
             listStrFilter.add( SQL_FILTER_IS_PINNED );
@@ -664,13 +674,16 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         {
             listStrFilter.add( SQL_FILTER_LUTECE_USER_KEY );
         }
-        if ( filter.containsIdType() )
+
+        if ( filter.containsIdType(  ) )
         {
             listStrFilter.add( SQL_FILTER_ID_TYPE );
         }
-        if(filter.containsIdContainsCommentDisable())
+
+        if ( filter.containsIdContainsCommentDisable(  ) )
         {
-        	listStrFilter.add(filter.getIdContainsCommentDisable() == SubmitFilter.ID_TRUE ? SQL_FILTER_CONTAINS_COMMENT_DISABLE : SQL_FILTER_NOT_CONTAINS_COMMENT_DISABLE );
+            listStrFilter.add( ( filter.getIdContainsCommentDisable(  ) == SubmitFilter.ID_TRUE )
+                ? SQL_FILTER_CONTAINS_COMMENT_DISABLE : SQL_FILTER_NOT_CONTAINS_COMMENT_DISABLE );
         }
 
         String strSQL = DiggUtils.buildRequestWithFilter( SQL_QUERY_SELECT_COUNT_BY_FILTER, listStrFilter, null );
@@ -724,9 +737,10 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
             daoUtil.setInt( nIndex, filter.getNumberVote(  ) );
             nIndex++;
         }
-        if ( filter.containsIdPinned())
+
+        if ( filter.containsIdPinned(  ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdPinned());
+            daoUtil.setInt( nIndex, filter.getIdPinned(  ) );
             nIndex++;
         }
 
@@ -735,9 +749,10 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
             daoUtil.setString( nIndex, filter.getLuteceUserKey(  ) );
             nIndex++;
         }
-        if ( filter.containsIdType())
+
+        if ( filter.containsIdType(  ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdType());
+            daoUtil.setInt( nIndex, filter.getIdType(  ) );
             nIndex++;
         }
 
@@ -761,7 +776,7 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
     private String getOrderBy( List<Integer> listSortBy )
     {
         StringBuffer strOrderBy = new StringBuffer(  );
-        String strReturn=DiggUtils.EMPTY_STRING;
+        String strReturn = DiggUtils.EMPTY_STRING;
         int ncpt = 0;
 
         if ( ( listSortBy != null ) && ( listSortBy.size(  ) != 0 ) )
@@ -838,20 +853,17 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
                     strOrderBy.append( "," );
                 }
             }
-            strReturn=strOrderBy.toString(  );
-            if ( strReturn.endsWith( ","  ) )
+
+            strReturn = strOrderBy.toString(  );
+
+            if ( strReturn.endsWith( "," ) )
             {
-            	strReturn=strReturn.substring(0,strReturn.length()-1);
+                strReturn = strReturn.substring( 0, strReturn.length(  ) - 1 );
             }
-           
         }
 
         return strReturn;
     }
-
-
-
-
 
     ////////////////////////////////////////////////////////////////////////////
     // ContactList Order management
@@ -871,21 +883,18 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         daoUtil.free(  );
     }
 
-
-
-
     /**
      * Calculate the new max order in a list
      * @param nIdDigg the id of the digg
      * @return the max order of diggsubmit
      * @param plugin The plugin
      */
-    public int maxOrderDiggSubmit( int nIdDigg,boolean bListPinned,Plugin plugin )
+    public int maxOrderDiggSubmit( int nIdDigg, boolean bListPinned, Plugin plugin )
     {
         int nOrder = 0;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_DIGG_SUBMIT_LIST_ORDER, plugin );
         daoUtil.setInt( 1, nIdDigg );
-        daoUtil.setBoolean(2, bListPinned);
+        daoUtil.setBoolean( 2, bListPinned );
         daoUtil.executeQuery(  );
 
         if ( daoUtil.next(  ) )
@@ -897,16 +906,15 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
 
         return nOrder;
     }
-    
+
     /**
-     * 
+     *
      * @param daoUtil {@link DAOUtil}
      * @return {@link DiggSubmit} DiggSubmit
      */
-    private DiggSubmit getRow(DAOUtil daoUtil)
+    private DiggSubmit getRow( DAOUtil daoUtil )
     {
-    
-    	DiggSubmit diggSubmit = new DiggSubmit(  );
+        DiggSubmit diggSubmit = new DiggSubmit(  );
         diggSubmit.setIdDiggSubmit( daoUtil.getInt( 1 ) );
 
         Digg digg = new Digg(  );
@@ -924,9 +932,9 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
 
         if ( daoUtil.getObject( 9 ) != null )
         {
-        	Category category=new Category();
-        	category.setIdCategory(daoUtil.getInt( 9 ));
-            diggSubmit.setCategory( category);
+            Category category = new Category(  );
+            category.setIdCategory( daoUtil.getInt( 9 ) );
+            diggSubmit.setCategory( category );
         }
 
         diggSubmit.setDiggSubmitValue( daoUtil.getString( 10 ) );
@@ -939,21 +947,23 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
 
         if ( daoUtil.getObject( 17 ) != null )
         {
-            DiggSubmitType diggSubmitType=new DiggSubmitType();
-            diggSubmitType.setIdType(daoUtil.getInt( 17 ));
-        	diggSubmit.setDiggSubmitType( diggSubmitType );
+            DiggSubmitType diggSubmitType = new DiggSubmitType(  );
+            diggSubmitType.setIdType( daoUtil.getInt( 17 ) );
+            diggSubmit.setDiggSubmitType( diggSubmitType );
         }
 
         diggSubmit.setNumberView( daoUtil.getInt( 18 ) );
-        diggSubmit.setDisableVote(daoUtil.getBoolean( 19 ));
-        diggSubmit.setPinned(daoUtil.getBoolean( 20));	
-        diggSubmit.setDisableComment(daoUtil.getBoolean( 21));
+        diggSubmit.setDisableVote( daoUtil.getBoolean( 19 ) );
+        diggSubmit.setPinned( daoUtil.getBoolean( 20 ) );
+        diggSubmit.setDisableComment( daoUtil.getBoolean( 21 ) );
+
         if ( daoUtil.getObject( 22 ) != null )
         {
-        	diggSubmit.setIdImageResource(daoUtil.getInt( 22 ) );
+            diggSubmit.setIdImageResource( daoUtil.getInt( 22 ) );
         }
+
         diggSubmit.setNumberComment( daoUtil.getInt( 23 ) );
+
         return diggSubmit;
-    
     }
 }

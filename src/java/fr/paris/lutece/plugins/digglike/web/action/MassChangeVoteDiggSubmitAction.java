@@ -33,13 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.web.action;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
@@ -58,27 +51,33 @@ import fr.paris.lutece.portal.web.pluginaction.AbstractPluginAction;
 import fr.paris.lutece.portal.web.pluginaction.DefaultPluginActionResult;
 import fr.paris.lutece.portal.web.pluginaction.IPluginActionResult;
 
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 /**
  *
  * MassPinnedDiggSubmitAction
  *
  */
-public class MassChangeVoteDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSearchFields> implements IDigglikeAction
+public class MassChangeVoteDiggSubmitAction extends AbstractPluginAction<DigglikeAdminSearchFields>
+    implements IDigglikeAction
 {
     private static final String ACTION_NAME = "Mass Change Vote DiggSubmit ";
-   
     private static final String MESSAGE_YOU_MUST_SELECT_DIGG_SUBMIT = "digglike.message.youMustSelectDiggSubmit";
     private static final String PARAMETER_MASS_DISABLE_ACTION = "mass_disable_vote_action";
     private static final String PARAMETER_MASS_ENABLE_ACTION = "mass_enable_vote_action";
-   
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void fillModel( HttpServletRequest request, AdminUser adminUser, Map<String, Object> model )
     {
-      
     }
 
     /**
@@ -105,7 +104,8 @@ public class MassChangeVoteDiggSubmitAction extends AbstractPluginAction<Digglik
     @Override
     public boolean isInvoked( HttpServletRequest request )
     {
-        return ( request.getParameter( PARAMETER_MASS_DISABLE_ACTION ) != null || request.getParameter( PARAMETER_MASS_ENABLE_ACTION ) != null );
+        return ( ( request.getParameter( PARAMETER_MASS_DISABLE_ACTION ) != null ) ||
+        ( request.getParameter( PARAMETER_MASS_ENABLE_ACTION ) != null ) );
     }
 
     /**
@@ -116,53 +116,48 @@ public class MassChangeVoteDiggSubmitAction extends AbstractPluginAction<Digglik
         DigglikeAdminSearchFields searchFields ) throws AccessDeniedException
     {
         IPluginActionResult result = new DefaultPluginActionResult(  );
-        
+
         int nIdDiggSubmit;
-        String strRedirect = DiggJspBean.getJspManageDiggSubmit(request);
-        
-       
-      
-        
-        if ( ( searchFields.getSelectedDiggSubmit() != null ) && !searchFields.getSelectedDiggSubmit() .isEmpty(  ) )
+        String strRedirect = DiggJspBean.getJspManageDiggSubmit( request );
+
+        if ( ( searchFields.getSelectedDiggSubmit(  ) != null ) && !searchFields.getSelectedDiggSubmit(  ).isEmpty(  ) )
         {
-            
-        	//test All ressource selected before update
-        	for ( String strIdDiggSubmit : searchFields.getSelectedDiggSubmit())
-             {
-        		
-             	if ( StringUtils.isNotBlank( strIdDiggSubmit ) && StringUtils.isNumeric( strIdDiggSubmit ) )
-                 {
-             		
-             		 nIdDiggSubmit=DiggUtils.getIntegerParameter(strIdDiggSubmit);
-                 	 DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit, false, getPlugin() );
-                    
-
-                      if ( ( diggSubmit == null ) ||
-                              !RBACService.isAuthorized( Digg.RESOURCE_TYPE, DiggUtils.EMPTY_STRING + diggSubmit.getDigg(  ).getIdDigg(  ),
-                                  DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT,adminUser) )
-                      {
-                          throw new AccessDeniedException();
-                      }
-
-                     
-                 }
-             	
-                }
-        	
-      
-        	boolean isDisabledVote=(request.getParameter( PARAMETER_MASS_DISABLE_ACTION ) != null); 
-          	//update all digg submit selected
-        	for ( String strIdDiggSubmittoUpdate : searchFields.getSelectedDiggSubmit()  )
+            //test All ressource selected before update
+            for ( String strIdDiggSubmit : searchFields.getSelectedDiggSubmit(  ) )
             {
-        		if ( StringUtils.isNotBlank( strIdDiggSubmittoUpdate ) && StringUtils.isNumeric( strIdDiggSubmittoUpdate ) )
+                if ( StringUtils.isNotBlank( strIdDiggSubmit ) && StringUtils.isNumeric( strIdDiggSubmit ) )
                 {
-        			 nIdDiggSubmit=DiggUtils.getIntegerParameter(strIdDiggSubmittoUpdate);
-    	    		 DiggSubmit diggSubmit = DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit, false, getPlugin() );
-    	    		 diggSubmit.setDisableVote(isDisabledVote);    	        	 
-    	    		 DiggSubmitService.getService().update( diggSubmit, getPlugin() );
+                    nIdDiggSubmit = DiggUtils.getIntegerParameter( strIdDiggSubmit );
+
+                    DiggSubmit diggSubmit = DiggSubmitService.getService(  )
+                                                             .findByPrimaryKey( nIdDiggSubmit, false, getPlugin(  ) );
+
+                    if ( ( diggSubmit == null ) ||
+                            !RBACService.isAuthorized( Digg.RESOURCE_TYPE,
+                                DiggUtils.EMPTY_STRING + diggSubmit.getDigg(  ).getIdDigg(  ),
+                                DigglikeResourceIdService.PERMISSION_MANAGE_DIGG_SUBMIT, adminUser ) )
+                    {
+                        throw new AccessDeniedException(  );
+                    }
                 }
             }
-        
+
+            boolean isDisabledVote = ( request.getParameter( PARAMETER_MASS_DISABLE_ACTION ) != null );
+
+            //update all digg submit selected
+            for ( String strIdDiggSubmittoUpdate : searchFields.getSelectedDiggSubmit(  ) )
+            {
+                if ( StringUtils.isNotBlank( strIdDiggSubmittoUpdate ) &&
+                        StringUtils.isNumeric( strIdDiggSubmittoUpdate ) )
+                {
+                    nIdDiggSubmit = DiggUtils.getIntegerParameter( strIdDiggSubmittoUpdate );
+
+                    DiggSubmit diggSubmit = DiggSubmitService.getService(  )
+                                                             .findByPrimaryKey( nIdDiggSubmit, false, getPlugin(  ) );
+                    diggSubmit.setDisableVote( isDisabledVote );
+                    DiggSubmitService.getService(  ).update( diggSubmit, getPlugin(  ) );
+                }
+            }
         }
         else
         {
@@ -183,6 +178,4 @@ public class MassChangeVoteDiggSubmitAction extends AbstractPluginAction<Digglik
     {
         return PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
     }
-
-
 }

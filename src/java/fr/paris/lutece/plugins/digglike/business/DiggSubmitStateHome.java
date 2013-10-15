@@ -40,9 +40,9 @@ import java.util.List;
 
 
 /**
- * 
+ *
  * class category Home
- * 
+ *
  */
 public final class DiggSubmitStateHome
 {
@@ -52,14 +52,14 @@ public final class DiggSubmitStateHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private DiggSubmitStateHome( )
+    private DiggSubmitStateHome(  )
     {
     }
 
     /**
      * Returns an instance of a Digg submit state whose identifier is specified
      * in parameter
-     * 
+     *
      * @param idKey The digg submit state primary key
      * @param plugin the Plugin
      * @return an instance of a Digg submit
@@ -72,7 +72,7 @@ public final class DiggSubmitStateHome
     /**
      * Returns an instance of a Digg submit state whose numero is specified in
      * parameter
-     * 
+     *
      * @param numero The digg submit state numero
      * @param plugin the Plugin
      * @return an instance of a Digg submit
@@ -84,7 +84,7 @@ public final class DiggSubmitStateHome
 
     /**
      * Returns a list of all Digg submit state
-     * 
+     *
      * @param plugin the plugin
      * @return the list of Digg submit state
      */

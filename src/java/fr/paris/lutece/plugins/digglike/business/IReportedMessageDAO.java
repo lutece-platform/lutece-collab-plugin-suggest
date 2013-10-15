@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.digglike.business;
 
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
+
+import java.util.List;
 
 
 /**
@@ -62,7 +62,6 @@ public interface IReportedMessageDAO
      */
     ReportedMessage load( int nKey, Plugin plugin );
 
-    
     /**
      * Delete the reportedMessage whose identifier is specified in parameter
      *
@@ -71,7 +70,6 @@ public interface IReportedMessageDAO
      */
     void deleteByDiggSubmit( int nIdDiggSubmit, Plugin plugin );
 
-    
     /**
      * Load the data of all the reportedMessage who is associated to the nIdDiggSubmit
      * @param nIdDiggSubmit the nIdDiggSubmit
@@ -79,6 +77,4 @@ public interface IReportedMessageDAO
      * @return  the list of reportedMessage
      */
     List<ReportedMessage> selectListByDiggSubmit( int nIdDiggSubmit, Plugin plugin );
-
-
 }

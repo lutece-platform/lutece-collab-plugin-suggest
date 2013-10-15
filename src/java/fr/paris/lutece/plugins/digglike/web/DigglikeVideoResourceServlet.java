@@ -59,7 +59,7 @@ public class DigglikeVideoResourceServlet
     private static final String STRING_DELAY_IN_SECOND = AppPropertiesService.getProperty( PROPERTY_EXPIRES_DELAY,
             DEFAULT_EXPIRES_DELAY );
     private static final Long LONG_DELAY_IN_MILLISECOND = Long.parseLong( STRING_DELAY_IN_SECOND ) * 1000;
-    private static final ResourceServletCache _cache = new ResourceServletCache( );
+    private static final ResourceServletCache _cache = new ResourceServletCache(  );
 
     /**
      * Put the file in cache
@@ -79,12 +79,12 @@ public class DigglikeVideoResourceServlet
 
         strFilename = DEFAULT_FILENAME + nIdDiggSubmit;
 
-        strContentType = video.getMimeType( );
-        content = video.getVideo( );
+        strContentType = video.getMimeType(  );
+        content = video.getVideo(  );
 
-        if ( _cache.isCacheEnable( ) )
+        if ( _cache.isCacheEnable(  ) )
         {
-            ResourceValueObject r = new ResourceValueObject( );
+            ResourceValueObject r = new ResourceValueObject(  );
             r.setContent( content );
             r.setContentType( strContentType );
             r.setFilename( strFilename );
@@ -101,8 +101,8 @@ public class DigglikeVideoResourceServlet
      * @throws ServletException the servlet Exception
      * @throws IOException the io exception
      */
-    public byte[] processRequest( HttpServletRequest request, HttpServletResponse response ) throws ServletException,
-            IOException
+    public byte[] processRequest( HttpServletRequest request, HttpServletResponse response )
+        throws ServletException, IOException
     {
         String strDiggSubmitId = request.getParameter( PARAMETER_VIDEO_ID );
         int nIdDiggSubmit = Integer.parseInt( strDiggSubmitId );
@@ -111,18 +111,17 @@ public class DigglikeVideoResourceServlet
         byte[] content;
         String strContentType;
 
-        if ( _cache.isCacheEnable( ) && ( _cache.get( strCacheKey ) != null ) )
+        if ( _cache.isCacheEnable(  ) && ( _cache.get( strCacheKey ) != null ) )
         {
             ResourceValueObject resource = _cache.get( strCacheKey );
-            content = resource.getContent( );
-            strContentType = resource.getContentType( );
+            content = resource.getContent(  );
+            strContentType = resource.getContentType(  );
         }
         else
         {
             VideoType video;
 
-            video = VideoTypeHome
-                    .findByPrimaryKey( nIdDiggSubmit, PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) );
+            video = VideoTypeHome.findByPrimaryKey( nIdDiggSubmit, PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) );
 
             if ( video == null )
             { //nothing to do if the data is no longer in DB
@@ -130,12 +129,12 @@ public class DigglikeVideoResourceServlet
                 return null;
             }
 
-            strContentType = video.getMimeType( );
-            content = video.getVideo( );
+            strContentType = video.getMimeType(  );
+            content = video.getVideo(  );
 
-            if ( _cache.isCacheEnable( ) )
+            if ( _cache.isCacheEnable(  ) )
             {
-                ResourceValueObject r = new ResourceValueObject( );
+                ResourceValueObject r = new ResourceValueObject(  );
                 r.setContent( content );
                 r.setContentType( strContentType );
                 r.setFilename( DEFAULT_FILENAME + nIdDiggSubmit );
@@ -144,10 +143,10 @@ public class DigglikeVideoResourceServlet
         }
 
         // Add Cache Control HTTP header
-        response.setHeader( "Content-Disposition", "attachment;filename=\"" + DEFAULT_FILENAME + nIdDiggSubmit
-                + VIDEO_EXTENSION + "\"" );
+        response.setHeader( "Content-Disposition",
+            "attachment;filename=\"" + DEFAULT_FILENAME + nIdDiggSubmit + VIDEO_EXTENSION + "\"" );
         response.setHeader( "Cache-Control", "max-age=" + STRING_DELAY_IN_SECOND ); // HTTP 1.1
-        response.setDateHeader( "Expires", System.currentTimeMillis( ) + LONG_DELAY_IN_MILLISECOND ); // HTTP 1.0
+        response.setDateHeader( "Expires", System.currentTimeMillis(  ) + LONG_DELAY_IN_MILLISECOND ); // HTTP 1.0
         response.setContentLength( content.length ); // Keep Alive connexion
 
         return content;

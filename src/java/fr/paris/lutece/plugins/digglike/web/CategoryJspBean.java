@@ -61,13 +61,14 @@ import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * 
+ *
  * class CategoryJspBean
- * 
+ *
  */
 public class CategoryJspBean extends PluginAdminPageJspBean
 {
     private static final long serialVersionUID = -4972338182883838725L;
+
     //	templates
     private static final String TEMPLATE_MANAGE_CATEGORY = "admin/plugins/digglike/manage_category.html";
     private static final String TEMPLATE_CREATE_CATEGORY = "admin/plugins/digglike/create_category.html";
@@ -114,12 +115,12 @@ public class CategoryJspBean extends PluginAdminPageJspBean
      */
     public String getManageCategory( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
-        Locale locale = getLocale( );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Plugin plugin = getPlugin(  );
+        Locale locale = getLocale(  );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         List<Category> listCategory = CategoryHome.getList( plugin );
         listCategory = (List<Category>) RBACService.getAuthorizedCollection( listCategory,
-                CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) );
+                CategoryResourceIdService.PERMISSION_MANAGE, getUser(  ) );
 
         _strCurrentPageIndexExport = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndexExport );
@@ -130,12 +131,12 @@ public class CategoryJspBean extends PluginAdminPageJspBean
                 getJspManageCategory( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexExport );
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, DiggUtils.EMPTY_STRING + _nItemsPerPageCategory );
-        model.put( MARK_CATEGORY_LIST, paginator.getPageItems( ) );
+        model.put( MARK_CATEGORY_LIST, paginator.getPageItems(  ) );
         setPageTitleProperty( PROPERTY_MANAGE_CATEGORY_TITLE );
 
         HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_CATEGORY, locale, model );
 
-        return getAdminPage( templateList.getHtml( ) );
+        return getAdminPage( templateList.getHtml(  ) );
     }
 
     /**
@@ -146,18 +147,18 @@ public class CategoryJspBean extends PluginAdminPageJspBean
     public String getCreateCategory( HttpServletRequest request )
     {
         if ( !RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
+                    CategoryResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
         {
             return getManageCategory( request );
         }
 
-        Locale locale = getLocale( );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Locale locale = getLocale(  );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         setPageTitleProperty( PROPERTY_CREATE_CATEGORY_TITLE );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_CATEGORY, locale, model );
 
-        return getAdminPage( template.getHtml( ) );
+        return getAdminPage( template.getHtml(  ) );
     }
 
     /**
@@ -168,12 +169,12 @@ public class CategoryJspBean extends PluginAdminPageJspBean
     public String doCreateCategory( HttpServletRequest request )
     {
         if ( !RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
+                    CategoryResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
         {
             return getJspManageCategory( request );
         }
 
-        Category category = new Category( );
+        Category category = new Category(  );
         String strError = getCategoryData( request, category );
 
         if ( strError != null )
@@ -181,7 +182,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
             return strError;
         }
 
-        CategoryHome.create( category, getPlugin( ) );
+        CategoryHome.create( category, getPlugin(  ) );
 
         return getJspManageCategory( request );
     }
@@ -193,18 +194,17 @@ public class CategoryJspBean extends PluginAdminPageJspBean
      */
     public String getModifyCategory( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
-        Locale locale = getLocale( );
+        Plugin plugin = getPlugin(  );
+        Locale locale = getLocale(  );
         Category category;
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<String, Object>(  );
 
         int nIdCategory = -1;
 
-        if ( ( strIdCategory != null )
-                && !strIdCategory.equals( DiggUtils.EMPTY_STRING )
-                && RBACService.isAuthorized( Category.RESOURCE_TYPE, strIdCategory,
-                        CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
+        if ( ( strIdCategory != null ) && !strIdCategory.equals( DiggUtils.EMPTY_STRING ) &&
+                RBACService.isAuthorized( Category.RESOURCE_TYPE, strIdCategory,
+                    CategoryResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
         {
             try
             {
@@ -228,7 +228,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_CATEGORY, locale, model );
 
-        return getAdminPage( template.getHtml( ) );
+        return getAdminPage( template.getHtml(  ) );
     }
 
     /**
@@ -238,15 +238,14 @@ public class CategoryJspBean extends PluginAdminPageJspBean
      */
     public String doModifyCategory( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
         Category category;
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         int nIdCategory = -1;
 
-        if ( ( strIdCategory != null )
-                && !strIdCategory.equals( DiggUtils.EMPTY_STRING )
-                && RBACService.isAuthorized( Category.RESOURCE_TYPE, strIdCategory,
-                        CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
+        if ( ( strIdCategory != null ) && !strIdCategory.equals( DiggUtils.EMPTY_STRING ) &&
+                RBACService.isAuthorized( Category.RESOURCE_TYPE, strIdCategory,
+                    CategoryResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
         {
             try
             {
@@ -264,7 +263,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
             return getJspManageCategory( request );
         }
 
-        category = new Category( );
+        category = new Category(  );
         category.setIdCategory( nIdCategory );
 
         String strError = getCategoryData( request, category );
@@ -296,8 +295,8 @@ public class CategoryJspBean extends PluginAdminPageJspBean
         UrlItem url = new UrlItem( JSP_DO_REMOVE_CATEGORY );
         url.addParameter( PARAMETER_ID_CATEGORY, strIdCategory );
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_CATEGORY, url.getUrl( ),
-                AdminMessage.TYPE_CONFIRMATION );
+        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_CATEGORY, url.getUrl(  ),
+            AdminMessage.TYPE_CONFIRMATION );
     }
 
     /**
@@ -307,14 +306,13 @@ public class CategoryJspBean extends PluginAdminPageJspBean
      */
     public String doRemoveCategory( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin( );
+        Plugin plugin = getPlugin(  );
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         int nIdCategory = -1;
 
-        if ( ( strIdCategory != null )
-                && !strIdCategory.equals( DiggUtils.EMPTY_STRING )
-                && RBACService.isAuthorized( Category.RESOURCE_TYPE, strIdCategory,
-                        CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
+        if ( ( strIdCategory != null ) && !strIdCategory.equals( DiggUtils.EMPTY_STRING ) &&
+                RBACService.isAuthorized( Category.RESOURCE_TYPE, strIdCategory,
+                    CategoryResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
         {
             try
             {
@@ -331,7 +329,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
             if ( CategoryHome.isAssociateToDigg( nIdCategory, plugin ) )
             {
                 return AdminMessageService.getMessageUrl( request, MESSAGE_CATEGORY_ASSOCIATE_TO_DIGG,
-                        AdminMessage.TYPE_STOP );
+                    AdminMessage.TYPE_STOP );
             }
 
             CategoryHome.remove( nIdCategory, plugin );
@@ -350,10 +348,12 @@ public class CategoryJspBean extends PluginAdminPageJspBean
      */
     private String getCategoryData( HttpServletRequest request, Category category )
     {
-        String strTitle = ( request.getParameter( PARAMETER_TITLE ) == null ) ? null : request.getParameter(
-                PARAMETER_TITLE ).trim( );
-        String strColor = ( request.getParameter( PARAMETER_COLOR ) == null ) ? null : request.getParameter(
-                PARAMETER_COLOR ).trim( );
+        String strTitle = ( request.getParameter( PARAMETER_TITLE ) == null ) ? null
+                                                                              : request.getParameter( PARAMETER_TITLE )
+                                                                                       .trim(  );
+        String strColor = ( request.getParameter( PARAMETER_COLOR ) == null ) ? null
+                                                                              : request.getParameter( PARAMETER_COLOR )
+                                                                                       .trim(  );
         String strFieldError = DiggUtils.EMPTY_STRING;
 
         if ( ( strTitle == null ) || strTitle.equals( DiggUtils.EMPTY_STRING ) )
@@ -369,10 +369,10 @@ public class CategoryJspBean extends PluginAdminPageJspBean
         //Mandatory fields
         if ( !strFieldError.equals( DiggUtils.EMPTY_STRING ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale( ) ) };
+            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale(  ) ) };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                    AdminMessage.TYPE_STOP );
+                AdminMessage.TYPE_STOP );
         }
 
         category.setTitle( strTitle );

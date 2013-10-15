@@ -42,9 +42,10 @@ import fr.paris.lutece.portal.service.resource.IExtendableResourceService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.Locale;
 
-import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -54,42 +55,44 @@ import org.apache.commons.lang.StringUtils;
 public class DiggSubmitExtendableResourceService implements IExtendableResourceService
 {
     private static final String MESSAGE_DIGG_SUBMIT_RESOURCE_TYPE_DESCRIPTION = "digglike.resource.diggSubmitResourceTypeDescription";
-
     private static final String MARK_PAGE = "page";
     private static final String MARK_ID_DIGG = "id_digg";
     private static final String MARK_ID_DIGG_SUBMIT = "id_digg_submit";
     private static final String MARK_ACTION = "action";
-
     private static final String CONSTANT_DIGG = "digg";
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean isInvoked( String strResourceType )
-	{
-		return DiggSubmit.RESOURCE_TYPE.equals( strResourceType );
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public IExtendableResource getResource( String strIdResource, String strResourceType )
-	{
-		if ( StringUtils.isNotBlank( strIdResource ) && StringUtils.isNumeric( strIdResource ) )
-		{
-			int nIdDiggSubmit = Integer.parseInt( strIdResource );
-			return DiggSubmitService.getService().findByPrimaryKey( nIdDiggSubmit,false,PluginService.getPlugin(DigglikePlugin.PLUGIN_NAME) );
-		}
-		return null;
-	}
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getResourceType( )
+    public boolean isInvoked( String strResourceType )
+    {
+        return DiggSubmit.RESOURCE_TYPE.equals( strResourceType );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public IExtendableResource getResource( String strIdResource, String strResourceType )
+    {
+        if ( StringUtils.isNotBlank( strIdResource ) && StringUtils.isNumeric( strIdResource ) )
+        {
+            int nIdDiggSubmit = Integer.parseInt( strIdResource );
+
+            return DiggSubmitService.getService(  )
+                                    .findByPrimaryKey( nIdDiggSubmit, false,
+                PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) );
+        }
+
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getResourceType(  )
     {
         return DiggSubmit.RESOURCE_TYPE;
     }
@@ -112,18 +115,22 @@ public class DiggSubmitExtendableResourceService implements IExtendableResourceS
         if ( StringUtils.isNotBlank( strIdResource ) && StringUtils.isNumeric( strIdResource ) )
         {
             int nIdDiggSubmit = Integer.parseInt( strIdResource );
-            DiggSubmit diggSubmit = DiggSubmitService.getService( ).findByPrimaryKey( nIdDiggSubmit, false,
+            DiggSubmit diggSubmit = DiggSubmitService.getService(  )
+                                                     .findByPrimaryKey( nIdDiggSubmit, false,
                     PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) );
+
             if ( diggSubmit != null )
             {
-                UrlItem urlItem = new UrlItem( AppPathService.getPortalUrl( ) );
+                UrlItem urlItem = new UrlItem( AppPathService.getPortalUrl(  ) );
                 urlItem.addParameter( MARK_PAGE, CONSTANT_DIGG );
-                urlItem.addParameter( MARK_ID_DIGG, diggSubmit.getDigg( ).getIdDigg( ) );
+                urlItem.addParameter( MARK_ID_DIGG, diggSubmit.getDigg(  ).getIdDigg(  ) );
                 urlItem.addParameter( MARK_ID_DIGG_SUBMIT, strIdResource );
                 urlItem.addParameter( MARK_ACTION, DiggApp.ACTION_VIEW_DIGG_SUBMIT );
-                return urlItem.getUrl( );
+
+                return urlItem.getUrl(  );
             }
         }
+
         return null;
     }
 }

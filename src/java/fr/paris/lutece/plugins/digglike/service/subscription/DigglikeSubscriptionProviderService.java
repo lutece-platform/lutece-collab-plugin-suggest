@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2012, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.digglike.service.subscription;
 
 import fr.paris.lutece.plugins.digglike.business.Category;
@@ -16,10 +49,10 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.List;
 import java.util.Locale;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -31,25 +64,21 @@ public class DigglikeSubscriptionProviderService implements ISubscriptionProvide
      * Name of the bean of the DigglikeSubscriptionProviderService
      */
     public static final String BEAN_NAME = "digglike.digglikeSubscriptionProviderService";
-
     public static final String SUBSCRIPTION_DIGG = "digg";
     public static final String SUBSCRIPTION_DIGG_CATEGORY = "digg_category";
     public static final String SUBSCRIPTION_DIGG_SUBMIT = "digg_submit";
-
     private static final String SUBSCRIPTION_PROVIDER_NAME = "digglike.digglikeSubscriptionProviderService";
-
     private static final String MESSAGE_SUBSCRIBED_DIGG = "digglike.message.subscriptions.subscribedDigg";
     private static final String MESSAGE_SUBSCRIBED_DIGG_SUBMIT = "digglike.message.subscriptions.subscribedDiggSubmit";
     private static final String MESSAGE_SUBSCRIBED_DIGG_CATEGORY = "digglike.message.subscriptions.subscribedCategory";
-
     private static DigglikeSubscriptionProviderService _instance;
 
     /**
      * Returns the instance of the singleton
-     * 
+     *
      * @return The instance of the singleton
      */
-    public static DigglikeSubscriptionProviderService getService( )
+    public static DigglikeSubscriptionProviderService getService(  )
     {
         if ( _instance == null )
         {
@@ -66,7 +95,7 @@ public class DigglikeSubscriptionProviderService implements ISubscriptionProvide
      * {@inheritDoc}
      */
     @Override
-    public String getProviderName( )
+    public String getProviderName(  )
     {
         return SUBSCRIPTION_PROVIDER_NAME;
     }
@@ -76,28 +105,34 @@ public class DigglikeSubscriptionProviderService implements ISubscriptionProvide
      */
     @Override
     public String getSubscriptionHtmlDescription( LuteceUser user, String strSubscriptionKey,
-            String strIdSubscribedResource, Locale locale )
+        String strIdSubscribedResource, Locale locale )
     {
-        int nId = strIdSubscribedResource != null && StringUtils.isNumeric( strIdSubscribedResource ) ? Integer
-                .parseInt( strIdSubscribedResource ) : 0;
+        int nId = ( ( strIdSubscribedResource != null ) && StringUtils.isNumeric( strIdSubscribedResource ) )
+            ? Integer.parseInt( strIdSubscribedResource ) : 0;
+
         if ( nId > 0 )
         {
             if ( StringUtils.equals( SUBSCRIPTION_DIGG, strSubscriptionKey ) )
             {
                 Digg digg = DiggHome.findByPrimaryKey( nId, PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) );
+
                 if ( digg != null )
                 {
-                    Object[] params = { digg.getTitle( ) };
+                    Object[] params = { digg.getTitle(  ) };
+
                     return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_DIGG, params, locale );
                 }
             }
             else if ( StringUtils.equals( SUBSCRIPTION_DIGG_SUBMIT, strSubscriptionKey ) )
             {
-                DiggSubmit diggSubmit = DiggSubmitService.getService( ).findByPrimaryKey( nId, false,
+                DiggSubmit diggSubmit = DiggSubmitService.getService(  )
+                                                         .findByPrimaryKey( nId, false,
                         PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) );
+
                 if ( diggSubmit != null )
                 {
-                    Object[] params = { diggSubmit.getDiggSubmitTitle( ) };
+                    Object[] params = { diggSubmit.getDiggSubmitTitle(  ) };
+
                     return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_DIGG_SUBMIT, params, locale );
                 }
             }
@@ -105,13 +140,16 @@ public class DigglikeSubscriptionProviderService implements ISubscriptionProvide
             {
                 Category category = CategoryHome.findByPrimaryKey( nId,
                         PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME ) );
+
                 if ( category != null )
                 {
-                    Object[] params = { category.getTitle( ) };
+                    Object[] params = { category.getTitle(  ) };
+
                     return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_DIGG_CATEGORY, params, locale );
                 }
             }
         }
+
         return StringUtils.EMPTY;
     }
 
@@ -182,15 +220,16 @@ public class DigglikeSubscriptionProviderService implements ISubscriptionProvide
      */
     private void removeDiggSubmitSubscription( LuteceUser user, int nId, String strSubscriptionKey )
     {
-        SubscriptionFilter filter = new SubscriptionFilter( user.getName( ), getProviderName( ), strSubscriptionKey,
+        SubscriptionFilter filter = new SubscriptionFilter( user.getName(  ), getProviderName(  ), strSubscriptionKey,
                 Integer.toString( nId ) );
 
-        List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( filter );
-        if ( listSubscription != null && listSubscription.size( ) > 0 )
+        List<Subscription> listSubscription = SubscriptionService.getInstance(  ).findByFilter( filter );
+
+        if ( ( listSubscription != null ) && ( listSubscription.size(  ) > 0 ) )
         {
             for ( Subscription subscription : listSubscription )
             {
-                SubscriptionService.getInstance( ).removeSubscription( subscription, false );
+                SubscriptionService.getInstance(  ).removeSubscription( subscription, false );
             }
         }
     }
@@ -236,12 +275,12 @@ public class DigglikeSubscriptionProviderService implements ISubscriptionProvide
 
     private void createSubscription( LuteceUser user, int nId, String strSubscriptionKey )
     {
-        Subscription subscription = new Subscription( );
+        Subscription subscription = new Subscription(  );
         subscription.setIdSubscribedResource( Integer.toString( nId ) );
-        subscription.setUserId( user.getName( ) );
+        subscription.setUserId( user.getName(  ) );
         subscription.setSubscriptionKey( strSubscriptionKey );
-        subscription.setSubscriptionProvider( getProviderName( ) );
-        SubscriptionService.getInstance( ).createSubscription( subscription );
+        subscription.setSubscriptionProvider( getProviderName(  ) );
+        SubscriptionService.getInstance(  ).createSubscription( subscription );
     }
 
     /**
@@ -291,14 +330,15 @@ public class DigglikeSubscriptionProviderService implements ISubscriptionProvide
      */
     private boolean hasUserSubscribedToResource( LuteceUser user, int nId, String strSubscriptionKey )
     {
-
-        SubscriptionFilter filter = new SubscriptionFilter( user.getName( ), getProviderName( ), strSubscriptionKey,
+        SubscriptionFilter filter = new SubscriptionFilter( user.getName(  ), getProviderName(  ), strSubscriptionKey,
                 Integer.toString( nId ) );
-        List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( filter );
-        if ( listSubscription != null && listSubscription.size( ) > 0 )
+        List<Subscription> listSubscription = SubscriptionService.getInstance(  ).findByFilter( filter );
+
+        if ( ( listSubscription != null ) && ( listSubscription.size(  ) > 0 ) )
         {
             return true;
         }
+
         return false;
     }
 }
