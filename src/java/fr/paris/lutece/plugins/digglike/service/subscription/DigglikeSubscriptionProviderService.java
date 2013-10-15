@@ -182,8 +182,8 @@ public class DigglikeSubscriptionProviderService implements ISubscriptionProvide
      */
     private void removeDiggSubmitSubscription( LuteceUser user, int nId, String strSubscriptionKey )
     {
-        SubscriptionFilter filter = new SubscriptionFilter( SubscriptionService.getInstance( )
-                .getIdSubscriberFromLuteceUser( user ), getProviderName( ), strSubscriptionKey, Integer.toString( nId ) );
+        SubscriptionFilter filter = new SubscriptionFilter( user.getName( ), getProviderName( ), strSubscriptionKey,
+                Integer.toString( nId ) );
 
         List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( filter );
         if ( listSubscription != null && listSubscription.size( ) > 0 )
@@ -238,7 +238,7 @@ public class DigglikeSubscriptionProviderService implements ISubscriptionProvide
     {
         Subscription subscription = new Subscription( );
         subscription.setIdSubscribedResource( Integer.toString( nId ) );
-        subscription.setIdSubscriber( SubscriptionService.getInstance( ).getIdSubscriberFromLuteceUser( user ) );
+        subscription.setUserId( user.getName( ) );
         subscription.setSubscriptionKey( strSubscriptionKey );
         subscription.setSubscriptionProvider( getProviderName( ) );
         SubscriptionService.getInstance( ).createSubscription( subscription );
@@ -292,8 +292,8 @@ public class DigglikeSubscriptionProviderService implements ISubscriptionProvide
     private boolean hasUserSubscribedToResource( LuteceUser user, int nId, String strSubscriptionKey )
     {
 
-        SubscriptionFilter filter = new SubscriptionFilter( SubscriptionService.getInstance( )
-                .getIdSubscriberFromLuteceUser( user ), getProviderName( ), strSubscriptionKey, Integer.toString( nId ) );
+        SubscriptionFilter filter = new SubscriptionFilter( user.getName( ), getProviderName( ), strSubscriptionKey,
+                Integer.toString( nId ) );
         List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( filter );
         if ( listSubscription != null && listSubscription.size( ) > 0 )
         {

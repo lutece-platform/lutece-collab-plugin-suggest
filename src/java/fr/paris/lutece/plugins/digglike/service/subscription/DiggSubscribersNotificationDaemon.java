@@ -16,6 +16,7 @@ import fr.paris.lutece.portal.service.mail.MailService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
+import fr.paris.lutece.portal.service.security.LuteceUserService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.html.HtmlTemplate;
@@ -50,8 +51,8 @@ public class DiggSubscribersNotificationDaemon extends Daemon
     private static final String TEMPLATE_NEW_DIGG_SUBMIT = "skin/plugins/digglike/notifications/new_digg_submit.html";
     private static final String TEMPLATE_NEW_DIGG_SUBMIT_TITLE = "skin/plugins/digglike/notifications/new_digg_submit_title.html";
 
-    private Map<Integer, List<CommentSubmit>> _mapCommentNotif;
-    private Map<Integer, List<DiggSubmit>> _mapDiggSubmitNotif;
+    private Map<String, List<CommentSubmit>> _mapCommentNotif;
+    private Map<String, List<DiggSubmit>> _mapDiggSubmitNotif;
 
     /**
      * {@inheritDoc}
@@ -108,7 +109,7 @@ public class DiggSubscribersNotificationDaemon extends Daemon
                                 List<CommentSubmit> listComments = mapCommentsByDiggSubmitId.get( nIdDiggSubmit );
                                 if ( listComments != null && listComments.size( ) > 0 )
                                 {
-                                    registerCommentNotificationToSend( listComments, subscription.getIdSubscriber( ) );
+                                    registerCommentNotificationToSend( listComments, subscription.getUserId( ) );
                                 }
                             }
                         }
@@ -145,8 +146,7 @@ public class DiggSubscribersNotificationDaemon extends Daemon
                                 {
                                     if ( nIdCategory == diggSubmit.getCategory( ).getIdCategory( ) )
                                     {
-                                        registerDiggSubmitNotificationToSend( diggSubmit,
-                                                subscription.getIdSubscriber( ) );
+                                        registerDiggSubmitNotificationToSend( diggSubmit, subscription.getUserId( ) );
                                     }
                                 }
                             }
@@ -170,8 +170,7 @@ public class DiggSubscribersNotificationDaemon extends Daemon
                                 {
                                     if ( nIdDigg == diggSubmit.getDigg( ).getIdDigg( ) )
                                     {
-                                        registerDiggSubmitNotificationToSend( diggSubmit,
-                                                subscription.getIdSubscriber( ) );
+                                        registerDiggSubmitNotificationToSend( diggSubmit, subscription.getUserId( ) );
                                     }
                                 }
                             }
@@ -206,8 +205,8 @@ public class DiggSubscribersNotificationDaemon extends Daemon
      */
     private void resetNotifSend( )
     {
-        this._mapCommentNotif = new HashMap<Integer, List<CommentSubmit>>( );
-        this._mapDiggSubmitNotif = new HashMap<Integer, List<DiggSubmit>>( );
+        this._mapCommentNotif = new HashMap<String, List<CommentSubmit>>( );
+        this._mapDiggSubmitNotif = new HashMap<String, List<DiggSubmit>>( );
     }
 
     /**
@@ -216,13 +215,13 @@ public class DiggSubscribersNotificationDaemon extends Daemon
      * @param listComments The list of comments to send
      * @param nSubscriberId The user to send the notification to
      */
-    private void registerCommentNotificationToSend( List<CommentSubmit> listComments, int nSubscriberId )
+    private void registerCommentNotificationToSend( List<CommentSubmit> listComments, String strUserId )
     {
-        List<CommentSubmit> listRegisteredCopmments = _mapCommentNotif.get( nSubscriberId );
+        List<CommentSubmit> listRegisteredCopmments = _mapCommentNotif.get( strUserId );
         if ( listRegisteredCopmments == null )
         {
             listRegisteredCopmments = new ArrayList<CommentSubmit>( listComments );
-            _mapCommentNotif.put( nSubscriberId, listRegisteredCopmments );
+            _mapCommentNotif.put( strUserId, listRegisteredCopmments );
         }
         else
         {
@@ -252,7 +251,7 @@ public class DiggSubscribersNotificationDaemon extends Daemon
      */
     private void sendRegisteredCommentNotifications( )
     {
-        for ( Entry<Integer, List<CommentSubmit>> entry : _mapCommentNotif.entrySet( ) )
+        for ( Entry<String, List<CommentSubmit>> entry : _mapCommentNotif.entrySet( ) )
         {
             sendCommentNotification( entry.getValue( ), entry.getKey( ) );
         }
@@ -261,12 +260,12 @@ public class DiggSubscribersNotificationDaemon extends Daemon
     /**
      * Send a single comment notification
      * @param listComments The list of comments to include into the notification
-     * @param nSubscriberId The subscriber id of the user to send the
-     *            notification to
+     * @param strUserName The name of the lutece user to send the notification
+     *            to
      */
-    private void sendCommentNotification( List<CommentSubmit> listComments, int nSubscriberId )
+    private void sendCommentNotification( List<CommentSubmit> listComments, String strUserName )
     {
-        LuteceUser user = SubscriptionService.getInstance( ).getLuteceUserFromSubscriberId( nSubscriberId );
+        LuteceUser user = LuteceUserService.getLuteceUserFromName( strUserName );
         String strEmail = getEmailFromLuteceUser( user );
         if ( StringUtils.isNotEmpty( strEmail ) )
         {
@@ -286,16 +285,17 @@ public class DiggSubscribersNotificationDaemon extends Daemon
     /**
      * Register a digg submit to send to a user
      * @param diggSubmit The digg submit to register
-     * @param nIdSubscriber The id of the subscriber to send the notification to
+     * @param strUserName The name of the lutece user to send the notification
+     *            to
      */
-    private void registerDiggSubmitNotificationToSend( DiggSubmit diggSubmit, int nIdSubscriber )
+    private void registerDiggSubmitNotificationToSend( DiggSubmit diggSubmit, String strUserName )
     {
-        List<DiggSubmit> listRegisteredDiggSubmit = _mapDiggSubmitNotif.get( nIdSubscriber );
+        List<DiggSubmit> listRegisteredDiggSubmit = _mapDiggSubmitNotif.get( strUserName );
         if ( listRegisteredDiggSubmit == null )
         {
             listRegisteredDiggSubmit = new ArrayList<DiggSubmit>( );
             listRegisteredDiggSubmit.add( diggSubmit );
-            _mapDiggSubmitNotif.put( nIdSubscriber, listRegisteredDiggSubmit );
+            _mapDiggSubmitNotif.put( strUserName, listRegisteredDiggSubmit );
         }
         else
         {
@@ -321,7 +321,7 @@ public class DiggSubscribersNotificationDaemon extends Daemon
      */
     private void sendRegisteredDiggSubmitNotifications( )
     {
-        for ( Entry<Integer, List<DiggSubmit>> entry : _mapDiggSubmitNotif.entrySet( ) )
+        for ( Entry<String, List<DiggSubmit>> entry : _mapDiggSubmitNotif.entrySet( ) )
         {
             sendDiggSubmitNotification( entry.getValue( ), entry.getKey( ) );
         }
@@ -331,12 +331,12 @@ public class DiggSubscribersNotificationDaemon extends Daemon
      * Send a single digg submit notification
      * @param listDiggSubmit The list of digg submit to include into the
      *            notification
-     * @param nSubscriberId The subscriber id of the user to send the
-     *            notification to
+     * @param nSubscriberId The name of the lutece user to send the notification
+     *            to
      */
-    private void sendDiggSubmitNotification( List<DiggSubmit> listDiggSubmit, int nSubscriberId )
+    private void sendDiggSubmitNotification( List<DiggSubmit> listDiggSubmit, String strUserName )
     {
-        LuteceUser user = SubscriptionService.getInstance( ).getLuteceUserFromSubscriberId( nSubscriberId );
+        LuteceUser user = LuteceUserService.getLuteceUserFromName( strUserName );
         String strEmail = getEmailFromLuteceUser( user );
         if ( StringUtils.isNotEmpty( strEmail ) )
         {
@@ -353,8 +353,18 @@ public class DiggSubscribersNotificationDaemon extends Daemon
         }
     }
 
+    /**
+     * Get the email from the lutece user
+     * @param user The user to get the email of
+     * @return The email of the user, or null if he has none
+     */
     private String getEmailFromLuteceUser( LuteceUser user )
     {
-        return user.getUserInfo( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL );
+        String strEmail = user.getUserInfo( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL );
+        if ( strEmail != null )
+        {
+            strEmail = user.getUserInfo( LuteceUser.HOME_INFO_ONLINE_EMAIL );
+        }
+        return strEmail;
     }
 }
