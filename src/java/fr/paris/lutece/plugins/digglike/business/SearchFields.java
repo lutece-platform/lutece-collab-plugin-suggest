@@ -91,9 +91,9 @@ public class SearchFields implements Serializable
         return _strPageIndex;
     }
 
-    public void setPageIndex( String _strPageIndex )
+    public void setPageIndex( String strPageIndex )
     {
-        this._strPageIndex = _strPageIndex;
+        this._strPageIndex = strPageIndex;
     }
 
     public int getIdFilterDiggSubmitType(  )
@@ -101,8 +101,8 @@ public class SearchFields implements Serializable
         return _nIdFilterDiggSubmitType;
     }
 
-    public void setIdFilterDiggSubmitType( int _nIdFilterDiggSubmitType )
+    public void setIdFilterDiggSubmitType( int nIdFilterDiggSubmitType )
     {
-        this._nIdFilterDiggSubmitType = _nIdFilterDiggSubmitType;
+        this._nIdFilterDiggSubmitType = nIdFilterDiggSubmitType;
     }
 }

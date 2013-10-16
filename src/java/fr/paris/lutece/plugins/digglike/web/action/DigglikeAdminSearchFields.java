@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.digglike.web.action;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 
 import java.io.Serializable;
-
 import java.util.List;
 
 
@@ -116,9 +115,9 @@ public final class DigglikeAdminSearchFields implements Serializable
         return _nIdDigg;
     }
 
-    public void setIdDigg( int _nIdDigg )
+    public void setIdDigg( int nIdDigg )
     {
-        this._nIdDigg = _nIdDigg;
+        this._nIdDigg = nIdDigg;
     }
 
     public int getIdCategory(  )
@@ -126,9 +125,9 @@ public final class DigglikeAdminSearchFields implements Serializable
         return _nIdCategory;
     }
 
-    public void setIdCategory( int _nIdCategory )
+    public void setIdCategory( int nIdCategory )
     {
-        this._nIdCategory = _nIdCategory;
+        this._nIdCategory = nIdCategory;
     }
 
     public int getIdType(  )
@@ -136,9 +135,9 @@ public final class DigglikeAdminSearchFields implements Serializable
         return _nIdType;
     }
 
-    public void setIdType( int _nIdType )
+    public void setIdType( int nIdType )
     {
-        this._nIdType = _nIdType;
+        this._nIdType = nIdType;
     }
 
     public int getIdDiggSubmitContainsCommentDisable(  )
@@ -146,8 +145,8 @@ public final class DigglikeAdminSearchFields implements Serializable
         return _nIdDiggSubmitContainsCommentDisable;
     }
 
-    public void setIdDiggSubmitContainsCommentDisable( int _nIdDiggSubmitContainsCommentDisable )
+    public void setIdDiggSubmitContainsCommentDisable( int nIdDiggSubmitContainsCommentDisable )
     {
-        this._nIdDiggSubmitContainsCommentDisable = _nIdDiggSubmitContainsCommentDisable;
+        this._nIdDiggSubmitContainsCommentDisable = nIdDiggSubmitContainsCommentDisable;
     }
 }

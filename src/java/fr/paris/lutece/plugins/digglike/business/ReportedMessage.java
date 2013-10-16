@@ -95,11 +95,11 @@ public class ReportedMessage
 
     /**
      * set the value of the reported
-     * @param value the value of the reported
+     * @param strValue the value of the reported
      */
-    public void setValue( String value )
+    public void setValue( String strValue )
     {
-        _strValue = value;
+        _strValue = strValue;
     }
 
     /**
@@ -112,11 +112,11 @@ public class ReportedMessage
     }
 
     /**
-     *
-     * @param _nIdReported  the reported id
+     * 
+     * @param nIdReported the reported id
      */
-    public void setIdReported( int _nIdReported )
+    public void setIdReported( int nIdReported )
     {
-        this._nIdReported = _nIdReported;
+        this._nIdReported = nIdReported;
     }
 }

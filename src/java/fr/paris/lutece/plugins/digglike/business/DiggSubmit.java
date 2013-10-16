@@ -39,7 +39,6 @@ import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.sql.Timestamp;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -48,9 +47,9 @@ import javax.servlet.http.HttpServletRequest;
 
 
 /**
- *
+ * 
  * class DiggSubmit
- *
+ * 
  */
 public class DiggSubmit implements IExtendableResource
 {
@@ -94,10 +93,10 @@ public class DiggSubmit implements IExtendableResource
     private Integer _nIdImageResource;
 
     /**
-    * true if the digg submit have been reported by people
-    * @return true if the digg submit have been reported by people
-    */
-    public boolean isReported(  )
+     * true if the digg submit have been reported by people
+     * @return true if the digg submit have been reported by people
+     */
+    public boolean isReported( )
     {
         return _bReported;
     }
@@ -112,10 +111,10 @@ public class DiggSubmit implements IExtendableResource
     }
 
     /**
-    *
-    * @return the title of the digg submit
-    */
-    public String getDiggSubmitTitle(  )
+     * 
+     * @return the title of the digg submit
+     */
+    public String getDiggSubmitTitle( )
     {
         return _strDiggSubmitTitle;
     }
@@ -130,17 +129,17 @@ public class DiggSubmit implements IExtendableResource
     }
 
     /**
-    *
-    * @return the digg associate to the submit
-    */
-    public Digg getDigg(  )
+     * 
+     * @return the digg associate to the submit
+     */
+    public Digg getDigg( )
     {
         return _digg;
     }
 
     /**
-     *
-     * set  the digg associate to the submit
+     * 
+     * set the digg associate to the submit
      * @param digg the digg associate to the submit
      */
     public void setDigg( Digg digg )
@@ -152,7 +151,7 @@ public class DiggSubmit implements IExtendableResource
      * return the id of the digg submit
      * @return the id of the digg submit
      */
-    public int getIdDiggSubmit(  )
+    public int getIdDiggSubmit( )
     {
         return _nIdDiggSubmit;
     }
@@ -167,10 +166,10 @@ public class DiggSubmit implements IExtendableResource
     }
 
     /**
-     *  return the digg submit date
+     * return the digg submit date
      * @return the digg submit date
      */
-    public Timestamp getDateResponse(  )
+    public Timestamp getDateResponse( )
     {
         return _tDateResponse;
     }
@@ -185,10 +184,10 @@ public class DiggSubmit implements IExtendableResource
     }
 
     /**
-     *
+     * 
      * @return the list of response associate to the digg submit
      */
-    public List<Response> getResponses(  )
+    public List<Response> getResponses( )
     {
         return _listResponse;
     }
@@ -203,16 +202,16 @@ public class DiggSubmit implements IExtendableResource
     }
 
     /**
-     *
+     * 
      * @return the digg submit state (published,enabled,disabled)
      */
-    public DiggSubmitState getDiggSubmitState(  )
+    public DiggSubmitState getDiggSubmitState( )
     {
         return _diggSubmitState;
     }
 
     /**
-     * set  the digg submit state (published,enabled,disabled)
+     * set the digg submit state (published,enabled,disabled)
      * @param submitState the digg submit state (published,enabled,disabled)
      */
     public void setDiggSubmitState( DiggSubmitState submitState )
@@ -221,10 +220,10 @@ public class DiggSubmit implements IExtendableResource
     }
 
     /**
-     *
+     * 
      * @return the category associated to the digg submit
      */
-    public Category getCategory(  )
+    public Category getCategory( )
     {
         return _category;
     }
@@ -239,10 +238,10 @@ public class DiggSubmit implements IExtendableResource
     }
 
     /**
-     *
+     * 
      * @return the number of vote
      */
-    public int getNumberVote(  )
+    public int getNumberVote( )
     {
         return _nNumberVote;
     }
@@ -260,14 +259,14 @@ public class DiggSubmit implements IExtendableResource
      * return the score of the digg submit
      * @return the score of the digg submit
      */
-    public int getNumberScore(  )
+    public int getNumberScore( )
     {
         return _nNumberScore;
     }
 
     /**
      * set the score of the digg submit
-     * @param numberScore  the score of the digg submit
+     * @param numberScore the score of the digg submit
      */
     public void setNumberScore( int numberScore )
     {
@@ -275,10 +274,10 @@ public class DiggSubmit implements IExtendableResource
     }
 
     /**
-     *
+     * 
      * @return the digg submit value
      */
-    public String getDiggSubmitValue(  )
+    public String getDiggSubmitValue( )
     {
         return _strDiggSubmitValue;
     }
@@ -293,17 +292,18 @@ public class DiggSubmit implements IExtendableResource
     }
 
     /**
-     *
+     * 
      * @return the digg submit value show in the list of digg submit
      */
-    public String getDiggSubmitValueShowInTheList(  )
+    public String getDiggSubmitValueShowInTheList( )
     {
         return _strDiggSubmitValueShowInTheList;
     }
 
     /**
      * set the digg submit value show in the list of digg submit
-     * @param diggSubmitValue the digg submit value show in the list of digg submit
+     * @param diggSubmitValue the digg submit value show in the list of digg
+     *            submit
      */
     public void setDiggSubmitValueShowInTheList( String diggSubmitValue )
     {
@@ -311,17 +311,18 @@ public class DiggSubmit implements IExtendableResource
     }
 
     /**
-     *
-     * @return the number of  enable comment associated to the digg submit
+     * 
+     * @return the number of enable comment associated to the digg submit
      */
-    public int getNumberCommentEnable(  )
+    public int getNumberCommentEnable( )
     {
         return _nNumberEnableComment;
     }
 
     /**
-     * set the number of enable comment  associated to the digg submit
-     * @param numberComment the number of  enable comment  associated to the digg submit
+     * set the number of enable comment associated to the digg submit
+     * @param numberComment the number of enable comment associated to the digg
+     *            submit
      */
     public void setNumberCommentEnable( int numberComment )
     {
@@ -329,17 +330,17 @@ public class DiggSubmit implements IExtendableResource
     }
 
     /**
-     *
-     * @return the number of comment  associated to the digg submit
+     * 
+     * @return the number of comment associated to the digg submit
      */
-    public int getNumberComment(  )
+    public int getNumberComment( )
     {
         return _nNumberComment;
     }
 
     /**
-     * set the number of  comment  associated to the digg submit
-     * @param numberComment the number of   comment  associated to the digg submit
+     * set the number of comment associated to the digg submit
+     * @param numberComment the number of comment associated to the digg submit
      */
     public void setNumberComment( int numberComment )
     {
@@ -347,85 +348,85 @@ public class DiggSubmit implements IExtendableResource
     }
 
     /**
-    *
-    * @return the number of view  associated to the digg submit
-    */
-    public int getNumberView(  )
+     * 
+     * @return the number of view associated to the digg submit
+     */
+    public int getNumberView( )
     {
         return _nNumberView;
     }
 
     /**
-     * set the number of  view  associated to the digg submit
-     * @param numberComment the number of   view  associated to the digg submit
+     * set the number of view associated to the digg submit
+     * @param nNumberView the number of view associated to the digg submit
      */
-    public void setNumberView( int numberView )
+    public void setNumberView( int nNumberView )
     {
-        _nNumberView = numberView;
+        _nNumberView = nNumberView;
     }
 
     /**
-    *
-    * @return the lutece user key associate to the digg submit
-    */
-    public String getLuteceUserKey(  )
+     * 
+     * @return the lutece user key associate to the digg submit
+     */
+    public String getLuteceUserKey( )
     {
         return _strLuteceUserKey;
     }
 
     /**
-     *
-     * set  the lutece user key associate to the digg submit
-     * @param luteceUserKey the lutece user key associate to the digg submit
+     * 
+     * set the lutece user key associate to the digg submit
+     * @param strLuteceUserKey the lutece user key associate to the digg submit
      */
-    public void setLuteceUserKey( String luteceUserKey )
+    public void setLuteceUserKey( String strLuteceUserKey )
     {
-        _strLuteceUserKey = luteceUserKey;
+        _strLuteceUserKey = strLuteceUserKey;
     }
 
     /**
      * Returns the xml of this digg submit
-     *
+     * 
      * @param request The HTTP Servlet request
      * @param locale the Locale
      * @return the xml of this digg submit
      */
     public String getXml( HttpServletRequest request, Locale locale )
     {
-        StringBuffer strXml = new StringBuffer(  );
+        StringBuffer strXml = new StringBuffer( );
         XmlUtil.beginElement( strXml, TAG_DIGG_SUBMIT );
         XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_DATE_RESPONSE,
-            DateUtil.getDateString( this.getDateResponse(  ), locale ) );
-        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_SCORE, Integer.toString( this.getNumberScore(  ) ) );
-        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_NUMBER_VOTE, Integer.toString( this.getNumberVote(  ) ) );
-        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_NUMBER_COMMENT, Integer.toString( this.getNumberComment(  ) ) );
-        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_CATEGORY,
-            ( this.getCategory(  ) != null ) ? this.getCategory(  ).getTitle(  ) : DiggUtils.EMPTY_STRING );
-        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_TYPE,
-            ( this.getDiggSubmitType(  ) != null ) ? this.getDiggSubmitType(  ).getName(  ) : DiggUtils.EMPTY_STRING );
-        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_TITLE, this.getDiggSubmitTitle(  ) );
+                DateUtil.getDateString( this.getDateResponse( ), locale ) );
+        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_SCORE, Integer.toString( this.getNumberScore( ) ) );
+        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_NUMBER_VOTE, Integer.toString( this.getNumberVote( ) ) );
+        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_NUMBER_COMMENT, Integer.toString( this.getNumberComment( ) ) );
+        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_CATEGORY, ( this.getCategory( ) != null ) ? this.getCategory( )
+                .getTitle( ) : DiggUtils.EMPTY_STRING );
+        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_TYPE, ( this.getDiggSubmitType( ) != null ) ? this
+                .getDiggSubmitType( ).getName( ) : DiggUtils.EMPTY_STRING );
+        XmlUtil.addElementHtml( strXml, TAG_DIGG_SUBMIT_TITLE, this.getDiggSubmitTitle( ) );
 
         XmlUtil.beginElement( strXml, TAG_DIGGS_SUBMIT_RESPONSES );
 
-        if ( ( getResponses(  ) != null ) && ( getResponses(  ).size(  ) != 0 ) )
+        if ( ( getResponses( ) != null ) && ( getResponses( ).size( ) != 0 ) )
         {
-            HashMap<Integer, Response> hashResponsesEntry = new HashMap<Integer, Response>(  );
+            HashMap<Integer, Response> hashResponsesEntry = new HashMap<Integer, Response>( );
 
-            for ( Response response : getResponses(  ) )
+            for ( Response response : getResponses( ) )
             {
-                hashResponsesEntry.put( response.getEntry(  ).getIdEntry(  ), response );
+                hashResponsesEntry.put( response.getEntry( ).getIdEntry( ), response );
             }
 
-            for ( IEntry entry : this.getDigg(  ).getEntries(  ) )
+            for ( IEntry entry : this.getDigg( ).getEntries( ) )
             {
-                if ( hashResponsesEntry.containsKey( entry.getIdEntry(  ) ) )
+                if ( hashResponsesEntry.containsKey( entry.getIdEntry( ) ) )
                 {
-                    strXml.append( hashResponsesEntry.get( entry.getIdEntry(  ) ).getXml( request, locale ) );
+                    strXml.append( hashResponsesEntry.get( entry.getIdEntry( ) ).getXml( request, locale ) );
                 }
                 else
                 {
                     //add xml empty response for this digg submit
-                    Response responseEmpty = new Response(  );
+                    Response responseEmpty = new Response( );
                     responseEmpty.setEntry( entry );
                     responseEmpty.setValueResponse( DiggUtils.EMPTY_STRING );
                     strXml.append( responseEmpty.getXml( request, locale ) );
@@ -437,9 +438,9 @@ public class DiggSubmit implements IExtendableResource
 
         XmlUtil.beginElement( strXml, TAG_DIGGS_SUBMIT_COMMENTS );
 
-        if ( ( getComments(  ) != null ) && ( getComments(  ).size(  ) != 0 ) )
+        if ( ( getComments( ) != null ) && ( getComments( ).size( ) != 0 ) )
         {
-            for ( CommentSubmit commentSubmit : getComments(  ) )
+            for ( CommentSubmit commentSubmit : getComments( ) )
             {
                 strXml.append( commentSubmit.getXml( request, locale ) );
             }
@@ -449,7 +450,7 @@ public class DiggSubmit implements IExtendableResource
 
         XmlUtil.endElement( strXml, TAG_DIGG_SUBMIT );
 
-        return strXml.toString(  );
+        return strXml.toString( );
     }
 
     /**
@@ -463,7 +464,7 @@ public class DiggSubmit implements IExtendableResource
     /**
      * @return the _listComments
      */
-    public List<CommentSubmit> getComments(  )
+    public List<CommentSubmit> getComments( )
     {
         return _listComments;
     }
@@ -479,7 +480,7 @@ public class DiggSubmit implements IExtendableResource
     /**
      * @return the _nDiggSubmitOrder
      */
-    public int getDiggSubmitOrder(  )
+    public int getDiggSubmitOrder( )
     {
         return _nDiggSubmitOrder;
     }
@@ -495,16 +496,16 @@ public class DiggSubmit implements IExtendableResource
     /**
      * @return the diggSubmitType
      */
-    public DiggSubmitType getDiggSubmitType(  )
+    public DiggSubmitType getDiggSubmitType( )
     {
         return _diggSubmitType;
     }
 
     /**
-     *
+     * 
      * @return true if the vote is disable
      */
-    public boolean isDisableVote(  )
+    public boolean isDisableVote( )
     {
         return _bDisableVote;
     }
@@ -519,10 +520,10 @@ public class DiggSubmit implements IExtendableResource
     }
 
     /**
-     *
+     * 
      * @return true if the vote is disable
      */
-    public boolean isDisableComment(  )
+    public boolean isDisableComment( )
     {
         return _bDisableComment;
     }
@@ -537,46 +538,46 @@ public class DiggSubmit implements IExtendableResource
     }
 
     /**
-     *
+     * 
      * @return true if the diggsubmit is pinned
      */
-    public boolean isPinned(  )
+    public boolean isPinned( )
     {
         return _bPinned;
     }
 
     /**
-     *
-     * @param _bPinned true if the diggsubmit is pinned
+     * 
+     * @param bPinned true if the diggsubmit is pinned
      */
-    public void setPinned( boolean _bPinned )
+    public void setPinned( boolean bPinned )
     {
-        this._bPinned = _bPinned;
+        this._bPinned = bPinned;
     }
 
     /**
-     *
+     * 
      * @return the list of reported Messages
      */
-    public List<ReportedMessage> getReportedMessages(  )
+    public List<ReportedMessage> getReportedMessages( )
     {
         return _listReportedMessages;
     }
 
     /**
      * set the list of reported Messages
-     * @param _listReportedMessages the list of reported Messages
+     * @param listReportedMessages the list of reported Messages
      */
-    public void setReportedMessages( List<ReportedMessage> _listReportedMessages )
+    public void setReportedMessages( List<ReportedMessage> listReportedMessages )
     {
-        this._listReportedMessages = _listReportedMessages;
+        this._listReportedMessages = listReportedMessages;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getIdExtendableResource(  )
+    public String getIdExtendableResource( )
     {
         return Integer.toString( _nIdDiggSubmit );
     }
@@ -585,7 +586,7 @@ public class DiggSubmit implements IExtendableResource
      * {@inheritDoc}
      */
     @Override
-    public String getExtendableResourceType(  )
+    public String getExtendableResourceType( )
     {
         return RESOURCE_TYPE;
     }
@@ -594,7 +595,7 @@ public class DiggSubmit implements IExtendableResource
      * {@inheritDoc}
      */
     @Override
-    public String getExtendableResourceName(  )
+    public String getExtendableResourceName( )
     {
         return _strDiggSubmitTitle;
     }
@@ -603,7 +604,7 @@ public class DiggSubmit implements IExtendableResource
      * {@inheritDoc}
      */
     @Override
-    public String getExtendableResourceDescription(  )
+    public String getExtendableResourceDescription( )
     {
         return _strDiggSubmitTitle;
     }
@@ -612,31 +613,32 @@ public class DiggSubmit implements IExtendableResource
      * {@inheritDoc}
      */
     @Override
-    public String getExtendableResourceImageUrl(  )
+    public String getExtendableResourceImageUrl( )
     {
         if ( _nIdImageResource != null )
         {
             StringBuilder sbUrl = new StringBuilder( DiggUtils.SERVLET_IMAGE_PATH );
             sbUrl.append( _nIdImageResource );
 
-            return sbUrl.toString(  );
+            return sbUrl.toString( );
         }
 
         return null;
     }
 
     /**
-     * the image id ressource associate to the digg submit
-     * @return the image id ressource associate to the digg submit
+     * the image id resource associate to the digg submit
+     * @return the image id resource associate to the digg submit
      */
-    public Integer getIdImageResource(  )
+    public Integer getIdImageResource( )
     {
         return _nIdImageResource;
     }
 
     /**
-     * set the image id ressource associate to the digg submit
-     * @param _nIdImageResource  the image id ressource associate to the digg submit
+     * set the image id resource associate to the digg submit
+     * @param nIdImageRessource the image id resource associate to the digg
+     *            submit
      */
     public void setIdImageResource( Integer nIdImageRessource )
     {
