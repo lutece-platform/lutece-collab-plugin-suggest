@@ -301,7 +301,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String JSP_DO_REMOVE_ENTRY = "jsp/admin/plugins/digglike/DoRemoveEntry.jsp";
     private static final String JSP_MANAGE_DIGG = "jsp/admin/plugins/digglike/ManageDigg.jsp";
     private static final String JSP_DO_REMOVE_COMMENT_SUBMIT = "jsp/admin/plugins/digglike/DoRemoveCommentSubmit.jsp";
-    private static final String JSP_MANAGE_DIGG_SUBMIT_TYPE = "jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp";
+    //    private static final String JSP_MANAGE_DIGG_SUBMIT_TYPE = "jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp";
     private static final String JSP_MODIFY_DIGG = "jsp/admin/plugins/digglike/ModifyDigg.jsp";
     private static final String JSP_MODIFY_ENTRY = "jsp/admin/plugins/digglike/ModifyEntry.jsp";
     private static final String JSP_MANAGE_DIGG_SUBMIT = "jsp/admin/plugins/digglike/ManageDiggSubmit.jsp";
@@ -2882,17 +2882,17 @@ public class DiggJspBean extends PluginAdminPageJspBean
         return AppPathService.getBaseUrl( request ) + JSP_MANAGE_DIGG;
     }
 
-    /**
-     * return url of the jsp manage diggSubmitType
-     *
-     * @param request
-     *            The HTTP request
-     * @return url of the jsp manage digg
-     */
-    private String getJspManageDiggSubmitType( HttpServletRequest request )
-    {
-        return AppPathService.getBaseUrl( request ) + JSP_MANAGE_DIGG_SUBMIT_TYPE;
-    }
+    //    /**
+    //     * return url of the jsp manage diggSubmitType
+    //     *
+    //     * @param request
+    //     *            The HTTP request
+    //     * @return url of the jsp manage digg
+    //     */
+    //    private String getJspManageDiggSubmitType( HttpServletRequest request )
+    //    {
+    //        return AppPathService.getBaseUrl( request ) + JSP_MANAGE_DIGG_SUBMIT_TYPE;
+    //    }
 
     /**
      * return url of the jsp manage digg submit

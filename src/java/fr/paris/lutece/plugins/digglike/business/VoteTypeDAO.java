@@ -49,9 +49,9 @@ public class VoteTypeDAO implements IVoteTypeDAO
 {
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_vote_type,title,template_file_name FROM digglike_vote_type WHERE id_vote_type=?";
     private static final String SQL_QUERY_SELECT = "SELECT id_vote_type,title,template_file_name FROM digglike_vote_type";
-    private static final String SQL_QUERY_SELECT_VOTE_BUTTON_BY_ID_VOTE_TYPE = "SELECT id_vote_button,title,vote_button_value,icon_content,icon_mime_type " +
-        "FROM digglike_vote_type_vote_button vt,digglike_vote_button vb WHERE vt.id_vote_button=vb.id_vote_button " +
-        "AND vt.id_vote_type=? ORDER BY vote_button_order";
+    //    private static final String SQL_QUERY_SELECT_VOTE_BUTTON_BY_ID_VOTE_TYPE = "SELECT id_vote_button,title,vote_button_value,icon_content,icon_mime_type " +
+    //        "FROM digglike_vote_type_vote_button vt,digglike_vote_button vb WHERE vt.id_vote_button=vb.id_vote_button " +
+    //        "AND vt.id_vote_type=? ORDER BY vote_button_order";
     private static final String SQL_QUERY_DELETE_VOTE_BUTTON_ASSOCIATED_BY_ID_VOTE_TYPE = "DELETE FROM digglike_vote_type_vote_button  WHERE id_vote_type = ? ";
     private static final String SQL_QUERY_INSERT_ASSOCIATED_VOTE_BUTTON = "INSERT INTO " +
         "digglike_vote_type_vote_button(id_vote_type,id_vote_button,vote_button_order) VALUES(?,?,?) ";
@@ -114,37 +114,37 @@ public class VoteTypeDAO implements IVoteTypeDAO
         return listVoteType;
     }
 
-    /**
-     * Load the data of all vote button associated to the vote type returns them in a  list
-     * @param nIdVoteType the vote type id
-     * @param plugin the plugin
-     * @return  the list of vote button associated to the vote type  returns them in a  list
-     */
-    private List<VoteButton> selectListVoteButton( int nIdVoteType, Plugin plugin )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_VOTE_BUTTON_BY_ID_VOTE_TYPE, plugin );
-        daoUtil.setInt( 1, nIdVoteType );
-        daoUtil.executeQuery(  );
-
-        VoteButton voteButton = null;
-        List<VoteButton> listVoteButton = new ArrayList<VoteButton>(  );
-
-        while ( daoUtil.next(  ) )
-        {
-            voteButton = new VoteButton(  );
-            voteButton.setIdVoteButton( daoUtil.getInt( 1 ) );
-            voteButton.setTitle( daoUtil.getString( 2 ) );
-            voteButton.setValue( daoUtil.getString( 3 ) );
-            voteButton.setIconContent( daoUtil.getBytes( 4 ) );
-            voteButton.setIconMimeType( daoUtil.getString( 5 ) );
-
-            listVoteButton.add( voteButton );
-        }
-
-        daoUtil.free(  );
-
-        return listVoteButton;
-    }
+    //    /**
+    //     * Load the data of all vote button associated to the vote type returns them in a  list
+    //     * @param nIdVoteType the vote type id
+    //     * @param plugin the plugin
+    //     * @return  the list of vote button associated to the vote type  returns them in a  list
+    //     */
+    //    private List<VoteButton> selectListVoteButton( int nIdVoteType, Plugin plugin )
+    //    {
+    //        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_VOTE_BUTTON_BY_ID_VOTE_TYPE, plugin );
+    //        daoUtil.setInt( 1, nIdVoteType );
+    //        daoUtil.executeQuery(  );
+    //
+    //        VoteButton voteButton = null;
+    //        List<VoteButton> listVoteButton = new ArrayList<VoteButton>(  );
+    //
+    //        while ( daoUtil.next(  ) )
+    //        {
+    //            voteButton = new VoteButton(  );
+    //            voteButton.setIdVoteButton( daoUtil.getInt( 1 ) );
+    //            voteButton.setTitle( daoUtil.getString( 2 ) );
+    //            voteButton.setValue( daoUtil.getString( 3 ) );
+    //            voteButton.setIconContent( daoUtil.getBytes( 4 ) );
+    //            voteButton.setIconMimeType( daoUtil.getString( 5 ) );
+    //
+    //            listVoteButton.add( voteButton );
+    //        }
+    //
+    //        daoUtil.free(  );
+    //
+    //        return listVoteButton;
+    //    }
 
     /**
      * Delete all associations between vote type  and vote buttons
