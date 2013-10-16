@@ -322,21 +322,6 @@ ALTER TABLE digglike_response ADD CONSTRAINT fk_digglike_response_digg FOREIGN K
 	REFERENCES digglike_digg_submit (id_digg_submit);
 
 --
--- Table structure for table digglike_tag_submit
---
-CREATE TABLE digglike_tag_submit (
-	id_tag_submit int default 0 NOT NULL,
-	id_digg_submit int default 0 NOT NULL,
-	tag_value long varchar,
-	PRIMARY KEY (id_tag_submit)
-);
-
-CREATE INDEX index_digglike_tag_submit ON digglike_tag_submit (id_digg_submit);
-
-ALTER TABLE digglike_tag_submit ADD CONSTRAINT fk_digglike_tag_submit FOREIGN KEY (id_digg_submit)
-	REFERENCES digglike_digg_submit (id_digg_submit);
-
---
 -- Table structure for table digglike_vote_type_vote_button
 --
 CREATE TABLE digglike_vote_type_vote_button (
