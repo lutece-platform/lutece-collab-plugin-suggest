@@ -50,9 +50,9 @@ public class DiggUserInfo
         return _strLuteceUserKey;
     }
 
-    public void setLuteceUserKey( String _strKey )
+    public void setLuteceUserKey( String strKey )
     {
-        this._strLuteceUserKey = _strKey;
+        this._strLuteceUserKey = strKey;
     }
 
     public String getFirstName(  )
@@ -60,9 +60,9 @@ public class DiggUserInfo
         return _strFirstName;
     }
 
-    public void setFirstName( String _strFirstName )
+    public void setFirstName( String strFirstName )
     {
-        this._strFirstName = _strFirstName;
+        this._strFirstName = strFirstName;
     }
 
     public String getLastName(  )
@@ -80,9 +80,9 @@ public class DiggUserInfo
         return _strBusinnessMail;
     }
 
-    public void setBusinesMail( String _strMail )
+    public void setBusinesMail( String strMail )
     {
-        this._strBusinnessMail = _strMail;
+        this._strBusinnessMail = strMail;
     }
 
     public String getHomeMail(  )
@@ -90,9 +90,9 @@ public class DiggUserInfo
         return _strHomeMail;
     }
 
-    public void setHomeMail( String _strMail )
+    public void setHomeMail( String strMail )
     {
-        this._strHomeMail = _strMail;
+        this._strHomeMail = strMail;
     }
 
     public String getLogin(  )
@@ -100,9 +100,9 @@ public class DiggUserInfo
         return _strLogin;
     }
 
-    public void setLogin( String _strLogin )
+    public void setLogin( String strLogin )
     {
-        this._strLogin = _strLogin;
+        this._strLogin = strLogin;
     }
 
     /**

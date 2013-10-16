@@ -49,5 +49,5 @@ public interface DigglikeSearchEngine
      * @param filter The filter
      * @return Results as a collection of SearchResult
      */
-    public List<DigglikeSearchItem> getSearchResults( String strQuery, SubmitFilter filter );
+    List<DigglikeSearchItem> getSearchResults( String strQuery, SubmitFilter filter );
 }

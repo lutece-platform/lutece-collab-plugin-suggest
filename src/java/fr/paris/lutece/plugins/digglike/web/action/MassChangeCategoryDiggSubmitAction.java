@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.plugins.digglike.web.action;
 
-import fr.paris.lutece.plugins.digglike.business.Category;
-import fr.paris.lutece.plugins.digglike.business.CategoryHome;
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
@@ -52,15 +50,14 @@ import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.web.pluginaction.AbstractPluginAction;
 import fr.paris.lutece.portal.web.pluginaction.DefaultPluginActionResult;
 import fr.paris.lutece.portal.web.pluginaction.IPluginActionResult;
-import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
-
-import org.apache.commons.lang.StringUtils;
 
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -74,8 +71,7 @@ public class MassChangeCategoryDiggSubmitAction extends AbstractPluginAction<Dig
     private static final String ACTION_NAME = "Mass Change Category DiggSubmit ";
     private static final String JSP_CONFIRM_CHANGE_DIGG_SUBMIT_CATEGORY = "jsp/admin/plugins/digglike/ConfirmMassChangeDiggSubmitCategory.jsp";
     private static final String MESSAGE_YOU_MUST_SELECT_DIGG_SUBMIT = "digglike.message.youMustSelectDiggSubmit";
-    private static final String MARK_CATEGORY_LIST = "category_list";
-    private static final String MARK_DIGG = "digg";
+
     private static final String PARAMETER_ID_CATEGORY = "id_category";
     private static final String PARAMETER_MASS_CHANGE_CATEGORY = "mass_change_category";
     private static final String PARAMETER_SELECTED_DIGG_SUBMIT = "selected_digg_submit";
@@ -86,6 +82,7 @@ public class MassChangeCategoryDiggSubmitAction extends AbstractPluginAction<Dig
     @Override
     public void fillModel( HttpServletRequest request, AdminUser adminUser, Map<String, Object> model )
     {
+        // Do nothing
     }
 
     /**

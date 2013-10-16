@@ -109,13 +109,11 @@ public class DigglikeVideoResourceServlet
 
         String strCacheKey = String.valueOf( nIdDiggSubmit );
         byte[] content;
-        String strContentType;
 
         if ( _cache.isCacheEnable(  ) && ( _cache.get( strCacheKey ) != null ) )
         {
             ResourceValueObject resource = _cache.get( strCacheKey );
             content = resource.getContent(  );
-            strContentType = resource.getContentType(  );
         }
         else
         {
@@ -129,14 +127,13 @@ public class DigglikeVideoResourceServlet
                 return null;
             }
 
-            strContentType = video.getMimeType(  );
             content = video.getVideo(  );
 
             if ( _cache.isCacheEnable(  ) )
             {
                 ResourceValueObject r = new ResourceValueObject(  );
                 r.setContent( content );
-                r.setContentType( strContentType );
+                r.setContentType( video.getMimeType( ) );
                 r.setFilename( DEFAULT_FILENAME + nIdDiggSubmit );
                 _cache.put( strCacheKey, r );
             }

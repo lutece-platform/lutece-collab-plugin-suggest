@@ -37,9 +37,9 @@ import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
 
 
 public interface ICommentSubmitService
@@ -100,7 +100,7 @@ public interface ICommentSubmitService
      * @return  the list of commentSubmit
      */
     @Transactional( "digglike.transactionManager" )
-    public List<CommentSubmit> getCommentSubmitList( SubmitFilter filter, Integer nLimitParentNumber, Plugin plugin );
+    List<CommentSubmit> getCommentSubmitList( SubmitFilter filter, Integer nLimitParentNumber, Plugin plugin );
 
     /**
      * Load the number of all the commentSubmit who verify the filter

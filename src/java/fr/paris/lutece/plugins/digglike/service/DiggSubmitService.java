@@ -55,13 +55,13 @@ import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import org.springframework.transaction.annotation.Transactional;
 
 
 public class DiggSubmitService implements IDiggSubmitService
@@ -188,8 +188,8 @@ public class DiggSubmitService implements IDiggSubmitService
 
         if ( ( listIdDiggDubmit != null ) && ( listIdDiggDubmit.size(  ) > 0 ) )
         {
-            if ( ( nPositionElement != null ) && ( nNewPositionElement != null ) &&
-                    ( nPositionElement != nNewPositionElement ) )
+            if ( ( nPositionElement != null ) && ( nNewPositionElement != null )
+                    && ( !nPositionElement.equals( nNewPositionElement ) ) )
             {
                 if ( ( ( nPositionElement > 0 ) && ( nPositionElement <= ( listIdDiggDubmit.size(  ) + 1 ) ) ) &&
                         ( ( nNewPositionElement > 0 ) && ( nNewPositionElement <= ( listIdDiggDubmit.size(  ) + 1 ) ) ) )

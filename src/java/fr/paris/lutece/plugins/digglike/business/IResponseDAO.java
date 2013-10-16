@@ -68,7 +68,7 @@ public interface IResponseDAO
      * @param nIdResponse The identifier of the response
      * @param plugin the plugin
      */
-    public void delete( int nIdResponse, Plugin plugin );
+    void delete( int nIdResponse, Plugin plugin );
 
     /**
      * Update the the response in the table

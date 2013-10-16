@@ -34,9 +34,7 @@
 package fr.paris.lutece.plugins.digglike.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.web.constants.Parameters;
 import fr.paris.lutece.util.sql.DAOUtil;
-import fr.paris.lutece.util.url.UrlItem;
 
 import java.util.ArrayList;
 import java.util.List;

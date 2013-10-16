@@ -65,10 +65,7 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -77,6 +74,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -253,8 +252,7 @@ public class DiggResourceRss extends ResourceRss
         Plugin pluginDigglike = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
 
         DiggFilter filter = new DiggFilter(  );
-
-        if ( DiggHome.getDiggList( filter, pluginDigglike ) != null )
+        if ( DiggHome.getDiggList( filter, pluginDigglike ).size( ) > 0 )
         {
             return true;
         }

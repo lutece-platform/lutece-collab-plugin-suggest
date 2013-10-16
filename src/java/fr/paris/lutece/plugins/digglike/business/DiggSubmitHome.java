@@ -151,13 +151,6 @@ public final class DiggSubmitHome
             CommentSubmitService.getService(  ).remove( comment.getIdCommentSubmit(  ), plugin );
         }
 
-        List<TagSubmit> listTags = TagSubmitHome.getTagSubmitList( filter, plugin );
-
-        for ( TagSubmit tag : listTags )
-        {
-            TagSubmitHome.remove( tag.getIdTagSubmit(  ), plugin );
-        }
-
         //remove all reported associated to the digg submit
         ReportedMessageHome.removeByDiggSubmit( nIdDiggSubmit, plugin );
 

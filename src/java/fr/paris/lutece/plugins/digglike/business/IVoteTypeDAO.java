@@ -39,25 +39,25 @@ import java.util.List;
 
 
 /**
-*
-*Interface IVoteTypeDAO
-*
-*/
+ * 
+ * Interface IVoteTypeDAO
+ * 
+ */
 public interface IVoteTypeDAO
 {
     /**
-    * Load the data of the vote type from the table
-    *
-    * @param idKey The identifier of the vote type
-    * @param plugin the plugin
+     * Load the data of the vote type from the table
+     * 
+     * @param idKey The identifier of the vote type
+     * @param plugin the plugin
      * @return Return the vote type
-    */
-    public VoteType load( int idKey, Plugin plugin );
+     */
+    VoteType load( int idKey, Plugin plugin );
 
     /**
-     * Load the data of all vote type returns them in a  list
+     * Load the data of all vote type returns them in a list
      * @param plugin the plugin
-     * @return  the list of Vote type
+     * @return the list of Vote type
      */
-    public List<VoteType> select( Plugin plugin );
+    List<VoteType> select( Plugin plugin );
 }

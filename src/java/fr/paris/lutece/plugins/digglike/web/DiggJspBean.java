@@ -115,13 +115,8 @@ import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
-
 import java.math.BigDecimal;
-
 import java.sql.Timestamp;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -133,6 +128,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -760,7 +758,6 @@ public class DiggJspBean extends PluginAdminPageJspBean
         _nItemsPerPageDiggSubmitOrder = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE,
                 _nItemsPerPageDiggSubmitOrder, _nDefaultItemsPerPage );
 
-        List<Integer> listIdDiggSubmitResult = new ArrayList<Integer>(  );
         List<DiggSubmit> listDiggSubmitDisplay = new ArrayList<DiggSubmit>(  );
 
         if ( ( strIdDigg != null ) && !strIdDigg.equals( EMPTY_STRING ) )
@@ -784,7 +781,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         DiggUtils.initSubmitFilterBySort( filter, SubmitFilter.SORT_MANUALLY );
         DiggUtils.initSubmitFilterBySort( filter, SubmitFilter.SORT_BY_PINNED_FIRST );
 
-        listIdDiggSubmitResult = _diggSubmitService.getDiggSubmitListId( filter, getPlugin(  ) );
+        List<Integer> listIdDiggSubmitResult = _diggSubmitService.getDiggSubmitListId( filter, getPlugin( ) );
 
         Map<String, Object> model = new HashMap<String, Object>(  );
         Paginator<Integer> paginator = new Paginator<Integer>( listIdDiggSubmitResult, _nItemsPerPageDiggSubmitOrder,
@@ -2482,13 +2479,13 @@ public class DiggJspBean extends PluginAdminPageJspBean
     {
         Plugin plugin = getPlugin(  );
         IEntry entry;
-        List<EntryAdditionalAttribute> entryAdditionalAttributeList = new ArrayList<EntryAdditionalAttribute>(  );
         ReferenceList refListRegularExpression;
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = DiggUtils.getIntegerParameter( strIdEntry );
         Digg digg = DiggHome.findByPrimaryKey( _nIdDigg, plugin );
         entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
-        entryAdditionalAttributeList = EntryAdditionalAttributeHome.getList( nIdEntry, plugin );
+        List<EntryAdditionalAttribute> entryAdditionalAttributeList = EntryAdditionalAttributeHome.getList( nIdEntry,
+                plugin );
 
         if ( ( entry == null ) || ( digg == null ) ||
                 !RBACService.isAuthorized( Digg.RESOURCE_TYPE, EMPTY_STRING + _nIdDigg,

@@ -8,7 +8,6 @@
 	<bean id="digglike.diggSubmitDAO"  class="fr.paris.lutece.plugins.digglike.business.DiggSubmitDAO" />
 	<bean id="digglike.diggSubmitStateDAO"  class="fr.paris.lutece.plugins.digglike.business.DiggSubmitStateDAO" />
 	<bean id="digglike.diggSubmitTypeDAO"  class="fr.paris.lutece.plugins.digglike.business.DiggSubmitTypeDAO" />
-	<bean id="digglike.tagSubmitDAO"  class="fr.paris.lutece.plugins.digglike.business.TagSubmitDAO" />
 	<bean id="digglike.diggDAO"  class="fr.paris.lutece.plugins.digglike.business.DiggDAO" />
 	<bean id="digglike.defaultMessageDAO"  class="fr.paris.lutece.plugins.digglike.business.DefaultMessageDAO" /> 	 
 	<bean id="digglike.entryTypeDAO"  class="fr.paris.lutece.plugins.digglike.business.EntryTypeDAO" />

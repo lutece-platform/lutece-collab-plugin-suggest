@@ -40,12 +40,11 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
-import org.apache.commons.beanutils.BeanUtils;
-
 import java.lang.reflect.InvocationTargetException;
-
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
 
 
 /**
@@ -173,11 +172,15 @@ public final class DiggHome
     public static void remove( int nIdDigg, Plugin plugin )
     {
         Digg digg = findByPrimaryKey( nIdDigg, plugin );
+        if ( digg == null )
+        {
+            return;
+        }
         List<IEntry> listEntry;
         List<Integer> listIdDiggSubmit;
 
         //delete image resource associate
-        if ( ( digg != null ) && ( digg.getIdImageResource(  ) != null ) &&
+        if ( ( digg.getIdImageResource( ) != null ) &&
                 ( digg.getIdImageResource(  ) != DiggUtils.CONSTANT_ID_NULL ) )
         {
             ImageResourceHome.remove( digg.getIdImageResource(  ), plugin );
@@ -261,7 +264,7 @@ public final class DiggHome
      * a list
      * @param filter the filter
      * @param plugin the plugin
-     * @return the list of diggs
+     * @return the list of diggs, or an empty list if no digg was found
      */
     public static List<Digg> getDiggList( DiggFilter filter, Plugin plugin )
     {

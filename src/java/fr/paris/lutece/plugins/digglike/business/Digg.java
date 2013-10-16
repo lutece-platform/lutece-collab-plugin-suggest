@@ -46,7 +46,6 @@ import fr.paris.lutece.portal.service.workgroup.WorkgroupRemovalListenerService;
 import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.sql.Timestamp;
-
 import java.util.List;
 import java.util.Locale;
 
@@ -61,13 +60,15 @@ import javax.servlet.http.HttpServletRequest;
 public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACResource
 {
     public static final String RESOURCE_TYPE = "DIGGLIKE_DIGG_TYPE";
+    public static final String ROLE_NONE = "none";
+    public static final String TAG_LIST_ENTRY = "digg-entries";
     public static final int STATE_ENABLE = 1;
     public static final int STATE_DISABLE = 0;
-    public static final String ROLE_NONE = "none";
+
     private static final String TAG_DIGG = "digg";
     private static final String TAG_DIGG_TITLE = "digg-title";
     private static final String TAG_DIGG_SUBMITS = "digg-submits";
-    public static final String TAG_LIST_ENTRY = "digg-entries";
+
     private static DiggWorkgroupRemovalListener _listenerWorkgroup;
     private static DiggRegularExpressionRemovalListener _listenerRegularExpression;
     private static DiggRoleRemovalListener _listenerRole;
@@ -758,13 +759,14 @@ public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACRe
     }
 
     /**
-    * Returns the xml of this digg
-    *
-    * @param request The HTTP Servlet request
-    * @param locale la locale
-    * @return the xml of this digg
-    */
-    public String getXml( HttpServletRequest request, StringBuffer strListDiggSubmit, Locale locale )
+     * Returns the xml of this digg
+     * 
+     * @param request The HTTP Servlet request
+     * @param sbListDiggSubmit The string buffer
+     * @param locale la locale
+     * @return the xml of this digg
+     */
+    public String getXml( HttpServletRequest request, StringBuffer sbListDiggSubmit, Locale locale )
     {
         StringBuffer strXml = new StringBuffer(  );
         XmlUtil.beginElement( strXml, TAG_DIGG );
@@ -781,7 +783,7 @@ public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACRe
 
         XmlUtil.endElement( strXml, TAG_LIST_ENTRY );
         XmlUtil.beginElement( strXml, TAG_DIGG_SUBMITS );
-        strXml.append( strListDiggSubmit );
+        strXml.append( sbListDiggSubmit );
         XmlUtil.endElement( strXml, TAG_DIGG_SUBMITS );
         XmlUtil.endElement( strXml, TAG_DIGG );
 
@@ -912,11 +914,11 @@ public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACRe
 
     /**
      * set true if the editor BBcode must be display
-     * @param _nActiveEditorBbCode true if the editor BBcode must be display
+     * @param nActiveEditorBbCode true if the editor BBcode must be display
      */
-    public void setActiveEditorBbcode( boolean _nActiveEditorBbCode )
+    public void setActiveEditorBbcode( boolean nActiveEditorBbCode )
     {
-        this._bActiveEditorBbcode = _nActiveEditorBbCode;
+        this._bActiveEditorBbcode = nActiveEditorBbCode;
     }
 
     /**
@@ -1008,11 +1010,11 @@ public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACRe
 
     /**
      *
-     * @param _bDisplayCommentInDiggSubmitList true if the list of comment must be display in digg submit list
+     * @param bDisplayCommentInDiggSubmitList true if the list of comment must be display in digg submit list
      */
-    public void setDisplayCommentInDiggSubmitList( boolean _bDisplayCommentInDiggSubmitList )
+    public void setDisplayCommentInDiggSubmitList( boolean bDisplayCommentInDiggSubmitList )
     {
-        this._bDisplayCommentInDiggSubmitList = _bDisplayCommentInDiggSubmitList;
+        this._bDisplayCommentInDiggSubmitList = bDisplayCommentInDiggSubmitList;
     }
 
     /**
@@ -1026,11 +1028,11 @@ public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACRe
 
     /**
      *
-     * @param _nNumberCommentDisplayInDiggSubmitList the number of comment submit display by digg submit in the list of digg submit
+     * @param nNumberCommentDisplayInDiggSubmitList the number of comment submit display by digg submit in the list of digg submit
      */
-    public void setNumberCommentDisplayInDiggSubmitList( Integer _nNumberCommentDisplayInDiggSubmitList )
+    public void setNumberCommentDisplayInDiggSubmitList( Integer nNumberCommentDisplayInDiggSubmitList )
     {
-        this._nNumberCommentDisplayInDiggSubmitList = _nNumberCommentDisplayInDiggSubmitList;
+        this._nNumberCommentDisplayInDiggSubmitList = nNumberCommentDisplayInDiggSubmitList;
     }
 
     /**
@@ -1044,11 +1046,11 @@ public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACRe
 
     /**
      *
-     * @param _nNumberCommentDisplayInDiggSubmitList the number of  char comment  display by digg submit in the list of digg submit
+     * @param nNumberCommentDisplayInDiggSubmitList the number of  char comment  display by digg submit in the list of digg submit
      */
-    public void setNumberCharCommentDisplayInDiggSubmitList( Integer _nNumberCommentDisplayInDiggSubmitList )
+    public void setNumberCharCommentDisplayInDiggSubmitList( Integer nNumberCommentDisplayInDiggSubmitList )
     {
-        this._nNumberCharCommentDisplayInDiggSubmitList = _nNumberCommentDisplayInDiggSubmitList;
+        this._nNumberCharCommentDisplayInDiggSubmitList = nNumberCommentDisplayInDiggSubmitList;
     }
 
     /**
@@ -1062,11 +1064,11 @@ public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACRe
 
     /**
     * set true if a mail must be sent when the new comment is submitted
-    * @param enableMailNewCommentSubmit true if a mail must be sent when the new comment is submitted
+    * @param bEnableMailNewCommentSubmit true if a mail must be sent when the new comment is submitted
     */
-    public void setEnableMailNewCommentSubmit( boolean enableMailNewCommentSubmit )
+    public void setEnableMailNewCommentSubmit( boolean bEnableMailNewCommentSubmit )
     {
-        _bEnableMailNewCommentSubmit = enableMailNewCommentSubmit;
+        _bEnableMailNewCommentSubmit = bEnableMailNewCommentSubmit;
     }
 
     /**
@@ -1080,11 +1082,11 @@ public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACRe
 
     /**
     * set true if a mail must be sent when the new reported is submitted
-    * @param enableMailNewReportedSubmit true if a mail must be sent when the new comment is submitted
+    * @param bEnableMailNewReportedSubmit true if a mail must be sent when the new comment is submitted
     */
-    public void setEnableMailNewReportedSubmit( boolean enableMailNewReportedSubmit )
+    public void setEnableMailNewReportedSubmit( boolean bEnableMailNewReportedSubmit )
     {
-        _bEnableMailNewReportedSubmit = enableMailNewReportedSubmit;
+        _bEnableMailNewReportedSubmit = bEnableMailNewReportedSubmit;
     }
 
     /**
@@ -1097,8 +1099,8 @@ public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACRe
     }
 
     /**
-     * set the digg submit type  List associate to the digg
-     * @param diggsSubmit the digg submit type  List associate to the digg
+     * set the digg submit type List associate to the digg
+     * @param diggSubmitTypes the digg submit type List associate to the digg
      */
     public void setDiggSubmiTypes( List<DiggSubmitType> diggSubmitTypes )
     {
@@ -1134,7 +1136,7 @@ public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACRe
 
     /**
      * set Terms of use
-     * @param _strTermsOfUse the terms of use
+     * @param strTermsOfUse the terms of use
      */
     public void setTermsOfUse( String strTermsOfUse )
     {
@@ -1151,12 +1153,12 @@ public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACRe
     }
 
     /**
-     *
-     * @param _strDescription set the digg description
+     * 
+     * @param strDescription set the digg description
      */
-    public void setDescription( String _strDescription )
+    public void setDescription( String strDescription )
     {
-        this._strDescription = _strDescription;
+        this._strDescription = strDescription;
     }
 
     /**
@@ -1169,8 +1171,8 @@ public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACRe
     }
 
     /**
-     *
-     * @param _bEnableReports true if reports are enable
+     * 
+     * @param bEnableReports true if reports are enable
      */
     public void setEnableReports( boolean bEnableReports )
     {
@@ -1188,11 +1190,11 @@ public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACRe
 
     /**
      * image resource id associate to the digg
-     * @param idImageResource image resource id associate to the digg
+     * @param nIdImageResource image resource id associate to the digg
      */
-    public void setIdImageResource( Integer idImageResource )
+    public void setIdImageResource( Integer nIdImageResource )
     {
-        _nIdImageResource = idImageResource;
+        _nIdImageResource = nIdImageResource;
     }
 
     /**

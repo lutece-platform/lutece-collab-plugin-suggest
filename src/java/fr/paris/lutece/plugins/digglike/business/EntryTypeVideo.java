@@ -41,13 +41,13 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 
-import org.apache.commons.fileupload.FileItem;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
 
 
 /**
@@ -264,7 +264,7 @@ public class EntryTypeVideo extends Entry
                 String strMenu = "false";
                 String strLoop = "false";
                 String strAutostart = "false";
-                String strAlignment = "bottom";
+                //                String strAlignment = "bottom";
                 String strQuality = "low";
 
                 for ( EntryAdditionalAttribute attr : this.getEntryAdditionalAttributeList(  ) )
@@ -273,10 +273,10 @@ public class EntryTypeVideo extends Entry
                     {
                         strAutostart = attr.getValue(  );
                     }
-                    else if ( attr.getName(  ).equals( PARAMETER_ALIGNMENT ) )
-                    {
-                        strAlignment = attr.getValue(  );
-                    }
+                    //                    else if ( attr.getName(  ).equals( PARAMETER_ALIGNMENT ) )
+                    //                    {
+                    //                        strAlignment = attr.getValue(  );
+                    //                    }
                     else if ( attr.getName(  ).equals( PARAMETER_LOOP ) )
                     {
                         strLoop = attr.getValue(  );

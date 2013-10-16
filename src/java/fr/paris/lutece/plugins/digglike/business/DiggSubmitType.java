@@ -174,7 +174,7 @@ public class DiggSubmitType implements RBACResource
      */
     public boolean equals( Object obj )
     {
-        if ( ( (DiggSubmitType) obj ).getIdType(  ) == _nIdType )
+        if ( obj instanceof DiggSubmitType && ( (DiggSubmitType) obj ).getIdType( ) == _nIdType )
         {
             return true;
         }

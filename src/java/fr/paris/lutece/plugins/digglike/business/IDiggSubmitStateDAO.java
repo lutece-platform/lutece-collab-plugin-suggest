@@ -68,5 +68,5 @@ public interface IDiggSubmitStateDAO
      * @param plugin the plugin
      * @return  the list of digg submit state
      */
-    public List<DiggSubmitState> select( Plugin plugin );
+    List<DiggSubmitState> select( Plugin plugin );
 }

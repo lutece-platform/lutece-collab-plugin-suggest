@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.digglike.service;
 
 import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
-import fr.paris.lutece.portal.service.cache.CacheService;
 
 
 /**

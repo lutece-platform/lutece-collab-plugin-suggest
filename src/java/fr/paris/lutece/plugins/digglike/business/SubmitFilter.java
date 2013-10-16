@@ -34,32 +34,31 @@
 package fr.paris.lutece.plugins.digglike.business;
 
 import java.sql.Timestamp;
-
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- *
+ * 
  * class SubmiFilter
- *
+ * 
  */
 public class SubmitFilter
 {
-    public final static int SORT_BY_DATE_RESPONSE_ASC = 0;
-    public final static int SORT_BY_DATE_RESPONSE_DESC = 1;
-    public final static int SORT_BY_SCORE_ASC = 2;
-    public final static int SORT_BY_SCORE_DESC = 3;
-    public final static int SORT_BY_NUMBER_COMMENT_ASC = 4;
-    public final static int SORT_BY_NUMBER_COMMENT_DESC = 5;
-    public final static int SORT_BY_NUMBER_VOTE_ASC = 6;
-    public final static int SORT_BY_NUMBER_VOTE_DESC = 7;
-    public final static int SORT_MANUALLY = 8;
-    public final static int SORT_BY_NUMBER_VIEW_ASC = 9;
-    public final static int SORT_BY_NUMBER_VIEW_DESC = 10;
-    public final static int SORT_BY_DATE_MODIFY_ASC = 11;
-    public final static int SORT_BY_DATE_MODIFY_DESC = 12;
-    public final static int SORT_BY_PINNED_FIRST = 13;
+    public static final int SORT_BY_DATE_RESPONSE_ASC = 0;
+    public static final int SORT_BY_DATE_RESPONSE_DESC = 1;
+    public static final int SORT_BY_SCORE_ASC = 2;
+    public static final int SORT_BY_SCORE_DESC = 3;
+    public static final int SORT_BY_NUMBER_COMMENT_ASC = 4;
+    public static final int SORT_BY_NUMBER_COMMENT_DESC = 5;
+    public static final int SORT_BY_NUMBER_VOTE_ASC = 6;
+    public static final int SORT_BY_NUMBER_VOTE_DESC = 7;
+    public static final int SORT_MANUALLY = 8;
+    public static final int SORT_BY_NUMBER_VIEW_ASC = 9;
+    public static final int SORT_BY_NUMBER_VIEW_DESC = 10;
+    public static final int SORT_BY_DATE_MODIFY_ASC = 11;
+    public static final int SORT_BY_DATE_MODIFY_DESC = 12;
+    public static final int SORT_BY_PINNED_FIRST = 13;
     public static final int ALL_INT = -1;
     public static final int ID_TRUE = 1;
     public static final int ID_FALSE = 0;
@@ -81,48 +80,48 @@ public class SubmitFilter
     private int _nIdPinned = ALL_INT;
     private int _nIdContainsCommentDisable = ALL_INT;
     private String _strLuteceUserKey = null;
-    private List<Integer> _listSortBy = new ArrayList<Integer>(  );
+    private List<Integer> _listSortBy = new ArrayList<Integer>( );
 
     /**
-     *
-     * @return  the id of the digg insert in the filter
+     * 
+     * @return the id of the digg insert in the filter
      */
-    public int getIdDigg(  )
+    public int getIdDigg( )
     {
         return _nIdDigg;
     }
 
     /**
-     * set  the id of the digg in the filter
-     * @param idDigg the id of digg to insert in the filter
+     * set the id of the digg in the filter
+     * @param nIdDigg the id of digg to insert in the filter
      */
-    public void setIdDigg( int idDigg )
+    public void setIdDigg( int nIdDigg )
     {
-        _nIdDigg = idDigg;
+        _nIdDigg = nIdDigg;
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain an id of digg
      */
-    public boolean containsIdDigg(  )
+    public boolean containsIdDigg( )
     {
         return ( _nIdDigg != ALL_INT );
     }
 
     /**
-    *
-    * @return the digg submit state
-    *
-    *  */
-    public int getIdDiggSubmitState(  )
+     * 
+     * @return the digg submit state
+     * 
+     * */
+    public int getIdDiggSubmitState( )
     {
         return _nIdDiggSubmitState;
     }
 
     /**
      * Set the digg submit state
-     * @param idState  the digg submit state
+     * @param idState the digg submit state
      */
     public void setIdDiggSubmitState( int idState )
     {
@@ -130,101 +129,101 @@ public class SubmitFilter
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain the digg submit state
      */
-    public boolean containsIdDiggSubmitState(  )
+    public boolean containsIdDiggSubmitState( )
     {
         return ( _nIdDiggSubmitState != ALL_INT );
     }
 
     /**
-    *
-    * @return the comment submit state
-    *
-    *  */
-    public int getIdCommentSubmitState(  )
+     * 
+     * @return the comment submit state
+     * 
+     * */
+    public int getIdCommentSubmitState( )
     {
         return _nIdCommentSubmitState;
     }
 
     /**
      * Set the comment submit state
-     * @param idState  the comment submit state
+     * @param nIdState the comment submit state
      */
-    public void setIdCommentSubmitState( int idState )
+    public void setIdCommentSubmitState( int nIdState )
     {
-        _nIdCommentSubmitState = idState;
+        _nIdCommentSubmitState = nIdState;
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain the comment submit state
      */
-    public boolean containsIdCommentSubmitState(  )
+    public boolean containsIdCommentSubmitState( )
     {
         return ( _nIdCommentSubmitState != ALL_INT );
     }
 
     /**
-    *
-    * @return  the id of the digg submit insert in the filter
-    */
-    public int getIdDiggSubmit(  )
+     * 
+     * @return the id of the digg submit insert in the filter
+     */
+    public int getIdDiggSubmit( )
     {
         return _nIdDiggSubmit;
     }
 
     /**
-     * set  the id of the digg submit in the filter
-     * @param idDiggSubmit the id of digg submit to insert in the filter
+     * set the id of the digg submit in the filter
+     * @param nIdDiggSubmit the id of digg submit to insert in the filter
      */
-    public void setIdDiggSubmit( int idDiggSubmit )
+    public void setIdDiggSubmit( int nIdDiggSubmit )
     {
-        _nIdDiggSubmit = idDiggSubmit;
+        _nIdDiggSubmit = nIdDiggSubmit;
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain an id of digg
      */
-    public boolean containsIdDiggSubmit(  )
+    public boolean containsIdDiggSubmit( )
     {
         return ( _nIdDiggSubmit != ALL_INT );
     }
 
     /**
-    *
-    * @return  the id of entry insert in the filter
-    */
-    public int getIdEntry(  )
+     * 
+     * @return the id of entry insert in the filter
+     */
+    public int getIdEntry( )
     {
         return _nIdEntry;
     }
 
     /**
-     * set the id of entry depend  in the filter
-     * @param idEntry the id of entry depend to insert in the filter
+     * set the id of entry depend in the filter
+     * @param nIdEntry the id of entry depend to insert in the filter
      */
-    public void setIdEntry( int idEntry )
+    public void setIdEntry( int nIdEntry )
     {
-        _nIdEntry = idEntry;
+        _nIdEntry = nIdEntry;
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain an id of entry depend
      */
-    public boolean containsIdEntry(  )
+    public boolean containsIdEntry( )
     {
         return ( _nIdEntry != ALL_INT );
     }
 
     /**
-         *
-         * @return date of the first submit
-         */
-    public Timestamp getDateFirst(  )
+     * 
+     * @return date of the first submit
+     */
+    public Timestamp getDateFirst( )
     {
         return _tDateFirst;
     }
@@ -239,26 +238,26 @@ public class SubmitFilter
     }
 
     /**
-    *
-    * @return true if the filter contain the date of the first submit
-    */
-    public boolean containsDateFirst(  )
+     * 
+     * @return true if the filter contain the date of the first submit
+     */
+    public boolean containsDateFirst( )
     {
         return ( _tDateFirst != null );
     }
 
     /**
-     *
+     * 
      * @return date of the last submit
      */
-    public Timestamp getDateLast(  )
+    public Timestamp getDateLast( )
     {
         return _tDateLast;
     }
 
     /**
      * set the date of the last submit
-     * @param end  the date of the last submit
+     * @param end the date of the last submit
      */
     public void setDateLast( Timestamp end )
     {
@@ -266,19 +265,19 @@ public class SubmitFilter
     }
 
     /**
-    *
-    * @return true if the filter contain the date of the last submit
-    */
-    public boolean containsDateLast(  )
+     * 
+     * @return true if the filter contain the date of the last submit
+     */
+    public boolean containsDateLast( )
     {
         return ( _tDateLast != null );
     }
 
     /**
-    * return the list of sort
-    * @return the list of sort
-    */
-    public List<Integer> getSortBy(  )
+     * return the list of sort
+     * @return the list of sort
+     */
+    public List<Integer> getSortBy( )
     {
         return _listSortBy;
     }
@@ -293,25 +292,25 @@ public class SubmitFilter
     }
 
     /**
-    *
-    * @return true if the filter contain the list of sort
-    */
-    public boolean containsSortBy(  )
+     * 
+     * @return true if the filter contain the list of sort
+     */
+    public boolean containsSortBy( )
     {
-        return ( ( _listSortBy != null ) && ( _listSortBy.size(  ) != 0 ) );
+        return ( ( _listSortBy != null ) && ( _listSortBy.size( ) != 0 ) );
     }
 
     /**
-    *
-    * @return true if the filter contain the sort
-    */
-    public boolean containsSortBy( Integer strSort )
+     * @param nSort The sort
+     * @return true if the filter contain the sort
+     */
+    public boolean containsSortBy( Integer nSort )
     {
-        if ( ( strSort != null ) && ( _listSortBy != null ) && ( _listSortBy.size(  ) != 0 ) )
+        if ( ( nSort != null ) && ( _listSortBy != null ) && ( _listSortBy.size( ) != 0 ) )
         {
-            for ( Integer nSort : _listSortBy )
+            for ( Integer nSortBy : _listSortBy )
             {
-                if ( nSort.equals( strSort ) )
+                if ( nSortBy.equals( nSort ) )
                 {
                     return true;
                 }
@@ -337,84 +336,84 @@ public class SubmitFilter
     }
 
     /**
-     *
-     * @return  the id of the category insert in the filter
+     * 
+     * @return the id of the category insert in the filter
      */
-    public int getIdCategory(  )
+    public int getIdCategory( )
     {
         return _nIdCategory;
     }
 
     /**
-     * set  the id of the category in the filter
-     * @param idCategory the id of the category to insert in the filter
+     * set the id of the category in the filter
+     * @param nIdCategory the id of the category to insert in the filter
      */
-    public void setIdCategory( int idCategory )
+    public void setIdCategory( int nIdCategory )
     {
-        _nIdCategory = idCategory;
+        _nIdCategory = nIdCategory;
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain an id of category
      */
-    public boolean containsIdCategory(  )
+    public boolean containsIdCategory( )
     {
         return ( _nIdCategory != ALL_INT );
     }
 
     /**
-    *
-    * @return 1 if the diggs return must be reported
-    *         0 if the diggss return must not  be reported
-    */
-    public int getIdReported(  )
+     * 
+     * @return 1 if the diggs return must be reported
+     *         0 if the diggs return must not be reported
+     */
+    public int getIdReported( )
     {
         return _nIdReported;
     }
 
     /**
-     * set   1 if the diggs return must be reported
-     *       0 if the diggss return must not  be reported
-     * @param idReported idReported
+     * set 1 if the diggs return must be reported
+     * 0 if the diggs return must not be reported
+     * @param nIdReported idReported
      */
-    public void setIdReported( int idReported )
+    public void setIdReported( int nIdReported )
     {
-        _nIdReported = idReported;
+        _nIdReported = nIdReported;
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain reported
      */
-    public boolean containsIdReported(  )
+    public boolean containsIdReported( )
     {
         return ( _nIdReported != ALL_INT );
     }
 
     /**
-          *
-          * @return the number of vote in the filter
-          */
-    public int getNumberVote(  )
+     * 
+     * @return the number of vote in the filter
+     */
+    public int getNumberVote( )
     {
         return _nNumberVote;
     }
 
     /**
      * set the number of vote in the filter
-     * @param numberVote the number of vote
+     * @param nNumberVote the number of vote
      */
-    public void setNumberVote( int numberVote )
+    public void setNumberVote( int nNumberVote )
     {
-        _nNumberVote = numberVote;
+        _nNumberVote = nNumberVote;
     }
 
     /**
-    *
-    * @return true if the filter contain a number of vote
-    */
-    public boolean containsNumberVote(  )
+     * 
+     * @return true if the filter contain a number of vote
+     */
+    public boolean containsNumberVote( )
     {
         return ( _nNumberVote != ALL_INT );
     }
@@ -430,128 +429,129 @@ public class SubmitFilter
     /**
      * @return the _strLuteceUserKey
      */
-    public String getLuteceUserKey(  )
+    public String getLuteceUserKey( )
     {
         return _strLuteceUserKey;
     }
 
     /**
-    *
-    * @return true if the filter contain a number of vote
-    */
-    public boolean containsLuteceUserKey(  )
+     * 
+     * @return true if the filter contain a number of vote
+     */
+    public boolean containsLuteceUserKey( )
     {
         return ( _strLuteceUserKey != null );
     }
 
     /**
-    *
-    * @return  the id of the digg insert in the filter
-    */
-    public int getIdParent(  )
+     * 
+     * @return the id of the digg insert in the filter
+     */
+    public int getIdParent( )
     {
         return _nIdParent;
     }
 
     /**
-     * set  the id of the digg in the filter
-     * @param idDigg the id of digg to insert in the filter
+     * set the id of the digg in the filter
+     * @param nIdParent the id of digg to insert in the filter
      */
-    public void setIdParent( int idParent )
+    public void setIdParent( int nIdParent )
     {
-        _nIdParent = idParent;
+        _nIdParent = nIdParent;
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain an id of digg
      */
-    public boolean containsIdParent(  )
+    public boolean containsIdParent( )
     {
         return ( _nIdParent != ALL_INT );
     }
 
     /**
-    *
-    * @return 1 if the diggs return must be reported
-    *         0 if the diggss return must not  be reported
-    */
-    public int getIdPinned(  )
+     * 
+     * @return 1 if the diggs return must be reported
+     *         0 if the diggss return must not be reported
+     */
+    public int getIdPinned( )
     {
         return _nIdPinned;
     }
 
     /**
-     * set   1 if the diggsubmit return must be pinned
-     *       0 if the diggsubmit return must not  be pinned
-     * @param idPinned idPinned
+     * set 1 if the diggsubmit return must be pinned
+     * 0 if the diggsubmit return must not be pinned
+     * @param nIdPinned idPinned
      */
-    public void setIdPinned( int idPinned )
+    public void setIdPinned( int nIdPinned )
     {
-        _nIdPinned = idPinned;
+        _nIdPinned = nIdPinned;
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain reported
      */
-    public boolean containsIdPinned(  )
+    public boolean containsIdPinned( )
     {
         return ( _nIdPinned != ALL_INT );
     }
 
     /**
-    *
-    * @return  the id of the type insert in the filter
-    */
-    public int getIdType(  )
+     * 
+     * @return the id of the type insert in the filter
+     */
+    public int getIdType( )
     {
         return _nIdType;
     }
 
     /**
-     * set  the id of the type in the filter
-     * @param idType the id of the type  to insert in the filter
+     * set the id of the type in the filter
+     * @param nIdType the id of the type to insert in the filter
      */
-    public void setIdType( int idType )
+    public void setIdType( int nIdType )
     {
-        _nIdType = idType;
+        _nIdType = nIdType;
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain an id of type
      */
-    public boolean containsIdType(  )
+    public boolean containsIdType( )
     {
         return ( _nIdType != ALL_INT );
     }
 
     /**
-     *
+     * 
      * @return 1 if the diggsubmit return must contains comment disable
-     *                  0 if the diggsubmit return must not contains comment disable
+     *         0 if the diggsubmit return must not contains comment disable
      */
-    public int getIdContainsCommentDisable(  )
+    public int getIdContainsCommentDisable( )
     {
         return _nIdContainsCommentDisable;
     }
 
     /**
-     *
-     * @param _nIdContainsCommentDisable 1 if the diggsubmit return must contains comment disable
-     *                                                                           0 if the diggsubmit return must not contains comment disable
+     * 
+     * @param nIdContainsCommentDisable 1 if the diggsubmit return must
+     *            contains comment disable 0 if the diggsubmit return must not
+     *            contains comment disable
      */
-    public void setIdContainsCommentDisable( int _nIdContainsCommentDisable )
+    public void setIdContainsCommentDisable( int nIdContainsCommentDisable )
     {
-        this._nIdContainsCommentDisable = _nIdContainsCommentDisable;
+        this._nIdContainsCommentDisable = nIdContainsCommentDisable;
     }
 
     /**
-    *
-    * @return true if the filter contains Id comment Disable
-    */
-    public boolean containsIdContainsCommentDisable(  )
+     * 
+     * @return true if the filter contains Id comment Disable
+     */
+    public boolean containsIdContainsCommentDisable( )
     {
         return ( _nIdContainsCommentDisable != ALL_INT );
     }
