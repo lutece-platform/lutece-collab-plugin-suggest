@@ -33,6 +33,23 @@
  */
 package fr.paris.lutece.plugins.digglike.web;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.digglike.business.Category;
 import fr.paris.lutece.plugins.digglike.business.CategoryHome;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
@@ -81,7 +98,6 @@ import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.role.RoleHome;
 import fr.paris.lutece.portal.business.style.Theme;
-import fr.paris.lutece.portal.business.style.ThemeHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
@@ -94,6 +110,7 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.message.SiteMessage;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.portal.ThemesService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
@@ -114,23 +131,6 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
-
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -1906,8 +1906,8 @@ public class DiggJspBean extends PluginAdminPageJspBean
         refMailingList.addAll( AdminMailingListService.getMailingLists( adminUser ) );
 
         // Style management
-        String defaultTheme = ThemeHome.getGlobalTheme(  );
-        Collection<Theme> themes = ThemeHome.getThemesList(  );
+        String defaultTheme = ThemesService.getGlobalTheme(  );
+        Collection<Theme> themes = ThemesService.getThemesList(  );
         ReferenceList themesRefList = new ReferenceList(  );
 
         for ( Theme theme : themes )
@@ -1973,8 +1973,6 @@ public class DiggJspBean extends PluginAdminPageJspBean
                 return getJspModifyDigg( request, digg.getIdDigg(  ) );
             }
 
-            Theme theme = ThemeHome.findByPrimaryKey( digg.getCodeTheme(  ) );
-            ( (DigglikePlugin) getPlugin(  ) ).addXPageTheme( digg.getIdDigg(  ), theme );
         }
 
         return getJspManageDigg( request );
@@ -2065,7 +2063,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         refEntryType = initRefListEntryType( plugin, locale );
 
         // Style management
-        Collection<Theme> themes = ThemeHome.getThemesList(  );
+        Collection<Theme> themes = ThemesService.getThemesList(  );
         ReferenceList themesRefList = new ReferenceList(  );
 
         for ( Theme theme : themes )
@@ -2075,7 +2073,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
 
         if ( digg.getCodeTheme(  ) == null )
         {
-            digg.setCodeTheme( ThemeHome.getGlobalTheme(  ) );
+            digg.setCodeTheme( ThemesService.getGlobalTheme(  ) );
         }
 
         Map<String, Object> model = new HashMap<String, Object>(  );
@@ -2130,24 +2128,17 @@ public class DiggJspBean extends PluginAdminPageJspBean
         {
             Plugin plugin = getPlugin(  );
             Digg digg = DiggHome.findByPrimaryKey( nIdDigg, plugin );
-            String strOldTheme = digg.getCodeTheme(  );
             String strError = getDiggData( multipartRequest, digg );
 
             if ( strError != null )
             {
                 return strError;
             }
-
+            
             DiggHome.update( digg, plugin );
 
-            String strNewTheme = digg.getCodeTheme(  );
-
-            if ( !strNewTheme.equals( strOldTheme ) )
-            {
-                Theme newTheme = ThemeHome.findByPrimaryKey( strNewTheme );
-                ( (DigglikePlugin) getPlugin(  ) ).addXPageTheme( nIdDigg, newTheme );
-            }
-
+           
+           
             if ( request.getParameter( PARAMETER_APPLY ) != null )
             {
                 return getJspModifyDigg( request, digg.getIdDigg(  ) );

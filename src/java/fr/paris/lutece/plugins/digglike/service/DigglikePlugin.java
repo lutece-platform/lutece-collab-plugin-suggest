@@ -33,15 +33,12 @@
  */
 package fr.paris.lutece.plugins.digglike.service;
 
-import fr.paris.lutece.plugins.digglike.business.DiggHome;
-import fr.paris.lutece.portal.business.style.Theme;
-import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
-
 import java.io.Serializable;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
+
+import fr.paris.lutece.portal.business.style.Theme;
+import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
 
 
 /**
@@ -51,9 +48,7 @@ public class DigglikePlugin extends PluginDefaultImplementation implements Seria
 {
     public static final String PLUGIN_NAME = "digglike";
     private static final long serialVersionUID = 6341523117444246634L;
-    private static final String PARAMETER_ID_DIGG = "id_digg";
-    private Map<Integer, Theme> _xPageTheme;
-
+    
     /**
      * Initialize the plugin digg
      */
@@ -62,11 +57,8 @@ public class DigglikePlugin extends PluginDefaultImplementation implements Seria
         // Initialize the  digglike service
         DigglikeService.getInstance(  ).init(  );
         ImageService.getInstance(  );
-
-        if ( this.isInstalled(  ) )
-        {
-            _xPageTheme = DiggHome.getXPageThemes( this );
-        }
+       
+       
     }
 
     /**
@@ -76,35 +68,8 @@ public class DigglikePlugin extends PluginDefaultImplementation implements Seria
      */
     public Theme getXPageTheme( HttpServletRequest request )
     {
-        String strIdDigg = request.getParameter( PARAMETER_ID_DIGG );
-
-        if ( strIdDigg != null )
-        {
-            int nIdDigg = Integer.parseInt( strIdDigg );
-
-            return _xPageTheme.get( nIdDigg );
-        }
-
-        return null;
+       return DigglikeService.getInstance().getXPageTheme(request);
+        
     }
 
-    /**
-     * Define the theme the plugin use for rendering a Xpage
-     * @param nIdDigg the if of the digg
-     * @param xPageTheme The theme
-     */
-    public void addXPageTheme( int nIdDigg, Theme xPageTheme )
-    {
-        _xPageTheme.put( nIdDigg, xPageTheme );
-    }
-
-    /**
-     * Updates a database connection pool associated to the plugin and stores it
-     * @param strPoolName the name of the pool
-     */
-    public void updatePoolName( String strPoolName )
-    {
-        super.updatePoolName( strPoolName );
-        _xPageTheme = DiggHome.getXPageThemes( this );
-    }
 }

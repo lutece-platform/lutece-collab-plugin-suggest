@@ -57,6 +57,7 @@ import fr.paris.lutece.plugins.digglike.business.VoteTypeHome;
 import fr.paris.lutece.plugins.digglike.service.CommentSubmitService;
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
 import fr.paris.lutece.plugins.digglike.service.DiggUserInfoService;
+import fr.paris.lutece.plugins.digglike.service.DigglikeService;
 import fr.paris.lutece.plugins.digglike.service.ICommentSubmitService;
 import fr.paris.lutece.plugins.digglike.service.IDiggSubmitService;
 import fr.paris.lutece.plugins.digglike.service.digglikesearch.DigglikeSearchService;
@@ -343,7 +344,7 @@ public class DiggApp implements XPageApplication
         else
         {
             if ( ( request.getParameter( PARAMETER_ID_DIGG ) != null ) ||
-                    ( getIdDefaultDigg(  ) != DiggUtils.CONSTANT_ID_NULL ) )
+                    ( DigglikeService.getInstance().getIdDefaultDigg(  ) != DiggUtils.CONSTANT_ID_NULL ) )
             {
                 page = getViewDiggSubmitList( page, nMode, request );
             }
@@ -417,7 +418,7 @@ public class DiggApp implements XPageApplication
 
         if ( digg == null )
         {
-            digg = DiggHome.findByPrimaryKey( getIdDefaultDigg(  ), _plugin );
+            digg = DiggHome.findByPrimaryKey(DigglikeService.getInstance(). getIdDefaultDigg(  ), _plugin );
         }
 
         //testAuthorizationAccess
@@ -1752,22 +1753,7 @@ public class DiggApp implements XPageApplication
         return searchFields;
     }
 
-    /**
-     *
-     * @return the Id of the default Digg
-     */
-    private int getIdDefaultDigg(  )
-    {
-        int nIdDefaultDigg;
-        DiggFilter filterDefaultDigg = new DiggFilter(  );
-        filterDefaultDigg.setIdDefaultDigg( DiggFilter.ID_TRUE );
 
-        List<Digg> listDefaultDigg = DiggHome.getDiggList( filterDefaultDigg, _plugin );
-        nIdDefaultDigg = ( ( listDefaultDigg != null ) && ( listDefaultDigg.size(  ) > 0 ) )
-            ? ( listDefaultDigg.get( 0 ) ).getIdDigg(  ) : DiggUtils.CONSTANT_ID_NULL;
-
-        return nIdDefaultDigg;
-    }
 
     /**
      * Add the digg page frameset
