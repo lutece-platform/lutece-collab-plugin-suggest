@@ -169,6 +169,7 @@ public class DiggApp implements XPageApplication
     private static final String TEMPLATE_XPAGE_LIST_DIGG = "skin/plugins/digglike/digg_list.html";
     private static final String TEMPLATE_XPAGE_DETAIL_SUBMIT_DIGG = "skin/plugins/digglike/digg_detail.html";
     private static final String TEMPLATE_XPAGE_DIGG_REPORTED = "skin/plugins/digglike/digg_reported.html";
+    private static final String TEMPLATE_XPAGE_DIGG_SUB_COMMENT = "skin/plugins/digglike/digg_sub_comment.html";
     private static final String TEMPLATE_XPAGE_COMMENT_SUBMIT_DIGG = "skin/plugins/digglike/digg_comment.html";
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
 
@@ -234,6 +235,7 @@ public class DiggApp implements XPageApplication
     private static final String ACTION_DO_CREATE_REPORT = "do_create_report";
     private static final String ACTION_DO_VOTE = "do_vote";
     private static final String ACTION_CREATE_REPORT = "create_report";
+    private static final String ACTION_CREATE_SUB_COMMENT = "create_sub_comment";
     private static final String ACTION_SUBSCRIBE_DIGG = "subscribe_digg";
     private static final String ACTION_UNSUBSCRIBE_DIGG = "unsubscribe_digg";
     private static final String CONSTANT_VIEW_LIST_DIGG_SUBMIT = "view_digg_submit_list";
@@ -300,6 +302,10 @@ public class DiggApp implements XPageApplication
         else if ( ACTION_CREATE_REPORT.equals( strAction ) )
         {
             page = getViewCreateReport( page, nMode, request );
+        }
+        else if ( ACTION_CREATE_SUB_COMMENT.equals( strAction ) )
+        {
+            page = getViewCreateSubComment( page, nMode, request );
         }
 
         else if ( ACTION_DO_CREATE_DIGG_SUBMIT.equals( strAction ) )
@@ -518,6 +524,52 @@ public class DiggApp implements XPageApplication
         addDiggPageFrameset( getHtmlForm( request, nMode, _plugin, digg, searchFields.getIdFilterCategory(  ) ),
             request, page, digg, model, searchFields, luteceUserConnected );
 
+        return page;
+    }
+    
+    /**
+     * Display create sub comment
+     * @param request the {@link HttpServletRequest}
+     * @param nMode the mode
+     * @param page {@link XPage}
+     * @return {@link XPage}
+     * @throws UserNotSignedException {@link UserNotSignedException}
+     * @throws SiteMessageException {@link SiteMessageException}
+     */
+    public XPage getViewCreateSubComment( XPage page, int nMode, HttpServletRequest request )
+        throws UserNotSignedException, SiteMessageException
+    {
+    	
+    	
+    	String strIdParentComment = request.getParameter( PARAMETER_COMMENT_ID_PARENT );
+        int nIdParentComment = DiggUtils.getIntegerParameter( strIdParentComment );
+        LuteceUser luteceUserConnected = SecurityService.getInstance(  ).getRegisteredUser( request );
+        
+        String strIdDigg = request.getParameter( PARAMETER_ID_DIGG );
+        int nIdDigg = DiggUtils.getIntegerParameter( strIdDigg );
+        Digg digg = DiggHome.findByPrimaryKey( nIdDigg, _plugin );
+
+        
+        Map<String, Object> model = new HashMap<String, Object>(  );
+        
+        CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService(  );
+
+        
+        if ( digg!=null  && digg.isActiveCaptcha(  ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
+        {
+            model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode(  ) );
+        }
+        
+        model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
+        model.put(MARK_ID_DIGG, strIdDigg);
+        CommentSubmit commentSubmit = _commentSubmitService.findByPrimaryKey(nIdParentComment, _plugin);
+        model.put(MARK_COMMENT_SUBMIT, commentSubmit);
+        model.put( MARK_DISABLE_NEW_COMMENT_SUBMIT, digg.isDisableNewComment(  ) );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_DIGG_SUB_COMMENT, request.getLocale(  ), model );
+        page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale(  ) ) );
+        page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale(  ) ) );
+        page.setContent( template.getHtml(  ) );
+        
         return page;
     }
 

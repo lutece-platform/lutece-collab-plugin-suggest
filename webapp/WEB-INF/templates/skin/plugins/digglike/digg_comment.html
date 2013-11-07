@@ -28,28 +28,9 @@
 		<p class="comment-content">
 		${digg.parseBbcodeValue(comment_submit_lutece_user.comment_submit.value)}
 		</p>
-		<button class="comment-link btn btn-link">
+		<a href="jsp/site/Portal.jsp?page=digg&id_digg=${id_digg}&id_digg_comment=${comment_submit_lutece_user.comment_submit.idCommentSubmit}&action=create_sub_comment">
 			&gt;&nbsp;#i18n{digglike.diggComment.labelCommentAComment}
-		</button>
-		<div class="comments-form">
-			<form action="jsp/site/Portal.jsp?page=digg" method="post" name="" id="comment-comment${rootId}" class="form comment-comment">
-			<input name="action" value="do_create_comment" type="hidden" />
-			<input name="id_digg" value="${id_digg}" type="hidden" />
-			<input name="id_digg_submit" value="${id_digg_submit}" type="hidden" />
-			<input name="id_digg_comment" value="${comment_submit_lutece_user.comment_submit.idCommentSubmit}" type="hidden" />
-			<label for name="comment_value">
-			#i18n{digglike.diggComment.labelComment}
-			<#if disable_new_comment_submit>(#i18n{digglike.diggComment.labelDisableNewCommentSubmit})</#if>
-			</label>
-			<textarea name="comment_value" id="comment_value${rootId}" class="comment-value markitup span8"></textarea>
-			<#if jcaptcha?exists>
-			<fieldset>${jcaptcha}</fieldset>
-			</#if>
-			<button class="btn btn-primary btn-small" type="submit" name="submit_comment">
-				<i class="icon-comment icon-white"></i>&nbsp;#i18n{digglike.diggComment.labelCommentAComment}
-			</button>
-			</form>
-		</div>
+		</a>
 		<#if comment_submit_lutece_user.list_sub_comment?has_content>
 			<#list comment_submit_lutece_user.list_sub_comment as comment_comment>
 			<blockquote>
