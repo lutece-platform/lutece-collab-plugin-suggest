@@ -3,7 +3,7 @@
     <!-- Plugin Informations -->
     <name>digglike</name>
     <class>fr.paris.lutece.plugins.digglike.service.DigglikePlugin</class>
-    <version>2.2.8</version>
+    <version>2.2.9</version>
     <description>digglike.plugin.description</description>
     <documentation/>
     <installation/>
