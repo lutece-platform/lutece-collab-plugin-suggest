@@ -511,16 +511,34 @@ public class DiggApp implements XPageApplication
     public XPage getViewCreateDiggSubmit( XPage page, int nMode, HttpServletRequest request )
         throws UserNotSignedException, SiteMessageException
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        model.put( MARK_VIEW, CONSTANT_VIEW_CREATE_DIGG_SUBMIT );
-
-        String strIdDigg = request.getParameter( PARAMETER_ID_DIGG );
+       
+    	
+    	LuteceUser luteceUserConnected = SecurityService.getInstance(  ).getRegisteredUser( request );
+    	String strIdDigg = request.getParameter( PARAMETER_ID_DIGG );
         int nIdDigg = DiggUtils.getIntegerParameter( strIdDigg );
-        LuteceUser luteceUserConnected = SecurityService.getInstance(  ).getRegisteredUser( request );
         Digg digg = DiggHome.findByPrimaryKey( nIdDigg, _plugin );
 
-        SearchFields searchFields = getSearchFields( request );
+        if ( digg.isActiveDiggSubmitAuthentification(  ) && SecurityService.isAuthenticationEnable(  ) )
+        {
+            luteceUserConnected = SecurityService.getInstance(  ).getRemoteUser( request );
 
+            if ( luteceUserConnected == null )
+            {
+                throw new UserNotSignedException(  );
+            }
+
+            //testAuthorizationAccess
+            testUserAuthorizationAccess( digg, request, luteceUserConnected );
+        }
+
+        
+        
+        
+        
+    	Map<String, Object> model = new HashMap<String, Object>(  );
+        model.put( MARK_VIEW, CONSTANT_VIEW_CREATE_DIGG_SUBMIT );
+        
+        SearchFields searchFields = getSearchFields( request );
         addDiggPageFrameset( getHtmlForm( request, nMode, _plugin, digg, searchFields.getIdFilterCategory(  ) ),
             request, page, digg, model, searchFields, luteceUserConnected );
 
@@ -548,7 +566,19 @@ public class DiggApp implements XPageApplication
         String strIdDigg = request.getParameter( PARAMETER_ID_DIGG );
         int nIdDigg = DiggUtils.getIntegerParameter( strIdDigg );
         Digg digg = DiggHome.findByPrimaryKey( nIdDigg, _plugin );
+        
+        if ( digg.isActiveCommentAuthentification(  ) && SecurityService.isAuthenticationEnable(  ) )
+        {
+            luteceUserConnected = SecurityService.getInstance(  ).getRemoteUser( request );
 
+            if ( luteceUserConnected == null )
+            {
+                throw new UserNotSignedException(  );
+            }
+
+            //testAuthorizationAccess
+            testUserAuthorizationAccess( digg, request, luteceUserConnected );
+        }
         
         Map<String, Object> model = new HashMap<String, Object>(  );
         
