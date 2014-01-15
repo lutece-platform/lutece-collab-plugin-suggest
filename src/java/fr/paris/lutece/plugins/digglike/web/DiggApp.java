@@ -1432,6 +1432,13 @@ public class DiggApp implements XPageApplication
                 getHtmlCommentSubmitList( request, diggSubmit.getComments(  ), diggSubmit.getDigg(  ),
                     diggSubmit.getIdDiggSubmit(  ), luteceUserConnected, plugin ) );
         }
+        CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService(  );
+
+        if ( diggSubmit.getDigg(  ).isActiveCaptcha(  ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
+        {
+            model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode(  ) );
+        }
+
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_DETAIL_SUBMIT_DIGG,
                 request.getLocale(  ), model );
@@ -1543,13 +1550,6 @@ public class DiggApp implements XPageApplication
         model.put( MARK_DISABLE_NEW_COMMENT_SUBMIT, digg.isDisableNewComment(  ) );
         model.put( MARK_ACTIVE_EDITOR_BBCODE, digg.isActiveEditorBbcode(  ) );
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
-
-        CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService(  );
-
-        if ( digg.isActiveCaptcha(  ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
-        {
-            model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode(  ) );
-        }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_COMMENT_SUBMIT_DIGG,
                 request.getLocale(  ), model );
