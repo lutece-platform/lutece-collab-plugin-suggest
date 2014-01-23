@@ -33,11 +33,13 @@
  */
 package fr.paris.lutece.plugins.digglike.utils;
 
+import fr.paris.lutece.plugins.avatar.service.AvatarService;
 import fr.paris.lutece.plugins.digglike.business.Category;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.Digg;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitType;
+import fr.paris.lutece.plugins.digglike.business.DiggUserInfo;
 import fr.paris.lutece.plugins.digglike.business.EntryFilter;
 import fr.paris.lutece.plugins.digglike.business.EntryHome;
 import fr.paris.lutece.plugins.digglike.business.EntryType;
@@ -133,6 +135,7 @@ public final class DiggUtils
     private static final String CONSTANT_CHARACTER_SIMPLE_QUOTE = "'";
     private static final String CONSTANTE_CHARACTERNEW_LINE = "\n";
     private static final String CONSTANTE_CHARACTER_RETURN = "\r";
+    private static final String MARK_AVATAR = "avatar";
 
     //	 Xml Tags
 
@@ -1606,4 +1609,26 @@ public final class DiggUtils
 
         return filter;
     }
+    
+    
+    
+    public static void addAvatarToModel( Map<String, Object> model,DiggUserInfo luteceUserInfo)
+    {
+    	
+    	if(luteceUserInfo!=null)
+        {
+        
+    		if(luteceUserInfo.getHomeMail()!=null)
+    		{
+    			model.put(MARK_AVATAR, AvatarService.getAvatar(luteceUserInfo.getHomeMail()));
+    		}
+    		else if(luteceUserInfo.getBusinessMail()!=null)
+    		{
+    			model.put(MARK_AVATAR, AvatarService.getAvatar(luteceUserInfo.getBusinessMail()));
+    		}
+    		
+        }
+    	
+    }
+    
 }

@@ -35,7 +35,7 @@
 				</a> |  
 			</#if>
 			<#if digg_submit_display.lutece_user?exists>
-				<i class="icon-user"></i> #i18n{digglike.diggListSubmit.postByUser} :
+				 #i18n{digglike.diggListSubmit.postByUser} :<#if digg_submit_display.avatar?has_content>${digg_submit_display.avatar}<#else><i class="icon-user"></i></#if>
 				<#if digg_submit_display.lutece_user?exists>
 					${digg_submit_display.lutece_user!""}
 				<#else>
@@ -70,6 +70,7 @@
 			</#if>
 		</p>
 		<div class="digg-list-content">				
+		
 			<#if digg_submit_display.digg_submit.diggSubmitValueShowInTheList?exists>
 				<#if digg_submit_display.digg_submit.diggSubmitValueShowInTheList?length &gt; 500>
 					<!-- span class="pull-right badge badge-inverse">
@@ -80,6 +81,7 @@
 					<div>${digg_submit_display.digg_submit.diggSubmitValueShowInTheList}</div>	
 				</#if>
 			</#if>
+			
 		</div>
 	
 		<p>

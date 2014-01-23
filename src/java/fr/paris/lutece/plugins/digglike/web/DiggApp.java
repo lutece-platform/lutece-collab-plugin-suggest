@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.digglike.web;
 
+import fr.paris.lutece.plugins.avatar.service.AvatarService;
 import fr.paris.lutece.plugins.digglike.business.Category;
 import fr.paris.lutece.plugins.digglike.business.CategoryHome;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
@@ -152,6 +153,7 @@ public class DiggApp implements XPageApplication
     private static final String MARK_SHOW_TOP_SCORE_BLOCK = "show_top_score_block";
     private static final String MARK_SHOW_TOP_COMMENT_BLOCK = "show_top_comment_block";
     private static final String MARK_DIGG_SUBMIT_VOTE_TYPE = "digg_submit_vote_type";
+  
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_JCAPTCHA = "jcaptcha";
     private static final String MARK_MAX_AMOUNT_COMMENTS = "number_comments";
@@ -1313,7 +1315,9 @@ public class DiggApp implements XPageApplication
             }
 
             modelDigg.put( MARK_LUTECE_USER, luteceUserInfo );
-
+            DiggUtils.addAvatarToModel(modelDigg, luteceUserInfo);
+            
+            
             if ( !digg.isDisableVote(  ) )
             {
                 modelDigg.put( MARK_DIGG_SUBMIT_VOTE_TYPE,
@@ -1353,6 +1357,9 @@ public class DiggApp implements XPageApplication
             }
 
             modelComment.put( MARK_LUTECE_USER, luteceUserInfo );
+            DiggUtils.addAvatarToModel(modelComment, luteceUserInfo);
+            
+            
             modelComment.put( MARK_LIST_SUB_COMMENT_SUBMIT_DIGG,
                 ( ( commentSubmit.getComments(  ) != null ) && !commentSubmit.getComments(  ).isEmpty(  ) )
                 ? getCommentSubmitDisplayList( commentSubmit.getComments(  ), plugin ) : null );
@@ -1413,14 +1420,21 @@ public class DiggApp implements XPageApplication
                                                    .hasUserSubscribedToDiggSubmit( luteceUserConnected,
                     diggSubmit.getIdDiggSubmit(  ) ) );
         }
+        
 
         model.put( MARK_ID_DIGG, diggSubmit.getDigg(  ).getIdDigg(  ) );
         model.put( MARK_DIGG_SUBMIT, diggSubmit );
         model.put( MARK_LUTECE_USER, luteceUserInfo );
+        DiggUtils.addAvatarToModel(model, luteceUserInfo);
+        
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
         model.put( MARK_DIGG_SUBMIT_VOTE_TYPE,
             getHtmlDiggSubmitVoteType( diggSubmit.getDigg(  ), diggSubmit, CONSTANT_VIEW_DIGG_SUBMIT,
                 request.getLocale(  ) ) );
+        
+       
+        
+        
         model.put( MARK_AUTHORIZED_COMMENT, diggSubmit.getDigg(  ).isAuthorizedComment(  ) );
         model.put( MARK_AUTHORIZED_VOTE, !diggSubmit.getDigg(  ).isDisableVote(  ) );
         model.put( MARK_ENABLE_DIGG_REPORTS, diggSubmit.getDigg(  ).isEnableReports(  ) );

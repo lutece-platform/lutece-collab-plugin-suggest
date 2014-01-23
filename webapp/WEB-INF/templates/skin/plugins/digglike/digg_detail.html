@@ -31,7 +31,8 @@
 	<p class="digg-meta">
 		<i class="icon-calendar"></i> ${digg_submit.dateResponse}&nbsp;
 		<#if lutece_user?exists>
-		<i class="icon-user"></i> #i18n{digg_submit.postByUser} :
+		 #i18n{digg_submit.postByUser} :
+		<#if  avatar?has_content>${avatar}<#else><i class="icon-user"></i></#if>
 			<#if lutece_user?exists>
 				${lutece_user!""}
 			<#else>
