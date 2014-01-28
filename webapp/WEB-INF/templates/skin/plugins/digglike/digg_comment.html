@@ -16,7 +16,7 @@
 			</#if>
 			<#if comment_submit_lutece_user.lutece_user?exists>
 				 #i18n{digglike.diggListSubmit.postByUser} :
-				<#if comment_submit_lutece_user.avatar?has_content>${comment_submit_lutece_user.avatar}<#else><i class="icon-user"></i></#if>
+				<#if comment_submit_lutece_user.avatar?has_content><img class="avatar" src="${comment_submit_lutece_user.avatar}" alt="avatar provided by gravatar.com" /><#else><i class="icon-user"></i></#if>
 				<#if comment_submit_lutece_user.lutece_user?exists>
 					${comment_submit_lutece_user.lutece_user}
 				<#else>
@@ -40,7 +40,7 @@
 					</#if>
 					<#if comment_comment.lutece_user?exists>
 						 #i18n{digglike.diggListSubmit.postByUser} :
-						<#if comment_comment.avatar?has_content>${comment_comment.avatar}<#else><i class="icon-user"></i></#if>
+						<#if comment_comment.avatar?has_content><img class="avatar" src="${comment_comment.avatar}" alt="avatar provided by gravatar.com" /><#else><i class="icon-user"></i></#if>
 						<#if comment_comment.lutece_user?exists>
 							${comment_comment.lutece_user}
 						<#else>

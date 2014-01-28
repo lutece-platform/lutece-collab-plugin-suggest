@@ -35,7 +35,8 @@
 				</a> |  
 			</#if>
 			<#if digg_submit_display.lutece_user?exists>
-				 #i18n{digglike.diggListSubmit.postByUser} :<#if digg_submit_display.avatar?has_content>${digg_submit_display.avatar}<#else><i class="icon-user"></i></#if>
+				 #i18n{digglike.diggListSubmit.postByUser} : <a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&lutece_user_name_filter=${digg_submit_display.lutece_user}" title="#i18n{digglike.diggListSubmit.labelFilterByUserName}"><#if digg_submit_display.avatar?has_content><img class="avatar" src="${digg_submit_display.avatar}" alt="avatar provided by gravatar.com" /><#else><i class="icon-user"></i></#if></a>
+				
 				<#if digg_submit_display.lutece_user?exists>
 					${digg_submit_display.lutece_user!""}
 				<#else>
@@ -47,7 +48,7 @@
 			<#if authorized_comment && !digg_submit_display.digg_submit.disableComment>
 				<i class="icon-comment"></i>&nbsp;
 					<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;action=view_digg_submit#digg${digg_submit_display.digg_submit.idDiggSubmit}">
-					${digg_submit_display.digg_submit.numberCommentEnable} #i18n{digglike.diggListSubmit.labelComments}
+					${digg_submit_display.digg_submit.numberCommentEnable} diggListSubmit.labelFilterByUserNamediggListSubmit.labelComments}
 				</a> |
 			</#if>
 			<#if digg_submit_display.digg_submit.category?exists>

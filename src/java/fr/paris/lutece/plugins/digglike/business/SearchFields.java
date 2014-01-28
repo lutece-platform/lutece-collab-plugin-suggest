@@ -40,6 +40,7 @@ public class SearchFields implements Serializable
 {
     private static final long serialVersionUID = 2512978426472997213L;
     private String _strQuery;
+    private String _strLuteceUserName;
     private String _strPageIndex;
     private int _nIdFilterPeriod = SubmitFilter.ALL_INT;
     private int _nIdDiggSubmitSort = SubmitFilter.ALL_INT;
@@ -105,4 +106,12 @@ public class SearchFields implements Serializable
     {
         this._nIdFilterDiggSubmitType = nIdFilterDiggSubmitType;
     }
+
+	public String getLuteceUserName() {
+		return _strLuteceUserName;
+	}
+
+	public void setLuteceUserName(String _strLuteceUserName) {
+		this._strLuteceUserName = _strLuteceUserName;
+	}
 }

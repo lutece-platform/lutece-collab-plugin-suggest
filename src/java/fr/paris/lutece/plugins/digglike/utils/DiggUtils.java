@@ -71,6 +71,7 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.string.StringUtil;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.sql.Timestamp;
@@ -1611,20 +1612,24 @@ public final class DiggUtils
     }
     
     
-    
+    /**
+     * Add Avatar to model
+     * @param model
+     * @param luteceUserInfo
+     */
     public static void addAvatarToModel( Map<String, Object> model,DiggUserInfo luteceUserInfo)
     {
     	
     	if(luteceUserInfo!=null)
         {
         
-    		if(luteceUserInfo.getHomeMail()!=null)
+    		if(!StringUtils.isEmpty(luteceUserInfo.getHomeMail()))
     		{
-    			model.put(MARK_AVATAR, AvatarService.getAvatar(luteceUserInfo.getHomeMail()));
+    			model.put(MARK_AVATAR, AvatarService.getAvatarUrl(luteceUserInfo.getHomeMail()));
     		}
-    		else if(luteceUserInfo.getBusinessMail()!=null)
+    		else if(!StringUtils.isEmpty(luteceUserInfo.getBusinessMail()))
     		{
-    			model.put(MARK_AVATAR, AvatarService.getAvatar(luteceUserInfo.getBusinessMail()));
+    			model.put(MARK_AVATAR, AvatarService.getAvatarUrl(luteceUserInfo.getBusinessMail()));
     		}
     		
         }

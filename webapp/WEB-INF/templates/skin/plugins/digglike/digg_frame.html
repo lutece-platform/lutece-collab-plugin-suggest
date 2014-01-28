@@ -48,24 +48,25 @@
 			<#if header_digg?has_content>
 				<div class="well">${header_digg}</div>			
 			</#if>
-		
+			
+			<ul class="nav nav-tabs">
+				<li <#if id_filter_category==-1 >class="active"</#if>>
+					<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_filter_category=-1&amp;action=view_digg_submit_list&lutece_user_name_filter=&query=">#i18n{digglike.diggFrame.labelAll}</a>
+				</li>	
 			<#if view?has_content && view == "view_digg_submit_list" >
 				<#if show_category_block>
 					<#if list_categories_digg?has_content>
-					<ul class="nav nav-tabs">
-						<li <#if id_filter_category==-1 >class="active"</#if>>
-							<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_filter_category=-1&amp;action=view_digg_submit_list">Tout</a>
-						</li>	
+					
 						<#list list_categories_digg as digg_categories>
 							<li <#if id_filter_category==digg_categories.idCategory>class="active"</#if>>
 								<a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_filter_category=${digg_categories.idCategory}&amp;action=view_digg_submit_list">${digg_categories.title}</a>
 							</li>
 						</#list>
-						</ul>
+						
 					</#if>
 				</#if>
 			</#if>
-			
+			</ul>
 			<div class="well">
 				<#if view?has_content && view == "view_digg_submit_list" >
 					<a class="btn btn-primary pull-left" href="jsp/site/Portal.jsp?page=digg&id_digg=${id_digg}&action=create_digg_submit" target="_top">

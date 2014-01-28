@@ -508,11 +508,18 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
         {
             listStrFilter.add( SQL_FILTER_IS_PINNED );
         }
+        if ( filter.containsLuteceUserKey())
+        {
+            listStrFilter.add( SQL_FILTER_LUTECE_USER_KEY);
+        }
 
         if ( filter.containsIdType(  ) )
         {
             listStrFilter.add( SQL_FILTER_ID_TYPE );
         }
+       
+        
+        
 
         if ( filter.containsIdContainsCommentDisable(  ) )
         {
@@ -595,12 +602,19 @@ public final class DiggSubmitDAO implements IDiggSubmitDAO
             daoUtil.setInt( nIndex, filter.getIdPinned(  ) );
             nIndex++;
         }
+        
+        if ( filter.containsLuteceUserKey())
+        {
+        	  daoUtil.setString( nIndex, filter.getLuteceUserKey());
+        	  nIndex++;
+        }
 
         if ( filter.containsIdType(  ) )
         {
             daoUtil.setInt( nIndex, filter.getIdType(  ) );
             nIndex++;
         }
+       
 
         daoUtil.executeQuery(  );
 

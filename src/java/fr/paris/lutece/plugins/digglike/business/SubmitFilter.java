@@ -37,6 +37,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 
 /**
  * 
@@ -440,7 +442,7 @@ public class SubmitFilter
      */
     public boolean containsLuteceUserKey( )
     {
-        return ( _strLuteceUserKey != null );
+        return ( !StringUtils.isEmpty( _strLuteceUserKey) );
     }
 
     /**

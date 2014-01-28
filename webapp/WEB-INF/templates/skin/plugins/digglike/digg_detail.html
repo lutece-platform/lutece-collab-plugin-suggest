@@ -32,7 +32,7 @@
 		<i class="icon-calendar"></i> ${digg_submit.dateResponse}&nbsp;
 		<#if lutece_user?exists>
 		 #i18n{digg_submit.postByUser} :
-		<#if  avatar?has_content>${avatar}<#else><i class="icon-user"></i></#if>
+		<#if  avatar?has_content><img class="avatar" src="${avatar}" alt="avatar provided by gravatar.com" /><#else><i class="icon-user"></i></#if>
 			<#if lutece_user?exists>
 				${lutece_user!""}
 			<#else>

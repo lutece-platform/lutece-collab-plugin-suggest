@@ -71,23 +71,27 @@ public class DiggUserInfoService implements IDiggUserInfoService
     @Override
     public void updateDiggUserInfoByLuteceUser( LuteceUser luteceUserConnected, Plugin plugin )
     {
-        //test if digg user info exist
+        //upadte digg user info
         if ( ( luteceUserConnected != null ) && ( luteceUserConnected.getName(  ) != null ) )
         {
-            DiggUserInfo diggUserInfo = null;
-            diggUserInfo = DiggUserInfoHome.findByKey( luteceUserConnected.getName(  ), plugin );
-
-            if ( diggUserInfo == null )
+          
+            DiggUserInfo diggUserInfoStrored = DiggUserInfoHome.findByKey( luteceUserConnected.getName(  ), plugin );
+            DiggUserInfo diggUserInfo = new DiggUserInfo(  );
+            diggUserInfo.setLuteceUserKey( luteceUserConnected.getName(  ) );
+            diggUserInfo.setLastName( luteceUserConnected.getUserInfos(  ).get( LuteceUser.NAME_FAMILY ) );
+            diggUserInfo.setFirstName( luteceUserConnected.getUserInfos(  ).get( LuteceUser.NAME_GIVEN ) );
+            diggUserInfo.setLogin( luteceUserConnected.getName(  ) );
+            diggUserInfo.setBusinesMail( luteceUserConnected.getUserInfos(  )
+                                                            .get( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL ) );
+            diggUserInfo.setHomeMail( luteceUserConnected.getUserInfos(  ).get( LuteceUser.HOME_INFO_ONLINE_EMAIL ) );
+      
+            if ( diggUserInfoStrored == null )
             {
-                diggUserInfo = new DiggUserInfo(  );
-                diggUserInfo.setLuteceUserKey( luteceUserConnected.getName(  ) );
-                diggUserInfo.setLastName( luteceUserConnected.getUserInfos(  ).get( LuteceUser.NAME_FAMILY ) );
-                diggUserInfo.setFirstName( luteceUserConnected.getUserInfos(  ).get( LuteceUser.NAME_GIVEN ) );
-                diggUserInfo.setLogin( luteceUserConnected.getName(  ) );
-                diggUserInfo.setBusinesMail( luteceUserConnected.getUserInfos(  )
-                                                                .get( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL ) );
-                diggUserInfo.setHomeMail( luteceUserConnected.getUserInfos(  ).get( LuteceUser.HOME_INFO_ONLINE_EMAIL ) );
-                DiggUserInfoHome.create( diggUserInfo, plugin );
+               DiggUserInfoHome.create( diggUserInfo, plugin );
+            }
+            else
+            {
+            	DiggUserInfoHome.update(diggUserInfo, plugin);
             }
         }
     }

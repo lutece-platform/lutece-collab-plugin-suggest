@@ -193,6 +193,7 @@ public class DiggApp implements XPageApplication
     private static final String PARAMETER_VOTE_DIGG = "vote";
     private static final String PARAMETER_ID_FILTER_CATEGORY_DIGG = "id_filter_category";
     private static final String PARAMETER_ID_FILTER_DIGG_SUBMIT_TYPE = "id_filter_type";
+    private static final String PARAMETER_LUTECE_USER_NAME_FILTER = "lutece_user_name_filter";
     private static final String PARAMETER_ID_CATEGORY_DIGG = "id_category";
     private static final String PARAMETER_ID_TYPE_DIGG = "id_type";
     private static final String PARAMETER_VOTED = "voted";
@@ -1198,7 +1199,8 @@ public class DiggApp implements XPageApplication
         submitFilter.setIdDiggSubmitState( _nIdDiggSubmitStatePublish );
         submitFilter.setIdCategory( searchFields.getIdFilterCategory(  ) );
         submitFilter.setIdType( searchFields.getIdFilterDiggSubmitType(  ) );
-
+        submitFilter.setLuteceUserKey(searchFields.getLuteceUserName());
+        
         listIdDiggSubmit = DigglikeSearchService.getInstance(  )
                                                 .getSearchResults( searchFields.getQuery(  ), submitFilter, plugin );
 
@@ -1824,6 +1826,7 @@ public class DiggApp implements XPageApplication
         String strIdFilterCategory = request.getParameter( PARAMETER_ID_FILTER_CATEGORY_DIGG );
         String strFilterPageIndex = request.getParameter( PARAMETER_FILTER_PAGE_INDEX );
         String strIdFilterDiggSubmitType = request.getParameter( PARAMETER_ID_FILTER_DIGG_SUBMIT_TYPE );
+        String strLuteceUserName = request.getParameter( PARAMETER_LUTECE_USER_NAME_FILTER );
 
         int nIdFilterPeriod = DiggUtils.getIntegerParameter( strIdFilterPeriod );
         int nIdDiggSubmitSort = DiggUtils.getIntegerParameter( strIdDiggSubmitSort );
@@ -1833,6 +1836,8 @@ public class DiggApp implements XPageApplication
         SearchFields searchFields = ( session.getAttribute( SESSION_SEARCH_FIELDS ) != null )
             ? (SearchFields) session.getAttribute( SESSION_SEARCH_FIELDS ) : new SearchFields(  );
         searchFields.setQuery( ( strQuery != null ) ? strQuery : searchFields.getQuery(  ) );
+        
+        
         searchFields.setIdFilterPeriod( ( strIdFilterPeriod != null ) ? nIdFilterPeriod
                                                                       : searchFields.getIdFilterPeriod(  ) );
         searchFields.setIdDiggSubmitSort( ( strIdDiggSubmitSort != null ) ? nIdDiggSubmitSort
@@ -1843,8 +1848,12 @@ public class DiggApp implements XPageApplication
                                                                                       : searchFields.getIdFilterDiggSubmitType(  ) );
         searchFields.setPageIndex( ( strFilterPageIndex != null ) ? strFilterPageIndex : searchFields.getPageIndex(  ) );
 
+        searchFields.setLuteceUserName( ( strLuteceUserName != null ) ? strLuteceUserName : searchFields.getLuteceUserName(  ) );
+        
         // update search Fields in session
         session.setAttribute( SESSION_SEARCH_FIELDS, searchFields );
+        
+        
 
         return searchFields;
     }
