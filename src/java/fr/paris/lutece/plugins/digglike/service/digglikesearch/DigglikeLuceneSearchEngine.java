@@ -39,20 +39,21 @@ import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 
 /**
@@ -62,65 +63,66 @@ public class DigglikeLuceneSearchEngine implements DigglikeSearchEngine
 {
     /**
      * Return search results
-     *
+     * 
      * @param strQuery The search query
      * @param filter the filter
      * @return Results as a collection of SearchResult
      */
     public List<DigglikeSearchItem> getSearchResults( String strQuery, SubmitFilter filter )
     {
-        List<DigglikeSearchItem> listResults = new ArrayList<DigglikeSearchItem>(  );
-        Searcher searcher = null;
+        List<DigglikeSearchItem> listResults = new ArrayList<DigglikeSearchItem>( );
+        IndexSearcher searcher = null;
 
         try
         {
-            searcher = new IndexSearcher( IndexationService.getDirectoryIndex(  ), true );
+            IndexReader ir = DirectoryReader.open( IndexationService.getDirectoryIndex( ) );
+            searcher = new IndexSearcher( ir );
 
-            Collection<String> queries = new ArrayList<String>(  );
-            Collection<String> fields = new ArrayList<String>(  );
-            Collection<BooleanClause.Occur> flags = new ArrayList<BooleanClause.Occur>(  );
+            Collection<String> queries = new ArrayList<String>( );
+            Collection<String> fields = new ArrayList<String>( );
+            Collection<BooleanClause.Occur> flags = new ArrayList<BooleanClause.Occur>( );
 
             //filter on content
             if ( ( strQuery != null ) && !strQuery.equals( "" ) )
             {
                 Query queryContent = new TermQuery( new Term( DigglikeSearchItem.FIELD_CONTENTS, strQuery ) );
-                queries.add( queryContent.toString(  ) );
+                queries.add( queryContent.toString( ) );
                 fields.add( DigglikeSearchItem.FIELD_CONTENTS );
                 flags.add( BooleanClause.Occur.MUST );
             }
 
             //filter on content id digg
-            if ( filter.containsIdDigg(  ) )
+            if ( filter.containsIdDigg( ) )
             {
-                Query queryIdDigg = new TermQuery( new Term( DigglikeSearchItem.FIELD_ID_DIGG,
-                            String.valueOf( filter.getIdDigg(  ) ) ) );
-                queries.add( queryIdDigg.toString(  ) );
+                Query queryIdDigg = new TermQuery( new Term( DigglikeSearchItem.FIELD_ID_DIGG, String.valueOf( filter
+                        .getIdDigg( ) ) ) );
+                queries.add( queryIdDigg.toString( ) );
                 fields.add( DigglikeSearchItem.FIELD_ID_DIGG );
                 flags.add( BooleanClause.Occur.MUST );
             }
 
             //filter on digg submit state
-            if ( filter.containsIdDiggSubmitState(  ) )
+            if ( filter.containsIdDiggSubmitState( ) )
             {
-                Query queryState = new TermQuery( new Term( DigglikeSearchItem.FIELD_STATE,
-                            String.valueOf( filter.getIdDiggSubmitState(  ) ) ) );
-                queries.add( queryState.toString(  ) );
+                Query queryState = new TermQuery( new Term( DigglikeSearchItem.FIELD_STATE, String.valueOf( filter
+                        .getIdDiggSubmitState( ) ) ) );
+                queries.add( queryState.toString( ) );
                 fields.add( DigglikeSearchItem.FIELD_STATE );
                 flags.add( BooleanClause.Occur.MUST );
             }
 
             //filter on digg type
             Query queryTypeDigg = new TermQuery( new Term( DigglikeSearchItem.FIELD_TYPE,
-                        DigglikeIndexer.INDEX_TYPE_DIGG ) );
-            queries.add( queryTypeDigg.toString(  ) );
+                    DigglikeIndexer.INDEX_TYPE_DIGG ) );
+            queries.add( queryTypeDigg.toString( ) );
             fields.add( DigglikeSearchItem.FIELD_TYPE );
             flags.add( BooleanClause.Occur.MUST );
 
             Query queryMulti = MultiFieldQueryParser.parse( IndexationService.LUCENE_INDEX_VERSION,
-                    (String[]) queries.toArray( new String[queries.size(  )] ),
-                    (String[]) fields.toArray( new String[fields.size(  )] ),
-                    (BooleanClause.Occur[]) flags.toArray( new BooleanClause.Occur[flags.size(  )] ),
-                    IndexationService.getAnalyser(  ) );
+                    (String[]) queries.toArray( new String[queries.size( )] ),
+                    (String[]) fields.toArray( new String[fields.size( )] ),
+                    (BooleanClause.Occur[]) flags.toArray( new BooleanClause.Occur[flags.size( )] ),
+                    IndexationService.getAnalyser( ) );
 
             TopDocs topDocs = searcher.search( queryMulti, LuceneSearchEngine.MAX_RESPONSES );
             ScoreDoc[] hits = topDocs.scoreDocs;
@@ -132,12 +134,10 @@ public class DigglikeLuceneSearchEngine implements DigglikeSearchEngine
                 DigglikeSearchItem si = new DigglikeSearchItem( document );
                 listResults.add( si );
             }
-
-            searcher.close(  );
         }
         catch ( Exception e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
         }
 
         return listResults;
