@@ -33,8 +33,22 @@
  */
 package fr.paris.lutece.plugins.digglike.service.subscription;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.digglike.business.CommentSubmit;
 import fr.paris.lutece.plugins.digglike.business.CommentSubmitHome;
+import fr.paris.lutece.plugins.digglike.business.Digg;
+import fr.paris.lutece.plugins.digglike.business.DiggFilter;
+import fr.paris.lutece.plugins.digglike.business.DiggHome;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmit;
 import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
@@ -54,18 +68,6 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
-import org.apache.commons.lang.StringUtils;
-
-import java.sql.Timestamp;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-
 
 /**
  * Daemon to send notifications to users that subscribed to diggs digg
@@ -77,10 +79,6 @@ public class DiggSubscribersNotificationDaemon extends Daemon
     private static final String MARK_COMMENTS = "comments";
     private static final String MARK_DIGG_SUBMIT = "diggSubmits";
     private static final String MARK_BASE_URL = "base_url";
-    private static final String TEMPLATE_NEW_COMMENTS = "skin/plugins/digglike/notifications/new_comments.html";
-    private static final String TEMPLATE_NEW_COMMENTS_TITLE = "skin/plugins/digglike/notifications/new_comments_title.html";
-    private static final String TEMPLATE_NEW_DIGG_SUBMIT = "skin/plugins/digglike/notifications/new_digg_submit.html";
-    private static final String TEMPLATE_NEW_DIGG_SUBMIT_TITLE = "skin/plugins/digglike/notifications/new_digg_submit_title.html";
     private Map<String, List<CommentSubmit>> _mapCommentNotif;
     private Map<String, List<DiggSubmit>> _mapDiggSubmitNotif;
 
@@ -101,20 +99,19 @@ public class DiggSubscribersNotificationDaemon extends Daemon
 
                 Plugin plugin = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
                 Date dateLastRun = new Date( Long.parseLong( strLastRunDate ) );
+                
 
                 // We get the list of comments posted after the last run of this daemon
                 List<CommentSubmit> listComment = CommentSubmitHome.findDiggCommentByDate( dateLastRun, plugin );
-
                 if ( ( listComment != null ) && ( listComment.size(  ) > 0 ) )
                 {
                     // We order the list of comments by digg submit
                     Map<Integer, List<CommentSubmit>> mapCommentsByDiggSubmitId = new HashMap<Integer, List<CommentSubmit>>( listComment.size(  ) );
-
+                   
                     for ( CommentSubmit comment : listComment )
                     {
-                        // We set the digg submit to have access to the underlying digg
-                        comment.setDiggSubmit( DiggSubmitHome.findByPrimaryKey( 
-                                comment.getDiggSubmit(  ).getIdDiggSubmit(  ), plugin ) );
+                    	comment.setDiggSubmit( DiggSubmitHome.findByPrimaryKey( 
+                                comment.getDiggSubmit(  ).getIdDiggSubmit(  ), plugin ));
                         addCommentToMap( comment, mapCommentsByDiggSubmitId );
                     }
 
@@ -146,7 +143,7 @@ public class DiggSubscribersNotificationDaemon extends Daemon
                             }
                         }
 
-                        sendRegisteredCommentNotifications(  );
+                        sendRegisteredCommentNotifications( plugin );
                         // We clear registered notifications
                         _mapCommentNotif = null;
                     }
@@ -157,6 +154,8 @@ public class DiggSubscribersNotificationDaemon extends Daemon
 
                 List<DiggSubmit> listCreatedDiggSubmit = DiggSubmitService.getService(  )
                                                                           .getDiggSubmitList( submitFilter, plugin );
+                
+                	
 
                 if ( ( listCreatedDiggSubmit != null ) && ( listCreatedDiggSubmit.size(  ) > 0 ) )
                 {
@@ -215,7 +214,7 @@ public class DiggSubscribersNotificationDaemon extends Daemon
                         }
                     }
 
-                    sendRegisteredDiggSubmitNotifications(  );
+                    sendRegisteredDiggSubmitNotifications(plugin  );
                 }
             }
 
@@ -295,22 +294,49 @@ public class DiggSubscribersNotificationDaemon extends Daemon
 
     /**
      * Send all registered comment notifications
+     * @param plugin the plugin 
      */
-    private void sendRegisteredCommentNotifications(  )
+    private void sendRegisteredCommentNotifications( Plugin plugin )
     {
-        for ( Entry<String, List<CommentSubmit>> entry : _mapCommentNotif.entrySet(  ) )
-        {
-            sendCommentNotification( entry.getValue(  ), entry.getKey(  ) );
-        }
+    	
+    	 DiggFilter filter = new DiggFilter(  );
+         filter.setIdState( Digg.STATE_ENABLE );
+         List<Digg> listDigg = DiggHome.getDiggList( filter, plugin );
+    	for(Digg digg:listDigg)
+    	{
+    		
+    		for ( Entry<String, List<CommentSubmit>> entry : _mapCommentNotif.entrySet(  ) )
+	        {
+    			List<CommentSubmit> listCommentSubmitsTmp=new ArrayList<CommentSubmit>();
+        		
+    			for(CommentSubmit commentSubmitTmp:entry.getValue(  ))
+    			{
+    				
+    				if(digg.getIdDigg()==commentSubmitTmp.getDiggSubmit().getDigg().getIdDigg())
+    				{
+    					
+    					listCommentSubmitsTmp.add(commentSubmitTmp);
+    				}
+    				
+    			}
+    		
+				if(!listCommentSubmitsTmp.isEmpty())
+				{
+					sendCommentNotification(digg, listCommentSubmitsTmp, entry.getKey(  ) );
+				}
+	        }
+			
+    	}
     }
 
     /**
      * Send a single comment notification
+     * @param digg the Digg link to the notification
      * @param listComments The list of comments to include into the notification
      * @param strUserName The name of the lutece user to send the notification
      *            to
      */
-    private void sendCommentNotification( List<CommentSubmit> listComments, String strUserName )
+    private void sendCommentNotification(Digg digg, List<CommentSubmit> listComments, String strUserName )
     {
         LuteceUser user = LuteceUserService.getLuteceUserFromName( strUserName );
         String strEmail = getEmailFromLuteceUser( user );
@@ -323,9 +349,9 @@ public class DiggSubscribersNotificationDaemon extends Daemon
             model.put( MARK_COMMENTS, listComments );
             model.put( MARK_BASE_URL, AppPathService.getProdUrl(  ) );
 
-            HtmlTemplate templateBody = AppTemplateService.getTemplate( TEMPLATE_NEW_COMMENTS, locale, model );
-            HtmlTemplate templateTitle = AppTemplateService.getTemplate( TEMPLATE_NEW_COMMENTS_TITLE, locale, model );
-            MailService.sendMailHtml( strEmail, MailService.getNoReplyEmail(  ), MailService.getNoReplyEmail(  ),
+            HtmlTemplate templateBody = AppTemplateService.getTemplateFromStringFtl(digg.getNotificationNewCommentBody(), locale, model);
+            HtmlTemplate templateTitle = AppTemplateService.getTemplateFromStringFtl(digg.getNotificationNewCommentTitle(), locale, model);
+            MailService.sendMailHtml( strEmail, !StringUtils.isBlank(digg.getNotificationNewCommentSenderName())?digg.getNotificationNewCommentSenderName():digg.getTitle(), MailService.getNoReplyEmail(  ),
                 templateTitle.getHtml(  ), templateBody.getHtml(  ) );
         }
     }
@@ -370,23 +396,49 @@ public class DiggSubscribersNotificationDaemon extends Daemon
 
     /**
      * Send all registered comment notifications
+     * @param plugin plugin
      */
-    private void sendRegisteredDiggSubmitNotifications(  )
+    private void sendRegisteredDiggSubmitNotifications(Plugin plugin  )
     {
-        for ( Entry<String, List<DiggSubmit>> entry : _mapDiggSubmitNotif.entrySet(  ) )
-        {
-            sendDiggSubmitNotification( entry.getValue(  ), entry.getKey(  ) );
-        }
+    	 DiggFilter filter = new DiggFilter(  );
+         filter.setIdState( Digg.STATE_ENABLE );
+         List<Digg> listDigg = DiggHome.getDiggList( filter, plugin );
+    	for(Digg digg:listDigg)
+    	{
+    		
+    		for ( Entry<String, List<DiggSubmit>> entry : _mapDiggSubmitNotif.entrySet(  ) )
+	        {
+    			List<DiggSubmit> listDiggSubmitTmp=new ArrayList<DiggSubmit>();
+        		
+    			for(DiggSubmit diggSubmitTmp:entry.getValue(  ))
+    			{
+    				
+    				if(digg.getIdDigg()==diggSubmitTmp.getDigg().getIdDigg())
+    				{
+    					
+    					listDiggSubmitTmp.add(diggSubmitTmp);
+    				}
+    				
+    			}
+    		
+				if(!listDiggSubmitTmp.isEmpty())
+				{
+					sendDiggSubmitNotification(digg, listDiggSubmitTmp, entry.getKey(  ) );
+				}
+	        }
+			
+    	}
     }
 
     /**
      * Send a single digg submit notification
+     * @param digg the Digg link to the notification
      * @param listDiggSubmit The list of digg submit to include into the
      *            notification
      * @param strUserName The name of the lutece user to send the notification
      *            to
      */
-    private void sendDiggSubmitNotification( List<DiggSubmit> listDiggSubmit, String strUserName )
+    private void sendDiggSubmitNotification( Digg digg,List<DiggSubmit> listDiggSubmit, String strUserName )
     {
         LuteceUser user = LuteceUserService.getLuteceUserFromName( strUserName );
         String strEmail = getEmailFromLuteceUser( user );
@@ -399,9 +451,9 @@ public class DiggSubscribersNotificationDaemon extends Daemon
             model.put( MARK_DIGG_SUBMIT, listDiggSubmit );
             model.put( MARK_BASE_URL, AppPathService.getProdUrl(  ) );
 
-            HtmlTemplate templateBody = AppTemplateService.getTemplate( TEMPLATE_NEW_DIGG_SUBMIT, locale, model );
-            HtmlTemplate templateTitle = AppTemplateService.getTemplate( TEMPLATE_NEW_DIGG_SUBMIT_TITLE, locale, model );
-            MailService.sendMailHtml( strEmail, MailService.getNoReplyEmail(  ), MailService.getNoReplyEmail(  ),
+            HtmlTemplate templateBody = AppTemplateService.getTemplateFromStringFtl(digg.getNotificationNewDiggSubmitBody(), locale, model);
+            HtmlTemplate templateTitle = AppTemplateService.getTemplateFromStringFtl(digg.getNotificationNewDiggSubmitTitle(), locale, model);
+          MailService.sendMailHtml( strEmail, !StringUtils.isBlank(digg.getNotificationNewDiggSubmitSenderName())?digg.getNotificationNewDiggSubmitSenderName():digg.getTitle(), MailService.getNoReplyEmail(  ),
                 templateTitle.getHtml(  ), templateBody.getHtml(  ) );
         }
     }

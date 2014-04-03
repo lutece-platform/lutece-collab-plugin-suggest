@@ -66,7 +66,11 @@ CREATE TABLE digglike_default_message (
 	libelle_contribution varchar(255),
 	number_digg_submit_in_top_score int,
 	number_digg_submit_in_top_comment int,
-	number_digg_submit_caracters_shown int
+	number_digg_submit_caracters_shown int,
+	notification_new_comment_title long varchar,
+	notification_new_comment_body long varchar,
+	notification_new_digg_submit_title long varchar,
+	notification_new_digg_submit_body long varchar
 );
 
 --
@@ -174,6 +178,12 @@ CREATE TABLE digglike_digg (
 	active_editor_bbcode smallint default 0,
 	default_digg smallint default 0,
 	id_default_sort int,
+	notification_new_comment_sender varchar(255),
+	notification_new_comment_title long varchar,
+	notification_new_comment_body long varchar,
+	notification_new_digg_submit_sender varchar(255),
+	notification_new_digg_submit_title long varchar,
+	notification_new_digg_submit_body long varchar,
 	PRIMARY KEY (id_digg)
 );
 

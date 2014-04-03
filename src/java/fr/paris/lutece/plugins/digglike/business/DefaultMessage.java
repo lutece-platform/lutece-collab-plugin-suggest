@@ -50,7 +50,76 @@ public class DefaultMessage implements RBACResource
     private int _nNumberDiggSubmitInTopScore = -1;
     private int _nNumberDiggSubmitInTopComment = -1;
     private int _nNumberDiggSubmitCaractersShown = -1;
+    private String _strNotificationNewCommentTitle;
+    private String _strNotificationNewCommentBody;
+    private String _strNotificationNewDiggSubmitTitle;
+    private String _strNotificationNewDiggSubmitBody;
 
+    /**
+     * 
+     * @return getNotificationNewCommentTitle
+     */
+    public String getNotificationNewCommentTitle() {
+		return _strNotificationNewCommentTitle;
+	}
+
+    /**
+     * 
+     * @param _strNotificationNewCommentTitle NotificationNewCommentTitle
+     */
+	public void setNotificationNewCommentTitle(
+			String _strNotificationNewCommentTitle) {
+		this._strNotificationNewCommentTitle = _strNotificationNewCommentTitle;
+	}
+	
+	/**
+	 * 
+	 * @return NotificationNewCommentBody
+	 */
+	public String getNotificationNewCommentBody() {
+		return _strNotificationNewCommentBody;
+	}
+	/**
+	 * 
+	 * @param _strNotificationNewCommentBody NotificationNewCommentBody
+	 */
+	public void setNotificationNewCommentBody(
+			String _strNotificationNewCommentBody) {
+		this._strNotificationNewCommentBody = _strNotificationNewCommentBody;
+	}
+	
+	/**
+	 * 
+	 * @return NotificationNewDiggSubmitTitle
+	 */
+	public String getNotificationNewDiggSubmitTitle() {
+		return _strNotificationNewDiggSubmitTitle;
+	}
+	/**
+	 * 
+	 * @param _strNotificationNewDiggSubmitTitle NotificationNewDiggSubmitTitle
+	 */
+	public void setNotificationNewDiggSubmitTitle(
+			String _strNotificationNewDiggSubmitTitle) {
+		this._strNotificationNewDiggSubmitTitle = _strNotificationNewDiggSubmitTitle;
+	}
+	/**
+	 * 
+	 * @return NotificationDiggSubmitBody
+	 */
+	public String getNotificationNewDiggSubmitBody() {
+		return _strNotificationNewDiggSubmitBody;
+	}
+	/**
+	 * 
+	 * @param _strNotificationDiggSubmitBody NotificationDiggSubmitBody
+	 */
+	public void setNotificationNewDiggSubmitBody(
+			String _strNotificationDiggSubmitBody) {
+		this._strNotificationNewDiggSubmitBody = _strNotificationDiggSubmitBody;
+	}
+
+	
     /**
      *
      * @return the default value of validate button

@@ -138,6 +138,19 @@ public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACRe
     private ImageResource _image;
     @DiggAttribute( "description" )
     private String _strDescription;
+    @DiggAttribute( "notificationNewCommentSenderName" )
+    private String _strNotificationNewCommentSenderName;
+    @DiggAttribute( "notificationNewCommentTitle" )
+    private String _strNotificationNewCommentTitle;
+    @DiggAttribute( "notificationNewCommentBody" )
+    private String _strNotificationNewCommentBody;
+    @DiggAttribute( "notificationNewDiggSubmitSenderName" )
+    private String _strNotificationNewDiggSubmitSenderName;
+    @DiggAttribute( "notificationNewDiggSubmitTitle" )
+    private String _strNotificationNewDiggSubmitTitle;
+    @DiggAttribute( "notificationNewDiggSubmitBody" )
+    private String _strNotificationNewDiggSubmitBody;
+    
 
     /**
     * Initialize the Digg
@@ -1267,4 +1280,97 @@ public class Digg implements IExtendableResource, AdminWorkgroupResource, RBACRe
 
         return null;
     }
+    
+    /**
+     * 
+     * @return getNotificationNewCommentSenderName
+     */
+    public String getNotificationNewCommentSenderName() {
+		return _strNotificationNewCommentSenderName;
+	}
+
+    /**
+     * 
+     * @param _strNotificationNewCommentSenderName
+     */
+	public void setNotificationNewCommentSenderName(
+			String _strNotificationNewCommentSenderName) {
+		this._strNotificationNewCommentSenderName = _strNotificationNewCommentSenderName;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getNotificationNewCommentTitle() {
+		return _strNotificationNewCommentTitle;
+	}
+	/**
+	 * 
+	 * @param _strNotificationNewCommentTitle
+	 */
+	public void setNotificationNewCommentTitle(
+			String _strNotificationNewCommentTitle) {
+		this._strNotificationNewCommentTitle = _strNotificationNewCommentTitle;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public String getNotificationNewCommentBody() {
+		return _strNotificationNewCommentBody;
+	}
+	/**
+	 * 
+	 * @param _strNotificationNewCommentBody
+	 */
+	public void setNotificationNewCommentBody(
+			String _strNotificationNewCommentBody) {
+		this._strNotificationNewCommentBody = _strNotificationNewCommentBody;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public String getNotificationNewDiggSubmitSenderName() {
+		return _strNotificationNewDiggSubmitSenderName;
+	}
+	/**
+	 * 
+	 * @param _strNotificationNewDiggSubmitSenderName
+	 */
+	public void setNotificationNewDiggSubmitSenderName(
+			String _strNotificationNewDiggSubmitSenderName) {
+		this._strNotificationNewDiggSubmitSenderName = _strNotificationNewDiggSubmitSenderName;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public String getNotificationNewDiggSubmitTitle() {
+		return _strNotificationNewDiggSubmitTitle;
+	}
+	/**
+	 * 
+	 * @param _strNotificationNewDiggSubmitTitle
+	 */
+	public void setNotificationNewDiggSubmitTitle(
+			String _strNotificationNewDiggSubmitTitle) {
+		this._strNotificationNewDiggSubmitTitle = _strNotificationNewDiggSubmitTitle;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public String getNotificationNewDiggSubmitBody() {
+		return _strNotificationNewDiggSubmitBody;
+	}
+	/**
+	 * 
+	 * @param _strNotificationDiggSubmitBody
+	 */
+	public void setNotificationNewDiggSubmitBody(
+			String _strNotificationDiggSubmitBody) {
+		this._strNotificationNewDiggSubmitBody = _strNotificationDiggSubmitBody;
+	}
 }

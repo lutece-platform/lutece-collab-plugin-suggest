@@ -62,6 +62,23 @@
 						<input type="text" name="number_digg_submit_caracters_shown" id="number_digg_submit_caracters_shown" class="input-mini" value="${default_message.numberDiggSubmitCaractersShown}" maxlength="10" />
 						<span class="help-text">#i18n{digglike.manageDefaultMessage.labelNumberDiggSubmitCaractersShownComment}</span>
 				</div>
+				 <div class="controls">
+					<label for="notification_new_comment_title"> #i18n{digglike.manageDefaultMessage.labelNotificationNewCommentTitle}  * </label>
+					<textarea name="notification_new_comment_title" id="notification_new_comment_title" rows="10" class="span6" class="richtext">${default_message.notificationNewCommentTitle!}</textarea>
+				</div>
+				 <div class="controls">
+					<label for="notification_new_comment_body"> #i18n{digglike.manageDefaultMessage.labelNotificationNewCommentBody}  * </label>
+					<textarea name="notification_new_comment_body" id="notification_new_comment_body" rows="10" class="span6" class="richtext">${default_message.notificationNewCommentBody!}</textarea>
+				</div>
+				 <div class="controls">
+					<label for="notification_new_digg_submit_title"> #i18n{digglike.manageDefaultMessage.labelNotificationNewDiggSubmitTitle}  * </label>
+					<textarea name="notification_new_digg_submit_title" id="notification_new_digg_submit_title" rows="10" class="span6" class="richtext">${default_message.notificationNewDiggSubmitTitle!}</textarea>
+				</div>
+				 <div class="controls">
+					<label for="notification_new_digg_submit_body"> #i18n{digglike.manageDefaultMessage.labelNotificationNewDiggSubmitBody}  * </label>
+					<textarea name="notification_new_digg_submit_body" id="notification_new_digg_submit_body" rows="10" class="span6" class="richtext">${default_message.notificationNewDiggSubmitBody!}</textarea>
+				</div>
+				
 			</div>
 			<div class="form-actions">
 				<button class="btn btn-primary btn-small" type="submit" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createDigg.buttonSave}</button>

@@ -83,7 +83,6 @@ import fr.paris.lutece.plugins.digglike.service.CategoryResourceIdService;
 import fr.paris.lutece.plugins.digglike.service.CommentSubmitService;
 import fr.paris.lutece.plugins.digglike.service.DefaultMessageResourceIdService;
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
-import fr.paris.lutece.plugins.digglike.service.DigglikePlugin;
 import fr.paris.lutece.plugins.digglike.service.DigglikeResourceIdService;
 import fr.paris.lutece.plugins.digglike.service.ExportFormatResourceIdService;
 import fr.paris.lutece.plugins.digglike.service.ICommentSubmitService;
@@ -191,6 +190,15 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String FIELD_NUMBER_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST = "digglike.createDigg.labelNumberCommentDisplayInDiggSubmitList";
     private static final String FIELD_NUMBER_CHAR_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST = "digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitList";
 
+    private static final String FIELD_NOTIFICATION_NEW_COMMENT_SENDER_NAME ="digglike.createDigg.labelNotificationNewCommentSenderName";
+    private static final String FIELD_NOTIFICATION_NEW_COMMENT_TITLE="digglike.createDigg.labelNotificationNewCommentTitle";
+    private static final String FIELD_NOTIFICATION_NEW_COMMENT_BODY="digglike.createDigg.labelNotificationNewCommentBody";
+    private static final String FIELD_NOTIFICATION_NEW_DIGG_DUBMIT_SENDER_NAME="digglike.createDigg.labelNotificationNewDiggSubmitSenderName";
+    private static final String FIELD_NOTIFICATION_NEW_DIGG_DUBMIT_TITLE="digglike.createDigg.labelNotificationNewDiggSubmitTitle";
+    private static final String FIELD_NOTIFICATION_NEW_DIGG_DUBMIT_BODY="digglike.createDigg.labelNotificationNewDiggSubmitBody";
+  
+    
+    
     // properties
     private static final String PROPERTY_ITEM_PER_PAGE = "digglike.itemsPerPage";
     private static final String PROPERTY_ALL = "digglike.manageDigg.select.all";
@@ -382,7 +390,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_ID_DEFAULT_DIGG = "id_default_digg";
     private static final String PARAMETER_SELECTED_DIGG_SUBMIT = "selected_digg_submit";
     private static final String PARAMETER_DISABLE_VOTE = "disable_vote";
-    private static final String PARAMETER_DISABLE_COMMENT = "disable_vote";
+    private static final String PARAMETER_DISABLE_COMMENT = "disable_comment";
     private static final String PARAMETER_ENABLE_PIN = "enable_pin";
     private static final String PARAMETER_ENABLE_REPORTS = "enable_reports";
     private static final String PARAMETER_ENABLE_TERMS_OF_USE = "enable_terms_of_use";
@@ -394,7 +402,12 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_IMAGE_SOURCE = "image_source";
     private static final String PARAMETER_DESCRIPTION = "description";
     private static final String PARAMETER_ID_CONTAINS_COMMENT_DISABLE = "id_contains_comment_disable";
-
+    private static final String PARAMETER_NOTIFICATION_NEW_COMMENT_SENDER_NAME ="notification_new_comment_sender_name";
+    private static final String PARAMETER_NOTIFICATION_NEW_COMMENT_TITLE="notification_new_comment_title";
+    private static final String PARAMETER_NOTIFICATION_NEW_COMMENT_BODY="notification_new_comment_body";
+    private static final String PARAMETER_NOTIFICATION_NEW_DIGG_SUBMIT_SENDER_NAME="notification_new_digg_submit_sender_name";
+    private static final String PARAMETER_NOTIFICATION_NEW_DIGG_SUBMIT_TITLE="notification_new_digg_submit_title";
+    private static final String PARAMETER_NOTIFICATION_NEW_DIGG_SUBMIT_BODY="notification_new_digg_submit_body";
     // other constants
     private static final String EMPTY_STRING = "";
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
@@ -1650,6 +1663,13 @@ public class DiggJspBean extends PluginAdminPageJspBean
         String strTermsOfUse = request.getParameter( PARAMETER_TERMS_OF_USE );
         String strEnableReports = request.getParameter( PARAMETER_ENABLE_REPORTS );
         String strDescription = request.getParameter( PARAMETER_DESCRIPTION );
+        String strNotificationNewCommentSenderName=request.getParameter(PARAMETER_NOTIFICATION_NEW_COMMENT_SENDER_NAME);
+        String strNotificationNewCommentTitle=request.getParameter(PARAMETER_NOTIFICATION_NEW_COMMENT_TITLE);
+        String strNotificationNewCommentBody=request.getParameter(PARAMETER_NOTIFICATION_NEW_COMMENT_BODY);
+        String strNotificationNewDiggSubmitSenderName=request.getParameter(PARAMETER_NOTIFICATION_NEW_DIGG_SUBMIT_SENDER_NAME);
+        String strNotificationNewDiggSubmitTitle=request.getParameter(PARAMETER_NOTIFICATION_NEW_DIGG_SUBMIT_TITLE);
+        String strNotificationNewDiggSubmitBody=request.getParameter(PARAMETER_NOTIFICATION_NEW_DIGG_SUBMIT_BODY);
+        
 
         int nIdVoteType = DiggUtils.getIntegerParameter( strIdVoteType );
         int nIdMailingListDiggSubmit = DiggUtils.getIntegerParameter( strIdMailingListDiggSubmit );
@@ -1665,17 +1685,17 @@ public class DiggJspBean extends PluginAdminPageJspBean
 
         String strFieldError = EMPTY_STRING;
 
-        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) )
+        if (  StringUtils.isEmpty(strTitle))
         {
             strFieldError = FIELD_TITLE;
         }
 
-        else if ( ( strLibelleContribution == null ) || strLibelleContribution.trim(  ).equals( EMPTY_STRING ) )
+        else if ( StringUtils.isEmpty(strLibelleContribution ) )
         {
             strFieldError = FIELD_LIBELLE_CONTRIBUTION;
         }
 
-        else if ( ( strUnavailabilityMessage == null ) || strUnavailabilityMessage.trim(  ).equals( EMPTY_STRING ) )
+        else if ( StringUtils.isEmpty( strUnavailabilityMessage))
         {
             strFieldError = FIELD_UNAVAILABILITY_MESSAGE;
         }
@@ -1683,8 +1703,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
         {
             strFieldError = FIELD_VOTE_TYPE;
         }
-        else if ( ( strNumberDiggSubmitCaractersShown == null ) ||
-                strNumberDiggSubmitCaractersShown.trim(  ).equals( EMPTY_STRING ) )
+        else if ( StringUtils.isEmpty( strNumberDiggSubmitCaractersShown) )
         {
             strFieldError = FIELD_NUMBER_DIGG_SUBMIT_CARACTERS_SHOWN;
         }
@@ -1724,6 +1743,28 @@ public class DiggJspBean extends PluginAdminPageJspBean
                 strNumberCharCommentDisplayInDiggSubmitList.trim(  ).equals( EMPTY_STRING ) ) ) )
         {
             strFieldError = FIELD_NUMBER_CHAR_COMMENT_DISPLAY_IN_DIGG_SUBMIT_LIST;
+        }
+       
+        else if(StringUtils.isEmpty(strNotificationNewCommentTitle))
+        {
+        	strFieldError = FIELD_NOTIFICATION_NEW_COMMENT_TITLE;
+        	
+        }
+        else if(StringUtils.isEmpty(strNotificationNewCommentBody))
+        {
+        	strFieldError = FIELD_NOTIFICATION_NEW_COMMENT_BODY;
+        	
+        }
+        
+        else if(StringUtils.isEmpty(strNotificationNewDiggSubmitTitle))
+        {
+        	
+        	strFieldError = FIELD_NOTIFICATION_NEW_DIGG_DUBMIT_TITLE;
+        }
+        else if(StringUtils.isEmpty(strNotificationNewDiggSubmitBody))
+        {
+        	
+        	strFieldError = FIELD_NOTIFICATION_NEW_DIGG_DUBMIT_BODY;
         }
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
@@ -1857,7 +1898,13 @@ public class DiggJspBean extends PluginAdminPageJspBean
         digg.setEnableTermsOfUse( strEnableTermsOfUse != null );
         digg.setTermsOfUse( strTermsOfUse );
         digg.setDescription( strDescription );
-
+        digg.setNotificationNewCommentSenderName(strNotificationNewCommentSenderName);
+        digg.setNotificationNewCommentTitle(strNotificationNewCommentTitle);
+        digg.setNotificationNewCommentBody(strNotificationNewCommentBody);
+        digg.setNotificationNewDiggSubmitSenderName(strNotificationNewDiggSubmitSenderName);
+        digg.setNotificationNewDiggSubmitTitle(strNotificationNewDiggSubmitTitle);
+        digg.setNotificationNewDiggSubmitBody(strNotificationNewDiggSubmitBody);
+        
         if ( ( digg.getIdDigg(  ) == DiggUtils.CONSTANT_ID_NULL ) || ( strUpdateFile != null ) )
         {
             FileItem imageSource = request.getFile( PARAMETER_IMAGE_SOURCE );

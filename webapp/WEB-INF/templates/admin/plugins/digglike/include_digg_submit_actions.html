@@ -1,6 +1,8 @@
+<#if !digg_submit.disableComment>
 <a class="btn btn-small btn-primary" href="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altManageComment}">
 	<i class="icon-comment icon-white"></i>
 </a>
+</#if>
 <#if digg_submit.diggSubmitState.number=disable_state_number>
 	<a class="btn btn-small btn-inverse" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${waiting_for_publish_state_number}#digg${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
 			<i class="icon-pause icon-white"></i>

@@ -33,6 +33,13 @@
  */
 package fr.paris.lutece.plugins.digglike.web;
 
+import java.util.HashMap;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.digglike.business.DefaultMessage;
 import fr.paris.lutece.plugins.digglike.business.DefaultMessageHome;
 import fr.paris.lutece.plugins.digglike.service.DefaultMessageResourceIdService;
@@ -48,11 +55,6 @@ import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.web.admin.PluginAdminPageJspBean;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
-import java.util.HashMap;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
 
 /**
  *
@@ -61,7 +63,15 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class DefaultMessageJspBean extends PluginAdminPageJspBean
 {
-    //	templates
+    
+	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8248033294625285115L;
+
+	//	templates
     private static final String TEMPLATE_MANAGE_DEFAULT_MESSAGE = "admin/plugins/digglike/manage_default_message.html";
 
     //	Markers
@@ -76,6 +86,11 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_NUMBER_DIGG_SUBMIT_IN_TOP_SCORE = "number_digg_submit_in_top_score";
     private static final String PARAMETER_NUMBER_DIGG_SUBMIT_IN_TOP_COMMENT = "number_digg_submit_in_top_comment";
     private static final String PARAMETER_NUMBER_DIGG_SUBMIT_CARACTERS_SHOWN = "number_digg_submit_caracters_shown";
+    private static final String PARAMETER_NOTIFICATION_NEW_COMMENT_TITLE="notification_new_comment_title";
+    private static final String PARAMETER_NOTIFICATION_NEW_COMMENT_BODY="notification_new_comment_body";
+    private static final String PARAMETER_NOTIFICATION_NEW_DIGG_SUBMIT_TITLE="notification_new_digg_submit_title";
+    private static final String PARAMETER_NOTIFICATION_NEW_DIGG_SUBMIT_BODY="notification_new_digg_submit_body";
+
 
     //	 other constants
     private static final String EMPTY_STRING = "";
@@ -88,10 +103,17 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
     private static final String FIELD_NUMBER_DIGG_SUBMIT_IN_TOP_SCORE = "digglike.createDigg.labelNumberDiggSumitInTopScore";
     private static final String FIELD_NUMBER_DIGG_SUBMIT_IN_TOP_COMMENT = "digglike.createDigg.labelNumberDiggSumitInTopComment";
     private static final String FIELD_NUMBER_DIGG_SUBMIT_CARACTERS_SHOWN = "digglike.createDigg.labelNumberDiggSubmitCaractersShown";
+    
+    private static final String FIELD_NOTIFICATION_NEW_COMMENT_TITLE="digglike.manageDefaultMessage.labelNotificationNewCommentTitle";
+    private static final String FIELD_NOTIFICATION_NEW_COMMENT_BODY="digglike.manageDefaultMessage.labelNotificationNewCommentBody";
+    private static final String FIELD_NOTIFICATION_NEW_DIGG_DUBMIT_TITLE="digglike.manageDefaultMessage.labelNotificationNewDiggSubmitTitle";
+    private static final String FIELD_NOTIFICATION_NEW_DIGG_DUBMIT_BODY="digglike.manageDefaultMessage.labelNotificationNewDiggSubmitBody";
+  
+    
     private static final String MESSAGE_ILLOGICAL_NUMBER_DIGG_SUBMIT_IN_TOP_SCORE = "digglike.message.illogicalNumberDiggSumitInTopScore";
     private static final String MESSAGE_ILLOGICAL_NUMBER_DIGG_SUBMIT_IN_TOP_COMMENT = "digglike.message.illogicalNumberDiggSumitInTopComment";
     private static final String MESSAGE_ILLOGICAL_NUMBER_DIGG_SUBMIT_CARACTERS_SHOWN = "digglike.message.illogicalNumberDiggSubmitCaractersShown";
-
+    	
     //properties
     private static final String PROPERTY_MANAGE_DEFAULT_MESSAGE_TITLE = "form.manageDefaultMessage.title";
 
@@ -154,41 +176,64 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
         String strNumberDiggSubmitInTopScore = request.getParameter( PARAMETER_NUMBER_DIGG_SUBMIT_IN_TOP_SCORE );
         String strNumberDiggSubmitInTopComment = request.getParameter( PARAMETER_NUMBER_DIGG_SUBMIT_IN_TOP_COMMENT );
         String strNumberDiggSubmitCaractersShown = request.getParameter( PARAMETER_NUMBER_DIGG_SUBMIT_CARACTERS_SHOWN );
-
+        String strNotificationNewCommentTitle=request.getParameter(PARAMETER_NOTIFICATION_NEW_COMMENT_TITLE);
+        String strNotificationNewCommentBody=request.getParameter(PARAMETER_NOTIFICATION_NEW_COMMENT_BODY);
+        String strNotificationNewDiggSubmitTitle=request.getParameter(PARAMETER_NOTIFICATION_NEW_DIGG_SUBMIT_TITLE);
+        String strNotificationNewDiggSubmitBody=request.getParameter(PARAMETER_NOTIFICATION_NEW_DIGG_SUBMIT_BODY);
+      
         int nNumberDiggSubmitInTopScore = DiggUtils.getIntegerParameter( strNumberDiggSubmitInTopScore );
         int nNumberDiggSubmitInTopComment = DiggUtils.getIntegerParameter( strNumberDiggSubmitInTopComment );
         int nNumberDiggSubmitCaractersShown = DiggUtils.getIntegerParameter( strNumberDiggSubmitCaractersShown );
 
         String strFieldError = EMPTY_STRING;
 
-        if ( ( strLibelleContribution == null ) || strLibelleContribution.trim(  ).equals( EMPTY_STRING ) )
+        if ( StringUtils.isEmpty( strLibelleContribution )  )
         {
             strFieldError = FIELD_LIBELLE_CONTRIBUTION;
         }
-        else if ( ( strUnavailabilityMessage == null ) || strUnavailabilityMessage.trim(  ).equals( EMPTY_STRING ) )
+        else if ( StringUtils.isEmpty(strUnavailabilityMessage) )
         {
             strFieldError = FIELD_UNAVAILABILITY_MESSAGE;
         }
 
-        else if ( ( strLibelleValidateButton == null ) || strLibelleValidateButton.trim(  ).equals( EMPTY_STRING ) )
+        else if ( StringUtils.isEmpty(strLibelleValidateButton) )
         {
             strFieldError = FIELD_LIBELLE_VALIDATE_BUTTON;
         }
-        else if ( ( strNumberDiggSubmitInTopScore == null ) ||
-                strNumberDiggSubmitInTopScore.trim(  ).equals( EMPTY_STRING ) )
+        else if ( StringUtils.isEmpty(strNumberDiggSubmitInTopScore ) )
         {
             strFieldError = FIELD_NUMBER_DIGG_SUBMIT_IN_TOP_SCORE;
         }
 
-        else if ( ( strNumberDiggSubmitInTopComment == null ) ||
-                strNumberDiggSubmitInTopComment.trim(  ).equals( EMPTY_STRING ) )
+        else if ( StringUtils.isEmpty(strNumberDiggSubmitInTopComment ) )
         {
             strFieldError = FIELD_NUMBER_DIGG_SUBMIT_IN_TOP_COMMENT;
         }
-        else if ( ( strNumberDiggSubmitCaractersShown == null ) ||
-                strNumberDiggSubmitCaractersShown.trim(  ).equals( EMPTY_STRING ) )
+        else if (StringUtils.isEmpty(strNumberDiggSubmitCaractersShown) )
         {
             strFieldError = FIELD_NUMBER_DIGG_SUBMIT_CARACTERS_SHOWN;
+        }
+      
+        else if(StringUtils.isEmpty(strNotificationNewCommentTitle))
+        {
+        	strFieldError = FIELD_NOTIFICATION_NEW_COMMENT_TITLE;
+        	
+        }
+        else if(StringUtils.isEmpty(strNotificationNewCommentBody))
+        {
+        	strFieldError = FIELD_NOTIFICATION_NEW_COMMENT_BODY;
+        	
+        }
+   
+        else if(StringUtils.isEmpty(strNotificationNewDiggSubmitTitle))
+        {
+        	
+        	strFieldError = FIELD_NOTIFICATION_NEW_DIGG_DUBMIT_TITLE;
+        }
+        else if(StringUtils.isEmpty(strNotificationNewDiggSubmitBody))
+        {
+        	
+        	strFieldError = FIELD_NOTIFICATION_NEW_DIGG_DUBMIT_BODY;
         }
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
@@ -223,6 +268,11 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
         defaultMessage.setNumberDiggSubmitInTopScore( nNumberDiggSubmitInTopScore );
         defaultMessage.setNumberDiggSubmitInTopComment( nNumberDiggSubmitInTopComment );
         defaultMessage.setNumberDiggSubmitCaractersShown( nNumberDiggSubmitCaractersShown );
+        
+        defaultMessage.setNotificationNewCommentTitle(strNotificationNewCommentTitle);
+        defaultMessage.setNotificationNewCommentBody(strNotificationNewCommentBody);
+        defaultMessage.setNotificationNewDiggSubmitTitle(strNotificationNewDiggSubmitTitle);
+        defaultMessage.setNotificationNewDiggSubmitBody(strNotificationNewDiggSubmitBody);
 
         return null;
     }

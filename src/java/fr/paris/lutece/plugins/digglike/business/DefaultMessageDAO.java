@@ -46,10 +46,10 @@ public class DefaultMessageDAO implements IDefaultMessageDAO
 {
     private static final String SQL_QUERY_SELECT = "SELECT " +
         "unavailability_message,libelle_validate_button,libelle_Contribution, " +
-        "number_digg_submit_in_top_score,number_digg_submit_in_top_comment,number_digg_submit_caracters_shown " +
+        "number_digg_submit_in_top_score,number_digg_submit_in_top_comment,number_digg_submit_caracters_shown,notification_new_comment_title,notification_new_comment_body,notification_new_digg_submit_title,notification_new_digg_submit_body " +
         "FROM digglike_default_message";
     private static final String SQL_QUERY_UPDATE = "UPDATE digglike_default_message SET  " +
-        "unavailability_message=?,libelle_validate_button=?,libelle_Contribution =?,number_digg_submit_in_top_score=?,number_digg_submit_in_top_comment=?,number_digg_submit_caracters_shown=? ";
+        "unavailability_message=?,libelle_validate_button=?,libelle_Contribution =?,number_digg_submit_in_top_score=?,number_digg_submit_in_top_comment=?,number_digg_submit_caracters_shown=? ,notification_new_comment_title= ?,notification_new_comment_body= ?,notification_new_digg_submit_title= ?,notification_new_digg_submit_body= ?";
 
     /**
      * Update the record in the table
@@ -67,6 +67,11 @@ public class DefaultMessageDAO implements IDefaultMessageDAO
         daoUtil.setInt( 4, defaultMessage.getNumberDiggSubmitInTopScore(  ) );
         daoUtil.setInt( 5, defaultMessage.getNumberDiggSubmitInTopComment(  ) );
         daoUtil.setInt( 6, defaultMessage.getNumberDiggSubmitCaractersShown(  ) );
+        daoUtil.setString( 7, defaultMessage.getNotificationNewCommentTitle());
+        daoUtil.setString( 8, defaultMessage.getNotificationNewCommentBody());
+        daoUtil.setString( 9, defaultMessage.getNotificationNewDiggSubmitTitle());
+        daoUtil.setString( 10, defaultMessage.getNotificationNewDiggSubmitBody());
+        
         daoUtil.executeUpdate(  );
 
         daoUtil.free(  );
@@ -94,6 +99,10 @@ public class DefaultMessageDAO implements IDefaultMessageDAO
             defaultMessage.setNumberDiggSubmitInTopScore( daoUtil.getInt( 4 ) );
             defaultMessage.setNumberDiggSubmitInTopComment( daoUtil.getInt( 5 ) );
             defaultMessage.setNumberDiggSubmitCaractersShown( daoUtil.getInt( 6 ) );
+            defaultMessage.setNotificationNewCommentTitle(daoUtil.getString(7));
+            defaultMessage.setNotificationNewCommentBody(daoUtil.getString(8));
+            defaultMessage.setNotificationNewDiggSubmitTitle(daoUtil.getString(9));
+            defaultMessage.setNotificationNewDiggSubmitBody(daoUtil.getString(10));
         }
 
         daoUtil.free(  );
