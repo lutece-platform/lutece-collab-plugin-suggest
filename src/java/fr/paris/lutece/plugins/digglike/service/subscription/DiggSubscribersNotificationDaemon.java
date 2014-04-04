@@ -54,6 +54,7 @@ import fr.paris.lutece.plugins.digglike.business.DiggSubmitHome;
 import fr.paris.lutece.plugins.digglike.business.SubmitFilter;
 import fr.paris.lutece.plugins.digglike.service.DiggSubmitService;
 import fr.paris.lutece.plugins.digglike.service.DigglikePlugin;
+import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.plugins.subscribe.business.Subscription;
 import fr.paris.lutece.plugins.subscribe.business.SubscriptionFilter;
 import fr.paris.lutece.plugins.subscribe.service.SubscriptionService;
@@ -175,11 +176,11 @@ public class DiggSubscribersNotificationDaemon extends Daemon
                             if ( StringUtils.isNotEmpty( subscription.getIdSubscribedResource(  ) ) &&
                                     StringUtils.isNumeric( subscription.getIdSubscribedResource(  ) ) )
                             {
-                                int nIdCategory = Integer.parseInt( subscription.getIdSubscribedResource(  ) );
+                                int nIdCategory = DiggUtils.getIntegerParameter( subscription.getIdSubscribedResource(  ) );
 
                                 for ( DiggSubmit diggSubmit : listCreatedDiggSubmit )
                                 {
-                                    if ( nIdCategory == diggSubmit.getCategory(  ).getIdCategory(  ) )
+                                    if ( nIdCategory!=DiggUtils.CONSTANT_ID_NULL && diggSubmit.getCategory(  )!=null &&  nIdCategory == diggSubmit.getCategory(  ).getIdCategory(  ) )
                                     {
                                         registerDiggSubmitNotificationToSend( diggSubmit, subscription.getUserId(  ) );
                                     }
