@@ -221,7 +221,7 @@ public class DiggJspBean extends PluginAdminPageJspBean
     private static final String PROPERTY_MANAGE_DIGG_SUBMIT_ORDER_PAGE_TITLE = "digglike.manageDiggSubmitOrder.pageTitle";
     private static final String PROPERTY_CREATE_DIGG_SUBMIT_PAGE_TITLE = "digglike.createDiggSubmit.pageTitle";
     private static final String PROPERTY_MANAGE_COMMENT_SUBMIT_PAGE_TITLE = "digglike.manageCommentSubmit.pageTitle";
-
+    private static final String PROPERTY_DEFAULT_ROLE_CODE = "defaultRole.code";
     // Markers
     private static final String MARK_WEBAPP_URL = "webapp_url";
     private static final String MARK_LOCALE = "locale";
@@ -1616,7 +1616,9 @@ public class DiggJspBean extends PluginAdminPageJspBean
      */
     private String getDiggData( MultipartHttpServletRequest request, Digg digg )
     {
-        String strUpdateFile = request.getParameter( PARAMETER_UPDATE_FILE );
+       
+    	String strDefaultRole=AppPropertiesService.getProperty( PROPERTY_DEFAULT_ROLE_CODE );
+    	String strUpdateFile = request.getParameter( PARAMETER_UPDATE_FILE );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strLibelleContribution = request.getParameter( PARAMETER_LIBELLE_CONTRIBUTION );
         String strUnavailabilityMessage = request.getParameter( PARAMETER_UNAVAILABILITY_MESSAGE );
@@ -1886,7 +1888,14 @@ public class DiggJspBean extends PluginAdminPageJspBean
         digg.setNumberDiggSubmitInTopComment( nNumberDiggSubmitInTopComment );
         digg.setNumberDiggSubmitCaractersShown( nNumberDiggSubmitCaractersShown );
         digg.setNumberDiggSubmitPerPage( nNumberDiggSubmitPerPage );
-        digg.setRole( strRole );
+        if(strDefaultRole != null && !strRole.equals(strDefaultRole) )
+        {
+        	digg.setRole( strRole );
+        }
+        else
+        {
+        	digg.setRole( null);
+         }
         digg.setHeader( strHeader );
         digg.setConfirmationMessage( strConfirmationMessage );
         digg.setIdDefaultSort( nIdDefaultSort );
