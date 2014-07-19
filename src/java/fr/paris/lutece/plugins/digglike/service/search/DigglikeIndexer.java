@@ -288,7 +288,10 @@ public class DigglikeIndexer implements SearchIndexer
         Plugin plugin = PluginService.getPlugin( DigglikePlugin.PLUGIN_NAME );
         Digg digg = DiggHome.findByPrimaryKey( diggSubmit.getDigg( ).getIdDigg( ), plugin );
 
-        doc.add( new Field( SearchItem.FIELD_ROLE, digg.getRole( ), ft ) );
+        if( digg.getRole() != null )
+        {
+            doc.add( new Field( SearchItem.FIELD_ROLE, digg.getRole( ), ft ) );
+        }
 
         // return the document
         return doc;
