@@ -418,7 +418,7 @@ CREATE TABLE digglike_video (
 -- Table structure for table digglike_digg_user_info
 --
 
-CREATE TABLE IF NOT EXISTS digglike_digg_user_info (
+CREATE TABLE digglike_digg_user_info (
   lutece_user_key varchar(255) NOT NULL,
   first_name varchar(255) DEFAULT NULL,
   last_name varchar(255)  DEFAULT NULL,
