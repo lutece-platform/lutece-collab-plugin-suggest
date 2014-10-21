@@ -1,15 +1,15 @@
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<fieldset>
 	<legend>#i18n{digglike.manageDigg.title}
 	 <#if permission_manage_advanced_parameters>
    		<form class="form-inline pull-right spaced" method="post" action="jsp/admin/plugins/digglike/ManageAdvancedParameters.jsp">
-    		<button type="submit" class="btn btn-primary btn-small" /><i class="icon-cog icon-white"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageDigg.buttonManageAdvancedParameters}</span></button>
+    		<button type="submit" class="btn btn-primary btn-sm btn-flat" /><i class="glyphicon glyphicon-cog"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageDigg.buttonManageAdvancedParameters}</span></button>
    		</form>
    	</#if>
   	<#if permission_create_digg?exists && permission_create_digg>
   		<form method="post" class="form-inline pull-right"  action="jsp/admin/plugins/digglike/CreateDigg.jsp">
-    		<button type="submit" class="btn btn-primary btn-small" /><i class="icon-plus icon-white"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageDigg.buttonCreate}</span></button>
+    		<button type="submit" class="btn btn-primary btn-sm btn-flat" /><i class="glyphicon glyphicon-plus"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageDigg.buttonCreate}</span></button>
    		</form>
    	</#if>
 	</legend>
@@ -21,7 +21,7 @@
       &nbsp;
        <span > #i18n{digglike.manageDigg.labelWorkGroup}  </span>
         <@combo name="workgroup"  items=user_workgroup_list default_value=user_workgroup_selected />
-		<button type="submit" class="btn btn-primary btn-small" /><i class="icon-filter icon-white"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageDigg.buttonSearch}</span></button>
+		<button type="submit" class="btn btn-primary btn-sm btn-flat" /><i class="glyphicon glyphicon-filter"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageDigg.buttonSearch}</span></button>
     </form>
   <@paginationAdmin paginator=paginator combo=1 />
   <table class="table table-striped table-condensed">
@@ -34,28 +34,28 @@
 	<tr>
 		<td>
 			<span class="pull-left">
-				${digg.title} &nbsp;<a href="jsp/site/Portal.jsp?page=digg&id_digg=${digg.idDigg}" target="_blank"><i class="icon-globe" title="${digg.title}"></i></a>
+				${digg.title} &nbsp;<a href="jsp/site/Portal.jsp?page=digg&id_digg=${digg.idDigg}" target="_blank"><i class="glyphicon glyphicon-globe" title="${digg.title}"></i></a>
 			</span>
 			<#if digg.active>
 				<form class="form-search" method="post" action="jsp/admin/plugins/digglike/Statistics.jsp">
 					<input type="hidden" name="id_digg" value="${digg.idDigg}" >
 					<button type="submit" class="btn-link pull-left" title="&nbsp;#i18n{digglike.manageAdvancedParameters.labelStatistics}">
-						<i class="icon-signal"></i>
+						<i class="glyphicon glyphicon-signal"></i>
 					</button>
 				</form>
 			</#if>
 		</td>
 		<td>
 		<#if digg.active>
-			<span class="label label-success"><i class="icon-ok icon-white"></i></span>
+			<span class="label label-success"><i class="glyphicon glyphicon-ok"></i></span>
 		<#else>
-      		<span class="label label-important"><i class="icon-remove icon-white"></i></span>
+      		<span class="label label-important"><i class="glyphicon glyphicon-remove"></i></span>
 		</#if>
 		</td>
 		<td>
 		<#if digg.actions?exists>
 			<#list digg.actions as action>
-				<a class="btn btn-small <#if action.permission=='DELETE' || action.nameKey=='digglike.action.disable.name'>btn-danger<#elseif action.nameKey=='digglike.action.enable.name' >btn-success<#else >btn-primary</#if>" href="${action.url}?id_digg=${digg.idDigg}" title="${action.description}">
+				<a class="btn btn-sm btn-flat <#if action.permission=='DELETE' || action.nameKey=='digglike.action.disable.name'>btn-danger<#elseif action.nameKey=='digglike.action.enable.name' >btn-success<#else >btn-primary</#if>" href="${action.url}?id_digg=${digg.idDigg}" title="${action.description}">
 					<i class="${action.iconUrl}"></i>
 				</a>
 			</#list>

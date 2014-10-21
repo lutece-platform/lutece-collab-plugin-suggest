@@ -1,30 +1,30 @@
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<fieldset>
     <legend> #i18n{digglike.createExportFormat.title}</legend>
     <form class="form-horizontal" method="post" action="jsp/admin/plugins/digglike/DoCreateExportFormat.jsp" enctype="multipart/form-data">
-    <div class="control-group">
-		<label class="control-label" for="" ></label>
-        <div class="controls">
+    <div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="" ></label>
+        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 			<label for="title" >#i18n{digglike.createExportFormat.labelTitle} * </label>
-			<input type="text" class="input-small" id="title" name="title" maxlength="20"/>
+			<input type="text" class="form-control input-sm" id="title" name="title" maxlength="20"/>
 		</div>
-	    <div class="controls">
+	    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 			<label for="description" >#i18n{digglike.createExportFormat.labelDescription} *</label>
 			<input type="text" id="description" name="description" maxlength="255" value=""/>
 		</div>
-		<div class="controls">
+		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 			<label for="extension" >#i18n{digglike.createExportFormat.labelExtension} *</label>
-			<input type="text" class="input-mini" id="extension" name="extension" maxlength="10" value=""/>
+			<input type="text" class="form-control input-sm" id="extension" name="extension" maxlength="10" value=""/>
 		</div>
-		<div class="controls">
+		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 			<label for="stylesheet_source" >#i18n{digglike.createExportFormat.labelXsl} *</label>
-			<input type="file" id="stylesheet_source" name="stylesheet_source" class="input-xlarge" maxlength="100"/>
+			<input type="file" id="stylesheet_source" name="stylesheet_source" class="form-control input-sm" maxlength="100"/>
 		</div>
 	</div>
-    <div class="form-actions">      
-		<button class="btn btn-primary btn-small" type="submit"  name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createExportFormat.buttonSave}</button>
-        <button class="btn btn-primary btn-small" onclick="javascript:window.history.back();" name="cancel"><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{digglike.createExportFormat.buttonCancel}</button>	</div>
+    <div class="form-group">      
+		<button class="btn btn-primary btn-sm btn-flat" type="submit"  name="save"><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{digglike.createExportFormat.buttonSave}</button>
+        <button class="btn btn-primary btn-sm btn-flat" onclick="javascript:window.history.back();" name="cancel"><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{digglike.createExportFormat.buttonCancel}</button>	</div>
     </form>
     </fieldset>
     </div>

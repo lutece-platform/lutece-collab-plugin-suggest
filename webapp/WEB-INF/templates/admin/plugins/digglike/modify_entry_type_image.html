@@ -1,48 +1,48 @@
  <#include "/admin/util/editor/editor.html" />
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<fieldset>
 	<legend>#i18n{digglike.modifyEntry.titleQuestion}:'${entry.digg.title}' &gt; #i18n{digglike.createEntry.labelType} :${entry.entryType.title}</legend>
 	<form class="form-horizontal" action="jsp/admin/plugins/digglike/DoModifyEntry.jsp#list" method="post" name="" id=""  >
 	<input name="id_entry" value="${entry.idEntry}" type="hidden">
-	<div class="control-group">
-	<label class="control-label" for=""></label>
-		<div class="controls">
+	<div class="form-group">
+	<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for=""></label>
+		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 		<label for="title">#i18n{digglike.createEntry.labelTitle} *</label>
-			<input type="text" name="title" id="title" class="input-xlarge" value="${entry.title}" maxlength="255"/>
+			<input type="text" name="title" id="title" class="form-control input-sm" value="${entry.title}" maxlength="255"/>
 			<span class="help-text">#i18n{digglike.createEntry.labelTitleComment}</span>
 		</div>
-		<div class="controls">
+		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 		<label>#i18n{digglike.createEntry.labelHelpMessage}</label>
 			<textarea name="help_message" id="help_message" rows="4" class="span5">${entry.helpMessage}</textarea>
 			<span class="help-text">#i18n{digglike.createEntry.labelHelpMessageComment}</span>
 		</div>
-		<div class="controls">
+		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 			<label for="comment"> #i18n{digglike.createEntry.labelComment}</label>
 			<textarea name="comment" class="span5" rows="2">${entry.comment}</textarea>
 		</div>
-		<div class="controls">
+		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 		<label class="checkbox" for="mandatory">#i18n{digglike.createEntry.labelMandatory}
 			<input name="mandatory" value="1" type="checkbox" <#if entry.mandatory>checked="checked"></#if>></label>
 		</div>
-		<div class="controls">
+		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 		<label for="width">#i18n{digglike.createEntryImg.labelWidth}</label>
-			<input type="text" name="width" id="width" class="input-mini" value="<#if entry.width!=-1>${entry.width}" /></#if>" />
+			<input type="text" name="width" id="width" class="form-control input-sm" value="<#if entry.width!=-1>${entry.width}" /></#if>" />
 		</div>
-		<div class="controls">
+		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 		<label for="height">#i18n{digglike.createEntryImg.labelHeight}</label>
-			<input type="text" name="height" id="height" class="input-mini" value="<#if entry.height!=-1>${entry.height}" /></#if>" />
+			<input type="text" name="height" id="height" class="form-control input-sm" value="<#if entry.height!=-1>${entry.height}" /></#if>" />
 		</div>
-		<div class="controls">
+		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 			<label class="checkbox" for="mandatory">#i18n{digglike.createEntry.labelShowInDiggSubmitList}
 				<input name="show_in_digg_submit_list" value="1" type="checkbox" <#if entry.showInDiggSubmitList>checked="checked"></#if>>
 			</label>
 			<span class="help-text">#i18n{digglike.createDigg.labelShowInDiggSubmitListComment}</span>
 		</div>
 	</div>
-	<div class="form-actions">
-		<button class="btn btn-primary btn-small" type="submit" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createEntry.buttonSave}</button>
-		<a class="btn btn-small" href="jsp/admin/plugins/digglike/ModifyDigg.jsp?plugin_name=digglike&amp;id_digg=${entry.digg.idDigg}" ><i class="icon-remove-circle"></i>&nbsp;#i18n{digglike.modifyEntry.buttonCancel}</a>
+	<div class="form-group">
+		<button class="btn btn-primary btn-sm btn-flat" type="submit" name="save"><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{digglike.createEntry.buttonSave}</button>
+		<a class="btn btn-default btn-sm btn-flat" href="jsp/admin/plugins/digglike/ModifyDigg.jsp?plugin_name=digglike&amp;id_digg=${entry.digg.idDigg}" ><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{digglike.modifyEntry.buttonCancel}</a>
 	</div>
 	</form>
 	</fieldset>

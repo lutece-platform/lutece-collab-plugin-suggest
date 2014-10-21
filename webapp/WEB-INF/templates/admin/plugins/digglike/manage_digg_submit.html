@@ -1,5 +1,5 @@
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<ul class="nav nav-tabs">
 			<li class="active">
 				<a href="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp?id_digg=${digg.idDigg}">
@@ -32,59 +32,59 @@
 				</div>
 				<div class="modal-body">
 					<#if category_list?has_content>
-						<div class="control-group">
-							<label class="control-label" for="id_category">#i18n{digglike.manageDiggSubmit.labelDiggSubmitCategory}</label>
-							<div class="controls">
-							<@comboWithParams name="id_category_filter" default_value="${digg_submit_category_selected}" additionalParameters="class=\"input-xlarge\"" items=category_list />
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_category">#i18n{digglike.manageDiggSubmit.labelDiggSubmitCategory}</label>
+							<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+							<@comboWithParams name="id_category_filter" default_value="${digg_submit_category_selected}" additionalParameters="class=\"form-control input-sm\"" items=category_list />
 							</div>
 						</div>
 					</#if>
 					<#if digg_submit_type_list?has_content>
-						<div class="control-group">
-							<label class="control-label" for="id_type">#i18n{digglike.manageDiggSubmit.labelDiggSubmitType}</label>
-							<div class="controls">
-								<@comboWithParams name="id_type" default_value="${digg_submit_type_selected}" additionalParameters="class=\"input-xlarge\"" items=digg_submit_type_list />
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_type">#i18n{digglike.manageDiggSubmit.labelDiggSubmitType}</label>
+							<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+								<@comboWithParams name="id_type" default_value="${digg_submit_type_selected}" additionalParameters="class=\"form-control input-sm\"" items=digg_submit_type_list />
 							</div>
 						</div>
 					</#if>
-					<div class="control-group">
-						<label class="control-label" for="id_digg_submit_state">#i18n{digglike.manageDiggSubmit.labelDiggSubmitState}</label>
-						<div class="controls">
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_digg_submit_state">#i18n{digglike.manageDiggSubmit.labelDiggSubmitState}</label>
+						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 							<@comboWithParams name="id_digg_submit_state" default_value="${digg_submit_state_selected}" additionalParameters="class=\"input-normal\"" items=digg_submit_state_list />
 						</div>
 					</div>
-					<div class="control-group">
-						<label class="control-label" for="id_digg_submit_report">#i18n{digglike.manageDiggSubmit.labelDiggSubmitReport}</label>
-						<div class="controls">
-							<@comboWithParams name="id_digg_submit_report" default_value="${digg_submit_report_selected}" additionalParameters="class=\"input-xlarge\"" items=digg_submit_report_list />
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_digg_submit_report">#i18n{digglike.manageDiggSubmit.labelDiggSubmitReport}</label>
+						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+							<@comboWithParams name="id_digg_submit_report" default_value="${digg_submit_report_selected}" additionalParameters="class=\"form-control input-sm\"" items=digg_submit_report_list />
 						</div>
 					</div>
-					<div class="control-group">
-						<label class="control-label" for="id_contains_comment_disable">#i18n{digglike.manageDiggSubmit.labelDiggSubmitContainsCommentDisable}</label>
-						<div class="controls">
-							<@comboWithParams name="id_contains_comment_disable" default_value="${digg_submit_contains_comment_disable_selected}" additionalParameters="class=\"input-xlarge\"" items=digg_submit_contains_comment_disable_list />
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_contains_comment_disable">#i18n{digglike.manageDiggSubmit.labelDiggSubmitContainsCommentDisable}</label>
+						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+							<@comboWithParams name="id_contains_comment_disable" default_value="${digg_submit_contains_comment_disable_selected}" additionalParameters="class=\"form-control input-sm\"" items=digg_submit_contains_comment_disable_list />
 						</div>
 					</div>
-					<div class="control-group">
-						<label class="control-label" for="id_digg_submit_report">#i18n{digglike.manageDiggSubmit.labelDiggSubmitSort}</label>
-						<div class="controls">
-							<@comboWithParams name="id_digg_submit_sort" default_value="${digg_submit_sort_selected}" additionalParameters="class=\"input-xlarge\"" items=digg_submit_sort_list />
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_digg_submit_report">#i18n{digglike.manageDiggSubmit.labelDiggSubmitSort}</label>
+						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+							<@comboWithParams name="id_digg_submit_sort" default_value="${digg_submit_sort_selected}" additionalParameters="class=\"form-control input-sm\"" items=digg_submit_sort_list />
 						</div>	
 					</div>	
-					<div class="control-group">
-						<label class="control-label" for="query">#i18n{digglike.manageDiggSubmit.buttonSearch}</label>
-						<div class="controls">
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="query">#i18n{digglike.manageDiggSubmit.buttonSearch}</label>
+						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 							<input type="hidden" name="page" value="search" />
-							<input type="text" name="query" id="query" placeholder="#i18n{digglike.manageDiggSubmit.labelSearch}" class="input-xlarge" value="<#if query?exists>${query}</#if>" title="#i18n{digglike.manageDiggSubmit.buttonSearch}">
+							<input type="text" name="query" id="query" placeholder="#i18n{digglike.manageDiggSubmit.labelSearch}" class="form-control input-sm" value="<#if query?exists>${query}</#if>" title="#i18n{digglike.manageDiggSubmit.buttonSearch}">
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
 					<button class="btn" data-dismiss="modal" aria-hidden="true">
-						<i class="icon-remove-circle"></i>&nbsp;#i18n{portal.util.labelCancel}
+						<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{portal.util.labelCancel}
 					</button>
-					<button class="btn btn-primary btn-small offset1" type="submit">
-						<i class="icon-search icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonSearch}
+					<button class="btn btn-primary btn-sm btn-flat offset1" type="submit">
+						<i class="glyphicon glyphicon-search"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonSearch}
 					</button>
 					<input type="hidden" name="search" value="Rechercher" />
 				</div>
@@ -108,7 +108,7 @@ $(document).ready(function () {
 	if ( $("#myModalSearch input#query").val() !="" ){ nQuery++; }
 	
 	if( nQuery > 0){
-		$('a[href="#myModalSearch"]').after('<a href="#" id="init" class="btn btn-small btn-danger spaced"><i class="icon-refresh icon-white"></i> #i18n{digglike.manageDiggSubmit.buttonReinitSearch} </a>');
+		$('a[href="#myModalSearch"]').after('<a href="#" id="init" class="btn btn-sm btn-flat btn-danger spaced"><i class="glyphicon glyphicon-refresh"></i> #i18n{digglike.manageDiggSubmit.buttonReinitSearch} </a>');
 		$("a#init").click( function(){
 			$("#myModalSearch select option:selected").each( function(){
 				$(this).val(-1);
@@ -160,9 +160,9 @@ $(document).ready(function () {
 	var nav = $('.fixed-actionbar');
     $(window).scroll(function () {
         if ($(this).scrollTop() > 200) {
-            nav.addClass("f-nav span12");
+            nav.addClass("f-nav col-xs-12 col-sm-12 col-md-12 col-lg-12");
         } else {
-            nav.removeClass("f-nav span12");
+            nav.removeClass("f-nav col-xs-12 col-sm-12 col-md-12 col-lg-12");
         }
     });
  

@@ -1,5 +1,5 @@
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<form class="form-horizontal" action="jsp/site/Portal.jsp" method="post" name="formdigg" id="formdigg"  enctype="multipart/form-data" >
 		<input name="page" value="digg" type="hidden"/>
 		<input name="id_digg" value="${digg.idDigg}" type="hidden"/>
@@ -8,25 +8,25 @@
 		<legend>#i18n{digglike.diggForm.title} <#if disable_new_digg_submit>(#i18n{digglike.diggForm.titleDisableNewDiggSubmit})</#if></legend>
 		${str_entry}
 		<#if category_list?has_content>
-			<div class="control-group">
-				<label class="control-label" for="id_category">#i18n{digglike.diggForm.labelCategoryTitle} *</label>
-				<div class="controls">
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_category">#i18n{digglike.diggForm.labelCategoryTitle} *</label>
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 					<@combo name="id_category" items=category_list default_value="${id_default_category}" />
 				</div>
 			</div>
 		</#if>	
 		<#if types_list?has_content>
-			<div class="control-group">
-				<label class="control-label" for="id_type">#i18n{digglike.diggForm.labelTypeTitle} *</label>
-				<div class="controls">
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_type">#i18n{digglike.diggForm.labelTypeTitle} *</label>
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 					<@combo name="id_type" items=types_list default_value="-1" />
 				</div>
 			</div>
 		</#if>
 		<#if digg.enableTermsOfUse && digg.termsOfUse?has_content>
-			<div class="control-group">
-					<label class="control-label" for="terms_of_use"></label>            
-					<div class="controls">
+			<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="terms_of_use"></label>            
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 						<label class="checkbox  inline" for="terms_of_use">
 							<input name="terms_of_use" value="terms_of_use" type="checkbox">
 								#i18n{digglike.diggForm.labelSelectTermsOfUse} *
@@ -44,8 +44,8 @@
 			${jcaptcha}
 			</fieldset>
 		</#if>
-		<div class="form-actions">
-			<button class="btn btn-primary btn-small" type="submit" name="submit"><i class="icon-ok icon-white"></i>&nbsp;${digg.libelleValidateButton}</button>
+		<div class="form-group">
+			<button class="btn btn-primary btn-sm" type="submit" name="submit"><i class="glyphicon glyphicon-ok"></i>&nbsp;${digg.libelleValidateButton}</button>
 		</div>
 		</fieldset>
 	</form>

@@ -5,14 +5,14 @@
 		<span class="input-append">
 			<@comboWithParams name="digg_submit_order" default_value="${digg_submit.diggSubmitOrder}" items=order_list_pinned additionalParameters="class=\"input-mini\"" />
 			<button type="submit" class="btn btn-primary" title="#i18n{digglike.manageDiggSubmit.buttonChangeOrder}">
-				<i class="icon-move icon-white"></i>
+				<i class="glyphicon glyphicon-move"></i>
 			</button>
 		</span>
 	<#else>	
 		<span class="input-append">
 			<@comboWithParams name="digg_submit_order" default_value="${digg_submit.diggSubmitOrder}" items=order_list additionalParameters="class=\"input-small\"" />
 			<button type="submit" class="btn btn-primary" title="#i18n{digglike.manageDiggSubmit.buttonChangeOrder}">
-				<i class="icon-ok icon-white"></i>
+				<i class="glyphicon glyphicon-ok"></i>
 			</button>
 		</span>
 	</#if>	

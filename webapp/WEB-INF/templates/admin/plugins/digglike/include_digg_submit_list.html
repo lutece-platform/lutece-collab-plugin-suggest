@@ -18,7 +18,7 @@
 			<#if digg_submit.diggSubmitTitle?exists>
 				<#if digg_submit.pinned>
 					<span class="label label-inverse spaced">
-						<i class="icon-magnet icon-white" title="#i18n{digglike.manageDiggSubmit.altPinned}"></i>
+						<i class="glyphicon glyphicon-magnet" title="#i18n{digglike.manageDiggSubmit.altPinned}"></i>
 					</span>
 				</#if>
 				<#if category_list?has_content  && digg_submit.category?exists>
@@ -34,15 +34,15 @@
 				</#if>	
 				<#if digg_submit.diggSubmitState.number=publish_state_number>
 					<span class="label label-success spaced" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState} #i18n{digglike.manageDiggSubmit.altPublish}">
-						<i class="icon-white icon-ok"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altPublish}
+						<i class="glyphicon glyphicon-white icon-ok"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altPublish}
 					</span>
 				<#elseif digg_submit.diggSubmitState.number=waiting_for_publish_state_number>
 					<span class="label label-warning spaced" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState} &nbsp;#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
-						<i class="icon-white icon-pause"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altWaitingForPublish}
+						<i class="glyphicon glyphicon-white icon-pause"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altWaitingForPublish}
 					</span>
 				<#else>
 					<span class="label label-important spaced" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState} #i18n{digglike.manageDiggSubmit.altDisable}">
-						<i class="icon-white icon-remove"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altDisable}
+						<i class="glyphicon glyphicon-white icon-remove"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altDisable}
 					</span>
 				</#if>
 				
@@ -61,19 +61,19 @@
 					<div class="btn-group" -->
 						<#if !digg_submit.disableVote>
 							<button class="btn btn-inverse btn-small disabled" data-title="">
-								<i class="icon-white icon-star"></i>&nbsp;#i18n{digglike.manageDiggSubmit.rowNumberVote}&nbsp;${digg_submit.numberVote}
+								<i class="glyphicon glyphicon-white icon-star"></i>&nbsp;#i18n{digglike.manageDiggSubmit.rowNumberVote}&nbsp;${digg_submit.numberVote}
 							</button>
 							<button href="#" class="btn btn-inverse btn-small disabled">
-								<i class="icon-white icon-thumbs-up"></i>
+								<i class="glyphicon glyphicon-white icon-thumbs-up"></i>
 								&nbsp;#i18n{digglike.manageDiggSubmit.rowNumberScore}&nbsp;${digg_submit.numberScore}
 							</button>
 						</#if>
 						<#if !digg_submit.disableComment>
 							<#assign nbWaiting=digg_submit.numberComment - digg_submit.numberCommentEnable />
 							<button href="#" class="btn btn-inverse btn-small disabled">
-								<i class="icon-white icon-comment"></i>&nbsp;#i18n{digglike.manageDiggSubmit.rowNumberComment} ${digg_submit.numberComment} 
+								<i class="glyphicon glyphicon-white icon-comment"></i>&nbsp;#i18n{digglike.manageDiggSubmit.rowNumberComment} ${digg_submit.numberComment} 
 								/ #i18n{digglike.manageDiggSubmit.rowNumberCommentEnable} ${digg_submit.numberCommentEnable}
-								 / #i18n{digglike.manageDiggSubmit.rowNumberCommentIdle} <#if nbWaiting &gt; 0><span class="badge badge-warning badge-waiting">${nbWaiting}</span><#else>&nbsp;<i class="icon-remove icon-white"></i>&nbsp;</#if>
+								 / #i18n{digglike.manageDiggSubmit.rowNumberCommentIdle} <#if nbWaiting &gt; 0><span class="badge badge-warning badge-waiting">${nbWaiting}</span><#else>&nbsp;<i class="glyphicon glyphicon-remove"></i>&nbsp;</#if>
 							</button>
 						</#if>	
 						<#include "${include_digg_submit_actions}">
@@ -83,13 +83,13 @@
 					<#if digg_submit.diggSubmitValue?length &gt; 800>
 						<div class="full">
 							<span class="pull-right badge badge-inverse">
-								<i class="icon-chevron-up icon-white"></i>
+								<i class="glyphicon glyphicon-chevron-up"></i>
 							</span>	
 							${digg_submit.diggSubmitValue}
 						</div>	
 						<div class="preview">
 							<span class="pull-right badge badge-inverse">
-								<i class="icon-chevron-down icon-white" title="Lire la suite..."></i>
+								<i class="glyphicon glyphicon-chevron-down" title="Lire la suite..."></i>
 							</span>	
 							<#assign text=digg_submit.diggSubmitValue?substring(0,800)/>
 							<#assign limit=text?last_index_of(" ")/>

@@ -1,5 +1,5 @@
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<ul class="nav nav-tabs">
 		<li>
 			<a href="jsp/admin/plugins/digglike/ManageAdvancedParameters.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
@@ -36,7 +36,7 @@
 		<legend>
 		#i18n{digglike.manageAdvancedParameters.title} - #i18n{digglike.manageCategory.title}
 		<form class="form-inline pull-right" method="post"  action="jsp/admin/plugins/digglike/CreateCategory.jsp" >
-			<button class="btn btn-primary btn-small" type="submit" ><i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.manageCategory.buttonCreate}</button>
+			<button class="btn btn-primary btn-sm btn-flat" type="submit" ><i class="glyphicon glyphicon-plus"></i>&nbsp;#i18n{digglike.manageCategory.buttonCreate}</button>
 		</form>
 		</legend>
 			
@@ -55,11 +55,11 @@
 				<td style="background-color:${category.color!};width:5px;">&nbsp;</td>
 				<td>${category.title}</td>
 				<td>
-				   <a class="btn btn-primary btn-small" href="jsp/admin/plugins/digglike/ModifyCategory.jsp?id_category=${category.idCategory}"  title="" >
-						<i class="icon-edit icon-white"></i>
+				   <a class="btn btn-primary btn-sm btn-flat" href="jsp/admin/plugins/digglike/ModifyCategory.jsp?id_category=${category.idCategory}"  title="" >
+						<i class="glyphicon glyphicon-edit"></i>
 					</a>
 	               	<a class="btn btn-danger btn-small" href="jsp/admin/plugins/digglike/ConfirmRemoveCategory.jsp?id_category=${category.idCategory}"  title="#i18n{digglike.manageCategory.altDelete}" >
-						<i class="icon-trash icon-white"></i>
+						<i class="glyphicon glyphicon-trash"></i>
 					</a>
 				</td>
 			</tr>

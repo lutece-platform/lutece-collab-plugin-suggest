@@ -1,5 +1,5 @@
-<div class="row-fluid">	
-	<div class="span12">
+<div class="row">	
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<form class="form-horizontal" action="jsp/admin/plugins/digglike/DoCreateDigg.jsp?plugin_name=digglike" method="post" enctype="multipart/form-data">
 		<ul class="nav nav-tabs">
 			<li class="active">
@@ -12,66 +12,69 @@
 		</ul>
 		<div class="tab-content">
 			<div class="tab-pane active" id="panel1">
-			<div class="row-fluid">
-				<div class="span12">
-				<div class="control-group">
-					<label class="control-label" for="title">#i18n{digglike.createDigg.labelTitle} * </label>
-					<div class="controls">
-						<input type="text" name="title" id="" class="input-xlarge" value="" maxlength="255" />
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title">#i18n{digglike.createDigg.labelTitle} * </label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<input type="text" name="title" id="" class="form-control input-sm" value="" maxlength="255">
 						<span class="help-text help-digg">#i18n{digglike.createDigg.labelTitleComment}</span>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="libelle_contribution">#i18n{digglike.createDigg.labelLibelleContribution} *</label>
-					<div class="controls">
-						<input type="text" name="libelle_contribution" id="libelle_contribution" class="input-xlarge" value="${default_message.libelleContribution}" maxlength="255" />
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="libelle_contribution">#i18n{digglike.createDigg.labelLibelleContribution} *</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<input type="text" name="libelle_contribution" id="libelle_contribution" class="form-control input-sm" value="${default_message.libelleContribution}" maxlength="255">
 					<span class="help-text help-digg">#i18n{digglike.createDigg.labelLibelleContributionComment}</span>
 				</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="libelle_validate_button">#i18n{digglike.createDigg.labelLibelleValidateButton} *</label>
-					<div class="controls">
-						<input type="text" name="libelle_validate_button" id="" class="input-xlarge" value="${default_message.libelleValidateButton}" maxlength="255">
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="libelle_validate_button">#i18n{digglike.createDigg.labelLibelleValidateButton} *</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<input type="text" name="libelle_validate_button" id="" class="form-control input-sm" value="${default_message.libelleValidateButton}" maxlength="255">
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="number_digg_submit_caracters_shown">	#i18n{digglike.createDigg.labelNumberDiggSubmitCaractersShown} *
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="number_digg_submit_caracters_shown">	#i18n{digglike.createDigg.labelNumberDiggSubmitCaractersShown} *
 					</label>
-					<div class="controls">
-						<input type="text" name="number_digg_submit_caracters_shown" id="number_digg_submit_caracters_shown" class="input-mini"  value="${default_message.numberDiggSubmitCaractersShown}" maxlength="10" />
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<input type="text" name="number_digg_submit_caracters_shown" id="number_digg_submit_caracters_shown" class="form-control input-sm"  value="${default_message.numberDiggSubmitCaractersShown}" maxlength="10" />
 						<span class="help-text help-digg">#i18n{digglike.createDigg.labelNumberDiggSubmitCaractersShownComment}</span>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="id_vote_type">#i18n{digglike.createDigg.labelVoteType}</label>
-					<div class="controls">
-						<@comboWithParams name="id_vote_type" default_value="-1" additionalParameters=" class=\"input-medium\"" items=vote_type_list />
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_vote_type">#i18n{digglike.createDigg.labelVoteType}</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<@comboWithParams name="id_vote_type" default_value="-1" additionalParameters=" class=\"form-control input-sm\"" items=vote_type_list />
 						<span class="help-text help-digg">#i18n{digglike.createDigg.labelVoteTypeComment}</span>
 					</div>
 				</div>
-				<div class="control-group">
-				<label class="control-label" for=""></label>
-				<div class="controls">
-					<label class="checkbox" for="disable_vote">
-						<input name="disable_vote" value="disable_vote" type="checkbox" >
-						#i18n{digglike.createDigg.labelDisableVote}
-						<span class="help-text help-digg">#i18n{digglike.createDigg.labelDisableVoteComment}</span>
-					</label>
-					
+				<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for=""></label>
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+					<div class="checkbox">
+						<label for="disable_vote">
+							<input name="disable_vote" value="disable_vote" type="checkbox">
+							#i18n{digglike.createDigg.labelDisableVote}
+							<span class="help-text help-digg">#i18n{digglike.createDigg.labelDisableVoteComment}</span>
+						</label>
+					</div>
 				</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label" for=""></label>     
-				<div class="controls">
-					<label class="checkbox" for="authorized_comment">
-						<input id="authorized_comment" name="authorized_comment" type="checkbox" onclick="displayAuthorizedComment()" >#i18n{digglike.createDigg.labelAuthorizedCommentSubmit}
-						<span class="help-text help-digg">#i18n{digglike.createDigg.labelAuthorizedCommentSubmitComment}</span>  
-					</label> 
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for=""></label>     
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+					<div class="checkbox">
+						<label for="authorized_comment">
+							<input id="authorized_comment" name="authorized_comment" type="checkbox" onclick="displayAuthorizedComment()">#i18n{digglike.createDigg.labelAuthorizedCommentSubmit}
+							<span class="help-text help-digg">#i18n{digglike.createDigg.labelAuthorizedCommentSubmitComment}</span>  
+						</label> 
+					</div>
 				</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label" for="unavailability_message">#i18n{digglike.createDigg.labelUnavailabilityMessage} *</label>
-					<div class="controls">
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="unavailability_message">#i18n{digglike.createDigg.labelUnavailabilityMessage} *</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 						<textarea name="unavailability_message" id="unavailability_message" rows="4" class="richtext">${default_message.unavailabilityMessage}</textarea>
 					</div>
 				</div>
@@ -80,97 +83,107 @@
 			</div>
 			</div>
 		<div class="tab-pane" id="panel2">
-			<div class="row-fluid">
-				<div class="span12">
-					<div class="well well-small">
-						<div class="control-group">
-							 <label class="control-label" for=""></label>
-							<div class="controls">
-								 <label class="checkbox" for="active_digg_submit_paginator">
-									<input name="active_digg_submit_paginator" value="${yes_value}" type="checkbox"checked='checked'> #i18n{digglike.createDigg.labelActiveDiggSubmitPaginator}
-									<!-- span class="help-text help-digg">#i18n{digglike.createDigg.labelActiveDiggSubmitPaginatorComment}</span -->
-								 </label>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div class="well well-sm">
+						<div class="form-group">
+							 <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for=""></label>
+							<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+								<div class="checkbox">
+									 <label for="active_digg_submit_paginator">
+										<input name="active_digg_submit_paginator" value="${yes_value}" type="checkbox"checked='checked'> #i18n{digglike.createDigg.labelActiveDiggSubmitPaginator}
+										<!-- span class="help-text help-digg">#i18n{digglike.createDigg.labelActiveDiggSubmitPaginatorComment}</span -->
+									 </label>
+								</div>
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="number_digg_submit_per_page">#i18n{digglike.createDigg.labelNumberDiggSubmitPerPage}</label> 
-							<div class="controls">
-								<input type="text" name="number_digg_submit_per_page" id="number_digg_submit_per_page" class="input-mini" value="20" maxlength="10">
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="number_digg_submit_per_page">#i18n{digglike.createDigg.labelNumberDiggSubmitPerPage}</label> 
+							<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+								<input type="text" name="number_digg_submit_per_page" id="number_digg_submit_per_page" class="form-control input-sm" value="20" maxlength="10">
 								<span class="help-text help-digg">#i18n{digglike.createDigg.labelNumberDiggSubmitPerPageComment}</span>
 							</div>
 						</div>
 					</div>
-					<div class="control-group">
-					<label class="control-label" for="show_category_block">#i18n{digglike.createDigg.labelShowBlock}</label>            
-						<div class="controls">
-							<label class="checkbox" for="show_category_block">#i18n{digglike.createDigg.labelCategoryBlock} 
-								<input name="show_category_block" value="show_category_block" type="checkbox" checked="checked" >
-							</label>            
-							<label class="checkbox" for="show_category_block">#i18n{digglike.createDigg.labelTopScoreBlock}
-								<input name="show_top_score_block" value="show_top_score_block"  type="checkbox"  checked="checked">
-								<label>#i18n{digglike.createDigg.labelNumberDiggSubmitInTopScore}</label>
-								<input type="text" name="number_digg_submit_in_top_score" id="number_digg_submit_in_top_score" class="input-mini" value="${default_message.numberDiggSubmitInTopScore}" maxlength="10" />
-								<!-- span class="help-text help-digg">#i18n{digglike.createDigg.labelNumberDiggSubmitInTopScoreComment}</span -->
-							</label>  
-							<label class="checkbox" for="show_category_block">#i18n{digglike.createDigg.labelTopCommentBlock}
-								<input name="show_top_comment_block" value="show_top_comment_block" type="checkbox" checked='checked'>
-								<label for="number_digg_submit_in_top_comment">#i18n{digglike.createDigg.labelNumberDiggSubmitInTopComment}</label>
-							<input type="text" name="number_digg_submit_in_top_comment" id="number_digg_submit_in_top_comment" class="input-mini" value="${default_message.numberDiggSubmitInTopComment}" maxlength="10" />
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="show_category_block">#i18n{digglike.createDigg.labelShowBlock}</label>            
+						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+							<div class="checkbox">
+								<label for="show_category_block">
+									<input name="show_category_block" value="show_category_block" type="checkbox" checked="checked">#i18n{digglike.createDigg.labelCategoryBlock} 
+								</label>
+							</div>
+							<div class="checkbox">
+								<label for="show_category_block">
+									<input name="show_top_score_block" value="show_top_score_block" type="checkbox" checked="checked">#i18n{digglike.createDigg.labelTopScoreBlock} 
+								</label>
+							</div>
+							<label>#i18n{digglike.createDigg.labelNumberDiggSubmitInTopScore}</label>
+							<input type="text" name="number_digg_submit_in_top_score" id="number_digg_submit_in_top_score" class="form-control input-sm" value="${default_message.numberDiggSubmitInTopScore}" maxlength="10" />
+							<!-- span class="help-text help-digg">#i18n{digglike.createDigg.labelNumberDiggSubmitInTopScoreComment}</span -->
+							<div class="checkbox">
+								<label for="show_category_block">
+									<input name="show_top_comment_block" value="show_top_comment_block" type="checkbox" checked='checked'>#i18n{digglike.createDigg.labelTopCommentBlock}
+								</label>
+							</div>
+							<label for="number_digg_submit_in_top_comment">#i18n{digglike.createDigg.labelNumberDiggSubmitInTopComment}</label>
+							<input type="text" name="number_digg_submit_in_top_comment" id="number_digg_submit_in_top_comment" class="form-control input-sm" value="${default_message.numberDiggSubmitInTopComment}" maxlength="10" />
 							<!-- span class="help-text help-digg">#i18n{digglike.createDigg.labelNumberDiggSubmitInTopCommentComment}</span -->
-							</label>  
 							<span class="help-text help-digg">#i18n{digglike.createDigg.labelShowBlockComment} </span>			
 						</div>
 					</div>
-					<div class="control-group">
-						<label class="control-label" for=""></label>
-						<div class="controls">
-							<label class="checkbox" for="display_comment_in_digg_submit_list">
-								#i18n{digglike.createDigg.labelDisplayCommentInDiggSubmitList}
-								<input name="display_comment_in_digg_submit_list" value="display_comment_in_digg_submit_list" type="checkbox">
+				
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for=""></label>
+						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+							<div class="checkbox">
+							<label for="display_comment_in_digg_submit_list">
+								<input name="display_comment_in_digg_submit_list" value="display_comment_in_digg_submit_list" type="checkbox">#i18n{digglike.createDigg.labelDisplayCommentInDiggSubmitList}
 								<!-- span class="help-text help-digg">#i18n{digglike.createDigg.labelDisplayCommentInDiggSubmitListComment}</span -->
 							</label>
+							</div>
 							<label for="number_comment_display_in_digg_submit_list">#i18n{digglike.createDigg.labelNumberCommentDisplayInDiggSubmitList}</label>
-							<input type="text" name="number_comment_display_in_digg_submit_list" id="number_comment_display_in_digg_submit_list" class="input-mini" value="3" maxlength="10" />
+							<input type="text" name="number_comment_display_in_digg_submit_list" id="number_comment_display_in_digg_submit_list" class="form-control input-sm" value="3" maxlength="10" />
 							<!-- span class="help-text help-digg">#i18n{digglike.createDigg.labelNumberCommentDisplayInDiggSubmitListComment}</span -->
 							<label for="number_char_comment_display_in_digg_submit_list">#i18n{digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitList}</label>
-							<input type="text" name="number_char_comment_display_in_digg_submit_list" id="number_char_comment_display_in_digg_submit_list" class="input-mini" value="30" maxlength="10" />
+							<input type="text" name="number_char_comment_display_in_digg_submit_list" id="number_char_comment_display_in_digg_submit_list" class="form-control input-sm" value="30" maxlength="10" />
 							<!-- span class="help-text help-digg">#i18n{digglike.createDigg.labelNumberCharCommentDisplayInDiggSubmitListComment}</span -->
 						</div>
 					</div>
-					<div class="control-group">
-					<label class="control-label" for="id_default_sort">#i18n{digglike.createDigg.labelDefaultSort}</label>
-						<div class="controls">
-							<@combo name="id_default_sort" items=digg_submit_sort_list default_value="-1" />
+					<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_default_sort">#i18n{digglike.createDigg.labelDefaultSort}</label>
+						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+							<@comboWithParams name="id_default_sort" items=digg_submit_sort_list default_value="-1" additionalParameters="class='form-control input-sm'" />
 							<span class="help-text help-digg">#i18n{digglike.createDigg.labelDefaultSortComment}</span>
 						</div>
 					</div>
-					<div class="control-group">
-						<label class="control-label" class="control-label" for="id_theme_list">#i18n{digglike.createDigg.labelThemeXpage}</label>
-						<div class="controls">
-							<@combo name="id_theme_list" items=theme_list default_value=default_theme />
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" class="control-label" for="id_theme_list">#i18n{digglike.createDigg.labelThemeXpage}</label>
+						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+							<@comboWithParams name="id_theme_list" items=theme_list default_value=default_theme additionalParameters="class='form-control input-sm'" />
 							<span class="help-text help-digg">#i18n{digglike.createDigg.labelThemeXpageComment}</span>
 						</div>
 					</div>
 			
-				<div class="control-group">
-					<label class="control-label" for="header">
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="header">
 					#i18n{digglike.createDigg.labelHeader}</label>
-					<div class="controls">
-						<textarea name="header" id="header" rows="4" class="richtext" style="width:50%" ></textarea>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<textarea name="header" id="header" rows="4" class="richtext" style="width:50%"></textarea>
 						<span class="help-text help-digg">#i18n{digglike.createDigg.labelHeaderComment}</span>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="confirmation_message">#i18n{digglike.createDigg.labelConfirmationMessage}</label>
-					<div class="controls">
-						<textarea name="confirmation_message" id="" rows="4"class="richtext"  style="width:50%" ></textarea>
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="confirmation_message">#i18n{digglike.createDigg.labelConfirmationMessage}</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<textarea name="confirmation_message" id="" rows="4" class="richtext" style="width:50%"></textarea>
 						<span class="help-text help-digg">#i18n{digglike.createDigg.labelConfirmationMessageComment}</span>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="terms_of_use">
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="terms_of_use">
 					#i18n{digglike.createDigg.labelTermsOfUse}</label>
-					<div class="controls">
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 						<textarea name="terms_of_use" id="terms_of_use" rows="4" class="richtext"  style="width:50%" ></textarea>
 						<span class="help-text help-digg">#i18n{digglike.createDigg.labelTermsOfUseComment}</span>
 					</div>
@@ -180,81 +193,91 @@
 			</div>
 		</div>
 		<div class="tab-pane" id="panel3">
-			<div class="control-group">
-				<label class="control-label" for="workgroup">#i18n{digglike.createDigg.labelWorkgroup}</label>
-				<div class="controls">
-				<@combo name="workgroup"  items=user_workgroup_list default_value="" />
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="workgroup">#i18n{digglike.createDigg.labelWorkgroup}</label>
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<@comboWithParams name="workgroup"  items=user_workgroup_list additionalParameters="class='form-control input-sm'" default_value="" />
 				<span class="help-text help-digg">#i18n{digglike.createDigg.labelWorkgroupComment}</span>
 				</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label" for="role">#i18n{digglike.createDigg.labelRole}</label>
-				<div class="controls">
-				<@combo name="role" default_value="${default_value_role}" items=role_list />
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="role">#i18n{digglike.createDigg.labelRole}</label>
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<@comboWithParams name="role" default_value="${default_value_role}" items=role_list additionalParameters="class='form-control input-sm'" />
 				<span class="help-text help-digg">#i18n{digglike.createDigg.labelRoleComment}</span>
 				</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label"></label>
-					<div class="controls">
-						<label class="checkbox" for="disable_new_digg_submit">
-							<input name="disable_new_digg_submit" value="${yes_value}" type="checkbox" >#i18n{digglike.createDigg.labelDisableNewDiggSubmit}
-						</label>	
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3"></label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<div class="checkbox">
+							<label for="disable_new_digg_submit">
+								<input name="disable_new_digg_submit" value="${yes_value}" type="checkbox"><strong>#i18n{digglike.createDigg.labelDisableNewDiggSubmit}</strong>
+							</label>	
+						</div>
 						<span class="help-text help-digg">#i18n{digglike.createDigg.labelDisableNewDiggSubmitComment}</span>
 					</div>
 			</div> 
-			<div class="control-group">
-				<label class="control-label" for="disable_new_comment"> </label>            
-				<div class="controls">
-					<label class="checkbox" for="disable_new_comment">
-						<input name="disable_new_comment" value="${yes_value}" type="checkbox"  onclick="displayId('p_id_mailing_list_comment')">
-						#i18n{digglike.createDigg.labelDisableNewCommentSubmit}
-					</label>
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="disable_new_comment"> </label>            
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+					<div class="checkbox">
+						<label for="disable_new_comment">
+							<input name="disable_new_comment" value="${yes_value}" type="checkbox"  onclick="displayId('p_id_mailing_list_comment')">
+							<strong>#i18n{digglike.createDigg.labelDisableNewCommentSubmit}</strong>
+						</label>
+					</div>
 					<span class="help-text help-digg">#i18n{digglike.createDigg.labelDisableNewCommentSubmitComment}</span>     
 				</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label" for="enable_reports"></label>            
-					<div class="controls">
-						<label class="checkbox" for="enable_reports">
-							<input name="enable_reports" value="${yes_value}" type="checkbox" >
-							#i18n{digglike.createDigg.labelEnableReports}
-						</label>
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="enable_reports"></label>            
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<div class="checkbox">
+							<label for="enable_reports">
+								<input name="enable_reports" value="${yes_value}" type="checkbox">
+								<strong>#i18n{digglike.createDigg.labelEnableReports}</strong>
+							</label>
+						</div>
 						<span class="help-text help-digg">#i18n{digglike.createDigg.labelEnableReportsComment}</span>
 					</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label" for="enable_terms_of_use"></label>            
-					<div class="controls">
-						<label class="checkbox" for="enable_terms_of_use">
-							<input name="enable_terms_of_use" value="${yes_value}" type="checkbox" >
-							#i18n{digglike.createDigg.labelEnableTermsOfUse}
-						</label>
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="enable_terms_of_use"></label>            
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<div class="checkbox">
+							<label for="enable_terms_of_use">
+								<input name="enable_terms_of_use" value="${yes_value}" type="checkbox" >
+								<strong>#i18n{digglike.createDigg.labelEnableTermsOfUse}</strong>
+							</label>
+						</div>
 						<span class="help-text help-digg">#i18n{digglike.createDigg.labelEnableTermsOfUseComment}</span>
 					</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label" for="limit_number_vote"> </label>            
-					<div class="controls">
-						<label class="checkbox" for="limit_number_vote">
-							<input name="limit_number_vote" value="${yes_value}" type="checkbox" >
-							#i18n{digglike.createDigg.labelLimitNumberVote}
-						</label>
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="limit_number_vote"> </label>            
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<div class="checkbox">
+							<label for="limit_number_vote">
+								<input name="limit_number_vote" value="${yes_value}" type="checkbox" >
+								<strong>#i18n{digglike.createDigg.labelLimitNumberVote}</strong>
+							</label>
+						</div>
 						<span class="help-text help-digg">#i18n{digglike.createDigg.labelLimitNumberVoteComment}</span>
 					</div>
 			</div>   
 		
 			<#if authentification_enable> 	
-						<div class="control-group">
-							<label class="control-label" for="">#i18n{digglike.createDigg.labelRequiredAuthentification}</label>						
-							<div class="controls">
-								<label class="checkbox inline" for="required_authentification">
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="">#i18n{digglike.createDigg.labelRequiredAuthentification}</label>						
+							<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+								<label class="checkbox-inline" for="required_authentification">
 									<input name="active_digg_submit_authentification" value="${yes_value}" type="checkbox" >#i18n{digglike.createDigg.labelRequiredAuthentificationCreation}
 								</label>
-								<label class="checkbox inline" for="active_vote_authentification"> 
+								<label class="checkbox-inline" for="active_vote_authentification"> 
 									<input name="active_vote_authentification" value="${yes_value}" type="checkbox" >#i18n{digglike.createDigg.labelRequiredAuthentificationVote} 
 								</label>
-								<label class="checkbox inline" for="active_comment_authentification">
+								<label class="checkbox-inline" for="active_comment_authentification">
 									<input name="active_comment_authentification" value="active_comment_authentification" type="checkbox" >	#i18n{digglike.createDigg.labelRequiredAuthentificationCommentSubmit}   
 								</label>
 								<span class="help-text help-digg">#i18n{digglike.createDigg.labelRequiredAuthentificationComment}</span>
@@ -263,121 +286,127 @@
 			</#if>
 		</div>
 		<div class="tab-pane" id="panel4">
-			<div class="control-group">
-				<label class="control-label" for="">#i18n{digglike.createDigg.labelMailDiggSubmit}</label>            
-				<div class="controls">
-					<label class="checkbox inline" for="enable_mail_new_digg_submit">
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="">#i18n{digglike.createDigg.labelMailDiggSubmit}</label>            
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+					<label class="checkbox-inline" for="enable_mail_new_digg_submit">
 							<input name="enable_mail_new_digg_submit" value="${yes_value}" type="checkbox" >#i18n{digglike.createDigg.labelMailNewDiggSubmit} 
 					</label>   
-					<label class="checkbox inline" for="enable_mail_new_comment_submit">
+					<label class="checkbox-inline" for="enable_mail_new_comment_submit">
 							<input name="enable_mail_new_comment_submit" value="${yes_value}" type="checkbox" >#i18n{digglike.createDigg.labelMailNewCommentSubmit} 
 					</label>
-					<label class="checkbox inline" for="enable_mail_new_reported_submit">
+					<label class="checkbox-inline" for="enable_mail_new_reported_submit">
 							<input name="enable_mail_new_reported_submit" value="${yes_value}" type="checkbox" >#i18n{digglike.createDigg.labelMailNewReportedSubmit} 
 					</label>    
 				</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label" for="id_mailing_list_digg_submit">#i18n{digglike.createDigg.labelMailingList}</label>
-				<div class="controls">
-						<@combo name="id_mailing_list_digg_submit" items=mailing_list default_value="-1" />
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_mailing_list_digg_submit">#i18n{digglike.createDigg.labelMailingList}</label>
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<@comboWithParams name="id_mailing_list_digg_submit" items=mailing_list default_value="-1" additionalParameters="class='form-control input-sm'" />
 					<span class="help-text help-digg">#i18n{digglike.createDigg.labelMailingListComment}</span>
 				</div>
 			</div>
-			<div class="control-group">
-				<label  class="control-label" for="notification_new_comment_sender_name"> #i18n{digglike.createDigg.labelNotificationNewCommentSenderName}   </label>
-				<div class="controls">
-						<input type="text" name="notification_new_comment_sender_name" id="notification_new_comment_sender_name" class="input-xlarge"  maxlength="255" value="" />
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="notification_new_comment_sender_name"> #i18n{digglike.createDigg.labelNotificationNewCommentSenderName}</label>
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+					<input type="text" name="notification_new_comment_sender_name" id="notification_new_comment_sender_name" class="form-control input-sm"  maxlength="255" value="">
 				</div>	
 			</div>
-			<div class="control-group">
-				<label  class="control-label" for="notification_new_comment_title"> #i18n{digglike.createDigg.labelNotificationNewCommentTitle}  * </label>
-				<div class="controls">
-					<textarea name="notification_new_comment_title" id="notification_new_comment_title" rows="10" class="span6" class="richtext">${default_message.notificationNewCommentTitle!}</textarea>
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="notification_new_comment_title"> #i18n{digglike.createDigg.labelNotificationNewCommentTitle}  * </label>
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+					<textarea name="notification_new_comment_title" id="notification_new_comment_title" rows="10" class="richtext">${default_message.notificationNewCommentTitle!}</textarea>
 				</div>	
 			</div>
-			 <div class="control-group">
-				<label class="control-label" for="notification_new_comment_body"> #i18n{digglike.createDigg.labelNotificationNewCommentBody}  * </label>
-				<div class="controls">
-					<textarea name="notification_new_comment_body" id="notification_new_comment_body" rows="10" class="span6" class="richtext">${default_message.notificationNewCommentBody!}</textarea>
+			 <div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="notification_new_comment_body"> #i18n{digglike.createDigg.labelNotificationNewCommentBody}  * </label>
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+					<textarea name="notification_new_comment_body" id="notification_new_comment_body" rows="10" class="richtext">${default_message.notificationNewCommentBody!}</textarea>
 				</div>
 			</div>
-			<div class="control-group">
-				<label  class="control-label" for="notification_new_digg_submit_sender_name"> #i18n{digglike.createDigg.labelNotificationNewDiggSubmitSenderName}</label>
-				<div class="controls">
-					<input type="text" name="notification_new_digg_submit_sender_name" id="notification_new_digg_submit_sender_name" class="input-xlarge"  maxlength="255" value="" />
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="notification_new_digg_submit_sender_name"> #i18n{digglike.createDigg.labelNotificationNewDiggSubmitSenderName}</label>
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+					<input type="text" name="notification_new_digg_submit_sender_name" id="notification_new_digg_submit_sender_name" class="form-control input-sm" maxlength="255" value="">
 				</div>	
 			</div>
-			 <div class="control-group">
-				<label  class="control-label" for="notification_new_digg_submit_title"> #i18n{digglike.createDigg.labelNotificationNewDiggSubmitTitle}  * </label>
-				<div class="controls">
-					<textarea name="notification_new_digg_submit_title" id="notification_new_digg_submit_title" rows="10" class="span6" class="richtext">${default_message.notificationNewDiggSubmitTitle!}</textarea>
+			 <div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="notification_new_digg_submit_title"> #i18n{digglike.createDigg.labelNotificationNewDiggSubmitTitle}  * </label>
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+					<textarea name="notification_new_digg_submit_title" id="notification_new_digg_submit_title" rows="10" class="richtext">${default_message.notificationNewDiggSubmitTitle!}</textarea>
 				</div>
 			</div>
-			 <div class="control-group">
-				<label class="control-label"  for="notification_new_digg_submit_body"> #i18n{digglike.createDigg.labelNotificationNewDiggSubmitBody}  * </label>
-				<div class="controls">
-					<textarea name="notification_new_digg_submit_body" id="notification_new_digg_submit_body" rows="10" class="span6" class="richtext">${default_message.notificationNewDiggSubmitBody!}</textarea>
+			 <div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3"  for="notification_new_digg_submit_body"> #i18n{digglike.createDigg.labelNotificationNewDiggSubmitBody}  * </label>
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+					<textarea name="notification_new_digg_submit_body" id="notification_new_digg_submit_body" rows="10" class="richtext">${default_message.notificationNewDiggSubmitBody!}</textarea>
 				</div>
 			</div>
 		     
 		</div>
 		<div class="tab-pane" id="panel5">
-			<div class="well well-small">
-				<div class="control-group">
-						<label class="control-label" for="description">#i18n{digglike.createDigg.labelDescription}</label>
-						<div class="controls">
+			<div class="well well-sm">
+				<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="description">#i18n{digglike.createDigg.labelDescription}</label>
+						<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 							<textarea name="description" id="description" rows="4" class="richtext"></textarea>
 							<span class="help-text help-digg">#i18n{digglike.createDigg.labelDescriptionComment}</span>  
 						</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="" >&nbsp;</label>
-					<div class="controls">
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="" >&nbsp;</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 						<label for="image_source" >#i18n{digglike.createDigg.labelImage}</label>
-						<input type="file" id="image_source" name="image_source" maxlength="100"/>
+						<input type="file" id="image_source" name="image_source" maxlength="100">
 					</div>
 				</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label" for="number_day_required">#i18n{digglike.createDigg.labelNumberDayRequired}</label>    
-				<div class="controls">
-					<input type="text" name="number_day_required" id="number_day_required" class="input-mini" value="" />
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="number_day_required">#i18n{digglike.createDigg.labelNumberDayRequired}</label>    
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+					<input type="text" name="number_day_required" id="number_day_required" class="form-control input-sm" value="">
 					<span class="help-text help-digg">#i18n{digglike.createDigg.labelNumberDayRequiredComment}</span>        
 				</div>
 			</div>
 			<#if is_active_captcha> 
-				<div class="control-group">
-				<label class="control-label" for="">&nbsp;</label>
-					<div class="controls">
-						<label class="checkbox" for="active_captcha">#i18n{digglike.createDigg.labelActiveCaptcha}
-							<input name="active_captcha" value="${yes_value}" type="checkbox" >
-						</label>
+				<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="">&nbsp;</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<div class="checkbox">
+							<label for="active_captcha">
+								<input name="active_captcha" value="${yes_value}" type="checkbox"><strong>#i18n{digglike.createDigg.labelActiveCaptcha}</strong>
+							</label>
+						</div>
 						<span class="help-text help-digg">#i18n{digglike.createDigg.labelActiveCaptchaComment}</span>
 					</div>
 				</div>
 			</#if>   
-			<div class="control-group">
-				<label class="control-label" for="active_editor_bbcode_on_comment"></label>
-				<div class="controls">
-					<label class="checkbox" for="active_editor_bbcode_on_comment">
-						<input name="active_editor_bbcode_on_comment"" value="${yes_value}" type="checkbox" > #i18n{digglike.createDigg.labelActiveEditorBbcodeOnComment}
-					</label>
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="active_editor_bbcode_on_comment"></label>
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+					<div class="checkbox">
+						<label for="active_editor_bbcode_on_comment">
+							<input name="active_editor_bbcode_on_comment"" value="${yes_value}" type="checkbox" ><strong>#i18n{digglike.createDigg.labelActiveEditorBbcodeOnComment}</strong>
+						</label>
+					</div>
 					<span class="help-text help-digg">#i18n{digglike.createDigg.labelActiveEditorBbcodeOnCommentComment}</span>   
 				</div>
 			</div>
 		</div>
 		</div>
-			<div class="form-actions">   	
-				<button class="btn btn-primary btn-small" type="submit" name="save">
-					<i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createDigg.buttonSave}
-				</button>
-				<button class="btn btn-primary btn-small" type="submit" name="apply" >
-					<i class="icon-ok-circle icon-white"></i>&nbsp;#i18n{digglike.modifyDigg.buttonApply}
-				</button>
-				<button class="btn btn-small" type="submit" name="cancel">
-					<i class="icon-remove-circle"></i>&nbsp;#i18n{digglike.createDigg.buttonCancel}
-				</button>
+			<div class="form-group">
+				<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
+					<button class="btn btn-primary btn-sm btn-flat" type="submit" name="save">
+						<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{digglike.createDigg.buttonSave}
+					</button>
+					<button class="btn btn-primary btn-sm btn-flat" type="submit" name="apply" >
+						<i class="glyphicon glyphicon-ok-circle"></i>&nbsp;#i18n{digglike.modifyDigg.buttonApply}
+					</button>
+					<button class="btn btn-default btn-sm btn-flat" type="submit" name="cancel">
+						<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{digglike.createDigg.buttonCancel}
+					</button>
+				</div>
 			</div>
 		</form>
 	</div>

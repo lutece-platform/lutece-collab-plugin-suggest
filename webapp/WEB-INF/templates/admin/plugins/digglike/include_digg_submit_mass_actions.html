@@ -1,12 +1,12 @@
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<div class="fixed-actionbar">
-				<a href="#myModalSearch" id="myModalLabelSearch" role="button" class="btn btn-primary btn-small" data-toggle="modal">
-					<i class="icon-search icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonSearch}
+				<a href="#myModalSearch" id="myModalLabelSearch" role="button" class="btn btn-primary btn-sm btn-flat" data-toggle="modal">
+					<i class="glyphicon glyphicon-search"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonSearch}
 				</a>
 				<div class="btn-group" style="font-size:100%;">
-					<a class="btn btn-small btn-primary dropdown-toggle" id="dLabel" data-toggle="dropdown" href="#">
-						<i class="icon-cog icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonActions}
+					<a class="btn btn-sm btn-flat btn-primary dropdown-toggle" id="dLabel" data-toggle="dropdown" href="#">
+						<i class="glyphicon glyphicon-cog"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonActions}
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
@@ -56,11 +56,11 @@
 						</#if>
 					</ul>
 				</div>
-				<a class="btn btn-primary btn-small" title="#i18n{digglike.manageDiggSubmit.buttonAddDiggSubmit}" href="jsp/admin/plugins/digglike/CreateDiggSubmit.jsp?id_digg=${digg.idDigg}">
-					<i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonAddDiggSubmit}
+				<a class="btn btn-primary btn-sm btn-flat" title="#i18n{digglike.manageDiggSubmit.buttonAddDiggSubmit}" href="jsp/admin/plugins/digglike/CreateDiggSubmit.jsp?id_digg=${digg.idDigg}">
+					<i class="glyphicon glyphicon-plus"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonAddDiggSubmit}
 				</a>
-				<a class="btn btn-primary btn-small" href="#myModalExport" role="button" data-toggle="modal">
-					<i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.labelDiggExport}
+				<a class="btn btn-primary btn-sm btn-flat" href="#myModalExport" role="button" data-toggle="modal">
+					<i class="glyphicon glyphicon-download"></i>&nbsp;#i18n{digglike.manageDiggSubmit.labelDiggExport}
 				</a>
 				<div id="myModalExport" class="" tabindex="-1" role="dialog" aria-labelledby="myModalLabelExport" aria-hidden="true">
 					<div class="modal-header">
@@ -69,14 +69,14 @@
 					</div>
 					<div class="modal-body">
 						<label>#i18n{digglike.manageDiggSubmit.labelDiggExport}</label>        
-						<@comboWithParams name="id_export_format" default_value="-1" additionalParameters="class=\"input-xlarge\"" items=export_format_list />
+						<@comboWithParams name="id_export_format" default_value="-1" additionalParameters="class=\"form-control input-sm\"" items=export_format_list />
 					</div>
 					<div class="modal-footer">
 						<button class="btn" data-dismiss="modal" aria-hidden="true">
-							<i class="icon-remove-circle"></i>&nbsp;#i18n{portal.util.labelCancel}
+							<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{portal.util.labelCancel}
 						</button>
-						<button class="btn btn-primary btn-small" type="submit"  name="export_search_all">
-							<i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonDiggExport}
+						<button class="btn btn-primary btn-sm btn-flat" type="submit"  name="export_search_all">
+							<i class="glyphicon glyphicon-download"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonDiggExport}
 						</button>
 					</div>
 				</div>
@@ -87,14 +87,14 @@
 							<h3 id="myModalLabel">#i18n{digglike.manageDiggSubmit.labelDiggSubmitCategory}</h3>
 						</div>
 						<div class="modal-body">
-							<@comboWithParams name="id_category" items=category_list default_value="-1"  additionalParameters="class=\"input-xlarge\"" /> 
+							<@comboWithParams name="id_category" items=category_list default_value="-1"  additionalParameters="class=\"form-control input-sm\"" /> 
 						</div>
 						<div class="modal-footer">
 							<button class="btn" data-dismiss="modal" aria-hidden="true">
-								<i class="icon-remove-circle"></i>&nbsp;#i18n{portal.util.labelCancel}
+								<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{portal.util.labelCancel}
 							</button>
-							<button class="btn btn-primary btn-small" type="submit" name="mass_change_category" >
-								<i class="icon-download icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonModify}
+							<button class="btn btn-primary btn-sm btn-flat" type="submit" name="mass_change_category" >
+								<i class="glyphicon glyphicon-download"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonModify}
 							</button>
 						</div>
 					</div>

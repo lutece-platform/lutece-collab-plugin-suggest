@@ -1,6 +1,6 @@
 
 <div class="row" id="digg${digg_submit.idDiggSubmit}">
-	<div class="span8">
+	<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
 		<h3>
 		${digg_submit.diggSubmitTitle}
 		<#if digg_submit.diggSubmitType?exists>
@@ -27,12 +27,12 @@
 	</div>
 </div>
 <div class="row">
-	<div class="span8">
+	<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
 	<p class="digg-meta">
-		<i class="icon-calendar"></i> ${digg_submit.dateResponse}&nbsp;
+		<i class="glyphicon glyphicon-calendar"></i> ${digg_submit.dateResponse}&nbsp;
 		<#if lutece_user?exists>
 		 #i18n{digg_submit.postByUser} :
-		<#if  avatar?has_content><img class="avatar" src="${avatar}" alt="avatar provided by gravatar.com" /><#else><i class="icon-user"></i></#if>
+		<#if  avatar?has_content><img class="avatar" src="${avatar}" alt="avatar provided by gravatar.com" /><#else><i class="glyphicon glyphicon-user"></i></#if>
 			<#if lutece_user?exists>
 				${lutece_user!""}
 			<#else>
@@ -42,12 +42,12 @@
 		<#if lutece_user_connected??>
 			<div class="pull-right">
 				<#if user_subscribed?? && user_subscribed>
-					<a class="btn btn-small btn-danger" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit.idDiggSubmit}&amp;action=unsubscribe_digg#digg${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.unsubscribe}">
-						<i class="icon-eye-close icon-white">&nbsp;</i>&nbsp;#i18n{digglike.manageDiggSubmit.unsubscribe}
+					<a class="btn btn-sm btn-danger" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit.idDiggSubmit}&amp;action=unsubscribe_digg#digg${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.unsubscribe}">
+						<i class="glyphicon glyphicon-eye-close">&nbsp;</i>&nbsp;#i18n{digglike.manageDiggSubmit.unsubscribe}
 					</a>
 				<#else>
-					<a class="btn btn-small btn-primary" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit.idDiggSubmit}&amp;action=subscribe_digg#digg${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.subscribe}">
-						<i class="icon-eye-open icon-white">&nbsp;</i>&nbsp;#i18n{digglike.manageDiggSubmit.subscribe}
+					<a class="btn btn-sm btn-primary" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit.idDiggSubmit}&amp;action=subscribe_digg#digg${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.subscribe}">
+						<i class="glyphicon glyphicon-eye-open">&nbsp;</i>&nbsp;#i18n{digglike.manageDiggSubmit.subscribe}
 					</a>
 				</#if>
 			</div>
@@ -59,7 +59,7 @@
 		</div>	
 	</#if>
 	<#if enable_digg_reports>
-		<a class="btn btn-primary btn-small" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit.idDiggSubmit}&amp;action=create_report#digg${digg_submit.idDiggSubmit}">
+		<a class="btn btn-primary btn-sm" href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit.idDiggSubmit}&amp;action=create_report#digg${digg_submit.idDiggSubmit}">
 			#i18n{digglike.diggListSubmit.labelReport}
 		</a>
 	</#if>
@@ -85,14 +85,14 @@
 			<#if jcaptcha?exists>
 			<fieldset>${jcaptcha}</fieldset>
 			</#if>
-			<button class="btn btn-primary btn-small pull-right" type="submit" name="submit_comment">
-				<i class="icon-comment icon-white"></i>&nbsp;#i18n{digglike.diggComment.labelAddNewComment}
+			<button class="btn btn-primary btn-sm pull-right" type="submit" name="submit_comment">
+				<i class="glyphicon glyphicon-comment"></i>&nbsp;#i18n{digglike.diggComment.labelAddNewComment}
 			</button>
 		</form>
 	</div>
 </div>
 <div class="row">		
-	<div class="span8">	
+	<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">	
 	<#if list_comment?has_content>
 		${list_comment}
 	</#if>

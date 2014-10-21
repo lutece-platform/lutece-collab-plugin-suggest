@@ -8,7 +8,7 @@
 
 <#list list_digg_submit as digg_submit_display>
 <div class="row" id="digg${digg_submit_display.digg_submit.idDiggSubmit}">
-    <div class="span8">
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
         <h3>
         <a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;action=view_digg_submit#digg${digg_submit_display.digg_submit.idDiggSubmit}">
         <#if digg_submit_display.digg_submit.diggSubmitTitle?length &gt;45>
@@ -35,7 +35,7 @@
                 </a> |  
             </#if>
             <#if digg_submit_display.lutece_user?exists>
-                 #i18n{digglike.diggListSubmit.postByUser} : <a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&lutece_user_name_filter=${digg_submit_display.lutece_user}" title="#i18n{digglike.diggListSubmit.labelFilterByUserName}"><#if digg_submit_display.avatar?has_content><img class="avatar" src="${digg_submit_display.avatar}" alt="avatar provided by gravatar.com" /><#else><i class="icon-user"></i></#if></a>
+                 #i18n{digglike.diggListSubmit.postByUser} : <a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&lutece_user_name_filter=${digg_submit_display.lutece_user}" title="#i18n{digglike.diggListSubmit.labelFilterByUserName}"><#if digg_submit_display.avatar?has_content><img class="avatar" src="${digg_submit_display.avatar}" alt="avatar provided by gravatar.com" /><#else><i class="glyphicon glyphicon-user"></i></#if></a>
                 
                 <#if digg_submit_display.lutece_user?exists>
                     ${digg_submit_display.lutece_user!""}
@@ -44,9 +44,9 @@
                 </#if>
                 | 
             </#if>
-            <i class="icon-calendar"></i> ${digg_submit_display.digg_submit.dateResponse} | 
+            <i class="glyphicon glyphicon-calendar"></i> ${digg_submit_display.digg_submit.dateResponse} | 
             <#if authorized_comment && !digg_submit_display.digg_submit.disableComment>
-                <i class="icon-comment"></i>&nbsp;
+                <i class="glyphicon glyphicon-comment"></i>&nbsp;
                     <a href="jsp/site/Portal.jsp?page=digg&amp;id_digg=${id_digg}&amp;id_digg_submit=${digg_submit_display.digg_submit.idDiggSubmit}&amp;action=view_digg_submit#digg${digg_submit_display.digg_submit.idDiggSubmit}">
                     ${digg_submit_display.digg_submit.numberCommentEnable} #i18n{digglike.diggListSubmit.labelComments}
                 </a> |
@@ -75,7 +75,7 @@
             <#if digg_submit_display.digg_submit.diggSubmitValueShowInTheList?exists>
                 <#if digg_submit_display.digg_submit.diggSubmitValueShowInTheList?length &gt; 500>
                     <!-- span class="pull-right badge badge-inverse">
-                        <i class="icon-chevron-up icon-white"></i>
+                        <i class="glyphicon glyphicon-chevron-up"></i>
                     </span -->  
                     ${digg_submit_display.digg_submit.diggSubmitValueShowInTheList}
                 <#else>

@@ -1,41 +1,41 @@
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <fieldset>
     <legend> #i18n{digglike.createDiggSubmitType.title}</legend>
     <form class="form-horizontal" method="post" action="jsp/admin/plugins/digglike/DoCreateDiggSubmitType.jsp" enctype="multipart/form-data">
-		<div class="control-group">
-		<label class="control-label" for="name" >#i18n{digglike.createDiggSubmitType.labelName} *</label>
-			<div class="controls">
-				<input type="text" class="input-small" id="name" name="name" maxlength="200" />
+		<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="name">#i18n{digglike.createDiggSubmitType.labelName} *</label>
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<input type="text" class="form-control input-sm" id="name" name="name" maxlength="200">
 			</div>
 		</div>
-		<div class="control-group">
-		<label class="control-label" for="color" >#i18n{digglike.createDiggSubmitType.labelColor}</label>
-			<div class="controls">
-				<input type="text" class="input-mini" id="color" name="color" maxlength="7" />
+		<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="color" >#i18n{digglike.createDiggSubmitType.labelColor}</label>
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<input type="text" class="form-control input-sm" id="color" name="color" maxlength="7">
 			</div>
 		</div>
-		<div class="control-group">
-		<label class="control-label" for="" >&nbsp;</label>
-			<div class="controls">
+		<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="" >&nbsp;</label>
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 				<label class="checkbox" for="parameterizable" >#i18n{digglike.createDiggSubmitType.labelParameterizable} *
-					<input id="parameterizable" name="parameterizable" type="checkbox" />
+					<input id="parameterizable" name="parameterizable" type="checkbox">
 				</label>
 			</div>
 		</div>
-        <div class="control-group">
-		<label class="control-label" for="" >&nbsp;</label>
-			<div class="controls">
+        <div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="" >&nbsp;</label>
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 				<label for="image_source" >#i18n{digglike.createDiggSubmitType.labelImage}</label>
-				<input type="file" id="image_source" name="image_source" maxlength="100"/>
+				<input type="file" id="image_source" name="image_source" maxlength="100">
 			</div>
 		</div>
-        <div class="form-actions">
-			<button class="btn btn-primary btn-small" type="submit" name="save">
-				<i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createExportFormat.buttonSave}
+        <div class="form-group">
+			<button class="btn btn-primary btn-sm btn-flat" type="submit" name="save">
+				<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{digglike.createExportFormat.buttonSave}
 			</button>
-			<a class="btn btn-small" href="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp?plugin_name=digglike" name="cancel">
-				<i class="icon-remove-circle"></i>&nbsp;#i18n{digglike.createExportFormat.buttonCancel}
+			<a class="btn btn-default btn-sm btn-flat" href="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp?plugin_name=digglike" name="cancel">
+				<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{digglike.createExportFormat.buttonCancel}
 			</a>
 		</div>
 		</form>

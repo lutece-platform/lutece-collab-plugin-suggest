@@ -1,5 +1,5 @@
-<div class="row-fluid" id="digg${digg_submit.idDiggSubmit}">
-	<div class="span12">
+<div class="row" id="digg${digg_submit.idDiggSubmit}">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<#if digg_submit.numberScore?exists>
 		<span class="badge badge-info">${digg_submit.numberScore}</span>
 	</#if>		 
@@ -8,19 +8,19 @@
 	 </#if>	 
 	<fieldset>
 	<legend>#i18n{digglike.diggReported.labelReported}</legend>
-   		<form class="form-horizontal" action="jsp/site/Portal.jsp?page=digg#digg${digg_submit.idDiggSubmit}" method="post" name="" id="" >
-		<input name="id_digg" value="${id_digg}" type="hidden" />
-		<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden" />
-		<input name="action" value="do_create_report" type="hidden" />
+   		<form class="form-horizontal" action="jsp/site/Portal.jsp?page=digg#digg${digg_submit.idDiggSubmit}" method="post" name="" id="">
+		<input name="id_digg" value="${id_digg}" type="hidden">
+		<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden">
+		<input name="action" value="do_create_report" type="hidden">
 		
 		
-		<div class="control-group">
-		<label class="control-label" for="reported_value">#i18n{digglike.diggReported.labelAddNewReported}:</label>
+		<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="reported_value">#i18n{digglike.diggReported.labelAddNewReported}:</label>
 			<textarea name="reported_value" id="reported_value" rows="3" cols="30"></textarea>
 		</div>
-		<div class="form-actions">
-			<button class="btn btn-primary btn-small" type="submit" name="save"><i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.diggReported.buttonAdd}</button>
-			<button class="btn btn-primary btn-small" type="button" name="cancel" onclick="javascript:window.history.back();" ><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{digglike.diggReported.buttonCancel}</button>
+		<div class="form-group">
+			<button class="btn btn-primary btn-sm" type="submit" name="save"><i class="glyphicon glyphicon-plus"></i>&nbsp;#i18n{digglike.diggReported.buttonAdd}</button>
+			<button class="btn btn-primary btn-sm" type="button" name="cancel" onclick="javascript:window.history.back();" ><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{digglike.diggReported.buttonCancel}</button>
 		</div>
 		</form>
 	</fieldset>

@@ -1,4 +1,4 @@
-<div class="row-fluid">
+<div class="row">
 	<div class="span3 span-fixed">
 		<h3>#i18n{digglike.manageCommentSubmit.rowTitleDiggSubmitTitle}</h3>
 		<p class="lead">
@@ -14,7 +14,7 @@
 		<div class="alert alert-error">
 			<span class="label label-important">#i18n{digglike.manageDiggSubmit.altWarning}</span>
 			<span class="pull-right">
-				<i id="display_advert" class="icon-chevron-down" title="Afficher les signalements"></i>
+				<i id="display_advert" class="glyphicon glyphicon-chevron-down" title="Afficher les signalements"></i>
 			</span>
 			<div id="advert_content">
 			<#if digg_submit.reportedMessages?has_content>
@@ -33,11 +33,11 @@
         <p>#i18n{digglike.manageCommentSubmit.rowDateDiggSubmit}: <strong>${digg_submit.dateResponse?date?string.short}</strong></p>
         <p>
 			#i18n{digglike.manageCommentSubmit.rowStateDiggSubmit}: <#if digg_submit.diggSubmitState.number=publish_state_number>
-				<span class="label label-success" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="icon-white icon-ok"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altPublish}</span>
+				<span class="label label-success" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="glyphicon glyphicon-white icon-ok"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altPublish}</span>
 			<#elseif digg_submit.diggSubmitState.number=waiting_for_publish_state_number>
-				<span class="label label-warning" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="icon-white icon-pause"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altWaitingForPublish}</span>
+				<span class="label label-warning" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="glyphicon glyphicon-white icon-pause"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altWaitingForPublish}</span>
 			<#else>
-				<span class="label label-important" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="icon-white icon-remove"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altDisable}</span>
+				<span class="label label-important" title="#i18n{digglike.manageDiggSubmit.rowDiggSubmitState}"><i class="glyphicon glyphicon-white icon-remove"></i>&nbsp;#i18n{digglike.manageDiggSubmit.altDisable}</span>
 			</#if></p>
      	
      	<#if digg.diggSubmitTypes?has_content && digg.diggSubmitTypes?size &gt; 0 >
@@ -57,24 +57,24 @@
 				<#else>
 					<@combo name="id_category" items=category_list default_value="-1" />
 				</#if>	
-				<button type="submit" class="btn btn-primary btn-small" title="#i18n{digglike.manageDiggSubmit.buttonModify}">
-					<i class="icon-ok icon-white"></i>
+				<button type="submit" class="btn btn-primary btn-sm btn-flat" title="#i18n{digglike.manageDiggSubmit.buttonModify}">
+					<i class="glyphicon glyphicon-ok"></i>
 				</button>
     		</form>
     	</#if>
 		<#if !digg_submit.disableVote>
-			<div class="well well-small">
+			<div class="well well-sm">
 				<p>	
-					<i class="icon-star"></i>&nbsp;#i18n{digglike.manageDiggSubmit.rowNumberVote} : ${digg_submit.numberVote}
+					<i class="glyphicon glyphicon-star"></i>&nbsp;#i18n{digglike.manageDiggSubmit.rowNumberVote} : ${digg_submit.numberVote}
 				</p>
 				<p>
-					<i class="icon-thumbs-up"></i>&nbsp;#i18n{digglike.manageDiggSubmit.rowNumberScore} : ${digg_submit.numberScore}
+					<i class="glyphicon glyphicon-thumbs-up"></i>&nbsp;#i18n{digglike.manageDiggSubmit.rowNumberScore} : ${digg_submit.numberScore}
 				</p>
 			</div>
 		</#if>
 		<#if !digg_submit.disableComment>
-			<div class="well well-small">
-				<i class="icon-comment"></i>&nbsp;#i18n{digglike.manageDiggSubmit.rowNumberComment} : ${digg_submit.numberComment} 
+			<div class="well well-sm">
+				<i class="glyphicon glyphicon-comment"></i>&nbsp;#i18n{digglike.manageDiggSubmit.rowNumberComment} : ${digg_submit.numberComment} 
 			</p>
 			<p>
 				<blockquote>
@@ -89,42 +89,42 @@
 		<p>
 			<a name="${digg_submit.idDiggSubmit}"></a>	 
 			<#if digg_submit.diggSubmitState.number=disable_state_number>
-            <a class="btn btn-small btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${waiting_for_publish_state_number}&comment=comment#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
-				<i class="icon-info-sign icon-white"></i>
+            <a class="btn btn-sm btn-flat btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${waiting_for_publish_state_number}&comment=comment#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
+				<i class="glyphicon glyphicon-info-sign"></i>
 			</a>
-			<a class="btn btn-small btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${publish_state_number}&comment=comment#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altPublish}">
-				<i class="icon-ok icon-white"></i>
+			<a class="btn btn-sm btn-flat btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${publish_state_number}&comment=comment#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altPublish}">
+				<i class="glyphicon glyphicon-ok"></i>
 			</a>
 			<#elseif digg_submit.diggSubmitState.number=waiting_for_publish_state_number >
-			<a class="btn btn-small btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${disable_state_number}&comment=comment#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altDisable}">
-				<i class="icon-remove icon-white"></i>
+			<a class="btn btn-sm btn-flat btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${disable_state_number}&comment=comment#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altDisable}">
+				<i class="glyphicon glyphicon-remove"></i>
 			</a>
-			 <a class="btn btn-small btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${publish_state_number}&comment=comment#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altPublish}">
-			   <i class="icon-ok icon-white"></i>
+			 <a class="btn btn-sm btn-flat btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${publish_state_number}&comment=comment#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altPublish}">
+			   <i class="glyphicon glyphicon-ok"></i>
 			</a>
 			<#elseif digg_submit.diggSubmitState.number=publish_state_number >
-            <a class="btn btn-small btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${disable_state_number}&comment=comment#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altDisable}">
-				<i class="icon-remove icon-white"></i>
+            <a class="btn btn-sm btn-flat btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${disable_state_number}&comment=comment#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altDisable}">
+				<i class="glyphicon glyphicon-remove"></i>
 			</a>
-			<a class="btn btn-small btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${waiting_for_publish_state_number}&comment=comment#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
-				<i class="icon-ok icon-white"></i>
+			<a class="btn btn-sm btn-flat btn-primary" href="jsp/admin/plugins/digglike/DoChangeDiggSubmitState.jsp?id_digg_submit=${digg_submit.idDiggSubmit}&state_number=${waiting_for_publish_state_number}&comment=comment#${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altWaitingForPublish}">
+				<i class="glyphicon glyphicon-ok"></i>
 			</a>
 			</#if>	 
-			<a class="btn btn-small btn-danger" href="jsp/admin/plugins/digglike/ConfirmRemoveDiggSubmit.jsp?id_digg_submit=${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altDelete}">
-				<i class="icon-trash icon-white"></i>
+			<a class="btn btn-sm btn-flat btn-danger" href="jsp/admin/plugins/digglike/ConfirmRemoveDiggSubmit.jsp?id_digg_submit=${digg_submit.idDiggSubmit}" title="#i18n{digglike.manageDiggSubmit.altDelete}">
+				<i class="glyphicon glyphicon-trash"></i>
 			</a>
 			<#if digg_submit_prev!=-1>
-			<a class="btn btn-small btn-primary" href="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=${digg_submit_prev}" title="#i18n{digglike.manageCommentSubmit.altPrevDiggSubmit}">
-		  		<i class="icon-arrow-left icon-white"></i>
+			<a class="btn btn-sm btn-flat btn-primary" href="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=${digg_submit_prev}" title="#i18n{digglike.manageCommentSubmit.altPrevDiggSubmit}">
+		  		<i class="glyphicon glyphicon-arrow-left"></i>
 			</a>
 			</#if>
 			<#if digg_submit_next!=-1>
-			<a class="btn btn-small btn-primary" href="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=${digg_submit_next}" title="#i18n{digglike.manageCommentSubmit.altNextDiggSubmit}">
-				<i class="icon-arrow-right icon-white"></i>
+			<a class="btn btn-sm btn-flat btn-primary" href="jsp/admin/plugins/digglike/ManageCommentSubmit.jsp?id_digg_submit=${digg_submit_next}" title="#i18n{digglike.manageCommentSubmit.altNextDiggSubmit}">
+				<i class="glyphicon glyphicon-arrow-right"></i>
 			</a>
 			</#if>
-			<a class="btn btn-small" href="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp?id_digg=${digg.idDigg}&comment=comment#digg${digg_submit.idDiggSubmit}" title="#i18n{portal.util.labelBack}">
-				<i class="icon-remove-circle"></i>
+			<a class="btn btn-default btn-sm btn-flat" href="jsp/admin/plugins/digglike/ManageDiggSubmit.jsp?id_digg=${digg.idDigg}&comment=comment#digg${digg_submit.idDiggSubmit}" title="#i18n{portal.util.labelBack}">
+				<i class="glyphicon glyphicon-remove-circle"></i>
 			</a>
 		</p>
     </div>
@@ -132,15 +132,15 @@
 		<form method="post" action="jsp/admin/plugins/digglike/DoSubmitOfficialAnswer.jsp" id="addOfficialComment">
 			<h3>#i18n{digglike.manageCommentSubmit.officialAnswer} <small>#i18n{digglike.manageCommentSubmit.labelAddOfficialAnswer}</small></h3>
 				<input name="id_digg_submit" value="${digg_submit.idDiggSubmit}" type="hidden">
-				<textarea name="comment_value" id="comment_value" rows="6" class="span12" <#if digg.activeEditorBbcode> class='markitup'</#if>></textarea>
-			<button type="submit" class="btn btn-primary btn-small" name="add">
-				<i class="icon-plus icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonAdd}
+				<textarea name="comment_value" id="comment_value" rows="6" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" <#if digg.activeEditorBbcode> class='markitup'</#if>></textarea>
+			<button type="submit" class="btn btn-primary btn-sm btn-flat" name="add">
+				<i class="glyphicon glyphicon-plus"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonAdd}
 			</button>
 
 		</form>
 		<div class="fixed-actionbar">
-			<a href="#myModalCommentSearch" id="myModalLabelCommentSearch" role="button" class="btn btn-primary btn-small" data-toggle="modal">
-				<i class="icon-search icon-white"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonSearch}
+			<a href="#myModalCommentSearch" id="myModalLabelCommentSearch" role="button" class="btn btn-primary btn-sm btn-flat" data-toggle="modal">
+				<i class="glyphicon glyphicon-search"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonSearch}
 			</a>
 		</div>
 		<@paginationAdmin paginator=paginator combo=1 />
@@ -160,11 +160,11 @@
 			<form method="post" class="form-inline pull-right" action="jsp/admin/plugins/digglike/DoChangeCommentSubmit.jsp#comment${comment_submit.idCommentSubmit}">
 				<input name="id_comment_submit" value="${comment_submit.idCommentSubmit}" type="hidden">
 				<#if comment_submit.active>
-					<button type="submit" class="btn btn-small btn-primary" name="disable"><i class="icon-remove icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonDisable}</button>
+					<button type="submit" class="btn btn-sm btn-flat btn-primary" name="disable"><i class="glyphicon glyphicon-remove"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonDisable}</button>
 				<#else>
-					<button type="submit" class="btn btn-small btn-primary" name="enable"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonEnable}</button>
+					<button type="submit" class="btn btn-sm btn-flat btn-primary" name="enable"><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonEnable}</button>
 				</#if>          
-					<button type="submit" class="btn btn-small btn-danger" name="delete"><i class="icon-trash icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonDelete}</button>
+					<button type="submit" class="btn btn-sm btn-flat btn-danger" name="delete"><i class="glyphicon glyphicon-trash"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonDelete}</button>
 			</form>
 			<p>
 			<p>
@@ -176,7 +176,7 @@
 			</#if> 
 			</p>
 			<#if comment_submit.comments?has_content>
-			<p class="comment_toggle" id="comment_toggle${comment_submit.idCommentSubmit}"><i class="icon-chevron-down"></i>&nbsp;#i18n{digglike.manageCommentSubmit.ShowSubComments}</p>
+			<p class="comment_toggle" id="comment_toggle${comment_submit.idCommentSubmit}"><i class="glyphicon glyphicon-chevron-down"></i>&nbsp;#i18n{digglike.manageCommentSubmit.ShowSubComments}</p>
 			<div class="commentComments">
 				<#list comment_submit.comments as comment_comment> 
 				<blockquote id="comment${comment_comment.idCommentSubmit}">
@@ -196,11 +196,11 @@
 					<input name="id_comment_submit" value="${comment_comment.idCommentSubmit}" type="hidden">
 					<input name="id_parent" value="${comment_submit.idCommentSubmit}" type="hidden">
 					<#if comment_comment.active>
-						<button type="submit" class="btn btn-small btn-primary" name="disable"><i class="icon-remove icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonDisable}</button>
+						<button type="submit" class="btn btn-sm btn-flat btn-primary" name="disable"><i class="glyphicon glyphicon-remove"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonDisable}</button>
 					<#else>
-						<button type="submit" class="btn btn-small btn-primary" name="enable"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonEnable}</button>
+						<button type="submit" class="btn btn-sm btn-flat btn-primary" name="enable"><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonEnable}</button>
 					</#if>          
-					<button type="submit" class="btn btn-small btn-danger" name="delete"><i class="icon-trash icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonDelete}</button>
+					<button type="submit" class="btn btn-sm btn-flat btn-danger" name="delete"><i class="glyphicon glyphicon-trash"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonDelete}</button>
 					</form>
 				</blockquote>
 				</#list>
@@ -215,31 +215,31 @@
 					<h3 id="myModalLabel">#i18n{digglike.manageCommentSubmit.title}</h3>
 				</div>
 				<div class="modal-body">
-						<div class="control-group">
-							<label class="control-label" for="id_comment_state">#i18n{digglike.manageCommentSubmit.labelState}</label>
-							<div class="controls">
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_comment_state">#i18n{digglike.manageCommentSubmit.labelState}</label>
+							<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 								<@comboWithParams name="id_comment_state" default_value=comment_state_selected?string additionalParameters=" class=\"input-medium\"" items=comment_state_list />
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="id_contains_sub_comment_disable">#i18n{digglike.manageCommentSubmit.labelContainsSubCommentDisable}</label>
-							<div class="controls">
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_contains_sub_comment_disable">#i18n{digglike.manageCommentSubmit.labelContainsSubCommentDisable}</label>
+							<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 								<@comboWithParams name="id_contains_sub_comment_disable" default_value=comment_contains_sub_comment_disable_selected?string  additionalParameters=" class=\"input-small\"" items=comment_contains_sub_comment_disable_list  />
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label" for="id_comment_sort">#i18n{digglike.manageCommentSubmit.labelSort}</label>
-							<div class="controls">
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_comment_sort">#i18n{digglike.manageCommentSubmit.labelSort}</label>
+							<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 								<@comboWithParams name="id_comment_sort" default_value=comment_sort_selected?string additionalParameters=" class=\"input-medium\"" items=comment_sort_list />
 							</div>
 						</div>
 				</div>
 				<div class="modal-footer">
 					<button class="btn" data-dismiss="modal" aria-hidden="true">
-						<i class="icon-remove-circle"></i>&nbsp;#i18n{portal.util.labelCancel}
+						<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{portal.util.labelCancel}
 					</button>
-					<button class="btn btn-primary btn-small" type="submit"  name="export_search_all">
-						<i class="icon-filter icon-white"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonSearch}
+					<button class="btn btn-primary btn-sm btn-flat" type="submit"  name="export_search_all">
+						<i class="glyphicon glyphicon-filter"></i>&nbsp;#i18n{digglike.manageCommentSubmit.buttonSearch}
 					</button>
 				</div>
 			</form>
@@ -262,7 +262,7 @@ $(document).ready( function () {
 	});
 	
 	if( nQuery > 0){
-		$('#myModalLabelCommentSearch').after('<a href="#" id="init" class="btn btn-small btn-danger spaced"><i class="icon-refresh icon-white"></i> #i18n{digglike.manageDiggSubmit.buttonReinitSearch} </a>');
+		$('#myModalLabelCommentSearch').after('<a href="#" id="init" class="btn btn-sm btn-flat btn-danger spaced"><i class="glyphicon glyphicon-refresh"></i> #i18n{digglike.manageDiggSubmit.buttonReinitSearch} </a>');
 		$("a#init").click( function(){
 			$("#myModalCommentSearch select option:selected").each( function(){
 				$(this).val(-1);
@@ -310,7 +310,7 @@ $(document).ready( function () {
 		console.log( n  );
 			if( $(this).next().find("span").hasClass("label-important") ){
 				// Add all unpublished comments info 
-				$(this).append(" <span class=\"badge badge-warning\"><i class=\"icon-exclamation-sign icon-white\"></i>#i18n{digglike.manageCommentSubmit.buttonContainsEnableSubComment}</span>")
+				$(this).append(" <span class=\"badge badge-warning\"><i class=\"icon-exclamation-sign\"></i>#i18n{digglike.manageCommentSubmit.buttonContainsEnableSubComment}</span>")
 			};
 
 		}

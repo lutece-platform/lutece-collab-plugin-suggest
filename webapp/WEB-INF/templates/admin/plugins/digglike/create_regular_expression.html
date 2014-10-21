@@ -1,38 +1,38 @@
 <#include "/admin/util/editor/editor.html" />
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<fieldset>
     <legend> #i18n{digglike.createRegularExpression.title}</legend>
     <form class="form-horizontal" method="post" action="jsp/admin/plugins/digglike/DoCreateRegularExpression.jsp" >
-		 <div class="control-group">
-			<label class="control-label" for="title" >#i18n{digglike.createRegularExpression.labelTitle}* </label>
-			<div class="controls">
-				<label class="control-label" for="title" >#i18n{digglike.createRegularExpression.labelTitle}* </label>
+		 <div class="form-group">
+			<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title" >#i18n{digglike.createRegularExpression.labelTitle}* </label>
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title" >#i18n{digglike.createRegularExpression.labelTitle}* </label>
 					<input type="text" id="title" name="title" maxlength="20"/>
 			</div>
-			<div class="controls">
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 			<label for="value" >#i18n{digglike.createRegularExpression.labelValue}* </label>
-				<input type="text" class="input-xlarge" id="value" name="value"  value=""/>
+				<input type="text" class="form-control input-sm" id="value" name="value"  value=""/>
 			</div>
-			<div class="controls">
-				<label class="control-label" for="valid_exemple">#i18n{digglike.createRegularExpression.labelValidExemple}* </label>
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="valid_exemple">#i18n{digglike.createRegularExpression.labelValidExemple}* </label>
 				<input type="text" name="valid_exemple" value="" class="input-xxlarge" />
 				<span class="help-text">#i18n{digglike.createRegularExpression.labelValidExempleComment}</span>
 			</div>
-			<div class="controls">
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 				<label for="information_message">	#i18n{digglike.createRegularExpression.labelInformationMessage}* </label>
 				<textarea class="richtext" name="information_message" id="information_message" class="span4" rows="2"></textarea>
 				<span class="help-text">#i18n{digglike.createRegularExpression.labelInformationMessageComment}</span>
 			</div>
-			<div class="controls">
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 				<label for="error_message">#i18n{digglike.createRegularExpression.labelErrorMessage}* </label>
 				<textarea class="richtext" name="error_message" id="error_message" class="span4" rows="2"></textarea>
 				<span class="help-text">#i18n{digglike.createRegularExpression.labelErrorMessageComment} </span>  
 			</div>
 		</div>
-		<div class="form-actions">
-			<button class="btn btn-primary btn-small" type="submit" name="save"><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createRegularExpression.buttonSave}</button>
-			<button class="btn btn-primary btn-small" onclick="javascript:window.history.back();" name="cancel"><i class="icon-remove-circle icon-white"></i>&nbsp;#i18n{digglike.createRegularExpression.buttonCancel}</button>
+		<div class="form-group">
+			<button class="btn btn-primary btn-sm btn-flat" type="submit" name="save"><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{digglike.createRegularExpression.buttonSave}</button>
+			<button class="btn btn-primary btn-sm btn-flat" onclick="javascript:window.history.back();" name="cancel"><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{digglike.createRegularExpression.buttonCancel}</button>
 		</div>
 		</form>
 	</fieldset>

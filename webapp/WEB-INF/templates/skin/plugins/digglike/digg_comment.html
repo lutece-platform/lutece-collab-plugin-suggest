@@ -8,7 +8,7 @@
 		<p>
 			<#if comment_submit_lutece_user.comment_submit.isOfficialAnswer()>
 				<span class="badge badge-warning">
-					<i class="icon-star icon-white"></i> 
+					<i class="glyphicon glyphicon-star"></i> 
 					#i18n{digglike.manageCommentSubmit.officialAnswer}
 				</span>
 				
@@ -16,7 +16,7 @@
 			</#if>
 			<#if comment_submit_lutece_user.lutece_user?exists>
 				 #i18n{digglike.diggListSubmit.postByUser} :
-				<#if comment_submit_lutece_user.avatar?has_content><img class="avatar" src="${comment_submit_lutece_user.avatar}" alt="avatar provided by gravatar.com" /><#else><i class="icon-user"></i></#if>
+				<#if comment_submit_lutece_user.avatar?has_content><img class="avatar" src="${comment_submit_lutece_user.avatar}" alt="avatar provided by gravatar.com" /><#else><i class="glyphicon glyphicon-user"></i></#if>
 				<#if comment_submit_lutece_user.lutece_user?exists>
 					${comment_submit_lutece_user.lutece_user}
 				<#else>
@@ -24,7 +24,7 @@
 					${comment_submit_lutece_user.lutece_user.getUserInfo("user.name.family")}
 				</#if> |
 			</#if>
-			<i class="icon-calendar"></i> ${comment_submit_lutece_user.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}
+			<i class="glyphicon glyphicon-calendar"></i> ${comment_submit_lutece_user.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}
 		</p>
 		<p class="comment-content"><pre>${digg.parseBbcodeValue(comment_submit_lutece_user.comment_submit.value)}</pre></p>
 		<a href="jsp/site/Portal.jsp?page=digg&id_digg=${id_digg}&id_digg_comment=${comment_submit_lutece_user.comment_submit.idCommentSubmit}&action=create_sub_comment">
@@ -36,11 +36,11 @@
 				<pre>${digg.parseBbcodeValue(comment_comment.comment_submit.value)}</pre>
 				<br>
 					<#if comment_comment.comment_submit.isOfficialAnswer()>
-						<i class="icon-star"></i> <span class="badge badge-info">#i18n{digglike.manageCommentSubmit.officialAnswer}</span> |
+						<i class="glyphicon glyphicon-star"></i> <span class="badge badge-info">#i18n{digglike.manageCommentSubmit.officialAnswer}</span> |
 					</#if>
 					<#if comment_comment.lutece_user?exists>
 						 #i18n{digglike.diggListSubmit.postByUser} :
-						<#if comment_comment.avatar?has_content><img class="avatar" src="${comment_comment.avatar}" alt="avatar provided by gravatar.com" /><#else><i class="icon-user"></i></#if>
+						<#if comment_comment.avatar?has_content><img class="avatar" src="${comment_comment.avatar}" alt="avatar provided by gravatar.com" /><#else><i class="glyphicon glyphicon-user"></i></#if>
 						<#if comment_comment.lutece_user?exists>
 							${comment_comment.lutece_user}
 						<#else>
@@ -48,13 +48,13 @@
 							${comment_comment.lutece_user.getUserInfo("user.name.family")}
 						</#if> |
 					</#if>		
-					<i class="icon-calendar"></i> ${comment_comment.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}
+					<i class="glyphicon glyphicon-calendar"></i> ${comment_comment.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}
 			</blockquote>
 			</#list>
 		</#if>
 		<p  class="clearfix">
 		<a href="jsp/site/Portal.jsp?page=digg&id_digg=${id_digg}&id_digg_submit=${id_digg_submit}&action=view_digg_submit" class="link-top label pull-right">
-			<i class="icon-chevron-up icon-white"></i>&nbsp;#i18n{digglike.diggListSubmit.labelPageTop}
+			<i class="glyphicon glyphicon-chevron-up"></i>&nbsp;#i18n{digglike.diggListSubmit.labelPageTop}
 		</a>
 		</p>
 	</li>

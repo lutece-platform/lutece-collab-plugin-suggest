@@ -1,22 +1,22 @@
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <legend> #i18n{digglike.createCategory.title}</legend>
 	<fieldset>
 		<form class="form-horizontal" method="post" action="jsp/admin/plugins/digglike/DoCreateCategory.jsp" >
-        <div class="control-group">
-		<label class="control-label" for="" ></label>
-            <div class="controls">	
+        <div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="" ></label>
+            <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">	
 				<label for="title" >#i18n{digglike.createCategory.labelTitle} *</label>
 				<input type="text" id="title" name="title" maxlength="50"/>
 			</div>
-	        <div class="controls">
+	        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 				<label for="color" >#i18n{digglike.createCategory.labelColor} : * </label>
-					<input type="text" value="" class="input-small" id="color" name="color" maxlength="7">
+					<input type="text" value="" class="form-control input-sm" id="color" name="color" maxlength="7">
 			</div>
 		</div>
-		<div class="form-actions">        
-			<button class="btn btn-primary btn-small" name="save" type="submit" ><i class="icon-ok icon-white"></i>&nbsp;#i18n{digglike.createCategory.buttonSave}</button>
-			<a class="btn btn-small" href="jsp/admin/plugins/digglike/ManageCategory.jsp?plugin_name=digglike" ><i class="icon-remove-circle"></i>&nbsp;#i18n{digglike.createCategory.buttonCancel}</a>
+		<div class="form-group">        
+			<button class="btn btn-primary btn-sm btn-flat" name="save" type="submit" ><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{digglike.createCategory.buttonSave}</button>
+			<a class="btn btn-default btn-sm btn-flat" href="jsp/admin/plugins/digglike/ManageCategory.jsp?plugin_name=digglike" ><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{digglike.createCategory.buttonCancel}</a>
 		</div>
 		</form>
 	</fieldset>

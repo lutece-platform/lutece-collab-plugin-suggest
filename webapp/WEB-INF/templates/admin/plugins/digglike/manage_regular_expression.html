@@ -1,10 +1,10 @@
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<fieldset>
 	<legend>
 		#i18n{digglike.manageRegularExpression.title}
 		<form method="post" class="form-inline pull-right"  action="jsp/admin/plugins/digglike/CreateRegularExpression.jsp">
-    		<button type="submit" class="btn btn-primary btn-small" /><i class="icon-plus icon-white"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageRegularExpression.buttonCreate}</span></button>
+    		<button type="submit" class="btn btn-primary btn-sm btn-flat" /><i class="glyphicon glyphicon-plus"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageRegularExpression.buttonCreate}</span></button>
    		</form>
 	</legend>
     <@paginationAdmin paginator=paginator />
@@ -25,11 +25,11 @@
 	            </td>
 	            <td>${expression.value}</td>
 				<td>
-					<a class="btn btn-primary btn-small"  href="jsp/admin/plugins/digglike/ModifyRegularExpression.jsp?id_expression=${expression.idExpression}" class="bullet-link">	
-						<i class="icon-edit icon-white"></i>
+					<a class="btn btn-primary btn-sm btn-flat"  href="jsp/admin/plugins/digglike/ModifyRegularExpression.jsp?id_expression=${expression.idExpression}" class="bullet-link">	
+						<i class="glyphicon glyphicon-edit"></i>
 					</a>
 	               	<a class="btn btn-danger btn-small" href="jsp/admin/plugins/digglike/ConfirmRemoveRegularExpression.jsp?id_expression=${expression.idExpression}" title="#i18n{digglike.manageForm.altDelete}">
-						<i class="icon-trash icon-white"></i>
+						<i class="glyphicon glyphicon-trash"></i>
 	       			 </a>
 	                </td>
 	            </tr>

@@ -1,25 +1,25 @@
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<div class="comments-form">
 			<form action="jsp/site/Portal.jsp?page=digg" method="post" name="" id="comment-comment" class="form comment-comment">
 				<input name="action" value="do_create_comment" type="hidden" /> 
 				<input name="id_digg" value="${id_digg}" type="hidden" />
 				<input name="id_digg_submit" value="${comment_submit.diggSubmit.idDiggSubmit}" type="hidden" />
 				<input name="id_digg_comment" value="${comment_submit.idCommentSubmit}"type="hidden" />
-				<div class="control-group">
-					<label class="control-label" for="reported_value">#i18n{digglike.diggComment.labelComment}
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="reported_value">#i18n{digglike.diggComment.labelComment}
 						<#if disable_new_comment_submit>(#i18n{digglike.diggComment.labelDisableNewCommentSubmit})</#if>
 					</label>
 					<textarea name="comment_value" id="comment_value"
-						class="comment-value markitup span8"></textarea>
+						class="comment-value markitup col-xs-12 col-sm-12 col-md-8 col-lg-8"></textarea>
 				</div>
 				<#if jcaptcha?exists>
 					<fieldset>${jcaptcha}</fieldset>
 				</#if>
-				<div class="form-actions">
-					<div class="form-actions">
-						<button class="btn btn-primary btn-small" type="submit" name="submit_comment">
-							<i class="icon-comment icon-white"></i>&nbsp;#i18n{digglike.diggComment.labelCommentAComment}
+				<div class="form-group">
+					<div class="form-group">
+						<button class="btn btn-primary btn-sm" type="submit" name="submit_comment">
+							<i class="glyphicon glyphicon-comment"></i>&nbsp;#i18n{digglike.diggComment.labelCommentAComment}
 						</button>
 					</div>
 				</div>
