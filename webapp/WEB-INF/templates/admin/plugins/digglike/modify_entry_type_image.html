@@ -3,13 +3,13 @@
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<fieldset>
 	<legend>#i18n{digglike.modifyEntry.titleQuestion}:'${entry.digg.title}' &gt; #i18n{digglike.createEntry.labelType} :${entry.entryType.title}</legend>
-	<form class="form-horizontal" action="jsp/admin/plugins/digglike/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+	<form class="form-horizontal" action="jsp/admin/plugins/digglike/DoModifyEntry.jsp#list" method="post" name="" id="">
 	<input name="id_entry" value="${entry.idEntry}" type="hidden">
 	<div class="form-group">
 	<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for=""></label>
 		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 		<label for="title">#i18n{digglike.createEntry.labelTitle} *</label>
-			<input type="text" name="title" id="title" class="form-control input-sm" value="${entry.title}" maxlength="255"/>
+			<input type="text" name="title" id="title" class="form-control input-sm" value="${entry.title}" maxlength="255">
 			<span class="help-text">#i18n{digglike.createEntry.labelTitleComment}</span>
 		</div>
 		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
@@ -27,11 +27,11 @@
 		</div>
 		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 		<label for="width">#i18n{digglike.createEntryImg.labelWidth}</label>
-			<input type="text" name="width" id="width" class="form-control input-sm" value="<#if entry.width!=-1>${entry.width}" /></#if>" />
+			<input type="text" name="width" id="width" class="form-control input-sm" value="<#if entry.width!=-1>${entry.width}"></#if>" />
 		</div>
 		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 		<label for="height">#i18n{digglike.createEntryImg.labelHeight}</label>
-			<input type="text" name="height" id="height" class="form-control input-sm" value="<#if entry.height!=-1>${entry.height}" /></#if>" />
+			<input type="text" name="height" id="height" class="form-control input-sm" value="<#if entry.height!=-1>${entry.height}"></#if>" />
 		</div>
 		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 			<label class="checkbox" for="mandatory">#i18n{digglike.createEntry.labelShowInDiggSubmitList}

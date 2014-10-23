@@ -2,52 +2,74 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<fieldset>
-	<legend>#i18n{digglike.modifyEntry.titleQuestion}:'${entry.digg.title}' &gt; #i18n{digglike.createEntry.labelType} : ${entry.entryType.title}</legend>
-	<form class="form-horizontal" action="jsp/admin/plugins/digglike/DoModifyEntry.jsp#list" method="post" name="" id=""  >
+	<legend>#i18n{digglike.modifyEntry.titleQuestion} : '${entry.digg.title}' &gt; #i18n{digglike.createEntry.labelType} : ${entry.entryType.title}</legend>
+	<form class="form-horizontal" action="jsp/admin/plugins/digglike/DoModifyEntry.jsp#list" method="post" name="" id="">
 	 <input name="id_entry" value="${entry.idEntry}" type="hidden">
 	<div class="form-group">
-		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for=""></label>
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title">#i18n{digglike.createEntry.labelTitle} *</label>
     	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-			<label for="title">#i18n{digglike.createEntry.labelTitle} *</label>
-				<input type="text" name="title" id="title" class="form-control input-sm" value="${entry.title!}" maxlength="255" />
-				<span class="help-text">#i18n{digglike.createEntry.labelTitleComment!}
+			<input type="text" name="title" id="title" class="form-control input-sm" value="${entry.title!}" maxlength="255">
+			<span class="help-text">#i18n{digglike.createEntry.labelTitleComment!}
 		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for=""> #i18n{digglike.createEntry.labelHelpMessage}</label>
 		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-		<label> #i18n{digglike.createEntry.labelHelpMessage}</label>
-			<textarea  name="help_message" id="help_message" rows="2" class="form-control input-sm">${entry.helpMessage!}</textarea>
+			<textarea name="help_message" id="help_message" rows="2" class="form-control input-sm">${entry.helpMessage!}</textarea>
 			<span class="help-text">#i18n{digglike.createEntry.labelHelpMessageComment}
 		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="comment"> #i18n{digglike.createEntry.labelComment}</label>
 		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-		<label for="comment"> #i18n{digglike.createEntry.labelComment}</label>
 		<textarea name="comment" class="form-control input-sm" rows="2">${entry.comment!}</textarea>
 		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="value">#i18n{digglike.createEntry.labelValueDefault}</label>
         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-			<label for="value">#i18n{digglike.createEntry.labelValueDefault}</label>
-			<input type="text" name="value" id="value" class="form-control input-sm"  value="${entry.defaultValue!}"/>
+			<input type="text" name="value" id="value" class="form-control input-sm" value="${entry.defaultValue!}">
 		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="mandatory">#i18n{digglike.createEntry.labelMandatory}</label>
 		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-			<label class="checkbox" for="mandatory">#i18n{digglike.createEntry.labelMandatory}</label>
-			<input name="mandatory" value="1" type="checkbox" <#if entry.mandatory>checked="checked"</#if>	>
+			<div class="checkbox">
+				<label>
+					<input name="mandatory" value="1" type="checkbox" <#if entry.mandatory>checked="checked"</#if>>&#160;
+				</label>
+			</div>
 		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="width">#i18n{digglike.createEntry.labelWidth} *</label>
 		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-			<label for="width">#i18n{digglike.createEntry.labelWidth} *</label>
-			<input type="text" name="width" id="width" class="form-control input-sm" value="<#if entry.width!=-1>${entry.width}</#if>" />
+			<input type="text" name="width" id="width" class="form-control input-sm" value="<#if entry.width!=-1>${entry.width}</#if>">
 		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="max_size_enter">#i18n{digglike.createEntry.labelMaxSizeEnter} </label>
    		 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-			<label for="max_size_enter">#i18n{digglike.createEntry.labelMaxSizeEnter} </label>
-			<input type="text" name="max_size_enter" id="max_size_enter" class="form-control input-sm" value="<#if entry.maxSizeEnter!=-1>${entry.maxSizeEnter}</#if>" />
+			<input type="text" name="max_size_enter" id="max_size_enter" class="form-control input-sm" value="<#if entry.maxSizeEnter!=-1>${entry.maxSizeEnter}</#if>">
 		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="mandatory">#i18n{digglike.createEntry.labelShowInDiggSubmitList}</label>
 		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-			<label class="checkbox" for="mandatory">#i18n{digglike.createEntry.labelShowInDiggSubmitList}
-				<input name="show_in_digg_submit_list" value="1" type="checkbox" <#if entry.showInDiggSubmitList>checked="checked"</#if> >
-			</label>
+			<div class="checkbox">
+				<label>
+					<input name="show_in_digg_submit_list" value="1" type="checkbox" <#if entry.showInDiggSubmitList>checked="checked"</#if> >&#160;
+				</label>
+			</div>
 			<span class="help-text">#i18n{digglike.createDigg.labelShowInDiggSubmitListComment}</span>
 		</div>
 	</div>
-   <div class="form-group">
-		<button class="btn btn-primary btn-sm btn-flat" type="submit" name="save"><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{digglike.createEntry.buttonSave}</button>
-		<button class="btn btn-primary btn-sm btn-flat" type="submit" name="apply"><i class="glyphicon glyphicon-ok-circle"></i>&nbsp;#i18n{digglike.createEntry.buttonApplyAndManageVerification}</button>
-		<a class="btn btn-default btn-sm btn-flat" href="jsp/admin/plugins/digglike/ModifyDigg.jsp?plugin_name=digglike&amp;id_digg=${entry.digg.idDigg}" ><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{digglike.modifyEntry.buttonCancel}</a>
+	<div class="form-group">
+		<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
+			<button class="btn btn-primary btn-sm btn-flat" type="submit" name="save"><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{digglike.createEntry.buttonSave}</button>
+			<button class="btn btn-primary btn-sm btn-flat" type="submit" name="apply"><i class="glyphicon glyphicon-ok-circle"></i>&nbsp;#i18n{digglike.createEntry.buttonApplyAndManageVerification}</button>
+			<a class="btn btn-default btn-sm btn-flat" href="jsp/admin/plugins/digglike/ModifyDigg.jsp?plugin_name=digglike&amp;id_digg=${entry.digg.idDigg}" ><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{digglike.modifyEntry.buttonCancel}</a>
+		</div>
 	</div>
 	</form>
 	</fieldset>
@@ -55,10 +77,16 @@
 	<legend>
 		#i18n{digglike.createEntry.manageRegularExpression.title}
 		<form  method="post" class="inline pull-right" action="jsp/admin/plugins/digglike/DoInsertVerification.jsp#list"> 
-		<input name="id_entry" value="${entry.idEntry}" type="hidden">
-		#i18n{digglike.modifyEntry.manageRegularExpression.labelInsert}
-		<@combo name="id_expression"  items=regular_expression_list default_value=-1 />
-		<button class="btn btn-primary btn-sm btn-flat" type="submit"><i class="glyphicon glyphicon-plus"></i>&nbsp;#i18n{digglike.createEntry.manageRegularExpression.buttonInsert}</button>
+			<input name="id_entry" value="${entry.idEntry}" type="hidden">
+			#i18n{digglike.modifyEntry.manageRegularExpression.labelInsert}
+			<div class="form-group">
+				<div class="input-group">
+					<@comboWithParams name="id_expression" items=regular_expression_list default_value="-1" additionalParameters="class='form-control input-sm'" />
+					<span class="input-group-btn">
+					<button class="btn btn-default btn-sm btn-flat" type="submit"><i class="glyphicon glyphicon-plus"></i>&nbsp;#i18n{digglike.createEntry.manageRegularExpression.buttonInsert}</button>
+					</span>
+				</div>
+			</div>
 		</form>
 	</legend>
 	#i18n{digglike.createEntry.manageRegularExpression.labelNumberRegularExpression} <b>${number_items}</b>
@@ -81,7 +109,7 @@
 				<td>${expression.informationMessage}</td>
 		        <td>${expression.validExemple}</td>
 	            <td>
-					<a class="btn btn-danger btn-small" href="jsp/admin/plugins/digglike/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_entry=${entry.idEntry}#list" title="#i18n{digglike.createEntry.manageField.titleDelete}">
+					<a class="btn btn-danger btn-xs btn-flat" href="jsp/admin/plugins/digglike/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_entry=${entry.idEntry}#list" title="#i18n{digglike.createEntry.manageField.titleDelete}">
 						<i class="glyphicon glyphicon-trash"></i>&nbsp;
 		            </a>
 		        </td>
