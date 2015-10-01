@@ -1,71 +1,72 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	<ul class="nav nav-tabs">
-		<li>
-			<a href="jsp/admin/plugins/digglike/ManageAdvancedParameters.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
-				#i18n{digglike.manageAdvancedParameters.title}
-			</a>
-		</li>
-		<li class="active">
-			<a href="jsp/admin/plugins/digglike/ManageCategory.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
-				#i18n{digglike.manageAdvancedParameters.labelCategory}
-			</a>
-		</li>
-		<li>
-			<a href="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelTypeComment}" >
-				#i18n{digglike.manageAdvancedParameters.labelType}
-			</a>
-		</li>
-		<li>
-			<a href="jsp/admin/plugins/digglike/ManageDefaultMessage.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelDefaultMessageComment}">
-				#i18n{digglike.manageAdvancedParameters.labelDefaultMessage}
-			</a>
-		</li>
-		<li>
-			<a href="jsp/admin/plugins/digglike/ManageExportFormat.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelExportFormatComment}" >
-				#i18n{digglike.manageAdvancedParameters.labelExportFormat}
-			</a>
-		</li>
-		<li>
-			<a href="jsp/admin/plugins/digglike/Statistics.jsp"  title="#i18n{digglike.manageAdvancedParameters.labelStatisticsComment}" >
-				#i18n{digglike.manageAdvancedParameters.labelStatistics}
-			</a>
-		</li>
-	</ul>
-	<fieldset>
-		<legend>
-		#i18n{digglike.manageAdvancedParameters.title} - #i18n{digglike.manageCategory.title}
-		<form class="form-inline pull-right" method="post"  action="jsp/admin/plugins/digglike/CreateCategory.jsp" >
-			<button class="btn btn-primary btn-sm btn-flat" type="submit" ><i class="glyphicon glyphicon-plus"></i>&nbsp;#i18n{digglike.manageCategory.buttonCreate}</button>
-		</form>
-		</legend>
-			
-		<@paginationAdmin paginator=paginator combo=1 /><!-- #i18n{digglike.manageCategory.buttonItemsPerPage}-->
-		<table class="table table-striped table-condensed"> 
-		<thead>
+		<div class="nav-tabs-custom">
+			<ul class="nav nav-tabs" role="tablist">
+				<li>
+					<a href="jsp/admin/plugins/digglike/ManageAdvancedParameters.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
+						#i18n{digglike.manageAdvancedParameters.title}
+					</a>
+				</li>
+				<li class="active">
+					<a href="jsp/admin/plugins/digglike/ManageCategory.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
+						#i18n{digglike.manageAdvancedParameters.labelCategory}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelTypeComment}" >
+						#i18n{digglike.manageAdvancedParameters.labelType}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/digglike/ManageDefaultMessage.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelDefaultMessageComment}">
+						#i18n{digglike.manageAdvancedParameters.labelDefaultMessage}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/digglike/ManageExportFormat.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelExportFormatComment}" >
+						#i18n{digglike.manageAdvancedParameters.labelExportFormat}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/digglike/Statistics.jsp"  title="#i18n{digglike.manageAdvancedParameters.labelStatisticsComment}" >
+						#i18n{digglike.manageAdvancedParameters.labelStatistics}
+					</a>
+				</li>
+				<li class="pull-right">
+					<form class="form-inline" method="post"  action="jsp/admin/plugins/digglike/CreateCategory.jsp" >
+						<button class="btn btn-primary btn-xs btn-flat" type="submit" ><i class="fa fa-plus"></i>&nbsp;#i18n{digglike.manageCategory.buttonCreate}</button>
+					</form>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active">
+					<@paginationAdmin paginator=paginator combo=1 /><!-- #i18n{digglike.manageCategory.buttonItemsPerPage}-->
+				<table class="table table-hover table-condensed">
+					<thead>
             <tr>
               <th></th>
               <th>#i18n{digglike.manageCategory.rowTitle}</th>
               <th>#i18n{digglike.manageCategory.rowActions}</th>
             </tr>
-		</thead>
-        <tbody>
-		<#list category_list as category>	
-	        <tr>
-				<td style="background-color:${category.color!};width:5px;">&nbsp;</td>
-				<td>${category.title}</td>
-				<td>
-				   <a class="btn btn-primary btn-sm btn-flat" href="jsp/admin/plugins/digglike/ModifyCategory.jsp?id_category=${category.idCategory}"  title="" >
-						<i class="glyphicon glyphicon-edit"></i>
-					</a>
-	               	<a class="btn btn-danger btn-small" href="jsp/admin/plugins/digglike/ConfirmRemoveCategory.jsp?id_category=${category.idCategory}"  title="#i18n{digglike.manageCategory.altDelete}" >
-						<i class="glyphicon glyphicon-trash"></i>
-					</a>
-				</td>
-			</tr>
-	    </#list>
-        </tbody>
-        </table> 
-       
-	</div> 
-</div> 
+					</thead>
+        	<tbody>
+					<#list category_list as category>
+		      	<tr>
+							<td style="background-color:${category.color!}"></td>
+							<td>${category.title}</td>
+							<td>
+							   <a class="btn btn-primary btn-xs btn-flat" href="jsp/admin/plugins/digglike/ModifyCategory.jsp?id_category=${category.idCategory}"  title="" >
+									<i class="fa fa-pencil"></i>
+								</a>
+				        <a class="btn btn-danger btn-xs btn-flat" href="jsp/admin/plugins/digglike/ConfirmRemoveCategory.jsp?id_category=${category.idCategory}"  title="#i18n{digglike.manageCategory.altDelete}" >
+									<i class="fa fa-trash"></i>
+								</a>
+							</td>
+					</tr>
+		    </#list>
+	      </tbody>
+      </table>
+			</div>
+		</div>
+	</div>
+</div>

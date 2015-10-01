@@ -1,71 +1,80 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	<ul class="nav nav-tabs">
-		<li>
-			<a href="jsp/admin/plugins/digglike/ManageAdvancedParameters.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
-				#i18n{digglike.manageAdvancedParameters.title}
-			</a>
-		</li>
-		<li>
-			<a href="jsp/admin/plugins/digglike/ManageCategory.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
-				#i18n{digglike.manageAdvancedParameters.labelCategory}
-			</a>
-		</li>
-		<li class="active">
-			<a href="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelTypeComment}" >
-				#i18n{digglike.manageAdvancedParameters.labelType}
-			</a>
-		</li>
-		<li>
-			<a href="jsp/admin/plugins/digglike/ManageDefaultMessage.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelDefaultMessageComment}">
-				#i18n{digglike.manageAdvancedParameters.labelDefaultMessage}
-			</a>
-		</li>
-		<li>
-			<a href="jsp/admin/plugins/digglike/ManageExportFormat.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelExportFormatComment}" >
-				#i18n{digglike.manageAdvancedParameters.labelExportFormat}
-			</a>
-		</li>
-		<li>
-			<a href="jsp/admin/plugins/digglike/Statistics.jsp"  title="#i18n{digglike.manageAdvancedParameters.labelStatisticsComment}" >
-				#i18n{digglike.manageAdvancedParameters.labelStatistics}
-			</a>
-		</li>
-	</ul>
-	<fieldset>
-		<legend>
-			#i18n{digglike.manageAdvancedParameters.title} - #i18n{digglike.manageDiggSubmitType.title}
-			<form method="post" class="form-inline pull-right"  action="jsp/admin/plugins/digglike/CreateDiggSubmitType.jsp">
-				<button type="submit" class="btn btn-primary btn-sm btn-flat" /><i class="glyphicon glyphicon-plus"></i><span class="hidden-phone">&nbsp;#i18n{digglike.manageDiggSubmitType.buttonCreate}</span></button>
-			</form>
-		</legend>
-		<table class="table table-striped table-condensed">
-		<tr>
-            <th>#i18n{digglike.manageDiggSubmitType.rowName}</th>
-            <th>#i18n{digglike.manageDiggSubmitType.rowColor}</th>
-            <th>#i18n{digglike.manageDiggSubmitType.rowParameterizable}</th>
-            <th>#i18n{digglike.manageDiggSubmitType.rowActions}</th>
-        </tr>
-        <#list type_list as type>	
-	    <tr>
-			<td>
-			<#if type.idImageResource?has_content >
-				<img class="thumbnail pull-left"  src="image?resource_type=image_digg&id=${type.idImageResource}" style="width:32px;" title="img">
-			</#if>	
-				&nbsp;<strong>${type.name}</strong></td>
-	        <td <#if type.color?exists>style="background-color:${type.color};width:5px;"</#if>>&nbsp;</td>
-	        <td>${type.parameterizableInFO?string("#i18n{digglike.manageDiggSubmitType.yes}","#i18n{digglike.manageDiggSubmitType.no}")}</td>
-			<td>
-				<a href="jsp/admin/plugins/digglike/ModifyDiggSubmitType.jsp?id_type=${type.idType}" class="btn btn-sm btn-flat btn-primary">
-					<i class="glyphicon glyphicon-edit"></i>
-				</a>
-	            <a class="btn btn-sm btn-flat btn-danger" href="jsp/admin/plugins/digglike/ConfirmRemoveDiggSubmitType.jsp?id_type=${type.idType}" title="#i18n{digglike.manageDiggSubmitType.altDelete}">
-					<i class="glyphicon glyphicon-trash"></i>
-	       		</a>
-	        </td>
-		</tr>
-	    </#list>
-    </table> 
-    </fieldset>
-	</div> 
-</div> 
+		<div class="nav-tabs-custom">
+			<ul class="nav nav-tabs" role="tablist">
+				<li>
+					<a href="jsp/admin/plugins/digglike/ManageAdvancedParameters.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
+						#i18n{digglike.manageAdvancedParameters.title}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/digglike/ManageCategory.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}" >
+						#i18n{digglike.manageAdvancedParameters.labelCategory}
+					</a>
+				</li>
+				<li class="active">
+					<a href="jsp/admin/plugins/digglike/ManageDiggSubmitType.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelTypeComment}" >
+						#i18n{digglike.manageAdvancedParameters.labelType}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/digglike/ManageDefaultMessage.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelDefaultMessageComment}">
+						#i18n{digglike.manageAdvancedParameters.labelDefaultMessage}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/digglike/ManageExportFormat.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelExportFormatComment}" >
+						#i18n{digglike.manageAdvancedParameters.labelExportFormat}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/digglike/Statistics.jsp"  title="#i18n{digglike.manageAdvancedParameters.labelStatisticsComment}" >
+						#i18n{digglike.manageAdvancedParameters.labelStatistics}
+					</a>
+				</li>
+				<li class="pull-right">
+					<form method="post" class="form-inline"  action="jsp/admin/plugins/digglike/CreateDiggSubmitType.jsp">
+						<button type="submit" class="btn btn-primary btn-xs btn-flat">
+							<i class="fa fa-plus"></i><span class="hidden-xs">&nbsp;#i18n{digglike.manageDiggSubmitType.buttonCreate}</span>
+						</button>
+					</form>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active">
+				<table class="table table-hover table-condensed">
+				<thead>
+					<tr>
+						<th></th>
+		        <th>#i18n{digglike.manageDiggSubmitType.rowName}</th>
+		        <th>#i18n{digglike.manageDiggSubmitType.rowParameterizable}</th>
+		        <th>#i18n{digglike.manageDiggSubmitType.rowActions}</th>
+		      </tr>
+				</thead>
+				<tbody>
+					<#list type_list as type>
+			    <tr>
+						<td <#if type.color?exists>style="background-color:${type.color}"</#if> title="#i18n{digglike.manageDiggSubmitType.rowColor}"></td>
+						<td>
+						<#if type.idImageResource?has_content >
+							<img class="img-responsive img-thumbnail thumbnail-sm pull-left" src="image?resource_type=image_digg&id=${type.idImageResource}" title="img">
+						</#if>
+						 <strong>${type.name}</strong>
+				 		</td>
+			      <td>${type.parameterizableInFO?string("#i18n{digglike.manageDiggSubmitType.yes}","#i18n{digglike.manageDiggSubmitType.no}")}</td>
+						<td>
+							<a href="jsp/admin/plugins/digglike/ModifyDiggSubmitType.jsp?id_type=${type.idType}" class="btn btn-xs btn-flat btn-primary">
+								<i class="fa fa-pencil"></i>
+							</a>
+				      <a class="btn btn-xs btn-flat btn-danger" href="jsp/admin/plugins/digglike/ConfirmRemoveDiggSubmitType.jsp?id_type=${type.idType}" title="#i18n{digglike.manageDiggSubmitType.altDelete}">
+								<i class="fa fa-trash"></i>
+				      </a>
+				    </td>
+					</tr>
+			    </#list>
+				</tbody>
+		    </table>
+
+		</div>
+	</div>
+</div>

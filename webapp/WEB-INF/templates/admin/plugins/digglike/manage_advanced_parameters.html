@@ -1,6 +1,7 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			<ul class="nav nav-tabs">
+		<div class="nav-tabs-custom">
+			<ul class="nav nav-tabs" role="tablist">
 				<li class="active">
 					<a href="jsp/admin/plugins/digglike/ManageAdvancedParameters.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelCategoryComment}">
 						#i18n{digglike.manageAdvancedParameters.title}
@@ -18,7 +19,7 @@
 					</a>
 				</li>
 				</#if>
-				<#if permission_manage_default_message>   
+				<#if permission_manage_default_message>
 				<li>
 					<a href="jsp/admin/plugins/digglike/ManageDefaultMessage.jsp?plugin_name=digglike"  title="#i18n{digglike.manageAdvancedParameters.labelDefaultMessageComment}" >
 						#i18n{digglike.manageAdvancedParameters.labelDefaultMessage}
@@ -32,27 +33,25 @@
 					</a>
 				</li>
 				</#if>
-				
 			</ul>
-		<fieldset>
-		<legend>#i18n{digglike.manageAdvancedParameters.title}</legend>
-			<form class="form-horizontal" method="post" action="jsp/admin/plugins/digglike/DoModifyAdvancedParameters.jsp">
-			<div class="form-group">
-				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_default_digg">#i18n{digglike.manageAdvancedParameters.labelDefaultDigg}</label>
-				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-					<@combo name="id_default_digg" items=digg_list default_value="${id_default_digg}" />
-					<p class="help-text" >#i18n{digglike.manageAdvancedParameters.labelDefaultDiggComment}</p>
-				</div>
+			<div class="tab-content">
+				<div class="tab-pane active">
+					<form class="form-horizontal" method="post" action="jsp/admin/plugins/digglike/DoModifyAdvancedParameters.jsp">
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="id_default_digg">#i18n{digglike.manageAdvancedParameters.labelDefaultDigg}</label>
+							<div class="col-xs-12 col-sm-10">
+								<@comboWithParams name="id_default_digg" default_value="${id_default_digg}" additionalParameters=" class=\"form-control \"" items=digg_list  />
+								<span class="help-text" >#i18n{digglike.manageAdvancedParameters.labelDefaultDiggComment}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-xs-12 col-sm-offset-2 col-sm-9">
+								<button class="btn btn-primary btn-flat" type="submit" ><i class="fa fa-check"></i>&nbsp;#i18n{digglike.manageAdvancedParameters.buttonModify}</button>
+							</div>
+						</div>
+					</form>
 			</div>
-			<div class="form-group">	
-				<button class="btn btn-primary btn-sm btn-flat" type="submit" ><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{digglike.manageAdvancedParameters.buttonModify}</button>
-			</div>
-			
-			</form>
-		</fieldset>		
+		</div>
+		</div>
 	</div>
 </div>
-
- 
-
- 

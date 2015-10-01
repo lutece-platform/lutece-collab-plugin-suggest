@@ -1,104 +1,64 @@
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<div class="fixed-actionbar">
-				<a href="#myModalSearch" id="myModalLabelSearch" role="button" class="btn btn-primary btn-sm btn-flat" data-toggle="modal">
-					<i class="glyphicon glyphicon-search"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonSearch}
+<div class="fixed-actionbar">
+	<button class="btn btn-default btn-sm" id="selectAll" name="selectAll" data-is="checked" type="button">
+		<i class="fa fa-square-o fa-2x"></i>
+	</button>
+	<#if !digg.disableVote>
+		<div class="btn-group">
+			<button class="btn btn-default btn-sm" type="submit" name="mass_enable_vote_action" title="#i18n{digglike.manageDiggSubmit.buttonEnableVote}" >
+				<i class="fa fa-star fa-2x"></i>
+			</button>
+			<button class="btn btn-default btn-sm" type="submit" name="mass_disable_vote_action" title="#i18n{digglike.manageDiggSubmit.buttonDisableVote}">
+				<span class="fa-stack fa-sm">
+					<i class="fa fa-star fa-stack-1x"></i>
+					<i class="fa fa-ban fa-stack-2x text-danger"></i>
+				</span>
+			</button>
+		</div>
+	</#if>
+	<#if digg.authorizedComment>
+		<div class="btn-group">
+			<button class="btn btn-default btn-sm" type="submit" name="mass_enable_comment_action" title="#i18n{digglike.manageDiggSubmit.buttonEnableComment}">
+				<i class="fa fa-comments fa-2x"></i>
+  		</button>
+			<button class="btn btn-default btn-sm" type="submit" name="mass_disable_comment_action" title="#i18n{digglike.manageDiggSubmit.buttonDisableComment}">
+				<span class="fa-stack fa-xs">
+					<i class="fa fa-comments fa-stack-1x"></i>
+					<i class="fa fa-ban fa-stack-2x text-danger"></i>
+				</span>
+			</button>
+		</div>
+	</#if>
+	<div class="btn-group">
+		<button class="btn btn-default btn-sm" type="submit" name="mass_pin_action" title="#i18n{digglike.manageDiggSubmit.buttonPinDiggSubmit}">
+			<i class="fa fa-thumb-tack fa-2x"></i>
+		</button>
+		<button class="btn btn-default btn-sm" type="submit" name="mass_unpin_action" title="#i18n{digglike.manageDiggSubmit.buttonUnPinDiggSubmit}">
+			<span class="fa-stack fa-sm">
+				<i class="fa fa-thumb-tack fa-stack-1x"></i>
+				<i class="fa fa-ban fa-stack-2x text-danger"></i>
+			</span>
+		</button>
+	</div>
+	<#if category_list?has_content>
+		<div class="btn-group">
+			<div class="input-group">
+				<@comboWithParams name="id_category" items=category_list default_value="-1" additionalParameters="class=\"form-control input-sm\"" />
+				<span class="input-group-btn">
+					<button class="btn btn-default btn-sm" type="submit" title="#i18n{digglike.manageDiggSubmit.labelDiggSubmitCategory}" name="mass_change_category">
+						<i class="fa fa-check"></i>
+					</button>
+				</span>
+			</div>
+		</div>
+	</#if>
+	<div class="btn-group">
+		<div class="input-group">
+	 		<@comboWithParams name="id_export_format" default_value="-1" additionalParameters="class=\"form-control input-sm\"" items=export_format_list />
+			<span class="input-group-btn">
+				<button class="btn btn-default btn-sm btn-flat" type="submit" title="#i18n{digglike.manageDiggSubmit.labelDiggExport}" name="export_search_all">
+					<i class="fa fa-download"></i>
 				</a>
-				<div class="btn-group" style="font-size:100%;">
-					<a class="btn btn-sm btn-flat btn-primary dropdown-toggle" id="dLabel" data-toggle="dropdown" href="#">
-						<i class="glyphicon glyphicon-cog"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonActions}
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-						<#if !digg.disableVote>  
-							<li>
-								<button class="btn btn-link btn-small" type="submit" name="mass_enable_vote_action" >		
-									#i18n{digglike.manageDiggSubmit.buttonEnableVote}
-								</button>
-							</li>
-							<li>
-								<button class="btn btn-link btn-small" type="submit" name="mass_disable_vote_action" >
-									#i18n{digglike.manageDiggSubmit.buttonDisableVote}
-								</button>
-							</li>
-						</#if>
-						<#if digg.authorizedComment>
-							<li>
-								<button class="btn btn-link btn-small" type="submit" name="mass_enable_comment_action">
-									#i18n{digglike.manageDiggSubmit.buttonEnableComment}
-								</button>
-							</li>
-							<li>
-								<button class="btn btn-link btn-small" type="submit" name="mass_disable_comment_action">
-									#i18n{digglike.manageDiggSubmit.buttonDisableComment}
-								</button>
-							</li>
-						</#if>
-						<li>
-							<button class="btn btn-link btn-small" type="submit" name="mass_pin_action">
-								#i18n{digglike.manageDiggSubmit.buttonPinDiggSubmit}
-							</button>
-						</li>
-						<li>
-							<button class="btn btn-link btn-small" type="submit" name="mass_unpin_action">
-								#i18n{digglike.manageDiggSubmit.buttonUnPinDiggSubmit}
-							</button>
-						</li>
-						<#if category_list?has_content> 
-							<li>
-								<!-- a class="btn btn-link btn-small" href="#myModalCategory" role="button" data-toggle="modal">
-									#i18n{digglike.manageDiggSubmit.labelDiggSubmitCategory}
-								</a -->
-								<button class="btn btn-link btn-small" type="button" href="#myModalCategory" role="button" data-toggle="modal">
-									#i18n{digglike.manageDiggSubmit.labelDiggSubmitCategory}
-								</button>
-							</li>
-						</#if>
-					</ul>
-				</div>
-				<a class="btn btn-primary btn-sm btn-flat" title="#i18n{digglike.manageDiggSubmit.buttonAddDiggSubmit}" href="jsp/admin/plugins/digglike/CreateDiggSubmit.jsp?id_digg=${digg.idDigg}">
-					<i class="glyphicon glyphicon-plus"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonAddDiggSubmit}
-				</a>
-				<a class="btn btn-primary btn-sm btn-flat" href="#myModalExport" role="button" data-toggle="modal">
-					<i class="glyphicon glyphicon-download"></i>&nbsp;#i18n{digglike.manageDiggSubmit.labelDiggExport}
-				</a>
-				<div id="myModalExport" class="" tabindex="-1" role="dialog" aria-labelledby="myModalLabelExport" aria-hidden="true">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-						<h3 id="myModalLabel">#i18n{digglike.manageDiggSubmit.labelDiggExport}</h3>
-					</div>
-					<div class="modal-body">
-						<label>#i18n{digglike.manageDiggSubmit.labelDiggExport}</label>        
-						<@comboWithParams name="id_export_format" default_value="-1" additionalParameters="class=\"form-control input-sm\"" items=export_format_list />
-					</div>
-					<div class="modal-footer">
-						<button class="btn" data-dismiss="modal" aria-hidden="true">
-							<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{portal.util.labelCancel}
-						</button>
-						<button class="btn btn-primary btn-sm btn-flat" type="submit"  name="export_search_all">
-							<i class="glyphicon glyphicon-download"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonDiggExport}
-						</button>
-					</div>
-				</div>
-				<#if category_list?has_content> 
-					<div id="myModalCategory" class="" tabindex="-1" role="dialog" aria-labelledby="myModalLabelCatgory" aria-hidden="true">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-							<h3 id="myModalLabel">#i18n{digglike.manageDiggSubmit.labelDiggSubmitCategory}</h3>
-						</div>
-						<div class="modal-body">
-							<@comboWithParams name="id_category" items=category_list default_value="-1"  additionalParameters="class=\"form-control input-sm\"" /> 
-						</div>
-						<div class="modal-footer">
-							<button class="btn" data-dismiss="modal" aria-hidden="true">
-								<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{portal.util.labelCancel}
-							</button>
-							<button class="btn btn-primary btn-sm btn-flat" type="submit" name="mass_change_category" >
-								<i class="glyphicon glyphicon-download"></i>&nbsp;#i18n{digglike.manageDiggSubmit.buttonModify}
-							</button>
-						</div>
-					</div>
-				</#if>
+			</span>
 		</div>
 	</div>
 </div>

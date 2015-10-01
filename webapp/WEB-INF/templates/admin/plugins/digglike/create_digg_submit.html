@@ -1,71 +1,80 @@
-<fieldset>
-<legend>#i18n{digglike.diggForm.title}</legend>
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	<fieldset>
-	<legend></legend>
-	<form class="form-horizontal" action="jsp/admin/plugins/digglike/DoCreateDiggSubmit.jsp" method="post" name="formdigg" id="formdigg"  enctype="multipart/form-data" >
-		<input name="plugin_name" value="digglike" type="hidden"/>
-		<input name="id_digg" value="${digg.idDigg}" type="hidden"/>
-
-		${str_entry}
-		<#if category_list?has_content>
-		<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_category">#i18n{digglike.createDiggSubmit.labelCategoryTitle} *</label>
-			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-				<@combo name="id_category" items=category_list default_value="${id_default_category}" />
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">#i18n{digglike.diggForm.title}</h3>
+			</div>
+			<div class="box-body">
+				<form class="form-horizontal" action="jsp/admin/plugins/digglike/DoCreateDiggSubmit.jsp" method="post" name="formdigg" id="formdigg"  enctype="multipart/form-data" >
+					<input name="plugin_name" value="digglike" type="hidden">
+					<input name="id_digg" value="${digg.idDigg}" type="hidden">
+					${str_entry}
+					<#if category_list?has_content>
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-3" for="id_category">#i18n{digglike.createDiggSubmit.labelCategoryTitle} *</label>
+						<div class="col-xs-12 col-sm-9">
+							<@comboWithParams name="id_category" default_value="${id_default_category}"  additionalParameters=" class=\"form-control\" " items=category_list  />
+						</div>
+					</div>
+					</#if>
+					<#if types_list?has_content>
+					<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-3" for="id_type">#i18n{digglike.createDiggSubmit.labelTypeTitle} *</label>
+						<div class="col-xs-12 col-sm-9">
+							<@comboWithParams name="id_type" default_value="-1" additionalParameters=" class=\"form-control\" " items=types_list />
+						</div>
+					</div>
+					</#if>
+					<#if !digg.disableVote>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3" for=""></label>
+							<div class="col-xs-12 col-sm-9">
+								<div class="checkbox">
+									<label for="disable_vote">
+										<input id="disable_vote" name="disable_vote" type="checkbox" > #i18n{digglike.createDiggSubmit.labelDisableVote}
+									</label>
+								</div>
+								<p class="help-text">#i18n{digglike.createDiggSubmit.labelDisableVoteComment}</p>
+							</div>
+						</div>
+					</#if>
+					<#if digg.authorizedComment>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3" for=""></label>
+							<div class="col-xs-12 col-sm-9">
+								<div class="checkbox">
+									<label for="disable_comment">
+										<input id="disable_comment" name="disable_comment" type="checkbox" > 	#i18n{digglike.createDiggSubmit.labelDisableComment}
+									</label>
+								</div>
+								<p class="help-text">#i18n{digglike.createDiggSubmit.labelDisableCommentComment}</p>
+							</div>
+						</div>
+					</#if>
+					<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3" for=""></label>
+							<div class="col-xs-12 col-sm-9">
+								<div class="checkbox">
+									<label class="checkbox" for="enable_pin">
+										<input id="enable_pin" name="enable_pin" type="checkbox">	#i18n{digglike.createDiggSubmit.labelEnablePin}
+									</label>
+								</div>
+								<p class="help-text">#i18n{digglike.createDiggSubmit.labelEnablePinComment}</p>
+							</div>
+						</div>
+					<div class="form-group">
+						<div class="col-xs-12 col-xs-12 cols col-sm-offset-3 col-sm-9">
+							<button class="btn btn-primary btn-sm btn-flat" type="submit" name="submit">
+									<i class="fa fa-check"></i>&nbsp;${digg.libelleValidateButton}
+							</button>
+							<a class="btn btn-default btn-sm btn-flat" href="jsp/admin/plugins/digglike/ManageDigg.jsp">
+									<i class="fa fa-remove"></i>&nbsp;#i18n{digglike.createDigg.buttonCancel}
+							</a>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
-		</#if>	
-		<#if types_list?has_content>
-		<div class="form-group">
-		<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_type">#i18n{digglike.createDiggSubmit.labelTypeTitle} *</label>
-			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-				<@combo name="id_type" items=types_list default_value="-1" />
-			</div>
-		</div>
-		</#if>
-		<#if !digg.disableVote>  
-			<div class="form-group">
-				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for=""></label>     
-				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-					<label class="checkbox" for="disable_vote">
-						<input id="disable_vote" name="disable_vote" type="checkbox" >
-						#i18n{digglike.createDiggSubmit.labelDisableVote}
-					</label>     
-					<p class="help-block">#i18n{digglike.createDiggSubmit.labelDisableVoteComment}</p>  
-				</div>
-			</div>
-		</#if>	
-		<#if digg.authorizedComment>
-			<div class="form-group">
-				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for=""></label>     
-				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-					<label class="checkbox" for="disable_comment">
-						#i18n{digglike.createDiggSubmit.labelDisableComment}
-						<input id="disable_comment" name="disable_comment" type="checkbox" >
-					</label>     
-					<p class="help-block">#i18n{digglike.createDiggSubmit.labelDisableCommentComment}</p>  
-				</div>
-			</div>
-		</#if>
-		<div class="form-group">
-				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for=""></label>     
-				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-					<label class="checkbox" for="enable_pin">
-						#i18n{digglike.createDiggSubmit.labelEnablePin}
-						<input id="enable_pin" name="enable_pin" type="checkbox" >
-					</label>     
-					<p class="help-block">#i18n{digglike.createDiggSubmit.labelEnablePinComment}</p>  
-				</div>
-			</div>	
-		
-		<div class="form-group">
-			<button class="btn btn-primary btn-sm btn-flat" type="submit" name="submit"><i class="glyphicon glyphicon-ok"></i>&nbsp;${digg.libelleValidateButton}</button>
-			<a class="btn btn-default btn-sm btn-flat" href="jsp/admin/plugins/digglike/ManageDigg.jsp"><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{digglike.createDigg.buttonCancel}</a>
-		</div>
-	</form>
-	</fieldset>
 	</div>
 </div>
 
@@ -73,5 +82,5 @@
 /*	var tabQuestionToOpen=new Array();
 	var	tabCalendar=new Array();
 	*/
-</script> 
+</script>
 </fieldset>

@@ -1,19 +1,23 @@
-<form method="post" class="form-inline offset1" action="jsp/admin/plugins/digglike/DoModifyDiggSubmitOrder.jsp">	
-	<input type="hidden" name="id_digg_submit" value="${digg_submit.idDiggSubmit}" />
-	<input type="hidden" name="id_digg" value="${digg.idDigg}" />
+<form method="post" class="form-inline pull-right" action="jsp/admin/plugins/digglike/DoModifyDiggSubmitOrder.jsp">
+	<input type="hidden" name="id_digg_submit" value="${digg_submit.idDiggSubmit}">
+	<input type="hidden" name="id_digg" value="${digg.idDigg}">
 	<#if digg_submit.pinned>
-		<span class="input-append">
-			<@comboWithParams name="digg_submit_order" default_value="${digg_submit.diggSubmitOrder}" items=order_list_pinned additionalParameters="class=\"input-mini\"" />
-			<button type="submit" class="btn btn-primary" title="#i18n{digglike.manageDiggSubmit.buttonChangeOrder}">
-				<i class="glyphicon glyphicon-move"></i>
+		<div class="input-group">
+			<@comboWithParams name="digg_submit_order" default_value="${digg_submit.diggSubmitOrder}" items=order_list_pinned additionalParameters="class=\"form-control input-xs\"" />
+			<span class="input-group-btn">
+				<button type="submit" class="btn btn-primary btn-xs" title="#i18n{digglike.manageDiggSubmit.buttonChangeOrder}">
+					<i class="fa fa-arrows"></i>
+				</button>
+			</span>
+		</div>
+	<#else>
+		<div class="input-group">
+			<@comboWithParams name="digg_submit_order" default_value="${digg_submit.diggSubmitOrder}" items=order_list additionalParameters="class=\"form-control input-xs\"" />
+			<span class="input-group-btn">
+			<button type="submit" class="btn btn-primary btn-xs" title="#i18n{digglike.manageDiggSubmit.buttonChangeOrder}">
+				<i class="fa fa-check"></i>
 			</button>
 		</span>
-	<#else>	
-		<span class="input-append">
-			<@comboWithParams name="digg_submit_order" default_value="${digg_submit.diggSubmitOrder}" items=order_list additionalParameters="class=\"input-small\"" />
-			<button type="submit" class="btn btn-primary" title="#i18n{digglike.manageDiggSubmit.buttonChangeOrder}">
-				<i class="glyphicon glyphicon-ok"></i>
-			</button>
-		</span>
-	</#if>	
+	</div>
+	</#if>
 </form>
