@@ -341,4 +341,12 @@ public class DigglikeSubscriptionProviderService implements ISubscriptionProvide
 
         return false;
     }
+
+    @Override
+    public String getSubscriptionHtmlDescriptionBis( LuteceUser user, String strSubscriptionKey,
+        String strIdSubscribedResource, Locale locale, String userSub )
+    {
+        // TODO is there a difference between getSubscriptionHtmlDescription and getSubscriptionHtmlDescriptionBis ?
+        return getSubscriptionHtmlDescriptionBis( user, strSubscriptionKey, strIdSubscribedResource, locale, userSub );
+    }
 }
