@@ -36,14 +36,16 @@ package fr.paris.lutece.plugins.digglike.business;
 import fr.paris.lutece.plugins.digglike.utils.DiggUtils;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 
+import java.io.Serializable;
 
 /**
  *
  * class category
  *
  */
-public class Category implements RBACResource
+public class Category implements RBACResource, Serializable
 {
+    private static final long serialVersionUID = 7639825068599530000L;
     public static final String RESOURCE_TYPE = "DIGGLIKE_CATEGORY_TYPE";
     public static final int DEFAULT_ID_CATEGORY = -1;
     private int _nIdCategory;

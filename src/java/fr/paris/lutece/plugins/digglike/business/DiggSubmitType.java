@@ -36,14 +36,16 @@ package fr.paris.lutece.plugins.digglike.business;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 
+import java.io.Serializable;
 
 /**
  *
  * class DiggSubmit
  *
  */
-public class DiggSubmitType implements RBACResource
+public class DiggSubmitType implements RBACResource, Serializable
 {
+    private static final long serialVersionUID = 6012149058400580840L;
     public static final String RESOURCE_TYPE = "DIGGLIKE_DIGG_SUBMIT_TYPE";
     private int _nIdType;
     private String _strName;
