@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<rss version="2.0">
+    <channel>
+        <title>${site_name}</title>
+        <link>${site_url}/jsp/admin/plugins/suggest/ManageSuggestSubmit.jsp?id_suggest=${id_suggest}</link>
+        <language>${file_language}</language>
+        <pubDate>${site_date}</pubDate>
+        <image>
+            <url>
+                ${site_url}/images/local/skin/valid-rss.png
+            </url>
+            <title>${site_name}</title>
+            <link>${site_url}</link>
+        </image>
+        <description>#i18n{suggest.resource_rss.state} : ${site_description}</description>
+        
+        <#list itemList as item>
+        <item>
+            <title>
+            	${item.item_title} ; 
+            	#i18n{suggest.resource_rss.vote_number} : ${item.number_vote} ; 
+            	#i18n{suggest.resource_rss.score} : ${item.score} ; 
+            	#i18n{suggest.resource_rss.state} : ${item.state} 
+            	<#if item.category?has_content>
+            		; #i18n{suggest.resource_rss.category} : ${item.category} 
+            	</#if>
+            </title>
+            <link>${site_url}/jsp/admin/plugins/suggest/ManageCommentSubmit.jsp?id_suggest_submit=${item.id_submit}</link>
+            <description>${item.item_description}</description>
+        	<pubDate>${item.item_date}</pubDate>
+        </item>
+        </#list>
+        
+    </channel>
+</rss>

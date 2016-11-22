@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
 	<properties>
-		<title>Plugin digglike</title>
+		<title>Plugin suggest</title>
 	</properties>
 	<body>
-		<section name="Plugin digglike">
+		<section name="Plugin suggest">
 			<subsection name="Introduction">
 				<p>
-					Le plugin Digglike permet aux utilisateurs de déposer du contenu sur le site en vue de le soumettre aux votes 
+					Le plugin Suggest permet aux utilisateurs de déposer du contenu sur le site en vue de le soumettre aux votes 
 					et commentaires des visiteurs.
 				</p>
 			</subsection>
@@ -27,13 +27,13 @@
 			</subsection>
 			<subsection name="Modération du contenu déposé par les utilisateurs">
 				<ul>
-				  <li>Possibilité d'exiger que les propositions et commentaires ne soient publiés qu'après vérification par le ou les modérateurs du digg.</li>
+				  <li>Possibilité d'exiger que les propositions et commentaires ne soient publiés qu'après vérification par le ou les modérateurs du suggest.</li>
 				  <li>Notification par email lors de la soumission d'une proposition, d'un commentaire ou d'un signalement d'une proposition considérée comme inadéquate.</li>
 				</ul>
 			</subsection>
 			<subsection name="Autre fonctionnalités">
 				<ul>
-				  <li>Activation, désactivation d'un digg avec message d'indisponibilité.</li>
+				  <li>Activation, désactivation d'un suggest avec message d'indisponibilité.</li>
 				  <li>Consultation des propositions et des commentaires avec possibilité d'export.</li>
 				  <li>Contrôle des saisies utilisateurs par expressions régulières.</li>
 				  <li>Possibilité d'ajouter un Captcha dans le formulaire de saisie d'une proposition.(i.e disponible par l'ajout d'un Captcha )</li>

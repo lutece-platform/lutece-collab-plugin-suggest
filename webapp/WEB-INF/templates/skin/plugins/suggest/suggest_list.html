@@ -1,0 +1,29 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<#if unavailability_message?exists>
+		<div class="alert alert-error">${unavailability_message}</div>    
+	<#else>
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<fieldset>
+				<legend>#i18n{suggest.suggestList.title}:</legend> 
+						<#if paginator?exists>
+							#i18n{suggest.suggestListSubmit.paginator.labelResultsCount} : <strong>${paginator.itemsCount}</strong> <br />
+							#i18n{suggest.suggestListSubmit.paginator.labelResultsRange} : <strong>${paginator.rangeMin} - ${paginator.rangeMax}</strong> <br />
+							<@pagination paginator=paginator />
+				 		</#if>
+					<ul>
+						<#if list_suggest?exists>
+						<#list list_suggest as suggest>	
+						<li>
+							<a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${suggest.idSuggest}&amp;action=view_suggest_submit_list">${suggest.title}</a>
+						</li>
+						</#list>
+					</#if>
+					</ul>
+				</fieldset>	
+			</div>
+		</div>
+	</#if>
+	</div>
+</div>

@@ -1,0 +1,113 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="nav-tabs-custom">
+			<ul class="nav nav-tabs" role="tablist">
+				<li>
+					<a href="jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelCategoryComment}" >
+						#i18n{suggest.manageAdvancedParameters.title}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelCategoryComment}" >
+						#i18n{suggest.manageAdvancedParameters.labelCategory}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelTypeComment}" >
+						#i18n{suggest.manageAdvancedParameters.labelType}
+					</a>
+				</li>
+				<li class="active">
+					<a href="jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelDefaultMessageComment}">
+						#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelExportFormatComment}" >
+						#i18n{suggest.manageAdvancedParameters.labelExportFormat}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/suggest/Statistics.jsp"  title="#i18n{suggest.manageAdvancedParameters.labelStatisticsComment}" >
+						#i18n{suggest.manageAdvancedParameters.labelStatistics}
+					</a>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active">
+					<form class="form-horizontal" action="jsp/admin/plugins/suggest/DoModifyDefaultMessage.jsp" method="post" >
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-3" for="libelle_contribution">#i18n{suggest.manageDefaultMessage.labelLibelleContribution} * </label>
+						<div class="col-xs-12 col-sm-9">
+							<input type="text" name="libelle_contribution" id="libelle_contribution" class="form-control" value="${default_message.libelleContribution}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-3" for="unavailability_message"> #i18n{suggest.manageDefaultMessage.labelUnavailabilityMessage}  * </label>
+						<div class="col-xs-12 col-sm-9">
+							<textarea name="unavailability_message" id="unavailability_message" rows="5" class="form-control richtext">${default_message.unavailabilityMessage}</textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-3"  for="libelle_validate_button">#i18n{suggest.manageDefaultMessage.labelLibelleValidateButton}  * </label>
+						<div class="col-xs-12 col-sm-9">
+							<input type="text" name="libelle_validate_button" id="libelle_validate_button" class="form-control" value="${default_message.libelleValidateButton}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-3" for="number_suggest_submit_in_top_score">#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitInTopScore} * </label>
+						<div class="col-xs-12 col-sm-9">
+							<input type="text" name="number_suggest_submit_in_top_score" id="number_suggest_submit_in_top_score" class="form-control" value="${default_message.numberSuggestSubmitInTopScore}" maxlength="10" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-3" for="number_suggest_submit_in_top_comment">#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitInTopComment} *  </label>
+						<div class="col-xs-12 col-sm-9">
+							<input type="text" name="number_suggest_submit_in_top_comment" id="number_suggest_submit_in_top_comment" class="form-control" value="${default_message.numberSuggestSubmitInTopComment}" maxlength="10" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-3" for="number_suggest_submit_caracters_shown">#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitCaractersShown} * </label>
+						<div class="col-xs-12 col-sm-9">
+							<input type="text" name="number_suggest_submit_caracters_shown" id="number_suggest_submit_caracters_shown" class="form-control" value="${default_message.numberSuggestSubmitCaractersShown}" maxlength="10" />
+							<span class="help-text">#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitCaractersShownComment}</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-3" for="notification_new_comment_title"> #i18n{suggest.manageDefaultMessage.labelNotificationNewCommentTitle}  * </label>
+						<div class="col-xs-12 col-sm-9">
+							<textarea name="notification_new_comment_title" id="notification_new_comment_title" rows="5" class="form-control richtext">${default_message.notificationNewCommentTitle!}</textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-3" for="notification_new_comment_body"> #i18n{suggest.manageDefaultMessage.labelNotificationNewCommentBody}  * </label>
+						<div class="col-xs-12 col-sm-9">
+							<textarea name="notification_new_comment_body" id="notification_new_comment_body" rows="5" class="form-control richtext">${default_message.notificationNewCommentBody!}</textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-3" for="notification_new_suggest_submit_title"> #i18n{suggest.manageDefaultMessage.labelNotificationNewSuggestSubmitTitle}  * </label>
+						<div class="col-xs-12 col-sm-9">
+							<textarea name="notification_new_suggest_submit_title" id="notification_new_suggest_submit_title" rows="5" class="form-control richtext">${default_message.notificationNewSuggestSubmitTitle!}</textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-3" for="notification_new_suggest_submit_body"> #i18n{suggest.manageDefaultMessage.labelNotificationNewSuggestSubmitBody}  * </label>
+						<div class="col-xs-12 col-sm-9">
+							<textarea name="notification_new_suggest_submit_body" id="notification_new_suggest_submit_body" rows="5" class="form-control richtext">${default_message.notificationNewSuggestSubmitBody!}</textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-12 col-sm-offset-3 col-sm-2">
+							<button class="btn btn-primary btn-flat" type="submit" name="save">
+								<i class="fa fa-check"></i>&nbsp;#i18n{suggest.createSuggest.buttonSave}
+							</button>
+						</div>
+					</div>
+		  	</form>
+	  	</div>
+		</div>
+	</div>
+</div>
+<#include "/admin/util/editor/editor.html" />
+<@initEditor />

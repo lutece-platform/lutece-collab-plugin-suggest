@@ -1,0 +1,35 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="nav-tabs-custom">
+			<ul class="nav nav-tabs">
+				<li>
+					<a href="jsp/admin/plugins/suggest/ManageSuggestSubmit.jsp?id_suggest=${suggest.idSuggest}">
+						#i18n{suggest.manageSuggestSubmit.title}
+					</a>
+				</li>
+				<li class="active">
+					<a href="jsp/admin/plugins/suggest/ManageSuggestSubmitOrder.jsp?id_suggest=${suggest.idSuggest}">
+						#i18n{suggest.manageSuggestSubmitOrder.title}
+					</a>
+				</li>
+				<li class="pull-right"><@paginationAdmin paginator=paginator combo=1 form=0 showcount=0 /></li>
+			</ul>
+			<div class="tab-content">
+				<div class="row">
+					<#assign include_suggest_submit_actions="include_suggest_submit_actions_change_order.html">
+					<#assign display_check_actions = false>
+				</div>
+				<#include "include_suggest_submit_list.html">
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$( function () {
+$(".preview").toggle();
+$(".full").click(function(){
+	$(this).next(".preview").toggle();
+	$(this).toggleClass("fa-plus-square").toggleClass("fa-minus-square");
+});
+});
+</script>

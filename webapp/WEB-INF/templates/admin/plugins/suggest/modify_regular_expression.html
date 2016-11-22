@@ -1,0 +1,42 @@
+<#include "/admin/util/editor/editor.html" />
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<fieldset>
+    <legend> #i18n{suggest.modifyRegularExpression.title}</legend>
+    <form class="form-horizontal" method="post" action="jsp/admin/plugins/suggest/DoModifyRegularExpression.jsp" >
+	<input name="id_expression" value="${expression.idExpression}" type="hidden">
+		 <div class="form-group">
+			<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title" >#i18n{suggest.createRegularExpression.labelTitle}* </label>
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title" >#i18n{suggest.createRegularExpression.labelTitle}* </label>
+					<input type="text" id="title" name="title" maxlength="20" value="${expression.title}"/>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+			<label for="value" >#i18n{suggest.createRegularExpression.labelValue}* </label>
+				<input type="text" class="form-control input-sm" id="value" name="value"  value="${expression.value}"/>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="valid_exemple">#i18n{suggest.createRegularExpression.labelValidExemple}* </label>
+				<input type="text" name="valid_exemple" value="${expression.validExemple}" class="input-xxlarge" />
+				<span class="help-text">#i18n{suggest.createRegularExpression.labelValidExempleComment}</span>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<label for="information_message">	#i18n{suggest.createRegularExpression.labelInformationMessage}* </label>
+				<textarea class="richtext" name="information_message" id="information_message" class="span4" rows="2">${expression.informationMessage}</textarea>
+				<span class="help-text">#i18n{suggest.createRegularExpression.labelInformationMessageComment}</span>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+				<label for="error_message">#i18n{suggest.createRegularExpression.labelErrorMessage}* </label>
+				<textarea class="richtext" name="error_message" id="error_message" class="span4" rows="2">${expression.errorMessage}</textarea>
+				<span class="help-text">#i18n{suggest.createRegularExpression.labelErrorMessageComment} </span>  
+			</div>
+		</div>
+		<div class="form-group">
+			<button class="btn btn-primary btn-sm btn-flat" type="submit" name="save"><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{suggest.createRegularExpression.buttonSave}</button>
+			<button class="btn btn-primary btn-sm btn-flat" onclick="javascript:window.history.back();" name="cancel"><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{suggest.createRegularExpression.buttonCancel}</button>
+		</div>
+		</form>
+	</fieldset>
+	</div>
+</div>
+<@initEditor />

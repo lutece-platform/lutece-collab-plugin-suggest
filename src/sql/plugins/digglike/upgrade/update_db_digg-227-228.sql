@@ -1,1 +1,0 @@
-DROP TABLE digglike_tag_submit;

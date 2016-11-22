@@ -1,0 +1,88 @@
+<table class="table table-hover table-striped">
+<thead>
+	<tr>
+		<th></th>
+		<th>Cat&eacute;gorie</th>
+		<th>Publication</th>
+		<th>Titre</th>
+		<th>Actions</th>
+	</tr>
+</thead>
+	<#list suggest_submit_list as suggest_submit>
+	<tr>
+		<td id="suggest${suggest_submit.idSuggestSubmit}" name="suggest${suggest_submit.idSuggestSubmit}">
+			<#if display_check_actions>
+				<input class="selected-id" type="checkbox" name="selected_suggest_submit" value="${suggest_submit.idSuggestSubmit}" >
+			</#if>
+		</td>
+		<#if suggest_submit.suggestSubmitTitle?exists>
+			<td>
+			<#if category_list?has_content  && suggest_submit.category?exists>
+				<span class="label" style="background-color:${suggest_submit.category.color!''};">${suggest_submit.category.title}</span>
+			</#if>
+			</td>
+			<td>
+				<#if suggest_submit_type_list?has_content  &&  suggest_submit.suggestSubmitType?exists>
+					<span class="label label-info spaced" style="background-color:${suggest_submit.suggestSubmitType.color!''};">
+						<#if suggest_submit.suggestSubmitType.idImageResource?has_content>
+							<img class="thumb-list img-responsive"  src="image?resource_type=image_suggest&id=${suggest_submit.suggestSubmitType.idImageResource}" title="${suggest_submit.suggestSubmitType.name} " alt="${suggest_submit.suggestSubmitType.name} ">
+						</#if>
+						${suggest_submit.suggestSubmitType.name}
+					</span>
+				</#if>
+				<#if suggest_submit.suggestSubmitState.number=publish_state_number>
+					<span class="label label-success spaced" title="#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState} #i18n{suggest.manageSuggestSubmit.altPublish}">
+						<i class="fa fa-check"></i>&nbsp;#i18n{suggest.manageSuggestSubmit.altPublish}
+					</span>
+				<#elseif suggest_submit.suggestSubmitState.number=waiting_for_publish_state_number>
+					<span class="label label-warning spaced" title="#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState} &nbsp;#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}">
+						<i class="fa fa-pause"></i>&nbsp;#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}
+					</span>
+				<#else>
+					<span class="label label-important spaced" title="#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState} #i18n{suggest.manageSuggestSubmit.altDisable}">
+						<i class="fa fa-remove"></i>&nbsp;#i18n{suggest.manageSuggestSubmit.altDisable}
+					</span>
+				</#if>
+				<#if suggest_submit.pinned>
+					<span class="label label-warning spaced">
+						<i class="fa fa-thumb-tack" title="#i18n{suggest.manageSuggestSubmit.altPinned}"></i>
+					</span>
+				</#if>
+			</td>
+			<td style="width:60%;">
+				<#if suggest_submit.reported>
+					<span class="label label-important" title="#i18n{suggest.manageSuggestSubmit.altWarning}"><i class="fa fa-exclamation-triangle"></i></span>
+				</#if>
+				<#if suggest_submit.reported><span class="text-danger" title="#i18n{suggest.manageSuggestSubmit.altWarning}"></#if>
+				<#if suggest_submit.suggestSubmitTitle?length &gt; 100>
+					${suggest_submit.suggestSubmitTitle?substring(0, 100 )}...
+				<#else>
+					${suggest_submit.suggestSubmitTitle}
+				</#if>
+				<#if suggest_submit.reported></span></#if>
+				<span class="pull-right fa fa-plus-square full"></span>
+				<#if suggest_submit.suggestSubmitValue?exists>
+					<div class="preview">${suggest_submit.suggestSubmitValue}</div>
+				</#if>
+				<p class="text-info">
+					<#if !suggest_submit.disableVote>
+							<i class="fa fa-star"></i>&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberVote}&nbsp;${suggest_submit.numberVote} /
+							<i class="fa fa-thumbs-up"></i>	&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberScore}&nbsp;${suggest_submit.numberScore} /
+					</#if>
+					<#if !suggest_submit.disableComment>
+						<#assign nbWaiting=suggest_submit.numberComment - suggest_submit.numberCommentEnable />
+							<i class="fa fa-comments-o"></i>&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberComment} ${suggest_submit.numberComment}
+								/ #i18n{suggest.manageSuggestSubmit.rowNumberCommentEnable} ${suggest_submit.numberCommentEnable}
+							 / #i18n{suggest.manageSuggestSubmit.rowNumberCommentIdle}
+							 <#if nbWaiting &gt; 0>
+							 	<span class="badge badge-warning">${nbWaiting}</span><#else>0
+							</#if>
+					</#if>
+				</p>
+			</td>
+		</#if>
+		<td><#include "${include_suggest_submit_actions}"></td>
+	</tr>
+
+</#list>
+</table>

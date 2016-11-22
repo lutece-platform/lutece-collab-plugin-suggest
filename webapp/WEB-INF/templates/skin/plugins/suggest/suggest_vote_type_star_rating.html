@@ -1,0 +1,32 @@
+<div class="btn btn-primary disabled suggest-vote-star-rating" style="display:none;">
+	<form id="form${id_suggest_submit}" class="form-inline" action="jsp/site/Portal.jsp#suggest${id_suggest_submit}">
+		<input type="hidden" name="vote" value="0">
+		<input type="hidden" name="id_suggest" value="${id_suggest}">
+		<input type="hidden" name="page" value="suggest">
+		<input type="hidden" name="id_suggest_submit" value="${id_suggest_submit}">
+		<input type="hidden" name="action" value="do_vote">
+		<input type="hidden" name="view" value="${view}">
+		<input class="star-rating inline" type="radio" name="vote${id_suggest_submit}" value="-2"  title="#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainstMore}" alt="#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainstMore}">
+		<input class="star-rating inline" type="radio" name="vote${id_suggest_submit}" value="-1" title="#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainst}" alt="#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainst}">
+		<input class="star-rating inline" type="radio" name="vote${id_suggest_submit}" value="1" title="#i18n{suggest.suggestVoteTypeStarRating.titleVoteFor}" alt="#i18n{suggest.suggestVoteTypeStarRating.titleVoteFor}">
+		<input class="star-rating inline" type="radio" name="vote${id_suggest_submit}" value="2" title="#i18n{suggest.suggestVoteTypeStarRating.titleVoteForMore}" alt="#i18n{suggest.suggestVoteTypeStarRating.titleVoteForMore}">
+	</form>
+</div>
+<div class="suggest-vote-star-rating-javascript-disable" >
+	<div class="star">
+		<a href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_submit=${id_suggest_submit}&vote=-2&view=${view}&action=do_vote#suggest${id_suggest_submit}"   title="#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainstMore}" alt="#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainstMore}">
+	</a>
+	</div >
+	<div class="star">
+	<a href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_submit=${id_suggest_submit}&vote=-1&view=${view}&action=do_vote#suggest${id_suggest_submit}" title="#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainst}" alt="#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainst}">
+	</a>
+	</div>
+	<div class="star">
+	<a href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_submit=${id_suggest_submit}&vote=1&view=${view}&action=do_vote#suggest${id_suggest_submit}"  title="#i18n{suggest.suggestVoteTypeStarRating.titleVoteFor}" alt="#i18n{suggest.suggestVoteTypeStarRating.titleVoteFor}">
+	</a>
+	</div>
+	<div class="star">
+	<a href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_submit=${id_suggest_submit}&vote=2&view=${view}&action=do_vote#suggest${id_suggest_submit}" title="#i18n{suggest.suggestVoteTypeStarRating.titleVoteForMore}" alt="#i18n{suggest.suggestVoteTypeStarRating.titleVoteForMore}">
+	</a>
+	</div>
+</div>

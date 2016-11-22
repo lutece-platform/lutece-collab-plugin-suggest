@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
 	<properties>
-		<title>Plugin digglike</title>
+		<title>Plugin suggest</title>
 	</properties>
 	<body>
-		<section name="Plugin digglike">
+		<section name="Plugin suggest">
 			<subsection name="Introduction">
-				Manage messages as digg.com website.
+				Manage messages as suggest.com website.
 			</subsection>
 		</section>
 	</body>

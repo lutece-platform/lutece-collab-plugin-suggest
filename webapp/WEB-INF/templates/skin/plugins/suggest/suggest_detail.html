@@ -1,0 +1,109 @@
+
+<div class="row" id="suggest${suggest_submit.idSuggestSubmit}">
+	<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+		<h3>
+		${suggest_submit.suggestSubmitTitle}
+		<#if suggest_submit.suggestSubmitType?exists>
+			<span class="badge" style="background-color:${suggest_submit.suggestSubmitType.color!''};">
+				<#if suggest_submit.suggestSubmitType.idImageResource?has_content>
+					<img class="thumb-list"  src="image?resource_type=image_suggest&id=${suggest_submit.suggestSubmitType.idImageResource}" title="${suggest_submit.suggestSubmitType.name} " alt="${suggest_submit.suggestSubmitType.name} ">
+				</#if>
+			${suggest_submit.suggestSubmitType.name}
+			</span>
+		</#if>
+		
+		<#if  authorized_vote && !suggest_submit.disableVote && suggest_submit.numberScore?exists>
+		<div class="btn-group pull-right">
+			<#if suggest_submit_vote_type?exists>
+				${suggest_submit_vote_type}
+			</#if>
+			<button class="btn btn-primary disabled">
+				#i18n{suggest.manageSuggestSubmit.rowNumberScore}&nbsp;${suggest_submit.numberScore}
+			</button>
+		</div>
+		</#if>
+		
+		</h3>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+	<p class="suggest-meta">
+		<i class="glyphicon glyphicon-calendar"></i> ${suggest_submit.dateResponse}&nbsp;
+		<#if lutece_user?exists>
+		 #i18n{suggest_submit.postByUser} :
+		<#if  avatar?has_content><img class="avatar" src="${avatar}" alt="avatar provided by gravatar.com" /><#else><i class="glyphicon glyphicon-user"></i></#if>
+			<#if lutece_user?exists>
+				${lutece_user!""}
+			<#else>
+				${lutece_user.getUserInfo("user.name.given")} ${lutece_user.getUserInfo("user.name.family")}
+			</#if> 
+		</#if>
+		<#if lutece_user_connected??>
+			<div class="pull-right">
+				<#if user_subscribed?? && user_subscribed>
+					<a class="btn btn-sm btn-danger" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit.idSuggestSubmit}&amp;action=unsubscribe_suggest#suggest${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.unsubscribe}">
+						<i class="glyphicon glyphicon-eye-close">&nbsp;</i>&nbsp;#i18n{suggest.manageSuggestSubmit.unsubscribe}
+					</a>
+				<#else>
+					<a class="btn btn-sm btn-primary" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit.idSuggestSubmit}&amp;action=subscribe_suggest#suggest${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.subscribe}">
+						<i class="glyphicon glyphicon-eye-open">&nbsp;</i>&nbsp;#i18n{suggest.manageSuggestSubmit.subscribe}
+					</a>
+				</#if>
+			</div>
+		</#if>
+	</p>
+	<#if suggest_submit.suggestSubmitValue?exists>
+		<div class="suggest-list-content">	
+			${suggest_submit.suggestSubmitValue}
+		</div>	
+	</#if>
+	<#if enable_suggest_reports>
+		<a class="btn btn-primary btn-sm" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit.idSuggestSubmit}&amp;action=create_report#suggest${suggest_submit.idSuggestSubmit}">
+			#i18n{suggest.suggestListSubmit.labelReport}
+		</a>
+	</#if>
+	<#if isExtendInstalled?? && isExtendInstalled >
+		@Extender[${suggest_submit.idSuggestSubmit},SUGGEST_SUGGEST_SUBMIT_TYPE,opengraph,{header:false,footer:false}]@
+		@ExtenderParameter[${suggest_submit.idSuggestSubmit},SUGGEST_SUGGEST_SUBMIT_TYPE,opengraph]@	
+	</#if>
+	<hr>
+	<#if authorized_comment && !suggest_submit.disableComment>
+		<h5>${suggest_submit.numberCommentEnable}  #i18n{suggest.suggestDetail.labelComments}</h5>
+	</#if>	
+	</div>
+</div>
+<#if authorized_comment && !suggest_submit.disableComment>
+<div class="row">
+	<div class="span7">	
+		<form class="form" action="jsp/site/Portal.jsp?page=suggest" method="post" name="form-comment" id="form-comment"  >
+			<input name="action" value="do_create_comment" type="hidden" />
+			<input name="id_suggest" value="${id_suggest}" type="hidden" />
+			<input name="id_suggest_submit" value="${suggest_submit.idSuggestSubmit}" type="hidden" />
+			<label></label>
+			<textarea name="comment_value" id="comment_value" class="markitup span7" rows="2" placeholder="#i18n{suggest.suggestComment.labelAddNewComment}"></textarea>
+			<#if jcaptcha?exists>
+			<fieldset>${jcaptcha}</fieldset>
+			</#if>
+			<button class="btn btn-primary btn-sm pull-right" type="submit" name="submit_comment">
+				<i class="glyphicon glyphicon-comment"></i>&nbsp;#i18n{suggest.suggestComment.labelAddNewComment}
+			</button>
+		</form>
+	</div>
+</div>
+<div class="row">		
+	<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">	
+	<#if list_comment?has_content>
+		${list_comment}
+	</#if>
+	</div>
+</div>
+</#if>
+<script>
+	$(document).ready( function(){
+		$(".comments-form").toggle();
+		$(".comment-link").click(function(){
+			$(this).next().toggle();
+		}); 
+	});
+</script>

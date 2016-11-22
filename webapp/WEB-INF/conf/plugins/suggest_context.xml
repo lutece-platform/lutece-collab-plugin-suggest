@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+ 	 
+	<bean id="suggest.categoryDAO"  class="fr.paris.lutece.plugins.suggest.business.CategoryDAO" />
+	<bean id="suggest.commentSubmitDAO"  class="fr.paris.lutece.plugins.suggest.business.CommentSubmitDAO" />
+	<bean id="suggest.suggestSubmitDAO"  class="fr.paris.lutece.plugins.suggest.business.SuggestSubmitDAO" />
+	<bean id="suggest.suggestSubmitStateDAO"  class="fr.paris.lutece.plugins.suggest.business.SuggestSubmitStateDAO" />
+	<bean id="suggest.suggestSubmitTypeDAO"  class="fr.paris.lutece.plugins.suggest.business.SuggestSubmitTypeDAO" />
+	<bean id="suggest.suggestDAO"  class="fr.paris.lutece.plugins.suggest.business.SuggestDAO" />
+	<bean id="suggest.defaultMessageDAO"  class="fr.paris.lutece.plugins.suggest.business.DefaultMessageDAO" /> 	 
+	<bean id="suggest.entryTypeDAO"  class="fr.paris.lutece.plugins.suggest.business.EntryTypeDAO" />
+	<bean id="suggest.voteTypeDAO"  class="fr.paris.lutece.plugins.suggest.business.VoteTypeDAO" />
+	<bean id="suggest.voteDAO"  class="fr.paris.lutece.plugins.suggest.business.VoteDAO" />
+	<bean id="suggest.entryDAO"  class="fr.paris.lutece.plugins.suggest.business.EntryDAO" />
+	<bean id="suggest.suggestActionDAO"  class="fr.paris.lutece.plugins.suggest.business.SuggestActionDAO" />
+	<bean id="suggest.responseDAO"  class="fr.paris.lutece.plugins.suggest.business.ResponseDAO" />
+	<bean id="suggest.suggestSearchEngine"  class="fr.paris.lutece.plugins.suggest.service.suggestsearch.SuggestLuceneSearchEngine"/>
+	<bean id="suggest.exportFormatDAO"  class="fr.paris.lutece.plugins.suggest.business.ExportFormatDAO" />
+	<bean id="resourceRssSuggestConfigDAO"  class="fr.paris.lutece.plugins.suggest.business.rss.SuggestResourceRssConfigDAO" />
+	<bean id="suggest.entryAdditionalAttributeDAO"  class="fr.paris.lutece.plugins.suggest.business.EntryAdditionalAttributeDAO" />
+	<bean id="suggest.videoTypeDAO"  class="fr.paris.lutece.plugins.suggest.business.VideoTypeDAO" />
+    <bean id="suggest.suggestSubmitService"  class="fr.paris.lutece.plugins.suggest.service.SuggestSubmitService" />
+    <bean id="suggest.commentSubmitService"  class="fr.paris.lutece.plugins.suggest.service.CommentSubmitService" />
+    <bean id="suggest.suggestUserInfoService"  class="fr.paris.lutece.plugins.suggest.service.SuggestUserInfoService" />
+    <bean id="suggest.suggestAttributeDAO"  class="fr.paris.lutece.plugins.suggest.business.attribute.SuggestAttributeDAO" />
+    <bean id="suggest.reportedMessageDAO"  class="fr.paris.lutece.plugins.suggest.business.ReportedMessageDAO" />
+    <bean id="suggest.imageResourceDAO"  class="fr.paris.lutece.plugins.suggest.business.ImageResourceDAO" />
+    
+    <bean id="suggest.transactionManager"  class="fr.paris.lutece.portal.service.database.DAOUtilTransactionManager">
+	 	<property name="pluginName" value="suggest" />
+	 </bean>
+	 
+	<bean id="suggest.suggestUserInfoDAO"  class="fr.paris.lutece.plugins.suggest.business.SuggestUserInfoDAO" />
+	<!-- RSS -->
+    <bean id="ResourceRssTypeSuggest" class="fr.paris.lutece.portal.business.rss.ResourceRssType" >
+    	<property name="key" value="ResourceRssTypeSuggest" />
+		<property name="titleI18nKey" value="suggest.resource_rss_type.label" />
+		<property name="className" value="fr.paris.lutece.plugins.suggest.business.rss.SuggestResourceRss"/>
+	</bean>
+	<!-- suggest suggest submit actions -->
+	<bean id="suggest.exportSuggestSubmitAction" class="fr.paris.lutece.plugins.suggest.web.action.ExportSuggestSubmitAction" />
+	<bean id="suggest.massChangeCategorySuggestSubmitAction" class="fr.paris.lutece.plugins.suggest.web.action.MassChangeCategorySuggestSubmitAction" />
+	<bean id="suggest.massChangeVoteSuggestSubmitAction" class="fr.paris.lutece.plugins.suggest.web.action.MassChangeVoteSuggestSubmitAction" />
+	<bean id="suggest.massChangeCommentSuggestSubmitAction" class="fr.paris.lutece.plugins.suggest.web.action.MassChangeCommentSuggestSubmitAction" />
+	<bean id="suggest.massPinnedSuggestSubmitAction" class="fr.paris.lutece.plugins.suggest.web.action.MassPinnedSuggestSubmitAction" />
+   <!-- Extendable Resource -->
+    <bean id="suggestExtendableResourceService" class="fr.paris.lutece.plugins.suggest.service.SuggestExtendableResourceService" />
+    <bean id="suggestSubmitExtendableResourceService" class="fr.paris.lutece.plugins.suggest.service.SuggestSubmitExtendableResourceService" />
+
+	<bean id="suggest.suggestSubscriptionProviderService" class="fr.paris.lutece.plugins.suggest.service.subscription.SuggestSubscriptionProviderService" />
+
+</beans>
+ 	

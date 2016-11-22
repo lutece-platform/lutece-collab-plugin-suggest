@@ -1,0 +1,1 @@
+DROP TABLE suggest_tag_submit;

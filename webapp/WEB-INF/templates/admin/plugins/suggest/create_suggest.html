@@ -1,0 +1,423 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" action="jsp/admin/plugins/suggest/DoCreateSuggest.jsp?plugin_name=suggest" method="post" enctype="multipart/form-data">
+		<div class="nav-tabs-custom">
+			<ul class="nav nav-tabs" role="tablist">
+				<li class="active">
+					<a data-toggle="tab" href="#panel1">#i18n{suggest.creatSuggest.navTab.labelGeneral}</a>
+				</li>
+				<li><a data-toggle="tab" href="#panel2">#i18n{suggest.creatSuggest.navTab.labelPresentation}</a></li>
+				<li><a data-toggle="tab" href="#panel3">#i18n{suggest.creatSuggest.navTab.labelPermission}</a></li>
+				<li><a data-toggle="tab" href="#panel4">#i18n{suggest.creatSuggest.navTab.labelNotification}</a></li>
+				<li><a data-toggle="tab" href="#panel5">#i18n{suggest.creatSuggest.navTab.labelAdvancedParameters}</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="panel1">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2" for="title">#i18n{suggest.createSuggest.labelTitle} * </label>
+								<div class="col-xs-12 col-sm-9">
+									<input type="text" name="title" id="" class="form-control" value="" maxlength="255">
+									<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelTitleComment}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2" for="libelle_contribution">#i18n{suggest.createSuggest.labelLibelleContribution} *</label>
+								<div class="col-xs-12 col-sm-9">
+									<input type="text" name="libelle_contribution" id="libelle_contribution" class="form-control" value="${default_message.libelleContribution}" maxlength="255">
+									<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelLibelleContributionComment}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2" for="libelle_validate_button">#i18n{suggest.createSuggest.labelLibelleValidateButton} *</label>
+								<div class="col-xs-12 col-sm-9">
+									<input type="text" name="libelle_validate_button" id="" class="form-control" value="${default_message.libelleValidateButton}" maxlength="255">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2" for="number_suggest_submit_caracters_shown">	#i18n{suggest.createSuggest.labelNumberSuggestSubmitCaractersShown} *
+								</label>
+								<div class="col-xs-12 col-sm-9">
+									<input type="text" name="number_suggest_submit_caracters_shown" id="number_suggest_submit_caracters_shown" class="form-control"  value="${default_message.numberSuggestSubmitCaractersShown}" maxlength="10" />
+									<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelNumberSuggestSubmitCaractersShownComment}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2" for="id_vote_type">#i18n{suggest.createSuggest.labelVoteType}</label>
+								<div class="col-xs-12 col-sm-9">
+									<@comboWithParams name="id_vote_type" default_value="-1" additionalParameters=" class=\"form-control\"" items=vote_type_list />
+									<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelVoteTypeComment}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2" for=""></label>
+								<div class="col-xs-12 col-sm-9">
+									<div class="checkbox">
+										<label for="disable_vote">
+											<input name="disable_vote" id="disable_vote" value="disable_vote" type="checkbox">
+											#i18n{suggest.createSuggest.labelDisableVote}
+											<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelDisableVoteComment}</span>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2" for=""></label>
+								<div class="col-xs-12 col-sm-9">
+									<div class="checkbox">
+										<label for="authorized_comment">
+											<input id="authorized_comment" name="authorized_comment" type="checkbox" onclick="displayAuthorizedComment()">#i18n{suggest.createSuggest.labelAuthorizedCommentSubmit}
+											<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelAuthorizedCommentSubmitComment}</span>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2" for="unavailability_message">#i18n{suggest.createSuggest.labelUnavailabilityMessage} *</label>
+									<div class="col-xs-12 col-sm-9">
+										<textarea name="unavailability_message" id="unavailability_message" rows="4" class="richtext">${default_message.unavailabilityMessage}</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane" id="panel2">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								<div class="form-group">
+									<label class="control-label col-xs-12 col-sm-2" for=""></label>
+									<div class="col-xs-12 col-sm-9">
+										<div class="checkbox">
+										 <label for="active_suggest_submit_paginator">
+											<input name="active_suggest_submit_paginator" id="active_suggest_submit_paginator" value="${yes_value}" type="checkbox"checked='checked'> #i18n{suggest.createSuggest.labelActiveSuggestSubmitPaginator}
+											<!-- span class="help-text help-suggest">#i18n{suggest.createSuggest.labelActiveSuggestSubmitPaginatorComment}</span -->
+											</label>
+										</div>
+										<div id="nb_submit_per_page">
+											<label for="number_suggest_submit_per_page">#i18n{suggest.createSuggest.labelNumberSuggestSubmitPerPage}</label>
+											<input type="text" name="number_suggest_submit_per_page" id="number_suggest_submit_per_page" class="form-control" value="20" maxlength="10">
+											<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelNumberSuggestSubmitPerPageComment}</span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-xs-12 col-sm-2" for="show_category_block">#i18n{suggest.createSuggest.labelShowBlock}</label>
+									<div class="col-xs-12 col-sm-9">
+										<div class="checkbox">
+											<label for="show_category_block">
+												<input name="show_category_block" id="show_category_block" value="show_category_block" type="checkbox" checked="checked">#i18n{suggest.createSuggest.labelCategoryBlock}
+											</label>
+										</div>
+										<div class="checkbox">
+											<label for="show_top_score_block">
+												<input name="show_top_score_block" id="show_top_score_block" value="show_top_score_block" type="checkbox" checked="checked">#i18n{suggest.createSuggest.labelTopScoreBlock}
+											</label>
+										</div>
+										<label for="number_suggest_submit_in_top_score">#i18n{suggest.createSuggest.labelNumberSuggestSubmitInTopScore}</label>
+										<input type="text" name="number_suggest_submit_in_top_score" id="number_suggest_submit_in_top_score" id="number_suggest_submit_in_top_score" class="form-control" value="${default_message.numberSuggestSubmitInTopScore}" maxlength="10" />
+										<!-- span class="help-text help-suggest">#i18n{suggest.createSuggest.labelNumberSuggestSubmitInTopScoreComment}</span -->
+										<div class="checkbox">
+											<label for="show_top_comment_block">
+												<input name="show_top_comment_block" id="show_top_comment_block" value="show_top_comment_block" type="checkbox" checked='checked'>#i18n{suggest.createSuggest.labelTopCommentBlock}
+											</label>
+										</div>
+										<label for="number_suggest_submit_in_top_comment">#i18n{suggest.createSuggest.labelNumberSuggestSubmitInTopComment}</label>
+										<input type="text" name="number_suggest_submit_in_top_comment" id="number_suggest_submit_in_top_comment" class="form-control" value="${default_message.numberSuggestSubmitInTopComment}" maxlength="10" />
+										<!-- span class="help-text help-suggest">#i18n{suggest.createSuggest.labelNumberSuggestSubmitInTopCommentComment}</span -->
+										<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelShowBlockComment} </span>
+									</div>
+								</div>
+
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2" for=""></label>
+								<div class="col-xs-12 col-sm-9">
+									<div class="checkbox">
+										<label for="display_comment_in_suggest_submit_list">
+											<input name="display_comment_in_suggest_submit_list"  id="display_comment_in_suggest_submit_list" value="display_comment_in_suggest_submit_list" type="checkbox">#i18n{suggest.createSuggest.labelDisplayCommentInSuggestSubmitList}
+											<!-- span class="help-text help-suggest">#i18n{suggest.createSuggest.labelDisplayCommentInSuggestSubmitListComment}</span -->
+										</label>
+									</div>
+									<label for="number_comment_display_in_suggest_submit_list">#i18n{suggest.createSuggest.labelNumberCommentDisplayInSuggestSubmitList}</label>
+									<input type="text" name="number_comment_display_in_suggest_submit_list" id="number_comment_display_in_suggest_submit_list" class="form-control" value="3" maxlength="10" />
+									<!-- span class="help-text help-suggest">#i18n{suggest.createSuggest.labelNumberCommentDisplayInSuggestSubmitListComment}</span -->
+									<label for="number_char_comment_display_in_suggest_submit_list">#i18n{suggest.createSuggest.labelNumberCharCommentDisplayInSuggestSubmitList}</label>
+									<input type="text" name="number_char_comment_display_in_suggest_submit_list" id="number_char_comment_display_in_suggest_submit_list" class="form-control" value="30" maxlength="10" />
+									<!-- span class="help-text help-suggest">#i18n{suggest.createSuggest.labelNumberCharCommentDisplayInSuggestSubmitListComment}</span -->
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2" for="id_default_sort">#i18n{suggest.createSuggest.labelDefaultSort}</label>
+								<div class="col-xs-12 col-sm-9">
+									<@comboWithParams name="id_default_sort" items=suggest_submit_sort_list default_value="-1" additionalParameters="class='form-control'" />
+									<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelDefaultSortComment}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2" class="control-label" for="id_theme_list">#i18n{suggest.createSuggest.labelThemeXpage}</label>
+								<div class="col-xs-12 col-sm-9">
+									<@comboWithParams name="id_theme_list" items=theme_list default_value=default_theme additionalParameters="class='form-control'" />
+									<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelThemeXpageComment}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2" for="header">
+								#i18n{suggest.createSuggest.labelHeader}</label>
+								<div class="col-xs-12 col-sm-9">
+									<textarea name="header" id="header" rows="4" class="richtext" style="width:50%"></textarea>
+									<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelHeaderComment}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2" for="confirmation_message">#i18n{suggest.createSuggest.labelConfirmationMessage}</label>
+								<div class="col-xs-12 col-sm-9">
+									<textarea name="confirmation_message" id="" rows="4" class="richtext" style="width:50%"></textarea>
+									<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelConfirmationMessageComment}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2" for="terms_of_use">
+								#i18n{suggest.createSuggest.labelTermsOfUse}</label>
+								<div class="col-xs-12 col-sm-9">
+									<textarea name="terms_of_use" id="terms_of_use" rows="4" class="richtext"  style="width:50%" ></textarea>
+									<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelTermsOfUseComment}</span>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane" id="panel3">
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="workgroup">#i18n{suggest.createSuggest.labelWorkgroup}</label>
+							<div class="col-xs-12 col-sm-9">
+							<@comboWithParams name="workgroup"  items=user_workgroup_list additionalParameters="class='form-control'" default_value="" />
+							<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelWorkgroupComment}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="role">#i18n{suggest.createSuggest.labelRole}</label>
+							<div class="col-xs-12 col-sm-9">
+							<@comboWithParams name="role" default_value="${default_value_role}" items=role_list additionalParameters="class='form-control'" />
+							<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelRoleComment}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2"></label>
+								<div class="col-xs-12 col-sm-9">
+									<div class="checkbox">
+										<label for="disable_new_suggest_submit">
+											<input name="disable_new_suggest_submit" id="disable_new_suggest_submit" value="${yes_value}" type="checkbox"><strong>#i18n{suggest.createSuggest.labelDisableNewSuggestSubmit}</strong>
+										</label>
+									</div>
+									<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelDisableNewSuggestSubmitComment}</span>
+								</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="disable_new_comment"> </label>
+							<div class="col-xs-12 col-sm-9">
+								<div class="checkbox">
+									<label for="disable_new_comment">
+										<input name="disable_new_comment" id="disable_new_comment" value="${yes_value}" type="checkbox"  onclick="displayId('p_id_mailing_list_comment')">
+										<strong>#i18n{suggest.createSuggest.labelDisableNewCommentSubmit}</strong>
+									</label>
+								</div>
+								<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelDisableNewCommentSubmitComment}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="enable_reports"></label>
+								<div class="col-xs-12 col-sm-9">
+									<div class="checkbox">
+										<label for="enable_reports">
+											<input name="enable_reports" id="enable_reports" value="${yes_value}" type="checkbox">
+											<strong>#i18n{suggest.createSuggest.labelEnableReports}</strong>
+										</label>
+									</div>
+									<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelEnableReportsComment}</span>
+								</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="enable_terms_of_use"></label>
+								<div class="col-xs-12 col-sm-9">
+									<div class="checkbox">
+										<label for="enable_terms_of_use">
+											<input name="enable_terms_of_use" id="enable_terms_of_use" value="${yes_value}" type="checkbox" >
+											<strong>#i18n{suggest.createSuggest.labelEnableTermsOfUse}</strong>
+										</label>
+									</div>
+									<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelEnableTermsOfUseComment}</span>
+								</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="limit_number_vote"> </label>
+								<div class="col-xs-12 col-sm-9">
+									<div class="checkbox">
+										<label for="limit_number_vote">
+											<input name="limit_number_vote" id="limit_number_vote" value="${yes_value}" type="checkbox" >
+											<strong>#i18n{suggest.createSuggest.labelLimitNumberVote}</strong>
+										</label>
+									</div>
+									<span class="help-text">#i18n{suggest.createSuggest.labelLimitNumberVoteComment}</span>
+								</div>
+						</div>
+						<#if authentification_enable>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2" for="">#i18n{suggest.createSuggest.labelRequiredAuthentification}</label>
+								<div class="col-xs-12 col-sm-9">
+									<label class="checkbox-inline" for="active_suggest_submit_authentification">
+										<input name="active_suggest_submit_authentification" id="active_suggest_submit_authentification" value="${yes_value}" type="checkbox" >#i18n{suggest.createSuggest.labelRequiredAuthentificationCreation}
+									</label>
+									<label class="checkbox-inline" for="active_vote_authentification">
+										<input name="active_vote_authentification" id="active_vote_authentification" value="${yes_value}" type="checkbox" >#i18n{suggest.createSuggest.labelRequiredAuthentificationVote}
+									</label>
+									<label class="checkbox-inline" for="active_comment_authentification">
+										<input name="active_comment_authentification" id="active_comment_authentification" value="active_comment_authentification" type="checkbox" >	#i18n{suggest.createSuggest.labelRequiredAuthentificationCommentSubmit}
+									</label>
+									<span class="help-text">#i18n{suggest.createSuggest.labelRequiredAuthentificationComment}</span>
+								</div>
+							</div>
+						</#if>
+					</div>
+					<div class="tab-pane" id="panel4">
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="">#i18n{suggest.createSuggest.labelMailSuggestSubmit}</label>
+							<div class="col-xs-12 col-sm-9">
+								<label class="checkbox-inline" for="enable_mail_new_suggest_submit">
+									<input name="enable_mail_new_suggest_submit" id="enable_mail_new_suggest_submit" value="${yes_value}" type="checkbox" >#i18n{suggest.createSuggest.labelMailNewSuggestSubmit}
+								</label>
+								<label class="checkbox-inline" for="enable_mail_new_comment_submit">
+									<input name="enable_mail_new_comment_submit" id="enable_mail_new_comment_submit" value="${yes_value}" type="checkbox" >#i18n{suggest.createSuggest.labelMailNewCommentSubmit}
+								</label>
+								<label class="checkbox-inline" for="enable_mail_new_reported_submit">
+									<input name="enable_mail_new_reported_submit" id="enable_mail_new_reported_submit" value="${yes_value}" type="checkbox" >#i18n{suggest.createSuggest.labelMailNewReportedSubmit}
+								</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="id_mailing_list_suggest_submit">#i18n{suggest.createSuggest.labelMailingList}</label>
+							<div class="col-xs-12 col-sm-9">
+								<@comboWithParams name="id_mailing_list_suggest_submit" items=mailing_list default_value="-1" additionalParameters="class='form-control'" />
+								<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelMailingListComment}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="notification_new_comment_sender_name"> #i18n{suggest.createSuggest.labelNotificationNewCommentSenderName}</label>
+							<div class="col-xs-12 col-sm-9">
+								<input type="text" name="notification_new_comment_sender_name" id="notification_new_comment_sender_name" class="form-control"  maxlength="255" value="">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="notification_new_comment_title"> #i18n{suggest.createSuggest.labelNotificationNewCommentTitle}  * </label>
+							<div class="col-xs-12 col-sm-9">
+								<textarea name="notification_new_comment_title" id="notification_new_comment_title" rows="10" class="richtext">${default_message.notificationNewCommentTitle!}</textarea>
+							</div>
+						</div>
+						 <div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="notification_new_comment_body"> #i18n{suggest.createSuggest.labelNotificationNewCommentBody}  * </label>
+							<div class="col-xs-12 col-sm-9">
+								<textarea name="notification_new_comment_body" id="notification_new_comment_body" rows="10" class="richtext">${default_message.notificationNewCommentBody!}</textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="notification_new_suggest_submit_sender_name"> #i18n{suggest.createSuggest.labelNotificationNewSuggestSubmitSenderName}</label>
+							<div class="col-xs-12 col-sm-9">
+								<input type="text" name="notification_new_suggest_submit_sender_name" id="notification_new_suggest_submit_sender_name" class="form-control" maxlength="255" value="">
+							</div>
+						</div>
+						 <div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="notification_new_suggest_submit_title"> #i18n{suggest.createSuggest.labelNotificationNewSuggestSubmitTitle}  * </label>
+							<div class="col-xs-12 col-sm-9">
+								<textarea name="notification_new_suggest_submit_title" id="notification_new_suggest_submit_title" rows="10" class="richtext">${default_message.notificationNewSuggestSubmitTitle!}</textarea>
+							</div>
+						</div>
+						 <div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2"  for="notification_new_suggest_submit_body"> #i18n{suggest.createSuggest.labelNotificationNewSuggestSubmitBody}  * </label>
+							<div class="col-xs-12 col-sm-9">
+								<textarea name="notification_new_suggest_submit_body" id="notification_new_suggest_submit_body" rows="10" class="richtext">${default_message.notificationNewSuggestSubmitBody!}</textarea>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane" id="panel5">
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="description"> #i18n{suggest.createSuggest.labelDescription}</label>
+							<div class="col-xs-12 col-sm-9">
+								<div class="callout">
+									<textarea name="description" id="description" rows="4" class="richtext form-control"></textarea>
+									<label for="image_source"> #i18n{suggest.createSuggest.labelImage}</label>
+									<input type="file" id="image_source" name="image_source" maxlength="100" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="number_day_required">#i18n{suggest.createSuggest.labelNumberDayRequired}</label>
+							<div class="col-xs-12 col-sm-9">
+								<input type="text" name="number_day_required" id="number_day_required" class="form-control" value="">
+								<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelNumberDayRequiredComment}</span>
+							</div>
+						</div>
+						<#if is_active_captcha>
+							<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="">&nbsp;</label>
+								<div class="col-xs-12 col-sm-9">
+									<div class="checkbox">
+										<label for="active_captcha">
+											<input name="active_captcha" id="active_captcha" value="${yes_value}" type="checkbox"><strong>#i18n{suggest.createSuggest.labelActiveCaptcha}</strong>
+										</label>
+									</div>
+									<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelActiveCaptchaComment}</span>
+								</div>
+							</div>
+						</#if>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2" for="active_editor_bbcode_on_comment"></label>
+							<div class="col-xs-12 col-sm-9">
+								<div class="checkbox">
+									<label for="active_editor_bbcode_on_comment">
+										<input name="active_editor_bbcode_on_comment" id="active_editor_bbcode_on_comment" value="${yes_value}" type="checkbox" ><strong>#i18n{suggest.createSuggest.labelActiveEditorBbcodeOnComment}</strong>
+									</label>
+								</div>
+								<span class="help-text help-suggest">#i18n{suggest.createSuggest.labelActiveEditorBbcodeOnCommentComment}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
+						<button class="btn btn-primary btn-flat" type="submit" name="save">
+							<i class="fa fa-check"></i>&nbsp;#i18n{suggest.createSuggest.buttonSave}
+						</button>
+						<button class="btn btn-primary btn-flat" type="submit" name="apply" >
+							<i class="fa fa-check-circle"></i>&nbsp;#i18n{suggest.modifySuggest.buttonApply}
+						</button>
+						<button class="btn btn-default btn-flat" type="submit" name="cancel">
+							<i class="fa fa-remove"></i>&nbsp;#i18n{suggest.createSuggest.buttonCancel}
+						</button>
+					</div>
+				</div>
+				<br>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+$(function(){
+	if ( $("#active_suggest_submit_paginator").prop('checked') == false ){
+		$("#nb_submit_per_page").toggle();
+	}
+	// For multi selection
+	$("#active_suggest_submit_paginator").change(function(){
+		$("#nb_submit_per_page").toggle();
+	});
+
+	// Function to activate the tab
+  function activateTab() {
+    var activeTab = $('[href=' + window.location.hash.replace('/', '') + ']');
+    activeTab && activeTab.tab('show');
+  }
+	// Trigger when the page loads
+  activateTab();
+});
+</script>
+<#include "/admin/util/editor/editor.html" />
+<@initEditor editorWidth=150 />

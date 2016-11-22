@@ -1,0 +1,80 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<div class="nav-tabs-custom">
+			<ul class="nav nav-tabs" role="tablist">
+				<li>
+					<a href="jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelCategoryComment}" >
+						#i18n{suggest.manageAdvancedParameters.title}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelCategoryComment}" >
+						#i18n{suggest.manageAdvancedParameters.labelCategory}
+					</a>
+				</li>
+				<li class="active">
+					<a href="jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelTypeComment}" >
+						#i18n{suggest.manageAdvancedParameters.labelType}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelDefaultMessageComment}">
+						#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelExportFormatComment}" >
+						#i18n{suggest.manageAdvancedParameters.labelExportFormat}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/suggest/Statistics.jsp"  title="#i18n{suggest.manageAdvancedParameters.labelStatisticsComment}" >
+						#i18n{suggest.manageAdvancedParameters.labelStatistics}
+					</a>
+				</li>
+				<li class="pull-right">
+					<form method="post" class="form-inline"  action="jsp/admin/plugins/suggest/CreateSuggestSubmitType.jsp">
+						<button type="submit" class="btn btn-primary btn-xs btn-flat">
+							<i class="fa fa-plus"></i><span class="hidden-xs">&nbsp;#i18n{suggest.manageSuggestSubmitType.buttonCreate}</span>
+						</button>
+					</form>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active">
+				<table class="table table-hover table-condensed">
+				<thead>
+					<tr>
+						<th></th>
+		        <th>#i18n{suggest.manageSuggestSubmitType.rowName}</th>
+		        <th>#i18n{suggest.manageSuggestSubmitType.rowParameterizable}</th>
+		        <th>#i18n{suggest.manageSuggestSubmitType.rowActions}</th>
+		      </tr>
+				</thead>
+				<tbody>
+					<#list type_list as type>
+			    <tr>
+						<td <#if type.color?exists>style="background-color:${type.color}"</#if> title="#i18n{suggest.manageSuggestSubmitType.rowColor}"></td>
+						<td>
+						<#if type.idImageResource?has_content >
+							<img class="img-responsive img-thumbnail thumbnail-sm pull-left" src="image?resource_type=image_suggest&id=${type.idImageResource}" title="img">
+						</#if>
+						 <strong>${type.name}</strong>
+				 		</td>
+			      <td>${type.parameterizableInFO?string("#i18n{suggest.manageSuggestSubmitType.yes}","#i18n{suggest.manageSuggestSubmitType.no}")}</td>
+						<td>
+							<a href="jsp/admin/plugins/suggest/ModifySuggestSubmitType.jsp?id_type=${type.idType}" class="btn btn-xs btn-flat btn-primary">
+								<i class="fa fa-pencil"></i>
+							</a>
+				      <a class="btn btn-xs btn-flat btn-danger" href="jsp/admin/plugins/suggest/ConfirmRemoveSuggestSubmitType.jsp?id_type=${type.idType}" title="#i18n{suggest.manageSuggestSubmitType.altDelete}">
+								<i class="fa fa-trash"></i>
+				      </a>
+				    </td>
+					</tr>
+			    </#list>
+				</tbody>
+		    </table>
+
+		</div>
+	</div>
+</div>

@@ -1,0 +1,36 @@
+<label for="id_suggest">#i18n{suggest.resource_rss.label_suggest} * </label>
+<@comboWithParams name="id_suggest" default_value="${suggest_list_default_item}" additionalParameters="onchange=\"javascript:select_submit();\" class=\"input-large\"" items=suggest_list />
+<label class="radio inline" for="rss_choice">#i18n{suggest.resource_rss.suggest_choice} 
+<#if suggest_is_suggest_submit_rss>
+	<input type="radio" name="rss_choice" id="choice_suggest" value="suggest">
+<#else>
+	<input checked="checked" type="radio" name="rss_choice" id="choice_suggest" value="suggest">
+</#if>
+</label>
+<label class="radio inline" for="suggest_rss_choice">#i18n{suggest.resource_rss.suggest_submit_choice} 
+	<input <#if suggest_is_suggest_submit_rss>checked="checked"</#if> type="radio" name="rss_choice" id="choice_submit" value="suggest_submit" onclick="javascript:select_submit();">
+</label>
+
+<#assign keys = suggestsubmit_list?keys/> 
+	<#list keys as submit>
+	<p id="suggest_submit${submit}" class="suggestSubmit">
+		<#if suggestsubmit_list[submit]?has_content>
+			<label for="id_suggest_submit${submit}">#i18n{suggest.resource_rss.submit_comment_choice} :</label>
+			<@combo name="id_suggest_submit${submit}" default_value=suggest_list_submit_default_item items=suggestsubmit_list[submit] />
+		<#else>
+			<label>&nbsp;</label>#i18n{suggest.resource_rss.empty_suggest}
+			<input type="hidden" value="empty_suggest" name="id_suggest_submit${submit}">
+		</#if>
+	</p>
+</#list>
+
+<script>
+$("p.suggestSubmit").toggle();
+
+$("#choice_suggest").click( function(){
+	$("p.suggestSubmit").toggle();
+});
+$("#choice_submit").click( function(){
+	$("p.suggestSubmit").toggle();
+});
+</script>

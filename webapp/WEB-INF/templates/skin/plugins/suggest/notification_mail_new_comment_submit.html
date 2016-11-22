@@ -1,0 +1,7 @@
+#i18n{suggest.notificationMailNewCommentSubmit.contentTitle} '${comment_submit.suggestSubmit.suggestSubmitTitle}' #i18n{suggest.notificationMailNewCommentSubmit.contentTitleNewComment}
+<br>
+${comment_submit.value}
+
+<a href="${base_url}/jsp/admin/plugins/suggest/ManageCommentSubmit.jsp?id_suggest_submit=${comment_submit.suggestSubmit.idSuggestSubmit}<#if comment_submit.idParent !=-1>&id_parent=${comment_submit.idParent}</#if>#comment${comment_submit.idCommentSubmit}">
+	#i18n{suggest.notificationMailNewCommentSubmit.contentAccesCommentSubmitList}
+</a>
