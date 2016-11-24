@@ -3,7 +3,7 @@
     <!-- Plugin Informations -->
     <name>suggest</name>
     <class>fr.paris.lutece.plugins.suggest.service.SuggestPlugin</class>
-    <version>2.3.2</version>
+    <version>3.0.0</version>
     <description>suggest.plugin.description</description>
     <documentation/>
     <installation/>
