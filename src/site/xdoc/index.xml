@@ -1,13 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
-	<properties>
-		<title>Plugin suggest</title>
-	</properties>
-	<body>
-		<section name="Plugin suggest">
-			<subsection name="Introduction">
-				Manage messages as suggest.com website.
-			</subsection>
-		</section>
-	</body>
+    <properties>
+        <title>Plugin suggest</title>
+    </properties>
+    <body>
+        <section name="Plugin suggest">
+            <subsection name="Introduction">
+                <p>
+                    The Suggest plugin allows users to submit ideas, proposals or questions for submitting to votes
+                    and comments from visitors. It allows for public consultations and discussion forums.
+                </p>
+            </subsection>
+            <subsection name = "Main Features">
+                <ul>
+                    <li>
+                        Dynamically creates a content type that can be submitted by users.
+                        A content type is created by selecting the different fields that should be
+                        provided by the user when submitting a proposal.
+                    </li>
+                    <li>
+                        Management of the content deposited by the users (publication, publication, deletion of certain proposals and comments).
+                    </li>
+                    <li>
+                        Ability to filter proposals by date of publication, category or by means of a search field.
+                    </li>
+                    <li>
+                        Possibility to order proposals by popularity or chronological order.
+                    </li>
+                </ul>
+            </subsection>
+            <subsection name = "Authentication Management">
+                <ul>
+                    <li>
+                        Ability to require the user to be authenticated in order to vote, comment or submit a proposal. 
+                    </li>
+                    <li> Ability to prevent a user from voting multiple times for the same proposal. </li>
+                </ul>
+            </subsection>
+            <subsection name = "Moderation of content submitted by users">
+                <ul>
+                    <li> Ability to require proposals and comments to be published only after verification by the moderator (s) of the sugg. </li>
+                    <li> Send email notification when submitting a proposal, comment or report of a proposal considered inadequate </li>
+                </ul>
+            </subsection>
+            <subsection name = "Other Features">
+                <ul>
+                    <li> Enabling / disabling a suggest with an unavailable message. </li>
+                    <li> Consultation of proposals and comments with possibility of export. </li>
+                    <li> Control of user input by regular expressions. </li>
+                    <li> Ability to add a Captcha in the proposal entry form.
+                        (I.e available by the addition of a Captcha) </li>
+                    <li> Managing regular expressions, managing export xsl, managing categories ... </li>
+                </ul>
+            </subsection>
+        </section>
+    </body>
 </document>
