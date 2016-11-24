@@ -1,4 +1,6 @@
 
+![](http://dev.lutece.paris.fr/plugins/plugin-suggest/images/suggest_banner.jpg)
+
 #Plugin suggest
 
 ##Introduction

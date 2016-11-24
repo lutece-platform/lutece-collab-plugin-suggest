@@ -4,6 +4,10 @@
         <title>Plugin suggest</title>
     </properties>
     <body>
+        <p>
+            <img src="images/suggest_banner.jpg" />
+        </p>
+
         <section name="Plugin suggest">
             <subsection name="Introduction">
                 <p>
