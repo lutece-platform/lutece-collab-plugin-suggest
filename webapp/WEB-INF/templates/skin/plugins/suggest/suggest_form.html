@@ -1,53 +1,70 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	<form class="form-horizontal" action="jsp/site/Portal.jsp" method="post" name="formsuggest" id="formsuggest"  enctype="multipart/form-data" >
-		<input name="page" value="suggest" type="hidden"/>
-		<input name="id_suggest" value="${suggest.idSuggest}" type="hidden"/>
-		<input name="action" value="do_create_suggest_submit" type="hidden" />
-		<fieldset>
-		<legend>#i18n{suggest.suggestForm.title} <#if disable_new_suggest_submit>(#i18n{suggest.suggestForm.titleDisableNewSuggestSubmit})</#if></legend>
+		<form class="form-horizontal" action="jsp/site/Portal.jsp" method="post" name="formsuggest" id="formsuggest"  enctype="multipart/form-data" >
+		<input name="page" value="suggest" type="hidden">
+		<input name="id_suggest" value="${suggest.idSuggest}" type="hidden">
+		<input name="action" value="do_create_suggest_submit" type="hidden">
+		<h2>#i18n{suggest.suggestForm.title} <#if disable_new_suggest_submit>(#i18n{suggest.suggestForm.titleDisableNewSuggestSubmit})</#if></h2>
 		${str_entry}
 		<#if category_list?has_content>
 			<div class="form-group">
-				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_category">#i18n{suggest.suggestForm.labelCategoryTitle} *</label>
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_category">
+					#i18n{suggest.suggestForm.labelCategoryTitle} *
+				</label>
 				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-					<@combo name="id_category" items=category_list default_value="${id_default_category}" />
+					<@comboWithParams name="id_category" default_value="${id_default_category}" additionalParameters=' class="form-control"' items=category_list />
 				</div>
 			</div>
-		</#if>	
+		</#if>
 		<#if types_list?has_content>
 			<div class="form-group">
-				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_type">#i18n{suggest.suggestForm.labelTypeTitle} *</label>
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_type">
+					#i18n{suggest.suggestForm.labelTypeTitle} *
+				</label>
 				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-					<@combo name="id_type" items=types_list default_value="-1" />
+					<@comboWithParams name="id_type" default_value="-1"  additionalParameters=' class="form-control"' items=types_list />
 				</div>
 			</div>
 		</#if>
 		<#if suggest.enableTermsOfUse && suggest.termsOfUse?has_content>
 			<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="terms_of_use"></label>            
+				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="terms_of_use"></label>
 					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<label class="checkbox  inline" for="terms_of_use">
-							<input name="terms_of_use" value="terms_of_use" type="checkbox">
+						<div class="checkbox">
+							<label for="terms_of_use">
+								<input name="terms_of_use" id="terms_of_use" value="terms_of_use" type="checkbox">
 								#i18n{suggest.suggestForm.labelSelectTermsOfUse} *
-								<a href="#" id="btn-tou" class="btn btn-link" title="#i18n{portal.util.labelMore}">
-									#i18n{portal.util.labelMore}
-								</a>
-						</label>
-						<div id="text-tou" class="alert alert-info">${suggest.termsOfUse}</div>
+							</label>
+							&nbsp;
+							<a href="#" id="btn-tou"  title="#i18n{portal.util.labelMore}">
+								#i18n{portal.util.labelMore}
+							</a>
+						</div>
 					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-xs-12 col-sm-offset-3 col-sm-9">
+
+						<div id="text-tou" class="panel panel-default">
+  						<div class="panel-body">
+								${suggest.termsOfUse}
+							</div>
+						</div>
+					</div>
+				</div>
+			</#if>
+			<#if jcaptcha?exists>
+				<div class="form-group">
+					${jcaptcha}
+				</div>
+			</#if>
+			<div class="form-group">
+				<div class="col-xs-12 col-sm-offset-3 col-sm-9">
+					<button class="btn btn-primary btn-lg" type="submit" name="submit">
+						${suggest.libelleValidateButton}
+					</button>
+				</div>
 			</div>
-		</#if>
-		
-		<#if jcaptcha?exists>
-			<fieldset> 
-			${jcaptcha}
-			</fieldset>
-		</#if>
-		<div class="form-group">
-			<button class="btn btn-primary btn-sm" type="submit" name="submit"><i class="glyphicon glyphicon-ok"></i>&nbsp;${suggest.libelleValidateButton}</button>
-		</div>
-		</fieldset>
-	</form>
+		</form>
 	</div>
 </div>

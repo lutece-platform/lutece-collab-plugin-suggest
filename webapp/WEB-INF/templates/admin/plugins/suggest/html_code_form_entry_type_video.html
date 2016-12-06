@@ -1,15 +1,15 @@
 <div class="form-group">
-<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> : </label>
-    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-		<input name="${entry.idEntry}" id="${entry.idEntry}" type="file"  size="32" value="" />
+  <label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> : </label>
+  <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+		<input name="${entry.idEntry}" id="${entry.idEntry}" type="file"  class="form-control" value="">
 	</div>
 </div>
 <div class="form-group">
 	<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="${entry.idEntry}">#i18n{suggest.createEntry.labelCredits}<#if entry.mandatory> *</#if> : </label>
 	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-		<input name="credits${entry.idEntry}" id="credist${entry.idEntry}" type="text"  size="50" value="" />
+		<input name="credits${entry.idEntry}" id="credist${entry.idEntry}" type="text" class="form-control"  value="" >
 		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
 		<span class="help-text">${entry.helpMessage}</span>
-		</#if>	
+		</#if>
 	</div>
 </div>

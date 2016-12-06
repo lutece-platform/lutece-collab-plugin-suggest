@@ -1,15 +1,9 @@
-<div class="form-element">
-	<span class="form-label">
-		<label for="${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> : </label>
-	</span>
-	<span class="form-field-column"> 
-            <input name="${entry.idEntry}" id="${entry.idEntry}" type="file"  size="32" value="" />
-	</span> 
-	<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-		<span class="form-help">
-			<a class="info" href="javascript:void;"><img  src="images/admin/skin/plugins/suggest/help.gif" />
-				<span><pre> ${entry.helpMessage}</pre></span>
-			</a>
-		</span>
-	</#if>	
+<div class="form-group">
+	<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> : </label>
+	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+		<input name="${entry.idEntry}" id="${entry.idEntry}" type="file" class="form-control" value="">
+		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
+			<span class="help-text">${entry.helpMessage}</span>
+		</#if>
+	</div>
 </div>

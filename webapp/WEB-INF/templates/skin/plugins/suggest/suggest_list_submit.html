@@ -1,120 +1,132 @@
-<#if list_suggest_submit?has_content>
-    <#if paginator?exists>
-        #i18n{suggest.suggestListSubmit.paginator.labelResultsCount} : <strong>${paginator.itemsCount}</strong> <br />
-        #i18n{suggest.suggestListSubmit.paginator.labelResultsRange} : <strong>${paginator.rangeMin} - ${paginator.rangeMax}</strong> <br />
-        <@pagination paginator=paginator />
-    </#if>
-</#if>
-
 <#list list_suggest_submit as suggest_submit_display>
-<div class="row" id="suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
-    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-        <h3>
-        <a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;action=view_suggest_submit#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
+<div class="row suggest-item" id="suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
+  <div class="col-xs-12 col-sm-12">
+    <h3>
+      <#if suggest_submit_display.suggest_submit.category?exists>
+      <p>
+        <small class="text-info" style="background-color:${suggest_submit_display.suggest_submit.category.color!''};">
+          ${suggest_submit_display.suggest_submit.category.title}
+        </small>
+      </p>
+      </#if>
+      <a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;action=view_suggest_submit#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
         <#if suggest_submit_display.suggest_submit.suggestSubmitTitle?length &gt;45>
-            ${suggest_submit_display.suggest_submit.suggestSubmitTitle?substring(0,42)}...
+          ${suggest_submit_display.suggest_submit.suggestSubmitTitle?substring(0,42)}...
         <#else>
-            ${suggest_submit_display.suggest_submit.suggestSubmitTitle}
+          ${suggest_submit_display.suggest_submit.suggestSubmitTitle}
         </#if>
+      </a>
+      <#if authorized_vote && !suggest_submit_display.suggest_submit.disableVote && suggest_submit_display.suggest_submit.numberScore?exists>
+      <span class="label suggest-score label-info pull-right">
+        #i18n{suggest.manageSuggestSubmit.rowNumberScore}&nbsp;${suggest_submit_display.suggest_submit.numberScore}
+      </span>
+      &nbsp;
+      <div class="btn-group pull-right">
+        <#if suggest_submit_display.suggest_submit_vote_type?exists>
+          ${suggest_submit_display.suggest_submit_vote_type}
+        </#if>
+      </div>
+    </#if>
+    </h3>
+    <h4>
+    <#if suggest_submit_display.lutece_user?exists>
+      <a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&lutece_user_name_filter=${suggest_submit_display.lutece_user}" title="#i18n{suggest.suggestListSubmit.labelFilterByUserName}">
+        <#if suggest_submit_display.avatar?has_content>
+        <img class="avatar avatar-suggest img-circle" src="${suggest_submit_display.avatar}" alt="avatar provided by gravatar.com" /><#else><i class="glyphicon glyphicon-user"></i></#if></a>
+      <#if suggest_submit_display.lutece_user?exists>
+        ${suggest_submit_display.lutece_user!""}
+      <#else>
+        ${suggest_submit_display.lutece_user.getUserInfo("user.name.given")} ${suggest_submit_display.lutece_user.getUserInfo("user.name.family")}
+      </#if> |
+    </#if>
+    <i class="glyphicon glyphicon-calendar"></i> ${suggest_submit_display.suggest_submit.dateResponse} |
+      <#if authorized_comment && !suggest_submit_display.suggest_submit.disableComment>
+        <i class="fa fa-comments"></i>
+        <#if suggest_submit_display.suggest_submit.numberCommentEnable &gt; 0 >
+          <a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;action=view_suggest_submit#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
+            ${suggest_submit_display.suggest_submit.numberCommentEnable} #i18n{suggest.suggestListSubmit.labelComments}
+          </a>
+        <#else>
+          #i18n{suggest.suggestListSubmit.labelNoComments}
+        </#if>
+      </#if>
+      <#if enable_suggest_reports>
+         |<a class="btn btn-link" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;action=create_report#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
+          <i class="fa fa-flag"></i> #i18n{suggest.suggestListSubmit.labelReport}
         </a>
-        <#if authorized_vote && !suggest_submit_display.suggest_submit.disableVote && suggest_submit_display.suggest_submit.numberScore?exists>
-        <div class="btn-group pull-right">
-            <#if suggest_submit_display.suggest_submit_vote_type?exists>
-                ${suggest_submit_display.suggest_submit_vote_type}
-            </#if>
-            <button class="btn btn-primary disabled">
-                #i18n{suggest.manageSuggestSubmit.rowNumberScore}&nbsp;${suggest_submit_display.suggest_submit.numberScore}
-            </button>
-        </div>
+      </#if>
+      <#if suggest_submit_display.suggest_submit.suggestSubmitType?exists>
+        <span class="label label-info" style="background-color:${suggest_submit_display.suggest_submit.suggestSubmitType.color!};">
+          <a href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_filter_type=${suggest_submit_display.suggest_submit.suggestSubmitType.idType}&action=view_suggest_submit_list" style="color:#fff;">
+          <#if suggest_submit_display.suggest_submit.suggestSubmitType.idImageResource?has_content>
+            <img class="img-circle img-thumbnail thumblist-small" src="image?resource_type=image_suggest&id=${suggest_submit_display.suggest_submit.suggestSubmitType.idImageResource}" title="${suggest_submit_display.suggest_submit.suggestSubmitType.name} " alt="${suggest_submit_display.suggest_submit.suggestSubmitType.name} ">
+          </#if>
+          ${suggest_submit_display.suggest_submit.suggestSubmitType.name}
+          </a>
+        </span>
+      </#if>
+    </h4>
+    <div class="suggest-list-content">
+      <a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;action=view_suggest_submit#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
+      <#if suggest_submit_display.suggest_submit.suggestSubmitValueShowInTheList?exists>
+        <#if suggest_submit_display.suggest_submit.suggestSubmitValueShowInTheList?length &gt; 500>
+          <!-- span class="pull-right badge badge-inverse">
+            <i class="glyphicon glyphicon-chevron-up"></i>
+          </span -->
+          ${suggest_submit_display.suggest_submit.suggestSubmitValueShowInTheList}
+        <#else>
+          ${suggest_submit_display.suggest_submit.suggestSubmitValueShowInTheList}
         </#if>
-        </h3>
-        <p>
-            <#if enable_suggest_reports>   
-                <a class="btn btn-link" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;action=create_report#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
-                    <i class=""></i>&nbsp;#i18n{suggest.suggestListSubmit.labelReport}
-                </a> |  
-            </#if>
-            <#if suggest_submit_display.lutece_user?exists>
-                 #i18n{suggest.suggestListSubmit.postByUser} : <a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&lutece_user_name_filter=${suggest_submit_display.lutece_user}" title="#i18n{suggest.suggestListSubmit.labelFilterByUserName}"><#if suggest_submit_display.avatar?has_content><img class="avatar" src="${suggest_submit_display.avatar}" alt="avatar provided by gravatar.com" /><#else><i class="glyphicon glyphicon-user"></i></#if></a>
-                
-                <#if suggest_submit_display.lutece_user?exists>
-                    ${suggest_submit_display.lutece_user!""}
-                <#else>
-                    ${suggest_submit_display.lutece_user.getUserInfo("user.name.given")} ${suggest_submit_display.lutece_user.getUserInfo("user.name.family")}
-                </#if>
-                | 
-            </#if>
-            <i class="glyphicon glyphicon-calendar"></i> ${suggest_submit_display.suggest_submit.dateResponse} | 
-            <#if authorized_comment && !suggest_submit_display.suggest_submit.disableComment>
-                <i class="glyphicon glyphicon-comment"></i>&nbsp;
-                    <a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;action=view_suggest_submit#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
-                    ${suggest_submit_display.suggest_submit.numberCommentEnable} #i18n{suggest.suggestListSubmit.labelComments}
-                </a> |
-            </#if>
-            <#if suggest_submit_display.suggest_submit.category?exists>
-                    <span class="label label-inverse" style="background-color:${suggest_submit_display.suggest_submit.category.color!''};">
-                        <a href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_filter_category=${suggest_submit_display.suggest_submit.category.idCategory}&action=view_suggest_submit_list" style="color:#fff;">
-                        ${suggest_submit_display.suggest_submit.category.title}
-                        </a>
-                    </span> 
-            </#if>
-            <#if suggest_submit_display.suggest_submit.suggestSubmitType?exists>
-            
-            <span class="label label-inverse" style="background-color:${suggest_submit_display.suggest_submit.suggestSubmitType.color!};">
-                <a href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_filter_type=${suggest_submit_display.suggest_submit.suggestSubmitType.idType}&action=view_suggest_submit_list" style="color:#fff;">
-                <#if suggest_submit_display.suggest_submit.suggestSubmitType.idImageResource?has_content>
-                    <img class="thumb-list"  src="image?resource_type=image_suggest&id=${suggest_submit_display.suggest_submit.suggestSubmitType.idImageResource}" title="${suggest_submit_display.suggest_submit.suggestSubmitType.name} " alt="${suggest_submit_display.suggest_submit.suggestSubmitType.name} ">
-                </#if>
-                ${suggest_submit_display.suggest_submit.suggestSubmitType.name}
-                </a>
-            </span> 
-            </#if>
-        </p>
-        <div class="suggest-list-content">             
-        
-            <#if suggest_submit_display.suggest_submit.suggestSubmitValueShowInTheList?exists>
-                <#if suggest_submit_display.suggest_submit.suggestSubmitValueShowInTheList?length &gt; 500>
-                    <!-- span class="pull-right badge badge-inverse">
-                        <i class="glyphicon glyphicon-chevron-up"></i>
-                    </span -->  
-                    ${suggest_submit_display.suggest_submit.suggestSubmitValueShowInTheList}
-                <#else>
-                    <div>${suggest_submit_display.suggest_submit.suggestSubmitValueShowInTheList}</div>  
-                </#if>
-            </#if>
-            
-        </div>
-    
-        <p>
-            <a class="btn btn-link pull-right" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;suggest_comment=1&amp;action=view_suggest_submit#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
-            #i18n{suggest.suggestListSubmit.labelReadMore} &gt;
-            </a>
-        </p>
-            <#if authorized_comment && !suggest_submit_display.suggest_submit.disableComment && display_comment_in_list>
-                <#assign nbComments = 1>
-                <div class="-suggest-comments">
-                    <ul>
-                    <#list suggest_submit_display.suggest_submit.comments as comment> 
-                        <#if nbComments <= number_comments>
-                                <li>
-                                    <#if comment.value?length <= cumber_char_comments>
-                                        ${comment.value[0..]}
-                                    <#else>
-                                        ${comment.value[0..cumber_char_comments-1]}...
-                                    </#if> 
-                                </li>
-                        </#if> 
-                        <#assign nbComments = nbComments + 1>
-                    </#list>
-                    </ul>
-                </div>
-            </#if> 
-        </div>
+      </#if>
+      </a>
     </div>
-<hr class="clearfix">
+    <p class="pull-right hidden">
+      <a class="btn btn-default" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;suggest_comment=1&amp;action=view_suggest_submit#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
+        #i18n{suggest.suggestListSubmit.labelReadMore} &gt;
+      </a>
+    </p>
+    <#if authorized_comment && !suggest_submit_display.suggest_submit.disableComment && display_comment_in_list && suggest_submit_display.suggest_submit.numberCommentEnable &gt; 0>
+      <#assign nbComments = 1>
+      <div class="suggest-list-comments">
+        <h5>
+          ${i18n( "suggest.suggestListSubmit.labelPreviewComments" , suggest_submit_display.suggest_submit.numberCommentEnable )}
+        </h5>
+        <ul class="list-unstyled">
+          <#list suggest_submit_display.suggest_submit.comments as comment>
+            <#if nbComments <= number_comments>
+              <li>
+                <i class="fa fa-comment-o"></i>
+                <#if comment.value?length <= cumber_char_comments>
+                  ${comment.value[0..]}
+                <#else>
+                  ${comment.value[0..cumber_char_comments-1]}...
+                </#if>
+                </li>
+              </#if>
+          </#list>
+        </ul>
+      </div>
+    </#if>
+  </div>
+</div>
 </#list>
+<#if list_suggest_submit?has_content>
+  <div class="row">
+    <#if paginator?exists>
+      <div class="col-xs-12 col-sm-6">
+        <!-- #i18n{suggest.suggestListSubmit.paginator.labelResultsCount} :  -->
+        #i18n{suggest.suggestListSubmit.paginator.labelResultsRange} :
+        <strong>${paginator.rangeMin} - ${paginator.rangeMax} / ${paginator.itemsCount}</strong>
+      </div>
+      <div class="col-xs-12 col-sm-6 text-right">
+        <@pagination paginator=paginator />
+      </div>
+    </#if>
+  </div>
+</#if>
+<br>
 <script>
-$(document).ready( function () {
+$( function () {
     var toGo = location.hash;
     if( toGo !=''){
         $('html, body').animate( {'scrollTop':$(toGo).offset().top - 120 },0 );
