@@ -1,7 +1,21 @@
 /* PLUGIN-SUGGEST */
+.avatar-suggest { width:32px;  border:0 ; padding: 0 }
+.nav-pills{ margin-top: 30px; margin-bottom: 30px}
 
-h4{border-bottom: 1px solid #EEEEEE;margin: 20px 0 30px;padding-bottom: 9px;}
-.suggest-meta { clear: both;  margin-bottom: 10px;}
+.suggest-subscribe { margin-right: 5px;	display: inline-block; padding-top: 6px; }
 .suggest-comments li{ border-top: 1px solid rgba(0, 0, 0, 0.1); position: relative;}
 .comment-content{ border-bottom: 1px solid rgba(0, 0, 0, 0.1);  padding: 10px 5px;}
-img.avatar { width: 30px; height: 30px; }
+.suggest-score{ margin:2px 5px}
+.suggest-item{ box-shadow: rgba(0, 0, 0, 0.5) 0px 5px 5px 2px; }
+.suggest-item:hover{ background: rgba(255,255,255, 0.1) }
+.suggest-meta, .suggest-item h4{ font-size: 100%; background: rgba(255,255,255, 0.2); margin-left: -15px; margin-right: -15px; padding: 10px 45px 5px 15px }
+.suggest-list-content{padding: 15px 0  }
+
+.suggest-list-comments{ padding:15px 30px; position:relative; }
+.suggest-list-comments h5{ padding:15px 0; border-top: 1px solid #fff; margin-top: 15px; height: 1px }
+.suggest-list-comments .avatar-suggest{ margin-left: -48px; margin-top: -8px; position: absolute; }
+.suggest-list-comments .well{ margin-left: 10%; margin-top: 15px; background: rgba(255,255,255,.1); position:relative; }
+
+.suggest-list-aside h4{ text-transform: uppercase; margin-top: 30px; border-top: 2px solid #fff; padding-top: 15px }
+.suggest-list-aside > section{ margin: 15px auto; position: relative }
+.suggest-socials div{ margin: 5px auto; position: relative; width: 80%}

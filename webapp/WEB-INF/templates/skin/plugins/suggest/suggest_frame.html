@@ -2,129 +2,162 @@
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	<#if unavailability_message?exists>
 		<div class="alert alert-error">
-			${unavailability_message}      
+			${unavailability_message}
 		</div>
 	<#else>
-		<fieldset>
-		<legend>
-			${label_suggest}
-			<#if lutece_user_connected?? && user_subscribed??>
-				<div class="pull-right">
-					<#if id_filter_category==-1> 
-						<#if user_subscribed>
-							<a class="btn btn-sm btn-danger" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;action=unsubscribe_suggest" title="#i18n{suggest.suggestListSubmit.unsubscribeSuggestHelp}">
-								<i class="glyphicon glyphicon-eye-close">&nbsp;</i>&nbsp;#i18n{suggest.suggestListSubmit.unsubscribeSuggest}
-							</a>
-						<#else>
-							<a class="btn btn-sm btn-primary" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;action=subscribe_suggest" title="#i18n{suggest.suggestListSubmit.subscribeSuggestHelp}">
-								<i class="glyphicon glyphicon-eye-open">&nbsp;</i>&nbsp;#i18n{suggest.suggestListSubmit.subscribeSuggest}
-							</a>
-						</#if>
-					<#else>
-						<#if list_categories_suggest??>
-							<#list list_categories_suggest as suggest_categories>
-								<#if id_filter_category==suggest_categories.idCategory>
-									<#if user_subscribed?? && user_subscribed>
-										<a class="btn btn-sm btn-danger" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;action=unsubscribe_suggest&amp;id_filter_category=${suggest_categories.idCategory}" title="#i18n{suggest.suggestListSubmit.unsubscribeCategoryHelp}">
-											<i class="glyphicon glyphicon-eye-close">&nbsp;</i>&nbsp;#i18n{suggest.suggestListSubmit.unsubscribeCategory} '${suggest_categories.title}'
-										</a>
-									<#else>
-										<a class="btn btn-sm btn-primary" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;action=subscribe_suggest&amp;id_filter_category=${suggest_categories.idCategory}" title="#i18n{suggest.suggestListSubmit.subscribeCategoryHelp}">
-											<i class="glyphicon glyphicon-eye-open">&nbsp;</i>&nbsp;#i18n{suggest.suggestListSubmit.subscribeCategory} '${suggest_categories.title}'
-										</a>
-									</#if>
-								</#if>
-							</#list>
-						</#if>
-					</#if>
-				</div>
-			</#if>
-		</legend>
-		<#if isExtendInstalled?? && isExtendInstalled && view?has_content && view != "view_suggest_submit" >
-				@Extender[${id_suggest},SUGGEST_SUGGEST_TYPE,opengraph,{header:false,footer:false}]@
-				@ExtenderParameter[${id_suggest},SUGGEST_SUGGEST_TYPE,opengraph]@
+		<#if view?has_content && view !="view_suggest_submit_list" >
+			<a class="btn btn-default btn-xs backlink" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=view_suggest_submit_list" target="_top">
+				<i class="glyphicon glyphicon-chevron-left"></i>  #i18n{suggest.suggestFrame.backToList}
+			</a>
 		</#if>
-		
-			<#if header_suggest?has_content>
-				<div class="well">${header_suggest}</div>			
-			</#if>
-			
-			<ul class="nav nav-tabs">
-				<li <#if id_filter_category==-1 >class="active"</#if>>
-					<a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_filter_category=-1&amp;action=view_suggest_submit_list&lutece_user_name_filter=&query=">#i18n{suggest.suggestFrame.labelAll}</a>
-				</li>	
-			<#if view?has_content && view == "view_suggest_submit_list" >
-				<#if show_category_block>
-					<#if list_categories_suggest?has_content>
-					
-						<#list list_categories_suggest as suggest_categories>
-							<li <#if id_filter_category==suggest_categories.idCategory>class="active"</#if>>
-								<a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_filter_category=${suggest_categories.idCategory}&amp;action=view_suggest_submit_list">${suggest_categories.title}</a>
-							</li>
-						</#list>
-						
-					</#if>
-				</#if>
-			</#if>
-			</ul>
-			<div class="well">
-				<#if view?has_content && view == "view_suggest_submit_list" >
-					<a class="btn btn-primary pull-left" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=create_suggest_submit" target="_top">
-						<i class="glyphicon glyphicon-pencil"></i>&nbsp;#i18n{suggest.suggestFrame.labelProposal}
+		<#if view?has_content && view == "view_suggest_submit_list">
+			<h2>
+				${label_suggest}
+				<form class="form-inline pull-right" name="search" id="search" method="post" action="jsp/site/Portal.jsp?page=suggest">
+					<input name="action" value="view_suggest_submit_list" type="hidden">
+					<input name="id_suggest" value="${id_suggest}" type="hidden">
+					<input type="hidden" name="page" value="search">
+					<div class="input-group">
+						<input type="text" class="form-control" name="query" id="query" placeholder="#i18n{suggest.suggestFrame.altSearch}" value="<#if query?exists>${query}</#if>">
+						<span class="input-group-btn">
+							<#if query?exists && query!="">
+							<button id="search-reset" class="btn btn-default" type="button">
+								<i class="fa fa-remove" aria-hidden="true"></i>
+							</button>
+							</#if>
+							<button class="btn btn-primary" type="submit">
+								<i class="fa fa-search" aria-hidden="true"></i>
+							</button>
+						</span>
+					</div>
+				</form>
+			</h2>
+		</#if>
+		<#if lutece_user_connected?? && user_subscribed??>
+			<span class="pull-right suggest-subscribe">
+			<#if id_filter_category==-1>
+				<#if user_subscribed>
+					<a class="btn btn-danger" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;action=unsubscribe_suggest" title="#i18n{suggest.suggestListSubmit.unsubscribeSuggestHelp}">
+						<i class="fa fa-bell-slash-o"></i> #i18n{suggest.suggestListSubmit.unsubscribeSuggest}
 					</a>
 				<#else>
-					<a id="backlink" class="btn btn-primary btn-sm pull-left" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=view_suggest_submit_list" target="_top">
-						<i class="glyphicon glyphicon-chevron-left"></i>&nbsp;#i18n{suggest.suggestFrame.backToList}
-					</a>	
+					<a class="btn btn-primary" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;action=subscribe_suggest" title="#i18n{suggest.suggestListSubmit.subscribeSuggestHelp}">
+						<i class="fa fa-bell-o"></i> #i18n{suggest.suggestListSubmit.subscribeSuggest}
+					</a>
 				</#if>
-				
-				<#if view?has_content && view == "view_suggest_submit_list">
-					<form class="form-search  pull-right" name="form_sort" id="form_sort" method="get" action="jsp/site/Portal.jsp">
-					<input name="page" value="suggest" type="hidden">
-					<input name="id_suggest" value="${id_suggest}" type="hidden">
-					<input name="action" value="view_suggest_submit_list" type="hidden">
-					<label>#i18n{suggest.suggestFrame.labelSorterTitle}:</label>
-					<@combo name="id_filter_period" default_value=id_filter_period items=list_filter_by_period  />
-					<@combo name="id_suggest_submit_sort" default_value=id_suggest_submit_sort items=list_suggest_submit_sort  />
-					<button class="btn btn-primary btn-sm" type="submit" ><i class="glyphicon glyphicon-filter"></i>&nbsp;#i18n{suggest.suggestFrame.buttonSorter}</button>
-					</form>
+			<#else>
+				<#if list_categories_suggest??>
+					<#list list_categories_suggest as suggest_categories>
+						<#if id_filter_category==suggest_categories.idCategory>
+							<#if user_subscribed?? && user_subscribed>
+								<a class="btn btn-danger" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;action=unsubscribe_suggest&amp;id_filter_category=${suggest_categories.idCategory}" title="#i18n{suggest.suggestListSubmit.unsubscribeCategoryHelp}">
+									<i class="fa-bell-slash-o"></i> #i18n{suggest.suggestListSubmit.unsubscribeCategory} '${suggest_categories.title}'
+								</a>
+							<#else>
+								<a class="btn btn-primary" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;action=subscribe_suggest&amp;id_filter_category=${suggest_categories.idCategory}" title="#i18n{suggest.suggestListSubmit.subscribeCategoryHelp}">
+									<i class="fa fa-bell-o"></i> #i18n{suggest.suggestListSubmit.subscribeCategory} '${suggest_categories.title}'
+								</a>
+							</#if>
+						</#if>
+					</#list>
 				</#if>
-			</div>	
-		</fieldset>
-		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">${content_suggest}</div>		              
-		<div class="span3">
+			</#if>
+		</span>
+		</#if>
+		<#if isExtendInstalled?? && isExtendInstalled && view?has_content && view != "view_suggest_submit" >
+			@Extender[${id_suggest},SUGGEST_SUGGEST_TYPE,opengraph,{header:false,footer:false}]@
+			@ExtenderParameter[${id_suggest},SUGGEST_SUGGEST_TYPE,opengraph]@
+		</#if>
+		<#if view?has_content && view =="view_suggest_submit_list" && header_suggest?has_content>
+			<div class="alert alert-info">${header_suggest}</div>
+		</#if>
+		<#if view?has_content && view =="view_suggest_submit_list">
+			<div class="col-xs-12 col-sm-8">
+		<#else>
+			<div class="col-xs-12 col-sm-12">
+		</#if>
+		<#if view?has_content && view =="view_suggest_submit_list">
+		<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<ul class="nav nav-pills">
+			<#if id_suggest_submit_sort?string==""><assign id_suggest_submit_sort="1"></#if>
+				<#list list_suggest_submit_sort as item >
+					<#if item.name?trim !="" >
+						<li<#if item.code=id_suggest_submit_sort?string> class="active"</#if>>
+							<a href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_submit_sort=${item.code}">
+								${item.name}
+							</a>
+					</li>
+				</#if>
+			</#list>
+			</ul>
+		</div>
+	</div>
+	</#if>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			${content_suggest}
+		</div>
+	</div>
+</div>
+<#if view?has_content && view =="view_suggest_submit_list">
+<div class="col-xs-12 col-sm-4 suggest-list-aside">
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			&nbsp;
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 col-sm-offset-1 col-sm-10">
+			<#if view?has_content && view == "view_suggest_submit_list" >
+				<a class="btn btn-block btn-lg btn-primary" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=create_suggest_submit" target="_top">
+					#i18n{suggest.suggestFrame.labelProposal}
+				</a>
+			<#else>
+				<a class="btn btn-default btn-xs backlink" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=view_suggest_submit_list" target="_top">
+					<i class="fa fa-chevron-left"></i>  #i18n{suggest.suggestFrame.backToList}
+				</a>
+			</#if>
+			</div>
+		</div>
+		<#if view?has_content && view == "view_suggest_submit_list" >
+		<div class="row">
+			<div class="col-xs-12 col-sm-12">
+				<h3>#i18n{suggest.suggestFrame.labelCategories}</h3>
+					<#if show_category_block>
+						<#if list_categories_suggest?has_content>
+							<#list list_categories_suggest as suggest_categories>
+								<#if id_filter_category==suggest_categories.idCategory>
+									<a class="btn btn-default btn-sm active" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_filter_category=${suggest_categories.idCategory}&amp;action=view_suggest_submit_list">${suggest_categories.title}</a>
+								<#else>
+									<a class="btn btn-default btn-sm" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_filter_category=${suggest_categories.idCategory}&amp;action=view_suggest_submit_list">${suggest_categories.title}</a>
+								</#if>
+							</#list>
+							<#if id_filter_category &gt; 0>
+								<a title="#i18n{suggest.suggestFrame.labelRemoveCategoryFilterTitle}" class="btn btn-danger btn-sm" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_filter_category=-1&amp;action=view_suggest_submit_list">
+									<i class="fa fa-times"></i>
+								</a>
+							</#if>
+						</#if>
+				</#if>
+			</div>
+		</div>
+	</#if>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
 			<#if type_selected??>
-			<div class="alert alert-danger">
-					 
+				<div class="alert alert-danger">
 					<a class="btn btn-danger btn-mini" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_filter_type=-1&amp;action=view_suggest_submit_list">
-						<i class="glyphicon glyphicon-remove-circle"></i>
+						<i class="fa fa-remove"></i>
 					</a>
 					<span class="label label-inverse" style="background-color:${type_selected.color!};">
-					${type_selected.name}
-				</span>
-			</div>	
+						${type_selected.name}
+					</span>
+				</div>
 			</#if>
-			<#if view?has_content && (view == "view_suggest_submit_list"||view == "view_suggest_submit" )>
-				<fieldset>
-				<legend>#i18n{suggest.suggestFrame.altSearch}</legend>
-					<form class="form-search" name="search" method="post" action="jsp/site/Portal.jsp?page=suggest">
-					<input name="action" value="view_suggest_submit_list" type="hidden">
-					<input name="id_suggest" value="${id_suggest}" type="hidden" />
-					<input type="hidden" name="page" value="search" />
-					<div class="input-append">
-						<input type="text" name="query" class="input-large" value="<#if query?exists>${query}</#if>">
-						<button class="btn btn-primary" type="submit" title="#i18n{suggest.suggestFrame.altSearch}">
-							<i class="glyphicon glyphicon-search"></i>
-						</button>
-					</div>
-					</form>
-				</fieldset>
-			</#if>
-			
 			<#if show_top_score_block>
 				<#if list_top_popularity_suggest?has_content>
-				<fieldset>
-					<legend>#i18n{suggest.suggestFrame.labelTopScore}</legend>
+				<h3>#i18n{suggest.suggestFrame.labelTopScore}</h3>
 					<ul>
 					<#list list_top_popularity_suggest as suggest_popularities>
 					<li>
@@ -144,13 +177,11 @@
 					</li>
 					</#list>
 					</ul>
-				</fieldset>
 				</#if>
 			</#if>
 			<#if authorized_comment && show_top_comment_block>
 			<#if list_top_comment_suggest?has_content>
-			<fieldset>
-			<legend>#i18n{suggest.suggestFrame.labelTopComment}</legend>
+			<h3>#i18n{suggest.suggestFrame.labelTopComment}</h3>
 			<ul>
 			<#list list_top_comment_suggest as suggest_top_comment>
 				<li>
@@ -164,99 +195,118 @@
 					</#if>
 					</a>
 				</li>
-			</#list>
-			</ul>
-			</fieldset>
-			</#if>
-			</#if>
-		</div>
+				</#list>
+				</ul>
+				</#if>
+				</#if>
+				</div>
+			</div>
 			<#if isExtendInstalled?? && isExtendInstalled >
 				@Extender[${id_suggest},SUGGEST_SUGGEST_TYPE,opengraph,{footer:true}]@
 			</#if>
 		</#if>
+			</div>
+	</#if>
+	<#if view?has_content && view =="view_suggest_submit_list" >
+		<#else>
+			<a class="btn btn-default btn-xs backlink" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=view_suggest_submit_list" target="_top">
+				<i class="fa fa-chevron-left"></i>  #i18n{suggest.suggestFrame.backToList}
+			</a>
+		</#if>
 	</div>
 </div>
-<script type="text/javascript" src="js/jquery/jquery.ui.totop.js"></script>
 <script>
-$(document).ready( function(){
-       /* $().UItoTop({ easingType: 'easeOutQuart' });*/
-		var activeSuggest = window.location.hash.replace('/', '');
-        var bhref = $("#backlink").attr("href");
-        $("#backlink").attr("href", bhref + activeSuggest );
+$.fn.clearForm = function() {
+  return this.each(function() {
+    var type = this.type, tag = this.tagName.toLowerCase();
+    if (tag == 'form')
+      return $(':input',this).clearForm();
+    if (type == 'text' || type == 'password' || tag == 'textarea')
+      this.value = '';
+    else if (type == 'checkbox' || type == 'radio')
+      this.checked = false;
+    else if (tag == 'select')
+      this.selectedIndex = -1;
+  });
+};
 
-		function charLimit( obj ){
-			var msg_carSucces="<span class=\"label label-success\"><i class=\"icon-white icon-ok-sign\"></i>&nbsp;<strong>";
-			var msg_carFail="<span class=\"label label-important\"><i class=\"icon-white icon-minus-sign\"></i>&nbsp;<b>&nbsp;Limite atteinte ! Vous devez saisir au plus <strong>";
-			var msg_carEnd=" caract&egrave;res</strong></span>";
+$( function(){
+	$("#search-reset").click( function(){
+		$("#search").clearForm();
+		$("#search").submit();
+	})
 
-			var limit=obj.attr("data-limit");
-			if( limit > 0){
+	function charLimit( obj ){
+		var msg_carSucces="<span class=\"label label-success\"><i class=\"fa fa-check\"></i>&nbsp;<strong>";
+		var msg_carFail="<span class=\"label label-important\"><i class=\"fa fa-warning\"></i>&nbsp;<b>&nbsp;Limite atteinte ! Vous devez saisir au plus <strong>";
+		var msg_carEnd=" caract&egrave;res</strong></span>";
+		var limit=obj.attr("data-limit");
+		if( limit > 0){
 			// Trigger KeyPress on the textarea
-				obj.keypress(function(e) {
-					if( e.charCode >= 48 ){
-						var nCar = obj.val().length
-						obj.next().html( msg_carSucces + eval(nCar + 1) + msg_carEnd);
-						if( nCar >= limit){
-							obj.next().html( msg_carFail + limit + msg_carEnd);
-							return false;
-						}
-					}
-				});
-				
-				// Trigger Blur on the textarea
-				obj.blur(function(e) {
-					var txt = obj.val();
-					if( txt.length > limit ){
-						obj.next().html( msg_carFail + limit + msg_carEnd);
-						txt = txt.substr(0,limit);
-						obj.val( txt );
-					}
-				});
-			
-				var nKey = false;
-				obj.keyup( function(e) {
-					if ( e.keyCode==46 || e.keyCode==8 ) {
-						var nCar = obj.val().length
-						if (  nCar < limit ){
-							obj.next().html(msg_carSucces + eval(nCar) + msg_carEnd);
-						} else {
-							obj.next().html( msg_carFail + limit + msg_carEnd);
-							txt = txt.substr(0,limit);
-							obj.val( txt );
-						}
-					}
-					
-					if( e.keyCode == 86 ){
-						var nCar = obj.val().length
-						obj.next().html(msg_carSucces + eval(nCar) + msg_carEnd);
-						if( nCar >= limit){
-							obj.next().html( msg_carFail + limit + msg_carEnd);
-							return false;
-						}
-					}
-				});
+			obj.keypress(function(e) {
+			if( e.charCode >= 48 ){
+				var nCar = obj.val().length
+				obj.next().html( msg_carSucces + eval(nCar + 1) + msg_carEnd);
+				if( nCar >= limit){
+					obj.next().html( msg_carFail + limit + msg_carEnd);
+					return false;
+				}
+			}
+		});
+
+	  // Trigger Blur on the textarea
+		obj.blur(function(e) {
+			var txt = obj.val();
+			if( txt.length > limit ){
+				obj.next().html( msg_carFail + limit + msg_carEnd);
+				txt = txt.substr(0,limit);
+				obj.val( txt );
+			}
+		});
+
+		var nKey = false;
+		obj.keyup( function(e) {
+		if ( e.keyCode==46 || e.keyCode==8 ) {
+				var nCar = obj.val().length
+				if (  nCar < limit ){
+					obj.next().html(msg_carSucces + eval(nCar) + msg_carEnd);
+				} else {
+					obj.next().html( msg_carFail + limit + msg_carEnd);
+					txt = txt.substr(0,limit);
+					obj.val( txt );
 			}
 		}
-		
-		$("textarea").each( function(){
-			// Trigger the textarea
-			charLimit( $(this) );
+
+		if( e.keyCode == 86 ){
+			var nCar = obj.val().length
+		  obj.next().html(msg_carSucces + eval(nCar) + msg_carEnd);
+			if( nCar >= limit){
+				obj.next().html( msg_carFail + limit + msg_carEnd);
+				return false;
+				}
+			}
 		});
-		
-        $("#text-tou").toggle();
-        $("#btn-tou").click( function(){
-			$("#text-tou").toggle();
-			return false;
-		});
-		
-		
-    });
+	}
+}
+
+$("textarea").each( function(){
+	// Trigger the textarea
+	charLimit( $(this) );
+});
+
+$("#text-tou").toggle();
+$("#btn-tou").click( function(){
+	$("#text-tou").toggle();
+	return false;
+});
+
+});
 	/*
 	$(window).load(function() {
 		$(".link-top").click(function () {
 		window.scrollTo(0,0);
 		return false;
 	});
- $(".response-element-title").toggle(); 
+ $(".response-element-title").toggle();
 });*/
-</script> 
+</script>

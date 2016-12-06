@@ -118,7 +118,7 @@ public class SuggestLuceneSearchEngine implements SuggestSearchEngine
             fields.add( SuggestSearchItem.FIELD_TYPE );
             flags.add( BooleanClause.Occur.MUST );
 
-            Query queryMulti = MultiFieldQueryParser.parse( IndexationService.LUCENE_INDEX_VERSION,
+            Query queryMulti = MultiFieldQueryParser.parse(
                     (String[]) queries.toArray( new String[queries.size( )] ),
                     (String[]) fields.toArray( new String[fields.size( )] ),
                     (BooleanClause.Occur[]) flags.toArray( new BooleanClause.Occur[flags.size( )] ),

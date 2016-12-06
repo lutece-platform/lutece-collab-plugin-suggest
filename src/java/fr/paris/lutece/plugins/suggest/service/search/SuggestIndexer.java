@@ -66,6 +66,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
@@ -220,7 +221,7 @@ public class SuggestIndexer implements SearchIndexer
         ft.setOmitNorms( false );
 
         FieldType ftNo = new FieldType( StringField.TYPE_STORED );
-        ftNo.setIndexed( false );
+        ftNo.setIndexOptions( IndexOptions.NONE );
         ftNo.setTokenized( false );
         ftNo.setOmitNorms( false );
 
