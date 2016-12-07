@@ -32,14 +32,16 @@
 			<span class="suggest-score">#i18n{suggest.manageSuggestSubmit.rowNumberScore}&nbsp;${suggest_submit.numberScore}</span>
 		</#if>
 	</section>
+	<#if isExtendInstalled?? && isExtendInstalled >
 	<section>
 		<h4 class="suggest-socials">#i18n{suggest.suggestDetail.labelShare}
-		<#if isExtendInstalled?? && isExtendInstalled >
+
 			@Extender[${suggest_submit.idSuggestSubmit},SUGGEST_SUGGEST_SUBMIT_TYPE,opengraph,{header:false,footer:false}]@
 			@ExtenderParameter[${suggest_submit.idSuggestSubmit},SUGGEST_SUGGEST_SUBMIT_TYPE,opengraph]@
-		</#if>
+
 		</h4>
 	</section>
+	</#if>
 	<section>
 	<#if user_subscribed?? && user_subscribed>
 		<a class="btn btn-block btn-danger" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit.idSuggestSubmit}&amp;action=unsubscribe_suggest#suggest${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.unsubscribe}">
