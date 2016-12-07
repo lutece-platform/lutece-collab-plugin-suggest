@@ -301,6 +301,8 @@ public class SuggestJspBean extends PluginAdminPageJspBean
     private static final String MARK_QUERY = "query";
     private static final String MARK_SUGGEST_ACTIONS = "suggest_actions";
     private static final String MARK_ID_PARENT = "id_parent";
+    private static final String MARK_PANEL = "panel";
+    
 
     // Jsp Definition
     private static final String JSP_DO_DISABLE_SUGGEST = "jsp/admin/plugins/suggest/DoDisableSuggest.jsp";
@@ -321,6 +323,8 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
     // parameters form
     private static final String PARAMETER_ID_SUGGEST = "id_suggest";
+    private static final String PARAMETER_PANEL = "panel";
+    
     private static final String PARAMETER_ID_SUGGEST_SUBMIT = "id_suggest_submit";
     private static final String PARAMETER_ID_COMMENT_SUBMIT = "id_comment_submit";
     private static final String PARAMETER_ID_PARENT = "id_parent";
@@ -2052,7 +2056,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         int nIdEntryFistInTheList = -1;
         int nIdEntryLastInTheList = -1;
         Suggest suggest = null;
-
+        String strPanel=request.getParameter( PARAMETER_PANEL );
+        
+        
         if ( ( strIdSuggest != null ) && !strIdSuggest.equals( EMPTY_STRING ) )
         {
             nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
@@ -2157,7 +2163,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         model.put( MARK_DEFAULT_VALUE_ROLE, Suggest.ROLE_NONE );
         model.put( MARK_THEME_REF_LIST, themesRefList );
         model.put( MARK_LIST_SUGGEST_SUBMIT_SORT, refListSuggestSort );
-
+        model.put( MARK_PANEL, strPanel );
         setPageTitleProperty( PROPERTY_MODIFY_SUGGEST_TITLE );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_SUGGEST, locale, model );
@@ -2197,7 +2203,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
            
             if ( request.getParameter( PARAMETER_APPLY ) != null )
             {
-                return getJspModifySuggest( request, suggest.getIdSuggest(  ) );
+                String strPanel=request.getParameter( PARAMETER_PANEL );
+                
+                return getJspModifySuggest( request, suggest.getIdSuggest(  ),strPanel );
             }
         }
 
@@ -3008,6 +3016,24 @@ public class SuggestJspBean extends PluginAdminPageJspBean
     {
         return AppPathService.getBaseUrl( request ) + JSP_MODIFY_SUGGEST + "?id_suggest=" + nIdSuggest;
     }
+    
+    /**
+     * return url of the jsp modify suggest
+     *
+     * @param request
+     *            The HTTP request
+     * @param nIdSuggest
+     *            the key of suggest to modify
+     * @param strPanel
+     *            the panel anchor
+                
+     * @return return url of the jsp modify suggest
+     */
+    private String getJspModifySuggest( HttpServletRequest request, int nIdSuggest,String strPanel )
+    {
+        return !StringUtils.isEmpty( strPanel )?getJspModifySuggest( request, nIdSuggest ) +"&panel="+strPanel:getJspModifySuggest( request, nIdSuggest );
+    }
+
 
     /**
      * return url of the jsp modify entry
