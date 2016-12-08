@@ -53,14 +53,12 @@
 		</#if>
 		</section>
 	</#if>
-	<#if lutece_user?exists>
-		<#if enable_suggest_reports>
+	<#if enable_suggest_reports>
 			<section>
 				<a class="btn btn-primary btn-block" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit.idSuggestSubmit}&amp;action=create_report#suggest${suggest_submit.idSuggestSubmit}">
 					<i class="fa fa-flag"></i> #i18n{suggest.suggestListSubmit.labelReport}
 				</a>
 			</section>
-		</#if>
 	</#if>
 	</div>
 	</div>
@@ -69,7 +67,7 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-12">
 		<hr>
-		<h2>Commentaire<#if suggest_submit.numberCommentEnable &gt; 1>s</#if> <small>(${suggest_submit.numberCommentEnable} )</small></h2>
+		<h2><#if suggest_submit.numberCommentEnable==0>Pas de commentaires<#elseif suggest_submit.numberCommentEnable==1>Commentaire<#else>Commentaires <small>(${suggest_submit.numberCommentEnable} )</small></#if></h2>
 		<form class="form" action="jsp/site/Portal.jsp?page=suggest" method="post" name="form-comment" id="form-comment">
 			<input name="action" value="do_create_comment" type="hidden">
 			<input name="id_suggest" value="${id_suggest}" type="hidden">
