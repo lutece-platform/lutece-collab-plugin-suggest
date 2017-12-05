@@ -1,13 +1,13 @@
-
+![](http://dev.lutece.paris.fr/jenkins/buildStatus/icon?job=collab-plugin-suggest-deploy)
 ![](http://dev.lutece.paris.fr/plugins/plugin-suggest/images/suggest_banner.jpg)
 
-#Plugin suggest
+# Plugin suggest
 
-##Introduction
+## Introduction
 
 The Suggest plugin allows users to submit ideas, proposals or questions for submitting to votes and comments from visitors. It allows for public consultations and discussion forums.
 
-##Main Features
+## Main Features
 
  
 * Dynamically creates a content type that can be submitted by users. A content type is created by selecting the different fields that should beprovided by the user when submitting a proposal.
@@ -15,19 +15,19 @@ The Suggest plugin allows users to submit ideas, proposals or questions for subm
 * Ability to filter proposals by date of publication, category or by means of a search field.
 * Possibility to order proposals by popularity or chronological order.
 
-##Authentication Management
+## Authentication Management
 
  
 * Ability to require the user to be authenticated in order to vote, comment or submit a proposal.
 * Ability to prevent a user from voting multiple times for the same proposal.
 
-##Moderation of content submitted by users
+## Moderation of content submitted by users
 
  
 * Ability to require proposals and comments to be published only after verification by the moderator (s) of the sugg.
 * Send email notification when submitting a proposal, comment or report of a proposal considered inadequate
 
-##Other Features
+## Other Features
 
  
 * Enabling / disabling a suggest with an unavailable message.
