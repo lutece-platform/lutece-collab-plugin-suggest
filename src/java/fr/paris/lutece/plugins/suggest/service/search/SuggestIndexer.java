@@ -95,6 +95,8 @@ public class SuggestIndexer implements SearchIndexer
     // request parameters
     private static final String PARAMETER_ID_SUGGEST = "id_suggest";
     private static final String PARAMETER_ID_SUGGEST_SUBMIT = "id_suggest_submit";
+    private static final String PARAMETER_ACTION = "action";
+    private static final String PARAMETER_SUGGEST_VIEW_DETAIL = "view_suggest_submit" ;
 
     /**
      * Returns the indexer service description
@@ -188,6 +190,7 @@ public class SuggestIndexer implements SearchIndexer
                     AppPropertiesService.getProperty( PROPERTY_XPAGE_APPLICATION_ID, "suggest" ) );
             url.addParameter( PARAMETER_ID_SUGGEST, suggestSubmit.getSuggest( ).getIdSuggest( ) );
             url.addParameter( PARAMETER_ID_SUGGEST_SUBMIT, suggestSubmit.getIdSuggestSubmit( ) );
+            url.addParameter( PARAMETER_ACTION, PARAMETER_SUGGEST_VIEW_DETAIL ); 
             url.addParameter( SuggestApp.PARAMETER_SUGGEST_DETAIL, 1 );
 
             //url.addParameter( SuggestApp.PARAMETER_CLEAR_FILTER,SuggestApp.PARAMETER_CLEAR_FILTER);
