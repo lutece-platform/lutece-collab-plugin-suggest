@@ -1,5 +1,7 @@
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<div class="row" id="suggestFrame">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="container">
+            
 	<#if unavailability_message?exists>
 		<div class="alert alert-error">
 			${unavailability_message}
@@ -62,7 +64,7 @@
 					</#list>
 				</#if>
 			</#if>
-		</span>
+                        </span>
 		</#if>
 		<#if isExtendInstalled?? && isExtendInstalled && view?has_content && view != "view_suggest_submit" >
 			@Extender[${id_suggest},SUGGEST_SUGGEST_TYPE,opengraph,{header:false,footer:false}]@
@@ -71,149 +73,153 @@
 		<#if view?has_content && view =="view_suggest_submit_list" && header_suggest?has_content>
 			<div class="alert alert-info">${header_suggest}</div>
 		</#if>
-		<#if view?has_content && view =="view_suggest_submit_list">
-			<div class="col-xs-12 col-sm-8">
-		<#else>
-			<div class="col-xs-12 col-sm-12">
-		</#if>
-		<#if view?has_content && view =="view_suggest_submit_list">
-		<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			<ul class="nav nav-pills">
-			<#if id_suggest_submit_sort?string==""><assign id_suggest_submit_sort="1"></#if>
-				<#list list_suggest_submit_sort as item >
-					<#if item.name?trim !="" >
-						<li<#if item.code=id_suggest_submit_sort?string> class="active"</#if>>
-							<a href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_submit_sort=${item.code}">
-								${item.name}
-							</a>
-					</li>
-				</#if>
-			</#list>
-			</ul>
-		</div>
-	</div>
+		
+                <div class="col-xs-12 col-sm-<#if view?has_content && view =="view_suggest_submit_list">8<#else>12</#if>">
+                    <#if view?has_content && view =="view_suggest_submit_list">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                                <ul class="nav nav-pills">
+                                <#if id_suggest_submit_sort?string==""><assign id_suggest_submit_sort="1"></#if>
+                                        <#list list_suggest_submit_sort as item >
+                                                <#if item.name?trim !="" >
+                                                        <li<#if item.code=id_suggest_submit_sort?string> class="active"</#if>>
+                                                                <a href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_submit_sort=${item.code}">
+                                                                        ${item.name}
+                                                                </a>
+                                                        </li>
+                                                </#if>
+                                        </#list>
+                                </ul>
+                        </div>
+                    </div>
+                    </#if>
+                    <div class="row">
+                            <div class="col-xs-12 col-sm-12">
+                                    ${content_suggest}
+                            </div>
+                    </div>
+                </div>
+                        
+                <#if view?has_content && view =="view_suggest_submit_list">
+                <div class="col-xs-12 col-sm-4 suggest-list-aside">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                                &nbsp;
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-offset-1 col-sm-10">
+                                <#if view?has_content && view == "view_suggest_submit_list" >
+                                        <a class="btn btn-block btn-lg btn-primary" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=create_suggest_submit" target="_top">
+                                                #i18n{suggest.suggestFrame.labelProposal}
+                                        </a>
+                                <#else>
+                                        <a class="btn btn-default btn-xs backlink" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=view_suggest_submit_list" target="_top">
+                                                <i class="fa fa-chevron-left"></i>  #i18n{suggest.suggestFrame.backToList}
+                                        </a>
+                                </#if>
+                        </div>
+                    </div>
+                    
+                    <#if view?has_content && view == "view_suggest_submit_list" >
+                    <div class="row">
+                            <div class="col-xs-12 col-sm-12">
+                                    <h3>#i18n{suggest.suggestFrame.labelCategories}</h3>
+                                    <#if show_category_block>
+                                            <#if list_categories_suggest?has_content>
+                                                    <#list list_categories_suggest as suggest_categories>
+                                                            <#if id_filter_category==suggest_categories.idCategory>
+                                                                    <a class="btn btn-default btn-sm active" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_filter_category=${suggest_categories.idCategory}&amp;action=view_suggest_submit_list">${suggest_categories.title}</a>
+                                                            <#else>
+                                                                    <a class="btn btn-default btn-sm" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_filter_category=${suggest_categories.idCategory}&amp;action=view_suggest_submit_list">${suggest_categories.title}</a>
+                                                            </#if>
+                                                    </#list>
+                                                    <#if id_filter_category &gt; 0>
+                                                            <a title="#i18n{suggest.suggestFrame.labelRemoveCategoryFilterTitle}" class="btn btn-danger btn-sm" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_filter_category=-1&amp;action=view_suggest_submit_list">
+                                                                    <i class="fa fa-times"></i>
+                                                            </a>
+                                                    </#if>
+                                            </#if>
+                                    </#if>
+                            </div>
+                    </div>
+                    </#if>
+                    
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                                <#if type_selected??>
+                                        <div class="alert alert-danger">
+                                                <a class="btn btn-danger btn-mini" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_filter_type=-1&amp;action=view_suggest_submit_list">
+                                                        <i class="fa fa-remove"></i>
+                                                </a>
+                                                <span class="label label-inverse" style="background-color:${type_selected.color!};">
+                                                        ${type_selected.name}
+                                                </span>
+                                        </div>
+                                </#if>
+                                <#if show_top_score_block>
+                                        <#if list_top_popularity_suggest?has_content>
+                                        <h3>#i18n{suggest.suggestFrame.labelTopScore}</h3>
+                                                <ul>
+                                                <#list list_top_popularity_suggest as suggest_popularities>
+                                                <li>
+                                                        <a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;&amp;id_suggest_submit=${suggest_popularities.idSuggestSubmit}&amp;action=view_suggest_submit">
+                                                        <#if suggest_popularities.suggestSubmitTitle?exists>
+                                                                <#if number_shown_characters?exists&&suggest_popularities.suggestSubmitTitle?length &gt;number_shown_characters>
+                                                                        <#if suggest_popularities.suggestSubmitTitle?contains("resource_type")>
+                                                                                #i18n{suggest.suggestFrame.suggestsubmit.image} &nbsp; ${suggest_popularities.idSuggestSubmit}
+                                                                        <#else>
+                                                                                ${suggest_popularities.suggestSubmitTitle?substring(0,number_shown_characters)}...
+                                                                        </#if>
+                                                                <#else>
+                                                                        ${suggest_popularities.suggestSubmitTitle}
+                                                                </#if>
+                                                        </#if>
+                                                        </a>
+                                                </li>
+                                                </#list>
+                                                </ul>
+                                        </#if>
+                                </#if>
+                                <#if authorized_comment && show_top_comment_block>
+                                <#if list_top_comment_suggest?has_content>
+                                <h3>#i18n{suggest.suggestFrame.labelTopComment}</h3>
+                                <ul>
+                                <#list list_top_comment_suggest as suggest_top_comment>
+                                        <li>
+                                                <a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;&amp;id_suggest_submit=${suggest_top_comment.idSuggestSubmit}&amp;action=view_suggest_submit">
+                                                <#if suggest_top_comment.suggestSubmitTitle?exists>
+                                                        <#if number_shown_characters?exists&&suggest_top_comment.suggestSubmitTitle?length &gt;number_shown_characters>
+                                                                ${suggest_top_comment.suggestSubmitTitle?substring(0,number_shown_characters)}...
+                                                        <#else>
+                                                                ${suggest_top_comment.suggestSubmitTitle}
+                                                        </#if>
+                                                </#if>
+                                                </a>
+                                        </li>
+                                </#list>
+                                </ul>
+                                </#if>
+                                </#if>
+                        </div>
+                    </div>
+                    <#if isExtendInstalled?? && isExtendInstalled >
+                            @Extender[${id_suggest},SUGGEST_SUGGEST_TYPE,opengraph,{footer:true}]@
+                    </#if>
+                </div>
+                </#if>
 	</#if>
-	<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			${content_suggest}
-		</div>
-	</div>
-</div>
-<#if view?has_content && view =="view_suggest_submit_list">
-<div class="col-xs-12 col-sm-4 suggest-list-aside">
-	<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			&nbsp;
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12 col-sm-offset-1 col-sm-10">
-			<#if view?has_content && view == "view_suggest_submit_list" >
-				<a class="btn btn-block btn-lg btn-primary" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=create_suggest_submit" target="_top">
-					#i18n{suggest.suggestFrame.labelProposal}
-				</a>
-			<#else>
-				<a class="btn btn-default btn-xs backlink" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=view_suggest_submit_list" target="_top">
-					<i class="fa fa-chevron-left"></i>  #i18n{suggest.suggestFrame.backToList}
-				</a>
-			</#if>
-			</div>
-		</div>
-		<#if view?has_content && view == "view_suggest_submit_list" >
-		<div class="row">
-			<div class="col-xs-12 col-sm-12">
-				<h3>#i18n{suggest.suggestFrame.labelCategories}</h3>
-					<#if show_category_block>
-						<#if list_categories_suggest?has_content>
-							<#list list_categories_suggest as suggest_categories>
-								<#if id_filter_category==suggest_categories.idCategory>
-									<a class="btn btn-default btn-sm active" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_filter_category=${suggest_categories.idCategory}&amp;action=view_suggest_submit_list">${suggest_categories.title}</a>
-								<#else>
-									<a class="btn btn-default btn-sm" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_filter_category=${suggest_categories.idCategory}&amp;action=view_suggest_submit_list">${suggest_categories.title}</a>
-								</#if>
-							</#list>
-							<#if id_filter_category &gt; 0>
-								<a title="#i18n{suggest.suggestFrame.labelRemoveCategoryFilterTitle}" class="btn btn-danger btn-sm" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_filter_category=-1&amp;action=view_suggest_submit_list">
-									<i class="fa fa-times"></i>
-								</a>
-							</#if>
-						</#if>
-				</#if>
-			</div>
-		</div>
-	</#if>
-	<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			<#if type_selected??>
-				<div class="alert alert-danger">
-					<a class="btn btn-danger btn-mini" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_filter_type=-1&amp;action=view_suggest_submit_list">
-						<i class="fa fa-remove"></i>
-					</a>
-					<span class="label label-inverse" style="background-color:${type_selected.color!};">
-						${type_selected.name}
-					</span>
-				</div>
-			</#if>
-			<#if show_top_score_block>
-				<#if list_top_popularity_suggest?has_content>
-				<h3>#i18n{suggest.suggestFrame.labelTopScore}</h3>
-					<ul>
-					<#list list_top_popularity_suggest as suggest_popularities>
-					<li>
-						<a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;&amp;id_suggest_submit=${suggest_popularities.idSuggestSubmit}&amp;action=view_suggest_submit">
-						<#if suggest_popularities.suggestSubmitTitle?exists>
-							<#if number_shown_characters?exists&&suggest_popularities.suggestSubmitTitle?length &gt;number_shown_characters>
-								<#if suggest_popularities.suggestSubmitTitle?contains("resource_type")>
-									#i18n{suggest.suggestFrame.suggestsubmit.image} &nbsp; ${suggest_popularities.idSuggestSubmit}
-								<#else>
-									${suggest_popularities.suggestSubmitTitle?substring(0,number_shown_characters)}...
-								</#if>
-							<#else>
-								${suggest_popularities.suggestSubmitTitle}
-							</#if>
-						</#if>
-						</a>
-					</li>
-					</#list>
-					</ul>
-				</#if>
-			</#if>
-			<#if authorized_comment && show_top_comment_block>
-			<#if list_top_comment_suggest?has_content>
-			<h3>#i18n{suggest.suggestFrame.labelTopComment}</h3>
-			<ul>
-			<#list list_top_comment_suggest as suggest_top_comment>
-				<li>
-					<a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;&amp;id_suggest_submit=${suggest_top_comment.idSuggestSubmit}&amp;action=view_suggest_submit">
-					<#if suggest_top_comment.suggestSubmitTitle?exists>
-						<#if number_shown_characters?exists&&suggest_top_comment.suggestSubmitTitle?length &gt;number_shown_characters>
-							${suggest_top_comment.suggestSubmitTitle?substring(0,number_shown_characters)}...
-						<#else>
-							${suggest_top_comment.suggestSubmitTitle}
-						</#if>
-					</#if>
-					</a>
-				</li>
-				</#list>
-				</ul>
-				</#if>
-				</#if>
-				</div>
-			</div>
-			<#if isExtendInstalled?? && isExtendInstalled >
-				@Extender[${id_suggest},SUGGEST_SUGGEST_TYPE,opengraph,{footer:true}]@
-			</#if>
-		</#if>
-			</div>
-	</#if>
-	<#if view?has_content && view =="view_suggest_submit_list" >
-		<#else>
-			<a class="btn btn-default btn-xs backlink" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=view_suggest_submit_list" target="_top">
-				<i class="fa fa-chevron-left"></i>  #i18n{suggest.suggestFrame.backToList}
-			</a>
-		</#if>
-	</div>
+        
+        <#if view?has_content && view =="view_suggest_submit_list" >
+        <#else>
+                <a class="btn btn-default btn-xs backlink" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=view_suggest_submit_list" target="_top">
+                        <i class="fa fa-chevron-left"></i>  #i18n{suggest.suggestFrame.backToList}
+                </a>
+        </#if>
+                    
+                    
+        </div>
+    </div>
 </div>
 <script>
 $.fn.clearForm = function() {
