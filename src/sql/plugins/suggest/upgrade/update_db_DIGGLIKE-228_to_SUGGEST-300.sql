@@ -112,6 +112,7 @@ INSERT INTO  suggest_suggest_submit_type  SELECT * FROM  digglike_digg_submit_ty
 INSERT INTO  suggest_suggest_submit_state  SELECT * FROM  digglike_digg_submit_state     ;
 INSERT INTO  suggest_suggest_submit  SELECT * FROM  digglike_digg_submit     ;
 
+-- ! it could be necessary to clean the database before migration
 -- delete  from digglike_comment_submit where id_digg_submit not in (select id_digg_submit from digglike_digg_submit);
 INSERT INTO  suggest_comment_submit  SELECT * FROM  digglike_comment_submit     ;
 
@@ -148,9 +149,14 @@ update suggest_action set action_url = replace(action_url, 'Digg', 'Suggest' )  
 
 update suggest_action set action_permission = replace(action_permission, 'DIGG', 'SUGGEST' )     where action_permission like '%DIGG%' ;
 
+-- ENTRY TYPES
+update suggest_entry_type set class_name = replace(class_name, 'digglike', 'suggest' ) where class_name like '%digglike%' ;
+
 -- INDEXER
 update core_indexer_action set indexer_name  = 'SuggestIndexer' where indexer_name='DigglikeIndexer';
 
+-- TEMPLATES
+update suggest_vote_type set template_file_name = replace ( template_file_name, "digg", "suggest" );
 
 -- DELETE RIGHTS
 delete from core_admin_role_resource where role_key = 'digg_manager';
