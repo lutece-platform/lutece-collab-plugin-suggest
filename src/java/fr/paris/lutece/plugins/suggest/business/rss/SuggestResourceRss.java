@@ -480,7 +480,6 @@ public class SuggestResourceRss extends ResourceRss
     /**
      * {@inheritDoc}
      */
-    @Override
     public String createHtmlRss(  )
     {
         HashMap<String, Object> model = new HashMap<String, Object>(  );

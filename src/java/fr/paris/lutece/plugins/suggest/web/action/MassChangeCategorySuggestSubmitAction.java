@@ -126,7 +126,7 @@ public class MassChangeCategorySuggestSubmitAction extends AbstractPluginAction<
         Plugin plugin = getPlugin(  );
         int nIdCategory = SuggestUtils.getIntegerParameter( strIdCategory );
         int nIdSuggestSubmit;
-        String strRedirect = StringUtils.EMPTY;
+        String strRedirect;
 
         if ( ( searchFields.getSelectedSuggestSubmit(  ) != null ) && !searchFields.getSelectedSuggestSubmit(  ).isEmpty(  ) )
         {
@@ -148,7 +148,7 @@ public class MassChangeCategorySuggestSubmitAction extends AbstractPluginAction<
                                 SuggestUtils.EMPTY_STRING + suggestSubmit.getSuggest(  ).getIdSuggest(  ),
                                 SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, adminUser ) )
                     {
-                        throw new AccessDeniedException(  );
+                        throw new AccessDeniedException( "Access denied" );
                     }
 
                     url.addParameter( PARAMETER_SELECTED_SUGGEST_SUBMIT, nIdSuggestSubmit );

@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.suggest.web;
 
 import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
-import fr.paris.lutece.portal.service.portal.PortalService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 
@@ -56,7 +55,6 @@ public class ResourceServletCache extends AbstractCacheableService
         if ( strCache.equalsIgnoreCase( "true" ) )
         {
             initCache( NAME );
-            PortalService.registerCacheableService( NAME, this );
         }
     }
 
@@ -64,6 +62,7 @@ public class ResourceServletCache extends AbstractCacheableService
      * Gets the cache name
      * @return The cache name
      */
+    @Override
     public String getName(  )
     {
         return NAME;

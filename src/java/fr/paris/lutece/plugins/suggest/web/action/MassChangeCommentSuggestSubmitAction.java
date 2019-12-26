@@ -137,7 +137,7 @@ public class MassChangeCommentSuggestSubmitAction extends AbstractPluginAction<S
                                 SuggestUtils.EMPTY_STRING + suggestSubmit.getSuggest(  ).getIdSuggest(  ),
                                 SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, adminUser ) )
                     {
-                        throw new AccessDeniedException(  );
+                        throw new AccessDeniedException( "Access denied" );
                     }
                 }
             }

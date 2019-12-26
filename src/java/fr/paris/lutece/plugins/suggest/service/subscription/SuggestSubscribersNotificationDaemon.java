@@ -348,7 +348,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
             Map<String, Object> model = new HashMap<String, Object>(  );
             model.put( MARK_COMMENTS, listComments );
-            model.put( MARK_BASE_URL, AppPathService.getProdUrl(  ) );
+            model.put( MARK_BASE_URL, AppPathService.getProdUrl( (String) null ) );
 
             HtmlTemplate templateBody = AppTemplateService.getTemplateFromStringFtl(suggest.getNotificationNewCommentBody(), locale, model);
             HtmlTemplate templateTitle = AppTemplateService.getTemplateFromStringFtl(suggest.getNotificationNewCommentTitle(), locale, model);
@@ -450,7 +450,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
             Map<String, Object> model = new HashMap<String, Object>(  );
             model.put( MARK_SUGGEST_SUBMIT, listSuggestSubmit );
-            model.put( MARK_BASE_URL, AppPathService.getProdUrl(  ) );
+            model.put( MARK_BASE_URL, AppPathService.getProdUrl( (String) null ) );
 
             HtmlTemplate templateBody = AppTemplateService.getTemplateFromStringFtl(suggest.getNotificationNewSuggestSubmitBody(), locale, model);
             HtmlTemplate templateTitle = AppTemplateService.getTemplateFromStringFtl(suggest.getNotificationNewSuggestSubmitTitle(), locale, model);

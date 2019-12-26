@@ -114,6 +114,7 @@ import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
+import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
@@ -190,10 +191,8 @@ public class SuggestJspBean extends PluginAdminPageJspBean
     private static final String FIELD_NUMBER_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST = "suggest.createSuggest.labelNumberCommentDisplayInSuggestSubmitList";
     private static final String FIELD_NUMBER_CHAR_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST = "suggest.createSuggest.labelNumberCharCommentDisplayInSuggestSubmitList";
 
-    private static final String FIELD_NOTIFICATION_NEW_COMMENT_SENDER_NAME ="suggest.createSuggest.labelNotificationNewCommentSenderName";
     private static final String FIELD_NOTIFICATION_NEW_COMMENT_TITLE="suggest.createSuggest.labelNotificationNewCommentTitle";
     private static final String FIELD_NOTIFICATION_NEW_COMMENT_BODY="suggest.createSuggest.labelNotificationNewCommentBody";
-    private static final String FIELD_NOTIFICATION_NEW_SUGGEST_DUBMIT_SENDER_NAME="suggest.createSuggest.labelNotificationNewSuggestSubmitSenderName";
     private static final String FIELD_NOTIFICATION_NEW_SUGGEST_DUBMIT_TITLE="suggest.createSuggest.labelNotificationNewSuggestSubmitTitle";
     private static final String FIELD_NOTIFICATION_NEW_SUGGEST_DUBMIT_BODY="suggest.createSuggest.labelNotificationNewSuggestSubmitBody";
   
@@ -416,10 +415,6 @@ public class SuggestJspBean extends PluginAdminPageJspBean
     private static final String EMPTY_STRING = "";
     private static final String JCAPTCHA_PLUGIN = "jcaptcha";
 
-    // private static final String EXPORT_TMPFILE_PREFIX = "exportSuggest";
-    // private static final String EXPORT_TMPFILE_SUFIX = ".part";
-    // private static final String CONSTANT_MIME_TYPE_CSV = "application/csv";
-
     // session fields
     private SuggestAdminSearchFields _searchFields = new SuggestAdminSearchFields(  );
     private int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_ITEM_PER_PAGE, 50 );
@@ -627,7 +622,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
                 !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggest.getIdSuggest(  ),
                     SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser(  ) ) )
         {
-            throw new AccessDeniedException(  );
+            throw new AccessDeniedException( "Access denied" );
         }
 
         // fill the selected records
@@ -671,9 +666,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         List<Integer> listIdSuggestSubmitResult;
 
         if ( ( getSearchFields(  ).getQuery(  ) != null ) &&
-                ( getSearchFields(  ).getQuery(  ).trim(  ) != SuggestUtils.EMPTY_STRING ) )
+                ( !getSearchFields(  ).getQuery(  ).trim(  ).equals( SuggestUtils.EMPTY_STRING )) )
         {
-            int nId = 0;
+            int nId;
 
             try
             {
@@ -788,7 +783,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
                 !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggest.getIdSuggest(  ),
                     SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser(  ) ) )
         {
-            throw new AccessDeniedException(  );
+            throw new AccessDeniedException( "Access denied" );
         }
 
         // build Filter
@@ -857,7 +852,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
                 !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggest.getIdSuggest(  ),
                     SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser(  ) ) )
         {
-            throw new AccessDeniedException(  );
+            throw new AccessDeniedException( "Access denied" );
         }
 
         Map<String, Object> model = SuggestUtils.getModelHtmlForm( suggest, getPlugin(  ), getLocale(  ),
@@ -1020,7 +1015,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         if ( !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggestSubmit.getSuggest(  ).getIdSuggest(  ),
                     SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser(  ) ) )
         {
-            throw new AccessDeniedException(  );
+            throw new AccessDeniedException( "Access denied" );
         }
 
         //add repoted Message
@@ -1244,7 +1239,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
                             SuggestUtils.EMPTY_STRING + suggestSubmit.getSuggest(  ).getIdSuggest(  ),
                             SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser(  ) ) )
                 {
-                    throw new AccessDeniedException(  );
+                    throw new AccessDeniedException( "Access denied" );
                 }
 
                 url.addParameter( PARAMETER_SELECTED_SUGGEST_SUBMIT, nIdSuggestSubmit );
@@ -1298,7 +1293,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
                             SuggestUtils.EMPTY_STRING + suggestSubmit.getSuggest(  ).getIdSuggest(  ),
                             SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser(  ) ) )
                 {
-                    throw new AccessDeniedException(  );
+                    throw new AccessDeniedException( "Access denied" );
                 }
             }
         }
@@ -1427,8 +1422,6 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         // Check XSS characters
         if ( StringUtil.containsXssCharacters( strCommentValueSuggest ) )
         {
-            strCommentValueSuggest = "";
-
             return AdminMessageService.getMessageUrl( request, MESSAGE_NEW_COMMENT_SUBMIT_INVALID, SiteMessage.TYPE_STOP );
         }
 
@@ -1448,7 +1441,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         {
             user = SecurityService.getInstance(  ).getRemoteUser( request );
         }
-        catch ( Exception e )
+        catch ( UserNotSignedException e )
         {
             AppLogService.error( "User not identified" );
         }

@@ -41,8 +41,8 @@ import java.util.Map;
 
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.business.style.Theme;
-import fr.paris.lutece.portal.business.style.ThemeHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.portal.ThemesService;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 
@@ -119,12 +119,7 @@ public final class SuggestDAO implements ISuggestDAO
 
         int nKey;
 
-        if ( !daoUtil.next(  ) )
-        {
-            // if the table is empty
-            nKey = 1;
-        }
-
+        daoUtil.next();
         nKey = daoUtil.getInt( 1 ) + 1;
         daoUtil.free(  );
 
@@ -138,6 +133,7 @@ public final class SuggestDAO implements ISuggestDAO
      * @param plugin the plugin
      * @return the new suggest create
      */
+    @Override
     public int insert( Suggest suggest, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
@@ -203,13 +199,14 @@ public final class SuggestDAO implements ISuggestDAO
      * @param plugin the plugin
      * @return the instance of the Suggest
      */
+    @Override
     public Suggest load( int nId, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, nId );
         daoUtil.executeQuery(  );
 
-        VoteType voteType = null;
+        VoteType voteType;
         Suggest suggest = null;
 
         if ( daoUtil.next(  ) )
@@ -277,6 +274,7 @@ public final class SuggestDAO implements ISuggestDAO
      * @param nIdSuggest The identifier of the suggest
      * @param plugin the plugin
      */
+    @Override
     public void delete( int nIdSuggest, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
@@ -291,6 +289,7 @@ public final class SuggestDAO implements ISuggestDAO
      * @param suggest instance of the suggest object to update
      * @param plugin the plugin
      */
+    @Override
     public void store( Suggest suggest, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
@@ -353,13 +352,14 @@ public final class SuggestDAO implements ISuggestDAO
      * @param plugin the plugin
      * @return  the list of suggest
      */
+    @Override
     public List<Suggest> selectSuggestList( SuggestFilter filter, Plugin plugin )
     {
         List<Suggest> suggestList = new ArrayList<Suggest>(  );
-        Suggest suggest = null;
-        VoteType voteType = null;
+        Suggest suggest;
+        VoteType voteType;
         List<String> listStrFilter = new ArrayList<String>(  );
-        int ncpt = 1;
+        int ncpt;
 
         if ( filter.containsWorkgroupCriteria(  ) )
         {
@@ -479,6 +479,7 @@ public final class SuggestDAO implements ISuggestDAO
      * @param nId The suggest identifier
      * @param plugin The plugin
      */
+    @Override
     public void storeSuggestOrderField( int nId, int nSortField, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_SUGGEST_ORDER, plugin );
@@ -493,6 +494,7 @@ public final class SuggestDAO implements ISuggestDAO
      * @param plugin the plugin
      * @return a map containing the themes by form id
      */
+    @Override
     public Map<Integer, Theme> getXPageThemesMap( Plugin plugin )
     {
         Map<Integer, Theme> xPageThemesMap = new HashMap<Integer, Theme>(  );
@@ -506,7 +508,7 @@ public final class SuggestDAO implements ISuggestDAO
             int nIndex = 1;
             int nIdForm = daoUtil.getInt( nIndex++ );
             String strCodeTheme = daoUtil.getString( nIndex++ );
-            Theme theme = ThemeHome.findByPrimaryKey( strCodeTheme );
+            Theme theme = ThemesService.getGlobalTheme( strCodeTheme );
             xPageThemesMap.put( nIdForm, theme );
         }
 
