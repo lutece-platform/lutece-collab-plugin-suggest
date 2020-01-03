@@ -73,21 +73,15 @@ public final class ResponseDAO implements IResponseDAO
      */
     private int newPrimaryKey( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery( );
-
-        int nKey;
-
-        if ( !daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
         {
-            // if the table is empty
-            nKey = 1;
+            daoUtil.executeQuery( );
+            daoUtil.next( );
+
+            int nKey = daoUtil.getInt( 1 ) + 1;
+
+            return nKey;
         }
-
-        nKey = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free( );
-
-        return nKey;
     }
 
     /**
@@ -98,26 +92,28 @@ public final class ResponseDAO implements IResponseDAO
      * @param plugin
      *            the plugin
      */
+    @Override
     public void insert( Response response, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        response.setIdResponse( newPrimaryKey( plugin ) );
-        daoUtil.setInt( 1, response.getIdResponse( ) );
-        daoUtil.setInt( 2, response.getSuggestSubmit( ).getIdSuggestSubmit( ) );
-        daoUtil.setString( 3, response.getValueResponse( ) );
-        daoUtil.setInt( 4, response.getEntry( ).getIdEntry( ) );
-
-        if ( response.getIdImageResource( ) != null )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
-            daoUtil.setInt( 5, response.getIdImageResource( ) );
-        }
-        else
-        {
-            daoUtil.setIntNull( 5 );
-        }
+            response.setIdResponse( newPrimaryKey( plugin ) );
+            daoUtil.setInt( 1, response.getIdResponse( ) );
+            daoUtil.setInt( 2, response.getSuggestSubmit( ).getIdSuggestSubmit( ) );
+            daoUtil.setString( 3, response.getValueResponse( ) );
+            daoUtil.setInt( 4, response.getEntry( ).getIdEntry( ) );
 
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+            if ( response.getIdImageResource( ) != null )
+            {
+                daoUtil.setInt( 5, response.getIdImageResource( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( 5 );
+            }
+
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -129,74 +125,75 @@ public final class ResponseDAO implements IResponseDAO
      *            the plugin
      * @return the instance of the response
      */
+    @Override
     public Response load( int nIdResponse, Plugin plugin )
     {
         boolean bException = false;
         Response response = null;
         IEntry entry = null;
-        EntryType entryType = null;
-        SuggestSubmit suggestSubmit = null;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
-        daoUtil.setInt( 1, nIdResponse );
-        daoUtil.executeQuery( );
-
-        if ( daoUtil.next( ) )
+        EntryType entryType;
+        SuggestSubmit suggestSubmit;
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
-            response = new Response( );
-            response.setIdResponse( daoUtil.getInt( 1 ) );
+            daoUtil.setInt( 1, nIdResponse );
+            daoUtil.executeQuery( );
 
-            suggestSubmit = new SuggestSubmit( );
-            suggestSubmit.setIdSuggestSubmit( daoUtil.getInt( 2 ) );
-            response.setSuggestSubmit( suggestSubmit );
+            if ( daoUtil.next( ) )
+            {
+                response = new Response( );
+                response.setIdResponse( daoUtil.getInt( 1 ) );
 
-            response.setValueResponse( daoUtil.getString( 3 ) );
-            entryType = new EntryType( );
-            entryType.setClassName( daoUtil.getString( 4 ) );
-            entryType.setIdType( daoUtil.getInt( 7 ) );
+                suggestSubmit = new SuggestSubmit( );
+                suggestSubmit.setIdSuggestSubmit( daoUtil.getInt( 2 ) );
+                response.setSuggestSubmit( suggestSubmit );
 
-            try
-            {
-                entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
-            }
-            catch( ClassNotFoundException e )
-            {
-                // class doesn't exist
-                AppLogService.error( e );
-                bException = true;
-            }
-            catch( InstantiationException e )
-            {
-                // Class is abstract or is an interface or haven't accessible builder
-                AppLogService.error( e );
-                bException = true;
-            }
-            catch( IllegalAccessException e )
-            {
-                // can't access to rhe class
-                AppLogService.error( e );
-                bException = true;
+                response.setValueResponse( daoUtil.getString( 3 ) );
+                entryType = new EntryType( );
+                entryType.setClassName( daoUtil.getString( 4 ) );
+                entryType.setIdType( daoUtil.getInt( 7 ) );
+
+                try
+                {
+                    entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
+                }
+                catch( ClassNotFoundException e )
+                {
+                    // class doesn't exist
+                    AppLogService.error( e );
+                    bException = true;
+                }
+                catch( InstantiationException e )
+                {
+                    // Class is abstract or is an interface or haven't accessible builder
+                    AppLogService.error( e );
+                    bException = true;
+                }
+                catch( IllegalAccessException e )
+                {
+                    // can't access to rhe class
+                    AppLogService.error( e );
+                    bException = true;
+                }
+
+                if ( bException )
+                {
+                    return null;
+                }
+
+                entry.setEntryType( entryType );
+                entry.setIdEntry( daoUtil.getInt( 5 ) );
+                entry.setTitle( daoUtil.getString( 6 ) );
+                entry.setShowInSuggestSubmitList( daoUtil.getBoolean( 8 ) );
+                response.setEntry( entry );
+
+                if ( daoUtil.getObject( 9 ) != null )
+                {
+                    response.setIdImageResource( daoUtil.getInt( 9 ) );
+                }
             }
 
-            if ( bException )
-            {
-                return null;
-            }
-
-            entry.setEntryType( entryType );
-            entry.setIdEntry( daoUtil.getInt( 5 ) );
-            entry.setTitle( daoUtil.getString( 6 ) );
-            entry.setShowInSuggestSubmitList( daoUtil.getBoolean( 8 ) );
-            response.setEntry( entry );
-
-            if ( daoUtil.getObject( 9 ) != null )
-            {
-                response.setIdImageResource( daoUtil.getInt( 9 ) );
-            }
+            return response;
         }
-
-        daoUtil.free( );
-
-        return response;
     }
 
     /**
@@ -207,12 +204,14 @@ public final class ResponseDAO implements IResponseDAO
      * @param plugin
      *            the plugin
      */
+    @Override
     public void delete( int nIdResponse, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1, nIdResponse );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdResponse );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -223,27 +222,28 @@ public final class ResponseDAO implements IResponseDAO
      * @param plugin
      *            the plugin
      */
+    @Override
     public void store( Response response, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-
-        daoUtil.setInt( 1, response.getIdResponse( ) );
-        daoUtil.setInt( 2, response.getSuggestSubmit( ).getIdSuggestSubmit( ) );
-        daoUtil.setString( 3, response.getValueResponse( ) );
-        daoUtil.setInt( 4, response.getEntry( ).getIdEntry( ) );
-
-        if ( response.getIdImageResource( ) != null )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
-            daoUtil.setInt( 5, response.getIdImageResource( ) );
-        }
-        else
-        {
-            daoUtil.setIntNull( 5 );
-        }
+            daoUtil.setInt( 1, response.getIdResponse( ) );
+            daoUtil.setInt( 2, response.getSuggestSubmit( ).getIdSuggestSubmit( ) );
+            daoUtil.setString( 3, response.getValueResponse( ) );
+            daoUtil.setInt( 4, response.getEntry( ).getIdEntry( ) );
 
-        daoUtil.setInt( 6, response.getIdResponse( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+            if ( response.getIdImageResource( ) != null )
+            {
+                daoUtil.setInt( 5, response.getIdImageResource( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( 5 );
+            }
+
+            daoUtil.setInt( 6, response.getIdResponse( ) );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -255,98 +255,99 @@ public final class ResponseDAO implements IResponseDAO
      *            the plugin
      * @return the list of response
      */
+    @Override
     public List<Response> selectListByFilter( SubmitFilter filter, Plugin plugin )
     {
         boolean bException = false;
-        List<Response> responseList = new ArrayList<Response>( );
+        List<Response> responseList = new ArrayList<>( );
         Response response;
         IEntry entry = null;
-        EntryType entryType = null;
+        EntryType entryType;
 
-        SuggestSubmit suggestSubmit = null;
+        SuggestSubmit suggestSubmit;
 
         String strSQL = SQL_QUERY_SELECT_RESPONSE_BY_FILTER;
         strSQL += ( ( filter.containsIdSuggestSubmit( ) ) ? SQL_FILTER_ID_SUGGEST_SUBMIT : EMPTY_STRING );
         strSQL += ( ( filter.containsIdEntry( ) ) ? SQL_FILTER_ID_ENTRY : EMPTY_STRING );
         strSQL += SQL_ORDER_BY_ID_RESPONSE;
 
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
-        int nIndex = 1;
-
-        if ( filter.containsIdSuggestSubmit( ) )
+        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdSuggestSubmit( ) );
-            nIndex++;
+            int nIndex = 1;
+
+            if ( filter.containsIdSuggestSubmit( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdSuggestSubmit( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdEntry( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdEntry( ) );
+                nIndex++;
+            }
+
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                response = new Response( );
+                response.setIdResponse( daoUtil.getInt( 1 ) );
+
+                suggestSubmit = new SuggestSubmit( );
+                suggestSubmit.setIdSuggestSubmit( daoUtil.getInt( 2 ) );
+                response.setSuggestSubmit( suggestSubmit );
+
+                response.setValueResponse( daoUtil.getString( 3 ) );
+                entryType = new EntryType( );
+                entryType.setClassName( daoUtil.getString( 4 ) );
+                entryType.setIdType( daoUtil.getInt( 7 ) );
+
+                try
+                {
+                    entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
+                }
+                catch( ClassNotFoundException e )
+                {
+                    // class doesn't exist
+                    AppLogService.error( e );
+                    bException = true;
+                }
+                catch( InstantiationException e )
+                {
+                    // Class is abstract or is an interface or haven't accessible builder
+                    AppLogService.error( e );
+                    bException = true;
+                }
+                catch( IllegalAccessException e )
+                {
+                    // can't access to rhe class
+                    AppLogService.error( e );
+                    bException = true;
+                }
+
+                if ( bException )
+                {
+                    return null;
+                }
+
+                entry.setEntryType( entryType );
+                entry.setIdEntry( daoUtil.getInt( 5 ) );
+                entry.setTitle( daoUtil.getString( 6 ) );
+
+                entry.setShowInSuggestSubmitList( daoUtil.getBoolean( 8 ) );
+
+                response.setEntry( entry );
+
+                if ( daoUtil.getObject( 9 ) != null )
+                {
+                    response.setIdImageResource( daoUtil.getInt( 9 ) );
+                }
+
+                responseList.add( response );
+            }
+
+            return responseList;
         }
-
-        if ( filter.containsIdEntry( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdEntry( ) );
-            nIndex++;
-        }
-
-        daoUtil.executeQuery( );
-
-        while ( daoUtil.next( ) )
-        {
-            response = new Response( );
-            response.setIdResponse( daoUtil.getInt( 1 ) );
-
-            suggestSubmit = new SuggestSubmit( );
-            suggestSubmit.setIdSuggestSubmit( daoUtil.getInt( 2 ) );
-            response.setSuggestSubmit( suggestSubmit );
-
-            response.setValueResponse( daoUtil.getString( 3 ) );
-            entryType = new EntryType( );
-            entryType.setClassName( daoUtil.getString( 4 ) );
-            entryType.setIdType( daoUtil.getInt( 7 ) );
-
-            try
-            {
-                entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
-            }
-            catch( ClassNotFoundException e )
-            {
-                // class doesn't exist
-                AppLogService.error( e );
-                bException = true;
-            }
-            catch( InstantiationException e )
-            {
-                // Class is abstract or is an interface or haven't accessible builder
-                AppLogService.error( e );
-                bException = true;
-            }
-            catch( IllegalAccessException e )
-            {
-                // can't access to rhe class
-                AppLogService.error( e );
-                bException = true;
-            }
-
-            if ( bException )
-            {
-                return null;
-            }
-
-            entry.setEntryType( entryType );
-            entry.setIdEntry( daoUtil.getInt( 5 ) );
-            entry.setTitle( daoUtil.getString( 6 ) );
-
-            entry.setShowInSuggestSubmitList( daoUtil.getBoolean( 8 ) );
-
-            response.setEntry( entry );
-
-            if ( daoUtil.getObject( 9 ) != null )
-            {
-                response.setIdImageResource( daoUtil.getInt( 9 ) );
-            }
-
-            responseList.add( response );
-        }
-
-        daoUtil.free( );
-
-        return responseList;
     }
 }

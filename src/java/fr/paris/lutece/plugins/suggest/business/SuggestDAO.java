@@ -114,16 +114,15 @@ public final class SuggestDAO implements ISuggestDAO
      */
     public int newPrimaryKey( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
+        {
+            daoUtil.executeQuery( );
 
-        int nKey;
+            daoUtil.next( );
+            int nKey = daoUtil.getInt( 1 ) + 1;
 
-        daoUtil.next( );
-        nKey = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free( );
-
-        return nKey;
+            return nKey;
+        }
     }
 
     /**
@@ -138,60 +137,61 @@ public final class SuggestDAO implements ISuggestDAO
     @Override
     public int insert( Suggest suggest, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        Timestamp timestamp = new java.sql.Timestamp( new java.util.Date( ).getTime( ) );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        {
+            Timestamp timestamp = new java.sql.Timestamp( new java.util.Date( ).getTime( ) );
 
-        suggest.setIdSuggest( newPrimaryKey( plugin ) );
+            suggest.setIdSuggest( newPrimaryKey( plugin ) );
 
-        int ncpt = 1;
-        daoUtil.setInt( ncpt++, suggest.getIdSuggest( ) );
-        daoUtil.setString( ncpt++, suggest.getTitle( ) );
-        daoUtil.setString( ncpt++, suggest.getUnavailabilityMessage( ) );
-        daoUtil.setString( ncpt++, suggest.getWorkgroup( ) );
-        daoUtil.setInt( ncpt++, suggest.getVoteType( ).getIdVoteType( ) );
-        daoUtil.setInt( ncpt++, suggest.getNumberVoteRequired( ) );
-        daoUtil.setInt( ncpt++, suggest.getNumberDayRequired( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActiveSuggestSubmitAuthentification( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActiveVoteAuthentification( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActiveCommentAuthentification( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isDisableNewSuggestSubmit( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isAuthorizedComment( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isDisableNewComment( ) );
-        daoUtil.setInt( ncpt++, suggest.getIdMailingListSuggestSubmit( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActiveCaptcha( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActive( ) );
-        daoUtil.setTimestamp( ncpt++, timestamp );
-        daoUtil.setString( ncpt++, suggest.getLibelleValidateButton( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActiveSuggestPropositionState( ) );
-        daoUtil.setString( ncpt++, suggest.getLibelleContribution( ) );
-        daoUtil.setInt( ncpt++, suggest.getNumberSuggestSubmitInTopScore( ) );
-        daoUtil.setInt( ncpt++, suggest.getNumberSuggestSubmitInTopComment( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isLimitNumberVote( ) );
-        daoUtil.setInt( ncpt++, suggest.getNumberSuggestSubmitCaractersShown( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isShowCategoryBlock( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isShowTopScoreBlock( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isShowTopCommentBlock( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActiveSuggestSubmitPaginator( ) );
-        daoUtil.setInt( ncpt++, suggest.getNumberSuggestSubmitPerPage( ) );
-        daoUtil.setString( ncpt++, suggest.getRole( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isEnableMailNewSuggestSubmit( ) );
-        daoUtil.setString( ncpt++, suggest.getHeader( ) );
-        daoUtil.setInt( ncpt++, suggest.getSortField( ) );
-        daoUtil.setString( ncpt++, suggest.getCodeTheme( ) );
-        daoUtil.setString( ncpt++, suggest.getConfirmationMessage( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActiveEditorBbcode( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isDefaultSuggest( ) );
-        daoUtil.setInt( ncpt++, suggest.getIdDefaultSort( ) );
-        daoUtil.setString( ncpt++, suggest.getNotificationNewCommentSenderName( ) );
-        daoUtil.setString( ncpt++, suggest.getNotificationNewCommentTitle( ) );
-        daoUtil.setString( ncpt++, suggest.getNotificationNewCommentBody( ) );
-        daoUtil.setString( ncpt++, suggest.getNotificationNewSuggestSubmitSenderName( ) );
-        daoUtil.setString( ncpt++, suggest.getNotificationNewSuggestSubmitTitle( ) );
-        daoUtil.setString( ncpt++, suggest.getNotificationNewSuggestSubmitBody( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+            int ncpt = 1;
+            daoUtil.setInt( ncpt++, suggest.getIdSuggest( ) );
+            daoUtil.setString( ncpt++, suggest.getTitle( ) );
+            daoUtil.setString( ncpt++, suggest.getUnavailabilityMessage( ) );
+            daoUtil.setString( ncpt++, suggest.getWorkgroup( ) );
+            daoUtil.setInt( ncpt++, suggest.getVoteType( ).getIdVoteType( ) );
+            daoUtil.setInt( ncpt++, suggest.getNumberVoteRequired( ) );
+            daoUtil.setInt( ncpt++, suggest.getNumberDayRequired( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isActiveSuggestSubmitAuthentification( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isActiveVoteAuthentification( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isActiveCommentAuthentification( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isDisableNewSuggestSubmit( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isAuthorizedComment( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isDisableNewComment( ) );
+            daoUtil.setInt( ncpt++, suggest.getIdMailingListSuggestSubmit( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isActiveCaptcha( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isActive( ) );
+            daoUtil.setTimestamp( ncpt++, timestamp );
+            daoUtil.setString( ncpt++, suggest.getLibelleValidateButton( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isActiveSuggestPropositionState( ) );
+            daoUtil.setString( ncpt++, suggest.getLibelleContribution( ) );
+            daoUtil.setInt( ncpt++, suggest.getNumberSuggestSubmitInTopScore( ) );
+            daoUtil.setInt( ncpt++, suggest.getNumberSuggestSubmitInTopComment( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isLimitNumberVote( ) );
+            daoUtil.setInt( ncpt++, suggest.getNumberSuggestSubmitCaractersShown( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isShowCategoryBlock( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isShowTopScoreBlock( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isShowTopCommentBlock( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isActiveSuggestSubmitPaginator( ) );
+            daoUtil.setInt( ncpt++, suggest.getNumberSuggestSubmitPerPage( ) );
+            daoUtil.setString( ncpt++, suggest.getRole( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isEnableMailNewSuggestSubmit( ) );
+            daoUtil.setString( ncpt++, suggest.getHeader( ) );
+            daoUtil.setInt( ncpt++, suggest.getSortField( ) );
+            daoUtil.setString( ncpt++, suggest.getCodeTheme( ) );
+            daoUtil.setString( ncpt++, suggest.getConfirmationMessage( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isActiveEditorBbcode( ) );
+            daoUtil.setBoolean( ncpt++, suggest.isDefaultSuggest( ) );
+            daoUtil.setInt( ncpt++, suggest.getIdDefaultSort( ) );
+            daoUtil.setString( ncpt++, suggest.getNotificationNewCommentSenderName( ) );
+            daoUtil.setString( ncpt++, suggest.getNotificationNewCommentTitle( ) );
+            daoUtil.setString( ncpt++, suggest.getNotificationNewCommentBody( ) );
+            daoUtil.setString( ncpt++, suggest.getNotificationNewSuggestSubmitSenderName( ) );
+            daoUtil.setString( ncpt++, suggest.getNotificationNewSuggestSubmitTitle( ) );
+            daoUtil.setString( ncpt++, suggest.getNotificationNewSuggestSubmitBody( ) );
+            daoUtil.executeUpdate( );
 
-        return suggest.getIdSuggest( );
+            return suggest.getIdSuggest( );
+        }
     }
 
     /**
@@ -206,70 +206,70 @@ public final class SuggestDAO implements ISuggestDAO
     @Override
     public Suggest load( int nId, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
-        daoUtil.setInt( 1, nId );
-        daoUtil.executeQuery( );
-
-        VoteType voteType;
-        Suggest suggest = null;
-
-        if ( daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
-            int ncpt = 1;
-            suggest = new Suggest( );
-            suggest.setIdSuggest( daoUtil.getInt( ncpt++ ) );
-            suggest.setTitle( daoUtil.getString( ncpt++ ) );
-            suggest.setUnavailabilityMessage( daoUtil.getString( ncpt++ ) );
-            suggest.setWorkgroup( daoUtil.getString( ncpt++ ) );
+            daoUtil.setInt( 1, nId );
+            daoUtil.executeQuery( );
 
-            voteType = new VoteType( );
-            voteType.setIdVoteType( daoUtil.getInt( ncpt++ ) );
-            suggest.setVoteType( voteType );
+            VoteType voteType;
+            Suggest suggest = null;
 
-            suggest.setNumberVoteRequired( daoUtil.getInt( ncpt++ ) );
-            suggest.setNumberDayRequired( daoUtil.getInt( ncpt++ ) );
-            suggest.setActiveSuggestSubmitAuthentification( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setActiveVoteAuthentification( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setActiveCommentAuthentification( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setDisableNewSuggestSubmit( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setAuthorizedComment( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setDisableNewComment( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setIdMailingListSuggestSubmit( daoUtil.getInt( ncpt++ ) );
-            suggest.setActiveCaptcha( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setActive( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setDateCreation( daoUtil.getTimestamp( ncpt++ ) );
-            suggest.setLibelleValidateButton( daoUtil.getString( ncpt++ ) );
-            suggest.setActiveSuggestPropositionState( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setLibelleContribution( daoUtil.getString( ncpt++ ) );
-            suggest.setNumberSuggestSubmitInTopScore( daoUtil.getInt( ncpt++ ) );
-            suggest.setNumberSuggestSubmitInTopComment( daoUtil.getInt( ncpt++ ) );
-            suggest.setLimitNumberVote( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setNumberSuggestSubmitCaractersShown( daoUtil.getInt( ncpt++ ) );
-            suggest.setShowCategoryBlock( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setShowTopScoreBlock( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setShowTopCommentBlock( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setActiveSuggestSubmitPaginator( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setNumberSuggestSubmitPerPage( daoUtil.getInt( ncpt++ ) );
-            suggest.setRole( daoUtil.getString( ncpt++ ) );
-            suggest.setEnableMailNewSuggestSubmit( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setHeader( daoUtil.getString( ncpt++ ) );
-            suggest.setSortField( daoUtil.getInt( ncpt++ ) );
-            suggest.setCodeTheme( daoUtil.getString( ncpt++ ) );
-            suggest.setConfirmationMessage( daoUtil.getString( ncpt++ ) );
-            suggest.setActiveEditorBbcode( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setDefaultSuggest( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setIdDefaultSort( daoUtil.getInt( ncpt++ ) );
-            suggest.setNotificationNewCommentSenderName( daoUtil.getString( ncpt++ ) );
-            suggest.setNotificationNewCommentTitle( daoUtil.getString( ncpt++ ) );
-            suggest.setNotificationNewCommentBody( daoUtil.getString( ncpt++ ) );
-            suggest.setNotificationNewSuggestSubmitSenderName( daoUtil.getString( ncpt++ ) );
-            suggest.setNotificationNewSuggestSubmitTitle( daoUtil.getString( ncpt++ ) );
-            suggest.setNotificationNewSuggestSubmitBody( daoUtil.getString( ncpt++ ) );
+            if ( daoUtil.next( ) )
+            {
+                int nIndex = 1;
+                suggest = new Suggest( );
+                suggest.setIdSuggest( daoUtil.getInt( nIndex++ ) );
+                suggest.setTitle( daoUtil.getString( nIndex++ ) );
+                suggest.setUnavailabilityMessage( daoUtil.getString( nIndex++ ) );
+                suggest.setWorkgroup( daoUtil.getString( nIndex++ ) );
+
+                voteType = new VoteType( );
+                voteType.setIdVoteType( daoUtil.getInt( nIndex++ ) );
+                suggest.setVoteType( voteType );
+
+                suggest.setNumberVoteRequired( daoUtil.getInt( nIndex++ ) );
+                suggest.setNumberDayRequired( daoUtil.getInt( nIndex++ ) );
+                suggest.setActiveSuggestSubmitAuthentification( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setActiveVoteAuthentification( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setActiveCommentAuthentification( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setDisableNewSuggestSubmit( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setAuthorizedComment( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setDisableNewComment( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setIdMailingListSuggestSubmit( daoUtil.getInt( nIndex++ ) );
+                suggest.setActiveCaptcha( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setActive( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setDateCreation( daoUtil.getTimestamp( nIndex++ ) );
+                suggest.setLibelleValidateButton( daoUtil.getString( nIndex++ ) );
+                suggest.setActiveSuggestPropositionState( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setLibelleContribution( daoUtil.getString( nIndex++ ) );
+                suggest.setNumberSuggestSubmitInTopScore( daoUtil.getInt( nIndex++ ) );
+                suggest.setNumberSuggestSubmitInTopComment( daoUtil.getInt( nIndex++ ) );
+                suggest.setLimitNumberVote( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setNumberSuggestSubmitCaractersShown( daoUtil.getInt( nIndex++ ) );
+                suggest.setShowCategoryBlock( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setShowTopScoreBlock( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setShowTopCommentBlock( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setActiveSuggestSubmitPaginator( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setNumberSuggestSubmitPerPage( daoUtil.getInt( nIndex++ ) );
+                suggest.setRole( daoUtil.getString( nIndex++ ) );
+                suggest.setEnableMailNewSuggestSubmit( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setHeader( daoUtil.getString( nIndex++ ) );
+                suggest.setSortField( daoUtil.getInt( nIndex++ ) );
+                suggest.setCodeTheme( daoUtil.getString( nIndex++ ) );
+                suggest.setConfirmationMessage( daoUtil.getString( nIndex++ ) );
+                suggest.setActiveEditorBbcode( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setDefaultSuggest( daoUtil.getBoolean( nIndex++ ) );
+                suggest.setIdDefaultSort( daoUtil.getInt( nIndex++ ) );
+                suggest.setNotificationNewCommentSenderName( daoUtil.getString( nIndex++ ) );
+                suggest.setNotificationNewCommentTitle( daoUtil.getString( nIndex++ ) );
+                suggest.setNotificationNewCommentBody( daoUtil.getString( nIndex++ ) );
+                suggest.setNotificationNewSuggestSubmitSenderName( daoUtil.getString( nIndex++ ) );
+                suggest.setNotificationNewSuggestSubmitTitle( daoUtil.getString( nIndex++ ) );
+                suggest.setNotificationNewSuggestSubmitBody( daoUtil.getString( nIndex++ ) );
+            }
+
+            return suggest;
         }
-
-        daoUtil.free( );
-
-        return suggest;
     }
 
     /**
@@ -283,10 +283,11 @@ public final class SuggestDAO implements ISuggestDAO
     @Override
     public void delete( int nIdSuggest, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1, nIdSuggest );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdSuggest );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -300,58 +301,59 @@ public final class SuggestDAO implements ISuggestDAO
     @Override
     public void store( Suggest suggest, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        int ncpt = 1;
-        suggest.setIdSuggest( suggest.getIdSuggest( ) );
-        daoUtil.setInt( ncpt++, suggest.getIdSuggest( ) );
-        daoUtil.setString( ncpt++, suggest.getTitle( ) );
-        daoUtil.setString( ncpt++, suggest.getUnavailabilityMessage( ) );
-        daoUtil.setString( ncpt++, suggest.getWorkgroup( ) );
-        daoUtil.setInt( ncpt++, suggest.getVoteType( ).getIdVoteType( ) );
-        daoUtil.setInt( ncpt++, suggest.getNumberVoteRequired( ) );
-        daoUtil.setInt( ncpt++, suggest.getNumberDayRequired( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActiveSuggestSubmitAuthentification( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActiveVoteAuthentification( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActiveCommentAuthentification( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isDisableNewSuggestSubmit( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isAuthorizedComment( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isDisableNewComment( ) );
-        daoUtil.setInt( ncpt++, suggest.getIdMailingListSuggestSubmit( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActiveCaptcha( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActive( ) );
-        daoUtil.setTimestamp( ncpt++, suggest.getDateCreation( ) );
-        daoUtil.setString( ncpt++, suggest.getLibelleValidateButton( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActiveSuggestPropositionState( ) );
-        daoUtil.setString( ncpt++, suggest.getLibelleContribution( ) );
-        daoUtil.setInt( ncpt++, suggest.getNumberSuggestSubmitInTopScore( ) );
-        daoUtil.setInt( ncpt++, suggest.getNumberSuggestSubmitInTopComment( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isLimitNumberVote( ) );
-        daoUtil.setInt( ncpt++, suggest.getNumberSuggestSubmitCaractersShown( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isShowCategoryBlock( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isShowTopScoreBlock( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isShowTopCommentBlock( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActiveSuggestSubmitPaginator( ) );
-        daoUtil.setInt( ncpt++, suggest.getNumberSuggestSubmitPerPage( ) );
-        daoUtil.setString( ncpt++, suggest.getRole( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isEnableMailNewSuggestSubmit( ) );
-        daoUtil.setString( ncpt++, suggest.getHeader( ) );
-        daoUtil.setInt( ncpt++, suggest.getSortField( ) );
-        daoUtil.setString( ncpt++, suggest.getCodeTheme( ) );
-        daoUtil.setString( ncpt++, suggest.getConfirmationMessage( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isActiveEditorBbcode( ) );
-        daoUtil.setBoolean( ncpt++, suggest.isDefaultSuggest( ) );
-        daoUtil.setInt( ncpt++, suggest.getIdDefaultSort( ) );
-        daoUtil.setString( ncpt++, suggest.getNotificationNewCommentSenderName( ) );
-        daoUtil.setString( ncpt++, suggest.getNotificationNewCommentTitle( ) );
-        daoUtil.setString( ncpt++, suggest.getNotificationNewCommentBody( ) );
-        daoUtil.setString( ncpt++, suggest.getNotificationNewSuggestSubmitSenderName( ) );
-        daoUtil.setString( ncpt++, suggest.getNotificationNewSuggestSubmitTitle( ) );
-        daoUtil.setString( ncpt++, suggest.getNotificationNewSuggestSubmitBody( ) );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
+            int nIndex = 1;
+            suggest.setIdSuggest( suggest.getIdSuggest( ) );
+            daoUtil.setInt( nIndex++, suggest.getIdSuggest( ) );
+            daoUtil.setString( nIndex++, suggest.getTitle( ) );
+            daoUtil.setString( nIndex++, suggest.getUnavailabilityMessage( ) );
+            daoUtil.setString( nIndex++, suggest.getWorkgroup( ) );
+            daoUtil.setInt( nIndex++, suggest.getVoteType( ).getIdVoteType( ) );
+            daoUtil.setInt( nIndex++, suggest.getNumberVoteRequired( ) );
+            daoUtil.setInt( nIndex++, suggest.getNumberDayRequired( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isActiveSuggestSubmitAuthentification( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isActiveVoteAuthentification( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isActiveCommentAuthentification( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isDisableNewSuggestSubmit( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isAuthorizedComment( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isDisableNewComment( ) );
+            daoUtil.setInt( nIndex++, suggest.getIdMailingListSuggestSubmit( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isActiveCaptcha( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isActive( ) );
+            daoUtil.setTimestamp( nIndex++, suggest.getDateCreation( ) );
+            daoUtil.setString( nIndex++, suggest.getLibelleValidateButton( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isActiveSuggestPropositionState( ) );
+            daoUtil.setString( nIndex++, suggest.getLibelleContribution( ) );
+            daoUtil.setInt( nIndex++, suggest.getNumberSuggestSubmitInTopScore( ) );
+            daoUtil.setInt( nIndex++, suggest.getNumberSuggestSubmitInTopComment( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isLimitNumberVote( ) );
+            daoUtil.setInt( nIndex++, suggest.getNumberSuggestSubmitCaractersShown( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isShowCategoryBlock( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isShowTopScoreBlock( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isShowTopCommentBlock( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isActiveSuggestSubmitPaginator( ) );
+            daoUtil.setInt( nIndex++, suggest.getNumberSuggestSubmitPerPage( ) );
+            daoUtil.setString( nIndex++, suggest.getRole( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isEnableMailNewSuggestSubmit( ) );
+            daoUtil.setString( nIndex++, suggest.getHeader( ) );
+            daoUtil.setInt( nIndex++, suggest.getSortField( ) );
+            daoUtil.setString( nIndex++, suggest.getCodeTheme( ) );
+            daoUtil.setString( nIndex++, suggest.getConfirmationMessage( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isActiveEditorBbcode( ) );
+            daoUtil.setBoolean( nIndex++, suggest.isDefaultSuggest( ) );
+            daoUtil.setInt( nIndex++, suggest.getIdDefaultSort( ) );
+            daoUtil.setString( nIndex++, suggest.getNotificationNewCommentSenderName( ) );
+            daoUtil.setString( nIndex++, suggest.getNotificationNewCommentTitle( ) );
+            daoUtil.setString( nIndex++, suggest.getNotificationNewCommentBody( ) );
+            daoUtil.setString( nIndex++, suggest.getNotificationNewSuggestSubmitSenderName( ) );
+            daoUtil.setString( nIndex++, suggest.getNotificationNewSuggestSubmitTitle( ) );
+            daoUtil.setString( nIndex++, suggest.getNotificationNewSuggestSubmitBody( ) );
 
-        daoUtil.setInt( ncpt++, suggest.getIdSuggest( ) );
+            daoUtil.setInt( nIndex++, suggest.getIdSuggest( ) );
 
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -366,10 +368,10 @@ public final class SuggestDAO implements ISuggestDAO
     @Override
     public List<Suggest> selectSuggestList( SuggestFilter filter, Plugin plugin )
     {
-        List<Suggest> suggestList = new ArrayList<Suggest>( );
+        List<Suggest> suggestList = new ArrayList<>( );
         Suggest suggest;
         VoteType voteType;
-        List<String> listStrFilter = new ArrayList<String>( );
+        List<String> listStrFilter = new ArrayList<>( );
         int ncpt;
 
         if ( filter.containsWorkgroupCriteria( ) )
@@ -393,94 +395,94 @@ public final class SuggestDAO implements ISuggestDAO
         }
 
         String strSQL = SuggestUtils.buildRequestWithFilter( SQL_QUERY_SELECT_SUGGEST_BY_FILTER, listStrFilter, SQL_ORDER_BY_DATE_CREATION );
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
-        int nIndex = 1;
-
-        if ( filter.containsWorkgroupCriteria( ) )
+        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
-            daoUtil.setString( nIndex, filter.getWorkgroup( ) );
-            nIndex++;
+            int nIndex = 1;
+
+            if ( filter.containsWorkgroupCriteria( ) )
+            {
+                daoUtil.setString( nIndex, filter.getWorkgroup( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsRoleCriteria( ) )
+            {
+                daoUtil.setString( nIndex, filter.getRole( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdState( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdState( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdDefaultSuggest( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdDefaultSuggest( ) );
+                nIndex++;
+            }
+
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                ncpt = 1;
+                suggest = new Suggest( );
+                suggest.setIdSuggest( daoUtil.getInt( ncpt++ ) );
+                suggest.setTitle( daoUtil.getString( ncpt++ ) );
+                suggest.setUnavailabilityMessage( daoUtil.getString( ncpt++ ) );
+                suggest.setWorkgroup( daoUtil.getString( ncpt++ ) );
+
+                voteType = new VoteType( );
+                voteType.setIdVoteType( daoUtil.getInt( ncpt++ ) );
+                suggest.setVoteType( voteType );
+
+                suggest.setNumberVoteRequired( daoUtil.getInt( ncpt++ ) );
+                suggest.setNumberDayRequired( daoUtil.getInt( ncpt++ ) );
+                suggest.setActiveSuggestSubmitAuthentification( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setActiveVoteAuthentification( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setActiveCommentAuthentification( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setDisableNewSuggestSubmit( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setAuthorizedComment( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setDisableNewComment( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setIdMailingListSuggestSubmit( daoUtil.getInt( ncpt++ ) );
+                suggest.setActiveCaptcha( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setActive( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setDateCreation( daoUtil.getTimestamp( ncpt++ ) );
+                suggest.setLibelleValidateButton( daoUtil.getString( ncpt++ ) );
+                suggest.setActiveSuggestPropositionState( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setLibelleContribution( daoUtil.getString( ncpt++ ) );
+                suggest.setNumberSuggestSubmitInTopScore( daoUtil.getInt( ncpt++ ) );
+                suggest.setNumberSuggestSubmitInTopComment( daoUtil.getInt( ncpt++ ) );
+                suggest.setLimitNumberVote( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setNumberSuggestSubmitCaractersShown( daoUtil.getInt( ncpt++ ) );
+                suggest.setShowCategoryBlock( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setShowTopScoreBlock( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setShowTopCommentBlock( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setActiveSuggestSubmitPaginator( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setNumberSuggestSubmitPerPage( daoUtil.getInt( ncpt++ ) );
+                suggest.setRole( daoUtil.getString( ncpt++ ) );
+                suggest.setEnableMailNewSuggestSubmit( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setHeader( daoUtil.getString( ncpt++ ) );
+                suggest.setSortField( daoUtil.getInt( ncpt++ ) );
+                suggest.setCodeTheme( daoUtil.getString( ncpt++ ) );
+                suggest.setConfirmationMessage( daoUtil.getString( ncpt++ ) );
+                suggest.setActiveEditorBbcode( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setDefaultSuggest( daoUtil.getBoolean( ncpt++ ) );
+                suggest.setIdDefaultSort( daoUtil.getInt( ncpt++ ) );
+                suggest.setNotificationNewCommentSenderName( daoUtil.getString( ncpt++ ) );
+                suggest.setNotificationNewCommentTitle( daoUtil.getString( ncpt++ ) );
+                suggest.setNotificationNewCommentBody( daoUtil.getString( ncpt++ ) );
+                suggest.setNotificationNewSuggestSubmitSenderName( daoUtil.getString( ncpt++ ) );
+                suggest.setNotificationNewSuggestSubmitTitle( daoUtil.getString( ncpt++ ) );
+                suggest.setNotificationNewSuggestSubmitBody( daoUtil.getString( ncpt++ ) );
+
+                suggestList.add( suggest );
+            }
+
+            return suggestList;
         }
-
-        if ( filter.containsRoleCriteria( ) )
-        {
-            daoUtil.setString( nIndex, filter.getRole( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdState( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdState( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdDefaultSuggest( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdDefaultSuggest( ) );
-            nIndex++;
-        }
-
-        daoUtil.executeQuery( );
-
-        while ( daoUtil.next( ) )
-        {
-            ncpt = 1;
-            suggest = new Suggest( );
-            suggest.setIdSuggest( daoUtil.getInt( ncpt++ ) );
-            suggest.setTitle( daoUtil.getString( ncpt++ ) );
-            suggest.setUnavailabilityMessage( daoUtil.getString( ncpt++ ) );
-            suggest.setWorkgroup( daoUtil.getString( ncpt++ ) );
-
-            voteType = new VoteType( );
-            voteType.setIdVoteType( daoUtil.getInt( ncpt++ ) );
-            suggest.setVoteType( voteType );
-
-            suggest.setNumberVoteRequired( daoUtil.getInt( ncpt++ ) );
-            suggest.setNumberDayRequired( daoUtil.getInt( ncpt++ ) );
-            suggest.setActiveSuggestSubmitAuthentification( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setActiveVoteAuthentification( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setActiveCommentAuthentification( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setDisableNewSuggestSubmit( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setAuthorizedComment( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setDisableNewComment( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setIdMailingListSuggestSubmit( daoUtil.getInt( ncpt++ ) );
-            suggest.setActiveCaptcha( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setActive( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setDateCreation( daoUtil.getTimestamp( ncpt++ ) );
-            suggest.setLibelleValidateButton( daoUtil.getString( ncpt++ ) );
-            suggest.setActiveSuggestPropositionState( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setLibelleContribution( daoUtil.getString( ncpt++ ) );
-            suggest.setNumberSuggestSubmitInTopScore( daoUtil.getInt( ncpt++ ) );
-            suggest.setNumberSuggestSubmitInTopComment( daoUtil.getInt( ncpt++ ) );
-            suggest.setLimitNumberVote( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setNumberSuggestSubmitCaractersShown( daoUtil.getInt( ncpt++ ) );
-            suggest.setShowCategoryBlock( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setShowTopScoreBlock( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setShowTopCommentBlock( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setActiveSuggestSubmitPaginator( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setNumberSuggestSubmitPerPage( daoUtil.getInt( ncpt++ ) );
-            suggest.setRole( daoUtil.getString( ncpt++ ) );
-            suggest.setEnableMailNewSuggestSubmit( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setHeader( daoUtil.getString( ncpt++ ) );
-            suggest.setSortField( daoUtil.getInt( ncpt++ ) );
-            suggest.setCodeTheme( daoUtil.getString( ncpt++ ) );
-            suggest.setConfirmationMessage( daoUtil.getString( ncpt++ ) );
-            suggest.setActiveEditorBbcode( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setDefaultSuggest( daoUtil.getBoolean( ncpt++ ) );
-            suggest.setIdDefaultSort( daoUtil.getInt( ncpt++ ) );
-            suggest.setNotificationNewCommentSenderName( daoUtil.getString( ncpt++ ) );
-            suggest.setNotificationNewCommentTitle( daoUtil.getString( ncpt++ ) );
-            suggest.setNotificationNewCommentBody( daoUtil.getString( ncpt++ ) );
-            suggest.setNotificationNewSuggestSubmitSenderName( daoUtil.getString( ncpt++ ) );
-            suggest.setNotificationNewSuggestSubmitTitle( daoUtil.getString( ncpt++ ) );
-            suggest.setNotificationNewSuggestSubmitBody( daoUtil.getString( ncpt++ ) );
-
-            suggestList.add( suggest );
-        }
-
-        daoUtil.free( );
-
-        return suggestList;
     }
 
     /**
@@ -496,11 +498,12 @@ public final class SuggestDAO implements ISuggestDAO
     @Override
     public void storeSuggestOrderField( int nId, int nSortField, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_SUGGEST_ORDER, plugin );
-        daoUtil.setInt( 1, nSortField );
-        daoUtil.setInt( 2, nId );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_SUGGEST_ORDER, plugin ) )
+        {
+            daoUtil.setInt( 1, nSortField );
+            daoUtil.setInt( 2, nId );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -513,23 +516,22 @@ public final class SuggestDAO implements ISuggestDAO
     @Override
     public Map<Integer, Theme> getXPageThemesMap( Plugin plugin )
     {
-        Map<Integer, Theme> xPageThemesMap = new HashMap<Integer, Theme>( );
+        Map<Integer, Theme> xPageThemesMap = new HashMap<>( );
 
-        String strSQL = SQL_QUERY_SELECT_ALL_THEMES;
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
-        daoUtil.executeQuery( );
-
-        while ( daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL_THEMES, plugin ) )
         {
-            int nIndex = 1;
-            int nIdForm = daoUtil.getInt( nIndex++ );
-            String strCodeTheme = daoUtil.getString( nIndex++ );
-            Theme theme = ThemesService.getGlobalTheme( strCodeTheme );
-            xPageThemesMap.put( nIdForm, theme );
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                int nIndex = 1;
+                int nIdForm = daoUtil.getInt( nIndex++ );
+                String strCodeTheme = daoUtil.getString( nIndex++ );
+                Theme theme = ThemesService.getGlobalTheme( strCodeTheme );
+                xPageThemesMap.put( nIdForm, theme );
+            }
+
+            return xPageThemesMap;
         }
-
-        daoUtil.free( );
-
-        return xPageThemesMap;
     }
 }
