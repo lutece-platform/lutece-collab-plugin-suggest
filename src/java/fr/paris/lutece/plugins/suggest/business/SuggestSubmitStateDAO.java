@@ -59,25 +59,26 @@ public class SuggestSubmitStateDAO implements ISuggestSubmitStateDAO
      *            the plugin
      * @return the instance of the state
      */
+    @Override
     public SuggestSubmitState load( int idKey, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
-        daoUtil.setInt( 1, idKey );
-        daoUtil.executeQuery( );
-
-        SuggestSubmitState suggestSubmitState = null;
-
-        if ( daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
-            suggestSubmitState = new SuggestSubmitState( );
-            suggestSubmitState.setIdSuggestSubmitState( daoUtil.getInt( 1 ) );
-            suggestSubmitState.setTitle( daoUtil.getString( 2 ) );
-            suggestSubmitState.setNumber( daoUtil.getInt( 3 ) );
+            daoUtil.setInt( 1, idKey );
+            daoUtil.executeQuery( );
+
+            SuggestSubmitState suggestSubmitState = null;
+
+            if ( daoUtil.next( ) )
+            {
+                suggestSubmitState = new SuggestSubmitState( );
+                suggestSubmitState.setIdSuggestSubmitState( daoUtil.getInt( 1 ) );
+                suggestSubmitState.setTitle( daoUtil.getString( 2 ) );
+                suggestSubmitState.setNumber( daoUtil.getInt( 3 ) );
+            }
+
+            return suggestSubmitState;
         }
-
-        daoUtil.free( );
-
-        return suggestSubmitState;
     }
 
     /**
@@ -89,25 +90,26 @@ public class SuggestSubmitStateDAO implements ISuggestSubmitStateDAO
      *            the plugin
      * @return the instance of the state
      */
+    @Override
     public SuggestSubmitState loadByNumero( int numero, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_NUMERO, plugin );
-        daoUtil.setInt( 1, numero );
-        daoUtil.executeQuery( );
-
-        SuggestSubmitState suggestSubmitState = null;
-
-        if ( daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_NUMERO, plugin ) )
         {
-            suggestSubmitState = new SuggestSubmitState( );
-            suggestSubmitState.setIdSuggestSubmitState( daoUtil.getInt( 1 ) );
-            suggestSubmitState.setTitle( daoUtil.getString( 2 ) );
-            suggestSubmitState.setNumber( daoUtil.getInt( 3 ) );
+            daoUtil.setInt( 1, numero );
+            daoUtil.executeQuery( );
+
+            SuggestSubmitState suggestSubmitState = null;
+
+            if ( daoUtil.next( ) )
+            {
+                suggestSubmitState = new SuggestSubmitState( );
+                suggestSubmitState.setIdSuggestSubmitState( daoUtil.getInt( 1 ) );
+                suggestSubmitState.setTitle( daoUtil.getString( 2 ) );
+                suggestSubmitState.setNumber( daoUtil.getInt( 3 ) );
+            }
+
+            return suggestSubmitState;
         }
-
-        daoUtil.free( );
-
-        return suggestSubmitState;
     }
 
     /**
@@ -117,25 +119,26 @@ public class SuggestSubmitStateDAO implements ISuggestSubmitStateDAO
      *            the plugin
      * @return the list of suggest submit state
      */
+    @Override
     public List<SuggestSubmitState> select( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.executeQuery( );
-
-        SuggestSubmitState suggestSubmitState = null;
-        List<SuggestSubmitState> listSuggestSubmitState = new ArrayList<SuggestSubmitState>( );
-
-        while ( daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
-            suggestSubmitState = new SuggestSubmitState( );
-            suggestSubmitState.setIdSuggestSubmitState( daoUtil.getInt( 1 ) );
-            suggestSubmitState.setTitle( daoUtil.getString( 2 ) );
-            suggestSubmitState.setNumber( daoUtil.getInt( 3 ) );
-            listSuggestSubmitState.add( suggestSubmitState );
+            daoUtil.executeQuery( );
+
+            SuggestSubmitState suggestSubmitState;
+            List<SuggestSubmitState> listSuggestSubmitState = new ArrayList<>( );
+
+            while ( daoUtil.next( ) )
+            {
+                suggestSubmitState = new SuggestSubmitState( );
+                suggestSubmitState.setIdSuggestSubmitState( daoUtil.getInt( 1 ) );
+                suggestSubmitState.setTitle( daoUtil.getString( 2 ) );
+                suggestSubmitState.setNumber( daoUtil.getInt( 3 ) );
+                listSuggestSubmitState.add( suggestSubmitState );
+            }
+
+            return listSuggestSubmitState;
         }
-
-        daoUtil.free( );
-
-        return listSuggestSubmitState;
     }
 }

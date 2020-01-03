@@ -213,7 +213,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
         List<CommentSubmit> commentSubmitList = new ArrayList<CommentSubmit>( );
         CommentSubmit commentSubmit = null;
         SuggestSubmit suggestSubmit = null;
-        List<String> listStrFilter = new ArrayList<String>( );
+        List<String> listStrFilter = new ArrayList<>( );
         String strOrderBy = null;
 
         if ( filter.containsIdSuggestSubmit( ) )

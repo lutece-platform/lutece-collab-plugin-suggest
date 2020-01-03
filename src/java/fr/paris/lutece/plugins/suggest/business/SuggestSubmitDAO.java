@@ -133,69 +133,71 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
      *            the plugin
      * @return the id of the new Suggest
      */
+    @Override
     public int insert( SuggestSubmit suggestSubmit, Plugin plugin )
     {
-        Timestamp timestamp = new java.sql.Timestamp( new java.util.Date( ).getTime( ) );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-
-        if ( suggestSubmit.getIdSuggestSubmit( ) == 0 )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
-            suggestSubmit.setIdSuggestSubmit( newPrimaryKey( plugin ) );
+            Timestamp timestamp = new java.sql.Timestamp( new java.util.Date( ).getTime( ) );
+
+            if ( suggestSubmit.getIdSuggestSubmit( ) == 0 )
+            {
+                suggestSubmit.setIdSuggestSubmit( newPrimaryKey( plugin ) );
+            }
+
+            suggestSubmit.setSuggestSubmitOrder( maxOrderSuggestSubmit( suggestSubmit.getSuggest( ).getIdSuggest( ), false, plugin ) + 1 );
+            daoUtil.setInt( 1, suggestSubmit.getIdSuggestSubmit( ) );
+            daoUtil.setInt( 2, suggestSubmit.getSuggest( ).getIdSuggest( ) );
+            daoUtil.setInt( 3, suggestSubmit.getSuggestSubmitState( ).getIdSuggestSubmitState( ) );
+            daoUtil.setTimestamp( 4, timestamp );
+            daoUtil.setInt( 5, suggestSubmit.getNumberVote( ) );
+            daoUtil.setInt( 6, suggestSubmit.getNumberScore( ) );
+
+            if ( suggestSubmit.getCategory( ) != null )
+            {
+                daoUtil.setInt( 7, suggestSubmit.getCategory( ).getIdCategory( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( 7 );
+            }
+
+            daoUtil.setString( 8, suggestSubmit.getSuggestSubmitValue( ) );
+            daoUtil.setString( 9, suggestSubmit.getSuggestSubmitTitle( ) );
+            daoUtil.setInt( 10, suggestSubmit.getNumberCommentEnable( ) );
+            daoUtil.setString( 11, suggestSubmit.getSuggestSubmitValueShowInTheList( ) );
+            daoUtil.setBoolean( 12, suggestSubmit.isReported( ) );
+            daoUtil.setString( 13, suggestSubmit.getLuteceUserKey( ) );
+            daoUtil.setInt( 14, suggestSubmit.getSuggestSubmitOrder( ) );
+
+            if ( suggestSubmit.getSuggestSubmitType( ) != null )
+            {
+                daoUtil.setInt( 15, suggestSubmit.getSuggestSubmitType( ).getIdType( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( 15 );
+            }
+
+            daoUtil.setInt( 16, suggestSubmit.getNumberView( ) );
+            daoUtil.setBoolean( 17, suggestSubmit.isDisableVote( ) );
+            daoUtil.setBoolean( 18, suggestSubmit.isPinned( ) );
+            daoUtil.setBoolean( 19, suggestSubmit.isDisableComment( ) );
+
+            if ( suggestSubmit.getIdImageResource( ) != null )
+            {
+                daoUtil.setInt( 20, suggestSubmit.getIdImageResource( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( 20 );
+            }
+
+            daoUtil.setInt( 21, suggestSubmit.getNumberComment( ) );
+            daoUtil.executeUpdate( );
+
+            return suggestSubmit.getIdSuggestSubmit( );
         }
-
-        suggestSubmit.setSuggestSubmitOrder( maxOrderSuggestSubmit( suggestSubmit.getSuggest( ).getIdSuggest( ), false, plugin ) + 1 );
-        daoUtil.setInt( 1, suggestSubmit.getIdSuggestSubmit( ) );
-        daoUtil.setInt( 2, suggestSubmit.getSuggest( ).getIdSuggest( ) );
-        daoUtil.setInt( 3, suggestSubmit.getSuggestSubmitState( ).getIdSuggestSubmitState( ) );
-        daoUtil.setTimestamp( 4, timestamp );
-        daoUtil.setInt( 5, suggestSubmit.getNumberVote( ) );
-        daoUtil.setInt( 6, suggestSubmit.getNumberScore( ) );
-
-        if ( suggestSubmit.getCategory( ) != null )
-        {
-            daoUtil.setInt( 7, suggestSubmit.getCategory( ).getIdCategory( ) );
-        }
-        else
-        {
-            daoUtil.setIntNull( 7 );
-        }
-
-        daoUtil.setString( 8, suggestSubmit.getSuggestSubmitValue( ) );
-        daoUtil.setString( 9, suggestSubmit.getSuggestSubmitTitle( ) );
-        daoUtil.setInt( 10, suggestSubmit.getNumberCommentEnable( ) );
-        daoUtil.setString( 11, suggestSubmit.getSuggestSubmitValueShowInTheList( ) );
-        daoUtil.setBoolean( 12, suggestSubmit.isReported( ) );
-        daoUtil.setString( 13, suggestSubmit.getLuteceUserKey( ) );
-        daoUtil.setInt( 14, suggestSubmit.getSuggestSubmitOrder( ) );
-
-        if ( suggestSubmit.getSuggestSubmitType( ) != null )
-        {
-            daoUtil.setInt( 15, suggestSubmit.getSuggestSubmitType( ).getIdType( ) );
-        }
-        else
-        {
-            daoUtil.setIntNull( 15 );
-        }
-
-        daoUtil.setInt( 16, suggestSubmit.getNumberView( ) );
-        daoUtil.setBoolean( 17, suggestSubmit.isDisableVote( ) );
-        daoUtil.setBoolean( 18, suggestSubmit.isPinned( ) );
-        daoUtil.setBoolean( 19, suggestSubmit.isDisableComment( ) );
-
-        if ( suggestSubmit.getIdImageResource( ) != null )
-        {
-            daoUtil.setInt( 20, suggestSubmit.getIdImageResource( ) );
-        }
-        else
-        {
-            daoUtil.setIntNull( 20 );
-        }
-
-        daoUtil.setInt( 21, suggestSubmit.getNumberComment( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
-
-        return suggestSubmit.getIdSuggestSubmit( );
     }
 
     /**
@@ -207,22 +209,23 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
      *            the plugin
      * @return the instance of the suggestSubmit
      */
+    @Override
     public SuggestSubmit load( int nIdSuggestSubmit, Plugin plugin )
     {
         SuggestSubmit suggestSubmit = null;
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
-        daoUtil.setInt( 1, nIdSuggestSubmit );
-        daoUtil.executeQuery( );
-
-        if ( daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
-            suggestSubmit = getRow( daoUtil );
+            daoUtil.setInt( 1, nIdSuggestSubmit );
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) )
+            {
+                suggestSubmit = getRow( daoUtil );
+            }
+
+            return suggestSubmit;
         }
-
-        daoUtil.free( );
-
-        return suggestSubmit;
     }
 
     /**
@@ -233,12 +236,14 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
      * @param plugin
      *            the plugin
      */
+    @Override
     public void delete( int nIdSuggestSubmit, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1, nIdSuggestSubmit );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdSuggestSubmit );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -251,58 +256,59 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
      */
     public void store( SuggestSubmit suggestSubmit, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        daoUtil.setInt( 1, suggestSubmit.getIdSuggestSubmit( ) );
-        daoUtil.setInt( 2, suggestSubmit.getSuggest( ).getIdSuggest( ) );
-        daoUtil.setInt( 3, suggestSubmit.getSuggestSubmitState( ).getIdSuggestSubmitState( ) );
-        daoUtil.setInt( 4, suggestSubmit.getNumberVote( ) );
-        daoUtil.setInt( 5, suggestSubmit.getNumberScore( ) );
-
-        if ( suggestSubmit.getCategory( ) != null )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
-            daoUtil.setInt( 6, suggestSubmit.getCategory( ).getIdCategory( ) );
-        }
-        else
-        {
-            daoUtil.setIntNull( 6 );
-        }
+            daoUtil.setInt( 1, suggestSubmit.getIdSuggestSubmit( ) );
+            daoUtil.setInt( 2, suggestSubmit.getSuggest( ).getIdSuggest( ) );
+            daoUtil.setInt( 3, suggestSubmit.getSuggestSubmitState( ).getIdSuggestSubmitState( ) );
+            daoUtil.setInt( 4, suggestSubmit.getNumberVote( ) );
+            daoUtil.setInt( 5, suggestSubmit.getNumberScore( ) );
 
-        daoUtil.setString( 7, suggestSubmit.getSuggestSubmitValue( ) );
-        daoUtil.setString( 8, suggestSubmit.getSuggestSubmitTitle( ) );
-        daoUtil.setInt( 9, suggestSubmit.getNumberCommentEnable( ) );
-        daoUtil.setString( 10, suggestSubmit.getSuggestSubmitValueShowInTheList( ) );
-        daoUtil.setBoolean( 11, suggestSubmit.isReported( ) );
-        daoUtil.setString( 12, suggestSubmit.getLuteceUserKey( ) );
-        daoUtil.setInt( 13, suggestSubmit.getSuggestSubmitOrder( ) );
+            if ( suggestSubmit.getCategory( ) != null )
+            {
+                daoUtil.setInt( 6, suggestSubmit.getCategory( ).getIdCategory( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( 6 );
+            }
 
-        if ( suggestSubmit.getSuggestSubmitType( ) != null )
-        {
-            daoUtil.setInt( 14, suggestSubmit.getSuggestSubmitType( ).getIdType( ) );
+            daoUtil.setString( 7, suggestSubmit.getSuggestSubmitValue( ) );
+            daoUtil.setString( 8, suggestSubmit.getSuggestSubmitTitle( ) );
+            daoUtil.setInt( 9, suggestSubmit.getNumberCommentEnable( ) );
+            daoUtil.setString( 10, suggestSubmit.getSuggestSubmitValueShowInTheList( ) );
+            daoUtil.setBoolean( 11, suggestSubmit.isReported( ) );
+            daoUtil.setString( 12, suggestSubmit.getLuteceUserKey( ) );
+            daoUtil.setInt( 13, suggestSubmit.getSuggestSubmitOrder( ) );
+
+            if ( suggestSubmit.getSuggestSubmitType( ) != null )
+            {
+                daoUtil.setInt( 14, suggestSubmit.getSuggestSubmitType( ).getIdType( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( 14 );
+            }
+
+            daoUtil.setInt( 15, suggestSubmit.getNumberView( ) );
+            daoUtil.setBoolean( 16, suggestSubmit.isDisableVote( ) );
+            daoUtil.setBoolean( 17, suggestSubmit.isPinned( ) );
+            daoUtil.setBoolean( 18, suggestSubmit.isDisableComment( ) );
+
+            if ( suggestSubmit.getIdImageResource( ) != null )
+            {
+                daoUtil.setInt( 19, suggestSubmit.getIdImageResource( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( 19 );
+            }
+
+            daoUtil.setInt( 20, suggestSubmit.getNumberComment( ) );
+            daoUtil.setInt( 21, suggestSubmit.getIdSuggestSubmit( ) );
+
+            daoUtil.executeUpdate( );
         }
-        else
-        {
-            daoUtil.setIntNull( 14 );
-        }
-
-        daoUtil.setInt( 15, suggestSubmit.getNumberView( ) );
-        daoUtil.setBoolean( 16, suggestSubmit.isDisableVote( ) );
-        daoUtil.setBoolean( 17, suggestSubmit.isPinned( ) );
-        daoUtil.setBoolean( 18, suggestSubmit.isDisableComment( ) );
-
-        if ( suggestSubmit.getIdImageResource( ) != null )
-        {
-            daoUtil.setInt( 19, suggestSubmit.getIdImageResource( ) );
-        }
-        else
-        {
-            daoUtil.setIntNull( 19 );
-        }
-
-        daoUtil.setInt( 20, suggestSubmit.getNumberComment( ) );
-        daoUtil.setInt( 21, suggestSubmit.getIdSuggestSubmit( ) );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
     }
 
     /**
@@ -314,11 +320,12 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
      *            the plugin
      * @return the list of suggestSubmit
      */
+    @Override
     public List<SuggestSubmit> selectListByFilter( SubmitFilter filter, Plugin plugin )
     {
-        List<SuggestSubmit> suggestSubmitList = new ArrayList<SuggestSubmit>( );
+        List<SuggestSubmit> suggestSubmitList = new ArrayList<>( );
 
-        List<String> listStrFilter = new ArrayList<String>( );
+        List<String> listStrFilter = new ArrayList<>( );
         String strOrderBy = null;
 
         listStrFilter.add( SQL_JOIN_STATE );
@@ -385,79 +392,80 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
         }
 
         String strSQL = SuggestUtils.buildRequestWithFilter( SQL_QUERY_SELECT_SUGGEST_SUBMIT_BY_FILTER, listStrFilter, strOrderBy );
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
-        int nIndex = 1;
 
-        if ( filter.containsIdSuggestSubmit( ) )
+        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdSuggestSubmit( ) );
-            nIndex++;
+            int nIndex = 1;
+
+            if ( filter.containsIdSuggestSubmit( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdSuggestSubmit( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdSuggest( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdSuggest( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdSuggestSubmitState( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdSuggestSubmitState( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdCategory( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdCategory( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsDateFirst( ) )
+            {
+                daoUtil.setTimestamp( nIndex, filter.getDateFirst( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsDateLast( ) )
+            {
+                daoUtil.setTimestamp( nIndex, filter.getDateLast( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdReported( ) )
+            {
+                daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdReported( ) ) );
+                nIndex++;
+            }
+
+            if ( filter.containsNumberVote( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getNumberVote( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdPinned( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdPinned( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdType( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdType( ) );
+                nIndex++;
+            }
+
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                suggestSubmitList.add( getRow( daoUtil ) );
+            }
+
+            return suggestSubmitList;
         }
-
-        if ( filter.containsIdSuggest( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdSuggest( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdSuggestSubmitState( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdSuggestSubmitState( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdCategory( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdCategory( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsDateFirst( ) )
-        {
-            daoUtil.setTimestamp( nIndex, filter.getDateFirst( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsDateLast( ) )
-        {
-            daoUtil.setTimestamp( nIndex, filter.getDateLast( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdReported( ) )
-        {
-            daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdReported( ) ) );
-            nIndex++;
-        }
-
-        if ( filter.containsNumberVote( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getNumberVote( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdPinned( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdPinned( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdType( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdType( ) );
-            nIndex++;
-        }
-
-        daoUtil.executeQuery( );
-
-        while ( daoUtil.next( ) )
-        {
-            suggestSubmitList.add( getRow( daoUtil ) );
-        }
-
-        daoUtil.free( );
-
-        return suggestSubmitList;
     }
 
     /**
@@ -469,10 +477,11 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
      *            the plugin
      * @return the list of suggestSubmit id
      */
+    @Override
     public List<Integer> selectIdListByFilter( SubmitFilter filter, Plugin plugin )
     {
-        List<Integer> suggestSubmitIdList = new ArrayList<Integer>( );
-        List<String> listStrFilter = new ArrayList<String>( );
+        List<Integer> suggestSubmitIdList = new ArrayList<>( );
+        List<String> listStrFilter = new ArrayList<>( );
         String strOrderBy = null;
 
         if ( filter.containsIdSuggest( ) )
@@ -540,98 +549,87 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
             strOrderBy = getOrderBy( filter.getSortBy( ) );
         }
 
-        // if(filter.isOrderByScore())
-        // {
-        // strSQL += SQL_ORDER_BY_SCORE;
-        // }
-        // else if(filter.isOrderByCommentNumber())
-        // {
-        // strSQL += SQL_ORDER_BY_COMMENT_NUMBER_ASC;
-        // }
-        // else
-        // {
-        // strSQL += SQL_ORDER_BY_DATE_RESPONSE;
-        // }
         String strSQL = SuggestUtils.buildRequestWithFilter( SQL_QUERY_SELECT_ID_SUGGEST_SUBMIT_BY_FILTER, listStrFilter, strOrderBy );
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
-        int nIndex = 1;
 
-        if ( filter.containsIdSuggest( ) )
+        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdSuggest( ) );
-            nIndex++;
+            int nIndex = 1;
+
+            if ( filter.containsIdSuggest( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdSuggest( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdSuggestSubmit( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdSuggestSubmit( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdSuggestSubmitState( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdSuggestSubmitState( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdCategory( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdCategory( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsDateFirst( ) )
+            {
+                daoUtil.setTimestamp( nIndex, filter.getDateFirst( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsDateLast( ) )
+            {
+                daoUtil.setTimestamp( nIndex, filter.getDateLast( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdReported( ) )
+            {
+                daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdReported( ) ) );
+                nIndex++;
+            }
+
+            if ( filter.containsNumberVote( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getNumberVote( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdPinned( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdPinned( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsLuteceUserKey( ) )
+            {
+                daoUtil.setString( nIndex, filter.getLuteceUserKey( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdType( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdType( ) );
+                nIndex++;
+            }
+
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                suggestSubmitIdList.add( daoUtil.getInt( 1 ) );
+            }
+
+            return suggestSubmitIdList;
         }
-
-        if ( filter.containsIdSuggestSubmit( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdSuggestSubmit( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdSuggestSubmitState( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdSuggestSubmitState( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdCategory( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdCategory( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsDateFirst( ) )
-        {
-            daoUtil.setTimestamp( nIndex, filter.getDateFirst( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsDateLast( ) )
-        {
-            daoUtil.setTimestamp( nIndex, filter.getDateLast( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdReported( ) )
-        {
-            daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdReported( ) ) );
-            nIndex++;
-        }
-
-        if ( filter.containsNumberVote( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getNumberVote( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdPinned( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdPinned( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsLuteceUserKey( ) )
-        {
-            daoUtil.setString( nIndex, filter.getLuteceUserKey( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdType( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdType( ) );
-            nIndex++;
-        }
-
-        daoUtil.executeQuery( );
-
-        while ( daoUtil.next( ) )
-        {
-            suggestSubmitIdList.add( daoUtil.getInt( 1 ) );
-        }
-
-        daoUtil.free( );
-
-        return suggestSubmitIdList;
     }
 
     /**
@@ -643,10 +641,11 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
      *            the plugin
      * @return the number of all the suggestSubmit who verify the filter
      */
+    @Override
     public int selectCountByFilter( SubmitFilter filter, Plugin plugin )
     {
         int nIdCount = 0;
-        List<String> listStrFilter = new ArrayList<String>( );
+        List<String> listStrFilter = new ArrayList<>( );
 
         if ( filter.containsIdSuggest( ) )
         {
@@ -710,85 +709,85 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
         }
 
         String strSQL = SuggestUtils.buildRequestWithFilter( SQL_QUERY_SELECT_COUNT_BY_FILTER, listStrFilter, null );
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
-        int nIndex = 1;
-
-        if ( filter.containsIdSuggest( ) )
+        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdSuggest( ) );
-            nIndex++;
+            int nIndex = 1;
+
+            if ( filter.containsIdSuggest( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdSuggest( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdSuggestSubmit( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdSuggestSubmit( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdSuggestSubmitState( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdSuggestSubmitState( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdCategory( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdCategory( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsDateFirst( ) )
+            {
+                daoUtil.setTimestamp( nIndex, filter.getDateFirst( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsDateLast( ) )
+            {
+                daoUtil.setTimestamp( nIndex, filter.getDateLast( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdReported( ) )
+            {
+                daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdReported( ) ) );
+                nIndex++;
+            }
+
+            if ( filter.containsNumberVote( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getNumberVote( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdPinned( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdPinned( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsLuteceUserKey( ) )
+            {
+                daoUtil.setString( nIndex, filter.getLuteceUserKey( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdType( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdType( ) );
+                nIndex++;
+            }
+
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) )
+            {
+                nIdCount = daoUtil.getInt( 1 );
+            }
+
+            return nIdCount;
         }
-
-        if ( filter.containsIdSuggestSubmit( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdSuggestSubmit( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdSuggestSubmitState( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdSuggestSubmitState( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdCategory( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdCategory( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsDateFirst( ) )
-        {
-            daoUtil.setTimestamp( nIndex, filter.getDateFirst( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsDateLast( ) )
-        {
-            daoUtil.setTimestamp( nIndex, filter.getDateLast( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdReported( ) )
-        {
-            daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdReported( ) ) );
-            nIndex++;
-        }
-
-        if ( filter.containsNumberVote( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getNumberVote( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdPinned( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdPinned( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsLuteceUserKey( ) )
-        {
-            daoUtil.setString( nIndex, filter.getLuteceUserKey( ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdType( ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdType( ) );
-            nIndex++;
-        }
-
-        daoUtil.executeQuery( );
-
-        if ( daoUtil.next( ) )
-        {
-            nIdCount = daoUtil.getInt( 1 );
-        }
-
-        daoUtil.free( );
-
-        return nIdCount;
     }
 
     /**
@@ -800,11 +799,11 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
      */
     private String getOrderBy( List<Integer> listSortBy )
     {
-        StringBuffer strOrderBy = new StringBuffer( );
+        StringBuilder strOrderBy = new StringBuilder( );
         String strReturn = SuggestUtils.EMPTY_STRING;
         int ncpt = 0;
 
-        if ( ( listSortBy != null ) && ( listSortBy.size( ) != 0 ) )
+        if ( ( listSortBy != null ) && ( !listSortBy.isEmpty( ) ) )
         {
             strOrderBy.append( SQL_ORDER_BY );
 
@@ -905,11 +904,12 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
      */
     public void storeSuggestSubmitOrder( int nNewOrder, int nId, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_SUGGEST_SUBMIT_LIST_ORDER, plugin );
-        daoUtil.setInt( 1, nNewOrder );
-        daoUtil.setInt( 2, nId );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_SUGGEST_SUBMIT_LIST_ORDER, plugin ) )
+        {
+            daoUtil.setInt( 1, nNewOrder );
+            daoUtil.setInt( 2, nId );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -917,26 +917,28 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
      * 
      * @param nIdSuggest
      *            the id of the suggest
+     * @param bListPinned
      * @return the max order of suggestsubmit
      * @param plugin
      *            The plugin
      */
+    @Override
     public int maxOrderSuggestSubmit( int nIdSuggest, boolean bListPinned, Plugin plugin )
     {
         int nOrder = 0;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_SUGGEST_SUBMIT_LIST_ORDER, plugin );
-        daoUtil.setInt( 1, nIdSuggest );
-        daoUtil.setBoolean( 2, bListPinned );
-        daoUtil.executeQuery( );
-
-        if ( daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_SUGGEST_SUBMIT_LIST_ORDER, plugin ) )
         {
-            nOrder = daoUtil.getInt( 1 );
+            daoUtil.setInt( 1, nIdSuggest );
+            daoUtil.setBoolean( 2, bListPinned );
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) )
+            {
+                nOrder = daoUtil.getInt( 1 );
+            }
+
+            return nOrder;
         }
-
-        daoUtil.free( );
-
-        return nOrder;
     }
 
     /**

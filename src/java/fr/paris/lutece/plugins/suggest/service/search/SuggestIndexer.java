@@ -247,9 +247,9 @@ public class SuggestIndexer implements SearchIndexer
         // Add the uid as a field, so that index can be incrementally maintained.
         // This field is not stored with question/answer, it is indexed, but it is not
         // tokenized prior to indexing.
-        doc.add( new Field( SuggestSearchItem.FIELD_UID, String.valueOf( suggestSubmit.getIdSuggestSubmit( ) ) + "_" + SHORT_NAME, ft ) );
+        doc.add( new Field( SearchItem.FIELD_UID, String.valueOf( suggestSubmit.getIdSuggestSubmit( ) ) + "_" + SHORT_NAME, ft ) );
         // Add state
-        doc.add( new Field( SuggestSearchItem.FIELD_STATE, Integer.toString( suggestSubmit.getSuggestSubmitState( ).getIdSuggestSubmitState( ) ), ft ) );
+        doc.add( new Field( SearchItem.FIELD_STATE, Integer.toString( suggestSubmit.getSuggestSubmitState( ).getIdSuggestSubmitState( ) ), ft ) );
 
         StringWriter writerFieldContent = new StringWriter( );
         writerFieldContent.write( suggestSubmit.getSuggestSubmitValue( ) );
@@ -283,16 +283,16 @@ public class SuggestIndexer implements SearchIndexer
         StringBuilder sb = new StringBuilder( handler.toString( ) );
         // Add the tag-stripped contents as a Reader-valued Text field so it will
         // get tokenized and indexed.
-        doc.add( new Field( SuggestSearchItem.FIELD_CONTENTS, sb.toString( ), TextField.TYPE_NOT_STORED ) );
+        doc.add( new Field( SearchItem.FIELD_CONTENTS, sb.toString( ), TextField.TYPE_NOT_STORED ) );
 
         // Add the title as a separate Text field, so that it can be searched
         // separately.
-        doc.add( new Field( SuggestSearchItem.FIELD_TITLE, suggestSubmit.getSuggestSubmitTitle( ), ftNo ) );
+        doc.add( new Field( SearchItem.FIELD_TITLE, suggestSubmit.getSuggestSubmitTitle( ), ftNo ) );
 
         // Add the summary as an UnIndexed field, so that it is stored and returned
         // with hit documents for display.
         // doc.add( new Field( SearchItem.FIELD_SUMMARY, suggestSubmit.getSuggestSubmitValueShowInTheList(), Field.Store.YES, Field.Index.NO ) );
-        doc.add( new Field( SuggestSearchItem.FIELD_TYPE, INDEX_TYPE_SUGGEST, ft ) );
+        doc.add( new Field( SearchItem.FIELD_TYPE, INDEX_TYPE_SUGGEST, ft ) );
 
         Plugin plugin = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
         Suggest suggest = SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), plugin );
@@ -350,7 +350,7 @@ public class SuggestIndexer implements SearchIndexer
      */
     public List<String> getListType( )
     {
-        List<String> listType = new ArrayList<String>( );
+        List<String> listType = new ArrayList<>( );
         listType.add( INDEX_TYPE_SUGGEST );
 
         return listType;

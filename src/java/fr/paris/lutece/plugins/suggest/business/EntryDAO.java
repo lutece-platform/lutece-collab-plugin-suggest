@@ -456,7 +456,7 @@ public final class EntryDAO implements IEntryDAO
      */
     public List<Integer> selectListRegularExpressionKeyByIdEntry( int nIdEntry, Plugin plugin )
     {
-        List<Integer> regularExpressionList = new ArrayList<Integer>( );
+        List<Integer> regularExpressionList = new ArrayList<>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_ENTRY, plugin );
         daoUtil.setInt( 1, nIdEntry );
         daoUtil.executeQuery( );

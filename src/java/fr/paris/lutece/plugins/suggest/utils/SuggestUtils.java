@@ -206,7 +206,7 @@ public final class SuggestUtils
             }
 
             Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( suggest.getIdMailingListSuggestSubmit( ) );
-            Map<String, Object> model = new HashMap<String, Object>( );
+            Map<String, Object> model = new HashMap<>( );
             model.put( MARK_SUGGEST, suggest );
             model.put( MARK_SUGGEST_SUBMIT, suggestSubmit );
             model.put( MARK_BASE_URL, AppPathService.getBaseUrl( request ) );
@@ -252,7 +252,7 @@ public final class SuggestUtils
             }
 
             Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( suggest.getIdMailingListSuggestSubmit( ) );
-            Map<String, Object> model = new HashMap<String, Object>( );
+            Map<String, Object> model = new HashMap<>( );
             model.put( MARK_SUGGEST, suggest );
             model.put( MARK_SUGGEST_SUBMIT, suggestSubmit );
 
@@ -292,7 +292,7 @@ public final class SuggestUtils
             String strSenderEmail = MailService.getNoReplyEmail( );
 
             Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( suggest.getIdMailingListSuggestSubmit( ) );
-            Map<String, Object> model = new HashMap<String, Object>( );
+            Map<String, Object> model = new HashMap<>( );
             model.put( MARK_SUGGEST, suggest );
             model.put( MARK_COMMENT_SUBMIT, commentSubmit );
             model.put( MARK_BASE_URL, AppPathService.getBaseUrl( request ) );
@@ -333,7 +333,7 @@ public final class SuggestUtils
             String strSenderEmail = MailService.getNoReplyEmail( );
 
             Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( suggest.getIdMailingListSuggestSubmit( ) );
-            Map<String, Object> model = new HashMap<String, Object>( );
+            Map<String, Object> model = new HashMap<>( );
             model.put( MARK_SUGGEST, suggest );
             model.put( MARK_REPORTED_MESSAGE, reportedMessage );
             model.put( MARK_BASE_URL, AppPathService.getBaseUrl( request ) );
@@ -696,7 +696,7 @@ public final class SuggestUtils
     public static Map<String, Object> getModelHtmlForm( Suggest suggest, Plugin plugin, Locale locale, int nIdDefaultCategory, boolean bBackOffice )
     {
         List<IEntry> listEntryFirstLevel;
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         EntryFilter filter;
         StringBuffer strBuffer = new StringBuffer( );
@@ -776,7 +776,7 @@ public final class SuggestUtils
      */
     public static void getHtmlFormEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale )
     {
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         HtmlTemplate template;
         IEntry entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
         model.put( MARK_ENTRY, entry );
@@ -801,7 +801,7 @@ public final class SuggestUtils
     {
         if ( ( response != null ) && ( response.getEntry( ) != null ) )
         {
-            Map<String, Object> model = new HashMap<String, Object>( );
+            Map<String, Object> model = new HashMap<>( );
             HtmlTemplate template;
             model.put( MARK_RESPONSE, response );
             model.put( MARK_IS_TITLE, bTitle );
@@ -1581,7 +1581,7 @@ public final class SuggestUtils
      */
     public static Map<String, Object> depopulate( Suggest suggest )
     {
-        Map<String, Object> mapAttributes = new HashMap<String, Object>( );
+        Map<String, Object> mapAttributes = new HashMap<>( );
 
         for ( java.lang.reflect.Field field : Suggest.class.getDeclaredFields( ) )
         {

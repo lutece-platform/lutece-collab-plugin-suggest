@@ -394,7 +394,7 @@ public class SuggestApp implements XPageApplication
      */
     public XPage getViewSuggestList( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         LuteceUser luteceUserConnected = SecurityService.getInstance( ).getRegisteredUser( request );
 
         String strContentSuggest = EMPTY_STRING;
@@ -441,7 +441,7 @@ public class SuggestApp implements XPageApplication
         Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, _plugin );
         LuteceUser luteceUserConnected = SecurityService.getInstance( ).getRegisteredUser( request );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         model.put( MARK_VIEW, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT );
 
         if ( suggest == null )
@@ -503,7 +503,7 @@ public class SuggestApp implements XPageApplication
      */
     public XPage getViewSuggestSubmit( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         LuteceUser luteceUserConnected = SecurityService.getInstance( ).getRegisteredUser( request );
         String strIdSubmitSuggest = request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST );
         int nIdSubmitSuggest = SuggestUtils.getIntegerParameter( strIdSubmitSuggest );
@@ -558,7 +558,7 @@ public class SuggestApp implements XPageApplication
             testUserAuthorizationAccess( suggest, request, luteceUserConnected );
         }
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         model.put( MARK_VIEW, CONSTANT_VIEW_CREATE_SUGGEST_SUBMIT );
 
         SearchFields searchFields = getSearchFields( request );
@@ -607,7 +607,7 @@ public class SuggestApp implements XPageApplication
             testUserAuthorizationAccess( suggest, request, luteceUserConnected );
         }
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService( );
 
@@ -646,7 +646,7 @@ public class SuggestApp implements XPageApplication
      */
     public XPage getViewCreateReport( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         LuteceUser luteceUserConnected = SecurityService.getInstance( ).getRegisteredUser( request );
         String strIdSubmitSuggest = request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST );
         int nIdSubmitSuggest = SuggestUtils.getIntegerParameter( strIdSubmitSuggest );
@@ -740,7 +740,7 @@ public class SuggestApp implements XPageApplication
             SuggestUtils.sendNotificationNewSuggestSubmit( suggest, suggestSubmit, request.getLocale( ), request );
         }
 
-        Map<String, Object> parameters = new HashMap<String, Object>( );
+        Map<String, Object> parameters = new HashMap<>( );
         parameters.put( PARAMETER_ID_SUGGEST, nIdSuggest );
         parameters.put( PARAMETER_ACTION, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT );
 
@@ -1010,7 +1010,7 @@ public class SuggestApp implements XPageApplication
 
         if ( !StringUtils.isEmpty( suggest.getConfirmationMessage( ) ) )
         {
-            Map<String, Object> parameters = new HashMap<String, Object>( );
+            Map<String, Object> parameters = new HashMap<>( );
 
             parameters.put( PARAMETER_ID_SUBMIT_SUGGEST, nIdSubmitSuggest );
             parameters.put( PARAMETER_ID_SUGGEST, suggest.getIdSuggest( ) );
@@ -1095,7 +1095,7 @@ public class SuggestApp implements XPageApplication
             SuggestUtils.sendNotificationNewReportedMessage( suggest, reportedMessage, request.getLocale( ), request );
         }
 
-        Map<String, Object> parameters = new HashMap<String, Object>( );
+        Map<String, Object> parameters = new HashMap<>( );
         parameters.put( PARAMETER_ID_SUBMIT_SUGGEST, nIdSubmitSuggest );
         parameters.put( PARAMETER_ID_SUGGEST, suggest.getIdSuggest( ) );
         parameters.put( PARAMETER_ACTION, CONSTANT_VIEW_SUGGEST_SUBMIT );
@@ -1229,7 +1229,7 @@ public class SuggestApp implements XPageApplication
     private String getHtmlListSuggestSubmit( Locale locale, Plugin plugin, Suggest suggest, SearchFields searchFields, UrlItem urlSuggestXPage,
             LuteceUser luteceUserConnected ) throws SiteMessageException
     {
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         List<Integer> listIdSuggestSubmit;
 
@@ -1310,7 +1310,7 @@ public class SuggestApp implements XPageApplication
         filter.setIdState( Suggest.STATE_ENABLE );
 
         List<Suggest> listSuggest = SuggestHome.getSuggestList( filter, plugin );
-        HashMap<String, Object> model = new HashMap<String, Object>( );
+        HashMap<String, Object> model = new HashMap<>( );
         Paginator<Suggest> paginator = new Paginator<Suggest>( listSuggest, nItemsPerPageSuggest, urlSuggestXPage.getUrl( ), PARAMETER_PAGE_INDEX,
                 strCurrentPageIndexSuggest );
 
@@ -1349,7 +1349,7 @@ public class SuggestApp implements XPageApplication
 
         for ( Integer idSuggestSubmit : listSuggestSubmit )
         {
-            HashMap<String, Object> modelSuggest = new HashMap<String, Object>( );
+            HashMap<String, Object> modelSuggest = new HashMap<>( );
 
             luteceUserInfo = null;
             suggestSubmit = _suggestSubmitService.findByPrimaryKey( idSuggestSubmit,
@@ -1391,7 +1391,7 @@ public class SuggestApp implements XPageApplication
 
         for ( CommentSubmit commentSubmit : listCommentSubmit )
         {
-            HashMap<String, Object> modelComment = new HashMap<String, Object>( );
+            HashMap<String, Object> modelComment = new HashMap<>( );
 
             luteceUserInfo = null;
 
@@ -1439,7 +1439,7 @@ public class SuggestApp implements XPageApplication
             throws SiteMessageException
     {
         SuggestUserInfo luteceUserInfo = null;
-        HashMap<String, Object> model = new HashMap<String, Object>( );
+        HashMap<String, Object> model = new HashMap<>( );
 
         if ( ( suggestSubmit == null ) || ( suggestSubmit.getSuggestSubmitState( ).getNumber( ) == SuggestSubmit.STATE_DISABLE ) )
         {
@@ -1521,7 +1521,7 @@ public class SuggestApp implements XPageApplication
             VoteType voteType = VoteTypeHome.findByPrimaryKey( suggest.getVoteType( ).getIdVoteType( ), _plugin );
 
             String strFilePath = PATH_TYPE_VOTE_FOLDER + voteType.getTemplateFileName( );
-            HashMap<String, Object> model = new HashMap<String, Object>( );
+            HashMap<String, Object> model = new HashMap<>( );
             model.put( MARK_ID_SUGGEST, suggest.getIdSuggest( ) );
             model.put( MARK_ID_SUGGEST_SUBMIT, suggestSubmit.getIdSuggestSubmit( ) );
             model.put( MARK_VIEW, strView );
@@ -1552,7 +1552,7 @@ public class SuggestApp implements XPageApplication
      */
     private String getHtmlReported( HttpServletRequest request, int nMode, Plugin plugin, SuggestSubmit suggestSubmit ) throws SiteMessageException
     {
-        HashMap<String, Object> model = new HashMap<String, Object>( );
+        HashMap<String, Object> model = new HashMap<>( );
 
         if ( ( suggestSubmit == null ) || ( suggestSubmit.getSuggestSubmitState( ).getNumber( ) == SuggestSubmit.STATE_DISABLE ) )
         {
@@ -1589,7 +1589,7 @@ public class SuggestApp implements XPageApplication
     private String getHtmlCommentSubmitList( HttpServletRequest request, List<CommentSubmit> listCommentSubmit, Suggest suggest, int nIdSubmitSuggest,
             LuteceUser luteceUserConnected, Plugin plugin )
     {
-        HashMap<String, Object> model = new HashMap<String, Object>( );
+        HashMap<String, Object> model = new HashMap<>( );
 
         model.put( MARK_SUGGEST, suggest );
         model.put( MARK_ID_SUGGEST, suggest.getIdSuggest( ) );

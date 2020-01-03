@@ -84,7 +84,7 @@ public class ManageSuggestJspBean extends PluginAdminPageJspBean
         AdminUser adminUser = getUser( );
         setPageTitleProperty( EMPTY_STRING );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         if ( RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, ExportFormatResourceIdService.PERMISSION_MANAGE, adminUser ) )
         {

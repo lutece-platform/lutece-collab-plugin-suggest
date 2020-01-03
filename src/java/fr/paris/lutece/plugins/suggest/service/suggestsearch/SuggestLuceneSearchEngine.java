@@ -37,6 +37,7 @@ import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
 import fr.paris.lutece.plugins.suggest.service.search.SuggestIndexer;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
+import fr.paris.lutece.portal.service.search.SearchItem;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.util.ArrayList;
@@ -79,16 +80,16 @@ public class SuggestLuceneSearchEngine implements SuggestSearchEngine
             IndexReader ir = DirectoryReader.open( IndexationService.getDirectoryIndex( ) );
             searcher = new IndexSearcher( ir );
 
-            Collection<String> queries = new ArrayList<String>( );
-            Collection<String> fields = new ArrayList<String>( );
+            Collection<String> queries = new ArrayList<>( );
+            Collection<String> fields = new ArrayList<>( );
             Collection<BooleanClause.Occur> flags = new ArrayList<BooleanClause.Occur>( );
 
             // filter on content
             if ( ( strQuery != null ) && !strQuery.equals( "" ) )
             {
-                Query queryContent = new TermQuery( new Term( SuggestSearchItem.FIELD_CONTENTS, strQuery ) );
+                Query queryContent = new TermQuery( new Term( SearchItem.FIELD_CONTENTS, strQuery ) );
                 queries.add( queryContent.toString( ) );
-                fields.add( SuggestSearchItem.FIELD_CONTENTS );
+                fields.add( SearchItem.FIELD_CONTENTS );
                 flags.add( BooleanClause.Occur.MUST );
             }
 
@@ -104,16 +105,16 @@ public class SuggestLuceneSearchEngine implements SuggestSearchEngine
             // filter on suggest submit state
             if ( filter.containsIdSuggestSubmitState( ) )
             {
-                Query queryState = new TermQuery( new Term( SuggestSearchItem.FIELD_STATE, String.valueOf( filter.getIdSuggestSubmitState( ) ) ) );
+                Query queryState = new TermQuery( new Term( SearchItem.FIELD_STATE, String.valueOf( filter.getIdSuggestSubmitState( ) ) ) );
                 queries.add( queryState.toString( ) );
-                fields.add( SuggestSearchItem.FIELD_STATE );
+                fields.add( SearchItem.FIELD_STATE );
                 flags.add( BooleanClause.Occur.MUST );
             }
 
             // filter on suggest type
-            Query queryTypeSuggest = new TermQuery( new Term( SuggestSearchItem.FIELD_TYPE, SuggestIndexer.INDEX_TYPE_SUGGEST ) );
+            Query queryTypeSuggest = new TermQuery( new Term( SearchItem.FIELD_TYPE, SuggestIndexer.INDEX_TYPE_SUGGEST ) );
             queries.add( queryTypeSuggest.toString( ) );
-            fields.add( SuggestSearchItem.FIELD_TYPE );
+            fields.add( SearchItem.FIELD_TYPE );
             flags.add( BooleanClause.Occur.MUST );
 
             Query queryMulti = MultiFieldQueryParser.parse( (String [ ]) queries.toArray( new String [ queries.size( )] ),

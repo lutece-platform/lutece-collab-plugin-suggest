@@ -142,7 +142,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
     {
         Plugin plugin = getPlugin( );
         Locale locale = getLocale( );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         List<ExportFormat> listExportFormat = ExportFormatHome.getList( plugin );
         listExportFormat = (List<ExportFormat>) RBACService.getAuthorizedCollection( listExportFormat, ExportFormatResourceIdService.PERMISSION_MANAGE,
                 getUser( ) );
@@ -179,7 +179,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
         }
 
         Locale locale = getLocale( );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         setPageTitleProperty( PROPERTY_CREATE_EXPORT_FORMAT_TITLE );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_EXPORT, locale, model );
@@ -228,7 +228,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
         Locale locale = getLocale( );
         ExportFormat exportFormat;
         String strIdExport = request.getParameter( PARAMETER_ID_EXPORT );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         int nIdExport = -1;
 
         if ( ( strIdExport != null ) && !strIdExport.equals( EMPTY_STRING )

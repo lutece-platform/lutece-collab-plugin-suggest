@@ -125,7 +125,7 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
     {
         Plugin plugin = getPlugin( );
         Locale locale = getLocale( );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         List<SuggestSubmitType> listSuggestSubmitType = SuggestSubmitTypeHome.getList( plugin );
         _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage, _nDefaultItemsPerPage );
@@ -153,7 +153,7 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
     public String getCreateSuggestSubmitType( HttpServletRequest request )
     {
         Locale locale = getLocale( );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         setPageTitleProperty( PROPERTY_CREATE_SUGGEST_SUBMIT_TYPE_TITLE );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_SUGGEST_SUBMIT_TYPE, locale, model );
@@ -197,7 +197,7 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
         Locale locale = getLocale( );
         SuggestSubmitType suggestSubmitType;
         String strIdSuggestSubmitType = request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT_TYPE );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         int nIdSuggestSubmitType = -1;
 
         if ( ( strIdSuggestSubmitType != null ) && !strIdSuggestSubmitType.equals( EMPTY_STRING ) )

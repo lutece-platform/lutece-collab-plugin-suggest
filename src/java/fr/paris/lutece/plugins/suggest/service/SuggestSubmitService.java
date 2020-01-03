@@ -175,7 +175,7 @@ public class SuggestSubmitService implements ISuggestSubmitService
         SubmitFilter filter = new SubmitFilter( );
         filter.setIdSuggest( nIdSuggest );
 
-        List<Integer> listSortByManually = new ArrayList<Integer>( );
+        List<Integer> listSortByManually = new ArrayList<>( );
         listSortByManually.add( SubmitFilter.SORT_MANUALLY );
         filter.setSortBy( listSortByManually );
         //

@@ -345,7 +345,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
         {
             Locale locale = Locale.getDefault( );
 
-            Map<String, Object> model = new HashMap<String, Object>( );
+            Map<String, Object> model = new HashMap<>( );
             model.put( MARK_COMMENTS, listComments );
             model.put( MARK_BASE_URL, AppPathService.getProdUrl( (String) null ) );
 
@@ -455,7 +455,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
         {
             Locale locale = Locale.getDefault( );
 
-            Map<String, Object> model = new HashMap<String, Object>( );
+            Map<String, Object> model = new HashMap<>( );
             model.put( MARK_SUGGEST_SUBMIT, listSuggestSubmit );
             model.put( MARK_BASE_URL, AppPathService.getProdUrl( (String) null ) );
 

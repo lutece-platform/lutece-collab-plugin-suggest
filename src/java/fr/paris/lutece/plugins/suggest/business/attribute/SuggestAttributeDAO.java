@@ -55,7 +55,7 @@ public class SuggestAttributeDAO implements ISuggestAttributeDAO
      */
     public Map<String, Object> load( int nIdDirectory, Plugin plugin )
     {
-        Map<String, Object> mapAttributes = new HashMap<String, Object>( );
+        Map<String, Object> mapAttributes = new HashMap<>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setInt( 1, nIdDirectory );
         daoUtil.executeQuery( );

@@ -374,9 +374,9 @@ public class SuggestResourceRss extends ResourceRss
         List<Suggest> suggestList = SuggestHome.getSuggestList( filter, pluginSuggest );
         ReferenceList referenceSuggest = new ReferenceList( );
 
-        HashMap<String, Object> model = new HashMap<String, Object>( );
+        HashMap<String, Object> model = new HashMap<>( );
 
-        Map<String, ReferenceList> suggestMap = new HashMap<String, ReferenceList>( );
+        Map<String, ReferenceList> suggestMap = new HashMap<>( );
 
         for ( Suggest suggest : suggestList )
         {
@@ -418,7 +418,7 @@ public class SuggestResourceRss extends ResourceRss
         ReferenceList referenceSuggest = new ReferenceList( );
 
         SuggestResourceRssConfig suggestResourceRssConfig = SuggestResourceRssConfigHome.findByPrimaryKey( this.getId( ), pluginSuggest );
-        HashMap<String, Object> model = new HashMap<String, Object>( );
+        HashMap<String, Object> model = new HashMap<>( );
 
         if ( request.getParameter( PARAMETER_ID_SUGGEST ) != null )
         {
@@ -431,7 +431,7 @@ public class SuggestResourceRss extends ResourceRss
             model.put( MARK_SUGGEST_LIST_DEFAULT_ITEM, suggestResourceRssConfig.getIdSuggest( ) );
         }
 
-        Map<String, ReferenceList> suggestMap = new HashMap<String, ReferenceList>( );
+        Map<String, ReferenceList> suggestMap = new HashMap<>( );
 
         for ( Suggest suggest : suggestList )
         {
@@ -476,7 +476,7 @@ public class SuggestResourceRss extends ResourceRss
      */
     public String createHtmlRss( )
     {
-        HashMap<String, Object> model = new HashMap<String, Object>( );
+        HashMap<String, Object> model = new HashMap<>( );
         Plugin pluginSuggestglike = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
         SuggestResourceRssConfig config = SuggestResourceRssConfigHome.findByPrimaryKey( this.getId( ), pluginSuggestglike );
 
@@ -519,7 +519,7 @@ public class SuggestResourceRss extends ResourceRss
             // Descriptino of the comments
             for ( CommentSubmit commentSubmit : listResultCommentSubmit )
             {
-                HashMap<String, Object> item = new HashMap<String, Object>( );
+                HashMap<String, Object> item = new HashMap<>( );
 
                 if ( commentSubmit.getLuteceUserKey( ) != null )
                 {
@@ -579,7 +579,7 @@ public class SuggestResourceRss extends ResourceRss
             // Description of the submits
             for ( SuggestSubmit suggestSubmit : listResultSuggestSubmit )
             {
-                HashMap<String, Object> item = new HashMap<String, Object>( );
+                HashMap<String, Object> item = new HashMap<>( );
                 SuggestSubmitState suggestsubmitState = suggestSubmit.getSuggestSubmitState( );
                 Category category = suggestSubmit.getCategory( );
 
@@ -654,7 +654,7 @@ public class SuggestResourceRss extends ResourceRss
             resource.setImage( image );
 
             String strDescription;
-            Map<String, Object> model = new HashMap<String, Object>( );
+            Map<String, Object> model = new HashMap<>( );
 
             model.put( MARK_RSS_SITE_DESCRIPTION, suggestSubmit.getSuggestSubmitValue( ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
             model.put( MARK_RSS_SITE_STATE, suggestsubmitStage.getTitle( ) );
@@ -684,7 +684,7 @@ public class SuggestResourceRss extends ResourceRss
                 IFeedResourceItem item = new FeedResourceItem( );
 
                 String strTitleItem;
-                Map<String, Object> model2 = new HashMap<String, Object>( );
+                Map<String, Object> model2 = new HashMap<>( );
 
                 if ( commentSubmit.getLuteceUserKey( ) != null )
                 {
@@ -772,7 +772,7 @@ public class SuggestResourceRss extends ResourceRss
                 IFeedResourceItem item = new FeedResourceItem( );
 
                 String strTitle;
-                Map<String, Object> model = new HashMap<String, Object>( );
+                Map<String, Object> model = new HashMap<>( );
                 SuggestSubmitState suggestsubmitState = suggestSubmit.getSuggestSubmitState( );
                 Category category = suggestSubmit.getCategory( );
 

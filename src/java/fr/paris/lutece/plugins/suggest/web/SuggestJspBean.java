@@ -481,7 +481,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         refListWorkGroups = AdminWorkgroupService.getUserWorkgroups( adminUser, locale );
         refListSuggestState = getRefListSuggestState( locale );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         Paginator<Suggest> paginator = new Paginator<Suggest>( listSuggest, _nItemsPerPageSuggest, getJspManageSuggest( request ), PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndexSuggest );
 
@@ -544,7 +544,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             return getManageSuggest( request );
         }
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         List<Suggest> listSuggest = SuggestHome.getSuggestList( new SuggestFilter( ), getPlugin( ) );
         int nIdDefaultSuggest = -1;
 
@@ -629,7 +629,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         }
         else
         {
-            listSelectedSuggestSubmit = new ArrayList<String>( );
+            listSelectedSuggestSubmit = new ArrayList<>( );
         }
 
         _searchFields.setSelectedSuggestSubmit( listSelectedSuggestSubmit );
@@ -678,7 +678,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         ReferenceList refListSuggestSort = SuggestUtils.getRefListSuggestSort( getLocale( ) );
         refListAllYesNo = getRefListAllYesNo( getLocale( ) );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         Paginator<Integer> paginator = new Paginator<Integer>( listIdSuggestSubmitResult, _nItemsPerPageSuggestSubmit, getJspManageSuggestSubmit( request ),
                 PARAMETER_PAGE_INDEX, _strCurrentPageIndexSuggestSubmit );
         SuggestSubmit suggestSubmit;
@@ -773,13 +773,13 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         // build Filter
         SubmitFilter filter = SuggestUtils.getSuggestSubmitFilter( getSearchFields( ) );
         // reinit order
-        filter.setSortBy( new ArrayList<Integer>( ) );
+        filter.setSortBy( new ArrayList<>( ) );
         SuggestUtils.initSubmitFilterBySort( filter, SubmitFilter.SORT_MANUALLY );
         SuggestUtils.initSubmitFilterBySort( filter, SubmitFilter.SORT_BY_PINNED_FIRST );
 
         List<Integer> listIdSuggestSubmitResult = _suggestSubmitService.getSuggestSubmitListId( filter, getPlugin( ) );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         Paginator<Integer> paginator = new Paginator<Integer>( listIdSuggestSubmitResult, _nItemsPerPageSuggestSubmitOrder,
                 getJspManageSuggestSubmitOrder( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexSuggestSubmitOrder );
         SuggestSubmit suggestSubmit;
@@ -1020,7 +1020,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         ReferenceList refCategoryList = SuggestUtils.getRefListCategory( suggest.getCategories( ) );
         SuggestUtils.addEmptyItem( refCategoryList );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         Paginator<CommentSubmit> paginator = new Paginator<CommentSubmit>( listCommentSubmit, _nItemsPerPageCommentSubmit,
                 getJspManageCommentSubmit( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexCommentSubmit );
         ReferenceList refListAllYesNo = getRefListAllYesNo( getLocale( ) );
@@ -1932,7 +1932,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         ReferenceList refListSuggestSort = SuggestUtils.getRefListSuggestSort( locale );
         ReferenceList refVoteTypeList = initRefListVoteType( plugin, locale );
         DefaultMessage defaultMessage = DefaultMessageHome.find( plugin );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         model.put( MARK_USER_WORKGROUP_REF_LIST, refListWorkGroups );
         model.put( MARK_MAILING_REF_LIST, refMailingList );
         model.put( MARK_DEFAULT_MESSAGE, defaultMessage );
@@ -2086,7 +2086,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             suggest.setCodeTheme( ThemesService.getGlobalTheme( ) );
         }
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageEntry );
         model.put( MARK_USER_WORKGROUP_REF_LIST, refListWorkGroups );
@@ -2406,7 +2406,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         entry.setSuggest( suggest );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         model.put( MARK_ENTRY, entry );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage( ) );
@@ -2484,7 +2484,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             return getManageSuggest( request );
         }
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         for ( EntryAdditionalAttribute entryAdditionalAttribute : entryAdditionalAttributeList )
         {
@@ -3279,7 +3279,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         int nNbVotes = 0;
 
         List<SuggestSubmit> listSuggestSubmit = _suggestSubmitService.getSuggestSubmitList( filter, plugin );
-        List<String> listUsersKey = new ArrayList<String>( );
+        List<String> listUsersKey = new ArrayList<>( );
 
         for ( SuggestSubmit d : listSuggestSubmit )
         {
@@ -3310,7 +3310,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         ReferenceList refSuggestList = SuggestUtils.getRefListSuggest( listSuggest, false );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         model.put( MARK_FIRST_DATE_FILTER, ( tFirstDateFilter == null ) ? null : new Date( tFirstDateFilter.getTime( ) ) );
         model.put( MARK_LAST_DATE_FILTER, ( tLastDateFilter == null ) ? null : new Date( tLastDateFilter.getTime( ) ) );

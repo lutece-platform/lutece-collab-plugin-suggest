@@ -83,7 +83,7 @@ public class SuggestSearchService
      */
     public List<Integer> getSearchResults( String strQuery, SubmitFilter filter, Plugin plugin )
     {
-        List<Integer> listSuggestSubmitResult = new ArrayList<Integer>( );
+        List<Integer> listSuggestSubmitResult = new ArrayList<>( );
         SuggestSearchEngine engine = SpringContextService.getBean( BEAN_SEARCH_ENGINE );
         List<Integer> suggestSubmitListId = SuggestSubmitService.getService( ).getSuggestSubmitListId( filter, plugin );
         List<SuggestSearchItem> listSearchesults = StringUtils.isEmpty( strQuery ) ? null : engine.getSearchResults( strQuery, filter );

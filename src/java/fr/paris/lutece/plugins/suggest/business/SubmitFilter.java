@@ -81,7 +81,7 @@ public class SubmitFilter
     private int _nIdPinned = ALL_INT;
     private int _nIdContainsCommentDisable = ALL_INT;
     private String _strLuteceUserKey = null;
-    private List<Integer> _listSortBy = new ArrayList<Integer>( );
+    private List<Integer> _listSortBy = new ArrayList<>( );
 
     /**
      * 

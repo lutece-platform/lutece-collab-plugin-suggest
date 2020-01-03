@@ -118,7 +118,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
     {
         Plugin plugin = getPlugin( );
         Locale locale = getLocale( );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         List<Category> listCategory = CategoryHome.getList( plugin );
         listCategory = (List<Category>) RBACService.getAuthorizedCollection( listCategory, CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) );
 
@@ -152,7 +152,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
         }
 
         Locale locale = getLocale( );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         setPageTitleProperty( PROPERTY_CREATE_CATEGORY_TITLE );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_CATEGORY, locale, model );
@@ -200,7 +200,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
         Locale locale = getLocale( );
         Category category;
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         int nIdCategory = -1;
 
