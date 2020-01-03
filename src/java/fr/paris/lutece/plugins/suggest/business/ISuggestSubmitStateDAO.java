@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,36 +37,41 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
-*
-*Interface IVoteTypeDAO
-*
-*/
+ *
+ * Interface IVoteTypeDAO
+ *
+ */
 public interface ISuggestSubmitStateDAO
 {
     /**
-    * Load the data of the suggest submit state from the table
-    *
-    * @param idKey The identifier of the state
-    * @param plugin the plugin
-    * @return the instance of the state
-    */
+     * Load the data of the suggest submit state from the table
+     *
+     * @param idKey
+     *            The identifier of the state
+     * @param plugin
+     *            the plugin
+     * @return the instance of the state
+     */
     SuggestSubmitState load( int idKey, Plugin plugin );
 
     /**
      * Load the data of the suggest submit state from the table by numero
      *
-     * @param numero The numero of the state
-     * @param plugin the plugin
+     * @param numero
+     *            The numero of the state
+     * @param plugin
+     *            the plugin
      * @return the instance of the state
      */
     SuggestSubmitState loadByNumero( int numero, Plugin plugin );
 
     /**
-     * Load the data of all suggest submit state returns them in a  list
-     * @param plugin the plugin
-     * @return  the list of suggest submit state
+     * Load the data of all suggest submit state returns them in a list
+     * 
+     * @param plugin
+     *            the plugin
+     * @return the list of suggest submit state
      */
     List<SuggestSubmitState> select( Plugin plugin );
 }

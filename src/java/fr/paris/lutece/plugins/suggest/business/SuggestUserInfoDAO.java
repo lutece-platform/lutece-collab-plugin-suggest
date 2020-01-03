@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,16 +36,15 @@ package fr.paris.lutece.plugins.suggest.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-
 public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
 {
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT first_name,last_name,business_mail,home_mail,login " +
-        "FROM suggest_suggest_user_info WHERE lutece_user_key = ?  ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_suggest_user_info ( lutece_user_key,first_name,last_name,business_mail,home_mail,login ) " +
-        "VALUES(?,?,?,?,?,?)";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT first_name,last_name,business_mail,home_mail,login "
+            + "FROM suggest_suggest_user_info WHERE lutece_user_key = ?  ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_suggest_user_info ( lutece_user_key,first_name,last_name,business_mail,home_mail,login ) "
+            + "VALUES(?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM suggest_suggest_user_info WHERE lutece_user_key= ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE suggest_suggest_user_info SET " +
-        "first_name= ?,last_name= ?,business_mail=?,home_mail=?,login= ?" + " WHERE lutece_user_key= ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE suggest_suggest_user_info SET " + "first_name= ?,last_name= ?,business_mail=?,home_mail=?,login= ?"
+            + " WHERE lutece_user_key= ? ";
 
     /**
      * {@inheritDoc}
@@ -56,14 +55,14 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
         int ncpt = 1;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
 
-        daoUtil.setString( ncpt++, suggestUserInfo.getLuteceUserKey(  ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getFirstName(  ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getLastName(  ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getBusinessMail(  ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getHomeMail(  ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getLogin(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.setString( ncpt++, suggestUserInfo.getLuteceUserKey( ) );
+        daoUtil.setString( ncpt++, suggestUserInfo.getFirstName( ) );
+        daoUtil.setString( ncpt++, suggestUserInfo.getLastName( ) );
+        daoUtil.setString( ncpt++, suggestUserInfo.getBusinessMail( ) );
+        daoUtil.setString( ncpt++, suggestUserInfo.getHomeMail( ) );
+        daoUtil.setString( ncpt++, suggestUserInfo.getLogin( ) );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -75,14 +74,14 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
         int ncpt = 1;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-        daoUtil.setString( ncpt++, suggestUserInfo.getFirstName(  ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getLastName(  ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getBusinessMail(  ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getHomeMail(  ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getLogin(  ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getLuteceUserKey(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.setString( ncpt++, suggestUserInfo.getFirstName( ) );
+        daoUtil.setString( ncpt++, suggestUserInfo.getLastName( ) );
+        daoUtil.setString( ncpt++, suggestUserInfo.getBusinessMail( ) );
+        daoUtil.setString( ncpt++, suggestUserInfo.getHomeMail( ) );
+        daoUtil.setString( ncpt++, suggestUserInfo.getLogin( ) );
+        daoUtil.setString( ncpt++, suggestUserInfo.getLuteceUserKey( ) );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -99,11 +98,11 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
 
         daoUtil.setString( 1, strLuteceUserKey );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            submitUserInfo = new SuggestUserInfo(  );
+            submitUserInfo = new SuggestUserInfo( );
 
             submitUserInfo.setLuteceUserKey( strLuteceUserKey );
             submitUserInfo.setFirstName( daoUtil.getString( ncpt++ ) );
@@ -113,7 +112,7 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
             submitUserInfo.setLogin( daoUtil.getString( ncpt++ ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return submitUserInfo;
     }
@@ -126,7 +125,7 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setString( 1, strLuteceUserKey );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 }

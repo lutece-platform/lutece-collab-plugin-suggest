@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.suggest.web;
 import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
-
 /**
  * ResourceServletCache
  */
@@ -48,7 +47,7 @@ public class ResourceServletCache extends AbstractCacheableService
     /**
      * Constructor
      */
-    public ResourceServletCache(  )
+    public ResourceServletCache( )
     {
         String strCache = AppPropertiesService.getProperty( PROPERTY_CACHE, "true" );
 
@@ -60,17 +59,20 @@ public class ResourceServletCache extends AbstractCacheableService
 
     /**
      * Gets the cache name
+     * 
      * @return The cache name
      */
     @Override
-    public String getName(  )
+    public String getName( )
     {
         return NAME;
     }
 
     /**
      * Get from the cache
-     * @param strKey The key
+     * 
+     * @param strKey
+     *            The key
      * @return The object or null if not found
      */
     public ResourceValueObject get( String strKey )
@@ -80,8 +82,11 @@ public class ResourceServletCache extends AbstractCacheableService
 
     /**
      * Put an object into the cache
-     * @param strKey The key
-     * @param resource The value
+     * 
+     * @param strKey
+     *            The key
+     * @param resource
+     *            The value
      */
     public void put( String strKey, ResourceValueObject resource )
     {

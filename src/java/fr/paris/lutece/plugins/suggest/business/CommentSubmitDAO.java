@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * This class provides Data Access methods for objects CommentSubmitDAO
  */
@@ -51,19 +50,19 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_comment_submit ) FROM suggest_comment_submit";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_comment_submit,id_suggest_submit,date_comment,comment_value,active, lutece_user_key, official_answer, id_parent_comment,date_modify  " +
-        "FROM suggest_comment_submit WHERE id_comment_submit=? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_comment_submit ( id_comment_submit,id_suggest_submit,date_comment,comment_value,active,lutece_user_key,official_answer,id_parent_comment,date_modify ) " +
-        "VALUES(?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_comment_submit,id_suggest_submit,date_comment,comment_value,active, lutece_user_key, official_answer, id_parent_comment,date_modify  "
+            + "FROM suggest_comment_submit WHERE id_comment_submit=? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_comment_submit ( id_comment_submit,id_suggest_submit,date_comment,comment_value,active,lutece_user_key,official_answer,id_parent_comment,date_modify ) "
+            + "VALUES(?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM suggest_comment_submit WHERE id_comment_submit = ? ";
     private static final String SQL_QUERY_DELETE_BY_ID_PARENT = "DELETE FROM suggest_comment_submit WHERE id_parent_comment = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE suggest_comment_submit SET " +
-        "id_comment_submit=?,id_suggest_submit=?,date_comment=?,comment_value=?,active=? ,lutece_user_key=? ,official_answer=? ,id_parent_comment=?" +
-        " WHERE id_comment_submit=? ";
-    private static final String SQL_QUERY_SELECT_COMMENT_SUBMIT_BY_FILTER = "SELECT dc.id_comment_submit,dc.id_suggest_submit,date_comment,dc.comment_value,dc.active,dc.lutece_user_key,dc.official_answer,dc.id_parent_comment,dc.date_modify " +
-        "FROM suggest_comment_submit dc ";
-    private static final String SQL_QUERY_SELECT_COUNT_BY_FILTER = "SELECT COUNT(dc.id_comment_submit) " +
-        "FROM suggest_comment_submit dc INNER JOIN suggest_suggest_submit ds ON dc.id_suggest_submit = ds.id_suggest_submit ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE suggest_comment_submit SET "
+            + "id_comment_submit=?,id_suggest_submit=?,date_comment=?,comment_value=?,active=? ,lutece_user_key=? ,official_answer=? ,id_parent_comment=?"
+            + " WHERE id_comment_submit=? ";
+    private static final String SQL_QUERY_SELECT_COMMENT_SUBMIT_BY_FILTER = "SELECT dc.id_comment_submit,dc.id_suggest_submit,date_comment,dc.comment_value,dc.active,dc.lutece_user_key,dc.official_answer,dc.id_parent_comment,dc.date_modify "
+            + "FROM suggest_comment_submit dc ";
+    private static final String SQL_QUERY_SELECT_COUNT_BY_FILTER = "SELECT COUNT(dc.id_comment_submit) "
+            + "FROM suggest_comment_submit dc INNER JOIN suggest_suggest_submit ds ON dc.id_suggest_submit = ds.id_suggest_submit ";
     private static final String SQL_FILTER_ID_SUGGEST_SUBMIT = " dc.id_suggest_submit = ? ";
     private static final String SQL_FILTER_ID_PARENT_COMMENT = "dc.id_parent_comment = ? ";
     private static final String SQL_FILTER_ID_SUGGEST = " ds.id_suggest = ? ";
@@ -82,26 +81,21 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     /**
      * Generates a new primary key
      *
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      * @return The new primary key
      */
     private int newPrimaryKey( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery(  );
-
-        int nKey;
-
-        if ( !daoUtil.next(  ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
         {
-            // if the table is empty
-            nKey = 1;
+            daoUtil.executeQuery( );
+
+            daoUtil.next( );
+            int nKey = daoUtil.getInt( 1 ) + 1;
+
+            return nKey;
         }
-
-        nKey = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free(  );
-
-        return nKey;
     }
 
     /**
@@ -110,19 +104,20 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public void insert( CommentSubmit commentSubmit, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        commentSubmit.setIdCommentSubmit( newPrimaryKey( plugin ) );
-        daoUtil.setInt( 1, commentSubmit.getIdCommentSubmit(  ) );
-        daoUtil.setInt( 2, commentSubmit.getSuggestSubmit(  ).getIdSuggestSubmit(  ) );
-        daoUtil.setTimestamp( 3, commentSubmit.getDateComment(  ) );
-        daoUtil.setString( 4, commentSubmit.getValue(  ) );
-        daoUtil.setBoolean( 5, commentSubmit.isActive(  ) );
-        daoUtil.setString( 6, commentSubmit.getLuteceUserKey(  ) );
-        daoUtil.setBoolean( 7, commentSubmit.isOfficialAnswer(  ) );
-        daoUtil.setInt( 8, commentSubmit.getIdParent(  ) );
-        daoUtil.setTimestamp( 9, commentSubmit.getDateModify(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        {
+            commentSubmit.setIdCommentSubmit( newPrimaryKey( plugin ) );
+            daoUtil.setInt( 1, commentSubmit.getIdCommentSubmit( ) );
+            daoUtil.setInt( 2, commentSubmit.getSuggestSubmit( ).getIdSuggestSubmit( ) );
+            daoUtil.setTimestamp( 3, commentSubmit.getDateComment( ) );
+            daoUtil.setString( 4, commentSubmit.getValue( ) );
+            daoUtil.setBoolean( 5, commentSubmit.isActive( ) );
+            daoUtil.setString( 6, commentSubmit.getLuteceUserKey( ) );
+            daoUtil.setBoolean( 7, commentSubmit.isOfficialAnswer( ) );
+            daoUtil.setInt( 8, commentSubmit.getIdParent( ) );
+            daoUtil.setTimestamp( 9, commentSubmit.getDateModify( ) );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -132,33 +127,33 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     public CommentSubmit load( int nIdCommentSubmit, Plugin plugin )
     {
         CommentSubmit commentSubmit = null;
-        SuggestSubmit suggestSubmit = null;
+        SuggestSubmit suggestSubmit;
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
-        daoUtil.setInt( 1, nIdCommentSubmit );
-        daoUtil.executeQuery(  );
-
-        if ( daoUtil.next(  ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
-            commentSubmit = new CommentSubmit(  );
-            commentSubmit.setIdCommentSubmit( daoUtil.getInt( 1 ) );
+            daoUtil.setInt( 1, nIdCommentSubmit );
+            daoUtil.executeQuery( );
 
-            suggestSubmit = new SuggestSubmit(  );
-            suggestSubmit.setIdSuggestSubmit( daoUtil.getInt( 2 ) );
-            commentSubmit.setSuggestSubmit( suggestSubmit );
+            if ( daoUtil.next( ) )
+            {
+                commentSubmit = new CommentSubmit( );
+                commentSubmit.setIdCommentSubmit( daoUtil.getInt( 1 ) );
 
-            commentSubmit.setDateComment( daoUtil.getTimestamp( 3 ) );
-            commentSubmit.setValue( daoUtil.getString( 4 ) );
-            commentSubmit.setActive( daoUtil.getBoolean( 5 ) );
-            commentSubmit.setLuteceUserKey( daoUtil.getString( 6 ) );
-            commentSubmit.setOfficialAnswer( daoUtil.getBoolean( 7 ) );
-            commentSubmit.setIdParent( daoUtil.getInt( 8 ) );
-            commentSubmit.setDateModify( daoUtil.getTimestamp( 9 ) );
+                suggestSubmit = new SuggestSubmit( );
+                suggestSubmit.setIdSuggestSubmit( daoUtil.getInt( 2 ) );
+                commentSubmit.setSuggestSubmit( suggestSubmit );
+
+                commentSubmit.setDateComment( daoUtil.getTimestamp( 3 ) );
+                commentSubmit.setValue( daoUtil.getString( 4 ) );
+                commentSubmit.setActive( daoUtil.getBoolean( 5 ) );
+                commentSubmit.setLuteceUserKey( daoUtil.getString( 6 ) );
+                commentSubmit.setOfficialAnswer( daoUtil.getBoolean( 7 ) );
+                commentSubmit.setIdParent( daoUtil.getInt( 8 ) );
+                commentSubmit.setDateModify( daoUtil.getTimestamp( 9 ) );
+            }
+
+            return commentSubmit;
         }
-
-        daoUtil.free(  );
-
-        return commentSubmit;
     }
 
     /**
@@ -167,10 +162,11 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public void delete( int nIdTagSubmit, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1, nIdTagSubmit );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdTagSubmit );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -179,18 +175,19 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public void store( CommentSubmit commentSubmit, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        daoUtil.setInt( 1, commentSubmit.getIdCommentSubmit(  ) );
-        daoUtil.setInt( 2, commentSubmit.getSuggestSubmit(  ).getIdSuggestSubmit(  ) );
-        daoUtil.setTimestamp( 3, commentSubmit.getDateComment(  ) );
-        daoUtil.setString( 4, commentSubmit.getValue(  ) );
-        daoUtil.setBoolean( 5, commentSubmit.isActive(  ) );
-        daoUtil.setString( 6, commentSubmit.getLuteceUserKey(  ) );
-        daoUtil.setBoolean( 7, commentSubmit.isOfficialAnswer(  ) );
-        daoUtil.setInt( 8, commentSubmit.getIdParent(  ) );
-        daoUtil.setInt( 9, commentSubmit.getIdCommentSubmit(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
+            daoUtil.setInt( 1, commentSubmit.getIdCommentSubmit( ) );
+            daoUtil.setInt( 2, commentSubmit.getSuggestSubmit( ).getIdSuggestSubmit( ) );
+            daoUtil.setTimestamp( 3, commentSubmit.getDateComment( ) );
+            daoUtil.setString( 4, commentSubmit.getValue( ) );
+            daoUtil.setBoolean( 5, commentSubmit.isActive( ) );
+            daoUtil.setString( 6, commentSubmit.getLuteceUserKey( ) );
+            daoUtil.setBoolean( 7, commentSubmit.isOfficialAnswer( ) );
+            daoUtil.setInt( 8, commentSubmit.getIdParent( ) );
+            daoUtil.setInt( 9, commentSubmit.getIdCommentSubmit( ) );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -199,11 +196,12 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public void storeDateModify( Timestamp dateModify, int idCommentSubmit, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_DATE_MODIFY, plugin );
-        daoUtil.setTimestamp( 1, dateModify );
-        daoUtil.setInt( 2, idCommentSubmit );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_DATE_MODIFY, plugin ) )
+        {
+            daoUtil.setTimestamp( 1, dateModify );
+            daoUtil.setInt( 2, idCommentSubmit );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -212,89 +210,89 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public List<CommentSubmit> selectListByFilter( SubmitFilter filter, Integer nLimit, Plugin plugin )
     {
-        List<CommentSubmit> commentSubmitList = new ArrayList<CommentSubmit>(  );
+        List<CommentSubmit> commentSubmitList = new ArrayList<CommentSubmit>( );
         CommentSubmit commentSubmit = null;
         SuggestSubmit suggestSubmit = null;
-        List<String> listStrFilter = new ArrayList<String>(  );
+        List<String> listStrFilter = new ArrayList<String>( );
         String strOrderBy = null;
 
-        if ( filter.containsIdSuggestSubmit(  ) )
+        if ( filter.containsIdSuggestSubmit( ) )
         {
             listStrFilter.add( SQL_FILTER_ID_SUGGEST_SUBMIT );
         }
 
-        if ( filter.containsIdCommentSubmitState(  ) )
+        if ( filter.containsIdCommentSubmitState( ) )
         {
             listStrFilter.add( SQL_FILTER_COMMENT_SUBMIT_STATE );
         }
 
-        if ( filter.containsIdParent(  ) )
+        if ( filter.containsIdParent( ) )
         {
             listStrFilter.add( SQL_FILTER_ID_PARENT_COMMENT );
         }
 
-        if ( filter.containsIdContainsCommentDisable(  ) )
+        if ( filter.containsIdContainsCommentDisable( ) )
         {
-            listStrFilter.add( ( filter.getIdContainsCommentDisable(  ) == SubmitFilter.ID_TRUE )
-                ? SQL_FILTER_CONTAINS_SUB_COMMENT_DISABLE : SQL_FILTER_NOT_CONTAINS_SUB_COMMENT_DISABLE );
+            listStrFilter.add( ( filter.getIdContainsCommentDisable( ) == SubmitFilter.ID_TRUE ) ? SQL_FILTER_CONTAINS_SUB_COMMENT_DISABLE
+                    : SQL_FILTER_NOT_CONTAINS_SUB_COMMENT_DISABLE );
         }
 
-        if ( filter.containsSortBy(  ) )
+        if ( filter.containsSortBy( ) )
         {
-            strOrderBy = getOrderBy( filter.getSortBy(  ) );
+            strOrderBy = getOrderBy( filter.getSortBy( ) );
         }
 
-        String strSQL = SuggestUtils.buildRequestWithFilter( SQL_QUERY_SELECT_COMMENT_SUBMIT_BY_FILTER, listStrFilter,
-                strOrderBy );
+        String strSQL = SuggestUtils.buildRequestWithFilter( SQL_QUERY_SELECT_COMMENT_SUBMIT_BY_FILTER, listStrFilter, strOrderBy );
 
         if ( ( nLimit != null ) && ( nLimit != SuggestUtils.CONSTANT_ID_NULL ) )
         {
             strSQL = strSQL + SQL_LIMIT + nLimit;
         }
 
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
-        int nIndex = 1;
-
-        if ( filter.containsIdSuggestSubmit(  ) )
+        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdSuggestSubmit(  ) );
-            nIndex++;
+            int nIndex = 1;
+
+            if ( filter.containsIdSuggestSubmit( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdSuggestSubmit( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdCommentSubmitState( ) )
+            {
+                daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdCommentSubmitState( ) ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdParent( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdParent( ) );
+                nIndex++;
+            }
+
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                commentSubmit = new CommentSubmit( );
+                commentSubmit.setIdCommentSubmit( daoUtil.getInt( 1 ) );
+
+                suggestSubmit = new SuggestSubmit( );
+                suggestSubmit.setIdSuggestSubmit( daoUtil.getInt( 2 ) );
+                commentSubmit.setSuggestSubmit( suggestSubmit );
+
+                commentSubmit.setDateComment( daoUtil.getTimestamp( 3 ) );
+                commentSubmit.setValue( daoUtil.getString( 4 ) );
+                commentSubmit.setActive( daoUtil.getBoolean( 5 ) );
+                commentSubmit.setLuteceUserKey( daoUtil.getString( 6 ) );
+                commentSubmit.setOfficialAnswer( daoUtil.getBoolean( 7 ) );
+                commentSubmit.setIdParent( daoUtil.getInt( 8 ) );
+                commentSubmit.setDateModify( daoUtil.getTimestamp( 9 ) );
+                commentSubmitList.add( commentSubmit );
+            }
+
         }
-
-        if ( filter.containsIdCommentSubmitState(  ) )
-        {
-            daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdCommentSubmitState(  ) ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdParent(  ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdParent(  ) );
-            nIndex++;
-        }
-
-        daoUtil.executeQuery(  );
-
-        while ( daoUtil.next(  ) )
-        {
-            commentSubmit = new CommentSubmit(  );
-            commentSubmit.setIdCommentSubmit( daoUtil.getInt( 1 ) );
-
-            suggestSubmit = new SuggestSubmit(  );
-            suggestSubmit.setIdSuggestSubmit( daoUtil.getInt( 2 ) );
-            commentSubmit.setSuggestSubmit( suggestSubmit );
-
-            commentSubmit.setDateComment( daoUtil.getTimestamp( 3 ) );
-            commentSubmit.setValue( daoUtil.getString( 4 ) );
-            commentSubmit.setActive( daoUtil.getBoolean( 5 ) );
-            commentSubmit.setLuteceUserKey( daoUtil.getString( 6 ) );
-            commentSubmit.setOfficialAnswer( daoUtil.getBoolean( 7 ) );
-            commentSubmit.setIdParent( daoUtil.getInt( 8 ) );
-            commentSubmit.setDateModify( daoUtil.getTimestamp( 9 ) );
-            commentSubmitList.add( commentSubmit );
-        }
-
-        daoUtil.free(  );
 
         return commentSubmitList;
     }
@@ -305,33 +303,33 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public List<CommentSubmit> findSuggestCommentByDate( Date dateCreation, Plugin plugin )
     {
-        List<CommentSubmit> listComment = new ArrayList<CommentSubmit>(  );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_COMMENTED_SUGGEST_SUBMIT, plugin );
-        daoUtil.setTimestamp( 1, new Timestamp( dateCreation.getTime(  ) ) );
-        daoUtil.executeQuery(  );
-
-        while ( daoUtil.next(  ) )
+        List<CommentSubmit> listComment = new ArrayList<>( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_COMMENTED_SUGGEST_SUBMIT, plugin ) )
         {
-            CommentSubmit commentSubmit = new CommentSubmit(  );
-            commentSubmit.setIdCommentSubmit( daoUtil.getInt( 1 ) );
+            daoUtil.setTimestamp( 1, new Timestamp( dateCreation.getTime( ) ) );
+            daoUtil.executeQuery( );
 
-            SuggestSubmit suggestSubmit = new SuggestSubmit(  );
-            suggestSubmit.setIdSuggestSubmit( daoUtil.getInt( 2 ) );
-            commentSubmit.setSuggestSubmit( suggestSubmit );
+            while ( daoUtil.next( ) )
+            {
+                CommentSubmit commentSubmit = new CommentSubmit( );
+                commentSubmit.setIdCommentSubmit( daoUtil.getInt( 1 ) );
 
-            commentSubmit.setDateComment( daoUtil.getTimestamp( 3 ) );
-            commentSubmit.setValue( daoUtil.getString( 4 ) );
-            commentSubmit.setActive( daoUtil.getBoolean( 5 ) );
-            commentSubmit.setLuteceUserKey( daoUtil.getString( 6 ) );
-            commentSubmit.setOfficialAnswer( daoUtil.getBoolean( 7 ) );
-            commentSubmit.setIdParent( daoUtil.getInt( 8 ) );
-            commentSubmit.setDateModify( daoUtil.getTimestamp( 9 ) );
-            listComment.add( commentSubmit );
+                SuggestSubmit suggestSubmit = new SuggestSubmit( );
+                suggestSubmit.setIdSuggestSubmit( daoUtil.getInt( 2 ) );
+                commentSubmit.setSuggestSubmit( suggestSubmit );
+
+                commentSubmit.setDateComment( daoUtil.getTimestamp( 3 ) );
+                commentSubmit.setValue( daoUtil.getString( 4 ) );
+                commentSubmit.setActive( daoUtil.getBoolean( 5 ) );
+                commentSubmit.setLuteceUserKey( daoUtil.getString( 6 ) );
+                commentSubmit.setOfficialAnswer( daoUtil.getBoolean( 7 ) );
+                commentSubmit.setIdParent( daoUtil.getInt( 8 ) );
+                commentSubmit.setDateModify( daoUtil.getTimestamp( 9 ) );
+                listComment.add( commentSubmit );
+            }
+
+            return listComment;
         }
-
-        daoUtil.free(  );
-
-        return listComment;
     }
 
     /**
@@ -341,74 +339,77 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     public int selectCountByFilter( SubmitFilter filter, Plugin plugin )
     {
         int nIdCount = 0;
-        List<String> listStrFilter = new ArrayList<String>(  );
+        List<String> listStrFilter = new ArrayList<>( );
 
-        if ( filter.containsIdSuggest(  ) )
+        if ( filter.containsIdSuggest( ) )
         {
             listStrFilter.add( SQL_FILTER_ID_SUGGEST );
         }
 
-        if ( filter.containsIdSuggestSubmit(  ) )
+        if ( filter.containsIdSuggestSubmit( ) )
         {
             listStrFilter.add( SQL_FILTER_ID_SUGGEST_SUBMIT );
         }
 
-        if ( filter.containsIdCommentSubmitState(  ) )
+        if ( filter.containsIdCommentSubmitState( ) )
         {
             listStrFilter.add( SQL_FILTER_COMMENT_SUBMIT_STATE );
         }
 
-        if ( filter.containsIdContainsCommentDisable(  ) )
+        if ( filter.containsIdContainsCommentDisable( ) )
         {
-            listStrFilter.add( ( filter.getIdContainsCommentDisable(  ) == SubmitFilter.ID_TRUE )
-                ? SQL_FILTER_CONTAINS_SUB_COMMENT_DISABLE : SQL_FILTER_NOT_CONTAINS_SUB_COMMENT_DISABLE );
+            listStrFilter.add( ( filter.getIdContainsCommentDisable( ) == SubmitFilter.ID_TRUE ) ? SQL_FILTER_CONTAINS_SUB_COMMENT_DISABLE
+                    : SQL_FILTER_NOT_CONTAINS_SUB_COMMENT_DISABLE );
         }
 
         String strSQL = SuggestUtils.buildRequestWithFilter( SQL_QUERY_SELECT_COUNT_BY_FILTER, listStrFilter, null );
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
-        int nIndex = 1;
-
-        if ( filter.containsIdSuggest(  ) )
+        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdSuggest(  ) );
-            nIndex++;
+            int nIndex = 1;
+
+            if ( filter.containsIdSuggest( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdSuggest( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdSuggestSubmit( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdSuggestSubmit( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsIdCommentSubmitState( ) )
+            {
+                daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdCommentSubmitState( ) ) );
+                nIndex++;
+            }
+
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) )
+            {
+                nIdCount = daoUtil.getInt( 1 );
+            }
+
         }
-
-        if ( filter.containsIdSuggestSubmit(  ) )
-        {
-            daoUtil.setInt( nIndex, filter.getIdSuggestSubmit(  ) );
-            nIndex++;
-        }
-
-        if ( filter.containsIdCommentSubmitState(  ) )
-        {
-            daoUtil.setBoolean( nIndex, filter.convertIdBoolean( filter.getIdCommentSubmitState(  ) ) );
-            nIndex++;
-        }
-
-        daoUtil.executeQuery(  );
-
-        if ( daoUtil.next(  ) )
-        {
-            nIdCount = daoUtil.getInt( 1 );
-        }
-
-        daoUtil.free(  );
 
         return nIdCount;
     }
 
     /**
      * build the order by clause
-     * @param listSortBy list of sort by
+     * 
+     * @param listSortBy
+     *            list of sort by
      * @return the sql order by clause
      */
     private String getOrderBy( List<Integer> listSortBy )
     {
-        StringBuffer strOrderBy = new StringBuffer(  );
+        StringBuilder strOrderBy = new StringBuilder( );
         int ncpt = 0;
 
-        if ( ( listSortBy != null ) && ( listSortBy.size(  ) != 0 ) )
+        if ( ( listSortBy != null ) && ( !listSortBy.isEmpty( ) ) )
         {
             strOrderBy.append( SQL_ORDER_BY );
 
@@ -416,7 +417,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
             {
                 ncpt++;
 
-                switch ( sort )
+                switch( sort )
                 {
                     case SubmitFilter.SORT_BY_DATE_RESPONSE_ASC:
                         strOrderBy.append( SQL_FILTER_SORT_BY_DATE_COMMENT_ASC );
@@ -444,14 +445,14 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
                         break;
                 }
 
-                if ( ncpt < listSortBy.size(  ) )
+                if ( ncpt < listSortBy.size( ) )
                 {
                     strOrderBy.append( "," );
                 }
             }
         }
 
-        return strOrderBy.toString(  );
+        return strOrderBy.toString( );
     }
 
     /**
@@ -460,9 +461,10 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public void deleteByIdParent( int nIdParentCommentSubmit, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_PARENT, plugin );
-        daoUtil.setInt( 1, nIdParentCommentSubmit );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_PARENT, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdParentCommentSubmit );
+            daoUtil.executeUpdate( );
+        }
     }
 }

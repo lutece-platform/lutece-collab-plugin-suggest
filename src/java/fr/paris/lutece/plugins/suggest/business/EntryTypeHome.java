@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
  *
  * class EntryTypeHome
@@ -52,16 +51,17 @@ public final class EntryTypeHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private EntryTypeHome(  )
+    private EntryTypeHome( )
     {
     }
 
     /**
-     * Returns an instance of a EntryType whose identifier is specified in
-     * parameter
+     * Returns an instance of a EntryType whose identifier is specified in parameter
      *
-     * @param nKey The entry type primary key
-     * @param plugin the Plugin
+     * @param nKey
+     *            The entry type primary key
+     * @param plugin
+     *            the Plugin
      * @return an instance of EntryType
      */
     public static EntryType findByPrimaryKey( int nKey, Plugin plugin )
@@ -72,7 +72,8 @@ public final class EntryTypeHome
     /**
      * Returns a list of all EntryType
      *
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      * @return the list of entry
      */
     public static List<EntryType> getList( Plugin plugin )

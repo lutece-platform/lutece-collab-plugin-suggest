@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,7 +47,6 @@ import fr.paris.lutece.util.ReferenceList;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  *
  * class FormResourceIdService
@@ -88,7 +87,7 @@ public class SuggestResourceIdService extends ResourceIdService
     private static final String PROPERTY_LABEL_MANAGE_ADVANCED_PARAMETERS = "suggest.permission.label.manageAdvancedParameters";
 
     /** Creates a new instance of SuggestTypeResourceIdService */
-    public SuggestResourceIdService(  )
+    public SuggestResourceIdService( )
     {
         setPluginName( SuggestPlugin.PLUGIN_NAME );
     }
@@ -96,45 +95,45 @@ public class SuggestResourceIdService extends ResourceIdService
     /**
      * Initializes the service
      */
-    public void register(  )
+    public void register( )
     {
-        ResourceType rt = new ResourceType(  );
-        rt.setResourceIdServiceClass( SuggestResourceIdService.class.getName(  ) );
+        ResourceType rt = new ResourceType( );
+        rt.setResourceIdServiceClass( SuggestResourceIdService.class.getName( ) );
         rt.setPluginName( SuggestPlugin.PLUGIN_NAME );
         rt.setResourceTypeKey( Suggest.RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
-        Permission p = new Permission(  );
+        Permission p = new Permission( );
         p.setPermissionKey( PERMISSION_CREATE );
         p.setPermissionTitleKey( PROPERTY_LABEL_CREATE );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_MODIFY );
         p.setPermissionTitleKey( PROPERTY_LABEL_MODIFY );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_COPY );
         p.setPermissionTitleKey( PROPERTY_LABEL_COPY );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_CHANGE_STATE );
         p.setPermissionTitleKey( PROPERTY_LABEL_CHANGE_STATE );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_MANAGE_SUGGEST_SUBMIT );
         p.setPermissionTitleKey( PROPERTY_LABEL_MANAGE_SUGGEST_SUBMIT );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_DELETE );
         p.setPermissionTitleKey( PROPERTY_LABEL_DELETE );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_MANAGE_ADVANCED_PARAMETERS );
         p.setPermissionTitleKey( PROPERTY_LABEL_MANAGE_ADVANCED_PARAMETERS );
         rt.registerPermission( p );
@@ -144,18 +143,19 @@ public class SuggestResourceIdService extends ResourceIdService
 
     /**
      * Returns a list of suggest resource ids
-     * @param locale The current locale
+     * 
+     * @param locale
+     *            The current locale
      * @return A list of suggest resource ids
      */
     public ReferenceList getResourceIdList( Locale locale )
     {
-        ReferenceList referenceList = new ReferenceList(  );
-        List<Suggest> listSuggest = SuggestHome.getSuggestList( new SuggestFilter(  ),
-                PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+        ReferenceList referenceList = new ReferenceList( );
+        List<Suggest> listSuggest = SuggestHome.getSuggestList( new SuggestFilter( ), PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
 
         for ( Suggest suggest : listSuggest )
         {
-            referenceList.addItem( suggest.getIdSuggest(  ), suggest.getTitle(  ) );
+            referenceList.addItem( suggest.getIdSuggest( ), suggest.getTitle( ) );
         }
 
         return referenceList;
@@ -163,8 +163,11 @@ public class SuggestResourceIdService extends ResourceIdService
 
     /**
      * Returns the Title of a given resource
-     * @param strId The Id of the resource
-     * @param locale The current locale
+     * 
+     * @param strId
+     *            The Id of the resource
+     * @param locale
+     *            The current locale
      * @return The Title of a given resource
      */
     public String getTitle( String strId, Locale locale )
@@ -175,13 +178,13 @@ public class SuggestResourceIdService extends ResourceIdService
         {
             nIdSuggest = Integer.parseInt( strId );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }
 
         Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
 
-        return suggest.getTitle(  );
+        return suggest.getTitle( );
     }
 }

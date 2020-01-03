@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  * class comment
@@ -70,16 +69,19 @@ public class CommentSubmit
 
     /**
      * return the id of the comment submit
+     * 
      * @return the id of the comment submit
      */
-    public int getIdCommentSubmit(  )
+    public int getIdCommentSubmit( )
     {
         return _nIdCommentSubmit;
     }
 
     /**
      * set the id of the comment submit
-     * @param idCommentSubmit the id of the comment submit
+     * 
+     * @param idCommentSubmit
+     *            the id of the comment submit
      */
     public void setIdCommentSubmit( int idCommentSubmit )
     {
@@ -87,17 +89,19 @@ public class CommentSubmit
     }
 
     /**
-    *
-    * @return the suggest submit of the comment
-    */
-    public SuggestSubmit getSuggestSubmit(  )
+     *
+     * @return the suggest submit of the comment
+     */
+    public SuggestSubmit getSuggestSubmit( )
     {
         return _suggestSubmit;
     }
 
     /**
      * set the suggest submit of the comment
-     * @param suggestSubmit the suggest submit of the comment
+     * 
+     * @param suggestSubmit
+     *            the suggest submit of the comment
      */
     public void setSuggestSubmit( SuggestSubmit suggestSubmit )
     {
@@ -105,17 +109,20 @@ public class CommentSubmit
     }
 
     /**
-     *  return the comment date
+     * return the comment date
+     * 
      * @return the comment date
      */
-    public Timestamp getDateComment(  )
+    public Timestamp getDateComment( )
     {
         return _tDateComment;
     }
 
     /**
      * set the comment date
-     * @param commentDate the comment date
+     * 
+     * @param commentDate
+     *            the comment date
      */
     public void setDateComment( Timestamp commentDate )
     {
@@ -123,17 +130,19 @@ public class CommentSubmit
     }
 
     /**
-    *
-    * @return the value of the comment
-    */
-    public String getValue(  )
+     *
+     * @return the value of the comment
+     */
+    public String getValue( )
     {
         return _strValue;
     }
 
     /**
      * set the value of the comment
-     * @param value the value of the comment
+     * 
+     * @param value
+     *            the value of the comment
      */
     public void setValue( String value )
     {
@@ -141,17 +150,19 @@ public class CommentSubmit
     }
 
     /**
-    *
-    * @return true if the comment is active
-    */
-    public boolean isActive(  )
+     *
+     * @return true if the comment is active
+     */
+    public boolean isActive( )
     {
         return _nActive;
     }
 
     /**
      * set true if the comment is active
-     * @param active true if the comment is active
+     * 
+     * @param active
+     *            true if the comment is active
      */
     public void setActive( boolean active )
     {
@@ -159,18 +170,20 @@ public class CommentSubmit
     }
 
     /**
-    *
-    * @return the lutece user key associate to the suggest submit
-    */
-    public String getLuteceUserKey(  )
+     *
+     * @return the lutece user key associate to the suggest submit
+     */
+    public String getLuteceUserKey( )
     {
         return _strLuteceUserKey;
     }
 
     /**
      *
-     * set  the lutece user key associate to the suggest submit
-     * @param luteceUserKey the lutece user key
+     * set the lutece user key associate to the suggest submit
+     * 
+     * @param luteceUserKey
+     *            the lutece user key
      */
     public void setLuteceUserKey( String luteceUserKey )
     {
@@ -178,7 +191,8 @@ public class CommentSubmit
     }
 
     /**
-     * @param bOfficialAnswer the _bOfficialAnswer to set
+     * @param bOfficialAnswer
+     *            the _bOfficialAnswer to set
      */
     public void setOfficialAnswer( Boolean bOfficialAnswer )
     {
@@ -188,13 +202,14 @@ public class CommentSubmit
     /**
      * @return the _bOfficialAnswer
      */
-    public Boolean isOfficialAnswer(  )
+    public Boolean isOfficialAnswer( )
     {
         return _bOfficialAnswer;
     }
 
     /**
-     * @param listComments the _listComments to set
+     * @param listComments
+     *            the _listComments to set
      */
     public void setComments( List<CommentSubmit> listComments )
     {
@@ -204,13 +219,14 @@ public class CommentSubmit
     /**
      * @return the _listComments
      */
-    public List<CommentSubmit> getComments(  )
+    public List<CommentSubmit> getComments( )
     {
         return _listComments;
     }
 
     /**
-     * @param nIdParent the _nIdParent to set
+     * @param nIdParent
+     *            the _nIdParent to set
      */
     public void setIdParent( int nIdParent )
     {
@@ -220,23 +236,26 @@ public class CommentSubmit
     /**
      * @return the _nIdParent
      */
-    public int getIdParent(  )
+    public int getIdParent( )
     {
         return _nIdParent;
     }
 
     /**
-     *  return the last comment date
+     * return the last comment date
+     * 
      * @return the last comment date
      */
-    public Timestamp getDateModify(  )
+    public Timestamp getDateModify( )
     {
         return _tDateModify;
     }
 
     /**
      * set the last comment date
-     * @param lastCommentDate the last comment date
+     * 
+     * @param lastCommentDate
+     *            the last comment date
      */
     public void setDateModify( Timestamp lastCommentDate )
     {
@@ -246,24 +265,25 @@ public class CommentSubmit
     /**
      * Returns the xml of this suggest submit
      *
-     * @param request The HTTP Servlet request
-     * @param locale the Locale
+     * @param request
+     *            The HTTP Servlet request
+     * @param locale
+     *            the Locale
      * @return the xml of this suggest submit
      */
     public String getXml( HttpServletRequest request, Locale locale )
     {
-        StringBuffer strXml = new StringBuffer(  );
+        StringBuffer strXml = new StringBuffer( );
         XmlUtil.beginElement( strXml, TAG_SUGGEST_SUBMIT_COMMENT );
 
-        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_COMMENT_DATE,
-            DateUtil.getDateString( getDateComment(  ), locale ) );
-        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_COMMENT_VALUE, getValue(  ) );
+        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_COMMENT_DATE, DateUtil.getDateString( getDateComment( ), locale ) );
+        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_COMMENT_VALUE, getValue( ) );
 
         XmlUtil.beginElement( strXml, TAG_SUGGESTS_SUBMIT_COMMENTS );
 
-        if ( ( getComments(  ) != null ) && ( getComments(  ).size(  ) != 0 ) )
+        if ( ( getComments( ) != null ) && ( getComments( ).size( ) != 0 ) )
         {
-            for ( CommentSubmit commentSubmit : getComments(  ) )
+            for ( CommentSubmit commentSubmit : getComments( ) )
             {
                 strXml.append( commentSubmit.getXml( request, locale ) );
             }
@@ -273,6 +293,6 @@ public class CommentSubmit
 
         XmlUtil.endElement( strXml, TAG_SUGGEST_SUBMIT_COMMENT );
 
-        return strXml.toString(  );
+        return strXml.toString( );
     }
 }

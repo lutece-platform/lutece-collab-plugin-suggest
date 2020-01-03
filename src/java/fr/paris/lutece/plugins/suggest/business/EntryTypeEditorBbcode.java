@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.portal.service.editor.EditorBbcodeService;
 
-
 /**
  *
  * class EntryTypeEditorBbcode
@@ -47,26 +46,28 @@ public class EntryTypeEditorBbcode extends EntryTypeTextArea
     private final String _template_html_code_response = "admin/plugins/suggest/html_code_response_entry_type_editor_bbcode.html";
 
     /**
-     * Get the HtmlCode  of   the entry
-     * @return the HtmlCode  of   the entry
+     * Get the HtmlCode of the entry
+     * 
+     * @return the HtmlCode of the entry
      *
      * */
-    public String getTemplateHtmlCodeForm(  )
+    public String getTemplateHtmlCodeForm( )
     {
         return _template_html_code_form;
     }
 
     /**
-     * Get the template of the html code of the response value  associate to the entry
-    * @return the template of the html code of the response value  associate to the entry
+     * Get the template of the html code of the response value associate to the entry
+     * 
+     * @return the template of the html code of the response value associate to the entry
      */
-    public String getTemplateHtmlCodeResponse(  )
+    public String getTemplateHtmlCodeResponse( )
     {
         return _template_html_code_response;
     }
 
     public String parseBbcodeValue( String strValue )
     {
-        return EditorBbcodeService.getInstance(  ).parse( strValue );
+        return EditorBbcodeService.getInstance( ).parse( strValue );
     }
 }

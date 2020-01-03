@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,10 +35,9 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 
-
 /**
  *
- *class DefaultMessage
+ * class DefaultMessage
  *
  */
 public class DefaultMessage implements RBACResource
@@ -59,79 +58,92 @@ public class DefaultMessage implements RBACResource
      * 
      * @return getNotificationNewCommentTitle
      */
-    public String getNotificationNewCommentTitle() {
-		return _strNotificationNewCommentTitle;
-	}
+    public String getNotificationNewCommentTitle( )
+    {
+        return _strNotificationNewCommentTitle;
+    }
 
     /**
      * 
-     * @param _strNotificationNewCommentTitle NotificationNewCommentTitle
+     * @param _strNotificationNewCommentTitle
+     *            NotificationNewCommentTitle
      */
-	public void setNotificationNewCommentTitle(
-			String _strNotificationNewCommentTitle) {
-		this._strNotificationNewCommentTitle = _strNotificationNewCommentTitle;
-	}
-	
-	/**
-	 * 
-	 * @return NotificationNewCommentBody
-	 */
-	public String getNotificationNewCommentBody() {
-		return _strNotificationNewCommentBody;
-	}
-	/**
-	 * 
-	 * @param _strNotificationNewCommentBody NotificationNewCommentBody
-	 */
-	public void setNotificationNewCommentBody(
-			String _strNotificationNewCommentBody) {
-		this._strNotificationNewCommentBody = _strNotificationNewCommentBody;
-	}
-	
-	/**
-	 * 
-	 * @return NotificationNewSuggestSubmitTitle
-	 */
-	public String getNotificationNewSuggestSubmitTitle() {
-		return _strNotificationNewSuggestSubmitTitle;
-	}
-	/**
-	 * 
-	 * @param _strNotificationNewSuggestSubmitTitle NotificationNewSuggestSubmitTitle
-	 */
-	public void setNotificationNewSuggestSubmitTitle(
-			String _strNotificationNewSuggestSubmitTitle) {
-		this._strNotificationNewSuggestSubmitTitle = _strNotificationNewSuggestSubmitTitle;
-	}
-	/**
-	 * 
-	 * @return NotificationSuggestSubmitBody
-	 */
-	public String getNotificationNewSuggestSubmitBody() {
-		return _strNotificationNewSuggestSubmitBody;
-	}
-	/**
-	 * 
-	 * @param _strNotificationSuggestSubmitBody NotificationSuggestSubmitBody
-	 */
-	public void setNotificationNewSuggestSubmitBody(
-			String _strNotificationSuggestSubmitBody) {
-		this._strNotificationNewSuggestSubmitBody = _strNotificationSuggestSubmitBody;
-	}
+    public void setNotificationNewCommentTitle( String _strNotificationNewCommentTitle )
+    {
+        this._strNotificationNewCommentTitle = _strNotificationNewCommentTitle;
+    }
 
-	
+    /**
+     * 
+     * @return NotificationNewCommentBody
+     */
+    public String getNotificationNewCommentBody( )
+    {
+        return _strNotificationNewCommentBody;
+    }
+
+    /**
+     * 
+     * @param _strNotificationNewCommentBody
+     *            NotificationNewCommentBody
+     */
+    public void setNotificationNewCommentBody( String _strNotificationNewCommentBody )
+    {
+        this._strNotificationNewCommentBody = _strNotificationNewCommentBody;
+    }
+
+    /**
+     * 
+     * @return NotificationNewSuggestSubmitTitle
+     */
+    public String getNotificationNewSuggestSubmitTitle( )
+    {
+        return _strNotificationNewSuggestSubmitTitle;
+    }
+
+    /**
+     * 
+     * @param _strNotificationNewSuggestSubmitTitle
+     *            NotificationNewSuggestSubmitTitle
+     */
+    public void setNotificationNewSuggestSubmitTitle( String _strNotificationNewSuggestSubmitTitle )
+    {
+        this._strNotificationNewSuggestSubmitTitle = _strNotificationNewSuggestSubmitTitle;
+    }
+
+    /**
+     * 
+     * @return NotificationSuggestSubmitBody
+     */
+    public String getNotificationNewSuggestSubmitBody( )
+    {
+        return _strNotificationNewSuggestSubmitBody;
+    }
+
+    /**
+     * 
+     * @param _strNotificationSuggestSubmitBody
+     *            NotificationSuggestSubmitBody
+     */
+    public void setNotificationNewSuggestSubmitBody( String _strNotificationSuggestSubmitBody )
+    {
+        this._strNotificationNewSuggestSubmitBody = _strNotificationSuggestSubmitBody;
+    }
+
     /**
      *
      * @return the default value of validate button
      */
-    public String getLibelleValidateButton(  )
+    public String getLibelleValidateButton( )
     {
         return _strLibelleValidateButton;
     }
 
     /**
      * set the default value of validate button
-     * @param libelleValidateButton value of validate button
+     * 
+     * @param libelleValidateButton
+     *            value of validate button
      */
     public void setLibelleValidateButton( String libelleValidateButton )
     {
@@ -142,14 +154,16 @@ public class DefaultMessage implements RBACResource
      *
      * @return the default Unavailability Message who see by the user when the form will be enable
      */
-    public String getUnavailabilityMessage(  )
+    public String getUnavailabilityMessage( )
     {
         return _strUnavailabilityMessage;
     }
 
     /**
      * set the Unavailability Message who see by the user when the form will be enable
-     * @param unavailabilityMessage the default Unavailability Message
+     * 
+     * @param unavailabilityMessage
+     *            the default Unavailability Message
      */
     public void setUnavailabilityMessage( String unavailabilityMessage )
     {
@@ -158,34 +172,38 @@ public class DefaultMessage implements RBACResource
 
     /**
      * RBAC resource implmentation
+     * 
      * @return The resource type code
      */
-    public String getResourceTypeCode(  )
+    public String getResourceTypeCode( )
     {
         return RESOURCE_TYPE;
     }
 
     /**
      * RBAC resource implmentation
+     * 
      * @return The resourceId
      */
-    public String getResourceId(  )
+    public String getResourceId( )
     {
         return "";
     }
 
     /**
-    *
-    * @return the default libelle of  suggest contribution
-    */
-    public String getLibelleContribution(  )
+     *
+     * @return the default libelle of suggest contribution
+     */
+    public String getLibelleContribution( )
     {
         return _strLibelleContribution;
     }
 
     /**
-     * set the default libelle of  suggest contribution
-     * @param libelleSuggestName  the default libelle of  suggest contribution
+     * set the default libelle of suggest contribution
+     * 
+     * @param libelleSuggestName
+     *            the default libelle of suggest contribution
      */
     public void setLibelleContribution( String libelleSuggestName )
     {
@@ -194,16 +212,19 @@ public class DefaultMessage implements RBACResource
 
     /**
      * return the number of suggest submit display in the list of top comment
+     * 
      * @return the number of suggest submit display in the list of top comment
      */
-    public int getNumberSuggestSubmitInTopComment(  )
+    public int getNumberSuggestSubmitInTopComment( )
     {
         return _nNumberSuggestSubmitInTopComment;
     }
 
     /**
      * Set the number of suggest submit display in the list of top comment
-     * @param numberTopComment the number of  suggest submit in the list of top comment
+     * 
+     * @param numberTopComment
+     *            the number of suggest submit in the list of top comment
      */
     public void setNumberSuggestSubmitInTopComment( int numberTopComment )
     {
@@ -211,17 +232,20 @@ public class DefaultMessage implements RBACResource
     }
 
     /**
-    * return the number of  suggest submit display in the list of top score
-    * @return the number of suggest submit  display in the list of top score
-    */
-    public int getNumberSuggestSubmitInTopScore(  )
+     * return the number of suggest submit display in the list of top score
+     * 
+     * @return the number of suggest submit display in the list of top score
+     */
+    public int getNumberSuggestSubmitInTopScore( )
     {
         return _nNumberSuggestSubmitInTopScore;
     }
 
     /**
      * Set the number of comment display in the list of top score
-     * @param numberTopScore the number of comment display in the list of top score
+     * 
+     * @param numberTopScore
+     *            the number of comment display in the list of top score
      */
     public void setNumberSuggestSubmitInTopScore( int numberTopScore )
     {
@@ -229,17 +253,20 @@ public class DefaultMessage implements RBACResource
     }
 
     /**
-        * return the nunber of caracters shown in the list of suggest submit
-        * @return the nunber of caracters shown in the list of suggest submit
-        */
-    public int getNumberSuggestSubmitCaractersShown(  )
+     * return the nunber of caracters shown in the list of suggest submit
+     * 
+     * @return the nunber of caracters shown in the list of suggest submit
+     */
+    public int getNumberSuggestSubmitCaractersShown( )
     {
         return _nNumberSuggestSubmitCaractersShown;
     }
 
     /**
      * set the nunber of caracters shown in the list of suggest submit
-     * @param numberCaractersShown the nunber of caracters shown in the list of suggest submit
+     * 
+     * @param numberCaractersShown
+     *            the nunber of caracters shown in the list of suggest submit
      */
     public void setNumberSuggestSubmitCaractersShown( int numberCaractersShown )
     {

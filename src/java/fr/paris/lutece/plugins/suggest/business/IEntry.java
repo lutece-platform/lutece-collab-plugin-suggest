@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,87 +43,100 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
- *IEntry Class
+ * IEntry Class
  */
 public interface IEntry
 {
     /**
-     * @return the  id of entry
+     * @return the id of entry
      */
-    int getIdEntry(  );
+    int getIdEntry( );
 
     /**
      * set the id of the entry
-     * @param idEntry  the id of the entry
+     * 
+     * @param idEntry
+     *            the id of the entry
      */
     void setIdEntry( int idEntry );
 
     /**
      * @return title entry
      */
-    String getTitle(  );
+    String getTitle( );
 
     /**
      * set title entry
-     * @param  title title
+     * 
+     * @param title
+     *            title
      */
     void setTitle( String title );
 
     /**
-     *  @return the entry  help message
+     * @return the entry help message
      */
-    String getHelpMessage(  );
+    String getHelpMessage( );
 
     /**
-     * set  the entry  help message
-     * @param  helpMessage the entry  help message
+     * set the entry help message
+     * 
+     * @param helpMessage
+     *            the entry help message
      */
     void setHelpMessage( String helpMessage );
 
     /**
-     *  @return the entry comment
+     * @return the entry comment
      */
-    String getComment(  );
+    String getComment( );
 
     /**
      * set entry comment
-     * @param comment entry comment
+     * 
+     * @param comment
+     *            entry comment
      */
     void setComment( String comment );
 
     /**
      * @return true if the question is mandatory
      */
-    boolean isMandatory(  );
+    boolean isMandatory( );
 
     /**
      * @return true if the entry must be shown in suggest submit list
      */
-    boolean isShowInSuggestSubmitList(  );
+    boolean isShowInSuggestSubmitList( );
 
     /**
      * set true if the question is mandatory
-     * @param  mandatory true if the question is mandatory
+     * 
+     * @param mandatory
+     *            true if the question is mandatory
      */
     void setMandatory( boolean mandatory );
 
     /**
      * set true if the entry must be shown in suggest submit list
-     * @param  show true if the entry must be shown in suggest submit list
+     * 
+     * @param show
+     *            true if the entry must be shown in suggest submit list
      */
     void setShowInSuggestSubmitList( boolean show );
 
     /**
      * @return position entry
      */
-    int getPosition(  );
+    int getPosition( );
 
     /**
      * set position entry
-     * @param  position  position entry
+     * 
+     * @param position
+     *            position entry
      */
     void setPosition( int position );
 
@@ -131,46 +144,54 @@ public interface IEntry
      *
      * @return the form of the entry
      */
-    Suggest getSuggest(  );
+    Suggest getSuggest( );
 
     /**
      * set the suggest of the entry
-     * @param suggest the suggest of the entry
+     * 
+     * @param suggest
+     *            the suggest of the entry
      */
     void setSuggest( Suggest suggest );
 
     /**
-     *  @return the type of the entry
+     * @return the type of the entry
      */
-    EntryType getEntryType(  );
+    EntryType getEntryType( );
 
     /**
      * set the type of the entry
-     * @param entryType the type of the entry
+     * 
+     * @param entryType
+     *            the type of the entry
      */
     void setEntryType( EntryType entryType );
 
     /**
-    *
-    * @return a list of regular expression which is associate to the entry
-    */
-    List<RegularExpression> getRegularExpressionList(  );
+     *
+     * @return a list of regular expression which is associate to the entry
+     */
+    List<RegularExpression> getRegularExpressionList( );
 
     /**
      * set a list of regular expression which is associate to the entry
-     * @param regularExpressionList a list of regular expression which is associate to the entry
+     * 
+     * @param regularExpressionList
+     *            a list of regular expression which is associate to the entry
      */
     void setRegularExpressionList( List<RegularExpression> regularExpressionList );
 
     /**
-    *
-    * @return the value of the entry
-    */
-    String getDefaultValue(  );
+     *
+     * @return the value of the entry
+     */
+    String getDefaultValue( );
 
     /**
      * set the default value of the entry
-     * @param value the default value of the entry
+     * 
+     * @param value
+     *            the default value of the entry
      */
     void setDefaultValue( String value );
 
@@ -178,127 +199,161 @@ public interface IEntry
      *
      * @return the width of the entry
      */
-    int getWidth(  );
+    int getWidth( );
 
     /**
      * set the width of the entry
-     * @param width the width of the entry
+     * 
+     * @param width
+     *            the width of the entry
      */
     void setWidth( int width );
 
     /**
      *
-     * @return  the height of the entry
+     * @return the height of the entry
      */
-    int getHeight(  );
+    int getHeight( );
 
     /**
      * set the height of the entry
-     * @param height  the height of the entry
+     * 
+     * @param height
+     *            the height of the entry
      */
     void setHeight( int height );
 
     /**
-    *
-    * @return the max size of enter user
-    */
-    int getMaxSizeEnter(  );
+     *
+     * @return the max size of enter user
+     */
+    int getMaxSizeEnter( );
 
     /**
      * set the max size of enter user
-     * @param maxSizeEnter the max size of enter user
+     * 
+     * @param maxSizeEnter
+     *            the max size of enter user
      */
     void setMaxSizeEnter( int maxSizeEnter );
 
     /**
      * Get the request data
-     * @param request HttpRequest
-     * @param locale the locale
+     * 
+     * @param request
+     *            HttpRequest
+     * @param locale
+     *            the locale
      * @return null if all data requiered are in the request else the url of jsp error
      */
     String getRequestData( HttpServletRequest request, Locale locale );
 
     /**
      * save in the list of response the response associate to the entry in the form submit
-     * @param request HttpRequest
-     * @param listResponse the list of response associate to the entry in the form submit
-     * @param locale the locale
+     * 
+     * @param request
+     *            HttpRequest
+     * @param listResponse
+     *            the list of response associate to the entry in the form submit
+     * @param locale
+     *            the locale
      * @return a Form error object if there is an error in the response
      */
     FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale );
 
     /**
-    * save in the list of response the response associate to the entry in the form submit
-    * @param nIdSuggestSubmit the id of the suggestSubmit
-    * @param request HttpRequest
-    * @param listResponse the list of response associate to the entry in the form submit
-    * @param locale the locale
-    * @param plugin the current plugin
-    * @return a Form error object if there is an error in the response
-    */
-    FormError getResponseData( int nIdSuggestSubmit, HttpServletRequest request, List<Response> listResponse,
-        Locale locale, Plugin plugin );
+     * save in the list of response the response associate to the entry in the form submit
+     * 
+     * @param nIdSuggestSubmit
+     *            the id of the suggestSubmit
+     * @param request
+     *            HttpRequest
+     * @param listResponse
+     *            the list of response associate to the entry in the form submit
+     * @param locale
+     *            the locale
+     * @param plugin
+     *            the current plugin
+     * @return a Form error object if there is an error in the response
+     */
+    FormError getResponseData( int nIdSuggestSubmit, HttpServletRequest request, List<Response> listResponse, Locale locale, Plugin plugin );
 
     /**
-     * Get the HtmlCode  of   the entry
-     * @return the HtmlCode  of   the entry
+     * Get the HtmlCode of the entry
+     * 
+     * @return the HtmlCode of the entry
      *
      * */
-    String getTemplateHtmlCodeForm(  );
+    String getTemplateHtmlCodeForm( );
 
     /**
-     * Get the template of the html code of the response value  associate to the entry
-     * @return the template of the html code of the response value  associate to the entry
+     * Get the template of the html code of the response value associate to the entry
+     * 
+     * @return the template of the html code of the response value associate to the entry
      */
-    String getTemplateHtmlCodeResponse(  );
+    String getTemplateHtmlCodeResponse( );
 
     /**
      * Get template create url of the entry
+     * 
      * @return template create url of the entry
      */
-    String getTemplateCreate(  );
+    String getTemplateCreate( );
 
     /**
-     * Get the template modify url  of the entry
-     * @return template modify url  of the entry
+     * Get the template modify url of the entry
+     * 
+     * @return template modify url of the entry
      */
-    String getTemplateModify(  );
+    String getTemplateModify( );
 
     /**
      * The paginator who is use in the template modify of the entry
-     * @param nItemPerPage Number of items to display per page
-    * @param strBaseUrl The base Url for build links on each page link
-    * @param strPageIndexParameterName The parameter name for the page index
-    * @param strPageIndex The current page index
+     * 
+     * @param nItemPerPage
+     *            Number of items to display per page
+     * @param strBaseUrl
+     *            The base Url for build links on each page link
+     * @param strPageIndexParameterName
+     *            The parameter name for the page index
+     * @param strPageIndex
+     *            The current page index
      * @return the paginator who is use in the template modify of the entry
      */
     Paginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName, String strPageIndex );
 
     /**
-     * Get the list of regular expression  who is use in the template modify of the entry
-     * @param plugin the plugin
-     * @param entry the entry
+     * Get the list of regular expression who is use in the template modify of the entry
+     * 
+     * @param plugin
+     *            the plugin
+     * @param entry
+     *            the entry
      * @return the regular expression list who is use in the template modify of the entry
      */
     ReferenceList getReferenceListRegularExpression( IEntry entry, Plugin plugin );
 
     /**
-    *
-    * @return a list of additional attribute which is associate to the entry
-    */
-    List<EntryAdditionalAttribute> getEntryAdditionalAttributeList(  );
+     *
+     * @return a list of additional attribute which is associate to the entry
+     */
+    List<EntryAdditionalAttribute> getEntryAdditionalAttributeList( );
 
     /**
      * set a list of additional attribute which is associate to the entry
-     * @param entryAdditionalAttributeList a list of additional attribute which is associate to the entry
+     * 
+     * @param entryAdditionalAttributeList
+     *            a list of additional attribute which is associate to the entry
      */
     void setEntryAdditionalAttributeList( List<EntryAdditionalAttribute> entryAdditionalAttributeList );
 
     /**
      * add The Xml of the entry in the string buffer
-    
-     * @param locale loclae
-     * @param strXml the string buffer
+     * 
+     * @param locale
+     *            loclae
+     * @param strXml
+     *            the string buffer
      *
      */
     void getXml( Locale locale, StringBuffer strXml );

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-
 /**
  *
  * class vote
@@ -45,17 +44,19 @@ public class Vote
     private String _strLuteceUserKey;
 
     /**
-       *
-       * @return the id of the suggest submit
-       */
-    public int getIdSuggestSubmit(  )
+     *
+     * @return the id of the suggest submit
+     */
+    public int getIdSuggestSubmit( )
     {
         return _nIdSuggestSubmit;
     }
 
     /**
      * set the id of the suggest submit
-     * @param idSuggestSubmit the id of the vote type
+     * 
+     * @param idSuggestSubmit
+     *            the id of the vote type
      */
     public void setIdSuggestSubmit( int idSuggestSubmit )
     {
@@ -66,15 +67,17 @@ public class Vote
      *
      * @return the lutece user key associate to the vote
      */
-    public String getLuteceUserKey(  )
+    public String getLuteceUserKey( )
     {
         return _strLuteceUserKey;
     }
 
     /**
      *
-     * set  the lutece user key associate to the vote
-     * @param luteceUserKey the lutece user key
+     * set the lutece user key associate to the vote
+     * 
+     * @param luteceUserKey
+     *            the lutece user key
      */
     public void setLuteceUserKey( String luteceUserKey )
     {

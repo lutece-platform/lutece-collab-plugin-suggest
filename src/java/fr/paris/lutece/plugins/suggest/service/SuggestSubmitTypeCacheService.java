@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.suggest.service;
 
 import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
 
-
 /**
  * Suggest Submit Type Cache Service
  */
@@ -44,17 +43,18 @@ public class SuggestSubmitTypeCacheService extends AbstractCacheableService
     private static final String CACHE_SERVICE_NAME = "Suggest Submit Type Cache Service";
 
     /** Constructor */
-    public SuggestSubmitTypeCacheService(  )
+    public SuggestSubmitTypeCacheService( )
     {
-        initCache(  );
+        initCache( );
     }
 
     /**
      * Gets the cache service name
+     * 
      * @return The service name
      */
     @Override
-    public String getName(  )
+    public String getName( )
     {
         return CACHE_SERVICE_NAME;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
  * class ReportedMessageHome
  */
@@ -51,44 +50,48 @@ public final class ReportedMessageHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private ReportedMessageHome(  )
+    private ReportedMessageHome( )
     {
     }
 
     /**
      * Creation of an instance of reported Message
      *
-     * @param reportedMessage The instance of the reported Message which
-     *            contains the informations to store
-     * @param plugin the Plugin
+     * @param reportedMessage
+     *            The instance of the reported Message which contains the informations to store
+     * @param plugin
+     *            the Plugin
      *
      */
     public static void create( ReportedMessage reportedMessage, Plugin plugin )
     {
-        reportedMessage.setDateReported( SuggestUtils.getCurrentDate(  ) );
+        reportedMessage.setDateReported( SuggestUtils.getCurrentDate( ) );
         _dao.insert( reportedMessage, plugin );
     }
 
     /**
      * Remove the reportedMessage whose identifier is specified in parameter
      *
-     * @param nIdSuggestSubmit The nIdSuggestSubmit
-     * @param plugin the Plugin
+     * @param nIdSuggestSubmit
+     *            The nIdSuggestSubmit
+     * @param plugin
+     *            the Plugin
      */
     public static void removeBySuggestSubmit( int nIdSuggestSubmit, Plugin plugin )
     {
         _dao.deleteBySuggestSubmit( nIdSuggestSubmit, plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
-     * Returns an instance of a reportedMessage whose identifier is specified in
-     * parameter
+     * Returns an instance of a reportedMessage whose identifier is specified in parameter
      *
-     * @param nKey The reportedMessage primary key
-     * @param plugin the Plugin
+     * @param nKey
+     *            The reportedMessage primary key
+     * @param plugin
+     *            the Plugin
      * @return an instance of commentSubmit
      */
     public static ReportedMessage findByPrimaryKey( int nKey, Plugin plugin )
@@ -97,10 +100,12 @@ public final class ReportedMessageHome
     }
 
     /**
-     * Load the data of all the reportedMessage who is associated to the
-     * nIdSuggestSubmit
-     * @param nIdSuggestSubmit the nIdSuggestSubmit
-     * @param plugin the plugin
+     * Load the data of all the reportedMessage who is associated to the nIdSuggestSubmit
+     * 
+     * @param nIdSuggestSubmit
+     *            the nIdSuggestSubmit
+     * @param plugin
+     *            the plugin
      * @return the list of reportedMessage
      */
     public static List<ReportedMessage> getReportedMessageBySuggestSubmit( int nIdSuggestSubmit, Plugin plugin )

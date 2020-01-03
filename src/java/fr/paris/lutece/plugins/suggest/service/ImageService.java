@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,6 @@ import fr.paris.lutece.portal.service.image.ImageResourceManager;
 import fr.paris.lutece.portal.service.image.ImageResourceProvider;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 
-
 /**
  *
  * This classe provide services for Category
@@ -47,13 +46,13 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
  */
 public class ImageService implements ImageResourceProvider
 {
-    private static ImageService _singleton = new ImageService(  );
+    private static ImageService _singleton = new ImageService( );
     private static final String IMAGE_RESOURCE_TYPE_ID = "image_suggest";
 
     /**
      * Creates a new instance of CategoryService
      */
-    ImageService(  )
+    ImageService( )
     {
         ImageResourceManager.registerProvider( this );
     }
@@ -63,14 +62,16 @@ public class ImageService implements ImageResourceProvider
      *
      * @return The unique instance
      */
-    public static ImageService getInstance(  )
+    public static ImageService getInstance( )
     {
         return _singleton;
     }
 
     /**
      * Get the resource for image
-     * @param nIdResource The identifier of image or suggestsubmit object
+     * 
+     * @param nIdResource
+     *            The identifier of image or suggestsubmit object
      * @return The ImageResource
      */
     public ImageResource getImageResource( int nIdResource )
@@ -80,9 +81,10 @@ public class ImageService implements ImageResourceProvider
 
     /**
      * Get the type of resource
+     * 
      * @return The type of resource
      */
-    public String getResourceTypeId(  )
+    public String getResourceTypeId( )
     {
         return IMAGE_RESOURCE_TYPE_ID;
     }

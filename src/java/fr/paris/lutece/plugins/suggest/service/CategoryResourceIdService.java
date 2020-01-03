@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,6 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.Locale;
 
-
 /**
  *
  * class ExportFormatResourceIdService
@@ -60,7 +59,7 @@ public class CategoryResourceIdService extends ResourceIdService
     private static final String PROPERTY_LABEL_MANAGE = "suggest.permission.label.manage.category";
 
     /** Creates a new instance of RegularExpressionResourceIdService */
-    public CategoryResourceIdService(  )
+    public CategoryResourceIdService( )
     {
         setPluginName( SuggestPlugin.PLUGIN_NAME );
     }
@@ -68,15 +67,15 @@ public class CategoryResourceIdService extends ResourceIdService
     /**
      * Initializes the service
      */
-    public void register(  )
+    public void register( )
     {
-        ResourceType rt = new ResourceType(  );
-        rt.setResourceIdServiceClass( CategoryResourceIdService.class.getName(  ) );
+        ResourceType rt = new ResourceType( );
+        rt.setResourceIdServiceClass( CategoryResourceIdService.class.getName( ) );
         rt.setPluginName( SuggestPlugin.PLUGIN_NAME );
         rt.setResourceTypeKey( Category.RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
-        Permission p = new Permission(  );
+        Permission p = new Permission( );
         p.setPermissionKey( PERMISSION_MANAGE );
         p.setPermissionTitleKey( PROPERTY_LABEL_MANAGE );
         rt.registerPermission( p );
@@ -85,7 +84,9 @@ public class CategoryResourceIdService extends ResourceIdService
 
     /**
      * Returns a list of category resource ids
-     * @param locale The current locale
+     * 
+     * @param locale
+     *            The current locale
      * @return A list of resource ids
      */
     public ReferenceList getResourceIdList( Locale locale )
@@ -95,8 +96,11 @@ public class CategoryResourceIdService extends ResourceIdService
 
     /**
      * Returns the Title of a given resource
-     * @param strId The Id of the resource
-     * @param locale The current locale
+     * 
+     * @param strId
+     *            The Id of the resource
+     * @param locale
+     *            The current locale
      * @return The Title of a given resource
      */
     public String getTitle( String strId, Locale locale )
@@ -107,14 +111,13 @@ public class CategoryResourceIdService extends ResourceIdService
         {
             nIdCategory = Integer.parseInt( strId );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }
 
-        Category category = CategoryHome.findByPrimaryKey( nIdCategory,
-                PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+        Category category = CategoryHome.findByPrimaryKey( nIdCategory, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
 
-        return category.getTitle(  );
+        return category.getTitle( );
     }
 }

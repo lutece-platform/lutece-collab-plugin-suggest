@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,7 +41,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * class CommentSubmitHome
  */
@@ -53,16 +52,17 @@ public final class CommentSubmitHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private CommentSubmitHome(  )
+    private CommentSubmitHome( )
     {
     }
 
     /**
      * Creation of an instance of commentSubmit
      *
-     * @param commentSubmit The instance of the commentSubmit which contains the
-     *            informations to store
-     * @param plugin the Plugin
+     * @param commentSubmit
+     *            The instance of the commentSubmit which contains the informations to store
+     * @param plugin
+     *            the Plugin
      *
      */
     public static void create( CommentSubmit commentSubmit, Plugin plugin )
@@ -73,9 +73,10 @@ public final class CommentSubmitHome
     /**
      * Update of the commentSubmit which is specified in parameter
      *
-     * @param commentSubmit The instance of the commentSubmit which contains the
-     *            informations to update
-     * @param plugin the Plugin
+     * @param commentSubmit
+     *            The instance of the commentSubmit which contains the informations to update
+     * @param plugin
+     *            the Plugin
      *
      */
     public static void update( CommentSubmit commentSubmit, Plugin plugin )
@@ -84,11 +85,14 @@ public final class CommentSubmitHome
     }
 
     /**
-     * Update the modification date of the commentSubmit which is specified in
-     * parameter
-     * @param dateModify The new date of modification of the commentSubmit
-     * @param idCommentSubmit The id of the comment submit to update
-     * @param plugin the Plugin
+     * Update the modification date of the commentSubmit which is specified in parameter
+     * 
+     * @param dateModify
+     *            The new date of modification of the commentSubmit
+     * @param idCommentSubmit
+     *            The id of the comment submit to update
+     * @param plugin
+     *            the Plugin
      *
      */
     public static void updateDateModify( Timestamp dateModify, int idCommentSubmit, Plugin plugin )
@@ -99,8 +103,10 @@ public final class CommentSubmitHome
     /**
      * Remove the commentSubmit whose identifier is specified in parameter
      *
-     * @param nIdCommentSubmit The commentSubmitId
-     * @param plugin the Plugin
+     * @param nIdCommentSubmit
+     *            The commentSubmitId
+     * @param plugin
+     *            the Plugin
      */
     public static void remove( int nIdCommentSubmit, Plugin plugin )
     {
@@ -108,26 +114,28 @@ public final class CommentSubmitHome
     }
 
     /**
-     * Remove the commentSubmit whose parent identifier is specified in
-     * parameter
+     * Remove the commentSubmit whose parent identifier is specified in parameter
      *
-     * @param nIdParentCommentSubmit The parent identifier
-     * @param plugin the Plugin
+     * @param nIdParentCommentSubmit
+     *            The parent identifier
+     * @param plugin
+     *            the Plugin
      */
     public static void removeByIdParent( int nIdParentCommentSubmit, Plugin plugin )
     {
         _dao.deleteByIdParent( nIdParentCommentSubmit, plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
-     * Returns an instance of a CommentSubmitwhose identifier is specified in
-     * parameter
+     * Returns an instance of a CommentSubmitwhose identifier is specified in parameter
      *
-     * @param nKey The commentSubmit primary key
-     * @param plugin the Plugin
+     * @param nKey
+     *            The commentSubmit primary key
+     * @param plugin
+     *            the Plugin
      * @return an instance of commentSubmit
      */
     public static CommentSubmit findByPrimaryKey( int nKey, Plugin plugin )
@@ -136,11 +144,14 @@ public final class CommentSubmitHome
     }
 
     /**
-     * Load the data of all the commentSubmit who verify the filter and returns
-     * them in a list
-     * @param filter the filter
-     * @param nLimit the number limit of comment return
-     * @param plugin the plugin
+     * Load the data of all the commentSubmit who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param nLimit
+     *            the number limit of comment return
+     * @param plugin
+     *            the plugin
      * @return the list of commentSubmit
      */
     public static List<CommentSubmit> getCommentSubmitList( SubmitFilter filter, Integer nLimit, Plugin plugin )
@@ -150,8 +161,11 @@ public final class CommentSubmitHome
 
     /**
      * Get the list of comments posted after a given date
-     * @param dateCreation The creation date of comments
-     * @param plugin The plugin
+     * 
+     * @param dateCreation
+     *            The creation date of comments
+     * @param plugin
+     *            The plugin
      * @return The list of comments, or an empty list if no comments was found
      */
     public static List<CommentSubmit> findSuggestCommentByDate( Date dateCreation, Plugin plugin )
@@ -161,8 +175,11 @@ public final class CommentSubmitHome
 
     /**
      * Load the number of all the commentSubmit who verify the filter
-     * @param filter the filter
-     * @param plugin the plugin
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
      * @return the number of all the commentSubmit who verify the filter
      */
     public static int getCountCommentSubmit( SubmitFilter filter, Plugin plugin )

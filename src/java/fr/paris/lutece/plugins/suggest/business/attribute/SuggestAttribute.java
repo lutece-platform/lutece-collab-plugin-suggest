@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,10 +40,8 @@ import java.lang.annotation.Target;
 
 /**
  *
- * SuggestAttribute
- * This annotation represente the suggest attribute associated to
- * a suggest. Each suggest field that has this annotation will
- * be stored in the table 'suggest_suggest_attribute'.
+ * SuggestAttribute This annotation represente the suggest attribute associated to a suggest. Each suggest field that has this annotation will be stored in the
+ * table 'suggest_suggest_attribute'.
  *
  */
 @Retention( RetentionPolicy.RUNTIME )
@@ -52,7 +50,8 @@ public @interface SuggestAttribute
 {
     /**
      * Get the key of the attribute
+     * 
      * @return the key of the attribute
      */
-    String value(  );
+    String value( );
 }

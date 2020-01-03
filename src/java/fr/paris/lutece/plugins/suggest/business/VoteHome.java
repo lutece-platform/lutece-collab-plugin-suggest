@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
  *
  * class voteHome
@@ -52,16 +51,17 @@ public final class VoteHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private VoteHome(  )
+    private VoteHome( )
     {
     }
 
     /**
      * Creation of an instance of vote
      *
-     * @param vote The instance of the Suggest which contains the informations to
-     *            store
-     * @param plugin the Plugin
+     * @param vote
+     *            The instance of the Suggest which contains the informations to store
+     * @param plugin
+     *            the Plugin
      *
      */
     public static void create( Vote vote, Plugin plugin )
@@ -71,10 +71,12 @@ public final class VoteHome
 
     /**
      * Load the data of all vote associate to the suggest submit
-     * @param nIdSuggestSubmit the id of the suggest submit
-     * @param plugin the plugin
-     * @return the list of vote button associated to the vote type returns them
-     *         in a list
+     * 
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param plugin
+     *            the plugin
+     * @return the list of vote button associated to the vote type returns them in a list
      */
     public static List<Vote> getListVoteByIdSuggestSubmit( int nIdSuggestSubmit, Plugin plugin )
     {
@@ -83,9 +85,13 @@ public final class VoteHome
 
     /**
      * return the number of vote for a lutece user on suggestSubmit
-     * @param nIdSuggestSubmit the id of the suggest submit
-     * @param strLuteceUserKey the LuteceUserKey
-     * @param plugin the plugin
+     * 
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param strLuteceUserKey
+     *            the LuteceUserKey
+     * @param plugin
+     *            the plugin
      * @return the number of vote for a lutece user on suggestSubmit
      */
     public static int getUserNumberVoteOnSuggestSubmit( int nIdSuggestSubmit, String strLuteceUserKey, Plugin plugin )
@@ -95,8 +101,11 @@ public final class VoteHome
 
     /**
      * return the number of vote for a lutece user on suggestSubmit
-     * @param nIdSuggestSubmit the id of the suggest submit
-     * @param plugin the plugin
+     * 
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param plugin
+     *            the plugin
      * @return the number of vote for a lutece user on suggestSubmit
      */
     public static int getNumberVoteSuggestSubmit( int nIdSuggestSubmit, Plugin plugin )

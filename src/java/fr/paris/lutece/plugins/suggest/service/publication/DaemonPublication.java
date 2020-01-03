@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,11 +35,8 @@ package fr.paris.lutece.plugins.suggest.service.publication;
 
 import fr.paris.lutece.portal.service.daemon.Daemon;
 
-
 /**
- * Daemon publication
- * disable all suggest submit not voted during the period
- * specified in the suggest
+ * Daemon publication disable all suggest submit not voted during the period specified in the suggest
  *
  */
 public class DaemonPublication extends Daemon
@@ -47,8 +44,8 @@ public class DaemonPublication extends Daemon
     /**
      * lance le service de publication
      */
-    public void run(  )
+    public void run( )
     {
-        PublicationService.publication(  );
+        PublicationService.publication( );
     }
 }

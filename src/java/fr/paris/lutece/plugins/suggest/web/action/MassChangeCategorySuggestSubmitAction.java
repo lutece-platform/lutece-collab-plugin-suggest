@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,14 +59,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
-
 /**
  *
  * MassChangeCategorySuggestSubmitAction
  *
  */
-public class MassChangeCategorySuggestSubmitAction extends AbstractPluginAction<SuggestAdminSearchFields>
-    implements ISuggestAction
+public class MassChangeCategorySuggestSubmitAction extends AbstractPluginAction<SuggestAdminSearchFields> implements ISuggestAction
 {
     private static final String ACTION_NAME = "Mass Change Category SuggestSubmit ";
     private static final String JSP_CONFIRM_CHANGE_SUGGEST_SUBMIT_CATEGORY = "jsp/admin/plugins/suggest/ConfirmMassChangeSuggestSubmitCategory.jsp";
@@ -89,7 +87,7 @@ public class MassChangeCategorySuggestSubmitAction extends AbstractPluginAction<
      * {@inheritDoc}
      */
     @Override
-    public String getName(  )
+    public String getName( )
     {
         return ACTION_NAME;
     }
@@ -98,7 +96,7 @@ public class MassChangeCategorySuggestSubmitAction extends AbstractPluginAction<
      * {@inheritDoc}
      */
     @Override
-    public String getButtonTemplate(  )
+    public String getButtonTemplate( )
     {
         return null;
     }
@@ -116,37 +114,35 @@ public class MassChangeCategorySuggestSubmitAction extends AbstractPluginAction<
      * {@inheritDoc}
      */
     @Override
-    public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser,
-        SuggestAdminSearchFields searchFields ) throws AccessDeniedException
+    public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser, SuggestAdminSearchFields searchFields )
+            throws AccessDeniedException
     {
-        IPluginActionResult result = new DefaultPluginActionResult(  );
+        IPluginActionResult result = new DefaultPluginActionResult( );
 
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
 
-        Plugin plugin = getPlugin(  );
+        Plugin plugin = getPlugin( );
         int nIdCategory = SuggestUtils.getIntegerParameter( strIdCategory );
         int nIdSuggestSubmit;
         String strRedirect;
 
-        if ( ( searchFields.getSelectedSuggestSubmit(  ) != null ) && !searchFields.getSelectedSuggestSubmit(  ).isEmpty(  ) )
+        if ( ( searchFields.getSelectedSuggestSubmit( ) != null ) && !searchFields.getSelectedSuggestSubmit( ).isEmpty( ) )
         {
             UrlItem url = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_CONFIRM_CHANGE_SUGGEST_SUBMIT_CATEGORY );
             url.addParameter( PARAMETER_ID_CATEGORY, nIdCategory );
 
-            //test All ressource selected before update
-            for ( String strIdSuggestSubmit : searchFields.getSelectedSuggestSubmit(  ) )
+            // test All ressource selected before update
+            for ( String strIdSuggestSubmit : searchFields.getSelectedSuggestSubmit( ) )
             {
                 if ( StringUtils.isNotBlank( strIdSuggestSubmit ) && StringUtils.isNumeric( strIdSuggestSubmit ) )
                 {
                     nIdSuggestSubmit = SuggestUtils.getIntegerParameter( strIdSuggestSubmit );
 
-                    SuggestSubmit suggestSubmit = SuggestSubmitService.getService(  )
-                                                             .findByPrimaryKey( nIdSuggestSubmit, false, plugin );
+                    SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, false, plugin );
 
-                    if ( ( suggestSubmit == null ) ||
-                            !RBACService.isAuthorized( Suggest.RESOURCE_TYPE,
-                                SuggestUtils.EMPTY_STRING + suggestSubmit.getSuggest(  ).getIdSuggest(  ),
-                                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, adminUser ) )
+                    if ( ( suggestSubmit == null )
+                            || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, SuggestUtils.EMPTY_STRING + suggestSubmit.getSuggest( ).getIdSuggest( ),
+                                    SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, adminUser ) )
                     {
                         throw new AccessDeniedException( "Access denied" );
                     }
@@ -155,12 +151,11 @@ public class MassChangeCategorySuggestSubmitAction extends AbstractPluginAction<
                 }
             }
 
-            strRedirect = url.getUrl(  );
+            strRedirect = url.getUrl( );
         }
         else
         {
-            strRedirect = AdminMessageService.getMessageUrl( request, MESSAGE_YOU_MUST_SELECT_SUGGEST_SUBMIT,
-                    AdminMessage.TYPE_INFO );
+            strRedirect = AdminMessageService.getMessageUrl( request, MESSAGE_YOU_MUST_SELECT_SUGGEST_SUBMIT, AdminMessage.TYPE_INFO );
         }
 
         result.setRedirect( strRedirect );
@@ -170,9 +165,10 @@ public class MassChangeCategorySuggestSubmitAction extends AbstractPluginAction<
 
     /**
      * Gets the plugin
+     * 
      * @return the plugin
      */
-    private Plugin getPlugin(  )
+    private Plugin getPlugin( )
     {
         return PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
     }

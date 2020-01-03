@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-
 /**
  *
  * class vote type
@@ -44,20 +43,22 @@ public class VideoType
     private int _nIdSuggestSubmit;
     private String _strCredits;
     private String _strMimeType;
-    private byte[] _video;
+    private byte [ ] _video;
 
     /**
-         *
-         * @return the id of the video (or suggestsubmit)
-         */
-    public int getIdSuggestSubmit(  )
+     *
+     * @return the id of the video (or suggestsubmit)
+     */
+    public int getIdSuggestSubmit( )
     {
         return _nIdSuggestSubmit;
     }
 
     /**
      * set the id of the SuggestSubmit
-     * @param nidSuggestSubmit the id of the vote type
+     * 
+     * @param nidSuggestSubmit
+     *            the id of the vote type
      */
     public void setIdSuggestSubmit( int nidSuggestSubmit )
     {
@@ -68,14 +69,16 @@ public class VideoType
      *
      * @return the credits of the video
      */
-    public String getCredits(  )
+    public String getCredits( )
     {
         return _strCredits;
     }
 
     /**
      * set the credits of the video
-     * @param strCredits the credits of the video
+     * 
+     * @param strCredits
+     *            the credits of the video
      */
     public void setCredits( String strCredits )
     {
@@ -83,7 +86,8 @@ public class VideoType
     }
 
     /**
-     * @param strMimeType the _strMimeType to set
+     * @param strMimeType
+     *            the _strMimeType to set
      */
     public void setMimeType( String strMimeType )
     {
@@ -93,15 +97,16 @@ public class VideoType
     /**
      * @return the _strMimeType
      */
-    public String getMimeType(  )
+    public String getMimeType( )
     {
         return _strMimeType;
     }
 
     /**
-     * @param video the _video to set
+     * @param video
+     *            the _video to set
      */
-    public void setVideo( byte[] video )
+    public void setVideo( byte [ ] video )
     {
         this._video = video;
     }
@@ -109,7 +114,7 @@ public class VideoType
     /**
      * @return the _video
      */
-    public byte[] getVideo(  )
+    public byte [ ] getVideo( )
     {
         return _video;
     }

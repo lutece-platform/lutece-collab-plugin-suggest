@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import java.util.List;
 
-
 /**
  *
  * class vote type
@@ -49,17 +48,19 @@ public class VoteType
     private String _strTemplateFileName;
 
     /**
-         *
-         * @return the id of the vote type
-         */
-    public int getIdVoteType(  )
+     *
+     * @return the id of the vote type
+     */
+    public int getIdVoteType( )
     {
         return _nIdVoteType;
     }
 
     /**
      * set the id of the vote type
-     * @param idVoteType the id of the vote type
+     * 
+     * @param idVoteType
+     *            the id of the vote type
      */
     public void setIdVoteType( int idVoteType )
     {
@@ -70,14 +71,16 @@ public class VoteType
      *
      * @return the title of the vote type
      */
-    public String getTitle(  )
+    public String getTitle( )
     {
         return _strTitle;
     }
 
     /**
      * set the title of the vote type
-     * @param title the title of the vote type
+     * 
+     * @param title
+     *            the title of the vote type
      */
     public void setTitle( String title )
     {
@@ -88,14 +91,16 @@ public class VoteType
      *
      * @return the list of vote buttons associated to the vote type
      */
-    public List<VoteButton> getVoteButtons(  )
+    public List<VoteButton> getVoteButtons( )
     {
         return _listVoteButtons;
     }
 
     /**
      * set the list of vote buttons associated to the vote type
-     * @param voteButtons the list of vote buttons associated to the vote type
+     * 
+     * @param voteButtons
+     *            the list of vote buttons associated to the vote type
      */
     public void setVoteButtons( List<VoteButton> voteButtons )
     {
@@ -106,14 +111,16 @@ public class VoteType
      *
      * @return the template file name
      */
-    public String getTemplateFileName(  )
+    public String getTemplateFileName( )
     {
         return _strTemplateFileName;
     }
 
     /**
      * set the template file name
-     * @param templateFileName the template file name
+     * 
+     * @param templateFileName
+     *            the template file name
      */
     public void setTemplateFileName( String templateFileName )
     {

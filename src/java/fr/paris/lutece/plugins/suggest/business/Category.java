@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,17 +53,19 @@ public class Category implements RBACResource, Serializable
     private String _strColor;
 
     /**
-       *
-       * @return the id of the category
-       */
-    public int getIdCategory(  )
+     *
+     * @return the id of the category
+     */
+    public int getIdCategory( )
     {
         return _nIdCategory;
     }
 
     /**
      * set the id of the category
-     * @param idCategory the id of the category
+     * 
+     * @param idCategory
+     *            the id of the category
      */
     public void setIdCategory( int idCategory )
     {
@@ -74,14 +76,16 @@ public class Category implements RBACResource, Serializable
      *
      * @return the title of the category
      */
-    public String getTitle(  )
+    public String getTitle( )
     {
         return _strTitle;
     }
 
     /**
      * set the title of the category
-     * @param title the title of the category
+     * 
+     * @param title
+     *            the title of the category
      */
     public void setTitle( String title )
     {
@@ -89,7 +93,8 @@ public class Category implements RBACResource, Serializable
     }
 
     /**
-     * @param obj the category to compare
+     * @param obj
+     *            the category to compare
      * @return true if category in parameter is the same category
      *
      */
@@ -105,24 +110,27 @@ public class Category implements RBACResource, Serializable
 
     /**
      * RBAC resource implmentation
+     * 
      * @return The resource type code
      */
-    public String getResourceTypeCode(  )
+    public String getResourceTypeCode( )
     {
         return RESOURCE_TYPE;
     }
 
     /**
      * RBAC resource implmentation
+     * 
      * @return The resourceId
      */
-    public String getResourceId(  )
+    public String getResourceId( )
     {
         return SuggestUtils.EMPTY_STRING + _nIdCategory;
     }
 
     /**
-     * @param strColor the _strColor to set
+     * @param strColor
+     *            the _strColor to set
      */
     public void setColor( String strColor )
     {
@@ -132,7 +140,7 @@ public class Category implements RBACResource, Serializable
     /**
      * @return the _strColor
      */
-    public String getColor(  )
+    public String getColor( )
     {
         return _strColor;
     }

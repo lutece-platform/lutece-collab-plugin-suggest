@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,10 +40,9 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  *
- *  Interface ICommentSubmitDAO
+ * Interface ICommentSubmitDAO
  *
  */
 public interface ICommentSubmitDAO
@@ -51,74 +50,98 @@ public interface ICommentSubmitDAO
     /**
      * Insert a new record in the table.
      *
-     * @param commentSubmit instance of the Comment Submit object to insert
-     * @param plugin the plugin
-     *          */
+     * @param commentSubmit
+     *            instance of the Comment Submit object to insert
+     * @param plugin
+     *            the plugin
+     * */
     void insert( CommentSubmit commentSubmit, Plugin plugin );
 
     /**
      * Load the data of the commentSubmit from the table
      *
-     * @param nIdCommentSubmit The identifier of the comment submit
-     * @param plugin the plugin
+     * @param nIdCommentSubmit
+     *            The identifier of the comment submit
+     * @param plugin
+     *            the plugin
      * @return the instance of the commentSubmit
      */
     CommentSubmit load( int nIdCommentSubmit, Plugin plugin );
 
     /**
-     * Delete   the comment submit whose identifier is specified in parameter
+     * Delete the comment submit whose identifier is specified in parameter
      *
-     * @param nIdCommentSubmit The identifier of the comment submit
-     * @param plugin the plugin
+     * @param nIdCommentSubmit
+     *            The identifier of the comment submit
+     * @param plugin
+     *            the plugin
      */
     void delete( int nIdCommentSubmit, Plugin plugin );
 
     /**
-     * Delete   the comment submit whose parent identifier is specified in parameter
+     * Delete the comment submit whose parent identifier is specified in parameter
      *
-     * @param nIdParentCommentSubmit The parent identifier
-     * @param plugin the plugin
+     * @param nIdParentCommentSubmit
+     *            The parent identifier
+     * @param plugin
+     *            the plugin
      */
     void deleteByIdParent( int nIdParentCommentSubmit, Plugin plugin );
 
     /**
      * Update the commentSubmit in the table
      *
-     * @param commentSubmit instance of the commentSubmit object to update
-     * @param plugin the plugin
+     * @param commentSubmit
+     *            instance of the commentSubmit object to update
+     * @param plugin
+     *            the plugin
      */
     void store( CommentSubmit commentSubmit, Plugin plugin );
 
     /**
-     * Load the data of all the commentSubmit who verify the filter and returns them in a  list
-     * @param filter the filter
-     * @param nLimit the number limit of comment return
-     * @param plugin the plugin
-     * @return  the list of commentSubmit
+     * Load the data of all the commentSubmit who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param nLimit
+     *            the number limit of comment return
+     * @param plugin
+     *            the plugin
+     * @return the list of commentSubmit
      */
     List<CommentSubmit> selectListByFilter( SubmitFilter filter, Integer nLimit, Plugin plugin );
 
     /**
      * Get the list of comments posted after a given date
-     * @param dateCreation The creation date of comments
-     * @param plugin The plugin
+     * 
+     * @param dateCreation
+     *            The creation date of comments
+     * @param plugin
+     *            The plugin
      * @return The list of comments, or an empty list if no comments was found
      */
     List<CommentSubmit> findSuggestCommentByDate( Date dateCreation, Plugin plugin );
 
     /**
      * return the number of all the commentSubmit who verify the filter
-     * @param filter the filter
-     * @param plugin the plugin
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
      * @return the number of all the commentSubmit who verify the filter
      */
     int selectCountByFilter( SubmitFilter filter, Plugin plugin );
 
     /**
      * Update date modify
-     * @param dateModify update the modification date
-     * @param idCommentSubmit the comment id
-     * @param plugin the plugin
+     * 
+     * @param dateModify
+     *            update the modification date
+     * @param idCommentSubmit
+     *            the comment id
+     * @param plugin
+     *            the plugin
      */
     void storeDateModify( Timestamp dateModify, int idCommentSubmit, Plugin plugin );
 }

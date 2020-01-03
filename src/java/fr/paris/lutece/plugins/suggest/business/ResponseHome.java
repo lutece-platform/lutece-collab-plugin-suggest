@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,10 +38,8 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
- * This class provides instances management methods (create, find, ...) for
- * Response objects
+ * This class provides instances management methods (create, find, ...) for Response objects
  */
 public final class ResponseHome
 {
@@ -51,16 +49,17 @@ public final class ResponseHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private ResponseHome(  )
+    private ResponseHome( )
     {
     }
 
     /**
      * Creation of an instance of response
      *
-     * @param response The instance of the response which contains the
-     *            informations to store
-     * @param plugin the Plugin
+     * @param response
+     *            The instance of the response which contains the informations to store
+     * @param plugin
+     *            the Plugin
      *
      */
     public static void create( Response response, Plugin plugin )
@@ -71,9 +70,10 @@ public final class ResponseHome
     /**
      * Update of the response which is specified in parameter
      *
-     * @param response The instance of the Response which contains the
-     *            informations to update
-     * @param plugin the Plugin
+     * @param response
+     *            The instance of the Response which contains the informations to update
+     * @param plugin
+     *            the Plugin
      *
      */
     public static void update( Response response, Plugin plugin )
@@ -82,26 +82,28 @@ public final class ResponseHome
     }
 
     /**
-     * Remove response associate to the suggest submit whose identifier is
-     * specified in parameter
+     * Remove response associate to the suggest submit whose identifier is specified in parameter
      *
-     * @param nIdResponse The suggestSubmitKey
-     * @param plugin the Plugin
+     * @param nIdResponse
+     *            The suggestSubmitKey
+     * @param plugin
+     *            the Plugin
      */
     public static void remove( int nIdResponse, Plugin plugin )
     {
         _dao.delete( nIdResponse, plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
-     * Returns an instance of a Response whose identifier is specified in
-     * parameter
+     * Returns an instance of a Response whose identifier is specified in parameter
      *
-     * @param nKey The entry primary key
-     * @param plugin the Plugin
+     * @param nKey
+     *            The entry primary key
+     * @param plugin
+     *            the Plugin
      * @return an instance of Response
      */
     public static Response findByPrimaryKey( int nKey, Plugin plugin )
@@ -110,10 +112,12 @@ public final class ResponseHome
     }
 
     /**
-     * Load the data of all the response who verify the filter and returns them
-     * in a list
-     * @param filter the filter
-     * @param plugin the plugin
+     * Load the data of all the response who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
      * @return the list of response
      */
     public static List<Response> getResponseList( SubmitFilter filter, Plugin plugin )

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-
 /**
  * This class provides Data Access methods for Field objects
  */
@@ -45,8 +44,7 @@ public final class ImageResourceDAO implements IImageResourceDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_resource_image ) FROM suggest_image";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT image_content, image_mime_type" +
-        " FROM suggest_image WHERE id_resource_image = ?";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT image_content, image_mime_type" + " FROM suggest_image WHERE id_resource_image = ?";
     private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_image (id_resource_image, image_content, image_mime_type) VALUES (?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM suggest_image WHERE id_resource_image = ? ";
 
@@ -54,13 +52,13 @@ public final class ImageResourceDAO implements IImageResourceDAO
     public synchronized int insert( ImageResource imageResource, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        daoUtil.setBytes( 2, imageResource.getImage(  ) );
-        daoUtil.setString( 3, imageResource.getMimeType(  ) );
+        daoUtil.setBytes( 2, imageResource.getImage( ) );
+        daoUtil.setString( 3, imageResource.getMimeType( ) );
 
         int nId = newPrimaryKey( plugin );
         daoUtil.setInt( 1, nId );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
 
         return nId;
     }
@@ -70,18 +68,18 @@ public final class ImageResourceDAO implements IImageResourceDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, nId );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         ImageResource imageResource = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            imageResource = new ImageResource(  );
+            imageResource = new ImageResource( );
             imageResource.setImage( daoUtil.getBytes( 1 ) );
             imageResource.setMimeType( daoUtil.getString( 2 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return imageResource;
     }
@@ -91,30 +89,32 @@ public final class ImageResourceDAO implements IImageResourceDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nId );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
-    * generate new primary key
-    * @param plugin plugin
-    * @return
-    */
+     * generate new primary key
+     * 
+     * @param plugin
+     *            plugin
+     * @return
+     */
     private int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nKey;
 
-        if ( !daoUtil.next(  ) )
+        if ( !daoUtil.next( ) )
         {
             // if the table is empty
             nKey = 1;
         }
 
         nKey = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nKey;
     }

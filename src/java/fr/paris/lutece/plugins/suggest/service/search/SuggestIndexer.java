@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -75,7 +75,6 @@ import org.apache.tika.sax.BodyContentHandler;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
-
 /**
  * SuggestIndexer
  * 
@@ -96,10 +95,11 @@ public class SuggestIndexer implements SearchIndexer
     private static final String PARAMETER_ID_SUGGEST = "id_suggest";
     private static final String PARAMETER_ID_SUGGEST_SUBMIT = "id_suggest_submit";
     private static final String PARAMETER_ACTION = "action";
-    private static final String PARAMETER_SUGGEST_VIEW_DETAIL = "view_suggest_submit" ;
+    private static final String PARAMETER_SUGGEST_VIEW_DETAIL = "view_suggest_submit";
 
     /**
      * Returns the indexer service description
+     * 
      * @return The indexer service description
      */
     public String getDescription( )
@@ -109,15 +109,19 @@ public class SuggestIndexer implements SearchIndexer
 
     /**
      * Index suggest documents
-     * @throws IOException Exception
-     * @throws InterruptedException Exception
-     * @throws SiteMessageException Exception
+     * 
+     * @throws IOException
+     *             Exception
+     * @throws InterruptedException
+     *             Exception
+     * @throws SiteMessageException
+     *             Exception
      */
     public void indexDocuments( ) throws IOException, InterruptedException, SiteMessageException
     {
         Plugin plugin = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
 
-        //filter on suggest state(the suggest submit are add if the suggest is activated)
+        // filter on suggest state(the suggest submit are add if the suggest is activated)
         SuggestFilter suggestFilter = new SuggestFilter( );
         suggestFilter.setIdState( Suggest.STATE_ENABLE );
 
@@ -125,7 +129,7 @@ public class SuggestIndexer implements SearchIndexer
         List<Integer> suggestSubmitActivatedList;
 
         SubmitFilter submitFilter = new SubmitFilter( );
-        //        submitFilter.setIdSuggestSubmitState( SuggestSubmit.STATE_PUBLISH );
+        // submitFilter.setIdSuggestSubmitState( SuggestSubmit.STATE_PUBLISH );
         submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_SCORE_DESC );
         submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
@@ -136,15 +140,15 @@ public class SuggestIndexer implements SearchIndexer
 
             for ( Integer idSuggestSubmit : suggestSubmitActivatedList )
             {
-                //url.addParameter( SuggestApp.PARAMETER_CLEAR_FILTER,SuggestApp.PARAMETER_CLEAR_FILTER);
-                //url.setAnchor(SuggestApp.ANCHOR_SUGGEST_SUBMIT+suggestSubmit.getIdSuggestSubmit());
+                // url.addParameter( SuggestApp.PARAMETER_CLEAR_FILTER,SuggestApp.PARAMETER_CLEAR_FILTER);
+                // url.setAnchor(SuggestApp.ANCHOR_SUGGEST_SUBMIT+suggestSubmit.getIdSuggestSubmit());
                 List<Document> listDocSuggestSubmit = null;
 
                 try
                 {
                     listDocSuggestSubmit = getDocuments( idSuggestSubmit.toString( ) );
                 }
-                catch ( Exception e )
+                catch( Exception e )
                 {
                     String strMessage = "Suggest ID : " + suggest.getIdSuggest( );
                     IndexationService.error( this, e, strMessage );
@@ -163,14 +167,18 @@ public class SuggestIndexer implements SearchIndexer
 
     /**
      * Return Lucene documents
-     * @param strIdSuggest the if of the suggest
+     * 
+     * @param strIdSuggest
+     *            the if of the suggest
      * @return a list of Documents
-     * @throws IOException Exception
-     * @throws InterruptedException Exception
-     * @throws SiteMessageException Exception
+     * @throws IOException
+     *             Exception
+     * @throws InterruptedException
+     *             Exception
+     * @throws SiteMessageException
+     *             Exception
      */
-    public List<Document> getDocuments( String strIdSuggestSubmit ) throws IOException, InterruptedException,
-            SiteMessageException
+    public List<Document> getDocuments( String strIdSuggestSubmit ) throws IOException, InterruptedException, SiteMessageException
     {
         List<org.apache.lucene.document.Document> listDocs = new ArrayList<org.apache.lucene.document.Document>( );
         String strPortalUrl = AppPathService.getPortalUrl( );
@@ -179,43 +187,44 @@ public class SuggestIndexer implements SearchIndexer
         SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, true, plugin );
 
         //
-        //SubmitFilter commentFilter=new SubmitFilter();
+        // SubmitFilter commentFilter=new SubmitFilter();
         // commentFilter.setIdSuggestSubmit(nIdSuggestSubmit);
         if ( suggestSubmit != null )
         {
-            //Add comment
-            //suggestSubmit.setComments(CommentSubmitHome.getCommentSubmitList(commentFilter, plugin)); 
+            // Add comment
+            // suggestSubmit.setComments(CommentSubmitHome.getCommentSubmitList(commentFilter, plugin));
             UrlItem url = new UrlItem( strPortalUrl );
-            url.addParameter( XPageAppService.PARAM_XPAGE_APP,
-                    AppPropertiesService.getProperty( PROPERTY_XPAGE_APPLICATION_ID, "suggest" ) );
+            url.addParameter( XPageAppService.PARAM_XPAGE_APP, AppPropertiesService.getProperty( PROPERTY_XPAGE_APPLICATION_ID, "suggest" ) );
             url.addParameter( PARAMETER_ID_SUGGEST, suggestSubmit.getSuggest( ).getIdSuggest( ) );
             url.addParameter( PARAMETER_ID_SUGGEST_SUBMIT, suggestSubmit.getIdSuggestSubmit( ) );
-            url.addParameter( PARAMETER_ACTION, PARAMETER_SUGGEST_VIEW_DETAIL ); 
+            url.addParameter( PARAMETER_ACTION, PARAMETER_SUGGEST_VIEW_DETAIL );
             url.addParameter( SuggestApp.PARAMETER_SUGGEST_DETAIL, 1 );
 
-            //url.addParameter( SuggestApp.PARAMETER_CLEAR_FILTER,SuggestApp.PARAMETER_CLEAR_FILTER);
-            //url.setAnchor(SuggestApp.ANCHOR_SUGGEST_SUBMIT+suggestSubmit.getIdSuggestSubmit());
+            // url.addParameter( SuggestApp.PARAMETER_CLEAR_FILTER,SuggestApp.PARAMETER_CLEAR_FILTER);
+            // url.setAnchor(SuggestApp.ANCHOR_SUGGEST_SUBMIT+suggestSubmit.getIdSuggestSubmit());
             org.apache.lucene.document.Document docSuggestSubmit = getDocument( suggestSubmit, url.getUrl( ) );
             listDocs.add( docSuggestSubmit );
         }
 
-        //}
+        // }
         return listDocs;
     }
 
     /**
-     * Builds a document which will be used by Lucene during the indexing of the
-     * suggest submit list
+     * Builds a document which will be used by Lucene during the indexing of the suggest submit list
      * 
-     * @param suggestSubmit the suggest submit to index
-     * @param strUrl the url of suggest submit
+     * @param suggestSubmit
+     *            the suggest submit to index
+     * @param strUrl
+     *            the url of suggest submit
      * @return a lucene document
      * 
-     * @throws IOException The IO Exception
-     * @throws InterruptedException The InterruptedException
+     * @throws IOException
+     *             The IO Exception
+     * @throws InterruptedException
+     *             The InterruptedException
      */
-    public static org.apache.lucene.document.Document getDocument( SuggestSubmit suggestSubmit, String strUrl )
-            throws IOException, InterruptedException
+    public static org.apache.lucene.document.Document getDocument( SuggestSubmit suggestSubmit, String strUrl ) throws IOException, InterruptedException
     {
         // make a new, empty document
         org.apache.lucene.document.Document doc = new org.apache.lucene.document.Document( );
@@ -228,27 +237,24 @@ public class SuggestIndexer implements SearchIndexer
         ftNo.setTokenized( false );
         ftNo.setOmitNorms( false );
 
-        // Add the url as a field named "url".  Use an UnIndexed field, so
+        // Add the url as a field named "url". Use an UnIndexed field, so
         // that the url is just stored with the question/answer, but is not searchable.
         doc.add( new Field( SearchItem.FIELD_URL, strUrl, ft ) );
 
         doc.add( new Field( SuggestSearchItem.FIELD_ID_SUGGEST, String.valueOf( suggestSubmit.getSuggest( ).getIdSuggest( ) ), ft ) );
-        doc.add( new Field( SuggestSearchItem.FIELD_ID_SUGGEST_SUBMIT, Integer.toString( suggestSubmit.getIdSuggestSubmit( ) ),
-                ft ) );
+        doc.add( new Field( SuggestSearchItem.FIELD_ID_SUGGEST_SUBMIT, Integer.toString( suggestSubmit.getIdSuggestSubmit( ) ), ft ) );
 
         // Add the uid as a field, so that index can be incrementally maintained.
         // This field is not stored with question/answer, it is indexed, but it is not
         // tokenized prior to indexing.
-        doc.add( new Field( SuggestSearchItem.FIELD_UID, String.valueOf( suggestSubmit.getIdSuggestSubmit( ) ) + "_"
-                + SHORT_NAME, ft ) );
-        //Add state
-        doc.add( new Field( SuggestSearchItem.FIELD_STATE, Integer.toString( suggestSubmit.getSuggestSubmitState( )
-                .getIdSuggestSubmitState( ) ), ft ) );
+        doc.add( new Field( SuggestSearchItem.FIELD_UID, String.valueOf( suggestSubmit.getIdSuggestSubmit( ) ) + "_" + SHORT_NAME, ft ) );
+        // Add state
+        doc.add( new Field( SuggestSearchItem.FIELD_STATE, Integer.toString( suggestSubmit.getSuggestSubmitState( ).getIdSuggestSubmitState( ) ), ft ) );
 
         StringWriter writerFieldContent = new StringWriter( );
         writerFieldContent.write( suggestSubmit.getSuggestSubmitValue( ) );
 
-        //Add the list of comments
+        // Add the list of comments
         if ( suggestSubmit.getComments( ) != null )
         {
             for ( CommentSubmit comment : suggestSubmit.getComments( ) )
@@ -261,20 +267,19 @@ public class SuggestIndexer implements SearchIndexer
         Metadata metadata = new Metadata( );
         try
         {
-            new HtmlParser( ).parse( new ByteArrayInputStream( writerFieldContent.toString( ).getBytes( ) ), handler,
-                    metadata, new ParseContext( ) );
+            new HtmlParser( ).parse( new ByteArrayInputStream( writerFieldContent.toString( ).getBytes( ) ), handler, metadata, new ParseContext( ) );
         }
-        catch ( SAXException e )
+        catch( SAXException e )
         {
             throw new AppException( "Error during page parsing." );
         }
-        catch ( TikaException e )
+        catch( TikaException e )
         {
             throw new AppException( "Error during page parsing." );
         }
 
-        //the content of the article is recovered in the parser because this one
-        //had replaced the encoded caracters (as &eacute;) by the corresponding special caracter (as ?)
+        // the content of the article is recovered in the parser because this one
+        // had replaced the encoded caracters (as &eacute;) by the corresponding special caracter (as ?)
         StringBuilder sb = new StringBuilder( handler.toString( ) );
         // Add the tag-stripped contents as a Reader-valued Text field so it will
         // get tokenized and indexed.
@@ -292,7 +297,7 @@ public class SuggestIndexer implements SearchIndexer
         Plugin plugin = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
         Suggest suggest = SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), plugin );
 
-        if( suggest.getRole() != null )
+        if ( suggest.getRole( ) != null )
         {
             doc.add( new Field( SearchItem.FIELD_ROLE, suggest.getRole( ), ft ) );
         }
@@ -303,6 +308,7 @@ public class SuggestIndexer implements SearchIndexer
 
     /**
      * Get the name of the indexer.
+     * 
      * @return The name
      */
     public String getName( )
@@ -312,6 +318,7 @@ public class SuggestIndexer implements SearchIndexer
 
     /**
      * Get the version of the indexer
+     * 
      * @return The version number
      */
     public String getVersion( )
@@ -321,6 +328,7 @@ public class SuggestIndexer implements SearchIndexer
 
     /**
      * Get the state of indexer
+     * 
      * @return Return true if the indexer is enabled, false else.
      */
     public boolean isEnable( )
@@ -328,8 +336,7 @@ public class SuggestIndexer implements SearchIndexer
         boolean bReturn = false;
         String strEnable = AppPropertiesService.getProperty( PROPERTY_INDEXER_ENABLE );
 
-        if ( ( strEnable != null )
-                && ( strEnable.equalsIgnoreCase( Boolean.TRUE.toString( ) ) || strEnable.equals( ENABLE_VALUE_TRUE ) )
+        if ( ( strEnable != null ) && ( strEnable.equalsIgnoreCase( Boolean.TRUE.toString( ) ) || strEnable.equals( ENABLE_VALUE_TRUE ) )
                 && PluginService.isPluginEnable( SuggestPlugin.PLUGIN_NAME ) )
         {
             bReturn = true;

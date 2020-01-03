@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
-
 /**
  * Interface for SuggestUserInfoDAO
  */
@@ -43,30 +42,42 @@ public interface ISuggestUserInfoDAO
 {
     /**
      * Update SuggestUserInfo
-     * @param suggestUserInfo suggestUserInfo
-     * @param plugin the plugin
+     * 
+     * @param suggestUserInfo
+     *            suggestUserInfo
+     * @param plugin
+     *            the plugin
      */
     void update( SuggestUserInfo suggestUserInfo, Plugin plugin );
 
     /**
      * insert SuggestUserInfo
-     * @param suggestUserInfo suggestUserInfo
-     * @param plugin the plugin
+     * 
+     * @param suggestUserInfo
+     *            suggestUserInfo
+     * @param plugin
+     *            the plugin
      */
     void insert( SuggestUserInfo suggestUserInfo, Plugin plugin );
 
     /**
      * Load user information by lutece user key
-     * @param strLuteceUserKey the lutece userKey
-     * @param plugin the plugin
+     * 
+     * @param strLuteceUserKey
+     *            the lutece userKey
+     * @param plugin
+     *            the plugin
      * @return The user information
      */
     SuggestUserInfo load( String strLuteceUserKey, Plugin plugin );
 
     /**
      * Delete suggest user info
-     * @param strLuteceUserKey the lutece user key
-     * @param plugin the plugin
+     * 
+     * @param strLuteceUserKey
+     *            the lutece user key
+     * @param plugin
+     *            the plugin
      */
     void delete( String strLuteceUserKey, Plugin plugin );
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-
 /**
  *
  * class SuggestFilter
@@ -53,13 +52,14 @@ public class SuggestFilter
     /**
      * @return the _strRole
      */
-    public String getRole(  )
+    public String getRole( )
     {
         return _strRole;
     }
 
     /**
-     * @param strRole the _strRole to set
+     * @param strRole
+     *            the _strRole to set
      */
     public void setRole( String strRole )
     {
@@ -67,20 +67,19 @@ public class SuggestFilter
     }
 
     /**
-    *
-    * @return 1 if the suggests return must be enabled
-    *                    0 if the suggestss return must be disabled
-    */
-    public int getIdState(  )
+     *
+     * @return 1 if the suggests return must be enabled 0 if the suggestss return must be disabled
+     */
+    public int getIdState( )
     {
         return _nIdState;
     }
 
     /**
-     * Set 1 if the  suggests return must be enabled
-     *            0 if the  suggests return must be disabled
-     * @param idState  1 if the  suggests return must be enabled
-     *                                      0 if the  suggests return must be disabled
+     * Set 1 if the suggests return must be enabled 0 if the suggests return must be disabled
+     * 
+     * @param idState
+     *            1 if the suggests return must be enabled 0 if the suggests return must be disabled
      */
     public void setIdState( int idState )
     {
@@ -91,23 +90,25 @@ public class SuggestFilter
      *
      * @return true if the filter contain suggest state
      */
-    public boolean containsIdState(  )
+    public boolean containsIdState( )
     {
         return ( _nIdState != ALL_INT );
     }
 
     /**
-         *
-         * @return the workgroup of the search suggests
-         */
-    public String getWorkgroup(  )
+     *
+     * @return the workgroup of the search suggests
+     */
+    public String getWorkgroup( )
     {
         return _strWorkgroup;
     }
 
     /**
      * set the workgroup of the search suggests
-     * @param workgroup the workgroup of the search suggests
+     * 
+     * @param workgroup
+     *            the workgroup of the search suggests
      */
     public void setWorkGroup( String workgroup )
     {
@@ -118,35 +119,34 @@ public class SuggestFilter
      *
      * @return true if the filter contain workgroup criteria
      */
-    public boolean containsWorkgroupCriteria(  )
+    public boolean containsWorkgroupCriteria( )
     {
         return ( !_strWorkgroup.equals( ALL_STRING ) );
     }
 
     /**
-    *
-    * @return true if the filter contain role criteria
-    */
-    public boolean containsRoleCriteria(  )
+     *
+     * @return true if the filter contain role criteria
+     */
+    public boolean containsRoleCriteria( )
     {
         return ( !_strRole.equals( Suggest.ROLE_NONE ) );
     }
 
     /**
-    *
-    * @return 1 if the suggests return must be a default suggest
-    *         0 if the suggests return must no be a default suggest
-    */
-    public int getIdDefaultSuggest(  )
+     *
+     * @return 1 if the suggests return must be a default suggest 0 if the suggests return must no be a default suggest
+     */
+    public int getIdDefaultSuggest( )
     {
         return _nIdDefaultSuggest;
     }
 
     /**
-     * Set 1 if the suggests return must be a default suggest
-    *         0 if the suggests return must no be a default suggest
-     * @param idDefaultSuggest  1 if the  suggests return must be a default suggest
-     *                                      0 if the  suggests return must not be a default suggest
+     * Set 1 if the suggests return must be a default suggest 0 if the suggests return must no be a default suggest
+     * 
+     * @param idDefaultSuggest
+     *            1 if the suggests return must be a default suggest 0 if the suggests return must not be a default suggest
      */
     public void setIdDefaultSuggest( int idDefaultSuggest )
     {
@@ -157,7 +157,7 @@ public class SuggestFilter
      *
      * @return true if the filter contain suggest state
      */
-    public boolean containsIdDefaultSuggest(  )
+    public boolean containsIdDefaultSuggest( )
     {
         return ( _nIdDefaultSuggest != ALL_INT );
     }

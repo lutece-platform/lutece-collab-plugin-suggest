@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  * IEntryDAO Interface
  */
@@ -46,8 +45,10 @@ public interface IEntryDAO
     /**
      * Insert a new record in the table.
      * 
-     * @param entry instance of the Entry object to insert
-     * @param plugin the plugin
+     * @param entry
+     *            instance of the Entry object to insert
+     * @param plugin
+     *            the plugin
      * @return the id of the new entry
      */
     int insert( IEntry entry, Plugin plugin );
@@ -55,37 +56,44 @@ public interface IEntryDAO
     /**
      * Update the entry in the table
      * 
-     * @param entry instance of the Entry object to update
-     * @param plugin the plugin
+     * @param entry
+     *            instance of the Entry object to update
+     * @param plugin
+     *            the plugin
      */
     void store( IEntry entry, Plugin plugin );
 
     /**
      * Delete a record from the table
      * 
-     * @param nIdEntry The identifier of the entry
-     * @param plugin the plugin
+     * @param nIdEntry
+     *            The identifier of the entry
+     * @param plugin
+     *            the plugin
      */
     void delete( int nIdEntry, Plugin plugin );
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Load the data of the entry from the table
      * 
-     * @param nIdEntry The identifier of the entry
-     * @param plugin the plugin
+     * @param nIdEntry
+     *            The identifier of the entry
+     * @param plugin
+     *            the plugin
      * @return the instance of the Entry
      */
     IEntry load( int nIdEntry, Plugin plugin );
 
     /**
-     * Load the data of all the entry who verify the filter and returns them in
-     * a list
+     * Load the data of all the entry who verify the filter and returns them in a list
      * 
-     * @param filter the filter
-     * @param plugin the plugin
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
      * @return the list of entry
      */
     List<IEntry> selectEntryListByFilter( EntryFilter filter, Plugin plugin );
@@ -93,8 +101,10 @@ public interface IEntryDAO
     /**
      * Return the number of entry who verify the filter
      * 
-     * @param filter the filter
-     * @param plugin the plugin
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
      * @return the number of entry who verify the filter
      */
     int selectNumberEntryByFilter( EntryFilter filter, Plugin plugin );
@@ -102,26 +112,34 @@ public interface IEntryDAO
     /**
      * Delete an association between entry and a regular expression
      * 
-     * @param nIdEntry The identifier of the field
-     * @param nIdExpression The identifier of the regular expression
-     * @param plugin the plugin
+     * @param nIdEntry
+     *            The identifier of the field
+     * @param nIdExpression
+     *            The identifier of the regular expression
+     * @param plugin
+     *            the plugin
      */
     void deleteVerifyBy( int nIdEntry, int nIdExpression, Plugin plugin );
 
     /**
      * insert an association between entry and a regular expression
      * 
-     * @param nIdEntry The identifier of the entry
-     * @param nIdExpression The identifier of the regular expression
-     * @param plugin the plugin
+     * @param nIdEntry
+     *            The identifier of the entry
+     * @param nIdExpression
+     *            The identifier of the regular expression
+     * @param plugin
+     *            the plugin
      */
     void insertVerifyBy( int nIdEntry, int nIdExpression, Plugin plugin );
 
     /**
-     * Load the key of all the regularExpression associate to the entry and
-     * returns them in a list
-     * @param nIdEntry the id of entry
-     * @param plugin the plugin
+     * Load the key of all the regularExpression associate to the entry and returns them in a list
+     * 
+     * @param nIdEntry
+     *            the id of entry
+     * @param plugin
+     *            the plugin
      * @return the list of regular expression key
      */
     List<Integer> selectListRegularExpressionKeyByIdEntry( int nIdEntry, Plugin plugin );
@@ -129,8 +147,10 @@ public interface IEntryDAO
     /**
      * verify if the regular expresssion is use
      * 
-     * @param nIdExpression The identifier of the entry
-     * @param plugin the plugin
+     * @param nIdExpression
+     *            The identifier of the entry
+     * @param plugin
+     *            the plugin
      * @return true if the regular expression is use
      */
     boolean isRegularExpressionIsUse( int nIdExpression, Plugin plugin );

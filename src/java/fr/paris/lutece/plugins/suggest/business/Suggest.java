@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,7 +50,6 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-
 
 /**
  *
@@ -150,30 +149,29 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     private String _strNotificationNewSuggestSubmitTitle;
     @SuggestAttribute( "notificationNewSuggestSubmitBody" )
     private String _strNotificationNewSuggestSubmitBody;
-    
 
     /**
-    * Initialize the Suggest
-    */
-    public static void init(  )
+     * Initialize the Suggest
+     */
+    public static void init( )
     {
         // Create removal listeners and register them
         if ( _listenerWorkgroup == null )
         {
-            _listenerWorkgroup = new SuggestWorkgroupRemovalListener(  );
-            WorkgroupRemovalListenerService.getService(  ).registerListener( _listenerWorkgroup );
+            _listenerWorkgroup = new SuggestWorkgroupRemovalListener( );
+            WorkgroupRemovalListenerService.getService( ).registerListener( _listenerWorkgroup );
         }
 
         if ( _listenerRegularExpression == null )
         {
-            _listenerRegularExpression = new SuggestRegularExpressionRemovalListener(  );
-            RegularExpressionRemovalListenerService.getService(  ).registerListener( _listenerRegularExpression );
+            _listenerRegularExpression = new SuggestRegularExpressionRemovalListener( );
+            RegularExpressionRemovalListenerService.getService( ).registerListener( _listenerRegularExpression );
         }
 
         if ( _listenerRole == null )
         {
-            _listenerRole = new SuggestRoleRemovalListener(  );
-            RoleRemovalListenerService.getService(  ).registerListener( _listenerRole );
+            _listenerRole = new SuggestRoleRemovalListener( );
+            RoleRemovalListenerService.getService( ).registerListener( _listenerRole );
         }
     }
 
@@ -181,14 +179,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return the id of the mailing list associate to the suggest submit
      */
-    public int getIdMailingListSuggestSubmit(  )
+    public int getIdMailingListSuggestSubmit( )
     {
         return _nIdMailingListSuggestSubmit;
     }
 
     /**
      * set the id of the mailing list associate to the suggest submit
-     * @param mailingListId the id of the mailing list associate to the suggest submit
+     * 
+     * @param mailingListId
+     *            the id of the mailing list associate to the suggest submit
      */
     public void setIdMailingListSuggestSubmit( int mailingListId )
     {
@@ -199,14 +199,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return true if the suggest for creating suggest contain a captcha
      */
-    public boolean isActiveCaptcha(  )
+    public boolean isActiveCaptcha( )
     {
         return _bActiveCaptcha;
     }
 
     /**
      * set true if the suggest for creating suggest contain a captcha
-     * @param activeCaptcha true if the suggest for creating suggest  contain a captcha
+     * 
+     * @param activeCaptcha
+     *            true if the suggest for creating suggest contain a captcha
      */
     public void setActiveCaptcha( boolean activeCaptcha )
     {
@@ -214,17 +216,19 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-        *
-        * @return the libelle of the validate button
-        */
-    public String getLibelleValidateButton(  )
+     *
+     * @return the libelle of the validate button
+     */
+    public String getLibelleValidateButton( )
     {
         return _strLibelleValidateButton;
     }
 
     /**
      * set the libelle of the validate button
-     * @param libelleValidateButton the libelle of the validate button
+     * 
+     * @param libelleValidateButton
+     *            the libelle of the validate button
      */
     public void setLibelleValidateButton( String libelleValidateButton )
     {
@@ -232,17 +236,19 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-    *
-    * @return the libelle of the suggest contribution
-    */
-    public String getLibelleContribution(  )
+     *
+     * @return the libelle of the suggest contribution
+     */
+    public String getLibelleContribution( )
     {
         return _strLibelleContribution;
     }
 
     /**
      * set the libelle of the suggest name
-     * @param libelleSuggestName the libelle of the suggest contribution
+     * 
+     * @param libelleSuggestName
+     *            the libelle of the suggest contribution
      */
     public void setLibelleContribution( String libelleSuggestName )
     {
@@ -253,14 +259,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return the title of the suggest
      */
-    public String getTitle(  )
+    public String getTitle( )
     {
         return _strTitle;
     }
 
     /**
      * set the title of the suggest
-     * @param strTitle the title of the suggest
+     * 
+     * @param strTitle
+     *            the title of the suggest
      */
     public void setTitle( String strTitle )
     {
@@ -271,14 +279,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return the unavailability message of the suggest
      */
-    public String getUnavailabilityMessage(  )
+    public String getUnavailabilityMessage( )
     {
         return _strUnavailabilityMessage;
     }
 
     /**
      * set the unavailability message of the suggest
-     * @param unavailabilityMessage the unavailability message of the suggest
+     * 
+     * @param unavailabilityMessage
+     *            the unavailability message of the suggest
      */
     public void setUnavailabilityMessage( String unavailabilityMessage )
     {
@@ -289,14 +299,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return the work group associate to the suggest
      */
-    public String getWorkgroup(  )
+    public String getWorkgroup( )
     {
         return _strWorkgroup;
     }
 
     /**
-     * set  the work group associate to the suggest
-     * @param workGroup  the work group associate to the suggest
+     * set the work group associate to the suggest
+     * 
+     * @param workGroup
+     *            the work group associate to the suggest
      */
     public void setWorkgroup( String workGroup )
     {
@@ -307,14 +319,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return the id of the suggest
      */
-    public int getIdSuggest(  )
+    public int getIdSuggest( )
     {
         return _nIdSuggest;
     }
 
     /**
      * set the id of the suggest
-     * @param idSuggest the id of the suggest
+     * 
+     * @param idSuggest
+     *            the id of the suggest
      */
     public void setIdSuggest( int idSuggest )
     {
@@ -325,14 +339,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return true if the suggest is active
      */
-    public boolean isActive(  )
+    public boolean isActive( )
     {
         return _bActive;
     }
 
     /**
      * set true if the suggest is active
-     * @param active true if the suggest is active
+     * 
+     * @param active
+     *            true if the suggest is active
      */
     public void setActive( boolean active )
     {
@@ -343,14 +359,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return the creation date
      */
-    public Timestamp getDateCreation(  )
+    public Timestamp getDateCreation( )
     {
         return _tDateCreation;
     }
 
     /**
      * set the creation date
-     * @param dateCreation the creation date
+     * 
+     * @param dateCreation
+     *            the creation date
      */
     public void setDateCreation( Timestamp dateCreation )
     {
@@ -358,19 +376,21 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-    * RBAC resource implmentation
-    * @return The resource type code
-    */
-    public String getResourceTypeCode(  )
+     * RBAC resource implmentation
+     * 
+     * @return The resource type code
+     */
+    public String getResourceTypeCode( )
     {
         return RESOURCE_TYPE;
     }
 
     /**
      * RBAC resource implmentation
+     * 
      * @return The resourceId
      */
-    public String getResourceId(  )
+    public String getResourceId( )
     {
         return "" + _nIdSuggest;
     }
@@ -379,14 +399,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return a list of action can be use for the suggest
      */
-    public List<SuggestAction> getActions(  )
+    public List<SuggestAction> getActions( )
     {
         return _listActions;
     }
 
     /**
      * set a list of action can be use for the suggest
-     * @param suggestActions a list of action must be use for the suggest
+     * 
+     * @param suggestActions
+     *            a list of action must be use for the suggest
      */
     public void setActions( List<SuggestAction> suggestActions )
     {
@@ -395,17 +417,20 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * return the number of vote required for publishing a suggest submit
+     * 
      * @return the number of vote required for publishing a suggest submit
      */
-    public int getNumberVoteRequired(  )
+    public int getNumberVoteRequired( )
     {
         return _nNumberVoteRequired;
     }
 
     /**
      * Set the number of vote required for publishing a suggest submit
-     * @param numberVoteRequired the number of vote required for publishing a suggest submit
-      */
+     * 
+     * @param numberVoteRequired
+     *            the number of vote required for publishing a suggest submit
+     */
     public void setNumberVoteRequired( int numberVoteRequired )
     {
         _nNumberVoteRequired = numberVoteRequired;
@@ -413,16 +438,19 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * return the number of day required for disable a suggest submit
-     * @return  the number of day required for disable a suggest submit
+     * 
+     * @return the number of day required for disable a suggest submit
      */
-    public int getNumberDayRequired(  )
+    public int getNumberDayRequired( )
     {
         return _nNumberDayRequired;
     }
 
     /**
      * set the number of day required for disable a suggest submit
-     * @param numberDayRequired the number of day required for disable a suggest submit
+     * 
+     * @param numberDayRequired
+     *            the number of day required for disable a suggest submit
      */
     public void setNumberDayRequired( int numberDayRequired )
     {
@@ -431,17 +459,20 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * return true if the form of suggest submit creation required a captcha
+     * 
      * @return true if the form of suggest submit creation required a captcha
      */
-    public boolean isActiveSuggestSubmitAuthentification(  )
+    public boolean isActiveSuggestSubmitAuthentification( )
     {
         return _bActiveSuggestSubmitAuthentification;
     }
 
     /**
-    *  set true if the form of suggest submit creation required a captcha
-    * @param activeSuggestSubmitAuthentification true if the form of suggest submit creation required a captcha
-    */
+     * set true if the form of suggest submit creation required a captcha
+     * 
+     * @param activeSuggestSubmitAuthentification
+     *            true if the form of suggest submit creation required a captcha
+     */
     public void setActiveSuggestSubmitAuthentification( boolean activeSuggestSubmitAuthentification )
     {
         _bActiveSuggestSubmitAuthentification = activeSuggestSubmitAuthentification;
@@ -449,16 +480,18 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      *
-     * @return true if the vote on  suggest submit required an authentification
+     * @return true if the vote on suggest submit required an authentification
      */
-    public boolean isActiveVoteAuthentification(  )
+    public boolean isActiveVoteAuthentification( )
     {
         return _bActiveVoteAuthentification;
     }
 
     /**
-     * set true if the vote on  suggest submit required an authentification
-     * @param activeVoteAuthentification true if the vote on  suggest submit required an authentification
+     * set true if the vote on suggest submit required an authentification
+     * 
+     * @param activeVoteAuthentification
+     *            true if the vote on suggest submit required an authentification
      */
     public void setActiveVoteAuthentification( boolean activeVoteAuthentification )
     {
@@ -467,16 +500,18 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      *
-     * @return true if the comment on  suggest submit required an authentification
+     * @return true if the comment on suggest submit required an authentification
      */
-    public boolean isActiveCommentAuthentification(  )
+    public boolean isActiveCommentAuthentification( )
     {
         return _bActiveCommentAuthentification;
     }
 
     /**
-     * set true if the comment on  suggest submit required an authentification
-     * @param activeCommentAuthentification true if the comment on  suggest submit required an authentification
+     * set true if the comment on suggest submit required an authentification
+     * 
+     * @param activeCommentAuthentification
+     *            true if the comment on suggest submit required an authentification
      */
     public void setActiveCommentAuthentification( boolean activeCommentAuthentification )
     {
@@ -487,14 +522,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return true if the new suggest submit must be disable
      */
-    public boolean isDisableNewSuggestSubmit(  )
+    public boolean isDisableNewSuggestSubmit( )
     {
         return _bDisableNewSuggestSubmit;
     }
 
     /**
      * set true if the new suggest submit must be disable
-     * @param disableNewSuggestSubmit true if the new suggest submit must be disable
+     * 
+     * @param disableNewSuggestSubmit
+     *            true if the new suggest submit must be disable
      */
     public void setDisableNewSuggestSubmit( boolean disableNewSuggestSubmit )
     {
@@ -502,17 +539,19 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-         *
-         * @return true if a mail must be sent when the new suggest is submitted
-         */
-    public boolean isEnableMailNewSuggestSubmit(  )
+     *
+     * @return true if a mail must be sent when the new suggest is submitted
+     */
+    public boolean isEnableMailNewSuggestSubmit( )
     {
         return _bEnableMailNewSuggestSubmit;
     }
 
     /**
      * set true if a mail must be sent when the new suggest is submitted
-     * @param enableMailNewSuggestSubmit true if a mail must be sent when the new suggest is submitted
+     * 
+     * @param enableMailNewSuggestSubmit
+     *            true if a mail must be sent when the new suggest is submitted
      */
     public void setEnableMailNewSuggestSubmit( boolean enableMailNewSuggestSubmit )
     {
@@ -523,14 +562,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return true if the new comment must be disable
      */
-    public boolean isDisableNewComment(  )
+    public boolean isDisableNewComment( )
     {
         return _bDisableNewComment;
     }
 
     /**
-     * true if the new comment  must be disable
-     * @param disableNewComment true if the new comment must be disable
+     * true if the new comment must be disable
+     * 
+     * @param disableNewComment
+     *            true if the new comment must be disable
      */
     public void setDisableNewComment( boolean disableNewComment )
     {
@@ -538,17 +579,19 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-    *
-    * @return the list of entries associate to the suggest
-    */
-    public List<IEntry> getEntries(  )
+     *
+     * @return the list of entries associate to the suggest
+     */
+    public List<IEntry> getEntries( )
     {
         return _listEntries;
     }
 
     /**
      * set the list of entries associate to the suggest
-     * @param listEntries the list of entries associate to the suggest
+     * 
+     * @param listEntries
+     *            the list of entries associate to the suggest
      */
     public void setEntries( List<IEntry> listEntries )
     {
@@ -556,17 +599,19 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-    *
-    * @return the list of categories associate to the suggest
-    */
-    public List<Category> getCategories(  )
+     *
+     * @return the list of categories associate to the suggest
+     */
+    public List<Category> getCategories( )
     {
         return _listCategories;
     }
 
     /**
      * set the list of categories associate to the suggest
-     * @param listCategories the list of categories associate to the suggest
+     * 
+     * @param listCategories
+     *            the list of categories associate to the suggest
      */
     public void setCategories( List<Category> listCategories )
     {
@@ -577,14 +622,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return the vote type associate to the suggest
      */
-    public VoteType getVoteType(  )
+    public VoteType getVoteType( )
     {
         return _voteType;
     }
 
     /**
      * set the vote type associate to the suggest
-     * @param type  the vote type associate to the suggest
+     * 
+     * @param type
+     *            the vote type associate to the suggest
      */
     public void setVoteType( VoteType type )
     {
@@ -593,16 +640,19 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * return true if the comment are authorized
+     * 
      * @return true if the comment are authorized
-      */
-    public boolean isAuthorizedComment(  )
+     */
+    public boolean isAuthorizedComment( )
     {
         return _bAuthorizedComment;
     }
 
     /**
      * set true if the comment are authorized
-     * @param authorizedComment true if the comment are authorized
+     * 
+     * @param authorizedComment
+     *            true if the comment are authorized
      */
     public void setAuthorizedComment( boolean authorizedComment )
     {
@@ -611,16 +661,19 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * return true if the suggest proposition state exist
+     * 
      * @return true if the suggest proposition state exist
      */
-    public boolean isActiveSuggestPropositionState(  )
+    public boolean isActiveSuggestPropositionState( )
     {
         return _bActiveSuggestPropositionState;
     }
 
     /**
      * set true if the suggest proposition state exist
-     * @param activeSuggestPropositionState true if the suggest proposition state exist
+     * 
+     * @param activeSuggestPropositionState
+     *            true if the suggest proposition state exist
      */
     public void setActiveSuggestPropositionState( boolean activeSuggestPropositionState )
     {
@@ -628,53 +681,61 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-    * return the number of suggest submit display in the list of top comment
-    * @return the number of suggest submit display in the list of top comment
-    */
-    public int getNumberSuggestSubmitInTopComment(  )
+     * return the number of suggest submit display in the list of top comment
+     * 
+     * @return the number of suggest submit display in the list of top comment
+     */
+    public int getNumberSuggestSubmitInTopComment( )
     {
         return _nNumberSuggestSubmitInTopComment;
     }
 
     /**
      * Set the number of suggest submit display in the list of top comment
-     * @param numberTopComment the number of  suggest submit in the list of top comment
-      */
+     * 
+     * @param numberTopComment
+     *            the number of suggest submit in the list of top comment
+     */
     public void setNumberSuggestSubmitInTopComment( int numberTopComment )
     {
         _nNumberSuggestSubmitInTopComment = numberTopComment;
     }
 
     /**
-    * return the number of  suggest submit display in the list of top score
-    * @return the number of suggest submit  display in the list of top score
-    */
-    public int getNumberSuggestSubmitInTopScore(  )
+     * return the number of suggest submit display in the list of top score
+     * 
+     * @return the number of suggest submit display in the list of top score
+     */
+    public int getNumberSuggestSubmitInTopScore( )
     {
         return _nNumberSuggestSubmitInTopScore;
     }
 
     /**
      * Set the number of comment display in the list of top score
-     * @param numberTopScore the top score
-      */
+     * 
+     * @param numberTopScore
+     *            the top score
+     */
     public void setNumberSuggestSubmitInTopScore( int numberTopScore )
     {
         _nNumberSuggestSubmitInTopScore = numberTopScore;
     }
 
     /**
-    *
-    * @return true if the user can submit just one  vote
-    */
-    public boolean isLimitNumberVote(  )
+     *
+     * @return true if the user can submit just one vote
+     */
+    public boolean isLimitNumberVote( )
     {
         return _nLimitNumberVote;
     }
 
     /**
-     * set true if the user can submit just one  vote
-     * @param numberVote true if the user can submit just one  vote
+     * set true if the user can submit just one vote
+     * 
+     * @param numberVote
+     *            true if the user can submit just one vote
      */
     public void setLimitNumberVote( boolean numberVote )
     {
@@ -683,16 +744,19 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * return the nunber of caracters shown in the list of suggest submit
+     * 
      * @return the nunber of caracters shown in the list of suggest submit
      */
-    public int getNumberSuggestSubmitCaractersShown(  )
+    public int getNumberSuggestSubmitCaractersShown( )
     {
         return _nNumberSuggestSubmitCaractersShown;
     }
 
     /**
      * set the nunber of caracters shown in the list of suggest submit
-     * @param numberCaractersShown the nunber of caracters shown in the list of suggest submit
+     * 
+     * @param numberCaractersShown
+     *            the nunber of caracters shown in the list of suggest submit
      */
     public void setNumberSuggestSubmitCaractersShown( int numberCaractersShown )
     {
@@ -703,14 +767,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return true if the category bloc must be show
      */
-    public boolean isShowCategoryBlock(  )
+    public boolean isShowCategoryBlock( )
     {
         return _bShowCategoryBlock;
     }
 
     /**
      * set true if the category bloc must be show
-     * @param activeCategoryBloc true if the category bloc must be show
+     * 
+     * @param activeCategoryBloc
+     *            true if the category bloc must be show
      */
     public void setShowCategoryBlock( boolean activeCategoryBloc )
     {
@@ -721,14 +787,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return true if the top score bloc must be show
      */
-    public boolean isShowTopScoreBlock(  )
+    public boolean isShowTopScoreBlock( )
     {
         return _bShowTopScoreBlock;
     }
 
     /**
      * set true if the top score bloc must be show
-     * @param activeTopScoreBloc true if the top score bloc must be show
+     * 
+     * @param activeTopScoreBloc
+     *            true if the top score bloc must be show
      */
     public void setShowTopScoreBlock( boolean activeTopScoreBloc )
     {
@@ -739,14 +807,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return true if the top comment bloc must be show
      */
-    public boolean isShowTopCommentBlock(  )
+    public boolean isShowTopCommentBlock( )
     {
         return _bShowTopCommentBlock;
     }
 
     /**
      * set true if the top comment bloc must be show
-     * @param activeTopCommentBloc true if the top comment bloc must be show
+     * 
+     * @param activeTopCommentBloc
+     *            true if the top comment bloc must be show
      */
     public void setShowTopCommentBlock( boolean activeTopCommentBloc )
     {
@@ -757,14 +827,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return the suggest submit List associate to the suggest
      */
-    public List<SuggestSubmit> getSuggestsSubmit(  )
+    public List<SuggestSubmit> getSuggestsSubmit( )
     {
         return _listSuggestsSubmit;
     }
 
     /**
      * set the suggest submit List associate to the suggest
-     * @param suggestsSubmit the suggest submit List associate to the suggest
+     * 
+     * @param suggestsSubmit
+     *            the suggest submit List associate to the suggest
      */
     public void setSuggestsSubmit( List<SuggestSubmit> suggestsSubmit )
     {
@@ -774,21 +846,24 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     /**
      * Returns the xml of this suggest
      * 
-     * @param request The HTTP Servlet request
-     * @param sbListSuggestSubmit The string buffer
-     * @param locale la locale
+     * @param request
+     *            The HTTP Servlet request
+     * @param sbListSuggestSubmit
+     *            The string buffer
+     * @param locale
+     *            la locale
      * @return the xml of this suggest
      */
     public String getXml( HttpServletRequest request, StringBuffer sbListSuggestSubmit, Locale locale )
     {
-        StringBuffer strXml = new StringBuffer(  );
+        StringBuffer strXml = new StringBuffer( );
         XmlUtil.beginElement( strXml, TAG_SUGGEST );
-        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_TITLE, getTitle(  ) );
+        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_TITLE, getTitle( ) );
         XmlUtil.beginElement( strXml, TAG_LIST_ENTRY );
 
-        if ( ( this.getEntries(  ) != null ) && !this.getEntries(  ).isEmpty(  ) )
+        if ( ( this.getEntries( ) != null ) && !this.getEntries( ).isEmpty( ) )
         {
-            for ( IEntry entry : this.getEntries(  ) )
+            for ( IEntry entry : this.getEntries( ) )
             {
                 entry.getXml( locale, strXml );
             }
@@ -800,21 +875,23 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
         XmlUtil.endElement( strXml, TAG_SUGGEST_SUBMITS );
         XmlUtil.endElement( strXml, TAG_SUGGEST );
 
-        return strXml.toString(  );
+        return strXml.toString( );
     }
 
     /**
      *
      * @return the number of suggest submit per page
      */
-    public int getNumberSuggestSubmitPerPage(  )
+    public int getNumberSuggestSubmitPerPage( )
     {
         return _nNumberSuggestSubmitPerPage;
     }
 
     /**
      * set the number of suggest submit per page
-     * @param numberSuggestSubmitPerPage the number of suggest submit per page
+     * 
+     * @param numberSuggestSubmitPerPage
+     *            the number of suggest submit per page
      */
     public void setNumberSuggestSubmitPerPage( int numberSuggestSubmitPerPage )
     {
@@ -825,14 +902,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return true if the paginator is enable
      */
-    public boolean isActiveSuggestSubmitPaginator(  )
+    public boolean isActiveSuggestSubmitPaginator( )
     {
         return _bActiveSuggestSubmitPaginator;
     }
 
     /**
      * set true if the paginator is enable
-     * @param activeSuggestSubmitPaginator true if the paginator is enable
+     * 
+     * @param activeSuggestSubmitPaginator
+     *            true if the paginator is enable
      */
     public void setActiveSuggestSubmitPaginator( boolean activeSuggestSubmitPaginator )
     {
@@ -841,17 +920,20 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * Gets the suggest role
+     * 
      * @return suggest's role as a String
      *
      */
-    public String getRole(  )
+    public String getRole( )
     {
         return _strRole;
     }
 
     /**
      * Sets the suggest's role
-     * @param strRole The role
+     * 
+     * @param strRole
+     *            The role
      *
      */
     public void setRole( String strRole )
@@ -859,8 +941,11 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
         _strRole = strRole;
     }
 
-    /**Sets the suggest's header
-     * @param strHeader the strHeader to set
+    /**
+     * Sets the suggest's header
+     * 
+     * @param strHeader
+     *            the strHeader to set
      */
     public void setHeader( String strHeader )
     {
@@ -870,13 +955,14 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     /**
      * @return the strHeader
      */
-    public String getHeader(  )
+    public String getHeader( )
     {
         return _strHeader;
     }
 
     /**
-     * @param nSortField the _nSortField to set
+     * @param nSortField
+     *            the _nSortField to set
      */
     public void setSortField( int nSortField )
     {
@@ -886,23 +972,25 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     /**
      * @return the _nSortField
      */
-    public int getSortField(  )
+    public int getSortField( )
     {
         return _nSortField;
     }
 
     /**
-    *
-    * @return the theme code
-    */
-    public String getCodeTheme(  )
+     *
+     * @return the theme code
+     */
+    public String getCodeTheme( )
     {
         return _strCodeTheme;
     }
 
     /**
      * set the theme code
-     * @param strCodeTheme the theme code
+     * 
+     * @param strCodeTheme
+     *            the theme code
      */
     public void setCodeTheme( String strCodeTheme )
     {
@@ -912,13 +1000,14 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     /**
      * @return the strMessage
      */
-    public String getConfirmationMessage(  )
+    public String getConfirmationMessage( )
     {
         return _strConfirmationMessage;
     }
 
     /**
-     * @param strConfirmationMessage the message of the validation to set
+     * @param strConfirmationMessage
+     *            the message of the validation to set
      */
     public void setConfirmationMessage( String strConfirmationMessage )
     {
@@ -927,7 +1016,9 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the editor BBcode must be display
-     * @param nActiveEditorBbCode true if the editor BBcode must be display
+     * 
+     * @param nActiveEditorBbCode
+     *            true if the editor BBcode must be display
      */
     public void setActiveEditorBbcode( boolean nActiveEditorBbCode )
     {
@@ -938,21 +1029,23 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return true if the editor BBcode must be display
      */
-    public boolean isActiveEditorBbcode(  )
+    public boolean isActiveEditorBbcode( )
     {
         return _bActiveEditorBbcode;
     }
 
     /**
      * parseBbcodeValue
-     * @param strValue the value to parse
+     * 
+     * @param strValue
+     *            the value to parse
      * @return the result of the parsing
      */
     public String parseBbcodeValue( String strValue )
     {
-        if ( isActiveEditorBbcode(  ) )
+        if ( isActiveEditorBbcode( ) )
         {
-            return EditorBbcodeService.getInstance(  ).parse( strValue );
+            return EditorBbcodeService.getInstance( ).parse( strValue );
         }
 
         return strValue;
@@ -962,14 +1055,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return the default sort id
      */
-    public int getIdDefaultSort(  )
+    public int getIdDefaultSort( )
     {
         return _nIdDefaultSort;
     }
 
     /**
      * set id Default Sort
-     * @param nIdDefaultSort  the default sort id
+     * 
+     * @param nIdDefaultSort
+     *            the default sort id
      */
     public void setIdDefaultSort( int nIdDefaultSort )
     {
@@ -980,14 +1075,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return true if the suggest is a Default suggest
      */
-    public boolean isDefaultSuggest(  )
+    public boolean isDefaultSuggest( )
     {
         return _bDefaultSuggest;
     }
 
     /**
      * set true if the suggest is a Default suggest
-     * @param bDefaultSuggest true if the suggest is a Default suggest
+     * 
+     * @param bDefaultSuggest
+     *            true if the suggest is a Default suggest
      */
     public void setDefaultSuggest( boolean bDefaultSuggest )
     {
@@ -998,14 +1095,16 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return true if the vote is disable
      */
-    public boolean isDisableVote(  )
+    public boolean isDisableVote( )
     {
         return _bDisableVote;
     }
 
     /**
      * set true if the vote is disable
-     * @param bDisable true if the vote is disable
+     * 
+     * @param bDisable
+     *            true if the vote is disable
      */
     public void setDisableVote( boolean bDisable )
     {
@@ -1016,14 +1115,15 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return true if the list of comment must be display in suggest submit list
      */
-    public boolean isDisplayCommentInSuggestSubmitList(  )
+    public boolean isDisplayCommentInSuggestSubmitList( )
     {
         return _bDisplayCommentInSuggestSubmitList;
     }
 
     /**
      *
-     * @param bDisplayCommentInSuggestSubmitList true if the list of comment must be display in suggest submit list
+     * @param bDisplayCommentInSuggestSubmitList
+     *            true if the list of comment must be display in suggest submit list
      */
     public void setDisplayCommentInSuggestSubmitList( boolean bDisplayCommentInSuggestSubmitList )
     {
@@ -1034,14 +1134,15 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return the number of comment submit display by suggest submit in the list of suggest submit
      */
-    public Integer getNumberCommentDisplayInSuggestSubmitList(  )
+    public Integer getNumberCommentDisplayInSuggestSubmitList( )
     {
         return _nNumberCommentDisplayInSuggestSubmitList;
     }
 
     /**
      *
-     * @param nNumberCommentDisplayInSuggestSubmitList the number of comment submit display by suggest submit in the list of suggest submit
+     * @param nNumberCommentDisplayInSuggestSubmitList
+     *            the number of comment submit display by suggest submit in the list of suggest submit
      */
     public void setNumberCommentDisplayInSuggestSubmitList( Integer nNumberCommentDisplayInSuggestSubmitList )
     {
@@ -1050,16 +1151,17 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      *
-     * @return the number of  char comment  display by suggest submit in the list of suggest submit
+     * @return the number of char comment display by suggest submit in the list of suggest submit
      */
-    public Integer getNumberCharCommentDisplayInSuggestSubmitList(  )
+    public Integer getNumberCharCommentDisplayInSuggestSubmitList( )
     {
         return _nNumberCharCommentDisplayInSuggestSubmitList;
     }
 
     /**
      *
-     * @param nNumberCommentDisplayInSuggestSubmitList the number of  char comment  display by suggest submit in the list of suggest submit
+     * @param nNumberCommentDisplayInSuggestSubmitList
+     *            the number of char comment display by suggest submit in the list of suggest submit
      */
     public void setNumberCharCommentDisplayInSuggestSubmitList( Integer nNumberCommentDisplayInSuggestSubmitList )
     {
@@ -1067,53 +1169,59 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-    *
-    * @return true if a mail must be sent when the new comment is submitted
-    */
-    public boolean isEnableMailNewCommentSubmit(  )
+     *
+     * @return true if a mail must be sent when the new comment is submitted
+     */
+    public boolean isEnableMailNewCommentSubmit( )
     {
         return _bEnableMailNewCommentSubmit;
     }
 
     /**
-    * set true if a mail must be sent when the new comment is submitted
-    * @param bEnableMailNewCommentSubmit true if a mail must be sent when the new comment is submitted
-    */
+     * set true if a mail must be sent when the new comment is submitted
+     * 
+     * @param bEnableMailNewCommentSubmit
+     *            true if a mail must be sent when the new comment is submitted
+     */
     public void setEnableMailNewCommentSubmit( boolean bEnableMailNewCommentSubmit )
     {
         _bEnableMailNewCommentSubmit = bEnableMailNewCommentSubmit;
     }
 
     /**
-    *
-    * @return true if a mail must be sent when the new comment is submitted
-    */
-    public boolean isEnableMailNewReportedSubmit(  )
+     *
+     * @return true if a mail must be sent when the new comment is submitted
+     */
+    public boolean isEnableMailNewReportedSubmit( )
     {
         return _bEnableMailNewReportedSubmit;
     }
 
     /**
-    * set true if a mail must be sent when the new reported is submitted
-    * @param bEnableMailNewReportedSubmit true if a mail must be sent when the new comment is submitted
-    */
+     * set true if a mail must be sent when the new reported is submitted
+     * 
+     * @param bEnableMailNewReportedSubmit
+     *            true if a mail must be sent when the new comment is submitted
+     */
     public void setEnableMailNewReportedSubmit( boolean bEnableMailNewReportedSubmit )
     {
         _bEnableMailNewReportedSubmit = bEnableMailNewReportedSubmit;
     }
 
     /**
-    *
-    * @return the suggest submit type List associate to the suggest
-    */
-    public List<SuggestSubmitType> getSuggestSubmitTypes(  )
+     *
+     * @return the suggest submit type List associate to the suggest
+     */
+    public List<SuggestSubmitType> getSuggestSubmitTypes( )
     {
         return _listSuggestSubmitTypes;
     }
 
     /**
      * set the suggest submit type List associate to the suggest
-     * @param suggestSubmitTypes the suggest submit type List associate to the suggest
+     * 
+     * @param suggestSubmitTypes
+     *            the suggest submit type List associate to the suggest
      */
     public void setSuggestSubmiTypes( List<SuggestSubmitType> suggestSubmitTypes )
     {
@@ -1124,14 +1232,15 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return true if Terms of use must be enable
      */
-    public boolean isEnableTermsOfUse(  )
+    public boolean isEnableTermsOfUse( )
     {
         return _bEnableTermsOfUse;
     }
 
     /**
      *
-     * @param bEnableTermsOfUse  true if Terms of use must be enable
+     * @param bEnableTermsOfUse
+     *            true if Terms of use must be enable
      */
     public void setEnableTermsOfUse( boolean bEnableTermsOfUse )
     {
@@ -1140,16 +1249,19 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * the terms of use
+     * 
      * @return the terms of use
      */
-    public String getTermsOfUse(  )
+    public String getTermsOfUse( )
     {
         return _strTermsOfUse;
     }
 
     /**
      * set Terms of use
-     * @param strTermsOfUse the terms of use
+     * 
+     * @param strTermsOfUse
+     *            the terms of use
      */
     public void setTermsOfUse( String strTermsOfUse )
     {
@@ -1160,14 +1272,15 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return the suggest description
      */
-    public String getDescription(  )
+    public String getDescription( )
     {
         return _strDescription;
     }
 
     /**
      * 
-     * @param strDescription set the suggest description
+     * @param strDescription
+     *            set the suggest description
      */
     public void setDescription( String strDescription )
     {
@@ -1178,14 +1291,15 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      *
      * @return true if reports are enable
      */
-    public boolean isEnableReports(  )
+    public boolean isEnableReports( )
     {
         return _bEnableReports;
     }
 
     /**
      * 
-     * @param bEnableReports true if reports are enable
+     * @param bEnableReports
+     *            true if reports are enable
      */
     public void setEnableReports( boolean bEnableReports )
     {
@@ -1194,16 +1308,19 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * the image resource id associate to the suggest
+     * 
      * @return Resource Image
      */
-    public Integer getIdImageResource(  )
+    public Integer getIdImageResource( )
     {
         return _nIdImageResource;
     }
 
     /**
      * image resource id associate to the suggest
-     * @param nIdImageResource image resource id associate to the suggest
+     * 
+     * @param nIdImageResource
+     *            image resource id associate to the suggest
      */
     public void setIdImageResource( Integer nIdImageResource )
     {
@@ -1212,16 +1329,19 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * get Image
+     * 
      * @return Image Resource
      */
-    public ImageResource getImage(  )
+    public ImageResource getImage( )
     {
         return _image;
     }
 
     /**
      * set Image Resource
-     * @param image  Image Resource
+     * 
+     * @param image
+     *            Image Resource
      */
     public void setImage( ImageResource image )
     {
@@ -1232,7 +1352,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      * {@inheritDoc}
      */
     @Override
-    public String getIdExtendableResource(  )
+    public String getIdExtendableResource( )
     {
         return Integer.toString( _nIdSuggest );
     }
@@ -1241,7 +1361,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      * {@inheritDoc}
      */
     @Override
-    public String getExtendableResourceType(  )
+    public String getExtendableResourceType( )
     {
         return RESOURCE_TYPE;
     }
@@ -1250,7 +1370,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      * {@inheritDoc}
      */
     @Override
-    public String getExtendableResourceName(  )
+    public String getExtendableResourceName( )
     {
         return _strTitle;
     }
@@ -1259,7 +1379,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      * {@inheritDoc}
      */
     @Override
-    public String getExtendableResourceDescription(  )
+    public String getExtendableResourceDescription( )
     {
         return _strDescription;
     }
@@ -1268,109 +1388,124 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
      * {@inheritDoc}
      */
     @Override
-    public String getExtendableResourceImageUrl(  )
+    public String getExtendableResourceImageUrl( )
     {
         if ( _nIdImageResource != null )
         {
             StringBuilder sbUrl = new StringBuilder( SuggestUtils.SERVLET_IMAGE_PATH );
             sbUrl.append( _nIdImageResource );
 
-            return sbUrl.toString(  );
+            return sbUrl.toString( );
         }
 
         return null;
     }
-    
+
     /**
      * 
      * @return getNotificationNewCommentSenderName
      */
-    public String getNotificationNewCommentSenderName() {
-		return _strNotificationNewCommentSenderName;
-	}
+    public String getNotificationNewCommentSenderName( )
+    {
+        return _strNotificationNewCommentSenderName;
+    }
 
     /**
      * 
      * @param _strNotificationNewCommentSenderName
      */
-	public void setNotificationNewCommentSenderName(
-			String _strNotificationNewCommentSenderName) {
-		this._strNotificationNewCommentSenderName = _strNotificationNewCommentSenderName;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public String getNotificationNewCommentTitle() {
-		return _strNotificationNewCommentTitle;
-	}
-	/**
-	 * 
-	 * @param _strNotificationNewCommentTitle
-	 */
-	public void setNotificationNewCommentTitle(
-			String _strNotificationNewCommentTitle) {
-		this._strNotificationNewCommentTitle = _strNotificationNewCommentTitle;
-	}
-	/**
-	 * 
-	 * @return
-	 */
-	public String getNotificationNewCommentBody() {
-		return _strNotificationNewCommentBody;
-	}
-	/**
-	 * 
-	 * @param _strNotificationNewCommentBody
-	 */
-	public void setNotificationNewCommentBody(
-			String _strNotificationNewCommentBody) {
-		this._strNotificationNewCommentBody = _strNotificationNewCommentBody;
-	}
-	/**
-	 * 
-	 * @return
-	 */
-	public String getNotificationNewSuggestSubmitSenderName() {
-		return _strNotificationNewSuggestSubmitSenderName;
-	}
-	/**
-	 * 
-	 * @param _strNotificationNewSuggestSubmitSenderName
-	 */
-	public void setNotificationNewSuggestSubmitSenderName(
-			String _strNotificationNewSuggestSubmitSenderName) {
-		this._strNotificationNewSuggestSubmitSenderName = _strNotificationNewSuggestSubmitSenderName;
-	}
-	/**
-	 * 
-	 * @return
-	 */
-	public String getNotificationNewSuggestSubmitTitle() {
-		return _strNotificationNewSuggestSubmitTitle;
-	}
-	/**
-	 * 
-	 * @param _strNotificationNewSuggestSubmitTitle
-	 */
-	public void setNotificationNewSuggestSubmitTitle(
-			String _strNotificationNewSuggestSubmitTitle) {
-		this._strNotificationNewSuggestSubmitTitle = _strNotificationNewSuggestSubmitTitle;
-	}
-	/**
-	 * 
-	 * @return
-	 */
-	public String getNotificationNewSuggestSubmitBody() {
-		return _strNotificationNewSuggestSubmitBody;
-	}
-	/**
-	 * 
-	 * @param _strNotificationSuggestSubmitBody
-	 */
-	public void setNotificationNewSuggestSubmitBody(
-			String _strNotificationSuggestSubmitBody) {
-		this._strNotificationNewSuggestSubmitBody = _strNotificationSuggestSubmitBody;
-	}
+    public void setNotificationNewCommentSenderName( String _strNotificationNewCommentSenderName )
+    {
+        this._strNotificationNewCommentSenderName = _strNotificationNewCommentSenderName;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public String getNotificationNewCommentTitle( )
+    {
+        return _strNotificationNewCommentTitle;
+    }
+
+    /**
+     * 
+     * @param _strNotificationNewCommentTitle
+     */
+    public void setNotificationNewCommentTitle( String _strNotificationNewCommentTitle )
+    {
+        this._strNotificationNewCommentTitle = _strNotificationNewCommentTitle;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public String getNotificationNewCommentBody( )
+    {
+        return _strNotificationNewCommentBody;
+    }
+
+    /**
+     * 
+     * @param _strNotificationNewCommentBody
+     */
+    public void setNotificationNewCommentBody( String _strNotificationNewCommentBody )
+    {
+        this._strNotificationNewCommentBody = _strNotificationNewCommentBody;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public String getNotificationNewSuggestSubmitSenderName( )
+    {
+        return _strNotificationNewSuggestSubmitSenderName;
+    }
+
+    /**
+     * 
+     * @param _strNotificationNewSuggestSubmitSenderName
+     */
+    public void setNotificationNewSuggestSubmitSenderName( String _strNotificationNewSuggestSubmitSenderName )
+    {
+        this._strNotificationNewSuggestSubmitSenderName = _strNotificationNewSuggestSubmitSenderName;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public String getNotificationNewSuggestSubmitTitle( )
+    {
+        return _strNotificationNewSuggestSubmitTitle;
+    }
+
+    /**
+     * 
+     * @param _strNotificationNewSuggestSubmitTitle
+     */
+    public void setNotificationNewSuggestSubmitTitle( String _strNotificationNewSuggestSubmitTitle )
+    {
+        this._strNotificationNewSuggestSubmitTitle = _strNotificationNewSuggestSubmitTitle;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public String getNotificationNewSuggestSubmitBody( )
+    {
+        return _strNotificationNewSuggestSubmitBody;
+    }
+
+    /**
+     * 
+     * @param _strNotificationSuggestSubmitBody
+     */
+    public void setNotificationNewSuggestSubmitBody( String _strNotificationSuggestSubmitBody )
+    {
+        this._strNotificationNewSuggestSubmitBody = _strNotificationSuggestSubmitBody;
+    }
 }

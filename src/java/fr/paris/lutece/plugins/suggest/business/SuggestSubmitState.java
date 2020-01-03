@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-
 /**
  *
  * class SuggestSubmitState
@@ -46,17 +45,19 @@ public class SuggestSubmitState
     private int _nNumber;
 
     /**
-       *
-       * @return the id of the submit state
-       */
-    public int getIdSuggestSubmitState(  )
+     *
+     * @return the id of the submit state
+     */
+    public int getIdSuggestSubmitState( )
     {
         return _nIdSuggestSubmitState;
     }
 
     /**
-     * set  the id of the submit state
-     * @param idSuggestSubmitState  the id of the submit state
+     * set the id of the submit state
+     * 
+     * @param idSuggestSubmitState
+     *            the id of the submit state
      */
     public void setIdSuggestSubmitState( int idSuggestSubmitState )
     {
@@ -67,14 +68,16 @@ public class SuggestSubmitState
      *
      * @return the number of the submit state
      */
-    public int getNumber(  )
+    public int getNumber( )
     {
         return _nNumber;
     }
 
     /**
-     * set  number of the submit state
-     * @param nSuggestSubmitState  the id of the submit state
+     * set number of the submit state
+     * 
+     * @param nSuggestSubmitState
+     *            the id of the submit state
      */
     public void setNumber( int nSuggestSubmitState )
     {
@@ -85,14 +88,16 @@ public class SuggestSubmitState
      *
      * @return the title of the state
      */
-    public String getTitle(  )
+    public String getTitle( )
     {
         return _strTitle;
     }
 
     /**
      * set the title of the state
-     * @param title the title of the state
+     * 
+     * @param title
+     *            the title of the state
      */
     public void setTitle( String title )
     {

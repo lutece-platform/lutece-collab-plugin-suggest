@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -74,7 +74,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  *
  * Exports records (search records or all records)
@@ -90,14 +89,14 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
     private static final String PARAMETER_BUTTON_EXPORT_ALL = "export_search_all";
     private static final String PARAMETER_BUTTON_EXPORT_SEARCH = "export_search_result";
     private static final String PARAMETER_ID_SUGGEST = "id_suggest";
-    private static final String XSL_UNIQUE_PREFIX_ID = UniqueIDGenerator.getNewId(  ) + "suggest-";
+    private static final String XSL_UNIQUE_PREFIX_ID = UniqueIDGenerator.getNewId( ) + "suggest-";
     private static final String PARAMETER_ID_EXPORT_FORMAT = "id_export_format";
     private static final String EXPORT_CSV_EXT = "csv";
     private static final String DEAFULT_ENCODING = "UTF-8";
     private static final String CONSTANT_MIME_TYPE_CSV = "application/csv";
     private static final String CONSTANT_MIME_TYPE_OCTETSTREAM = "application/octet-stream";
 
-    //PROPERTY
+    // PROPERTY
     private static final String PROPERTY_EXPORT_ENCODING_CSV = "suggest.exportFileEncoding.csv";
     private static final String PROPERTY_EXPORT_ENCODING_XML = "suggest.exportFileEncoding.xml";
 
@@ -107,14 +106,14 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
     @Override
     public void fillModel( HttpServletRequest request, AdminUser adminUser, Map<String, Object> model )
     {
-        model.put( MARK_EXPORT_FORMAT_REF_LIST, ExportFormatHome.getListExport( getPlugin(  ) ) );
+        model.put( MARK_EXPORT_FORMAT_REF_LIST, ExportFormatHome.getListExport( getPlugin( ) ) );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getName(  )
+    public String getName( )
     {
         return ACTION_NAME;
     }
@@ -123,7 +122,7 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
      * {@inheritDoc}
      */
     @Override
-    public String getButtonTemplate(  )
+    public String getButtonTemplate( )
     {
         return null;
     }
@@ -134,19 +133,18 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
     @Override
     public boolean isInvoked( HttpServletRequest request )
     {
-        return ( request.getParameter( PARAMETER_BUTTON_EXPORT_SEARCH ) != null ) ||
-        ( request.getParameter( PARAMETER_BUTTON_EXPORT_ALL ) != null );
+        return ( request.getParameter( PARAMETER_BUTTON_EXPORT_SEARCH ) != null ) || ( request.getParameter( PARAMETER_BUTTON_EXPORT_ALL ) != null );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser,
-        SuggestAdminSearchFields searchFields ) throws AccessDeniedException
+    public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser, SuggestAdminSearchFields searchFields )
+            throws AccessDeniedException
     {
-        Plugin plugin = getPlugin(  );
-        IPluginActionResult result = new DefaultPluginActionResult(  );
+        Plugin plugin = getPlugin( );
+        IPluginActionResult result = new DefaultPluginActionResult( );
 
         String strIdExportFormat = request.getParameter( PARAMETER_ID_EXPORT_FORMAT );
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
@@ -155,12 +153,11 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
 
         Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
 
-        if ( ( suggest == null ) ||
-                !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, Integer.toString( suggest.getIdSuggest(  ) ),
-                    SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, adminUser ) )
+        if ( ( suggest == null )
+                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, Integer.toString( suggest.getIdSuggest( ) ),
+                        SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, adminUser ) )
         {
-            throw new AccessDeniedException( I18nService.getLocalizedString( 
-                    MESSAGE_YOU_ARE_NOT_ALLOWED_TO_DOWLOAD_THIS_FILE, request.getLocale(  ) ) );
+            throw new AccessDeniedException( I18nService.getLocalizedString( MESSAGE_YOU_ARE_NOT_ALLOWED_TO_DOWLOAD_THIS_FILE, request.getLocale( ) ) );
         }
 
         ExportFormat exportFormat;
@@ -168,49 +165,46 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
 
         if ( exportFormat == null )
         {
-            result.setRedirect( AdminMessageService.getMessageUrl( request, MESSAGE_YOU_MUST_SELECT_EXPORT_FORMAT,
-                    AdminMessage.TYPE_STOP ) );
+            result.setRedirect( AdminMessageService.getMessageUrl( request, MESSAGE_YOU_MUST_SELECT_EXPORT_FORMAT, AdminMessage.TYPE_STOP ) );
         }
         else
         {
-            EntryFilter entryfilter = new EntryFilter(  );
-            entryfilter.setIdSuggest( suggest.getIdSuggest(  ) );
-            //set suggest entries
+            EntryFilter entryfilter = new EntryFilter( );
+            entryfilter.setIdSuggest( suggest.getIdSuggest( ) );
+            // set suggest entries
             suggest.setEntries( EntryHome.getEntryList( entryfilter, plugin ) );
 
             SubmitFilter filter = SuggestUtils.getSuggestSubmitFilter( searchFields );
-            List<Integer> listIdSuggestSubmit = SuggestSubmitService.getService(  ).getSuggestSubmitListId( filter, plugin );
+            List<Integer> listIdSuggestSubmit = SuggestSubmitService.getService( ).getSuggestSubmitListId( filter, plugin );
 
-            StringBuffer strBufferListSuggestSubmitXml = new StringBuffer(  );
+            StringBuffer strBufferListSuggestSubmitXml = new StringBuffer( );
             SuggestSubmit suggestSubmit = null;
             List<CommentSubmit> listCommentSubmit;
-            //reinit filter for comment
-            filter = new SubmitFilter(  );
+            // reinit filter for comment
+            filter = new SubmitFilter( );
 
             for ( Integer nIdSuggestSubmit : listIdSuggestSubmit )
             {
-                suggestSubmit = SuggestSubmitService.getService(  ).findByPrimaryKey( nIdSuggestSubmit, false, true, plugin );
+                suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, false, true, plugin );
                 filter.setIdSuggestSubmit( nIdSuggestSubmit );
-                listCommentSubmit = CommentSubmitService.getService(  ).getCommentSubmitList( filter, plugin );
+                listCommentSubmit = CommentSubmitService.getService( ).getCommentSubmitList( filter, plugin );
                 suggestSubmit.setComments( listCommentSubmit );
                 suggestSubmit.setSuggest( suggest );
-                strBufferListSuggestSubmitXml.append( suggestSubmit.getXml( request, adminUser.getLocale(  ) ) );
+                strBufferListSuggestSubmitXml.append( suggestSubmit.getXml( request, adminUser.getLocale( ) ) );
             }
 
-            String strXmlSource = XmlUtil.getXmlHeader(  ) +
-                suggest.getXml( request, strBufferListSuggestSubmitXml, adminUser.getLocale(  ) );
-            XmlTransformerService xmlTransformerService = new XmlTransformerService(  );
+            String strXmlSource = XmlUtil.getXmlHeader( ) + suggest.getXml( request, strBufferListSuggestSubmitXml, adminUser.getLocale( ) );
+            XmlTransformerService xmlTransformerService = new XmlTransformerService( );
 
-            String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource,
-                    exportFormat.getXsl(  ), XSL_UNIQUE_PREFIX_ID + nIdExportFormat, null, null );
+            String strFileOutPut = xmlTransformerService.transformBySourceWithXslCache( strXmlSource, exportFormat.getXsl( ), XSL_UNIQUE_PREFIX_ID
+                    + nIdExportFormat, null, null );
 
-            String strFormatExtension = exportFormat.getExtension(  ).trim(  );
-            String strFileName = suggest.getTitle(  ) + "." + strFormatExtension;
+            String strFormatExtension = exportFormat.getExtension( ).trim( );
+            String strFileName = suggest.getTitle( ) + "." + strFormatExtension;
             boolean isExporTypeCSV = ( ( strFormatExtension != null ) && strFormatExtension.equals( EXPORT_CSV_EXT ) );
 
-            String strEncoding = isExporTypeCSV
-                ? AppPropertiesService.getProperty( PROPERTY_EXPORT_ENCODING_CSV, DEAFULT_ENCODING )
-                : AppPropertiesService.getProperty( PROPERTY_EXPORT_ENCODING_XML, DEAFULT_ENCODING );
+            String strEncoding = isExporTypeCSV ? AppPropertiesService.getProperty( PROPERTY_EXPORT_ENCODING_CSV, DEAFULT_ENCODING ) : AppPropertiesService
+                    .getProperty( PROPERTY_EXPORT_ENCODING_XML, DEAFULT_ENCODING );
             String strResponseContentType = null;
 
             if ( isExporTypeCSV )
@@ -229,19 +223,18 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
 
             try
             {
-                byte[] byteFileOutPut = strFileOutPut.getBytes( strEncoding );
+                byte [ ] byteFileOutPut = strFileOutPut.getBytes( strEncoding );
                 response.setContentLength( (int) byteFileOutPut.length );
 
-                OutputStream os = response.getOutputStream(  );
+                OutputStream os = response.getOutputStream( );
                 os.write( byteFileOutPut );
-                os.close(  );
+                os.close( );
             }
-            catch ( IOException e )
+            catch( IOException e )
             {
                 AppLogService.error( e );
 
-                result.setRedirect( AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_DURING_DOWNLOAD_FILE,
-                        AdminMessage.TYPE_STOP ) );
+                result.setRedirect( AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_DURING_DOWNLOAD_FILE, AdminMessage.TYPE_STOP ) );
             }
         }
 
@@ -252,9 +245,10 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
 
     /**
      * Gets the plugin
+     * 
      * @return the plugin
      */
-    private Plugin getPlugin(  )
+    private Plugin getPlugin( )
     {
         return PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
     }

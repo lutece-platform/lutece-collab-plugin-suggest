@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.search.SearchItem;
 
 import org.apache.lucene.document.Document;
 
-
 /**
  * SuggestSearchItem
  */
@@ -51,7 +50,8 @@ public class SuggestSearchItem extends SearchItem
     private String _strIdSuggestSubmit;
 
     /**
-     * @param document a document
+     * @param document
+     *            a document
      */
     public SuggestSearchItem( Document document )
     {
@@ -63,13 +63,14 @@ public class SuggestSearchItem extends SearchItem
     /**
      * @return the id of the suggest
      */
-    public String getIdSuggest(  )
+    public String getIdSuggest( )
     {
         return _strIdSuggest;
     }
 
     /**
-     * @param idSuggest the id of the suggest
+     * @param idSuggest
+     *            the id of the suggest
      */
     public void setIdSuggest( String idSuggest )
     {
@@ -78,16 +79,19 @@ public class SuggestSearchItem extends SearchItem
 
     /**
      * Id suggest submit
+     * 
      * @return the suggest submit id
      */
-    public String getIdSuggestSubmit(  )
+    public String getIdSuggestSubmit( )
     {
         return _strIdSuggestSubmit;
     }
 
     /**
      * The the suggest submit id
-     * @param strIdSuggestSubmit the new suggest submit id
+     * 
+     * @param strIdSuggestSubmit
+     *            the new suggest submit id
      */
     public void setIdSuggestSubmit( String strIdSuggestSubmit )
     {

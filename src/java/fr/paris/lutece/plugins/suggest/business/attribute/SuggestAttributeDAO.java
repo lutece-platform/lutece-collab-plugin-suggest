@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  *
  * SuggestAttributeDAO
@@ -56,12 +55,12 @@ public class SuggestAttributeDAO implements ISuggestAttributeDAO
      */
     public Map<String, Object> load( int nIdDirectory, Plugin plugin )
     {
-        Map<String, Object> mapAttributes = new HashMap<String, Object>(  );
+        Map<String, Object> mapAttributes = new HashMap<String, Object>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setInt( 1, nIdDirectory );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             int nIndex = 1;
             String strAttributeKey = daoUtil.getString( nIndex++ );
@@ -69,7 +68,7 @@ public class SuggestAttributeDAO implements ISuggestAttributeDAO
             mapAttributes.put( strAttributeKey, attributeValue );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return mapAttributes;
     }
@@ -83,11 +82,11 @@ public class SuggestAttributeDAO implements ISuggestAttributeDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         daoUtil.setInt( nIndex++, nIdDirectory );
         daoUtil.setString( nIndex++, strAttributeKey );
-        daoUtil.setString( nIndex++, ( attributeValue != null ) ? attributeValue.toString(  ) : null );
+        daoUtil.setString( nIndex++, ( attributeValue != null ) ? attributeValue.toString( ) : null );
 
-        daoUtil.executeUpdate(  );
+        daoUtil.executeUpdate( );
 
-        daoUtil.free(  );
+        daoUtil.free( );
     }
 
     /**
@@ -98,8 +97,8 @@ public class SuggestAttributeDAO implements ISuggestAttributeDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nIdDirectory );
 
-        daoUtil.executeUpdate(  );
+        daoUtil.executeUpdate( );
 
-        daoUtil.free(  );
+        daoUtil.free( );
     }
 }

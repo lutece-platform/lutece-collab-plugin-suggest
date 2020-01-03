@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,7 +41,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import java.util.Map;
 import java.util.Map.Entry;
 
-
 /**
  *
  * SuggestAttributeHome
@@ -55,7 +54,9 @@ public final class SuggestAttributeHome
 
     /**
      * Load the attributes of the suggest
-     * @param nIdSuggest the id suggest
+     * 
+     * @param nIdSuggest
+     *            the id suggest
      * @return a map of key - value
      */
     public static Map<String, Object> findByPrimaryKey( int nIdSuggest )
@@ -65,9 +66,13 @@ public final class SuggestAttributeHome
 
     /**
      * create a suggest Attribute
-     * @param nIdSuggest the id of the suggest
-     * @param strAttributeKey the attribute key
-     * @param attributeValue the attribute value
+     * 
+     * @param nIdSuggest
+     *            the id of the suggest
+     * @param strAttributeKey
+     *            the attribute key
+     * @param attributeValue
+     *            the attribute value
      */
     public static void create( int nIdSuggest, String strAttributeKey, Object attributeValue )
     {
@@ -76,20 +81,25 @@ public final class SuggestAttributeHome
 
     /**
      * Create the attribute of the suggest
-     * @param nIdSuggest the if of the suggest
-     * @param mapAttributes the map of attributes
+     * 
+     * @param nIdSuggest
+     *            the if of the suggest
+     * @param mapAttributes
+     *            the map of attributes
      */
     public static void create( int nIdSuggest, Map<String, Object> mapAttributes )
     {
-        for ( Entry<String, Object> attribute : mapAttributes.entrySet(  ) )
+        for ( Entry<String, Object> attribute : mapAttributes.entrySet( ) )
         {
-            create( nIdSuggest, attribute.getKey(  ), attribute.getValue(  ) );
+            create( nIdSuggest, attribute.getKey( ), attribute.getValue( ) );
         }
     }
 
     /**
      * Remove the attributes of the suggest
-     * @param nIdSuggest the id suggest
+     * 
+     * @param nIdSuggest
+     *            the id suggest
      */
     public static void remove( int nIdSuggest )
     {

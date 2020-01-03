@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.suggest.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-
 /**
  *
  * class voteTypeHome
@@ -50,16 +49,17 @@ public final class VideoTypeHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private VideoTypeHome(  )
+    private VideoTypeHome( )
     {
     }
 
     /**
-     * Returns an instance of a video Type whose identifier is specified in
-     * parameter
+     * Returns an instance of a video Type whose identifier is specified in parameter
      *
-     * @param idKey The video type primary key
-     * @param plugin the Plugin
+     * @param idKey
+     *            The video type primary key
+     * @param plugin
+     *            the Plugin
      * @return an instance of voteType
      */
     public static VideoType findByPrimaryKey( int idKey, Plugin plugin )
@@ -70,14 +70,15 @@ public final class VideoTypeHome
     /**
      * Creation of an instance of suggestSubmit
      *
-     * @param videoType The instance of the videoType which contains the
-     *            informations to store
-     * @param plugin the Plugin
+     * @param videoType
+     *            The instance of the videoType which contains the informations to store
+     * @param plugin
+     *            the Plugin
      * @return the id of the new videoType
-     * @throws com.mysql.jdbc.PacketTooBigException Exception
+     * @throws com.mysql.jdbc.PacketTooBigException
+     *             Exception
      */
-    public static int create( VideoType videoType, Plugin plugin )
-        throws com.mysql.jdbc.PacketTooBigException
+    public static int create( VideoType videoType, Plugin plugin ) throws com.mysql.jdbc.PacketTooBigException
     {
         return _dao.insert( videoType, plugin );
     }
@@ -85,9 +86,10 @@ public final class VideoTypeHome
     /**
      * Update of the suggestSubmit which is specified in parameter
      *
-     * @param video The instance of the videoType which contains the
-     *            informations to update
-     * @param plugin the Plugin
+     * @param video
+     *            The instance of the videoType which contains the informations to update
+     * @param plugin
+     *            the Plugin
      *
      */
     public static void update( VideoType video, Plugin plugin )
@@ -98,8 +100,10 @@ public final class VideoTypeHome
     /**
      * Remove the video whose identifier is specified in parameter
      *
-     * @param nIdSuggestSubmit The identifier of the nIdSuggestSubmit / Video
-     * @param plugin the Plugin
+     * @param nIdSuggestSubmit
+     *            The identifier of the nIdSuggestSubmit / Video
+     * @param plugin
+     *            the Plugin
      */
     public static void remove( int nIdSuggestSubmit, Plugin plugin )
     {

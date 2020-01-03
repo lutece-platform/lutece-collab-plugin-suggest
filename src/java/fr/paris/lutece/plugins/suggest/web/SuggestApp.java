@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -100,7 +100,6 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
-
 /**
  * This class manages Form page.
  */
@@ -151,7 +150,7 @@ public class SuggestApp implements XPageApplication
     private static final String MARK_SHOW_TOP_SCORE_BLOCK = "show_top_score_block";
     private static final String MARK_SHOW_TOP_COMMENT_BLOCK = "show_top_comment_block";
     private static final String MARK_SUGGEST_SUBMIT_VOTE_TYPE = "suggest_submit_vote_type";
-  
+
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_JCAPTCHA = "jcaptcha";
     private static final String MARK_MAX_AMOUNT_COMMENTS = "number_comments";
@@ -254,30 +253,33 @@ public class SuggestApp implements XPageApplication
     private int _nIdSuggestSubmitStatePublish = SuggestUtils.CONSTANT_ID_NULL;
     private UrlItem _urlSuggestXpageHome;
     private int _nNumberShownCharacters = SuggestUtils.CONSTANT_ID_NULL;
-    private ISuggestSubmitService _suggestSubmitService = SuggestSubmitService.getService(  );
-    private ICommentSubmitService _commentSubmitService = CommentSubmitService.getService(  );
+    private ISuggestSubmitService _suggestSubmitService = SuggestSubmitService.getService( );
+    private ICommentSubmitService _commentSubmitService = CommentSubmitService.getService( );
 
     /**
-     * Returns the Suggest XPage result content depending on the request
-     * parameters and the current mode.
+     * Returns the Suggest XPage result content depending on the request parameters and the current mode.
      *
-     * @param request the {@link HttpServletRequest}
-     * @param nMode the mode
-     * @param plugin {@link Plugin}
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @param nMode
+     *            the mode
+     * @param plugin
+     *            {@link Plugin}
      * @return {@link XPage}
-     * @throws UserNotSignedException {@link UserNotSignedException}
-     * @throws SiteMessageException {@link SiteMessageException}
+     * @throws UserNotSignedException
+     *             {@link UserNotSignedException}
+     * @throws SiteMessageException
+     *             {@link SiteMessageException}
      */
-    public XPage getPage( HttpServletRequest request, int nMode, Plugin plugin )
-        throws UserNotSignedException, SiteMessageException
+    public XPage getPage( HttpServletRequest request, int nMode, Plugin plugin ) throws UserNotSignedException, SiteMessageException
     {
-        XPage page = new XPage(  );
+        XPage page = new XPage( );
         init( request, plugin );
 
         if ( request.getParameter( PARAMETER_CLEAR_FILTER ) != null )
         {
-            //clear all filter in session
-            clearSessionFilter( request.getSession(  ) );
+            // clear all filter in session
+            clearSessionFilter( request.getSession( ) );
         }
 
         String strAction = request.getParameter( PARAMETER_ACTION );
@@ -286,114 +288,128 @@ public class SuggestApp implements XPageApplication
         {
             page = getViewSuggestList( page, nMode, request );
         }
-        else if ( ACTION_VIEW_SUGGEST_SUBMIT_LIST.equals( strAction ) )
-        {
-            page = getViewSuggestSubmitList( page, nMode, request );
-        }
-
-        else if ( ACTION_VIEW_SUGGEST_SUBMIT.equals( strAction ) )
-        {
-            page = getViewSuggestSubmit( page, nMode, request );
-        }
-
-        else if ( ACTION_CREATE_SUGGEST_SUBMIT.equals( strAction ) )
-        {
-            page = getViewCreateSuggestSubmit( page, nMode, request );
-        }
-        else if ( ACTION_CREATE_REPORT.equals( strAction ) )
-        {
-            page = getViewCreateReport( page, nMode, request );
-        }
-        else if ( ACTION_CREATE_SUB_COMMENT.equals( strAction ) )
-        {
-            page = getViewCreateSubComment( page, nMode, request );
-        }
-
-        else if ( ACTION_DO_CREATE_SUGGEST_SUBMIT.equals( strAction ) )
-        {
-            doCreateSuggestSubmit( page, nMode, request );
-            page = getViewSuggestSubmitList( page, nMode, request );
-        }
-        else if ( ACTION_DO_CREATE_COMMENT.equals( strAction ) )
-        {
-            doCreateComment( page, nMode, request );
-            page = getViewSuggestSubmit( page, nMode, request );
-        }
-        else if ( ACTION_DO_CREATE_REPORT.equals( strAction ) )
-        {
-            doReport( page, nMode, request );
-            page = getViewSuggestSubmit( page, nMode, request );
-        }
-
-        else if ( ACTION_DO_VOTE.equals( strAction ) )
-        {
-            doVote( page, nMode, request );
-
-            String strView = request.getParameter( PARAMETER_VIEW );
-
-            if ( ( strView != null ) && strView.equals( CONSTANT_VIEW_SUGGEST_SUBMIT ) )
-            {
-                page = getViewSuggestSubmit( page, nMode, request );
-            }
-            else
-            {
-                page = getViewSuggestSubmitList( page, nMode, request );
-            }
-        }
-        else if ( ACTION_SUBSCRIBE_SUGGEST.equals( strAction ) )
-        {
-            doSubscribeSuggest( request );
-        }
-        else if ( ACTION_UNSUBSCRIBE_SUGGEST.equals( strAction ) )
-        {
-            doUnsubscribeSuggest( request );
-        }
         else
-        {
-            if ( ( request.getParameter( PARAMETER_ID_SUGGEST ) != null ) ||
-                    ( SuggestService.getInstance().getIdDefaultSuggest(  ) != SuggestUtils.CONSTANT_ID_NULL ) )
+            if ( ACTION_VIEW_SUGGEST_SUBMIT_LIST.equals( strAction ) )
             {
                 page = getViewSuggestSubmitList( page, nMode, request );
             }
+
             else
-            {
-                page = getViewSuggestList( page, nMode, request );
-            }
-        }
+                if ( ACTION_VIEW_SUGGEST_SUBMIT.equals( strAction ) )
+                {
+                    page = getViewSuggestSubmit( page, nMode, request );
+                }
+
+                else
+                    if ( ACTION_CREATE_SUGGEST_SUBMIT.equals( strAction ) )
+                    {
+                        page = getViewCreateSuggestSubmit( page, nMode, request );
+                    }
+                    else
+                        if ( ACTION_CREATE_REPORT.equals( strAction ) )
+                        {
+                            page = getViewCreateReport( page, nMode, request );
+                        }
+                        else
+                            if ( ACTION_CREATE_SUB_COMMENT.equals( strAction ) )
+                            {
+                                page = getViewCreateSubComment( page, nMode, request );
+                            }
+
+                            else
+                                if ( ACTION_DO_CREATE_SUGGEST_SUBMIT.equals( strAction ) )
+                                {
+                                    doCreateSuggestSubmit( page, nMode, request );
+                                    page = getViewSuggestSubmitList( page, nMode, request );
+                                }
+                                else
+                                    if ( ACTION_DO_CREATE_COMMENT.equals( strAction ) )
+                                    {
+                                        doCreateComment( page, nMode, request );
+                                        page = getViewSuggestSubmit( page, nMode, request );
+                                    }
+                                    else
+                                        if ( ACTION_DO_CREATE_REPORT.equals( strAction ) )
+                                        {
+                                            doReport( page, nMode, request );
+                                            page = getViewSuggestSubmit( page, nMode, request );
+                                        }
+
+                                        else
+                                            if ( ACTION_DO_VOTE.equals( strAction ) )
+                                            {
+                                                doVote( page, nMode, request );
+
+                                                String strView = request.getParameter( PARAMETER_VIEW );
+
+                                                if ( ( strView != null ) && strView.equals( CONSTANT_VIEW_SUGGEST_SUBMIT ) )
+                                                {
+                                                    page = getViewSuggestSubmit( page, nMode, request );
+                                                }
+                                                else
+                                                {
+                                                    page = getViewSuggestSubmitList( page, nMode, request );
+                                                }
+                                            }
+                                            else
+                                                if ( ACTION_SUBSCRIBE_SUGGEST.equals( strAction ) )
+                                                {
+                                                    doSubscribeSuggest( request );
+                                                }
+                                                else
+                                                    if ( ACTION_UNSUBSCRIBE_SUGGEST.equals( strAction ) )
+                                                    {
+                                                        doUnsubscribeSuggest( request );
+                                                    }
+                                                    else
+                                                    {
+                                                        if ( ( request.getParameter( PARAMETER_ID_SUGGEST ) != null )
+                                                                || ( SuggestService.getInstance( ).getIdDefaultSuggest( ) != SuggestUtils.CONSTANT_ID_NULL ) )
+                                                        {
+                                                            page = getViewSuggestSubmitList( page, nMode, request );
+                                                        }
+                                                        else
+                                                        {
+                                                            page = getViewSuggestList( page, nMode, request );
+                                                        }
+                                                    }
 
         return page;
     }
 
     /**
      * Display Suggest List
-     * @param request the {@link HttpServletRequest}
-     * @param nMode the mode
-     * @param page {@link XPage}
+     * 
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @param nMode
+     *            the mode
+     * @param page
+     *            {@link XPage}
      * @return {@link XPage}
-     * @throws UserNotSignedException {@link UserNotSignedException}
-     * @throws SiteMessageException {@link SiteMessageException}
+     * @throws UserNotSignedException
+     *             {@link UserNotSignedException}
+     * @throws SiteMessageException
+     *             {@link SiteMessageException}
      */
-    public XPage getViewSuggestList( XPage page, int nMode, HttpServletRequest request )
-        throws UserNotSignedException, SiteMessageException
+    public XPage getViewSuggestList( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        LuteceUser luteceUserConnected = SecurityService.getInstance(  ).getRegisteredUser( request );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        LuteceUser luteceUserConnected = SecurityService.getInstance( ).getRegisteredUser( request );
 
         String strContentSuggest = EMPTY_STRING;
-        page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale(  ) ) );
-        page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale(  ) ) );
+        page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale( ) ) );
+        page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale( ) ) );
 
         // show the suggests list
         String strCurrentPageIndexSuggest = "";
-        strCurrentPageIndexSuggest = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX,
-                strCurrentPageIndexSuggest );
+        strCurrentPageIndexSuggest = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, strCurrentPageIndexSuggest );
 
         int nItemsPerPageSuggest = _nDefaultItemsPerPage;
-        nItemsPerPageSuggest = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, nItemsPerPageSuggest,
-                _nDefaultItemsPerPage );
+        nItemsPerPageSuggest = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, nItemsPerPageSuggest, _nDefaultItemsPerPage );
 
-        strContentSuggest = getHtmlListSuggest( request.getLocale(  ), _plugin, strCurrentPageIndexSuggest, nItemsPerPageSuggest,
-                getNewUrlItemPage(  ), luteceUserConnected );
+        strContentSuggest = getHtmlListSuggest( request.getLocale( ), _plugin, strCurrentPageIndexSuggest, nItemsPerPageSuggest, getNewUrlItemPage( ),
+                luteceUserConnected );
 
         model.put( MARK_CONTENT_SUGGEST, strContentSuggest );
 
@@ -404,31 +420,36 @@ public class SuggestApp implements XPageApplication
 
     /**
      * Display SuggestSubmit List
-     * @param request the {@link HttpServletRequest}
-     * @param nMode the mode
-     * @param page {@link XPage}
+     * 
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @param nMode
+     *            the mode
+     * @param page
+     *            {@link XPage}
      * @return {@link XPage}
-     * @throws UserNotSignedException {@link UserNotSignedException}
-     * @throws SiteMessageException {@link SiteMessageException}
+     * @throws UserNotSignedException
+     *             {@link UserNotSignedException}
+     * @throws SiteMessageException
+     *             {@link SiteMessageException}
      */
-    public XPage getViewSuggestSubmitList( XPage page, int nMode, HttpServletRequest request )
-        throws UserNotSignedException, SiteMessageException
+    public XPage getViewSuggestSubmitList( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
 
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
         Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, _plugin );
-        LuteceUser luteceUserConnected = SecurityService.getInstance(  ).getRegisteredUser( request );
+        LuteceUser luteceUserConnected = SecurityService.getInstance( ).getRegisteredUser( request );
 
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
         model.put( MARK_VIEW, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT );
 
         if ( suggest == null )
         {
-            suggest = SuggestHome.findByPrimaryKey(SuggestService.getInstance(). getIdDefaultSuggest(  ), _plugin );
+            suggest = SuggestHome.findByPrimaryKey( SuggestService.getInstance( ).getIdDefaultSuggest( ), _plugin );
         }
 
-        //testAuthorizationAccess
+        // testAuthorizationAccess
         testUserAuthorizationAccess( suggest, request, luteceUserConnected );
 
         if ( luteceUserConnected != null )
@@ -446,201 +467,215 @@ public class SuggestApp implements XPageApplication
             if ( nIdCategory > 0 )
             {
                 model.put( MARK_USER_SUBSCRIBED,
-                    SuggestSubscriptionProviderService.getService(  )
-                                                       .hasUserSubscribedToSuggestCategory( luteceUserConnected,
-                        nIdCategory ) );
+                        SuggestSubscriptionProviderService.getService( ).hasUserSubscribedToSuggestCategory( luteceUserConnected, nIdCategory ) );
             }
             else
             {
-                model.put( MARK_USER_SUBSCRIBED,
-                    SuggestSubscriptionProviderService.getService(  )
-                                                       .hasUserSubscribedToSuggest( luteceUserConnected, nIdSuggest ) );
+                model.put( MARK_USER_SUBSCRIBED, SuggestSubscriptionProviderService.getService( ).hasUserSubscribedToSuggest( luteceUserConnected, nIdSuggest ) );
             }
         }
 
-        UrlItem urlSuggestXpage = getNewUrlItemPage(  );
+        UrlItem urlSuggestXpage = getNewUrlItemPage( );
         urlSuggestXpage.addParameter( PARAMETER_ACTION, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT );
         urlSuggestXpage.addParameter( PARAMETER_ID_SUGGEST, nIdSuggest );
 
         SearchFields searchFields = getSearchFields( request );
-        addSuggestPageFrameset( getHtmlListSuggestSubmit( request.getLocale(  ), _plugin, suggest, searchFields, urlSuggestXpage,
-                luteceUserConnected ), request, page, suggest, model, searchFields, luteceUserConnected );
+        addSuggestPageFrameset( getHtmlListSuggestSubmit( request.getLocale( ), _plugin, suggest, searchFields, urlSuggestXpage, luteceUserConnected ),
+                request, page, suggest, model, searchFields, luteceUserConnected );
 
         return page;
     }
 
     /**
      * Display view SuggestSubmit
-     * @param request the {@link HttpServletRequest}
-     * @param nMode the mode
-     * @param page {@link XPage}
+     * 
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @param nMode
+     *            the mode
+     * @param page
+     *            {@link XPage}
      * @return {@link XPage}
-     * @throws UserNotSignedException {@link UserNotSignedException}
-     * @throws SiteMessageException {@link SiteMessageException}
+     * @throws UserNotSignedException
+     *             {@link UserNotSignedException}
+     * @throws SiteMessageException
+     *             {@link SiteMessageException}
      */
-    public XPage getViewSuggestSubmit( XPage page, int nMode, HttpServletRequest request )
-        throws UserNotSignedException, SiteMessageException
+    public XPage getViewSuggestSubmit( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        LuteceUser luteceUserConnected = SecurityService.getInstance(  ).getRegisteredUser( request );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        LuteceUser luteceUserConnected = SecurityService.getInstance( ).getRegisteredUser( request );
         String strIdSubmitSuggest = request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST );
         int nIdSubmitSuggest = SuggestUtils.getIntegerParameter( strIdSubmitSuggest );
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSubmitSuggest, true, _plugin );
-        suggestSubmit.setSuggest( SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest(  ).getIdSuggest(  ), _plugin ) );
+        suggestSubmit.setSuggest( SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), _plugin ) );
 
-        //testAuthorizationAccess
-        testUserAuthorizationAccess( suggestSubmit.getSuggest(  ), request, luteceUserConnected );
+        // testAuthorizationAccess
+        testUserAuthorizationAccess( suggestSubmit.getSuggest( ), request, luteceUserConnected );
 
         model.put( MARK_VIEW, CONSTANT_VIEW_SUGGEST_SUBMIT );
 
         SearchFields searchFields = getSearchFields( request );
-        addSuggestPageFrameset( getHtmlSuggestSubmitDetail( request, nMode, _plugin, suggestSubmit, luteceUserConnected ),
-            request, page, suggestSubmit.getSuggest(  ), model, searchFields, luteceUserConnected );
+        addSuggestPageFrameset( getHtmlSuggestSubmitDetail( request, nMode, _plugin, suggestSubmit, luteceUserConnected ), request, page,
+                suggestSubmit.getSuggest( ), model, searchFields, luteceUserConnected );
 
         return page;
     }
 
     /**
      * Display create SuggestSubmit Form
-     * @param request the {@link HttpServletRequest}
-     * @param nMode the mode
-     * @param page {@link XPage}
+     * 
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @param nMode
+     *            the mode
+     * @param page
+     *            {@link XPage}
      * @return {@link XPage}
-     * @throws UserNotSignedException {@link UserNotSignedException}
-     * @throws SiteMessageException {@link SiteMessageException}
+     * @throws UserNotSignedException
+     *             {@link UserNotSignedException}
+     * @throws SiteMessageException
+     *             {@link SiteMessageException}
      */
-    public XPage getViewCreateSuggestSubmit( XPage page, int nMode, HttpServletRequest request )
-        throws UserNotSignedException, SiteMessageException
+    public XPage getViewCreateSuggestSubmit( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
-       
-    	
-    	LuteceUser luteceUserConnected = SecurityService.getInstance(  ).getRegisteredUser( request );
-    	String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
-        int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
-        Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, _plugin );
 
-        if ( suggest.isActiveSuggestSubmitAuthentification(  ) && SecurityService.isAuthenticationEnable(  ) )
-        {
-            luteceUserConnected = SecurityService.getInstance(  ).getRemoteUser( request );
-
-            if ( luteceUserConnected == null )
-            {
-                throw new UserNotSignedException(  );
-            }
-
-            //testAuthorizationAccess
-            testUserAuthorizationAccess( suggest, request, luteceUserConnected );
-        }
-
-        
-        
-        
-        
-    	Map<String, Object> model = new HashMap<String, Object>(  );
-        model.put( MARK_VIEW, CONSTANT_VIEW_CREATE_SUGGEST_SUBMIT );
-        
-        SearchFields searchFields = getSearchFields( request );
-        addSuggestPageFrameset( getHtmlForm( request, nMode, _plugin, suggest, searchFields.getIdFilterCategory(  ) ),
-            request, page, suggest, model, searchFields, luteceUserConnected );
-
-        return page;
-    }
-    
-    /**
-     * Display create sub comment
-     * @param request the {@link HttpServletRequest}
-     * @param nMode the mode
-     * @param page {@link XPage}
-     * @return {@link XPage}
-     * @throws UserNotSignedException {@link UserNotSignedException}
-     * @throws SiteMessageException {@link SiteMessageException}
-     */
-    public XPage getViewCreateSubComment( XPage page, int nMode, HttpServletRequest request )
-        throws UserNotSignedException, SiteMessageException
-    {
-    	
-    	
-    	String strIdParentComment = request.getParameter( PARAMETER_COMMENT_ID_PARENT );
-        int nIdParentComment = SuggestUtils.getIntegerParameter( strIdParentComment );
-        LuteceUser luteceUserConnected = SecurityService.getInstance(  ).getRegisteredUser( request );
-        
+        LuteceUser luteceUserConnected = SecurityService.getInstance( ).getRegisteredUser( request );
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
         Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, _plugin );
-        
-        if ( suggest.isActiveCommentAuthentification(  ) && SecurityService.isAuthenticationEnable(  ) )
+
+        if ( suggest.isActiveSuggestSubmitAuthentification( ) && SecurityService.isAuthenticationEnable( ) )
         {
-            luteceUserConnected = SecurityService.getInstance(  ).getRemoteUser( request );
+            luteceUserConnected = SecurityService.getInstance( ).getRemoteUser( request );
 
             if ( luteceUserConnected == null )
             {
-                throw new UserNotSignedException(  );
+                throw new UserNotSignedException( );
             }
 
-            //testAuthorizationAccess
+            // testAuthorizationAccess
             testUserAuthorizationAccess( suggest, request, luteceUserConnected );
         }
-        
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        
-        CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService(  );
 
-        
-        if ( suggest!=null  && suggest.isActiveCaptcha(  ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
+        Map<String, Object> model = new HashMap<String, Object>( );
+        model.put( MARK_VIEW, CONSTANT_VIEW_CREATE_SUGGEST_SUBMIT );
+
+        SearchFields searchFields = getSearchFields( request );
+        addSuggestPageFrameset( getHtmlForm( request, nMode, _plugin, suggest, searchFields.getIdFilterCategory( ) ), request, page, suggest, model,
+                searchFields, luteceUserConnected );
+
+        return page;
+    }
+
+    /**
+     * Display create sub comment
+     * 
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @param nMode
+     *            the mode
+     * @param page
+     *            {@link XPage}
+     * @return {@link XPage}
+     * @throws UserNotSignedException
+     *             {@link UserNotSignedException}
+     * @throws SiteMessageException
+     *             {@link SiteMessageException}
+     */
+    public XPage getViewCreateSubComment( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
+    {
+
+        String strIdParentComment = request.getParameter( PARAMETER_COMMENT_ID_PARENT );
+        int nIdParentComment = SuggestUtils.getIntegerParameter( strIdParentComment );
+        LuteceUser luteceUserConnected = SecurityService.getInstance( ).getRegisteredUser( request );
+
+        String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
+        int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
+        Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, _plugin );
+
+        if ( suggest.isActiveCommentAuthentification( ) && SecurityService.isAuthenticationEnable( ) )
         {
-            model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode(  ) );
+            luteceUserConnected = SecurityService.getInstance( ).getRemoteUser( request );
+
+            if ( luteceUserConnected == null )
+            {
+                throw new UserNotSignedException( );
+            }
+
+            // testAuthorizationAccess
+            testUserAuthorizationAccess( suggest, request, luteceUserConnected );
         }
-        
+
+        Map<String, Object> model = new HashMap<String, Object>( );
+
+        CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService( );
+
+        if ( suggest != null && suggest.isActiveCaptcha( ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
+        {
+            model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode( ) );
+        }
+
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
-        model.put(MARK_ID_SUGGEST, strIdSuggest);
-        CommentSubmit commentSubmit = _commentSubmitService.findByPrimaryKey(nIdParentComment, _plugin);
-        model.put(MARK_COMMENT_SUBMIT, commentSubmit);
-        model.put( MARK_DISABLE_NEW_COMMENT_SUBMIT, suggest.isDisableNewComment(  ) );
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_SUGGEST_SUB_COMMENT, request.getLocale(  ), model );
-        page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale(  ) ) );
-        page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale(  ) ) );
-        page.setContent( template.getHtml(  ) );
-        
+        model.put( MARK_ID_SUGGEST, strIdSuggest );
+        CommentSubmit commentSubmit = _commentSubmitService.findByPrimaryKey( nIdParentComment, _plugin );
+        model.put( MARK_COMMENT_SUBMIT, commentSubmit );
+        model.put( MARK_DISABLE_NEW_COMMENT_SUBMIT, suggest.isDisableNewComment( ) );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_SUGGEST_SUB_COMMENT, request.getLocale( ), model );
+        page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale( ) ) );
+        page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale( ) ) );
+        page.setContent( template.getHtml( ) );
+
         return page;
     }
 
     /**
      * Display create Report form
-     * @param request the {@link HttpServletRequest}
-     * @param nMode the mode
-     * @param page {@link XPage}
+     * 
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @param nMode
+     *            the mode
+     * @param page
+     *            {@link XPage}
      * @return {@link XPage}
-     * @throws UserNotSignedException {@link UserNotSignedException}
-     * @throws SiteMessageException {@link SiteMessageException}
+     * @throws UserNotSignedException
+     *             {@link UserNotSignedException}
+     * @throws SiteMessageException
+     *             {@link SiteMessageException}
      */
-    public XPage getViewCreateReport( XPage page, int nMode, HttpServletRequest request )
-        throws UserNotSignedException, SiteMessageException
+    public XPage getViewCreateReport( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        LuteceUser luteceUserConnected = SecurityService.getInstance(  ).getRegisteredUser( request );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        LuteceUser luteceUserConnected = SecurityService.getInstance( ).getRegisteredUser( request );
         String strIdSubmitSuggest = request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST );
         int nIdSubmitSuggest = SuggestUtils.getIntegerParameter( strIdSubmitSuggest );
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSubmitSuggest, true, _plugin );
-        suggestSubmit.setSuggest( SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest(  ).getIdSuggest(  ), _plugin ) );
+        suggestSubmit.setSuggest( SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), _plugin ) );
         model.put( MARK_VIEW, CONSTANT_VIEW_REPORT );
 
         SearchFields searchFields = getSearchFields( request );
-        addSuggestPageFrameset( getHtmlReported( request, nMode, _plugin, suggestSubmit ), request, page,
-            suggestSubmit.getSuggest(  ), model, searchFields, luteceUserConnected );
+        addSuggestPageFrameset( getHtmlReported( request, nMode, _plugin, suggestSubmit ), request, page, suggestSubmit.getSuggest( ), model, searchFields,
+                luteceUserConnected );
 
         return page;
     }
 
     /**
      * Perform Action create Suggest Submit
-     * @param request the {@link HttpServletRequest}
-     * @param nMode the mode
-     * @param page {@link XPage}
-     * @throws UserNotSignedException {@link UserNotSignedException}
-     * @throws SiteMessageException {@link SiteMessageException}
+     * 
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @param nMode
+     *            the mode
+     * @param page
+     *            {@link XPage}
+     * @throws UserNotSignedException
+     *             {@link UserNotSignedException}
+     * @throws SiteMessageException
+     *             {@link SiteMessageException}
      */
-    public void doCreateSuggestSubmit( XPage page, int nMode, HttpServletRequest request )
-        throws UserNotSignedException, SiteMessageException
+    public void doCreateSuggestSubmit( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
 
@@ -649,16 +684,16 @@ public class SuggestApp implements XPageApplication
 
         Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, _plugin );
 
-        if ( suggest.isActiveSuggestSubmitAuthentification(  ) && SecurityService.isAuthenticationEnable(  ) )
+        if ( suggest.isActiveSuggestSubmitAuthentification( ) && SecurityService.isAuthenticationEnable( ) )
         {
-            luteceUserConnected = SecurityService.getInstance(  ).getRemoteUser( request );
+            luteceUserConnected = SecurityService.getInstance( ).getRemoteUser( request );
 
             if ( luteceUserConnected == null )
             {
-                throw new UserNotSignedException(  );
+                throw new UserNotSignedException( );
             }
 
-            //testAuthorizationAccess
+            // testAuthorizationAccess
             testUserAuthorizationAccess( suggest, request, luteceUserConnected );
         }
 
@@ -669,14 +704,14 @@ public class SuggestApp implements XPageApplication
         int nIdType = SuggestUtils.getIntegerParameter( strIdType );
         String strTermsOfUse = request.getParameter( PARAMETER_TERMS_OF_USE );
 
-        //Check if  terms of used is selected 
-        if ( suggest.isEnableTermsOfUse(  ) && ( strTermsOfUse == null ) )
+        // Check if terms of used is selected
+        if ( suggest.isEnableTermsOfUse( ) && ( strTermsOfUse == null ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_ERROR_MUST_SELECTED_TERMS_OF_USE, SiteMessage.TYPE_STOP );
         }
 
-        //Check if a category is selected (in the case or the suggest has some categories)
-        if ( !suggest.getCategories(  ).isEmpty(  ) )
+        // Check if a category is selected (in the case or the suggest has some categories)
+        if ( !suggest.getCategories( ).isEmpty( ) )
         {
             if ( ( strIdCategory == null ) || strIdCategory.equals( Integer.toString( SuggestUtils.CONSTANT_ID_NULL ) ) )
             {
@@ -684,56 +719,55 @@ public class SuggestApp implements XPageApplication
             }
         }
 
-        //Check if a type is selected (in the case or the suggest has some type)
-        if ( !suggest.getSuggestSubmitTypes(  ).isEmpty(  ) )
+        // Check if a type is selected (in the case or the suggest has some type)
+        if ( !suggest.getSuggestSubmitTypes( ).isEmpty( ) )
         {
             if ( ( strIdType == null ) || strIdType.equals( Integer.toString( SuggestUtils.CONSTANT_ID_NULL ) ) )
             {
-                SiteMessageService.setMessage( request, MESSAGE_ERROR_NO_SUGGEST_SUBMIT_TYPE_SELECTED,
-                    SiteMessage.TYPE_STOP );
+                SiteMessageService.setMessage( request, MESSAGE_ERROR_NO_SUGGEST_SUBMIT_TYPE_SELECTED, SiteMessage.TYPE_STOP );
             }
         }
 
-        SuggestSubmit suggestSubmit = doInsertSuggestSubmit( request, nMode, _plugin, suggest, nIdCategory, nIdType,
-                luteceUserConnected );
+        SuggestSubmit suggestSubmit = doInsertSuggestSubmit( request, nMode, _plugin, suggest, nIdCategory, nIdType, luteceUserConnected );
 
-        if ( suggest.isDisableNewSuggestSubmit(  ) )
+        if ( suggest.isDisableNewSuggestSubmit( ) )
         {
             strMessage = MESSAGE_NEW_SUGGEST_SUBMIT_DISABLE;
         }
 
-        if ( suggest.isEnableMailNewSuggestSubmit(  ) && ( suggest.getIdMailingListSuggestSubmit(  ) != SuggestUtils.CONSTANT_ID_NULL ) )
+        if ( suggest.isEnableMailNewSuggestSubmit( ) && ( suggest.getIdMailingListSuggestSubmit( ) != SuggestUtils.CONSTANT_ID_NULL ) )
         {
-            SuggestUtils.sendNotificationNewSuggestSubmit( suggest, suggestSubmit, request.getLocale(  ), request );
+            SuggestUtils.sendNotificationNewSuggestSubmit( suggest, suggestSubmit, request.getLocale( ), request );
         }
 
-        Map<String, Object> parameters = new HashMap<String, Object>(  );
+        Map<String, Object> parameters = new HashMap<String, Object>( );
         parameters.put( PARAMETER_ID_SUGGEST, nIdSuggest );
         parameters.put( PARAMETER_ACTION, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT );
 
-        if ( !StringUtils.isEmpty( suggest.getConfirmationMessage(  ) ) )
+        if ( !StringUtils.isEmpty( suggest.getConfirmationMessage( ) ) )
         {
-            Object[] args = { ( suggest.getConfirmationMessage(  ) == null ) ? "" : suggest.getConfirmationMessage(  ) };
-            SiteMessageService.setMessage( request, strMessage, args, null, getNewUrlItemPage(  ).getUrl(  ), null,
-                SiteMessage.TYPE_INFO, parameters );
+            Object [ ] args = {
+                ( suggest.getConfirmationMessage( ) == null ) ? "" : suggest.getConfirmationMessage( )
+            };
+            SiteMessageService.setMessage( request, strMessage, args, null, getNewUrlItemPage( ).getUrl( ), null, SiteMessage.TYPE_INFO, parameters );
         }
     }
 
     /**
-     * Do subscribe to a suggest or a suggest submit. If the parameter
-     * {@link #PARAMETER_ID_SUBMIT_SUGGEST} has a value, then subscribe to the suggest
-     * submit, otherwise subscribe to the suggest
-     * @param request The request
-     * @throws SiteMessageException If the suggest or the suggest submit does not
-     *             exist
+     * Do subscribe to a suggest or a suggest submit. If the parameter {@link #PARAMETER_ID_SUBMIT_SUGGEST} has a value, then subscribe to the suggest submit,
+     * otherwise subscribe to the suggest
+     * 
+     * @param request
+     *            The request
+     * @throws SiteMessageException
+     *             If the suggest or the suggest submit does not exist
      */
-    public void doSubscribeSuggest( HttpServletRequest request )
-        throws SiteMessageException
+    public void doSubscribeSuggest( HttpServletRequest request ) throws SiteMessageException
     {
-        LuteceUser luteceUserConnected = SecurityService.getInstance(  ).getRegisteredUser( request );
+        LuteceUser luteceUserConnected = SecurityService.getInstance( ).getRegisteredUser( request );
         String strIdSubmitSuggest = request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST );
 
-        UrlItem urlItem = new UrlItem( request.getRequestURL(  ).toString(  ) );
+        UrlItem urlItem = new UrlItem( request.getRequestURL( ).toString( ) );
         urlItem.addParameter( PARAMETER_PAGE, CONSTANT_SUGGEST );
         urlItem.addParameter( PARAMETER_ID_SUGGEST, request.getParameter( PARAMETER_ID_SUGGEST ) );
 
@@ -749,8 +783,7 @@ public class SuggestApp implements XPageApplication
                 return;
             }
 
-            SuggestSubscriptionProviderService.getService(  )
-                                               .createSuggestSubmitSubscription( luteceUserConnected, nIdSubmitSuggest );
+            SuggestSubscriptionProviderService.getService( ).createSuggestSubmitSubscription( luteceUserConnected, nIdSubmitSuggest );
 
             urlItem.addParameter( PARAMETER_ID_SUBMIT_SUGGEST, strIdSubmitSuggest );
             urlItem.addParameter( PARAMETER_ACTION, ACTION_VIEW_SUGGEST_SUBMIT );
@@ -774,8 +807,7 @@ public class SuggestApp implements XPageApplication
                     return;
                 }
 
-                SuggestSubscriptionProviderService.getService(  )
-                                                   .createSuggestCategorySubscription( luteceUserConnected, nIdCategory );
+                SuggestSubscriptionProviderService.getService( ).createSuggestCategorySubscription( luteceUserConnected, nIdCategory );
                 urlItem.addParameter( PARAMETER_ID_FILTER_CATEGORY_SUGGEST, strIdFilterCategory );
             }
             else
@@ -790,7 +822,7 @@ public class SuggestApp implements XPageApplication
                     return;
                 }
 
-                SuggestSubscriptionProviderService.getService(  ).createSuggestSubscription( luteceUserConnected, nIdSuggest );
+                SuggestSubscriptionProviderService.getService( ).createSuggestSubscription( luteceUserConnected, nIdSuggest );
             }
 
             urlItem.addParameter( PARAMETER_ACTION, ACTION_VIEW_SUGGEST_SUBMIT_LIST );
@@ -798,30 +830,30 @@ public class SuggestApp implements XPageApplication
 
         try
         {
-            LocalVariables.getResponse(  ).sendRedirect( urlItem.getUrl(  ) );
+            LocalVariables.getResponse( ).sendRedirect( urlItem.getUrl( ) );
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
         }
     }
 
     /**
-     * Do unsubscribe to a suggest or a suggest submit. If the parameter
-     * {@link #PARAMETER_ID_SUBMIT_SUGGEST} has a value, then unsubscribe to the
-     * suggest submit, otherwise unsubscribe to the suggest
-     * @param request The request
-     * @throws SiteMessageException If the suggest or the suggest submit does not
-     *             exist
+     * Do unsubscribe to a suggest or a suggest submit. If the parameter {@link #PARAMETER_ID_SUBMIT_SUGGEST} has a value, then unsubscribe to the suggest
+     * submit, otherwise unsubscribe to the suggest
+     * 
+     * @param request
+     *            The request
+     * @throws SiteMessageException
+     *             If the suggest or the suggest submit does not exist
      */
-    public void doUnsubscribeSuggest( HttpServletRequest request )
-        throws SiteMessageException
+    public void doUnsubscribeSuggest( HttpServletRequest request ) throws SiteMessageException
     {
-        LuteceUser luteceUserConnected = SecurityService.getInstance(  ).getRegisteredUser( request );
+        LuteceUser luteceUserConnected = SecurityService.getInstance( ).getRegisteredUser( request );
         String strIdSubmitSuggest = request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST );
 
-        UrlItem urlItem = new UrlItem( request.getRequestURL(  ).toString(  ) );
+        UrlItem urlItem = new UrlItem( request.getRequestURL( ).toString( ) );
         urlItem.addParameter( PARAMETER_PAGE, CONSTANT_SUGGEST );
         urlItem.addParameter( PARAMETER_ID_SUGGEST, request.getParameter( PARAMETER_ID_SUGGEST ) );
 
@@ -837,8 +869,7 @@ public class SuggestApp implements XPageApplication
                 return;
             }
 
-            SuggestSubscriptionProviderService.getService(  )
-                                               .removeSuggestSubmitSubscription( luteceUserConnected, nIdSubmitSuggest );
+            SuggestSubscriptionProviderService.getService( ).removeSuggestSubmitSubscription( luteceUserConnected, nIdSubmitSuggest );
 
             urlItem.addParameter( PARAMETER_ID_SUBMIT_SUGGEST, strIdSubmitSuggest );
             urlItem.addParameter( PARAMETER_ACTION, ACTION_VIEW_SUGGEST_SUBMIT );
@@ -862,8 +893,7 @@ public class SuggestApp implements XPageApplication
                     return;
                 }
 
-                SuggestSubscriptionProviderService.getService(  )
-                                                   .createSuggestCategorySubscription( luteceUserConnected, nIdCategory );
+                SuggestSubscriptionProviderService.getService( ).createSuggestCategorySubscription( luteceUserConnected, nIdCategory );
                 urlItem.addParameter( PARAMETER_ID_FILTER_CATEGORY_SUGGEST, strIdFilterCategory );
             }
             else
@@ -879,7 +909,7 @@ public class SuggestApp implements XPageApplication
                     return;
                 }
 
-                SuggestSubscriptionProviderService.getService(  ).removeSuggestSubscription( luteceUserConnected, nIdSuggest );
+                SuggestSubscriptionProviderService.getService( ).removeSuggestSubscription( luteceUserConnected, nIdSuggest );
             }
 
             urlItem.addParameter( PARAMETER_ACTION, ACTION_VIEW_SUGGEST_SUBMIT_LIST );
@@ -887,25 +917,30 @@ public class SuggestApp implements XPageApplication
 
         try
         {
-            LocalVariables.getResponse(  ).sendRedirect( urlItem.getUrl(  ) );
+            LocalVariables.getResponse( ).sendRedirect( urlItem.getUrl( ) );
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
         }
     }
 
     /**
      * Perform Action create Comment
-     * @param request the {@link HttpServletRequest}
-     * @param nMode the mode
-     * @param page {@link XPage}
-     * @throws UserNotSignedException {@link UserNotSignedException}
-     * @throws SiteMessageException {@link SiteMessageException}
+     * 
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @param nMode
+     *            the mode
+     * @param page
+     *            {@link XPage}
+     * @throws UserNotSignedException
+     *             {@link UserNotSignedException}
+     * @throws SiteMessageException
+     *             {@link SiteMessageException}
      */
-    public void doCreateComment( XPage page, int nMode, HttpServletRequest request )
-        throws UserNotSignedException, SiteMessageException
+    public void doCreateComment( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
         String strIdSubmitSuggest = request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST );
         int nIdSubmitSuggest = SuggestUtils.getIntegerParameter( strIdSubmitSuggest );
@@ -914,30 +949,29 @@ public class SuggestApp implements XPageApplication
 
         if ( suggestSubmit != null )
         {
-            suggest = SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest(  ).getIdSuggest(  ), _plugin );
+            suggest = SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), _plugin );
             suggestSubmit.setSuggest( suggest );
         }
 
         LuteceUser luteceUserConnected = null;
 
-        if ( ( suggest == null ) || ( suggestSubmit == null ) || !suggest.isAuthorizedComment(  ) ||
-                suggestSubmit.isDisableComment(  ) )
+        if ( ( suggest == null ) || ( suggestSubmit == null ) || !suggest.isAuthorizedComment( ) || suggestSubmit.isDisableComment( ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
 
             return;
         }
 
-        if ( suggest.isActiveCommentAuthentification(  ) && SecurityService.isAuthenticationEnable(  ) )
+        if ( suggest.isActiveCommentAuthentification( ) && SecurityService.isAuthenticationEnable( ) )
         {
-            luteceUserConnected = SecurityService.getInstance(  ).getRemoteUser( request );
+            luteceUserConnected = SecurityService.getInstance( ).getRemoteUser( request );
 
             if ( luteceUserConnected == null )
             {
-                throw new UserNotSignedException(  );
+                throw new UserNotSignedException( );
             }
 
-            //testAuthorizationAccess
+            // testAuthorizationAccess
             testUserAuthorizationAccess( suggest, request, luteceUserConnected );
         }
 
@@ -946,19 +980,19 @@ public class SuggestApp implements XPageApplication
         String strIdParentComment = request.getParameter( PARAMETER_COMMENT_ID_PARENT );
         int nIdParentComment = SubmitFilter.ID_PARENT_NULL;
 
-        if ( ( strIdParentComment != null ) && ( !strIdParentComment.trim(  ).equals( EMPTY_STRING ) ) )
+        if ( ( strIdParentComment != null ) && ( !strIdParentComment.trim( ).equals( EMPTY_STRING ) ) )
         {
             nIdParentComment = SuggestUtils.getIntegerParameter( strIdParentComment );
         }
 
-        if ( ( strCommentValueSuggest == null ) || strCommentValueSuggest.trim(  ).equals( EMPTY_STRING ) )
+        if ( ( strCommentValueSuggest == null ) || strCommentValueSuggest.trim( ).equals( EMPTY_STRING ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_MANDATORY_COMMENT, SiteMessage.TYPE_STOP );
         }
 
-        if ( suggest.isActiveCaptcha(  ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
+        if ( suggest.isActiveCaptcha( ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
         {
-            CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService(  );
+            CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService( );
 
             if ( !captchaSecurityService.validate( request ) )
             {
@@ -966,42 +1000,46 @@ public class SuggestApp implements XPageApplication
             }
         }
 
-        CommentSubmit commentSubmit = doInsertComment( request, suggestSubmit, strCommentValueSuggest, _plugin,
-                luteceUserConnected, nIdParentComment );
+        CommentSubmit commentSubmit = doInsertComment( request, suggestSubmit, strCommentValueSuggest, _plugin, luteceUserConnected, nIdParentComment );
 
-        if ( suggest.isEnableMailNewCommentSubmit(  ) &&
-                ( suggest.getIdMailingListSuggestSubmit(  ) != SuggestUtils.CONSTANT_ID_NULL ) )
+        if ( suggest.isEnableMailNewCommentSubmit( ) && ( suggest.getIdMailingListSuggestSubmit( ) != SuggestUtils.CONSTANT_ID_NULL ) )
         {
-            SuggestUtils.sendNotificationNewCommentSubmit( suggest, commentSubmit, request.getLocale(  ), request );
+            SuggestUtils.sendNotificationNewCommentSubmit( suggest, commentSubmit, request.getLocale( ), request );
             strMessage = MESSAGE_NEW_COMMENT_SUBMIT_DISABLE;
         }
 
-        if ( !StringUtils.isEmpty( suggest.getConfirmationMessage(  ) ) )
+        if ( !StringUtils.isEmpty( suggest.getConfirmationMessage( ) ) )
         {
-            Map<String, Object> parameters = new HashMap<String, Object>(  );
+            Map<String, Object> parameters = new HashMap<String, Object>( );
 
             parameters.put( PARAMETER_ID_SUBMIT_SUGGEST, nIdSubmitSuggest );
-            parameters.put( PARAMETER_ID_SUGGEST, suggest.getIdSuggest(  ) );
+            parameters.put( PARAMETER_ID_SUGGEST, suggest.getIdSuggest( ) );
             parameters.put( PARAMETER_COMMENT_SUGGEST, CONSTANTE_PARAMETER_TRUE_VALUE );
             parameters.put( PARAMETER_ACTION, CONSTANT_VIEW_SUGGEST_SUBMIT );
 
-            Object[] args = { ( suggest.getConfirmationMessage(  ) == null ) ? "" : suggest.getConfirmationMessage(  ) };
-            SiteMessageService.setMessage( request, strMessage, args, null, getNewUrlItemPage(  ).getUrl(  ), null,
-                SiteMessage.TYPE_INFO, parameters );
+            Object [ ] args = {
+                ( suggest.getConfirmationMessage( ) == null ) ? "" : suggest.getConfirmationMessage( )
+            };
+            SiteMessageService.setMessage( request, strMessage, args, null, getNewUrlItemPage( ).getUrl( ), null, SiteMessage.TYPE_INFO, parameters );
         }
     }
 
     /**
      *
      * Perform Action Report
-     * @param request the {@link HttpServletRequest}
-     * @param nMode the mode
-     * @param page {@link XPage}
-     * @throws UserNotSignedException {@link UserNotSignedException}
-     * @throws SiteMessageException {@link SiteMessageException}
+     * 
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @param nMode
+     *            the mode
+     * @param page
+     *            {@link XPage}
+     * @throws UserNotSignedException
+     *             {@link UserNotSignedException}
+     * @throws SiteMessageException
+     *             {@link SiteMessageException}
      */
-    public void doReport( XPage page, int nMode, HttpServletRequest request )
-        throws UserNotSignedException, SiteMessageException
+    public void doReport( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
         String strIdSubmitSuggest = request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST );
         int nIdSubmitSuggest = SuggestUtils.getIntegerParameter( strIdSubmitSuggest );
@@ -1011,18 +1049,18 @@ public class SuggestApp implements XPageApplication
 
         if ( suggestSubmit != null )
         {
-            suggest = SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest(  ).getIdSuggest(  ), _plugin );
+            suggest = SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), _plugin );
             suggestSubmit.setSuggest( suggest );
         }
 
         String strReportedValue = request.getParameter( PARAMETER_REPORTED_VALUE );
 
-        if ( ( strReportedValue == null ) || strReportedValue.trim(  ).equals( EMPTY_STRING ) )
+        if ( ( strReportedValue == null ) || strReportedValue.trim( ).equals( EMPTY_STRING ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_MANDATORY_REPORTED, SiteMessage.TYPE_STOP );
         }
 
-        if ( ( suggestSubmit == null ) || ( suggest == null ) || !suggest.isEnableReports(  ) )
+        if ( ( suggestSubmit == null ) || ( suggest == null ) || !suggest.isEnableReports( ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
 
@@ -1031,91 +1069,95 @@ public class SuggestApp implements XPageApplication
 
         LuteceUser luteceUserConnected = null;
 
-        if ( suggest.isActiveCommentAuthentification(  ) && SecurityService.isAuthenticationEnable(  ) )
+        if ( suggest.isActiveCommentAuthentification( ) && SecurityService.isAuthenticationEnable( ) )
         {
-            luteceUserConnected = SecurityService.getInstance(  ).getRemoteUser( request );
+            luteceUserConnected = SecurityService.getInstance( ).getRemoteUser( request );
 
             if ( luteceUserConnected == null )
             {
-                throw new UserNotSignedException(  );
+                throw new UserNotSignedException( );
             }
 
-            //testAuthorizationAccess
+            // testAuthorizationAccess
             testUserAuthorizationAccess( suggest, request, luteceUserConnected );
         }
 
         SuggestUtils.doReportSuggestSubmit( suggestSubmit, _plugin );
 
-        ReportedMessage reportedMessage = new ReportedMessage(  );
+        ReportedMessage reportedMessage = new ReportedMessage( );
         reportedMessage.setSuggestSubmit( suggestSubmit );
         reportedMessage.setValue( strReportedValue );
 
         ReportedMessageHome.create( reportedMessage, _plugin );
 
-        if ( suggest.isEnableMailNewReportedSubmit(  ) &&
-                ( suggest.getIdMailingListSuggestSubmit(  ) != SuggestUtils.CONSTANT_ID_NULL ) )
+        if ( suggest.isEnableMailNewReportedSubmit( ) && ( suggest.getIdMailingListSuggestSubmit( ) != SuggestUtils.CONSTANT_ID_NULL ) )
         {
-            SuggestUtils.sendNotificationNewReportedMessage( suggest, reportedMessage, request.getLocale(  ), request );
+            SuggestUtils.sendNotificationNewReportedMessage( suggest, reportedMessage, request.getLocale( ), request );
         }
 
-        Map<String, Object> parameters = new HashMap<String, Object>(  );
+        Map<String, Object> parameters = new HashMap<String, Object>( );
         parameters.put( PARAMETER_ID_SUBMIT_SUGGEST, nIdSubmitSuggest );
-        parameters.put( PARAMETER_ID_SUGGEST, suggest.getIdSuggest(  ) );
+        parameters.put( PARAMETER_ID_SUGGEST, suggest.getIdSuggest( ) );
         parameters.put( PARAMETER_ACTION, CONSTANT_VIEW_SUGGEST_SUBMIT );
 
-        UrlItem urlItemPage = getNewUrlItemPage(  );
+        UrlItem urlItemPage = getNewUrlItemPage( );
         urlItemPage.setAnchor( ANCHOR_SUGGEST_SUBMIT + nIdSubmitSuggest );
 
-        SiteMessageService.setMessage( request, MESSAGE_NEW_REPORTED_SUBMIT, null, null, urlItemPage.getUrl(  ), null,
-            SiteMessage.TYPE_INFO, parameters );
+        SiteMessageService.setMessage( request, MESSAGE_NEW_REPORTED_SUBMIT, null, null, urlItemPage.getUrl( ), null, SiteMessage.TYPE_INFO, parameters );
     }
 
     /**
      * Perform Action Vote
-     * @param request the {@link HttpServletRequest}
-     * @param nMode the mode
-     * @param page {@link XPage}
-     * @throws UserNotSignedException {@link UserNotSignedException}
-     * @throws SiteMessageException {@link SiteMessageException}
+     * 
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @param nMode
+     *            the mode
+     * @param page
+     *            {@link XPage}
+     * @throws UserNotSignedException
+     *             {@link UserNotSignedException}
+     * @throws SiteMessageException
+     *             {@link SiteMessageException}
      */
-    public void doVote( XPage page, int nMode, HttpServletRequest request )
-        throws UserNotSignedException, SiteMessageException
+    public void doVote( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
         String strVote = request.getParameter( PARAMETER_VOTE_SUGGEST );
         String strIdSubmitSuggest = request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST );
         int nIdSubmitSuggest = SuggestUtils.getIntegerParameter( strIdSubmitSuggest );
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSubmitSuggest, true, _plugin );
-        Suggest suggest = SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest(  ).getIdSuggest(  ), _plugin );
+        Suggest suggest = SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), _plugin );
         suggestSubmit.setSuggest( suggest );
 
         LuteceUser luteceUserConnected = null;
 
-        if ( suggest.isLimitNumberVote(  ) )
+        if ( suggest.isLimitNumberVote( ) )
         {
-            if ( suggest.isActiveVoteAuthentification(  ) && SecurityService.isAuthenticationEnable(  ) )
+            if ( suggest.isActiveVoteAuthentification( ) && SecurityService.isAuthenticationEnable( ) )
             {
-                luteceUserConnected = SecurityService.getInstance(  ).getRemoteUser( request );
+                luteceUserConnected = SecurityService.getInstance( ).getRemoteUser( request );
 
                 if ( luteceUserConnected == null )
                 {
-                    throw new UserNotSignedException(  );
+                    throw new UserNotSignedException( );
                 }
-                else if ( ( suggest.getRole(  ) != null ) &&
-                        !SecurityService.getInstance(  ).isUserInRole( request, suggest.getRole(  ) ) )
-                {
-                    SiteMessageService.setMessage( request, MESSAGE_ACCESS_DENIED, SiteMessage.TYPE_STOP );
-                }
+                else
+                    if ( ( suggest.getRole( ) != null ) && !SecurityService.getInstance( ).isUserInRole( request, suggest.getRole( ) ) )
+                    {
+                        SiteMessageService.setMessage( request, MESSAGE_ACCESS_DENIED, SiteMessage.TYPE_STOP );
+                    }
 
-                if ( VoteHome.getUserNumberVoteOnSuggestSubmit( nIdSubmitSuggest, luteceUserConnected.getName(  ), _plugin ) == 0 )
+                if ( VoteHome.getUserNumberVoteOnSuggestSubmit( nIdSubmitSuggest, luteceUserConnected.getName( ), _plugin ) == 0 )
                 {
-                    doVote( strVote, nIdSubmitSuggest, _plugin, luteceUserConnected.getName(  ) );
+                    doVote( strVote, nIdSubmitSuggest, _plugin, luteceUserConnected.getName( ) );
                 }
             }
-            else if ( request.getSession(  ).getAttribute( EMPTY_STRING + nIdSubmitSuggest ) == null )
-            {
-                doVote( strVote, nIdSubmitSuggest, _plugin, null );
-                request.getSession(  ).setAttribute( EMPTY_STRING + nIdSubmitSuggest, PARAMETER_VOTED );
-            }
+            else
+                if ( request.getSession( ).getAttribute( EMPTY_STRING + nIdSubmitSuggest ) == null )
+                {
+                    doVote( strVote, nIdSubmitSuggest, _plugin, null );
+                    request.getSession( ).setAttribute( EMPTY_STRING + nIdSubmitSuggest, PARAMETER_VOTED );
+                }
         }
         else
         {
@@ -1145,93 +1187,101 @@ public class SuggestApp implements XPageApplication
             nScore = Integer.parseInt( strVote );
             SuggestUtils.doVoteSuggestSubmit( nIdSubmitSuggest, nScore, strUserKey, plugin );
         }
-        else if ( ( strVote != null ) && strVote.equals( "-1" ) )
-        {
-            nScore = Integer.parseInt( strVote );
-            SuggestUtils.doVoteSuggestSubmit( nIdSubmitSuggest, nScore, strUserKey, plugin );
-        }
-        else if ( ( strVote != null ) && strVote.equals( "1" ) )
-        {
-            nScore = Integer.parseInt( strVote );
-            SuggestUtils.doVoteSuggestSubmit( nIdSubmitSuggest, nScore, strUserKey, plugin );
-        }
-        else if ( ( strVote != null ) && strVote.equals( "2" ) )
-        {
-            nScore = Integer.parseInt( strVote );
-            SuggestUtils.doVoteSuggestSubmit( nIdSubmitSuggest, nScore, strUserKey, plugin );
-        }
+        else
+            if ( ( strVote != null ) && strVote.equals( "-1" ) )
+            {
+                nScore = Integer.parseInt( strVote );
+                SuggestUtils.doVoteSuggestSubmit( nIdSubmitSuggest, nScore, strUserKey, plugin );
+            }
+            else
+                if ( ( strVote != null ) && strVote.equals( "1" ) )
+                {
+                    nScore = Integer.parseInt( strVote );
+                    SuggestUtils.doVoteSuggestSubmit( nIdSubmitSuggest, nScore, strUserKey, plugin );
+                }
+                else
+                    if ( ( strVote != null ) && strVote.equals( "2" ) )
+                    {
+                        nScore = Integer.parseInt( strVote );
+                        SuggestUtils.doVoteSuggestSubmit( nIdSubmitSuggest, nScore, strUserKey, plugin );
+                    }
     }
 
     /**
      * return the html list of suggest submit
-     * @param locale the locale
-     * @param plugin the plugin
-     * @param suggest the suggest
-     * @param searchFields the searchFields
-     * @param urlSuggestXPage the url of the Xpage
-     * @param luteceUserConnected the lutece UserConnected
+     * 
+     * @param locale
+     *            the locale
+     * @param plugin
+     *            the plugin
+     * @param suggest
+     *            the suggest
+     * @param searchFields
+     *            the searchFields
+     * @param urlSuggestXPage
+     *            the url of the Xpage
+     * @param luteceUserConnected
+     *            the lutece UserConnected
      * @return the html list of suggest submit
-     * @throws SiteMessageException SiteMessageException
-     *             {@link SiteMessageException}
+     * @throws SiteMessageException
+     *             SiteMessageException {@link SiteMessageException}
      */
-    private String getHtmlListSuggestSubmit( Locale locale, Plugin plugin, Suggest suggest, SearchFields searchFields,
-        UrlItem urlSuggestXPage, LuteceUser luteceUserConnected )
-        throws SiteMessageException
+    private String getHtmlListSuggestSubmit( Locale locale, Plugin plugin, Suggest suggest, SearchFields searchFields, UrlItem urlSuggestXPage,
+            LuteceUser luteceUserConnected ) throws SiteMessageException
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
 
         List<Integer> listIdSuggestSubmit;
 
-        SubmitFilter submitFilter = new SubmitFilter(  );
+        SubmitFilter submitFilter = new SubmitFilter( );
 
         // Filter the list
-        SuggestUtils.initSubmitFilterByPeriod( submitFilter, searchFields.getIdFilterPeriod(  ) );
-        SuggestUtils.initSubmitFilterBySort( submitFilter,
-            ( searchFields.getIdSuggestSubmitSort(  ) != SuggestUtils.CONSTANT_ID_NULL )
-            ? searchFields.getIdSuggestSubmitSort(  ) : suggest.getIdDefaultSort(  ) );
-        //add sort by pinned first
+        SuggestUtils.initSubmitFilterByPeriod( submitFilter, searchFields.getIdFilterPeriod( ) );
+        SuggestUtils.initSubmitFilterBySort(
+                submitFilter,
+                ( searchFields.getIdSuggestSubmitSort( ) != SuggestUtils.CONSTANT_ID_NULL ) ? searchFields.getIdSuggestSubmitSort( ) : suggest
+                        .getIdDefaultSort( ) );
+        // add sort by pinned first
         SuggestUtils.initSubmitFilterBySort( submitFilter, SubmitFilter.SORT_BY_PINNED_FIRST );
 
-        submitFilter.setIdSuggest( suggest.getIdSuggest(  ) );
+        submitFilter.setIdSuggest( suggest.getIdSuggest( ) );
 
         submitFilter.setIdSuggestSubmitState( _nIdSuggestSubmitStatePublish );
-        submitFilter.setIdCategory( searchFields.getIdFilterCategory(  ) );
-        submitFilter.setIdType( searchFields.getIdFilterSuggestSubmitType(  ) );
-        submitFilter.setLuteceUserKey(searchFields.getLuteceUserName());
-        
-        listIdSuggestSubmit = SuggestSearchService.getInstance(  )
-                                                .getSearchResults( searchFields.getQuery(  ), submitFilter, plugin );
+        submitFilter.setIdCategory( searchFields.getIdFilterCategory( ) );
+        submitFilter.setIdType( searchFields.getIdFilterSuggestSubmitType( ) );
+        submitFilter.setLuteceUserKey( searchFields.getLuteceUserName( ) );
 
-        if ( suggest.isActiveSuggestSubmitPaginator(  ) && ( suggest.getNumberSuggestSubmitPerPage(  ) > 0 ) )
+        listIdSuggestSubmit = SuggestSearchService.getInstance( ).getSearchResults( searchFields.getQuery( ), submitFilter, plugin );
+
+        if ( suggest.isActiveSuggestSubmitPaginator( ) && ( suggest.getNumberSuggestSubmitPerPage( ) > 0 ) )
         {
-            Paginator<Integer> paginator = new Paginator<Integer>( listIdSuggestSubmit,
-                    suggest.getNumberSuggestSubmitPerPage(  ), urlSuggestXPage.getUrl(  ), PARAMETER_FILTER_PAGE_INDEX,
-                    searchFields.getPageIndex(  ) );
-            listIdSuggestSubmit = paginator.getPageItems(  );
+            Paginator<Integer> paginator = new Paginator<Integer>( listIdSuggestSubmit, suggest.getNumberSuggestSubmitPerPage( ), urlSuggestXPage.getUrl( ),
+                    PARAMETER_FILTER_PAGE_INDEX, searchFields.getPageIndex( ) );
+            listIdSuggestSubmit = paginator.getPageItems( );
             model.put( MARK_PAGINATOR, paginator );
         }
 
         model.put( MARK_SUGGEST, suggest );
         model.put( MARK_LIST_SUGGEST_SUBMIT, getSuggestSubmitDisplayList( listIdSuggestSubmit, suggest, locale, plugin ) );
 
-        model.put( MARK_AUTHORIZED_COMMENT, suggest.isAuthorizedComment(  ) );
-        model.put( MARK_AUTHORIZED_VOTE, !suggest.isDisableVote(  ) );
-        model.put( MARK_DISPLAY_COMMENT_IN_LIST, suggest.isDisplayCommentInSuggestSubmitList(  ) );
-        model.put( MARK_ENABLE_SUGGEST_REPORTS, suggest.isEnableReports(  ) );
-        model.put( MARK_ID_SUGGEST, suggest.getIdSuggest(  ) );
+        model.put( MARK_AUTHORIZED_COMMENT, suggest.isAuthorizedComment( ) );
+        model.put( MARK_AUTHORIZED_VOTE, !suggest.isDisableVote( ) );
+        model.put( MARK_DISPLAY_COMMENT_IN_LIST, suggest.isDisplayCommentInSuggestSubmitList( ) );
+        model.put( MARK_ENABLE_SUGGEST_REPORTS, suggest.isEnableReports( ) );
+        model.put( MARK_ID_SUGGEST, suggest.getIdSuggest( ) );
 
-        if ( suggest.isAuthorizedComment(  ) )
+        if ( suggest.isAuthorizedComment( ) )
         {
-            model.put( MARK_MAX_AMOUNT_COMMENTS, suggest.getNumberCommentDisplayInSuggestSubmitList(  ) );
-            model.put( MARK_MAX_AMOUNT_COMMENTS_CHAR, suggest.getNumberCharCommentDisplayInSuggestSubmitList(  ) );
+            model.put( MARK_MAX_AMOUNT_COMMENTS, suggest.getNumberCommentDisplayInSuggestSubmitList( ) );
+            model.put( MARK_MAX_AMOUNT_COMMENTS_CHAR, suggest.getNumberCharCommentDisplayInSuggestSubmitList( ) );
         }
 
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
-        model.put( MARK_IS_EXTEND_INSTALLED, PortalService.isExtendActivated(  ) );
+        model.put( MARK_IS_EXTEND_INSTALLED, PortalService.isExtendActivated( ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_LIST_SUBMIT_SUGGEST, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -1253,27 +1303,26 @@ public class SuggestApp implements XPageApplication
      *             SiteMessageException
      * @return the html list of suggest
      */
-    private String getHtmlListSuggest( Locale locale, Plugin plugin, String strCurrentPageIndexSuggest,
-        int nItemsPerPageSuggest, UrlItem urlSuggestXPage, LuteceUser luteceUserConnected )
-        throws SiteMessageException
+    private String getHtmlListSuggest( Locale locale, Plugin plugin, String strCurrentPageIndexSuggest, int nItemsPerPageSuggest, UrlItem urlSuggestXPage,
+            LuteceUser luteceUserConnected ) throws SiteMessageException
     {
-        SuggestFilter filter = new SuggestFilter(  );
+        SuggestFilter filter = new SuggestFilter( );
         filter.setIdState( Suggest.STATE_ENABLE );
 
         List<Suggest> listSuggest = SuggestHome.getSuggestList( filter, plugin );
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
-        Paginator<Suggest> paginator = new Paginator<Suggest>( listSuggest, nItemsPerPageSuggest, urlSuggestXPage.getUrl(  ),
-                PARAMETER_PAGE_INDEX, strCurrentPageIndexSuggest );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
+        Paginator<Suggest> paginator = new Paginator<Suggest>( listSuggest, nItemsPerPageSuggest, urlSuggestXPage.getUrl( ), PARAMETER_PAGE_INDEX,
+                strCurrentPageIndexSuggest );
 
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + nItemsPerPageSuggest );
 
-        model.put( MARK_SUGGEST_LIST, paginator.getPageItems(  ) );
+        model.put( MARK_SUGGEST_LIST, paginator.getPageItems( ) );
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
 
         HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_XPAGE_LIST_SUGGEST, locale, model );
 
-        return templateList.getHtml(  );
+        return templateList.getHtml( );
     }
 
     /**
@@ -1291,37 +1340,35 @@ public class SuggestApp implements XPageApplication
      *             SiteMessageException
      * @return a collection which contains suggest submit and lutece user associate
      */
-    private Collection<HashMap> getSuggestSubmitDisplayList( Collection<Integer> listSuggestSubmit, Suggest suggest, Locale locale,
-        Plugin plugin ) throws SiteMessageException
+    private Collection<HashMap> getSuggestSubmitDisplayList( Collection<Integer> listSuggestSubmit, Suggest suggest, Locale locale, Plugin plugin )
+            throws SiteMessageException
     {
         SuggestUserInfo luteceUserInfo;
         SuggestSubmit suggestSubmit;
-        Collection<HashMap> listHashSuggest = new ArrayList<HashMap>(  );
+        Collection<HashMap> listHashSuggest = new ArrayList<HashMap>( );
 
         for ( Integer idSuggestSubmit : listSuggestSubmit )
         {
-            HashMap<String, Object> modelSuggest = new HashMap<String, Object>(  );
+            HashMap<String, Object> modelSuggest = new HashMap<String, Object>( );
 
             luteceUserInfo = null;
             suggestSubmit = _suggestSubmitService.findByPrimaryKey( idSuggestSubmit,
-                    ( suggest.isAuthorizedComment(  ) && suggest.isDisplayCommentInSuggestSubmitList(  ) ),
-                    suggest.getNumberCommentDisplayInSuggestSubmitList(  ), plugin );
+                    ( suggest.isAuthorizedComment( ) && suggest.isDisplayCommentInSuggestSubmitList( ) ),
+                    suggest.getNumberCommentDisplayInSuggestSubmitList( ), plugin );
             modelSuggest.put( MARK_SUGGEST_SUBMIT, suggestSubmit );
 
-            if ( SecurityService.isAuthenticationEnable(  ) && ( suggestSubmit.getLuteceUserKey(  ) != null ) )
+            if ( SecurityService.isAuthenticationEnable( ) && ( suggestSubmit.getLuteceUserKey( ) != null ) )
             {
-                luteceUserInfo = SuggestUserInfoService.getService(  )
-                                                    .findSuggestUserInfoByKey( suggestSubmit.getLuteceUserKey(  ), plugin );
+                luteceUserInfo = SuggestUserInfoService.getService( ).findSuggestUserInfoByKey( suggestSubmit.getLuteceUserKey( ), plugin );
             }
 
             modelSuggest.put( MARK_LUTECE_USER, luteceUserInfo );
-            SuggestUtils.addAvatarToModel(modelSuggest, luteceUserInfo);
-            
-            
-            if ( !suggest.isDisableVote(  ) )
+            SuggestUtils.addAvatarToModel( modelSuggest, luteceUserInfo );
+
+            if ( !suggest.isDisableVote( ) )
             {
                 modelSuggest.put( MARK_SUGGEST_SUBMIT_VOTE_TYPE,
-                    getHtmlSuggestSubmitVoteType( suggest, suggestSubmit, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT, locale ) );
+                        getHtmlSuggestSubmitVoteType( suggest, suggestSubmit, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT, locale ) );
             }
 
             listHashSuggest.add( modelSuggest );
@@ -1339,30 +1386,29 @@ public class SuggestApp implements XPageApplication
      */
     private Collection<HashMap> getCommentSubmitDisplayList( Collection<CommentSubmit> listCommentSubmit, Plugin plugin )
     {
-        Collection<HashMap> listHashComment = new ArrayList<HashMap>(  );
+        Collection<HashMap> listHashComment = new ArrayList<HashMap>( );
         SuggestUserInfo luteceUserInfo;
 
         for ( CommentSubmit commentSubmit : listCommentSubmit )
         {
-            HashMap<String, Object> modelComment = new HashMap<String, Object>(  );
+            HashMap<String, Object> modelComment = new HashMap<String, Object>( );
 
             luteceUserInfo = null;
 
             modelComment.put( MARK_COMMENT_SUBMIT, commentSubmit );
 
-            if ( SecurityService.isAuthenticationEnable(  ) && ( commentSubmit.getLuteceUserKey(  ) != null ) )
+            if ( SecurityService.isAuthenticationEnable( ) && ( commentSubmit.getLuteceUserKey( ) != null ) )
             {
-                luteceUserInfo = SuggestUserInfoService.getService(  )
-                                                    .findSuggestUserInfoByKey( commentSubmit.getLuteceUserKey(  ), plugin );
+                luteceUserInfo = SuggestUserInfoService.getService( ).findSuggestUserInfoByKey( commentSubmit.getLuteceUserKey( ), plugin );
             }
 
             modelComment.put( MARK_LUTECE_USER, luteceUserInfo );
-            SuggestUtils.addAvatarToModel(modelComment, luteceUserInfo);
-            
-            
-            modelComment.put( MARK_LIST_SUB_COMMENT_SUBMIT_SUGGEST,
-                ( ( commentSubmit.getComments(  ) != null ) && !commentSubmit.getComments(  ).isEmpty(  ) )
-                ? getCommentSubmitDisplayList( commentSubmit.getComments(  ), plugin ) : null );
+            SuggestUtils.addAvatarToModel( modelComment, luteceUserInfo );
+
+            modelComment.put(
+                    MARK_LIST_SUB_COMMENT_SUBMIT_SUGGEST,
+                    ( ( commentSubmit.getComments( ) != null ) && !commentSubmit.getComments( ).isEmpty( ) ) ? getCommentSubmitDisplayList(
+                            commentSubmit.getComments( ), plugin ) : null );
 
             listHashComment.add( modelComment );
         }
@@ -1389,14 +1435,13 @@ public class SuggestApp implements XPageApplication
      * @throws SiteMessageException
      *             SiteMessageException
      */
-    private String getHtmlSuggestSubmitDetail( HttpServletRequest request, int nMode, Plugin plugin,
-        SuggestSubmit suggestSubmit, LuteceUser luteceUserConnected )
-        throws SiteMessageException
+    private String getHtmlSuggestSubmitDetail( HttpServletRequest request, int nMode, Plugin plugin, SuggestSubmit suggestSubmit, LuteceUser luteceUserConnected )
+            throws SiteMessageException
     {
         SuggestUserInfo luteceUserInfo = null;
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
 
-        if ( ( suggestSubmit == null ) || ( suggestSubmit.getSuggestSubmitState(  ).getNumber(  ) == SuggestSubmit.STATE_DISABLE ) )
+        if ( ( suggestSubmit == null ) || ( suggestSubmit.getSuggestSubmitState( ).getNumber( ) == SuggestSubmit.STATE_DISABLE ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
 
@@ -1404,60 +1449,52 @@ public class SuggestApp implements XPageApplication
         }
 
         // update number view
-        suggestSubmit.setNumberView( suggestSubmit.getNumberView(  ) + 1 );
+        suggestSubmit.setNumberView( suggestSubmit.getNumberView( ) + 1 );
         _suggestSubmitService.update( suggestSubmit, false, plugin );
 
-        if ( SecurityService.isAuthenticationEnable(  ) && ( suggestSubmit.getLuteceUserKey(  ) != null ) )
+        if ( SecurityService.isAuthenticationEnable( ) && ( suggestSubmit.getLuteceUserKey( ) != null ) )
         {
-            luteceUserInfo = SuggestUserInfoService.getService(  )
-                                                .findSuggestUserInfoByKey( suggestSubmit.getLuteceUserKey(  ), plugin );
+            luteceUserInfo = SuggestUserInfoService.getService( ).findSuggestUserInfoByKey( suggestSubmit.getLuteceUserKey( ), plugin );
         }
 
         if ( luteceUserConnected != null )
         {
             model.put( MARK_USER_SUBSCRIBED,
-                SuggestSubscriptionProviderService.getService(  )
-                                                   .hasUserSubscribedToSuggestSubmit( luteceUserConnected,
-                    suggestSubmit.getIdSuggestSubmit(  ) ) );
+                    SuggestSubscriptionProviderService.getService( )
+                            .hasUserSubscribedToSuggestSubmit( luteceUserConnected, suggestSubmit.getIdSuggestSubmit( ) ) );
         }
-        
 
-        model.put( MARK_ID_SUGGEST, suggestSubmit.getSuggest(  ).getIdSuggest(  ) );
+        model.put( MARK_ID_SUGGEST, suggestSubmit.getSuggest( ).getIdSuggest( ) );
         model.put( MARK_SUGGEST_SUBMIT, suggestSubmit );
         model.put( MARK_LUTECE_USER, luteceUserInfo );
-        SuggestUtils.addAvatarToModel(model, luteceUserInfo);
-        
+        SuggestUtils.addAvatarToModel( model, luteceUserInfo );
+
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
         model.put( MARK_SUGGEST_SUBMIT_VOTE_TYPE,
-            getHtmlSuggestSubmitVoteType( suggestSubmit.getSuggest(  ), suggestSubmit, CONSTANT_VIEW_SUGGEST_SUBMIT,
-                request.getLocale(  ) ) );
-        
-       
-        
-        
-        model.put( MARK_AUTHORIZED_COMMENT, suggestSubmit.getSuggest(  ).isAuthorizedComment(  ) );
-        model.put( MARK_AUTHORIZED_VOTE, !suggestSubmit.getSuggest(  ).isDisableVote(  ) );
-        model.put( MARK_ENABLE_SUGGEST_REPORTS, suggestSubmit.getSuggest(  ).isEnableReports(  ) );
-        model.put( MARK_IS_EXTEND_INSTALLED, PortalService.isExtendActivated(  ) );
+                getHtmlSuggestSubmitVoteType( suggestSubmit.getSuggest( ), suggestSubmit, CONSTANT_VIEW_SUGGEST_SUBMIT, request.getLocale( ) ) );
 
-        if ( suggestSubmit.getSuggest(  ).isAuthorizedComment(  ) && !suggestSubmit.isDisableComment(  ) )
+        model.put( MARK_AUTHORIZED_COMMENT, suggestSubmit.getSuggest( ).isAuthorizedComment( ) );
+        model.put( MARK_AUTHORIZED_VOTE, !suggestSubmit.getSuggest( ).isDisableVote( ) );
+        model.put( MARK_ENABLE_SUGGEST_REPORTS, suggestSubmit.getSuggest( ).isEnableReports( ) );
+        model.put( MARK_IS_EXTEND_INSTALLED, PortalService.isExtendActivated( ) );
+
+        if ( suggestSubmit.getSuggest( ).isAuthorizedComment( ) && !suggestSubmit.isDisableComment( ) )
         {
-            model.put( MARK_LIST_COMMENT_SUBMIT_SUGGEST,
-                getHtmlCommentSubmitList( request, suggestSubmit.getComments(  ), suggestSubmit.getSuggest(  ),
-                    suggestSubmit.getIdSuggestSubmit(  ), luteceUserConnected, plugin ) );
+            model.put(
+                    MARK_LIST_COMMENT_SUBMIT_SUGGEST,
+                    getHtmlCommentSubmitList( request, suggestSubmit.getComments( ), suggestSubmit.getSuggest( ), suggestSubmit.getIdSuggestSubmit( ),
+                            luteceUserConnected, plugin ) );
         }
-        CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService(  );
+        CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService( );
 
-        if ( suggestSubmit.getSuggest(  ).isActiveCaptcha(  ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
+        if ( suggestSubmit.getSuggest( ).isActiveCaptcha( ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
         {
-            model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode(  ) );
+            model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode( ) );
         }
 
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_DETAIL_SUBMIT_SUGGEST, request.getLocale( ), model );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_DETAIL_SUBMIT_SUGGEST,
-                request.getLocale(  ), model );
-
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -1469,29 +1506,29 @@ public class SuggestApp implements XPageApplication
      *            the suggest
      * @param nIdSuggestSubmit
      *            the id of the suggestSubmit
-     * @param strView the view which is display the vote type
+     * @param strView
+     *            the view which is display the vote type
      * @param locale
      *            the locale
      * @return the Html type of vote
      * @throws SiteMessageException
      *             SiteMessageException
      */
-    private String getHtmlSuggestSubmitVoteType( Suggest suggest, SuggestSubmit suggestSubmit, String strView, Locale locale )
-        throws SiteMessageException
+    private String getHtmlSuggestSubmitVoteType( Suggest suggest, SuggestSubmit suggestSubmit, String strView, Locale locale ) throws SiteMessageException
     {
-        if ( !suggest.isDisableVote(  ) && !suggestSubmit.isDisableVote(  ) )
+        if ( !suggest.isDisableVote( ) && !suggestSubmit.isDisableVote( ) )
         {
-            VoteType voteType = VoteTypeHome.findByPrimaryKey( suggest.getVoteType(  ).getIdVoteType(  ), _plugin );
+            VoteType voteType = VoteTypeHome.findByPrimaryKey( suggest.getVoteType( ).getIdVoteType( ), _plugin );
 
-            String strFilePath = PATH_TYPE_VOTE_FOLDER + voteType.getTemplateFileName(  );
-            HashMap<String, Object> model = new HashMap<String, Object>(  );
-            model.put( MARK_ID_SUGGEST, suggest.getIdSuggest(  ) );
-            model.put( MARK_ID_SUGGEST_SUBMIT, suggestSubmit.getIdSuggestSubmit(  ) );
+            String strFilePath = PATH_TYPE_VOTE_FOLDER + voteType.getTemplateFileName( );
+            HashMap<String, Object> model = new HashMap<String, Object>( );
+            model.put( MARK_ID_SUGGEST, suggest.getIdSuggest( ) );
+            model.put( MARK_ID_SUGGEST_SUBMIT, suggestSubmit.getIdSuggestSubmit( ) );
             model.put( MARK_VIEW, strView );
 
             HtmlTemplate template = AppTemplateService.getTemplate( strFilePath, locale, model );
 
-            return template.getHtml(  );
+            return template.getHtml( );
         }
 
         return null;
@@ -1513,25 +1550,23 @@ public class SuggestApp implements XPageApplication
      * @throws SiteMessageException
      *             SiteMessageException
      */
-    private String getHtmlReported( HttpServletRequest request, int nMode, Plugin plugin, SuggestSubmit suggestSubmit )
-        throws SiteMessageException
+    private String getHtmlReported( HttpServletRequest request, int nMode, Plugin plugin, SuggestSubmit suggestSubmit ) throws SiteMessageException
     {
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
 
-        if ( ( suggestSubmit == null ) || ( suggestSubmit.getSuggestSubmitState(  ).getNumber(  ) == SuggestSubmit.STATE_DISABLE ) )
+        if ( ( suggestSubmit == null ) || ( suggestSubmit.getSuggestSubmitState( ).getNumber( ) == SuggestSubmit.STATE_DISABLE ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
 
             return null;
         }
 
-        model.put( MARK_ID_SUGGEST, suggestSubmit.getSuggest(  ).getIdSuggest(  ) );
+        model.put( MARK_ID_SUGGEST, suggestSubmit.getSuggest( ).getIdSuggest( ) );
         model.put( MARK_SUGGEST_SUBMIT, suggestSubmit );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_SUGGEST_REPORTED, request.getLocale(  ),
-                model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_SUGGEST_REPORTED, request.getLocale( ), model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -1551,24 +1586,23 @@ public class SuggestApp implements XPageApplication
      *            lutece user connected
      * @return the html list of comment submit for a suggest submit
      */
-    private String getHtmlCommentSubmitList( HttpServletRequest request, List<CommentSubmit> listCommentSubmit,
-        Suggest suggest, int nIdSubmitSuggest, LuteceUser luteceUserConnected, Plugin plugin )
+    private String getHtmlCommentSubmitList( HttpServletRequest request, List<CommentSubmit> listCommentSubmit, Suggest suggest, int nIdSubmitSuggest,
+            LuteceUser luteceUserConnected, Plugin plugin )
     {
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
 
         model.put( MARK_SUGGEST, suggest );
-        model.put( MARK_ID_SUGGEST, suggest.getIdSuggest(  ) );
+        model.put( MARK_ID_SUGGEST, suggest.getIdSuggest( ) );
         model.put( MARK_ID_SUGGEST_SUBMIT, nIdSubmitSuggest );
         model.put( MARK_SUGGEST_COMMENT, CONSTANTE_PARAMETER_TRUE_VALUE );
         model.put( MARK_LIST_COMMENT_SUBMIT_SUGGEST, getCommentSubmitDisplayList( listCommentSubmit, plugin ) );
-        model.put( MARK_DISABLE_NEW_COMMENT_SUBMIT, suggest.isDisableNewComment(  ) );
-        model.put( MARK_ACTIVE_EDITOR_BBCODE, suggest.isActiveEditorBbcode(  ) );
+        model.put( MARK_DISABLE_NEW_COMMENT_SUBMIT, suggest.isDisableNewComment( ) );
+        model.put( MARK_ACTIVE_EDITOR_BBCODE, suggest.isActiveEditorBbcode( ) );
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_COMMENT_SUBMIT_SUGGEST,
-                request.getLocale(  ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_COMMENT_SUBMIT_SUGGEST, request.getLocale( ), model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -1582,23 +1616,22 @@ public class SuggestApp implements XPageApplication
      *            The Plugin
      * @param suggest
      *            the suggest
-     * @param nIdDefaultCategory the id of the default category
+     * @param nIdDefaultCategory
+     *            the id of the default category
      * @return the html form
      * @throws SiteMessageException
      *             SiteMessageException
      */
-    private String getHtmlForm( HttpServletRequest request, int nMode, Plugin plugin, Suggest suggest, int nIdDefaultCategory )
-        throws SiteMessageException
+    private String getHtmlForm( HttpServletRequest request, int nMode, Plugin plugin, Suggest suggest, int nIdDefaultCategory ) throws SiteMessageException
     {
-        Map<String, Object> model = SuggestUtils.getModelHtmlForm( suggest, plugin, request.getLocale(  ),
-                nIdDefaultCategory, false );
+        Map<String, Object> model = SuggestUtils.getModelHtmlForm( suggest, plugin, request.getLocale( ), nIdDefaultCategory, false );
 
         // get form Recap
-        model.put( MARK_DISABLE_NEW_SUGGEST_SUBMIT, suggest.isDisableNewSuggestSubmit(  ) );
+        model.put( MARK_DISABLE_NEW_SUGGEST_SUBMIT, suggest.isDisableNewSuggestSubmit( ) );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FORM_SUGGEST, request.getLocale(  ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FORM_SUGGEST, request.getLocale( ), model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -1622,16 +1655,15 @@ public class SuggestApp implements XPageApplication
      * @throws SiteMessageException
      *             SiteMessageException
      */
-    private SuggestSubmit doInsertSuggestSubmit( HttpServletRequest request, int nMode, Plugin plugin, Suggest suggest,
-        int nIdCategory, int nIdType, LuteceUser user )
-        throws SiteMessageException
+    private SuggestSubmit doInsertSuggestSubmit( HttpServletRequest request, int nMode, Plugin plugin, Suggest suggest, int nIdCategory, int nIdType,
+            LuteceUser user ) throws SiteMessageException
     {
-        Locale locale = request.getLocale(  );
-        List<Response> listResponse = new ArrayList<Response>(  );
+        Locale locale = request.getLocale( );
+        List<Response> listResponse = new ArrayList<Response>( );
 
-        if ( suggest.isActiveCaptcha(  ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
+        if ( suggest.isActiveCaptcha( ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
         {
-            CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService(  );
+            CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService( );
 
             if ( !captchaSecurityService.validate( request ) )
             {
@@ -1639,7 +1671,7 @@ public class SuggestApp implements XPageApplication
             }
         }
 
-        SuggestSubmit suggestSubmit = new SuggestSubmit(  );
+        SuggestSubmit suggestSubmit = new SuggestSubmit( );
         suggestSubmit.setSuggest( suggest );
         suggestSubmit.setResponses( listResponse );
 
@@ -1647,15 +1679,18 @@ public class SuggestApp implements XPageApplication
 
         if ( formError != null )
         {
-            if ( formError.isMandatoryError(  ) )
+            if ( formError.isMandatoryError( ) )
             {
-                Object[] tabRequiredFields = { formError.getTitleQuestion(  ) };
-                SiteMessageService.setMessage( request, MESSAGE_MANDATORY_QUESTION, tabRequiredFields,
-                    SiteMessage.TYPE_STOP );
+                Object [ ] tabRequiredFields = {
+                    formError.getTitleQuestion( )
+                };
+                SiteMessageService.setMessage( request, MESSAGE_MANDATORY_QUESTION, tabRequiredFields, SiteMessage.TYPE_STOP );
             }
             else
             {
-                Object[] tabFormError = { formError.getTitleQuestion(  ), formError.getErrorMessage(  ) };
+                Object [ ] tabFormError = {
+                        formError.getTitleQuestion( ), formError.getErrorMessage( )
+                };
                 SiteMessageService.setMessage( request, MESSAGE_FORM_ERROR, tabFormError, SiteMessage.TYPE_STOP );
             }
         }
@@ -1675,23 +1710,23 @@ public class SuggestApp implements XPageApplication
 
         if ( user != null )
         {
-            suggestSubmit.setLuteceUserKey( user.getName(  ) );
-            //insert SuggestSubmitInfi=ormation if not exists
-            SuggestUserInfoService.getService(  ).updateSuggestUserInfoByLuteceUser( user, plugin );
+            suggestSubmit.setLuteceUserKey( user.getName( ) );
+            // insert SuggestSubmitInfi=ormation if not exists
+            SuggestUserInfoService.getService( ).updateSuggestUserInfoByLuteceUser( user, plugin );
         }
 
         try
         {
             _suggestSubmitService.create( suggestSubmit, plugin, locale );
         }
-        catch ( Exception ex )
+        catch( Exception ex )
         {
             // something very wrong happened... a database check might be needed
-            AppLogService.error( ex.getMessage(  ) + " for SuggestSubmit " + suggestSubmit.getIdSuggestSubmit(  ), ex );
+            AppLogService.error( ex.getMessage( ) + " for SuggestSubmit " + suggestSubmit.getIdSuggestSubmit( ), ex );
             // revert
             // we clear the DB form the given formsubmit (FormSubmitHome also
             // removes the reponses)
-            _suggestSubmitService.remove( suggestSubmit.getIdSuggestSubmit(  ), plugin );
+            _suggestSubmitService.remove( suggestSubmit.getIdSuggestSubmit( ), plugin );
             // throw a message to the user
             SiteMessageService.setMessage( request, MESSAGE_MESSAGE_SUBMIT_SAVE_ERROR, SiteMessage.TYPE_ERROR );
         }
@@ -1719,30 +1754,29 @@ public class SuggestApp implements XPageApplication
      * @throws SiteMessageException
      *             SiteMessageException
      */
-    public CommentSubmit doInsertComment( HttpServletRequest request, SuggestSubmit suggestSubmit,
-        String strCommentValueSuggest, Plugin plugin, LuteceUser user, int nIdParentComment )
-        throws SiteMessageException
+    public CommentSubmit doInsertComment( HttpServletRequest request, SuggestSubmit suggestSubmit, String strCommentValueSuggest, Plugin plugin,
+            LuteceUser user, int nIdParentComment ) throws SiteMessageException
     {
-        CommentSubmit commentSubmit = new CommentSubmit(  );
+        CommentSubmit commentSubmit = new CommentSubmit( );
 
-        if ( ( suggestSubmit == null ) || ( suggestSubmit.getSuggestSubmitState(  ).getNumber(  ) == SuggestSubmit.STATE_DISABLE ) )
+        if ( ( suggestSubmit == null ) || ( suggestSubmit.getSuggestSubmitState( ).getNumber( ) == SuggestSubmit.STATE_DISABLE ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
 
             return null;
         }
 
-        suggestSubmit.setNumberComment( suggestSubmit.getNumberComment(  ) + 1 );
+        suggestSubmit.setNumberComment( suggestSubmit.getNumberComment( ) + 1 );
 
-        if ( !suggestSubmit.getSuggest(  ).isDisableNewComment(  ) )
+        if ( !suggestSubmit.getSuggest( ).isDisableNewComment( ) )
         {
             commentSubmit.setActive( true );
-            suggestSubmit.setNumberCommentEnable( suggestSubmit.getNumberCommentEnable(  ) + 1 );
+            suggestSubmit.setNumberCommentEnable( suggestSubmit.getNumberCommentEnable( ) + 1 );
         }
 
         _suggestSubmitService.update( suggestSubmit, plugin );
 
-        commentSubmit.setDateComment( SuggestUtils.getCurrentDate(  ) );
+        commentSubmit.setDateComment( SuggestUtils.getCurrentDate( ) );
         commentSubmit.setSuggestSubmit( suggestSubmit );
         commentSubmit.setValue( strCommentValueSuggest );
         commentSubmit.setOfficialAnswer( false );
@@ -1750,9 +1784,9 @@ public class SuggestApp implements XPageApplication
 
         if ( user != null )
         {
-            commentSubmit.setLuteceUserKey( user.getName(  ) );
-            //insert SuggestSubmitInfiormation if not exists
-            SuggestUserInfoService.getService(  ).updateSuggestUserInfoByLuteceUser( user, plugin );
+            commentSubmit.setLuteceUserKey( user.getName( ) );
+            // insert SuggestSubmitInfiormation if not exists
+            SuggestUserInfoService.getService( ).updateSuggestUserInfoByLuteceUser( user, plugin );
         }
 
         _commentSubmitService.create( commentSubmit, plugin );
@@ -1774,6 +1808,7 @@ public class SuggestApp implements XPageApplication
     /**
      *
      * method init
+     * 
      * @param request
      *            The HTTP request
      * @param plugin
@@ -1789,35 +1824,35 @@ public class SuggestApp implements XPageApplication
 
             if ( suggestSubmitStatePublish != null )
             {
-                _nIdSuggestSubmitStatePublish = suggestSubmitStatePublish.getIdSuggestSubmitState(  );
+                _nIdSuggestSubmitStatePublish = suggestSubmitStatePublish.getIdSuggestSubmitState( );
             }
         }
 
-        String strPortalUrl = AppPathService.getPortalUrl(  );
+        String strPortalUrl = AppPathService.getPortalUrl( );
 
         if ( _urlSuggestXpageHome == null )
         {
             _urlSuggestXpageHome = new UrlItem( strPortalUrl );
-            _urlSuggestXpageHome.addParameter( XPageAppService.PARAM_XPAGE_APP,
-                AppPropertiesService.getProperty( PROPERTY_PAGE_APPLICATION_ID ) );
+            _urlSuggestXpageHome.addParameter( XPageAppService.PARAM_XPAGE_APP, AppPropertiesService.getProperty( PROPERTY_PAGE_APPLICATION_ID ) );
         }
 
         if ( _nNumberShownCharacters == SuggestUtils.CONSTANT_ID_NULL )
         {
-            _nNumberShownCharacters = AppPropertiesService.getPropertyInt( PROPERTY_NUMBER_SUGGEST_SUBMIT_VALUE_SHOWN_CHARACTERS,
-                    100 );
+            _nNumberShownCharacters = AppPropertiesService.getPropertyInt( PROPERTY_NUMBER_SUGGEST_SUBMIT_VALUE_SHOWN_CHARACTERS, 100 );
         }
     }
 
     /**
      *
      * Return the searcheField contains in the request or store in session
-     * @param request {@link HttpServletRequest}
+     * 
+     * @param request
+     *            {@link HttpServletRequest}
      * @return the SearchField
      */
     private SearchFields getSearchFields( HttpServletRequest request )
     {
-        HttpSession session = request.getSession(  );
+        HttpSession session = request.getSession( );
         String strQuery = request.getParameter( PARAMETER_QUERY );
         String strIdFilterPeriod = request.getParameter( PARAMETER_ID_FILTER_PERIOD );
         String strIdSuggestSubmitSort = request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT_SORT );
@@ -1831,163 +1866,169 @@ public class SuggestApp implements XPageApplication
         int nIdFilterCategory = SuggestUtils.getIntegerParameter( strIdFilterCategory );
         int nIdFilterSuggestSubmitType = SuggestUtils.getIntegerParameter( strIdFilterSuggestSubmitType );
 
-        SearchFields searchFields = ( session.getAttribute( SESSION_SEARCH_FIELDS ) != null )
-            ? (SearchFields) session.getAttribute( SESSION_SEARCH_FIELDS ) : new SearchFields(  );
-        searchFields.setQuery( ( strQuery != null ) ? strQuery : searchFields.getQuery(  ) );
-        
-        
-        searchFields.setIdFilterPeriod( ( strIdFilterPeriod != null ) ? nIdFilterPeriod
-                                                                      : searchFields.getIdFilterPeriod(  ) );
-        searchFields.setIdSuggestSubmitSort( ( strIdSuggestSubmitSort != null ) ? nIdSuggestSubmitSort
-                                                                          : searchFields.getIdSuggestSubmitSort(  ) );
-        searchFields.setIdFilterCategory( ( strIdFilterCategory != null ) ? nIdFilterCategory
-                                                                          : searchFields.getIdFilterCategory(  ) );
-        searchFields.setIdFilterSuggestSubmitType( ( strIdFilterSuggestSubmitType != null ) ? nIdFilterSuggestSubmitType
-                                                                                      : searchFields.getIdFilterSuggestSubmitType(  ) );
-        searchFields.setPageIndex( ( strFilterPageIndex != null ) ? strFilterPageIndex : searchFields.getPageIndex(  ) );
+        SearchFields searchFields = ( session.getAttribute( SESSION_SEARCH_FIELDS ) != null ) ? (SearchFields) session.getAttribute( SESSION_SEARCH_FIELDS )
+                : new SearchFields( );
+        searchFields.setQuery( ( strQuery != null ) ? strQuery : searchFields.getQuery( ) );
 
-        searchFields.setLuteceUserName( ( strLuteceUserName != null ) ? strLuteceUserName : searchFields.getLuteceUserName(  ) );
-        
+        searchFields.setIdFilterPeriod( ( strIdFilterPeriod != null ) ? nIdFilterPeriod : searchFields.getIdFilterPeriod( ) );
+        searchFields.setIdSuggestSubmitSort( ( strIdSuggestSubmitSort != null ) ? nIdSuggestSubmitSort : searchFields.getIdSuggestSubmitSort( ) );
+        searchFields.setIdFilterCategory( ( strIdFilterCategory != null ) ? nIdFilterCategory : searchFields.getIdFilterCategory( ) );
+        searchFields.setIdFilterSuggestSubmitType( ( strIdFilterSuggestSubmitType != null ) ? nIdFilterSuggestSubmitType : searchFields
+                .getIdFilterSuggestSubmitType( ) );
+        searchFields.setPageIndex( ( strFilterPageIndex != null ) ? strFilterPageIndex : searchFields.getPageIndex( ) );
+
+        searchFields.setLuteceUserName( ( strLuteceUserName != null ) ? strLuteceUserName : searchFields.getLuteceUserName( ) );
+
         // update search Fields in session
         session.setAttribute( SESSION_SEARCH_FIELDS, searchFields );
-        
-        
 
         return searchFields;
     }
 
-
-
     /**
      * Add the suggest page frameset
+     * 
      * @param strContentSuggest
-     * @param request the {@link HttpServletRequest}
-     * @param page {@link XPage}
-     * @param suggest {@link Suggest}
-     * @param model the model
-     * @param searchFields the searchField
-     * @param luteceUserConnected the luteceUserConnected
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @param page
+     *            {@link XPage}
+     * @param suggest
+     *            {@link Suggest}
+     * @param model
+     *            the model
+     * @param searchFields
+     *            the searchField
+     * @param luteceUserConnected
+     *            the luteceUserConnected
      */
-    private void addSuggestPageFrameset( String strContentSuggest, HttpServletRequest request, XPage page, Suggest suggest,
-        Map<String, Object> model, SearchFields searchFields, LuteceUser luteceUserConnected )
+    private void addSuggestPageFrameset( String strContentSuggest, HttpServletRequest request, XPage page, Suggest suggest, Map<String, Object> model,
+            SearchFields searchFields, LuteceUser luteceUserConnected )
     {
-        page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale(  ) ) );
-        page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale(  ) ) );
+        page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale( ) ) );
+        page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale( ) ) );
 
-        if ( suggest.isActive(  ) )
+        if ( suggest.isActive( ) )
         {
-            //Filter by comment
-            if ( suggest.isAuthorizedComment(  ) && suggest.isShowTopCommentBlock(  ) )
+            // Filter by comment
+            if ( suggest.isAuthorizedComment( ) && suggest.isShowTopCommentBlock( ) )
             {
-                SubmitFilter submmitFilterTopComment = new SubmitFilter(  );
-                submmitFilterTopComment.setIdSuggest( suggest.getIdSuggest(  ) );
+                SubmitFilter submmitFilterTopComment = new SubmitFilter( );
+                submmitFilterTopComment.setIdSuggest( suggest.getIdSuggest( ) );
                 submmitFilterTopComment.setIdSuggestSubmitState( _nIdSuggestSubmitStatePublish );
-                submmitFilterTopComment.setIdCategory( searchFields.getIdFilterCategory(  ) );
+                submmitFilterTopComment.setIdCategory( searchFields.getIdFilterCategory( ) );
 
                 SuggestUtils.initSubmitFilterBySort( submmitFilterTopComment, SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC );
 
-                List<SuggestSubmit> listSuggestSubmitTopComment = _suggestSubmitService.getSuggestSubmitList( submmitFilterTopComment,
-                        _plugin, suggest.getNumberSuggestSubmitInTopComment(  ) );
+                List<SuggestSubmit> listSuggestSubmitTopComment = _suggestSubmitService.getSuggestSubmitList( submmitFilterTopComment, _plugin,
+                        suggest.getNumberSuggestSubmitInTopComment( ) );
                 model.put( MARK_LIST_SUBMIT_TOP_COMMENT, listSuggestSubmitTopComment );
             }
 
-            //Filter by popularity
-            if ( suggest.isShowTopScoreBlock(  ) )
+            // Filter by popularity
+            if ( suggest.isShowTopScoreBlock( ) )
             {
-                SubmitFilter submmitFilterTopPopularity = new SubmitFilter(  );
-                submmitFilterTopPopularity.setIdSuggest( suggest.getIdSuggest(  ) );
+                SubmitFilter submmitFilterTopPopularity = new SubmitFilter( );
+                submmitFilterTopPopularity.setIdSuggest( suggest.getIdSuggest( ) );
 
                 SuggestUtils.initSubmitFilterBySort( submmitFilterTopPopularity, SubmitFilter.SORT_BY_SCORE_DESC );
 
                 submmitFilterTopPopularity.setIdSuggestSubmitState( _nIdSuggestSubmitStatePublish );
-                submmitFilterTopPopularity.setIdCategory( searchFields.getIdFilterCategory(  ) );
+                submmitFilterTopPopularity.setIdCategory( searchFields.getIdFilterCategory( ) );
 
-                List<SuggestSubmit> listSuggestSubmitTopPopularity = _suggestSubmitService.getSuggestSubmitList( submmitFilterTopPopularity,
-                        _plugin, suggest.getNumberSuggestSubmitInTopScore(  ) );
+                List<SuggestSubmit> listSuggestSubmitTopPopularity = _suggestSubmitService.getSuggestSubmitList( submmitFilterTopPopularity, _plugin,
+                        suggest.getNumberSuggestSubmitInTopScore( ) );
                 model.put( MARK_LIST_SUBMIT_TOP_POPULARITY_SUGGEST, listSuggestSubmitTopPopularity );
             }
 
-            //category Block
-            if ( suggest.isShowCategoryBlock(  ) )
+            // category Block
+            if ( suggest.isShowCategoryBlock( ) )
             {
-                model.put( MARK_LIST_CATEGORIES_SUGGEST, suggest.getCategories(  ) );
+                model.put( MARK_LIST_CATEGORIES_SUGGEST, suggest.getCategories( ) );
             }
 
-            ReferenceList refListSuggestSort = SuggestUtils.getRefListSuggestSort( request.getLocale(  ), true );
-            ReferenceList refListFilterByPeriod = SuggestUtils.getRefListFilterByPeriod( request.getLocale(  ) );
+            ReferenceList refListSuggestSort = SuggestUtils.getRefListSuggestSort( request.getLocale( ), true );
+            ReferenceList refListFilterByPeriod = SuggestUtils.getRefListFilterByPeriod( request.getLocale( ) );
 
-            //model
-            model.put( MARK_ID_SUGGEST, suggest.getIdSuggest(  ) );
-            model.put( MARK_QUERY, searchFields.getQuery(  ) );
-            model.put( MARK_ID_SUGGEST_SUBMIT_SORT, searchFields.getIdSuggestSubmitSort(  ) );
-            model.put( MARK_ID_FILTER_PERIOD, searchFields.getIdFilterPeriod(  ) );
-            model.put( MARK_ID_FILTER_CATEGORY_SUGGEST, searchFields.getIdFilterCategory(  ) );
-            model.put( MARK_ID_FILTER_TYPE, searchFields.getIdFilterSuggestSubmitType(  ) );
+            // model
+            model.put( MARK_ID_SUGGEST, suggest.getIdSuggest( ) );
+            model.put( MARK_QUERY, searchFields.getQuery( ) );
+            model.put( MARK_ID_SUGGEST_SUBMIT_SORT, searchFields.getIdSuggestSubmitSort( ) );
+            model.put( MARK_ID_FILTER_PERIOD, searchFields.getIdFilterPeriod( ) );
+            model.put( MARK_ID_FILTER_CATEGORY_SUGGEST, searchFields.getIdFilterCategory( ) );
+            model.put( MARK_ID_FILTER_TYPE, searchFields.getIdFilterSuggestSubmitType( ) );
 
-            if ( searchFields.getIdFilterSuggestSubmitType(  ) != SuggestUtils.CONSTANT_ID_NULL )
+            if ( searchFields.getIdFilterSuggestSubmitType( ) != SuggestUtils.CONSTANT_ID_NULL )
             {
-                model.put( MARK_TYPE_SELECTED,
-                    SuggestSubmitTypeHome.findByPrimaryKey( searchFields.getIdFilterSuggestSubmitType(  ), _plugin ) );
+                model.put( MARK_TYPE_SELECTED, SuggestSubmitTypeHome.findByPrimaryKey( searchFields.getIdFilterSuggestSubmitType( ), _plugin ) );
             }
 
             model.put( MARK_CONTENT_SUGGEST, strContentSuggest );
-            model.put( MARK_LABEL_SUGGEST, suggest.getLibelleContribution(  ) );
-            model.put( MARK_HEADER_SUGGEST, suggest.getHeader(  ) );
+            model.put( MARK_LABEL_SUGGEST, suggest.getLibelleContribution( ) );
+            model.put( MARK_HEADER_SUGGEST, suggest.getHeader( ) );
 
-            model.put( MARK_AUTHORIZED_COMMENT, suggest.isAuthorizedComment(  ) );
-            model.put( MARK_AUTHORIZED_VOTE, !suggest.isDisableVote(  ) );
+            model.put( MARK_AUTHORIZED_COMMENT, suggest.isAuthorizedComment( ) );
+            model.put( MARK_AUTHORIZED_VOTE, !suggest.isDisableVote( ) );
             model.put( MARK_NUMBER_SHOWN_CHARACTERS, _nNumberShownCharacters );
 
             model.put( MARK_LIST_SUGGEST_SUBMIT_SORT, refListSuggestSort );
             model.put( MARK_LIST_FILTER_BY_PERIOD, refListFilterByPeriod );
 
-            model.put( MARK_SHOW_CATEGORY_BLOCK, suggest.isShowCategoryBlock(  ) );
-            model.put( MARK_SHOW_TOP_SCORE_BLOCK, suggest.isShowTopScoreBlock(  ) );
-            model.put( MARK_SHOW_TOP_COMMENT_BLOCK, suggest.isShowTopCommentBlock(  ) );
-            model.put( MARK_IS_EXTEND_INSTALLED, PortalService.isExtendActivated(  ) );
+            model.put( MARK_SHOW_CATEGORY_BLOCK, suggest.isShowCategoryBlock( ) );
+            model.put( MARK_SHOW_TOP_SCORE_BLOCK, suggest.isShowTopScoreBlock( ) );
+            model.put( MARK_SHOW_TOP_COMMENT_BLOCK, suggest.isShowTopCommentBlock( ) );
+            model.put( MARK_IS_EXTEND_INSTALLED, PortalService.isExtendActivated( ) );
         }
         else
         {
-            model.put( MARK_UNAVAILABILITY_MESSAGE, suggest.getUnavailabilityMessage(  ) );
+            model.put( MARK_UNAVAILABILITY_MESSAGE, suggest.getUnavailabilityMessage( ) );
         }
 
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FRAME_SUGGEST, request.getLocale(  ), model );
-        page.setContent( template.getHtml(  ) );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FRAME_SUGGEST, request.getLocale( ), model );
+        page.setContent( template.getHtml( ) );
     }
 
     /**
      * return a new UrlItem Xpage
+     * 
      * @return a new UrlItem Xpage
      */
-    private UrlItem getNewUrlItemPage(  )
+    private UrlItem getNewUrlItemPage( )
     {
-        return new UrlItem( _urlSuggestXpageHome.getUrl(  ) );
+        return new UrlItem( _urlSuggestXpageHome.getUrl( ) );
     }
 
     /**
      * Test if a user can process action to a suggest
-     * @param suggest the suggest
-     * @param request the {@link HttpServletRequest}
-     * @param user The LuteceUser
-     * @throws UserNotSignedException {@link UserNotSignedException}
-     * @throws SiteMessageException {@link SiteMessageException}
+     * 
+     * @param suggest
+     *            the suggest
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @param user
+     *            The LuteceUser
+     * @throws UserNotSignedException
+     *             {@link UserNotSignedException}
+     * @throws SiteMessageException
+     *             {@link SiteMessageException}
      */
-    private void testUserAuthorizationAccess( Suggest suggest, HttpServletRequest request, LuteceUser user )
-        throws UserNotSignedException, SiteMessageException
+    private void testUserAuthorizationAccess( Suggest suggest, HttpServletRequest request, LuteceUser user ) throws UserNotSignedException,
+            SiteMessageException
     {
-        if ( ( suggest.getRole(  ) != null ) && !Suggest.ROLE_NONE.equals( suggest.getRole(  ) ) )
+        if ( ( suggest.getRole( ) != null ) && !Suggest.ROLE_NONE.equals( suggest.getRole( ) ) )
         {
             if ( user == null )
             {
-                throw new UserNotSignedException(  );
+                throw new UserNotSignedException( );
             }
 
-            else if ( !SecurityService.getInstance(  ).isUserInRole( request, suggest.getRole(  ) ) )
-            {
-                SiteMessageService.setMessage( request, MESSAGE_ACCESS_DENIED, SiteMessage.TYPE_STOP );
-            }
+            else
+                if ( !SecurityService.getInstance( ).isUserInRole( request, suggest.getRole( ) ) )
+                {
+                    SiteMessageService.setMessage( request, MESSAGE_ACCESS_DENIED, SiteMessage.TYPE_STOP );
+                }
         }
     }
 }

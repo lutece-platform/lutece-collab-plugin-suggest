@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
  *
  * class voteTypeHome
@@ -52,16 +51,17 @@ public final class VoteTypeHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private VoteTypeHome(  )
+    private VoteTypeHome( )
     {
     }
 
     /**
-     * Returns an instance of a vote Type whose identifier is specified in
-     * parameter
+     * Returns an instance of a vote Type whose identifier is specified in parameter
      *
-     * @param idKey The vote type primary key
-     * @param plugin the Plugin
+     * @param idKey
+     *            The vote type primary key
+     * @param plugin
+     *            the Plugin
      * @return an instance of voteType
      */
     public static VoteType findByPrimaryKey( int idKey, Plugin plugin )
@@ -72,7 +72,8 @@ public final class VoteTypeHome
     /**
      * Returns a list of all vote Type
      *
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      * @return the list of vote Type
      */
     public static List<VoteType> getList( Plugin plugin )

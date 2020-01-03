@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.suggest.service;
 
-
 /**
  * File attribute implementation
  */
@@ -48,63 +47,67 @@ public class FileManager
 
     /**
      * Gets the template to enter the attribute value
+     * 
      * @return The template to enter the attribute value
      */
-    String getCreateTemplate(  )
+    String getCreateTemplate( )
     {
         return TEMPLATE_CREATE_ATTRIBUTE;
     }
 
     /**
      * Gets the template to modify the attribute value
+     * 
      * @return The template to modify the attribute value
      */
-    String getModifyTemplate(  )
+    String getModifyTemplate( )
     {
         return TEMPLATE_MODIFY_ATTRIBUTE;
     }
 
     /**
      * Gets the template to enter the parameters of the attribute value
+     * 
      * @return The template to enter the parameters of the attribute value
      */
-    String getCreateParametersTemplate(  )
+    String getCreateParametersTemplate( )
     {
         return null;
     }
 
     /**
      * Gets the template to modify the parameters of the attribute value
+     * 
      * @return The template to modify the parameters of the attribute value
      */
-    String getModifyParametersTemplate(  )
+    String getModifyParametersTemplate( )
     {
         return null;
     }
 
-    //    /**
-    //     * Get the XML data corresponding to the attribute to build the document XML content
-    //     * @param document The document
-    //     * @param attribute  The attribute
-    //     * @return The XML value of the attribute
-    //     */
-    //    public String getAttributeXmlValue( Document document, DocumentAttribute attribute )
-    //    {
-    //        StringBuffer sbXml = new StringBuffer(  );
+    // /**
+    // * Get the XML data corresponding to the attribute to build the document XML content
+    // * @param document The document
+    // * @param attribute The attribute
+    // * @return The XML value of the attribute
+    // */
+    // public String getAttributeXmlValue( Document document, DocumentAttribute attribute )
+    // {
+    // StringBuffer sbXml = new StringBuffer( );
     //
-    //        if ( attribute.getBinaryValue(  ).length != 0 )
-    //        {
-    //            XmlUtil.beginElement( sbXml, TAG_FILE_RESOURCE );
-    //            XmlUtil.addElement( sbXml, TAG_DOCUMENT_ID, document.getId(  ) );
-    //            XmlUtil.addElement( sbXml, TAG_ATTRIBUTE_ID, attribute.getId(  ) );
-    //            XmlUtil.addElement( sbXml, TAG_CONTENT_TYPE, attribute.getValueContentType(  ) );
-    //            XmlUtil.endElement( sbXml, TAG_FILE_RESOURCE );
+    // if ( attribute.getBinaryValue( ).length != 0 )
+    // {
+    // XmlUtil.beginElement( sbXml, TAG_FILE_RESOURCE );
+    // XmlUtil.addElement( sbXml, TAG_DOCUMENT_ID, document.getId( ) );
+    // XmlUtil.addElement( sbXml, TAG_ATTRIBUTE_ID, attribute.getId( ) );
+    // XmlUtil.addElement( sbXml, TAG_CONTENT_TYPE, attribute.getValueContentType( ) );
+    // XmlUtil.endElement( sbXml, TAG_FILE_RESOURCE );
     //
-    //            return sbXml.toString(  );
-    //        }
-    //        else
-    //        {
-    //            return "";
-    //        }
-    //    }
+    // return sbXml.toString( );
+    // }
+    // else
+    // {
+    // return "";
+    // }
+    // }
 }

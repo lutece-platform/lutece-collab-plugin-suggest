@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.portal.service.security.LuteceUser;
 
-
 public class SuggestUserInfo
 {
     private String _strLuteceUserKey;
@@ -45,7 +44,7 @@ public class SuggestUserInfo
     private String _strHomeMail;
     private String _strLogin;
 
-    public String getLuteceUserKey(  )
+    public String getLuteceUserKey( )
     {
         return _strLuteceUserKey;
     }
@@ -55,7 +54,7 @@ public class SuggestUserInfo
         this._strLuteceUserKey = strKey;
     }
 
-    public String getFirstName(  )
+    public String getFirstName( )
     {
         return _strFirstName;
     }
@@ -65,7 +64,7 @@ public class SuggestUserInfo
         this._strFirstName = strFirstName;
     }
 
-    public String getLastName(  )
+    public String getLastName( )
     {
         return _strLastName;
     }
@@ -75,7 +74,7 @@ public class SuggestUserInfo
         this._strLastName = strLastName;
     }
 
-    public String getBusinessMail(  )
+    public String getBusinessMail( )
     {
         return _strBusinnessMail;
     }
@@ -85,7 +84,7 @@ public class SuggestUserInfo
         this._strBusinnessMail = strMail;
     }
 
-    public String getHomeMail(  )
+    public String getHomeMail( )
     {
         return _strHomeMail;
     }
@@ -95,7 +94,7 @@ public class SuggestUserInfo
         this._strHomeMail = strMail;
     }
 
-    public String getLogin(  )
+    public String getLogin( )
     {
         return _strLogin;
     }
@@ -107,7 +106,9 @@ public class SuggestUserInfo
 
     /**
      * Gets a user's info
-     * @param key The info key
+     * 
+     * @param key
+     *            The info key
      * @return The info value
      */
     public String getUserInfo( String key )
@@ -118,21 +119,24 @@ public class SuggestUserInfo
         {
             if ( key.equals( LuteceUser.NAME_GIVEN ) )
             {
-                strReturn = getFirstName(  );
+                strReturn = getFirstName( );
             }
-            else if ( key.equals( LuteceUser.NAME_FAMILY ) )
-            {
-                strReturn = getLastName(  );
-            }
-            else if ( key.equals( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL ) )
-            {
-                strReturn = getBusinessMail(  );
-            }
+            else
+                if ( key.equals( LuteceUser.NAME_FAMILY ) )
+                {
+                    strReturn = getLastName( );
+                }
+                else
+                    if ( key.equals( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL ) )
+                    {
+                        strReturn = getBusinessMail( );
+                    }
 
-            else if ( key.equals( LuteceUser.HOME_INFO_ONLINE_EMAIL ) )
-            {
-                strReturn = getHomeMail(  );
-            }
+                    else
+                        if ( key.equals( LuteceUser.HOME_INFO_ONLINE_EMAIL ) )
+                        {
+                            strReturn = getHomeMail( );
+                        }
         }
 
         return strReturn;
@@ -140,10 +144,11 @@ public class SuggestUserInfo
 
     /**
      * toString implementation
+     * 
      * @return The login
      */
-    public String toString(  )
+    public String toString( )
     {
-        return getLogin(  );
+        return getLogin( );
     }
 }

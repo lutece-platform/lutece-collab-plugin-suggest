@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
  *
  * class category Home
@@ -52,16 +51,17 @@ public final class SuggestSubmitStateHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private SuggestSubmitStateHome(  )
+    private SuggestSubmitStateHome( )
     {
     }
 
     /**
-     * Returns an instance of a Suggest submit state whose identifier is specified
-     * in parameter
+     * Returns an instance of a Suggest submit state whose identifier is specified in parameter
      *
-     * @param idKey The suggest submit state primary key
-     * @param plugin the Plugin
+     * @param idKey
+     *            The suggest submit state primary key
+     * @param plugin
+     *            the Plugin
      * @return an instance of a Suggest submit
      */
     public static SuggestSubmitState findByPrimaryKey( int idKey, Plugin plugin )
@@ -70,11 +70,12 @@ public final class SuggestSubmitStateHome
     }
 
     /**
-     * Returns an instance of a Suggest submit state whose numero is specified in
-     * parameter
+     * Returns an instance of a Suggest submit state whose numero is specified in parameter
      *
-     * @param numero The suggest submit state numero
-     * @param plugin the Plugin
+     * @param numero
+     *            The suggest submit state numero
+     * @param plugin
+     *            the Plugin
      * @return an instance of a Suggest submit
      */
     public static SuggestSubmitState findByNumero( int numero, Plugin plugin )
@@ -85,7 +86,8 @@ public final class SuggestSubmitStateHome
     /**
      * Returns a list of all Suggest submit state
      *
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      * @return the list of Suggest submit state
      */
     public static List<SuggestSubmitState> getList( Plugin plugin )

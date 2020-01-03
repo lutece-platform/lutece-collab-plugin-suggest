@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  *
  * class EntryTypeDAO
@@ -47,61 +46,64 @@ import java.util.List;
  */
 public class EntryTypeDAO implements IEntryTypeDAO
 {
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_type,title,class_name" +
-        " FROM suggest_entry_type WHERE id_type=?";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_type,title,class_name" + " FROM suggest_entry_type WHERE id_type=?";
     private static final String SQL_QUERY_SELECT = "SELECT id_type,title,class_name" + " FROM suggest_entry_type ";
 
     /**
      * Load the data of the entry type from the table
      *
-     * @param idKey The identifier of the entry type
-     * @param plugin the plugin
+     * @param idKey
+     *            The identifier of the entry type
+     * @param plugin
+     *            the plugin
      * @return the instance of the EntryType
      */
     public EntryType load( int idKey, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, idKey );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         EntryType entryType = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            entryType = new EntryType(  );
+            entryType = new EntryType( );
             entryType.setIdType( daoUtil.getInt( 1 ) );
             entryType.setTitle( daoUtil.getString( 2 ) );
             entryType.setClassName( daoUtil.getString( 3 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return entryType;
     }
 
     /**
-     * Load the data of all  entry type returns them in a  list
-     * @param plugin the plugin
-     * @return  the list of entry type
+     * Load the data of all entry type returns them in a list
+     * 
+     * @param plugin
+     *            the plugin
+     * @return the list of entry type
      */
     public List<EntryType> select( Plugin plugin )
     {
-        List<EntryType> listEntryType = new ArrayList<EntryType>(  );
+        List<EntryType> listEntryType = new ArrayList<EntryType>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         EntryType entryType = null;
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            entryType = new EntryType(  );
+            entryType = new EntryType( );
             entryType.setIdType( daoUtil.getInt( 1 ) );
             entryType.setTitle( daoUtil.getString( 2 ) );
             entryType.setClassName( daoUtil.getString( 3 ) );
             listEntryType.add( entryType );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return listEntryType;
     }

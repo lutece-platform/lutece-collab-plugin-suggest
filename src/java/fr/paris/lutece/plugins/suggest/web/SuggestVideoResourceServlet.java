@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  * suggest video resources
  */
@@ -56,14 +55,15 @@ public class SuggestVideoResourceServlet
     private static final String VIDEO_EXTENSION = ".flv";
     private static final String DEFAULT_EXPIRES_DELAY = "180000";
     private static final String PROPERTY_EXPIRES_DELAY = "suggest.resourceServlet.cacheControl.expires";
-    private static final String STRING_DELAY_IN_SECOND = AppPropertiesService.getProperty( PROPERTY_EXPIRES_DELAY,
-            DEFAULT_EXPIRES_DELAY );
+    private static final String STRING_DELAY_IN_SECOND = AppPropertiesService.getProperty( PROPERTY_EXPIRES_DELAY, DEFAULT_EXPIRES_DELAY );
     private static final Long LONG_DELAY_IN_MILLISECOND = Long.parseLong( STRING_DELAY_IN_SECOND ) * 1000;
-    private static final ResourceServletCache _cache = new ResourceServletCache(  );
+    private static final ResourceServletCache _cache = new ResourceServletCache( );
 
     /**
      * Put the file in cache
-     * @param nIdSuggestSubmit The SuggestSubmit id
+     * 
+     * @param nIdSuggestSubmit
+     *            The SuggestSubmit id
      */
     public static void putInCache( int nIdSuggestSubmit )
     {
@@ -71,7 +71,7 @@ public class SuggestVideoResourceServlet
 
         VideoType video;
 
-        byte[] content;
+        byte [ ] content;
         String strContentType;
         String strFilename;
 
@@ -79,12 +79,12 @@ public class SuggestVideoResourceServlet
 
         strFilename = DEFAULT_FILENAME + nIdSuggestSubmit;
 
-        strContentType = video.getMimeType(  );
-        content = video.getVideo(  );
+        strContentType = video.getMimeType( );
+        content = video.getVideo( );
 
-        if ( _cache.isCacheEnable(  ) )
+        if ( _cache.isCacheEnable( ) )
         {
-            ResourceValueObject r = new ResourceValueObject(  );
+            ResourceValueObject r = new ResourceValueObject( );
             r.setContent( content );
             r.setContentType( strContentType );
             r.setFilename( strFilename );
@@ -93,27 +93,30 @@ public class SuggestVideoResourceServlet
     }
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     * @param request servlet request
-     * @param response servlet response
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * 
+     * @param request
+     *            servlet request
+     * @param response
+     *            servlet response
      * @return the content of the video
-     * @throws ServletException the servlet Exception
-     * @throws IOException the io exception
+     * @throws ServletException
+     *             the servlet Exception
+     * @throws IOException
+     *             the io exception
      */
-    public byte[] processRequest( HttpServletRequest request, HttpServletResponse response )
-        throws ServletException, IOException
+    public byte [ ] processRequest( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
         String strSuggestSubmitId = request.getParameter( PARAMETER_VIDEO_ID );
         int nIdSuggestSubmit = Integer.parseInt( strSuggestSubmitId );
 
         String strCacheKey = String.valueOf( nIdSuggestSubmit );
-        byte[] content;
+        byte [ ] content;
 
-        if ( _cache.isCacheEnable(  ) && ( _cache.get( strCacheKey ) != null ) )
+        if ( _cache.isCacheEnable( ) && ( _cache.get( strCacheKey ) != null ) )
         {
             ResourceValueObject resource = _cache.get( strCacheKey );
-            content = resource.getContent(  );
+            content = resource.getContent( );
         }
         else
         {
@@ -122,16 +125,16 @@ public class SuggestVideoResourceServlet
             video = VideoTypeHome.findByPrimaryKey( nIdSuggestSubmit, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
 
             if ( video == null )
-            { //nothing to do if the data is no longer in DB
+            { // nothing to do if the data is no longer in DB
 
                 return null;
             }
 
-            content = video.getVideo(  );
+            content = video.getVideo( );
 
-            if ( _cache.isCacheEnable(  ) )
+            if ( _cache.isCacheEnable( ) )
             {
-                ResourceValueObject r = new ResourceValueObject(  );
+                ResourceValueObject r = new ResourceValueObject( );
                 r.setContent( content );
                 r.setContentType( video.getMimeType( ) );
                 r.setFilename( DEFAULT_FILENAME + nIdSuggestSubmit );
@@ -140,10 +143,9 @@ public class SuggestVideoResourceServlet
         }
 
         // Add Cache Control HTTP header
-        response.setHeader( "Content-Disposition",
-            "attachment;filename=\"" + DEFAULT_FILENAME + nIdSuggestSubmit + VIDEO_EXTENSION + "\"" );
+        response.setHeader( "Content-Disposition", "attachment;filename=\"" + DEFAULT_FILENAME + nIdSuggestSubmit + VIDEO_EXTENSION + "\"" );
         response.setHeader( "Cache-Control", "max-age=" + STRING_DELAY_IN_SECOND ); // HTTP 1.1
-        response.setDateHeader( "Expires", System.currentTimeMillis(  ) + LONG_DELAY_IN_MILLISECOND ); // HTTP 1.0
+        response.setDateHeader( "Expires", System.currentTimeMillis( ) + LONG_DELAY_IN_MILLISECOND ); // HTTP 1.0
         response.setContentLength( content.length ); // Keep Alive connexion
 
         return content;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,6 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.Locale;
 
-
 /**
  *
  * class ExportFormatResourceIdService
@@ -53,13 +52,13 @@ import java.util.Locale;
  */
 public class ExportFormatResourceIdService extends ResourceIdService
 {
-    /** Permission for manage a export format*/
+    /** Permission for manage a export format */
     public static final String PERMISSION_MANAGE = "MANAGE";
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "suggest.permission.label.resourceType.exportFormat";
     private static final String PROPERTY_LABEL_MANAGE = "suggest.permission.label.manage.exportFormat";
 
     /** Creates a new instance of DocumentTypeResourceIdService */
-    public ExportFormatResourceIdService(  )
+    public ExportFormatResourceIdService( )
     {
         setPluginName( SuggestPlugin.PLUGIN_NAME );
     }
@@ -67,15 +66,15 @@ public class ExportFormatResourceIdService extends ResourceIdService
     /**
      * Initializes the service
      */
-    public void register(  )
+    public void register( )
     {
-        ResourceType rt = new ResourceType(  );
-        rt.setResourceIdServiceClass( ExportFormatResourceIdService.class.getName(  ) );
+        ResourceType rt = new ResourceType( );
+        rt.setResourceIdServiceClass( ExportFormatResourceIdService.class.getName( ) );
         rt.setPluginName( SuggestPlugin.PLUGIN_NAME );
         rt.setResourceTypeKey( ExportFormat.RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
-        Permission p = new Permission(  );
+        Permission p = new Permission( );
         p.setPermissionKey( PERMISSION_MANAGE );
         p.setPermissionTitleKey( PROPERTY_LABEL_MANAGE );
         rt.registerPermission( p );
@@ -84,7 +83,9 @@ public class ExportFormatResourceIdService extends ResourceIdService
 
     /**
      * Returns a list of export format resource ids
-     * @param locale The current locale
+     * 
+     * @param locale
+     *            The current locale
      * @return A list of resource ids
      */
     public ReferenceList getResourceIdList( Locale locale )
@@ -94,8 +95,11 @@ public class ExportFormatResourceIdService extends ResourceIdService
 
     /**
      * Returns the Title of a given resource
-     * @param strId The Id of the resource
-     * @param locale The current locale
+     * 
+     * @param strId
+     *            The Id of the resource
+     * @param locale
+     *            The current locale
      * @return The Title of a given resource
      */
     public String getTitle( String strId, Locale locale )
@@ -106,14 +110,13 @@ public class ExportFormatResourceIdService extends ResourceIdService
         {
             nIdExport = Integer.parseInt( strId );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }
 
-        ExportFormat export = ExportFormatHome.findByPrimaryKey( nIdExport,
-                PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+        ExportFormat export = ExportFormatHome.findByPrimaryKey( nIdExport, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
 
-        return export.getTitle(  );
+        return export.getTitle( );
     }
 }

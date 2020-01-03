@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.suggest.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-
 /**
  *
  * class DefaultMessageHome
@@ -50,15 +49,17 @@ public final class DefaultMessageHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private DefaultMessageHome(  )
+    private DefaultMessageHome( )
     {
     }
 
     /**
      * Update of the defaults Messages which is specified in parameter
      *
-     * @param defaultMessage The instance of the DefaultMessage which contains the data to store
-     * @param plugin the Plugin
+     * @param defaultMessage
+     *            The instance of the DefaultMessage which contains the data to store
+     * @param plugin
+     *            the Plugin
      */
     public static void update( DefaultMessage defaultMessage, Plugin plugin )
     {
@@ -68,7 +69,8 @@ public final class DefaultMessageHome
     /**
      * Returns an instance of a defaultMessage of application
      *
-     * @param plugin the Plugin
+     * @param plugin
+     *            the Plugin
      * @return an instance of DefaultMessage
      */
     public static DefaultMessage find( Plugin plugin )

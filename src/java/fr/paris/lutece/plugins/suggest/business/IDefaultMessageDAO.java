@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,9 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -69,25 +68,27 @@ package fr.paris.lutece.plugins.suggest.business;
  */
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
-
 /**
-* IDefaultMessageDAO Interface
-*/
+ * IDefaultMessageDAO Interface
+ */
 public interface IDefaultMessageDAO
 {
     /**
-    * Update the record in the table
-    *
-    * @param defaultMessage the reference of the default message
-    * @param plugin the Plugin
-    */
+     * Update the record in the table
+     *
+     * @param defaultMessage
+     *            the reference of the default message
+     * @param plugin
+     *            the Plugin
+     */
     void store( DefaultMessage defaultMessage, Plugin plugin );
 
     /**
      * load a record from the table
      *
      *
-     * @param plugin the Plugin
+     * @param plugin
+     *            the Plugin
      * @return the default message object
      */
     DefaultMessage load( Plugin plugin );

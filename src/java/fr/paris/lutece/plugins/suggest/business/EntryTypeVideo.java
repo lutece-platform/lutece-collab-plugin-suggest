@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,12 +49,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
 
-
 /**
-*
-* class EntryTypeVideo
-*
-*/
+ *
+ * class EntryTypeVideo
+ *
+ */
 public class EntryTypeVideo extends Entry
 {
     private static final String PARAMETER_CREDITS = "credits";
@@ -71,19 +70,23 @@ public class EntryTypeVideo extends Entry
     private final String _template_html_code_response = "admin/plugins/suggest/html_code_response_entry_type_video.html";
 
     /**
-     * Get the HtmlCode  of   the entry
-     * @return the HtmlCode  of   the entry
+     * Get the HtmlCode of the entry
+     * 
+     * @return the HtmlCode of the entry
      *
      * */
-    public String getTemplateHtmlCodeForm(  )
+    public String getTemplateHtmlCodeForm( )
     {
         return _template_html_code_form;
     }
 
     /**
      * Get the request data
-     * @param request HttpRequest
-     * @param locale the local
+     * 
+     * @param request
+     *            HttpRequest
+     * @param locale
+     *            the local
      * @return null if all data required are in the request else the url of jsp error
      */
     public String getRequestData( HttpServletRequest request, Locale locale )
@@ -107,73 +110,75 @@ public class EntryTypeVideo extends Entry
 
         String strFieldError = EMPTY_STRING;
 
-        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) )
+        if ( ( strTitle == null ) || strTitle.trim( ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_TITLE;
         }
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         try
         {
-            if ( !( ( strHeight == null ) || strHeight.trim(  ).equals( EMPTY_STRING ) ) )
+            if ( !( ( strHeight == null ) || strHeight.trim( ).equals( EMPTY_STRING ) ) )
             {
                 nHeight = Integer.parseInt( strHeight );
             }
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             strFieldError = FIELD_HEIGHT;
         }
 
         try
         {
-            if ( !( ( strWidth == null ) || strWidth.trim(  ).equals( EMPTY_STRING ) ) )
+            if ( !( ( strWidth == null ) || strWidth.trim( ).equals( EMPTY_STRING ) ) )
             {
                 nWidth = Integer.parseInt( strWidth );
             }
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             strFieldError = FIELD_WIDTH;
         }
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
-        List<EntryAdditionalAttribute> entryAdditionalAttributeList = new ArrayList<EntryAdditionalAttribute>(  );
-        EntryAdditionalAttribute entryAdditionalAttributeAutostart = new EntryAdditionalAttribute(  );
+        List<EntryAdditionalAttribute> entryAdditionalAttributeList = new ArrayList<EntryAdditionalAttribute>( );
+        EntryAdditionalAttribute entryAdditionalAttributeAutostart = new EntryAdditionalAttribute( );
         entryAdditionalAttributeAutostart.setName( PARAMETER_AUTOSTART );
         entryAdditionalAttributeAutostart.setValue( strAutostart );
         entryAdditionalAttributeList.add( entryAdditionalAttributeAutostart );
 
-        EntryAdditionalAttribute entryAdditionalAttributeLoop = new EntryAdditionalAttribute(  );
+        EntryAdditionalAttribute entryAdditionalAttributeLoop = new EntryAdditionalAttribute( );
         entryAdditionalAttributeLoop.setName( PARAMETER_LOOP );
         entryAdditionalAttributeLoop.setValue( strLoop );
         entryAdditionalAttributeList.add( entryAdditionalAttributeLoop );
 
-        EntryAdditionalAttribute entryAdditionalAttributeAlignment = new EntryAdditionalAttribute(  );
+        EntryAdditionalAttribute entryAdditionalAttributeAlignment = new EntryAdditionalAttribute( );
         entryAdditionalAttributeAlignment.setName( PARAMETER_ALIGNMENT );
         entryAdditionalAttributeAlignment.setValue( strAlignment );
         entryAdditionalAttributeList.add( entryAdditionalAttributeAlignment );
 
-        EntryAdditionalAttribute entryAdditionalAttributeQuality = new EntryAdditionalAttribute(  );
+        EntryAdditionalAttribute entryAdditionalAttributeQuality = new EntryAdditionalAttribute( );
         entryAdditionalAttributeQuality.setName( PARAMETER_QUALITY );
         entryAdditionalAttributeQuality.setValue( strQuality );
         entryAdditionalAttributeList.add( entryAdditionalAttributeQuality );
 
-        EntryAdditionalAttribute entryAdditionalAttributeMenu = new EntryAdditionalAttribute(  );
+        EntryAdditionalAttribute entryAdditionalAttributeMenu = new EntryAdditionalAttribute( );
         entryAdditionalAttributeMenu.setName( PARAMETER_MENU );
         entryAdditionalAttributeMenu.setValue( strMenu );
         entryAdditionalAttributeList.add( entryAdditionalAttributeMenu );
@@ -211,49 +216,56 @@ public class EntryTypeVideo extends Entry
 
     /**
      * Get template create url of the entry
+     * 
      * @return template create url of the entry
      */
-    public String getTemplateCreate(  )
+    public String getTemplateCreate( )
     {
         return _template_create;
     }
 
     /**
-     * Get the template modify url  of the entry
-     * @return template modify url  of the entry
+     * Get the template modify url of the entry
+     * 
+     * @return template modify url of the entry
      */
-    public String getTemplateModify(  )
+    public String getTemplateModify( )
     {
         return _template_modify;
     }
 
     /**
      * save in the list of response the response associate to the entry in the form submit
-     * @param nIdSuggestSubmit the id of the SuggestSubmit
-     * @param request HttpRequest
-     * @param listResponse the list of response associate to the entry in the form submit
-     * @param locale the locale
-     * @param plugin the plugin
+     * 
+     * @param nIdSuggestSubmit
+     *            the id of the SuggestSubmit
+     * @param request
+     *            HttpRequest
+     * @param listResponse
+     *            the list of response associate to the entry in the form submit
+     * @param locale
+     *            the locale
+     * @param plugin
+     *            the plugin
      * @return a Form error object if there is an error in the response
      */
-    public FormError getResponseData( int nIdSuggestSubmit, HttpServletRequest request, List<Response> listResponse,
-        Locale locale, Plugin plugin )
+    public FormError getResponseData( int nIdSuggestSubmit, HttpServletRequest request, List<Response> listResponse, Locale locale, Plugin plugin )
     {
-        String strCredits = request.getParameter( PARAMETER_CREDITS + this.getIdEntry(  ) );
+        String strCredits = request.getParameter( PARAMETER_CREDITS + this.getIdEntry( ) );
 
         MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
-        FileItem item = mRequest.getFile( SuggestUtils.EMPTY_STRING + this.getIdEntry(  ) );
+        FileItem item = mRequest.getFile( SuggestUtils.EMPTY_STRING + this.getIdEntry( ) );
 
-        byte[] bytes = item.get(  );
+        byte [ ] bytes = item.get( );
 
-        Response response = new Response(  );
+        Response response = new Response( );
         response.setEntry( this );
 
         if ( bytes != null )
         {
-            VideoType video = new VideoType(  );
+            VideoType video = new VideoType( );
             video.setVideo( bytes );
-            video.setMimeType( item.getContentType(  ) );
+            video.setMimeType( item.getContentType( ) );
             video.setCredits( strCredits );
             video.setIdSuggestSubmit( nIdSuggestSubmit );
 
@@ -264,59 +276,59 @@ public class EntryTypeVideo extends Entry
                 String strMenu = "false";
                 String strLoop = "false";
                 String strAutostart = "false";
-                //                String strAlignment = "bottom";
+                // String strAlignment = "bottom";
                 String strQuality = "low";
 
-                for ( EntryAdditionalAttribute attr : this.getEntryAdditionalAttributeList(  ) )
+                for ( EntryAdditionalAttribute attr : this.getEntryAdditionalAttributeList( ) )
                 {
-                    if ( attr.getName(  ).equals( PARAMETER_AUTOSTART ) )
+                    if ( attr.getName( ).equals( PARAMETER_AUTOSTART ) )
                     {
-                        strAutostart = attr.getValue(  );
+                        strAutostart = attr.getValue( );
                     }
-                    //                    else if ( attr.getName(  ).equals( PARAMETER_ALIGNMENT ) )
-                    //                    {
-                    //                        strAlignment = attr.getValue(  );
-                    //                    }
-                    else if ( attr.getName(  ).equals( PARAMETER_LOOP ) )
-                    {
-                        strLoop = attr.getValue(  );
-                    }
-                    else if ( attr.getName(  ).equals( PARAMETER_QUALITY ) )
-                    {
-                        strQuality = attr.getValue(  );
-                    }
-                    else if ( attr.getName(  ).equals( PARAMETER_MENU ) )
-                    {
-                        strMenu = attr.getValue(  );
-                    }
+                    // else if ( attr.getName( ).equals( PARAMETER_ALIGNMENT ) )
+                    // {
+                    // strAlignment = attr.getValue( );
+                    // }
+                    else
+                        if ( attr.getName( ).equals( PARAMETER_LOOP ) )
+                        {
+                            strLoop = attr.getValue( );
+                        }
+                        else
+                            if ( attr.getName( ).equals( PARAMETER_QUALITY ) )
+                            {
+                                strQuality = attr.getValue( );
+                            }
+                            else
+                                if ( attr.getName( ).equals( PARAMETER_MENU ) )
+                                {
+                                    strMenu = attr.getValue( );
+                                }
                 }
 
-                String strResponse = "<div id='mediaspace" + nIdSuggestSubmit + "'></div>" +
-                    "<script type='text/javascript' src='js/player/swfobject.js'></script>" +
-                    "<script type='text/javascript'>" + " var so = new SWFObject('js/player/player.swf','mpl','" +
-                    this.getWidth(  ) + "','" + this.getHeight(  ) + "','9');" +
-                    "  so.addParam('allowfullscreen','true');" + "  so.addParam('allowscriptaccess','always');" +
-                    "  so.addParam('wmode','opaque');" + "  so.addParam('quality','" + strQuality + "');" +
-                    "  so.addParam('menu','" + strMenu + "');" +
-                    "  so.addVariable('file','../../jsp/site/plugins/suggest/getVideo.jsp?video_id=" + nIdSuggestSubmit +
-                    "');" + "  so.addVariable('provider','video');" + "  so.addVariable('autostart','" + strAutostart +
-                    "');" + "  so.addVariable('icons','false');" + "  so.addVariable('repeat','" + strLoop + "');" +
-                    "  so.write('mediaspace" + nIdSuggestSubmit + "');" + "</script>";
+                String strResponse = "<div id='mediaspace" + nIdSuggestSubmit + "'></div>"
+                        + "<script type='text/javascript' src='js/player/swfobject.js'></script>" + "<script type='text/javascript'>"
+                        + " var so = new SWFObject('js/player/player.swf','mpl','" + this.getWidth( ) + "','" + this.getHeight( ) + "','9');"
+                        + "  so.addParam('allowfullscreen','true');" + "  so.addParam('allowscriptaccess','always');" + "  so.addParam('wmode','opaque');"
+                        + "  so.addParam('quality','" + strQuality + "');" + "  so.addParam('menu','" + strMenu + "');"
+                        + "  so.addVariable('file','../../jsp/site/plugins/suggest/getVideo.jsp?video_id=" + nIdSuggestSubmit + "');"
+                        + "  so.addVariable('provider','video');" + "  so.addVariable('autostart','" + strAutostart + "');"
+                        + "  so.addVariable('icons','false');" + "  so.addVariable('repeat','" + strLoop + "');" + "  so.write('mediaspace" + nIdSuggestSubmit
+                        + "');" + "</script>";
 
-                strResponse += ( "<br /><b>" + I18nService.getLocalizedString( PROPERTY_CREDITS, locale ) +
-                "&nbsp;:&nbsp;</b>" + strCredits );
+                strResponse += ( "<br /><b>" + I18nService.getLocalizedString( PROPERTY_CREDITS, locale ) + "&nbsp;:&nbsp;</b>" + strCredits );
 
                 response.setValueResponse( strResponse );
             }
-            catch ( com.mysql.jdbc.PacketTooBigException e )
+            catch( com.mysql.jdbc.PacketTooBigException e )
             {
-                //Remove the suggest submit potentially created
-                SuggestSubmitService.getService(  ).remove( nIdSuggestSubmit, plugin );
-                //Remove the video potentially created
+                // Remove the suggest submit potentially created
+                SuggestSubmitService.getService( ).remove( nIdSuggestSubmit, plugin );
+                // Remove the video potentially created
                 VideoTypeHome.remove( nIdSuggestSubmit, plugin );
 
-                FormError formError = new FormError(  );
-                formError.setTitleQuestion( this.getTitle(  ) );
+                FormError formError = new FormError( );
+                formError.setTitleQuestion( this.getTitle( ) );
                 formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_FILE_TOO_HEAVY, locale ) );
 
                 return formError;
@@ -324,11 +336,11 @@ public class EntryTypeVideo extends Entry
         }
         else
         {
-            if ( this.isMandatory(  ) )
+            if ( this.isMandatory( ) )
             {
-                FormError formError = new FormError(  );
+                FormError formError = new FormError( );
                 formError.setMandatoryError( true );
-                formError.setTitleQuestion( this.getTitle(  ) );
+                formError.setTitleQuestion( this.getTitle( ) );
 
                 return formError;
             }
@@ -340,10 +352,11 @@ public class EntryTypeVideo extends Entry
     }
 
     /**
-     * Get the template of the html code of the response value  associate to the entry
-    * @return the template of the html code of the response value  associate to the entry
+     * Get the template of the html code of the response value associate to the entry
+     * 
+     * @return the template of the html code of the response value associate to the entry
      */
-    public String getTemplateHtmlCodeResponse(  )
+    public String getTemplateHtmlCodeResponse( )
     {
         return _template_html_code_response;
     }

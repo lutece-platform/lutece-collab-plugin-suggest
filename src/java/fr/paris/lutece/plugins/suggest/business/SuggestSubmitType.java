@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,7 +56,8 @@ public class SuggestSubmitType implements RBACResource, Serializable
     private Integer _nIdImageResource;
 
     /**
-     * @param nIdType the _nIdType to set
+     * @param nIdType
+     *            the _nIdType to set
      */
     public void setIdType( int nIdType )
     {
@@ -66,13 +67,14 @@ public class SuggestSubmitType implements RBACResource, Serializable
     /**
      * @return the _nIdType
      */
-    public int getIdType(  )
+    public int getIdType( )
     {
         return _nIdType;
     }
 
     /**
-     * @param strName the _strName to set
+     * @param strName
+     *            the _strName to set
      */
     public void setName( String strName )
     {
@@ -82,13 +84,14 @@ public class SuggestSubmitType implements RBACResource, Serializable
     /**
      * @return the _strName
      */
-    public String getName(  )
+    public String getName( )
     {
         return _strName;
     }
 
     /**
-     * @param strColor the _strColor to set
+     * @param strColor
+     *            the _strColor to set
      */
     public void setColor( String strColor )
     {
@@ -98,13 +101,14 @@ public class SuggestSubmitType implements RBACResource, Serializable
     /**
      * @return the _strColor
      */
-    public String getColor(  )
+    public String getColor( )
     {
         return _strColor;
     }
 
     /**
-     * @param imgPictogram the _imgPictogram to set
+     * @param imgPictogram
+     *            the _imgPictogram to set
      */
     public void setPictogram( ImageResource imgPictogram )
     {
@@ -114,13 +118,14 @@ public class SuggestSubmitType implements RBACResource, Serializable
     /**
      * @return the _imgPictogram
      */
-    public ImageResource getPictogram(  )
+    public ImageResource getPictogram( )
     {
         return _imgPictogram;
     }
 
     /**
-     * @param bParameterizableInFO the _bParameterizableInFO to set
+     * @param bParameterizableInFO
+     *            the _bParameterizableInFO to set
      */
     public void setParameterizableInFO( Boolean bParameterizableInFO )
     {
@@ -130,31 +135,34 @@ public class SuggestSubmitType implements RBACResource, Serializable
     /**
      * @return the _bParameterizableInFO
      */
-    public Boolean getParameterizableInFO(  )
+    public Boolean getParameterizableInFO( )
     {
         return _bParameterizableInFO;
     }
 
     /**
-    * RBAC resource implmentation
-    * @return The resource type code
-    */
-    public String getResourceTypeCode(  )
+     * RBAC resource implmentation
+     * 
+     * @return The resource type code
+     */
+    public String getResourceTypeCode( )
     {
         return RESOURCE_TYPE;
     }
 
     /**
      * RBAC resource implmentation
+     * 
      * @return The resourceId
      */
-    public String getResourceId(  )
+    public String getResourceId( )
     {
         return "" + _nIdType;
     }
 
     /**
-     * @param idXSLStyleSheet the idXSLStyleSheet to set
+     * @param idXSLStyleSheet
+     *            the idXSLStyleSheet to set
      */
     public void setIdXSLStyleSheet( int idXSLStyleSheet )
     {
@@ -164,14 +172,15 @@ public class SuggestSubmitType implements RBACResource, Serializable
     /**
      * @return the idXSLStyleSheet
      */
-    public int getIdXSLStyleSheet(  )
+    public int getIdXSLStyleSheet( )
     {
         return _nIdXSLStyleSheet;
     }
 
     /**
-     * @param obj the Suggest Submit Type  to compare
-     * @return true if Suggest Submit Type  in parameter is the same object
+     * @param obj
+     *            the Suggest Submit Type to compare
+     * @return true if Suggest Submit Type in parameter is the same object
      *
      */
     public boolean equals( Object obj )
@@ -186,16 +195,19 @@ public class SuggestSubmitType implements RBACResource, Serializable
 
     /**
      * the image resource id associate to the response
+     * 
      * @return Resource Image
      */
-    public Integer getIdImageResource(  )
+    public Integer getIdImageResource( )
     {
         return _nIdImageResource;
     }
 
     /**
      * image resource id associate to the response
-     * @param idImageResource image resource id associate to the response
+     * 
+     * @param idImageResource
+     *            image resource id associate to the response
      */
     public void setIdImageResource( Integer idImageResource )
     {

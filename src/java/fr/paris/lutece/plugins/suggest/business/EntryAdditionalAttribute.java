@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-
 /**
  *
  * class EntryAdditionalAttribute
@@ -49,14 +48,16 @@ public class EntryAdditionalAttribute
      *
      * @return the id of the entry
      */
-    public int getIdEntry(  )
+    public int getIdEntry( )
     {
         return _nIdEntry;
     }
 
     /**
      * set the id of the entry
-     * @param idEntry the id of the entry
+     * 
+     * @param idEntry
+     *            the id of the entry
      */
     public void setIdEntry( int idEntry )
     {
@@ -67,14 +68,16 @@ public class EntryAdditionalAttribute
      *
      * @return the name of the additional entry attribute
      */
-    public String getName(  )
+    public String getName( )
     {
         return _strName;
     }
 
     /**
      * set the name of the additional entry attribute
-     * @param name the name of the additional entry attribute
+     * 
+     * @param name
+     *            the name of the additional entry attribute
      */
     public void setName( String name )
     {
@@ -85,14 +88,16 @@ public class EntryAdditionalAttribute
      *
      * @return the value of the additional entry attribute
      */
-    public String getValue(  )
+    public String getValue( )
     {
         return _strValue;
     }
 
     /**
      * set the value of the additional entry attribute
-     * @param value the value of the additional entry attribute
+     * 
+     * @param value
+     *            the value of the additional entry attribute
      */
     public void setValue( String value )
     {

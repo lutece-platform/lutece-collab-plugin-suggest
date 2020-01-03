@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,25 +42,24 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 public class CommentSubmitService implements ICommentSubmitService
 {
     public static final String BEAN_SERVICE = "suggest.commentSubmitService";
     private static ICommentSubmitService _singleton;
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @Override
     public void create( CommentSubmit commentSubmit, Plugin plugin )
     {
-        commentSubmit.setDateModify( commentSubmit.getDateComment(  ) );
+        commentSubmit.setDateModify( commentSubmit.getDateComment( ) );
         CommentSubmitHome.create( commentSubmit, plugin );
 
-        if ( commentSubmit.getIdParent(  ) != SuggestUtils.CONSTANT_ID_NULL )
+        if ( commentSubmit.getIdParent( ) != SuggestUtils.CONSTANT_ID_NULL )
         {
-            //update parent modification date
-            CommentSubmitHome.updateDateModify( commentSubmit.getDateComment(  ), commentSubmit.getIdParent(  ), plugin );
+            // update parent modification date
+            CommentSubmitHome.updateDateModify( commentSubmit.getDateComment( ), commentSubmit.getIdParent( ), plugin );
         }
     }
 
@@ -79,13 +78,13 @@ public class CommentSubmitService implements ICommentSubmitService
     @Override
     public void remove( int nIdCommentSubmit, Plugin plugin )
     {
-        //remove children
+        // remove children
         CommentSubmitHome.removeByIdParent( nIdCommentSubmit, plugin );
 
         CommentSubmitHome.remove( nIdCommentSubmit, plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
@@ -103,13 +102,13 @@ public class CommentSubmitService implements ICommentSubmitService
     @Override
     public List<CommentSubmit> getCommentSubmitList( SubmitFilter filter, Plugin plugin )
     {
-        if ( !filter.containsSortBy(  ) )
+        if ( !filter.containsSortBy( ) )
         {
-            //use default sort
+            // use default sort
             SuggestUtils.initCommentFilterBySort( filter, SuggestUtils.CONSTANT_ID_NULL );
         }
 
-        //get All parent
+        // get All parent
         filter.setIdParent( SubmitFilter.ID_PARENT_NULL );
 
         List<CommentSubmit> commentSubmitList = CommentSubmitHome.getCommentSubmitList( filter, null, plugin );
@@ -120,11 +119,11 @@ public class CommentSubmitService implements ICommentSubmitService
 
             for ( CommentSubmit c : commentSubmitList )
             {
-                subCommentFilter = new SubmitFilter(  );
-                //in this  we gonna get themethod list of children of a comment
-                subCommentFilter.setIdParent( c.getIdCommentSubmit(  ) );
-                subCommentFilter.setIdCommentSubmitState( filter.getIdCommentSubmitState(  ) );
-                subCommentFilter.getSortBy(  ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+                subCommentFilter = new SubmitFilter( );
+                // in this we gonna get themethod list of children of a comment
+                subCommentFilter.setIdParent( c.getIdCommentSubmit( ) );
+                subCommentFilter.setIdCommentSubmitState( filter.getIdCommentSubmitState( ) );
+                subCommentFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
                 c.setComments( CommentSubmitHome.getCommentSubmitList( subCommentFilter, null, plugin ) );
             }
         }
@@ -142,21 +141,20 @@ public class CommentSubmitService implements ICommentSubmitService
     {
         if ( ( nLimitParentNumber == null ) || ( nLimitParentNumber == SuggestUtils.CONSTANT_ID_NULL ) )
         {
-            //if the number of comment parent are not limited used getCommentSubmitList(filter, plugin)
+            // if the number of comment parent are not limited used getCommentSubmitList(filter, plugin)
             return getCommentSubmitList( filter, plugin );
         }
 
-        if ( !filter.containsSortBy(  ) )
+        if ( !filter.containsSortBy( ) )
         {
-            //use default sort
+            // use default sort
             SuggestUtils.initCommentFilterBySort( filter, SuggestUtils.CONSTANT_ID_NULL );
         }
 
-        //get All parent
+        // get All parent
         filter.setIdParent( SubmitFilter.ID_PARENT_NULL );
 
-        List<CommentSubmit> commentSubmitList = CommentSubmitHome.getCommentSubmitList( filter, nLimitParentNumber,
-                plugin );
+        List<CommentSubmit> commentSubmitList = CommentSubmitHome.getCommentSubmitList( filter, nLimitParentNumber, plugin );
 
         return commentSubmitList;
     }
@@ -175,7 +173,7 @@ public class CommentSubmitService implements ICommentSubmitService
      *
      * @return The instance of the singleton
      */
-    public static ICommentSubmitService getService(  )
+    public static ICommentSubmitService getService( )
     {
         if ( _singleton == null )
         {

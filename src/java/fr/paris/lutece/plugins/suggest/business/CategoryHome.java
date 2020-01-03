@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,31 +41,32 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
  *
- *class category Home
+ * class category Home
  *
  */
 public final class CategoryHome
 {
     // Static variable pointed at the DAO instance
     private static ICategoryDAO _dao = SpringContextService.getBean( "suggest.categoryDAO" );
-    private static AbstractCacheableService _cache = new SuggestCategoryCacheService(  );
+    private static AbstractCacheableService _cache = new SuggestCategoryCacheService( );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private CategoryHome(  )
+    private CategoryHome( )
     {
     }
 
     /**
-     * Creation of an instance of  category
+     * Creation of an instance of category
      *
-     * @param category The instance of the Category which contains the informations to store
-     * @param plugin the Plugin
-      */
+     * @param category
+     *            The instance of the Category which contains the informations to store
+     * @param plugin
+     *            the Plugin
+     */
     public static void create( Category category, Plugin plugin )
     {
         _dao.insert( category, plugin );
@@ -74,21 +75,25 @@ public final class CategoryHome
     /**
      * Update of the category which is specified in parameter
      *
-     * @param category The instance of the Category which contains the informations to update
-     * @param plugin the Plugin
+     * @param category
+     *            The instance of the Category which contains the informations to update
+     * @param plugin
+     *            the Plugin
      *
      */
     public static void update( Category category, Plugin plugin )
     {
         _dao.store( category, plugin );
-        _cache.removeKey( SuggestUtils.EMPTY_STRING + category.getIdCategory(  ) );
+        _cache.removeKey( SuggestUtils.EMPTY_STRING + category.getIdCategory( ) );
     }
 
     /**
      * Remove the category whose identifier is specified in parameter
      *
-     * @param nIdCategory The category Id
-     * @param plugin the Plugin
+     * @param nIdCategory
+     *            The category Id
+     * @param plugin
+     *            the Plugin
      */
     public static void remove( int nIdCategory, Plugin plugin )
     {
@@ -99,8 +104,10 @@ public final class CategoryHome
     /**
      * Returns an instance of a category whose identifier is specified in parameter
      *
-     * @param idKey The category primary key
-     * @param plugin the Plugin
+     * @param idKey
+     *            The category primary key
+     * @param plugin
+     *            the Plugin
      * @return an instance of category
      */
     public static Category findByPrimaryKey( int idKey, Plugin plugin )
@@ -117,20 +124,24 @@ public final class CategoryHome
     }
 
     /**
-        * Returns a list of all category
-        *
-        * @param plugin the plugin
-        * @return  the list of category
-        */
+     * Returns a list of all category
+     *
+     * @param plugin
+     *            the plugin
+     * @return the list of category
+     */
     public static List<Category> getList( Plugin plugin )
     {
         return _dao.select( plugin );
     }
 
     /**
-     * true if there is a  suggest associate to the category
-     * @param nIdCategory the key of the category
-     * @param plugin the plugin
+     * true if there is a suggest associate to the category
+     * 
+     * @param nIdCategory
+     *            the key of the category
+     * @param plugin
+     *            the plugin
      * @return true if there is a suggest associate to the category
      */
     public static boolean isAssociateToSuggest( int nIdCategory, Plugin plugin )
@@ -140,9 +151,12 @@ public final class CategoryHome
 
     /**
      * Returns a list of all category associate to the suggest
-     * @param nIdSuggest the id suggest
-     * @param plugin the plugin
-     * @return  the list of category
+     * 
+     * @param nIdSuggest
+     *            the id suggest
+     * @param plugin
+     *            the plugin
+     * @return the list of category
      */
     public static List<Category> getListByIdSuggest( int nIdSuggest, Plugin plugin )
     {
@@ -152,9 +166,12 @@ public final class CategoryHome
     /**
      * Delete an association between suggest and a category
      *
-     * @param nIdSuggest The identifier of the suggest
-     * @param nIdCategory The identifier of the category
-     * @param plugin the plugin
+     * @param nIdSuggest
+     *            The identifier of the suggest
+     * @param nIdCategory
+     *            The identifier of the category
+     * @param plugin
+     *            the plugin
      */
     public static void removeSuggestAssociation( int nIdSuggest, int nIdCategory, Plugin plugin )
     {
@@ -164,9 +181,12 @@ public final class CategoryHome
     /**
      * insert an association between suggest and categories
      *
-     * @param nIdSuggest The identifier of the suggest
-     * @param nIdCategory The identifier of the category
-     * @param plugin the plugin
+     * @param nIdSuggest
+     *            The identifier of the suggest
+     * @param nIdCategory
+     *            The identifier of the category
+     * @param plugin
+     *            the plugin
      */
     public static void createSuggestAssociation( int nIdSuggest, int nIdCategory, Plugin plugin )
     {

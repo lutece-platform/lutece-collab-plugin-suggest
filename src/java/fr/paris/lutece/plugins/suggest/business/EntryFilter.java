@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-
 /**
  *
  * class EntryFilter
@@ -49,16 +48,18 @@ public class EntryFilter
 
     /**
      *
-     * @return  the id of suggest insert in the filter
+     * @return the id of suggest insert in the filter
      */
-    public int getIdSuggest(  )
+    public int getIdSuggest( )
     {
         return _nIdSuggest;
     }
 
     /**
-     * set  the id of suggest  in the filter
-     * @param idSuggest the id of suggest to insert in the filter
+     * set the id of suggest in the filter
+     * 
+     * @param idSuggest
+     *            the id of suggest to insert in the filter
      */
     public void setIdSuggest( int idSuggest )
     {
@@ -69,7 +70,7 @@ public class EntryFilter
      *
      * @return true if the filter contain an id of suggest
      */
-    public boolean containsIdSuggest(  )
+    public boolean containsIdSuggest( )
     {
         return ( _nIdSuggest != ALL_INT );
     }

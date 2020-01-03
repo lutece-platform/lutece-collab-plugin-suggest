@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,7 +42,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  *
  * A suggest action.
@@ -50,8 +49,8 @@ import javax.servlet.http.HttpServletResponse;
  * <li>{@link #fillModel(HttpServletRequest, AdminUser, Map)} is called by DirectoryJspBean to add additionnal data in the main model
  * <li>{@link #getButtonTemplate()} is used in manage directory record template to display buttons.
  * <li>{@link #isInvoked(HttpServletRequest)} is used by DirectoryJspBean to detect the invoked action.
- * <li>{@link #process(HttpServletRequest, HttpServletResponse, AdminUser, DirectoryAdminSearchFields)} is called by DirectoryJspBean.
- * The {@link DefaultPluginActionResult} may contain html content or a redirect url or a noop.
+ * <li>{@link #process(HttpServletRequest, HttpServletResponse, AdminUser, DirectoryAdminSearchFields)} is called by DirectoryJspBean. The
+ * {@link DefaultPluginActionResult} may contain html content or a redirect url or a noop.
  * <li>{@link #getName()} is mainly for debbuging purpose
  * </ul>
  */

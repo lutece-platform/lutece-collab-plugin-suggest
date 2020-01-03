@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  *
  * suggest action Dao
@@ -45,10 +44,13 @@ import java.util.List;
 public interface ISuggestActionDAO
 {
     /**
-    * Load the list of actions for a all suggest by suggest state
-    * @param nState the state of the form
-    * @param plugin the plugin
-    * @return The Collection of actions
-    */
+     * Load the list of actions for a all suggest by suggest state
+     * 
+     * @param nState
+     *            the state of the form
+     * @param plugin
+     *            the plugin
+     * @return The Collection of actions
+     */
     List<SuggestAction> selectActionsBySuggestState( int nState, Plugin plugin );
 }

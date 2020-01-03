@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.Locale;
 
-
 /**
  *
  * DocumentExtendableResourceService
@@ -80,9 +79,7 @@ public class SuggestSubmitExtendableResourceService implements IExtendableResour
         {
             int nIdSuggestSubmit = Integer.parseInt( strIdResource );
 
-            return SuggestSubmitService.getService(  )
-                                    .findByPrimaryKey( nIdSuggestSubmit, false,
-                PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+            return SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, false, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
         }
 
         return null;
@@ -92,7 +89,7 @@ public class SuggestSubmitExtendableResourceService implements IExtendableResour
      * {@inheritDoc}
      */
     @Override
-    public String getResourceType(  )
+    public String getResourceType( )
     {
         return SuggestSubmit.RESOURCE_TYPE;
     }
@@ -115,19 +112,18 @@ public class SuggestSubmitExtendableResourceService implements IExtendableResour
         if ( StringUtils.isNotBlank( strIdResource ) && StringUtils.isNumeric( strIdResource ) )
         {
             int nIdSuggestSubmit = Integer.parseInt( strIdResource );
-            SuggestSubmit suggestSubmit = SuggestSubmitService.getService(  )
-                                                     .findByPrimaryKey( nIdSuggestSubmit, false,
+            SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, false,
                     PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
 
             if ( suggestSubmit != null )
             {
-                UrlItem urlItem = new UrlItem( AppPathService.getPortalUrl(  ) );
+                UrlItem urlItem = new UrlItem( AppPathService.getPortalUrl( ) );
                 urlItem.addParameter( MARK_PAGE, CONSTANT_SUGGEST );
-                urlItem.addParameter( MARK_ID_SUGGEST, suggestSubmit.getSuggest(  ).getIdSuggest(  ) );
+                urlItem.addParameter( MARK_ID_SUGGEST, suggestSubmit.getSuggest( ).getIdSuggest( ) );
                 urlItem.addParameter( MARK_ID_SUGGEST_SUBMIT, strIdResource );
                 urlItem.addParameter( MARK_ACTION, SuggestApp.ACTION_VIEW_SUGGEST_SUBMIT );
 
-                return urlItem.getUrl(  );
+                return urlItem.getUrl( );
             }
         }
 

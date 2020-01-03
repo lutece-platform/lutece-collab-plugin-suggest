@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.suggest.web;
 
-
 /**
  * Resource Value Object
  */
@@ -41,22 +40,25 @@ public class ResourceValueObject
 {
     // Variables declarations
     private int _nIdObject;
-    private byte[] _content;
+    private byte [ ] _content;
     private String _strContentType;
     private String _strFilename;
 
     /**
      * Returns the IdObject
+     * 
      * @return The IdObject
      */
-    public int getIdObject(  )
+    public int getIdObject( )
     {
         return _nIdObject;
     }
 
     /**
      * Sets the IdObject
-     * @param nIdObject The IdObject
+     * 
+     * @param nIdObject
+     *            The IdObject
      */
     public void setIdObject( int nIdObject )
     {
@@ -65,34 +67,40 @@ public class ResourceValueObject
 
     /**
      * Returns the Content
+     * 
      * @return The Content
      */
-    public byte[] getContent(  )
+    public byte [ ] getContent( )
     {
         return _content;
     }
 
     /**
      * Sets the Content
-     * @param content The Content
+     * 
+     * @param content
+     *            The Content
      */
-    public void setContent( byte[] content )
+    public void setContent( byte [ ] content )
     {
         _content = content;
     }
 
     /**
      * Returns the ContentType
+     * 
      * @return The ContentType
      */
-    public String getContentType(  )
+    public String getContentType( )
     {
         return _strContentType;
     }
 
     /**
      * Sets the ContentType
-     * @param strContentType The ContentType
+     * 
+     * @param strContentType
+     *            The ContentType
      */
     public void setContentType( String strContentType )
     {
@@ -101,16 +109,19 @@ public class ResourceValueObject
 
     /**
      * Returns the Filename
+     * 
      * @return The Filename
      */
-    public String getFilename(  )
+    public String getFilename( )
     {
         return _strFilename;
     }
 
     /**
      * Sets the Filename
-     * @param strFilename The Filename
+     * 
+     * @param strFilename
+     *            The Filename
      */
     public void setFilename( String strFilename )
     {

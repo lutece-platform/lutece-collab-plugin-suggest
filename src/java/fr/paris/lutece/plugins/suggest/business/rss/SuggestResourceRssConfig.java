@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.suggest.business.rss;
 
-
 /**
  *
  * SuggestResourceRssConfig
@@ -47,17 +46,19 @@ public class SuggestResourceRssConfig
     private int _nIdSuggestSubmit;
 
     /**
-    *
-    * @return id Rss
-    */
-    public int getIdRss(  )
+     *
+     * @return id Rss
+     */
+    public int getIdRss( )
     {
         return _nIdRss;
     }
 
     /**
      * set id Rss
-     * @param idRss id Rss
+     * 
+     * @param idRss
+     *            id Rss
      */
     public void setIdRss( int idRss )
     {
@@ -65,17 +66,19 @@ public class SuggestResourceRssConfig
     }
 
     /**
-    *
-    * @return id suggest
-    */
-    public int getIdSuggest(  )
+     *
+     * @return id suggest
+     */
+    public int getIdSuggest( )
     {
         return _nIdSuggest;
     }
 
     /**
      * set id suggest
-     * @param idSuggest id suggest
+     * 
+     * @param idSuggest
+     *            id suggest
      */
     public void setIdSuggest( int idSuggest )
     {
@@ -83,17 +86,19 @@ public class SuggestResourceRssConfig
     }
 
     /**
-    *
-    * @return true if it is a submit RSS
-    */
-    public boolean isSubmitRss(  )
+     *
+     * @return true if it is a submit RSS
+     */
+    public boolean isSubmitRss( )
     {
         return _bisSubmitRss;
     }
 
     /**
      * set true if it is a submit RSS
-     * @param isSubmitRss true if it is a submit RSS
+     * 
+     * @param isSubmitRss
+     *            true if it is a submit RSS
      */
     public void setSubmitRss( boolean isSubmitRss )
     {
@@ -101,17 +106,19 @@ public class SuggestResourceRssConfig
     }
 
     /**
-    *
-    * @return id suggestSubmit
-    */
-    public int getIdSuggestSubmit(  )
+     *
+     * @return id suggestSubmit
+     */
+    public int getIdSuggestSubmit( )
     {
         return _nIdSuggestSubmit;
     }
 
     /**
      * set id suggestSubmit
-     * @param idSuggestSubmit id suggestSubmit
+     * 
+     * @param idSuggestSubmit
+     *            id suggestSubmit
      */
     public void setIdSuggestSubmit( int idSuggestSubmit )
     {

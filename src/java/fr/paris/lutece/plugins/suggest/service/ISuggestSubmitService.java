@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,24 +46,27 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-
 public interface ISuggestSubmitService
 {
     /**
-    * Creation of an instance of record
-    *
-    * @param suggestSubmit The instance of the suggestSubmit which contains the informations to store
-    * @param plugin the Plugin
-    * @return the id of {@link Theme} suggestsubmit
-    */
+     * Creation of an instance of record
+     *
+     * @param suggestSubmit
+     *            The instance of the suggestSubmit which contains the informations to store
+     * @param plugin
+     *            the Plugin
+     * @return the id of {@link Theme} suggestsubmit
+     */
     @Transactional( "suggest.transactionManager" )
     int create( SuggestSubmit suggestSubmit, Plugin plugin, Locale locale );
 
     /**
      * Remove the record whose identifier is specified in parameter
      *
-     * @param nIdSuggestSubmit the id of the suggestSubmit
-     * @param plugin the Plugin
+     * @param nIdSuggestSubmit
+     *            the id of the suggestSubmit
+     * @param plugin
+     *            the Plugin
      */
     @Transactional( "suggest.transactionManager" )
     void remove( int nIdSuggestSubmit, Plugin plugin );
@@ -71,8 +74,10 @@ public interface ISuggestSubmitService
     /**
      * Update of the suggestSubmit which is specified in parameter
      *
-     * @param suggestSubmit The instance of the suggestSubmit which contains the informations to update
-     * @param plugin the Plugin
+     * @param suggestSubmit
+     *            The instance of the suggestSubmit which contains the informations to update
+     * @param plugin
+     *            the Plugin
      *
      */
     @Transactional( "suggest.transactionManager" )
@@ -80,6 +85,7 @@ public interface ISuggestSubmitService
 
     /**
      * Update of the suggestSubmit which is specified in parameter
+     * 
      * @param suggestSubmit
      * @param bUpdateIndex
      * @param plugin
@@ -90,9 +96,12 @@ public interface ISuggestSubmitService
     /**
      * Returns an instance of a SuggestSubmit whose identifier is specified in parameter
      *
-     * @param nKey The suggestSubmit primary key
-     * @param bLoadCommentList true if the comment list must be get
-     * @param plugin the Plugin
+     * @param nKey
+     *            The suggestSubmit primary key
+     * @param bLoadCommentList
+     *            true if the comment list must be get
+     * @param plugin
+     *            the Plugin
      * @return an instance of SuggestSubmit
      */
     SuggestSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList, Plugin plugin );
@@ -100,10 +109,14 @@ public interface ISuggestSubmitService
     /**
      * Returns an instance of a SuggestSubmit whose identifier is specified in parameter
      *
-     * @param nKey The suggestSubmit primary key
-     * @param bLoadCommentList true if the comment list must be get
-     * @param numberMaxCommentLoad the number max of parent comment Load
-     * @param plugin the Plugin
+     * @param nKey
+     *            The suggestSubmit primary key
+     * @param bLoadCommentList
+     *            true if the comment list must be get
+     * @param numberMaxCommentLoad
+     *            the number max of parent comment Load
+     * @param plugin
+     *            the Plugin
      * @return an instance of SuggestSubmit
      */
     SuggestSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList, Integer numberMaxCommentLoad, Plugin plugin );
@@ -111,91 +124,125 @@ public interface ISuggestSubmitService
     /**
      * Returns an instance of a SuggestSubmit whose identifier is specified in parameter
      *
-     * @param nKey The suggestSubmit primary key
-     * @param bLoadCommentList true if the comment list must be get
-     * @param bLoadResponseList true if the response list must be get
-     * @param plugin the Plugin
+     * @param nKey
+     *            The suggestSubmit primary key
+     * @param bLoadCommentList
+     *            true if the comment list must be get
+     * @param bLoadResponseList
+     *            true if the response list must be get
+     * @param plugin
+     *            the Plugin
      * @return an instance of SuggestSubmit
      */
     SuggestSubmit findByPrimaryKey( int nKey, boolean bLoadCommentList, boolean bLoadResponseList, Plugin plugin );
 
     /**
-     * Load the data of all the suggestSubmit who verify the filter and returns them in a  list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return  the list of suggestSubmit
+     * Load the data of all the suggestSubmit who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
+     * @return the list of suggestSubmit
      */
     List<SuggestSubmit> getSuggestSubmitList( SubmitFilter filter, Plugin plugin );
 
-    //    /**
-    //     * Load the data of all the suggestSubmit with the number of comment by suggest submit  who verify the filter and returns them in a  list
-    //     * @param filter the filter
-    //     * @param plugin the plugin
-    //     * @return  the list of suggestSubmit
-    //     */
-    //    List<SuggestSubmit> getSuggestSubmitListWithNumberComment( SubmitFilter filter, Plugin plugin );
+    // /**
+    // * Load the data of all the suggestSubmit with the number of comment by suggest submit who verify the filter and returns them in a list
+    // * @param filter the filter
+    // * @param plugin the plugin
+    // * @return the list of suggestSubmit
+    // */
+    // List<SuggestSubmit> getSuggestSubmitListWithNumberComment( SubmitFilter filter, Plugin plugin );
 
     /**
-     * Load the id of all the suggestSubmit who verify the filter and returns them in a  list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return  the list of suggestSubmit id
+     * Load the id of all the suggestSubmit who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
+     * @return the list of suggestSubmit id
      */
     List<Integer> getSuggestSubmitListId( SubmitFilter filter, Plugin plugin );
 
     /**
-     * Load the data of all the suggestSubmit who verify the filter and returns them in a  list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @param nNumberMaxSuggestSubmit Max Number of Suggestsubmit return
-     * @return  the list of suggestSubmit
+     * Load the data of all the suggestSubmit who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
+     * @param nNumberMaxSuggestSubmit
+     *            Max Number of Suggestsubmit return
+     * @return the list of suggestSubmit
      */
     List<SuggestSubmit> getSuggestSubmitList( SubmitFilter filter, Plugin plugin, int nNumberMaxSuggestSubmit );
 
     /**
      * Load the number of all the suggestSubmit who verify the filter
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return  the list of suggestSubmit
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
+     * @return the list of suggestSubmit
      */
     int getCountSuggestSubmit( SubmitFilter filter, Plugin plugin );
 
     /**
      * return the id of the next suggest submit in the list
-     *  @param nIdCurrentSuggestSubmit the id of the current suggest submit
-     * @param filter the filter
-     * @param plugin the plugin
+     * 
+     * @param nIdCurrentSuggestSubmit
+     *            the id of the current suggest submit
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
      * @return the id of the next suggest submit in the list
      */
     int findNextIdSuggestSubmitInTheList( int nIdCurrentSuggestSubmit, SubmitFilter filter, Plugin plugin );
 
     /**
      * return the id of the prev suggest submit in the list
-     *  @param nIdCurrentSuggestSubmit the id of the current suggest submit
-     * @param filter the filter
-     * @param plugin the plugin
+     * 
+     * @param nIdCurrentSuggestSubmit
+     *            the id of the current suggest submit
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
      * @return the id of the prev suggest submit in the list
      */
     int findPrevIdSuggestSubmitInTheList( int nIdCurrentSuggestSubmit, SubmitFilter filter, Plugin plugin );
 
     /**
      * move an element in the list of suggestSubmit and update the order
-     * @param nPositionElement the position of the element to move
-     * @param nNewPositionElement the new position of the element
-     * @param nIdSuggest the suggest id
-     * @param bListPinned true if the list to update contains only pinned suggestsubmit
-     * @param plugin the plugin
+     * 
+     * @param nPositionElement
+     *            the position of the element to move
+     * @param nNewPositionElement
+     *            the new position of the element
+     * @param nIdSuggest
+     *            the suggest id
+     * @param bListPinned
+     *            true if the list to update contains only pinned suggestsubmit
+     * @param plugin
+     *            the plugin
      */
     @Transactional( "suggest.transactionManager" )
-    void updateSuggestSubmitOrder( Integer nPositionElement, Integer nNewPositionElement, int nIdSuggest,
-        boolean bListPinned, Plugin plugin );
+    void updateSuggestSubmitOrder( Integer nPositionElement, Integer nNewPositionElement, int nIdSuggest, boolean bListPinned, Plugin plugin );
 
     /**
      * Search the max order number of contacts for one list
-     * @param nIdSuggest the Id of the Suggest
-     * @param bListPinned true if the list
+     * 
+     * @param nIdSuggest
+     *            the Id of the Suggest
+     * @param bListPinned
+     *            true if the list
      * @return int the max order
-     * @param plugin The Plugin object
+     * @param plugin
+     *            The Plugin object
      */
     int getMaxOrderList( int nIdSuggest, boolean bListPinned, Plugin plugin );
 
@@ -204,7 +251,8 @@ public interface ISuggestSubmitService
      *
      * @param nIdSuggest
      *            the id suggest
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      *
      * @locale locale the locale
      */
@@ -213,13 +261,18 @@ public interface ISuggestSubmitService
 
     /**
      * update the display of the suggestsubmit
-     * @param nIdSuggestSubmit the suggestSubmit Id
-     * @param plugin the plugin
-     * @param locale the locale
-     * @param suggest the suggest
-     * @param mapEntry a map of entry assocaited to the suggest
+     * 
+     * @param nIdSuggestSubmit
+     *            the suggestSubmit Id
+     * @param plugin
+     *            the plugin
+     * @param locale
+     *            the locale
+     * @param suggest
+     *            the suggest
+     * @param mapEntry
+     *            a map of entry assocaited to the suggest
      */
     @Transactional( "suggest.transactionManager" )
-    void updateDisplaySuggestSubmit( Integer nIdSuggestSubmit, Plugin plugin, Locale locale, Suggest suggest,
-        Map<Integer, IEntry> mapEntry );
+    void updateDisplaySuggestSubmit( Integer nIdSuggestSubmit, Plugin plugin, Locale locale, Suggest suggest, Map<Integer, IEntry> mapEntry );
 }

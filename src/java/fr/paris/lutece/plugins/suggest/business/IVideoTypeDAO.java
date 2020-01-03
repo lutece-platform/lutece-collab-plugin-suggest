@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,46 +37,54 @@ import com.mysql.jdbc.PacketTooBigException;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
-
 /**
-*
-*Interface IVideoTypeDAO
-*
-*/
+ *
+ * Interface IVideoTypeDAO
+ *
+ */
 public interface IVideoTypeDAO
 {
     /**
-    * Load the data of the vote type from the table
-    *
-    * @param idKey The identifier of the vote type
-    * @param plugin the plugin
+     * Load the data of the vote type from the table
+     *
+     * @param idKey
+     *            The identifier of the vote type
+     * @param plugin
+     *            the plugin
      * @return the video
-    */
+     */
     VideoType load( int idKey, Plugin plugin );
 
     /**
      * Insert a new record in the table.
      *
-     * @param video instance of the VideoType object to insert
-     * @param plugin the plugin
+     * @param video
+     *            instance of the VideoType object to insert
+     * @param plugin
+     *            the plugin
      * @return the id of the new video
-     * @throws PacketTooBigException  exception
+     * @throws PacketTooBigException
+     *             exception
      */
     int insert( VideoType video, Plugin plugin ) throws PacketTooBigException;
 
     /**
-         * Update the video in the table
-         *
-         * @param video instance of the VideoType object to update
-         * @param plugin the plugin
-         */
+     * Update the video in the table
+     *
+     * @param video
+     *            instance of the VideoType object to update
+     * @param plugin
+     *            the plugin
+     */
     void store( VideoType video, Plugin plugin );
 
     /**
-         * Delete a record from the table
-         *
-         * @param nIdSuggestSubmit The identifier of the SuggestSubmit
-         * @param plugin the plugin
-         */
+     * Delete a record from the table
+     *
+     * @param nIdSuggestSubmit
+     *            The identifier of the SuggestSubmit
+     * @param plugin
+     *            the plugin
+     */
     void delete( int nIdSuggestSubmit, Plugin plugin );
 }

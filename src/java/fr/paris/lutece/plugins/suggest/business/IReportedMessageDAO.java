@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,10 +37,9 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  *
- *  Interface IReportedMessageDAO
+ * Interface IReportedMessageDAO
  *
  */
 public interface IReportedMessageDAO
@@ -48,16 +47,20 @@ public interface IReportedMessageDAO
     /**
      * Insert a new reportedMessage in the table.
      *
-     * @param reportedMessage The instance of the reported Message which contains the informations to storet
-     * @param plugin the plugin
-     *          */
+     * @param reportedMessage
+     *            The instance of the reported Message which contains the informations to storet
+     * @param plugin
+     *            the plugin
+     * */
     void insert( ReportedMessage reportedMessage, Plugin plugin );
 
     /**
      * Load the data of the ReportedMessage from the table
      *
-     * @param nKey The identifier of the report Message
-     * @param plugin the plugin
+     * @param nKey
+     *            The identifier of the report Message
+     * @param plugin
+     *            the plugin
      * @return the instance of the ReportedMessage
      */
     ReportedMessage load( int nKey, Plugin plugin );
@@ -65,16 +68,21 @@ public interface IReportedMessageDAO
     /**
      * Delete the reportedMessage whose identifier is specified in parameter
      *
-     * @param nIdSuggestSubmit The nIdSuggestSubmit
-     * @param plugin the Plugin
+     * @param nIdSuggestSubmit
+     *            The nIdSuggestSubmit
+     * @param plugin
+     *            the Plugin
      */
     void deleteBySuggestSubmit( int nIdSuggestSubmit, Plugin plugin );
 
     /**
      * Load the data of all the reportedMessage who is associated to the nIdSuggestSubmit
-     * @param nIdSuggestSubmit the nIdSuggestSubmit
-     * @param plugin the plugin
-     * @return  the list of reportedMessage
+     * 
+     * @param nIdSuggestSubmit
+     *            the nIdSuggestSubmit
+     * @param plugin
+     *            the plugin
+     * @return the list of reportedMessage
      */
     List<ReportedMessage> selectListBySuggestSubmit( int nIdSuggestSubmit, Plugin plugin );
 }

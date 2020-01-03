@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.business.event.ResourceEvent;
 import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
 import fr.paris.lutece.portal.service.event.ResourceEventManager;
 
-
 /**
  *
  * SuggestIndexerUtils
@@ -49,17 +48,20 @@ public class SuggestIndexerUtils
     public static final String CONSTANT_TYPE_RESOURCE = "SUGGEST_SUGGEST";
 
     /**
-    * Warn that a action has been done.
-    * @param strIdDocument the document id
-    * @param nIdTask the key of the action to do
-    */
+     * Warn that a action has been done.
+     * 
+     * @param strIdDocument
+     *            the document id
+     * @param nIdTask
+     *            the key of the action to do
+     */
     public static void addIndexerAction( String strIdDocument, int nIdTask )
     {
-        ResourceEvent event = new ResourceEvent(  );
+        ResourceEvent event = new ResourceEvent( );
         event.setIdResource( strIdDocument );
         event.setTypeResource( CONSTANT_TYPE_RESOURCE );
 
-        switch ( nIdTask )
+        switch( nIdTask )
         {
             case IndexerAction.TASK_CREATE:
                 ResourceEventManager.fireAddedResource( event );

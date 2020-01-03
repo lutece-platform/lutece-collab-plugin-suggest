@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-
 /**
  *
  * service SuggestUserInfoService
@@ -55,7 +54,7 @@ public class SuggestUserInfoService implements ISuggestUserInfoService
      *
      * @return The instance of the singleton
      */
-    public static ISuggestUserInfoService getService(  )
+    public static ISuggestUserInfoService getService( )
     {
         if ( _singleton == null )
         {
@@ -71,27 +70,26 @@ public class SuggestUserInfoService implements ISuggestUserInfoService
     @Override
     public void updateSuggestUserInfoByLuteceUser( LuteceUser luteceUserConnected, Plugin plugin )
     {
-        //upadte suggest user info
-        if ( ( luteceUserConnected != null ) && ( luteceUserConnected.getName(  ) != null ) )
+        // upadte suggest user info
+        if ( ( luteceUserConnected != null ) && ( luteceUserConnected.getName( ) != null ) )
         {
-          
-            SuggestUserInfo suggestUserInfoStrored = SuggestUserInfoHome.findByKey( luteceUserConnected.getName(  ), plugin );
-            SuggestUserInfo suggestUserInfo = new SuggestUserInfo(  );
-            suggestUserInfo.setLuteceUserKey( luteceUserConnected.getName(  ) );
-            suggestUserInfo.setLastName( luteceUserConnected.getUserInfos(  ).get( LuteceUser.NAME_FAMILY ) );
-            suggestUserInfo.setFirstName( luteceUserConnected.getUserInfos(  ).get( LuteceUser.NAME_GIVEN ) );
-            suggestUserInfo.setLogin( luteceUserConnected.getName(  ) );
-            suggestUserInfo.setBusinesMail( luteceUserConnected.getUserInfos(  )
-                                                            .get( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL ) );
-            suggestUserInfo.setHomeMail( luteceUserConnected.getUserInfos(  ).get( LuteceUser.HOME_INFO_ONLINE_EMAIL ) );
-      
+
+            SuggestUserInfo suggestUserInfoStrored = SuggestUserInfoHome.findByKey( luteceUserConnected.getName( ), plugin );
+            SuggestUserInfo suggestUserInfo = new SuggestUserInfo( );
+            suggestUserInfo.setLuteceUserKey( luteceUserConnected.getName( ) );
+            suggestUserInfo.setLastName( luteceUserConnected.getUserInfos( ).get( LuteceUser.NAME_FAMILY ) );
+            suggestUserInfo.setFirstName( luteceUserConnected.getUserInfos( ).get( LuteceUser.NAME_GIVEN ) );
+            suggestUserInfo.setLogin( luteceUserConnected.getName( ) );
+            suggestUserInfo.setBusinesMail( luteceUserConnected.getUserInfos( ).get( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL ) );
+            suggestUserInfo.setHomeMail( luteceUserConnected.getUserInfos( ).get( LuteceUser.HOME_INFO_ONLINE_EMAIL ) );
+
             if ( suggestUserInfoStrored == null )
             {
-               SuggestUserInfoHome.create( suggestUserInfo, plugin );
+                SuggestUserInfoHome.create( suggestUserInfo, plugin );
             }
             else
             {
-            	SuggestUserInfoHome.update(suggestUserInfo, plugin);
+                SuggestUserInfoHome.update( suggestUserInfo, plugin );
             }
         }
     }

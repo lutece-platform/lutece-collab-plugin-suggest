@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-
 /**
  * This class provides instances management methods (create, find, ...) for ImageResource objects
  */
@@ -49,15 +48,17 @@ public final class ImageResourceHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private ImageResourceHome(  )
+    private ImageResourceHome( )
     {
     }
 
     /**
      * Creation of an instance of ImageResource
      *
-     * @param imageResource The instance of the ImageResource file which contains the informations to store
-     * @param plugin the plugin
+     * @param imageResource
+     *            The instance of the ImageResource file which contains the informations to store
+     * @param plugin
+     *            the plugin
      *
      * @return the id of the file after creation
      *
@@ -68,24 +69,28 @@ public final class ImageResourceHome
     }
 
     /**
-     *Delete the ImageResource file whose identifier is specified in parameter
+     * Delete the ImageResource file whose identifier is specified in parameter
      *
-     * @param nIdImageResource The identifier of the record physical file
-     * @param plugin the Plugin
+     * @param nIdImageResource
+     *            The identifier of the record physical file
+     * @param plugin
+     *            the Plugin
      */
     public static void remove( int nIdImageResource, Plugin plugin )
     {
         _dao.delete( nIdImageResource, plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Returns an instance of a ImageResource whose identifier is specified in parameter
      *
-     * @param nKey The file  primary key
-     * @param plugin the Plugin
+     * @param nKey
+     *            The file primary key
+     * @param plugin
+     *            the Plugin
      * @return an instance of ImageResource
      */
     public static ImageResource findByPrimaryKey( int nKey, Plugin plugin )

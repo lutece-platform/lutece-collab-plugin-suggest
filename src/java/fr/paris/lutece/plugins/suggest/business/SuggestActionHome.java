@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  * This class provides instances management methods (create, find, ...) for SuggestAction objects
  */
@@ -52,15 +51,19 @@ public final class SuggestActionHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private SuggestActionHome(  )
+    private SuggestActionHome( )
     {
     }
 
     /**
      * Load the list of actions by suggest state
-     * @param nState the state of the suggest
-     * @param locale the locale
-     * @param plugin the plugin
+     * 
+     * @param nState
+     *            the state of the suggest
+     * @param locale
+     *            the locale
+     * @param plugin
+     *            the plugin
      * @return The Collection of actions
      */
     public static List<SuggestAction> selectActionsBySuggestState( int nState, Plugin plugin, Locale locale )

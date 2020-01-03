@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,7 +55,6 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 
-
 /**
  * LuceneSearchEngine
  */
@@ -64,8 +63,10 @@ public class SuggestLuceneSearchEngine implements SuggestSearchEngine
     /**
      * Return search results
      * 
-     * @param strQuery The search query
-     * @param filter the filter
+     * @param strQuery
+     *            The search query
+     * @param filter
+     *            the filter
      * @return Results as a collection of SearchResult
      */
     public List<SuggestSearchItem> getSearchResults( String strQuery, SubmitFilter filter )
@@ -82,7 +83,7 @@ public class SuggestLuceneSearchEngine implements SuggestSearchEngine
             Collection<String> fields = new ArrayList<String>( );
             Collection<BooleanClause.Occur> flags = new ArrayList<BooleanClause.Occur>( );
 
-            //filter on content
+            // filter on content
             if ( ( strQuery != null ) && !strQuery.equals( "" ) )
             {
                 Query queryContent = new TermQuery( new Term( SuggestSearchItem.FIELD_CONTENTS, strQuery ) );
@@ -91,51 +92,46 @@ public class SuggestLuceneSearchEngine implements SuggestSearchEngine
                 flags.add( BooleanClause.Occur.MUST );
             }
 
-            //filter on content id suggest
+            // filter on content id suggest
             if ( filter.containsIdSuggest( ) )
             {
-                Query queryIdSuggest = new TermQuery( new Term( SuggestSearchItem.FIELD_ID_SUGGEST, String.valueOf( filter
-                        .getIdSuggest( ) ) ) );
+                Query queryIdSuggest = new TermQuery( new Term( SuggestSearchItem.FIELD_ID_SUGGEST, String.valueOf( filter.getIdSuggest( ) ) ) );
                 queries.add( queryIdSuggest.toString( ) );
                 fields.add( SuggestSearchItem.FIELD_ID_SUGGEST );
                 flags.add( BooleanClause.Occur.MUST );
             }
 
-            //filter on suggest submit state
+            // filter on suggest submit state
             if ( filter.containsIdSuggestSubmitState( ) )
             {
-                Query queryState = new TermQuery( new Term( SuggestSearchItem.FIELD_STATE, String.valueOf( filter
-                        .getIdSuggestSubmitState( ) ) ) );
+                Query queryState = new TermQuery( new Term( SuggestSearchItem.FIELD_STATE, String.valueOf( filter.getIdSuggestSubmitState( ) ) ) );
                 queries.add( queryState.toString( ) );
                 fields.add( SuggestSearchItem.FIELD_STATE );
                 flags.add( BooleanClause.Occur.MUST );
             }
 
-            //filter on suggest type
-            Query queryTypeSuggest = new TermQuery( new Term( SuggestSearchItem.FIELD_TYPE,
-                    SuggestIndexer.INDEX_TYPE_SUGGEST ) );
+            // filter on suggest type
+            Query queryTypeSuggest = new TermQuery( new Term( SuggestSearchItem.FIELD_TYPE, SuggestIndexer.INDEX_TYPE_SUGGEST ) );
             queries.add( queryTypeSuggest.toString( ) );
             fields.add( SuggestSearchItem.FIELD_TYPE );
             flags.add( BooleanClause.Occur.MUST );
 
-            Query queryMulti = MultiFieldQueryParser.parse(
-                    (String[]) queries.toArray( new String[queries.size( )] ),
-                    (String[]) fields.toArray( new String[fields.size( )] ),
-                    (BooleanClause.Occur[]) flags.toArray( new BooleanClause.Occur[flags.size( )] ),
-                    IndexationService.getAnalyser( ) );
+            Query queryMulti = MultiFieldQueryParser.parse( (String [ ]) queries.toArray( new String [ queries.size( )] ),
+                    (String [ ]) fields.toArray( new String [ fields.size( )] ),
+                    (BooleanClause.Occur [ ]) flags.toArray( new BooleanClause.Occur [ flags.size( )] ), IndexationService.getAnalyser( ) );
 
             TopDocs topDocs = searcher.search( queryMulti, LuceneSearchEngine.MAX_RESPONSES );
-            ScoreDoc[] hits = topDocs.scoreDocs;
+            ScoreDoc [ ] hits = topDocs.scoreDocs;
 
             for ( int i = 0; i < hits.length; i++ )
             {
-                int docId = hits[i].doc;
+                int docId = hits [i].doc;
                 Document document = searcher.doc( docId );
                 SuggestSearchItem si = new SuggestSearchItem( document );
                 listResults.add( si );
             }
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             AppLogService.error( e.getMessage( ), e );
         }

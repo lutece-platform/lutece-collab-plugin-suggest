@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -51,7 +51,6 @@ import java.sql.Timestamp;
 
 import java.util.List;
 
-
 /**
  *
  * PublicationService
@@ -60,53 +59,51 @@ import java.util.List;
 public final class PublicationService
 {
     /**
-    * PublicationService
-    *
-    */
-    private PublicationService(  )
+     * PublicationService
+     *
+     */
+    private PublicationService( )
     {
     }
 
     /**
-     * disable all suggest submit not voted during the period
-     * specified in the suggest
+     * disable all suggest submit not voted during the period specified in the suggest
      *
      */
-    public static void publication(  )
+    public static void publication( )
     {
         Plugin plugin = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
         Timestamp dateCreationMin;
-        Timestamp currentDate = SuggestUtils.getCurrentDate(  );
+        Timestamp currentDate = SuggestUtils.getCurrentDate( );
         List<SuggestSubmit> listSuggestSubmit;
         SuggestSubmitState suggestSubmitStateDisable = SuggestSubmitStateHome.findByNumero( SuggestSubmit.STATE_DISABLE, plugin );
         SuggestSubmitState suggestSubmitStatePublish = SuggestSubmitStateHome.findByNumero( SuggestSubmit.STATE_PUBLISH, plugin );
 
-        SuggestFilter suggestFilter = new SuggestFilter(  );
+        SuggestFilter suggestFilter = new SuggestFilter( );
 
         suggestFilter.setIdState( Suggest.STATE_ENABLE );
 
         List<Suggest> listSuggest = SuggestHome.getSuggestList( suggestFilter, plugin );
 
-        SubmitFilter submitFilter = new SubmitFilter(  );
-        submitFilter.setIdSuggestSubmitState( suggestSubmitStatePublish.getIdSuggestSubmitState(  ) );
+        SubmitFilter submitFilter = new SubmitFilter( );
+        submitFilter.setIdSuggestSubmitState( suggestSubmitStatePublish.getIdSuggestSubmitState( ) );
         submitFilter.setNumberVote( 0 );
 
         for ( Suggest suggest : listSuggest )
         {
-            if ( suggest.getNumberDayRequired(  ) > 0 )
+            if ( suggest.getNumberDayRequired( ) > 0 )
             {
-                dateCreationMin = SuggestUtils.getDateAfterNDay( currentDate, -suggest.getNumberDayRequired(  ) );
-                submitFilter.setIdSuggest( suggest.getIdSuggest(  ) );
+                dateCreationMin = SuggestUtils.getDateAfterNDay( currentDate, -suggest.getNumberDayRequired( ) );
+                submitFilter.setIdSuggest( suggest.getIdSuggest( ) );
                 submitFilter.setDateLast( dateCreationMin );
-                listSuggestSubmit = SuggestSubmitService.getService(  ).getSuggestSubmitList( submitFilter, plugin );
+                listSuggestSubmit = SuggestSubmitService.getService( ).getSuggestSubmitList( submitFilter, plugin );
 
                 for ( SuggestSubmit suggestSubmit : listSuggestSubmit )
                 {
-                    suggestSubmit = SuggestSubmitService.getService(  )
-                                                  .findByPrimaryKey( suggestSubmit.getIdSuggestSubmit(  ), false, plugin );
+                    suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( suggestSubmit.getIdSuggestSubmit( ), false, plugin );
                     suggestSubmit.setSuggestSubmitState( suggestSubmitStateDisable );
-                    SuggestSubmitService.getService(  ).update( suggestSubmit, plugin );
-                    SuggestUtils.sendNotificationNewSuggestSubmitDisable( suggest, suggestSubmit, I18nService.getDefaultLocale(  ) );
+                    SuggestSubmitService.getService( ).update( suggestSubmit, plugin );
+                    SuggestUtils.sendNotificationNewSuggestSubmitDisable( suggest, suggestSubmit, I18nService.getDefaultLocale( ) );
                 }
             }
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,40 +37,49 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
-*  interface IEntryAdditionalAttributeDAO
-*/
+ * interface IEntryAdditionalAttributeDAO
+ */
 public interface IEntryAdditionalAttributeDAO
 {
     /**
-    * Insert a new record in the table.
-    * @param entryAdditionalAttribute instance of the Entry additional attribute object to insert
-    * @param plugin the plugin
-    */
+     * Insert a new record in the table.
+     * 
+     * @param entryAdditionalAttribute
+     *            instance of the Entry additional attribute object to insert
+     * @param plugin
+     *            the plugin
+     */
     void insert( EntryAdditionalAttribute entryAdditionalAttribute, Plugin plugin );
 
     /**
      * Load the additional attribute of the entry returns them in a list
-     * @param idEntry the id of the Entry
-     * @param plugin the plugin
-     * @return  the list of entry additional attribute
+     * 
+     * @param idEntry
+     *            the id of the Entry
+     * @param plugin
+     *            the plugin
+     * @return the list of entry additional attribute
      */
     List<EntryAdditionalAttribute> selectEntryAdditionalAttributeList( int idEntry, Plugin plugin );
 
     /**
-     * Delete   the additional entry whose identifier is specified in parameter
+     * Delete the additional entry whose identifier is specified in parameter
      *
-     * @param nIdEntry The identifier of the entry
-     * @param plugin the plugin
+     * @param nIdEntry
+     *            The identifier of the entry
+     * @param plugin
+     *            the plugin
      */
     void delete( int nIdEntry, Plugin plugin );
 
     /**
      * Update the additional entry in the table
      *
-     * @param entryAdditionalAttribute instance of the EntryAdditionalAttribute object to update
-     * @param plugin the plugin
+     * @param entryAdditionalAttribute
+     *            instance of the EntryAdditionalAttribute object to update
+     * @param plugin
+     *            the plugin
      */
     void store( EntryAdditionalAttribute entryAdditionalAttribute, Plugin plugin );
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,13 +33,11 @@
  */
 package fr.paris.lutece.plugins.suggest.business.rss;
 
-
 //import fr.paris.lutece.plugins.suggest.service.DirectoryPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
-
 
 /**
  * SuggestResourceRssConfigHome
@@ -52,15 +50,17 @@ public final class SuggestResourceRssConfigHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private SuggestResourceRssConfigHome(  )
+    private SuggestResourceRssConfigHome( )
     {
     }
 
     /**
      * Insert new configuration
      *
-     * @param config object configuration
-     * @param plugin the plugin
+     * @param config
+     *            object configuration
+     * @param plugin
+     *            the plugin
      */
     public static void create( SuggestResourceRssConfig config, Plugin plugin )
     {
@@ -70,8 +70,10 @@ public final class SuggestResourceRssConfigHome
     /**
      * Update a configuration
      *
-     * @param config object configuration
-     * @param plugin the plugin
+     * @param config
+     *            object configuration
+     * @param plugin
+     *            the plugin
      */
     public static void update( SuggestResourceRssConfig config, Plugin plugin )
     {
@@ -80,8 +82,11 @@ public final class SuggestResourceRssConfigHome
 
     /**
      * Delete a configuration
-     * @param nIdSuggestResourceRssConfig id SuggestResourceRssConfig
-     * @param plugin the plugin
+     * 
+     * @param nIdSuggestResourceRssConfig
+     *            id SuggestResourceRssConfig
+     * @param plugin
+     *            the plugin
      */
     public static void remove( int nIdSuggestResourceRssConfig, Plugin plugin )
     {
@@ -90,8 +95,11 @@ public final class SuggestResourceRssConfigHome
 
     /**
      * Delete a configuration
-     * @param nIdSuggestResourceRssConfig id task
-     * @param plugin the plugin
+     * 
+     * @param nIdSuggestResourceRssConfig
+     *            id task
+     * @param plugin
+     *            the plugin
      * @return a configuration
      *
      */
@@ -104,7 +112,9 @@ public final class SuggestResourceRssConfigHome
 
     /**
      * Load All SuggestResourceRssConfig
-     * @param plugin the plugin
+     * 
+     * @param plugin
+     *            the plugin
      * @return a list of SuggestResourceRssConfig
      *
      */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-
 /**
  *
  * class entryType
@@ -49,14 +48,16 @@ public class EntryType
      *
      * @return the id of the entry type
      */
-    public int getIdType(  )
+    public int getIdType( )
     {
         return _nIdType;
     }
 
     /**
      * set the id of the entry type
-     * @param idType the id of the entry type
+     * 
+     * @param idType
+     *            the id of the entry type
      */
     public void setIdType( int idType )
     {
@@ -67,14 +68,16 @@ public class EntryType
      *
      * @return the title of the entry type
      */
-    public String getTitle(  )
+    public String getTitle( )
     {
         return _strTitle;
     }
 
     /**
      * set the title of the entry type
-     * @param title the title of the entry type
+     * 
+     * @param title
+     *            the title of the entry type
      */
     public void setTitle( String title )
     {
@@ -85,14 +88,16 @@ public class EntryType
      *
      * @return the path for acces to the Classe Entry
      */
-    public String getClassName(  )
+    public String getClassName( )
     {
         return _strClassName;
     }
 
     /**
      * set the path for acces to the Class Entry
-     * @param className the path for acces to the Class Entry
+     * 
+     * @param className
+     *            the path for acces to the Class Entry
      */
     public void setClassName( String className )
     {

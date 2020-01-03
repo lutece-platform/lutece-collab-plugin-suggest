@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  * class EntryTypeTextArea
@@ -60,19 +59,23 @@ public class EntryTypeTextArea extends Entry
     private final String _template_html_code_response = "admin/plugins/suggest/html_code_response_entry_type_text_area.html";
 
     /**
-     * Get the HtmlCode  of   the entry
-     * @return the HtmlCode  of   the entry
+     * Get the HtmlCode of the entry
+     * 
+     * @return the HtmlCode of the entry
      *
      * */
-    public String getTemplateHtmlCodeForm(  )
+    public String getTemplateHtmlCodeForm( )
     {
         return _template_html_code_form;
     }
 
     /**
      * Get the request data
-     * @param request HttpRequest
-     * @param locale the locale
+     * 
+     * @param request
+     *            HttpRequest
+     * @param locale
+     *            the locale
      * @return null if all data requiered are in the request else the url of jsp error
      */
     public String getRequestData( HttpServletRequest request, Locale locale )
@@ -93,26 +96,29 @@ public class EntryTypeTextArea extends Entry
 
         String strFieldError = EMPTY_STRING;
 
-        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) )
+        if ( ( strTitle == null ) || strTitle.trim( ).equals( EMPTY_STRING ) )
         {
             strFieldError = FIELD_TITLE;
         }
 
-        else if ( ( strWidth == null ) || strWidth.trim(  ).equals( EMPTY_STRING ) )
-        {
-            strFieldError = FIELD_WIDTH;
-        }
-        else if ( ( strHeight == null ) || strHeight.trim(  ).equals( EMPTY_STRING ) )
-        {
-            strFieldError = FIELD_HEIGHT;
-        }
+        else
+            if ( ( strWidth == null ) || strWidth.trim( ).equals( EMPTY_STRING ) )
+            {
+                strFieldError = FIELD_WIDTH;
+            }
+            else
+                if ( ( strHeight == null ) || strHeight.trim( ).equals( EMPTY_STRING ) )
+                {
+                    strFieldError = FIELD_HEIGHT;
+                }
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         nHeight = SuggestUtils.getIntegerParameter( strHeight );
@@ -138,10 +144,11 @@ public class EntryTypeTextArea extends Entry
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         this.setTitle( strTitle );
@@ -176,44 +183,50 @@ public class EntryTypeTextArea extends Entry
 
     /**
      * Get template create url of the entry
+     * 
      * @return template create url of the entry
      */
-    public String getTemplateCreate(  )
+    public String getTemplateCreate( )
     {
         return _template_create;
     }
 
     /**
-     * Get the template modify url  of the entry
-     * @return template modify url  of the entry
+     * Get the template modify url of the entry
+     * 
+     * @return template modify url of the entry
      */
-    public String getTemplateModify(  )
+    public String getTemplateModify( )
     {
         return _template_modify;
     }
 
     /**
      * save in the list of response the response associate to the entry in the form submit
-     * @param request HttpRequest
-     * @param listResponse the list of response associate to the entry in the form submit
-     * @param locale the locale
+     * 
+     * @param request
+     *            HttpRequest
+     * @param listResponse
+     *            the list of response associate to the entry in the form submit
+     * @param locale
+     *            the locale
      * @return a Form error object if there is an error in the response
      */
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strValueEntry = request.getParameter( SuggestUtils.EMPTY_STRING + this.getIdEntry(  ) ).trim(  );
-        Response response = new Response(  );
+        String strValueEntry = request.getParameter( SuggestUtils.EMPTY_STRING + this.getIdEntry( ) ).trim( );
+        Response response = new Response( );
         response.setEntry( this );
 
         if ( strValueEntry != null )
         {
-            if ( this.isMandatory(  ) )
+            if ( this.isMandatory( ) )
             {
                 if ( strValueEntry.equals( SuggestUtils.EMPTY_STRING ) )
                 {
-                    FormError formError = new FormError(  );
+                    FormError formError = new FormError( );
                     formError.setMandatoryError( true );
-                    formError.setTitleQuestion( this.getTitle(  ) );
+                    formError.setTitleQuestion( this.getTitle( ) );
 
                     return formError;
                 }
@@ -229,24 +242,30 @@ public class EntryTypeTextArea extends Entry
 
     /**
      * save in the list of response the response associate to the entry in the form submit
-     * @param nIdSuggestSubmit The if of the SuggestSubmit
-     * @param request HttpRequest
-     * @param listResponse the list of response associate to the entry in the form submit
-     * @param locale the locale
-     * @param plugin the plugin
+     * 
+     * @param nIdSuggestSubmit
+     *            The if of the SuggestSubmit
+     * @param request
+     *            HttpRequest
+     * @param listResponse
+     *            the list of response associate to the entry in the form submit
+     * @param locale
+     *            the locale
+     * @param plugin
+     *            the plugin
      * @return a Form error object if there is an error in the response
      */
-    public FormError getResponseData( int nIdSuggestSubmit, HttpServletRequest request, List<Response> listResponse,
-        Locale locale, Plugin plugin )
+    public FormError getResponseData( int nIdSuggestSubmit, HttpServletRequest request, List<Response> listResponse, Locale locale, Plugin plugin )
     {
         return getResponseData( request, listResponse, locale );
     }
 
     /**
-     * Get the template of the html code of the response value  associate to the entry
-    * @return the template of the html code of the response value  associate to the entry
+     * Get the template of the html code of the response value associate to the entry
+     * 
+     * @return the template of the html code of the response value associate to the entry
      */
-    public String getTemplateHtmlCodeResponse(  )
+    public String getTemplateHtmlCodeResponse( )
     {
         return _template_html_code_response;
     }

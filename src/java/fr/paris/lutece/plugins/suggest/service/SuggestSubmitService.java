@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,7 +63,6 @@ import java.util.Map;
 
 import org.springframework.transaction.annotation.Transactional;
 
-
 public class SuggestSubmitService implements ISuggestSubmitService
 {
     public static final String BEAN_SERVICE = "suggest.suggestSubmitService";
@@ -76,14 +75,13 @@ public class SuggestSubmitService implements ISuggestSubmitService
     @Transactional( "suggest.transactionManager" )
     public int create( SuggestSubmit suggestSubmit, Plugin plugin, Locale locale )
     {
-        //update creation date
-        suggestSubmit.setDateResponse( SuggestUtils.getCurrentDate(  ) );
+        // update creation date
+        suggestSubmit.setDateResponse( SuggestUtils.getCurrentDate( ) );
 
-        //update suggest submit state
-        if ( suggestSubmit.getSuggest(  ).isDisableNewSuggestSubmit(  ) )
+        // update suggest submit state
+        if ( suggestSubmit.getSuggest( ).isDisableNewSuggestSubmit( ) )
         {
-            suggestSubmit.setSuggestSubmitState( SuggestSubmitStateHome.findByNumero( SuggestSubmit.STATE_WAITING_FOR_PUBLISH,
-                    plugin ) );
+            suggestSubmit.setSuggestSubmitState( SuggestSubmitStateHome.findByNumero( SuggestSubmit.STATE_WAITING_FOR_PUBLISH, plugin ) );
         }
         else
         {
@@ -93,25 +91,25 @@ public class SuggestSubmitService implements ISuggestSubmitService
         int nIdSuggestSubmit = SuggestSubmitHome.create( suggestSubmit, plugin );
         suggestSubmit.setIdSuggestSubmit( nIdSuggestSubmit );
 
-        if ( suggestSubmit.getSuggestSubmitState(  ).getIdSuggestSubmitState(  ) == SuggestSubmit.STATE_PUBLISH )
+        if ( suggestSubmit.getSuggestSubmitState( ).getIdSuggestSubmitState( ) == SuggestSubmit.STATE_PUBLISH )
         {
             String strIdSuggestSubmit = Integer.toString( nIdSuggestSubmit );
-            IndexationService.addIndexerAction( strIdSuggestSubmit,
-                AppPropertiesService.getProperty( SuggestIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_CREATE );
+            IndexationService.addIndexerAction( strIdSuggestSubmit, AppPropertiesService.getProperty( SuggestIndexer.PROPERTY_INDEXER_NAME ),
+                    IndexerAction.TASK_CREATE );
 
             SuggestIndexerUtils.addIndexerAction( strIdSuggestSubmit, IndexerAction.TASK_CREATE );
         }
 
-        //store response
-        if ( suggestSubmit.getResponses(  ) != null )
+        // store response
+        if ( suggestSubmit.getResponses( ) != null )
         {
-            for ( Response response : suggestSubmit.getResponses(  ) )
+            for ( Response response : suggestSubmit.getResponses( ) )
             {
-                if ( response.getImage(  ) != null )
+                if ( response.getImage( ) != null )
                 {
-                    response.setIdImageResource( ImageResourceHome.create( response.getImage(  ), plugin ) );
-                    //update Id Image ressource associate to the suggest
-                    suggestSubmit.setIdImageResource( response.getIdImageResource(  ) );
+                    response.setIdImageResource( ImageResourceHome.create( response.getImage( ), plugin ) );
+                    // update Id Image ressource associate to the suggest
+                    suggestSubmit.setIdImageResource( response.getIdImageResource( ) );
                 }
 
                 response.setSuggestSubmit( suggestSubmit );
@@ -119,7 +117,7 @@ public class SuggestSubmitService implements ISuggestSubmitService
             }
         }
 
-        //update SuggestSubmit 
+        // update SuggestSubmit
         suggestSubmit.setSuggestSubmitValue( SuggestUtils.getHtmlSuggestSubmitValue( suggestSubmit, locale ) );
         suggestSubmit.setSuggestSubmitValueShowInTheList( SuggestUtils.getHtmlSuggestSubmitValueShowInTheList( suggestSubmit, locale ) );
         suggestSubmit.setSuggestSubmitTitle( SuggestUtils.getSuggestSubmitTitle( suggestSubmit, locale ) );
@@ -159,11 +157,11 @@ public class SuggestSubmitService implements ISuggestSubmitService
 
         if ( suggestSubmit != null )
         {
-            int nIdSuggest = suggestSubmit.getSuggest(  ).getIdSuggest(  );
-            //remove
+            int nIdSuggest = suggestSubmit.getSuggest( ).getIdSuggest( );
+            // remove
             SuggestSubmitHome.remove( nIdSuggestSubmit, plugin );
-            //update suggest submit order
-            updateSuggestSubmitOrder( null, null, nIdSuggest, suggestSubmit.isPinned(  ), plugin );
+            // update suggest submit order
+            updateSuggestSubmitOrder( null, null, nIdSuggest, suggestSubmit.isPinned( ), plugin );
         }
     }
 
@@ -172,13 +170,12 @@ public class SuggestSubmitService implements ISuggestSubmitService
      */
     @Override
     @Transactional( "suggest.transactionManager" )
-    public void updateSuggestSubmitOrder( Integer nPositionElement, Integer nNewPositionElement, int nIdSuggest,
-        boolean bListPinned, Plugin plugin )
+    public void updateSuggestSubmitOrder( Integer nPositionElement, Integer nNewPositionElement, int nIdSuggest, boolean bListPinned, Plugin plugin )
     {
-        SubmitFilter filter = new SubmitFilter(  );
+        SubmitFilter filter = new SubmitFilter( );
         filter.setIdSuggest( nIdSuggest );
 
-        List<Integer> listSortByManually = new ArrayList<Integer>(  );
+        List<Integer> listSortByManually = new ArrayList<Integer>( );
         listSortByManually.add( SubmitFilter.SORT_MANUALLY );
         filter.setSortBy( listSortByManually );
         //
@@ -186,13 +183,12 @@ public class SuggestSubmitService implements ISuggestSubmitService
 
         List<Integer> listIdSuggestDubmit = getSuggestSubmitListId( filter, plugin );
 
-        if ( ( listIdSuggestDubmit != null ) && ( listIdSuggestDubmit.size(  ) > 0 ) )
+        if ( ( listIdSuggestDubmit != null ) && ( listIdSuggestDubmit.size( ) > 0 ) )
         {
-            if ( ( nPositionElement != null ) && ( nNewPositionElement != null )
-                    && ( !nPositionElement.equals( nNewPositionElement ) ) )
+            if ( ( nPositionElement != null ) && ( nNewPositionElement != null ) && ( !nPositionElement.equals( nNewPositionElement ) ) )
             {
-                if ( ( ( nPositionElement > 0 ) && ( nPositionElement <= ( listIdSuggestDubmit.size(  ) + 1 ) ) ) &&
-                        ( ( nNewPositionElement > 0 ) && ( nNewPositionElement <= ( listIdSuggestDubmit.size(  ) + 1 ) ) ) )
+                if ( ( ( nPositionElement > 0 ) && ( nPositionElement <= ( listIdSuggestDubmit.size( ) + 1 ) ) )
+                        && ( ( nNewPositionElement > 0 ) && ( nNewPositionElement <= ( listIdSuggestDubmit.size( ) + 1 ) ) ) )
                 {
                     SuggestUtils.moveElement( nPositionElement, nNewPositionElement, (ArrayList<Integer>) listIdSuggestDubmit );
                 }
@@ -200,7 +196,7 @@ public class SuggestSubmitService implements ISuggestSubmitService
 
             int nNewOrder = 1;
 
-            //update all Suggest submit
+            // update all Suggest submit
             for ( Integer nIdSuggestSubmit : listIdSuggestDubmit )
             {
                 SuggestSubmitHome.updateSuggestSubmitOrder( nNewOrder++, nIdSuggestSubmit, plugin );
@@ -225,14 +221,12 @@ public class SuggestSubmitService implements ISuggestSubmitService
     {
         SuggestSubmit suggestSubmit = SuggestSubmitHome.findByPrimaryKey( nKey, plugin );
 
-        if ( ( suggestSubmit != null ) && !suggestSubmit.isDisableComment(  ) && bLoadCommentList )
+        if ( ( suggestSubmit != null ) && !suggestSubmit.isDisableComment( ) && bLoadCommentList )
         {
-            SubmitFilter submmitFilterComment = new SubmitFilter(  );
-            submmitFilterComment.setIdSuggestSubmit( suggestSubmit.getIdSuggestSubmit(  ) );
+            SubmitFilter submmitFilterComment = new SubmitFilter( );
+            submmitFilterComment.setIdSuggestSubmit( suggestSubmit.getIdSuggestSubmit( ) );
             submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
-            suggestSubmit.setComments( CommentSubmitService.getService(  )
-                                                        .getCommentSubmitList( submmitFilterComment,
-                    numberMaxCommentLoad, plugin ) );
+            suggestSubmit.setComments( CommentSubmitService.getService( ).getCommentSubmitList( submmitFilterComment, numberMaxCommentLoad, plugin ) );
         }
 
         return suggestSubmit;
@@ -248,8 +242,8 @@ public class SuggestSubmitService implements ISuggestSubmitService
 
         if ( ( suggestSubmit != null ) && bLoadResponseList )
         {
-            SubmitFilter submmitFilter = new SubmitFilter(  );
-            submmitFilter.setIdSuggestSubmit( suggestSubmit.getIdSuggestSubmit(  ) );
+            SubmitFilter submmitFilter = new SubmitFilter( );
+            submmitFilter.setIdSuggestSubmit( suggestSubmit.getIdSuggestSubmit( ) );
             suggestSubmit.setResponses( ResponseHome.getResponseList( submmitFilter, plugin ) );
         }
 
@@ -263,16 +257,16 @@ public class SuggestSubmitService implements ISuggestSubmitService
     public int findNextIdSuggestSubmitInTheList( int nIdCurrentSuggestSubmit, SubmitFilter filter, Plugin plugin )
     {
         List<Integer> suggestSubmitListId = getSuggestSubmitListId( filter, plugin );
-        Object[] suggestSubmitArrayId = suggestSubmitListId.toArray(  );
+        Object [ ] suggestSubmitArrayId = suggestSubmitListId.toArray( );
         int nIdSuggestSubmitNext = -1;
 
         for ( int cpt = 0; cpt < suggestSubmitArrayId.length; cpt++ )
         {
-            if ( (Integer) suggestSubmitArrayId[cpt] == nIdCurrentSuggestSubmit )
+            if ( (Integer) suggestSubmitArrayId [cpt] == nIdCurrentSuggestSubmit )
             {
                 if ( cpt < ( suggestSubmitArrayId.length - 1 ) )
                 {
-                    nIdSuggestSubmitNext = (Integer) suggestSubmitArrayId[cpt + 1];
+                    nIdSuggestSubmitNext = (Integer) suggestSubmitArrayId [cpt + 1];
                 }
 
                 break;
@@ -289,16 +283,16 @@ public class SuggestSubmitService implements ISuggestSubmitService
     public int findPrevIdSuggestSubmitInTheList( int nIdCurrentSuggestSubmit, SubmitFilter filter, Plugin plugin )
     {
         List<Integer> suggestSubmitListId = getSuggestSubmitListId( filter, plugin );
-        Object[] suggestSubmitArrayId = suggestSubmitListId.toArray(  );
+        Object [ ] suggestSubmitArrayId = suggestSubmitListId.toArray( );
         int nIdSuggestSubmitPrev = -1;
 
         for ( int cpt = 0; cpt < suggestSubmitArrayId.length; cpt++ )
         {
-            if ( (Integer) suggestSubmitArrayId[cpt] == nIdCurrentSuggestSubmit )
+            if ( (Integer) suggestSubmitArrayId [cpt] == nIdCurrentSuggestSubmit )
             {
                 if ( cpt != 0 )
                 {
-                    nIdSuggestSubmitPrev = (Integer) suggestSubmitArrayId[cpt - 1];
+                    nIdSuggestSubmitPrev = (Integer) suggestSubmitArrayId [cpt - 1];
                 }
 
                 break;
@@ -323,21 +317,22 @@ public class SuggestSubmitService implements ISuggestSubmitService
     @Override
     public List<SuggestSubmit> getSuggestSubmitList( SubmitFilter filter, Plugin plugin )
     {
-        if ( !filter.containsSortBy(  ) )
+        if ( !filter.containsSortBy( ) )
         {
-            //use default sort
+            // use default sort
             SuggestUtils.initSubmitFilterBySort( filter, SuggestUtils.CONSTANT_ID_NULL );
         }
-        else if ( filter.containsSortBy( SubmitFilter.SORT_BY_PINNED_FIRST ) )
-        {
-            SubmitFilter filterPinned = SuggestUtils.createPinnedFilter( filter );
-            List<SuggestSubmit> listSuggestSubmitPinned = SuggestSubmitHome.getSuggestSubmitList( filterPinned, plugin );
-            filter.setIdPinned( SubmitFilter.ID_FALSE );
-            listSuggestSubmitPinned.addAll( SuggestSubmitHome.getSuggestSubmitList( filter, plugin ) );
-            filter.setIdPinned( SubmitFilter.ALL_INT );
+        else
+            if ( filter.containsSortBy( SubmitFilter.SORT_BY_PINNED_FIRST ) )
+            {
+                SubmitFilter filterPinned = SuggestUtils.createPinnedFilter( filter );
+                List<SuggestSubmit> listSuggestSubmitPinned = SuggestSubmitHome.getSuggestSubmitList( filterPinned, plugin );
+                filter.setIdPinned( SubmitFilter.ID_FALSE );
+                listSuggestSubmitPinned.addAll( SuggestSubmitHome.getSuggestSubmitList( filter, plugin ) );
+                filter.setIdPinned( SubmitFilter.ALL_INT );
 
-            return listSuggestSubmitPinned;
-        }
+                return listSuggestSubmitPinned;
+            }
 
         return SuggestSubmitHome.getSuggestSubmitList( filter, plugin );
     }
@@ -348,24 +343,24 @@ public class SuggestSubmitService implements ISuggestSubmitService
     @Override
     public List<SuggestSubmit> getSuggestSubmitList( SubmitFilter filter, Plugin plugin, int nNumberMaxSuggestSubmit )
     {
-        if ( !filter.containsSortBy(  ) )
+        if ( !filter.containsSortBy( ) )
         {
-            //use default sort
+            // use default sort
             SuggestUtils.initSubmitFilterBySort( filter, SuggestUtils.CONSTANT_ID_NULL );
         }
 
-        else if ( filter.containsSortBy( SubmitFilter.SORT_BY_PINNED_FIRST ) )
-        {
-            SubmitFilter filterPinned = SuggestUtils.createPinnedFilter( filter );
-            List<SuggestSubmit> listSuggestSubmitPinned = SuggestSubmitHome.getSuggestSubmitList( filterPinned, plugin,
-                    nNumberMaxSuggestSubmit );
-            filter.setIdPinned( SubmitFilter.ID_FALSE );
-            listSuggestSubmitPinned.addAll( SuggestSubmitHome.getSuggestSubmitList( filterPinned, plugin,
-                    nNumberMaxSuggestSubmit - listSuggestSubmitPinned.size(  ) ) );
-            filter.setIdPinned( SubmitFilter.ALL_INT );
+        else
+            if ( filter.containsSortBy( SubmitFilter.SORT_BY_PINNED_FIRST ) )
+            {
+                SubmitFilter filterPinned = SuggestUtils.createPinnedFilter( filter );
+                List<SuggestSubmit> listSuggestSubmitPinned = SuggestSubmitHome.getSuggestSubmitList( filterPinned, plugin, nNumberMaxSuggestSubmit );
+                filter.setIdPinned( SubmitFilter.ID_FALSE );
+                listSuggestSubmitPinned.addAll( SuggestSubmitHome.getSuggestSubmitList( filterPinned, plugin,
+                        nNumberMaxSuggestSubmit - listSuggestSubmitPinned.size( ) ) );
+                filter.setIdPinned( SubmitFilter.ALL_INT );
 
-            return listSuggestSubmitPinned;
-        }
+                return listSuggestSubmitPinned;
+            }
 
         return SuggestSubmitHome.getSuggestSubmitList( filter, plugin, nNumberMaxSuggestSubmit );
     }
@@ -376,36 +371,37 @@ public class SuggestSubmitService implements ISuggestSubmitService
     @Override
     public List<Integer> getSuggestSubmitListId( SubmitFilter filter, Plugin plugin )
     {
-        if ( !filter.containsSortBy(  ) )
+        if ( !filter.containsSortBy( ) )
         {
-            //use default sort
+            // use default sort
             SuggestUtils.initSubmitFilterBySort( filter, SuggestUtils.CONSTANT_ID_NULL );
         }
-        else if ( filter.containsSortBy( SubmitFilter.SORT_BY_PINNED_FIRST ) )
-        {
-            SubmitFilter filterPinned = SuggestUtils.createPinnedFilter( filter );
-            List<Integer> listSuggestSubmitPinned = SuggestSubmitHome.getSuggestSubmitListId( filterPinned, plugin );
-            filter.setIdPinned( SubmitFilter.ID_FALSE );
-            listSuggestSubmitPinned.addAll( SuggestSubmitHome.getSuggestSubmitListId( filter, plugin ) );
-            filter.setIdPinned( SubmitFilter.ALL_INT );
+        else
+            if ( filter.containsSortBy( SubmitFilter.SORT_BY_PINNED_FIRST ) )
+            {
+                SubmitFilter filterPinned = SuggestUtils.createPinnedFilter( filter );
+                List<Integer> listSuggestSubmitPinned = SuggestSubmitHome.getSuggestSubmitListId( filterPinned, plugin );
+                filter.setIdPinned( SubmitFilter.ID_FALSE );
+                listSuggestSubmitPinned.addAll( SuggestSubmitHome.getSuggestSubmitListId( filter, plugin ) );
+                filter.setIdPinned( SubmitFilter.ALL_INT );
 
-            return listSuggestSubmitPinned;
-        }
+                return listSuggestSubmitPinned;
+            }
 
         return SuggestSubmitHome.getSuggestSubmitListId( filter, plugin );
     }
 
-    //    @Override
-    //    public List<SuggestSubmit> getSuggestSubmitListWithNumberComment( SubmitFilter filter, Plugin plugin )
-    //    {
-    //        if ( !filter.containsSortBy(  ) )
-    //        {
-    //            //use default sort
-    //            SuggestUtils.initSubmitFilterBySort( filter, SuggestUtils.CONSTANT_ID_NULL );
-    //        }
+    // @Override
+    // public List<SuggestSubmit> getSuggestSubmitListWithNumberComment( SubmitFilter filter, Plugin plugin )
+    // {
+    // if ( !filter.containsSortBy( ) )
+    // {
+    // //use default sort
+    // SuggestUtils.initSubmitFilterBySort( filter, SuggestUtils.CONSTANT_ID_NULL );
+    // }
     //
-    //        return SuggestSubmitHome.getSuggestSubmitListWithNumberComment( filter, plugin );
-    //    }
+    // return SuggestSubmitHome.getSuggestSubmitListWithNumberComment( filter, plugin );
+    // }
 
     /**
      * {@inheritDoc}
@@ -422,7 +418,7 @@ public class SuggestSubmitService implements ISuggestSubmitService
      *
      * @return The instance of the singleton
      */
-    public static ISuggestSubmitService getService(  )
+    public static ISuggestSubmitService getService( )
     {
         if ( _singleton == null )
         {
@@ -439,16 +435,16 @@ public class SuggestSubmitService implements ISuggestSubmitService
     public void updateAllDisplayOfSuggestSubmit( Integer nIdSuggest, Plugin plugin, Locale locale )
     {
         Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
-        HashMap<Integer, IEntry> mapEntry = new HashMap<Integer, IEntry>(  );
-        EntryFilter entryFilter = new EntryFilter(  );
-        entryFilter.setIdSuggest( suggest.getIdSuggest(  ) );
+        HashMap<Integer, IEntry> mapEntry = new HashMap<Integer, IEntry>( );
+        EntryFilter entryFilter = new EntryFilter( );
+        entryFilter.setIdSuggest( suggest.getIdSuggest( ) );
 
         for ( IEntry entry : EntryHome.getEntryList( entryFilter, plugin ) )
         {
-            mapEntry.put( entry.getIdEntry(  ), EntryHome.findByPrimaryKey( entry.getIdEntry(  ), plugin ) );
+            mapEntry.put( entry.getIdEntry( ), EntryHome.findByPrimaryKey( entry.getIdEntry( ), plugin ) );
         }
 
-        SubmitFilter filter = new SubmitFilter(  );
+        SubmitFilter filter = new SubmitFilter( );
         filter.setIdSuggest( nIdSuggest );
 
         List<Integer> listIdSuggestSubmit = getSuggestSubmitListId( filter, plugin );
@@ -463,13 +459,12 @@ public class SuggestSubmitService implements ISuggestSubmitService
      * {@inheritDoc}
      */
     @Override
-    public void updateDisplaySuggestSubmit( Integer nIdSuggestSubmit, Plugin plugin, Locale locale, Suggest suggest,
-        Map<Integer, IEntry> mapEntry )
+    public void updateDisplaySuggestSubmit( Integer nIdSuggestSubmit, Plugin plugin, Locale locale, Suggest suggest, Map<Integer, IEntry> mapEntry )
     {
         SuggestSubmit suggestSubmit = findByPrimaryKey( nIdSuggestSubmit, false, plugin );
         suggestSubmit.setSuggest( suggest );
 
-        SubmitFilter filter = new SubmitFilter(  );
+        SubmitFilter filter = new SubmitFilter( );
         filter.setIdSuggestSubmit( nIdSuggestSubmit );
 
         // add responses
@@ -477,22 +472,22 @@ public class SuggestSubmitService implements ISuggestSubmitService
 
         for ( Response response : listResponses )
         {
-            response.setEntry( mapEntry.get( response.getEntry(  ).getIdEntry(  ) ) );
+            response.setEntry( mapEntry.get( response.getEntry( ).getIdEntry( ) ) );
         }
 
         suggestSubmit.setResponses( listResponses );
         // update Number of comment
-        suggestSubmit.setNumberComment( CommentSubmitService.getService(  ).getCountCommentSubmit( filter, plugin ) );
+        suggestSubmit.setNumberComment( CommentSubmitService.getService( ).getCountCommentSubmit( filter, plugin ) );
         // update Number of Comment Enable
         filter.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
-        suggestSubmit.setNumberCommentEnable( CommentSubmitService.getService(  ).getCountCommentSubmit( filter, plugin ) );
+        suggestSubmit.setNumberCommentEnable( CommentSubmitService.getService( ).getCountCommentSubmit( filter, plugin ) );
         // update SuggestSubmitValue
         suggestSubmit.setSuggestSubmitValue( SuggestUtils.getHtmlSuggestSubmitValue( suggestSubmit, locale ) );
         // update SuggestSubmitValue show in the list
         suggestSubmit.setSuggestSubmitValueShowInTheList( SuggestUtils.getHtmlSuggestSubmitValueShowInTheList( suggestSubmit, locale ) );
         // update SuggestSubmit title
         suggestSubmit.setSuggestSubmitTitle( SuggestUtils.getSuggestSubmitTitle( suggestSubmit, locale ) );
-        //update SuggestSubmit
+        // update SuggestSubmit
         update( suggestSubmit, plugin );
     }
 }

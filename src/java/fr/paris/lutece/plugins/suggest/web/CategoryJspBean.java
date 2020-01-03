@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,7 +59,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  * class CategoryJspBean
@@ -69,112 +68,113 @@ public class CategoryJspBean extends PluginAdminPageJspBean
 {
     private static final long serialVersionUID = -4972338182883838725L;
 
-    //	templates
+    // templates
     private static final String TEMPLATE_MANAGE_CATEGORY = "admin/plugins/suggest/manage_category.html";
     private static final String TEMPLATE_CREATE_CATEGORY = "admin/plugins/suggest/create_category.html";
     private static final String TEMPLATE_MODIFY_CATEGORY = "admin/plugins/suggest/modify_category.html";
 
-    //	Markers
+    // Markers
     private static final String MARK_CATEGORY_LIST = "category_list";
     private static final String MARK_CATEGORY = "category";
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
 
-    //	parameters form
+    // parameters form
     private static final String PARAMETER_ID_CATEGORY = "id_category";
     private static final String PARAMETER_TITLE = "title";
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String PARAMETER_COLOR = "color";
 
-    //	message
+    // message
     private static final String MESSAGE_CONFIRM_REMOVE_CATEGORY = "suggest.message.confirmRemoveCategory";
     private static final String MESSAGE_MANDATORY_FIELD = "suggest.message.mandatory.field";
     private static final String MESSAGE_CATEGORY_ASSOCIATE_TO_SUGGEST = "suggest.message.categoryAssociateToSuggest";
     private static final String FIELD_TITLE = "suggest.createCategory.labelTitle";
     private static final String FIELD_COLOR = "suggest.createCategory.labelColor";
 
-    //	properties
+    // properties
     private static final String PROPERTY_ITEM_PER_PAGE = "suggest.itemsPerPage";
     private static final String PROPERTY_MANAGE_CATEGORY_TITLE = "suggest.manageCategory.pageTitle";
     private static final String PROPERTY_MODIFY_CATEGORY_TITLE = "suggest.modifyCategory.title";
     private static final String PROPERTY_CREATE_CATEGORY_TITLE = "suggest.createCategory.title";
 
-    //Jsp Definition
+    // Jsp Definition
     private static final String JSP_MANAGE_CATEGORY = "jsp/admin/plugins/suggest/ManageCategory.jsp";
     private static final String JSP_DO_REMOVE_CATEGORY = "jsp/admin/plugins/suggest/DoRemoveCategory.jsp";
 
-    //	session fields
+    // session fields
     private int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_ITEM_PER_PAGE, 15 );
     private String _strCurrentPageIndexExport;
     private int _nItemsPerPageCategory;
 
     /**
      * Return management category( list of category)
-     * @param request The Http request
+     * 
+     * @param request
+     *            The Http request
      * @return Html form
      */
     public String getManageCategory( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin(  );
-        Locale locale = getLocale(  );
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Plugin plugin = getPlugin( );
+        Locale locale = getLocale( );
+        Map<String, Object> model = new HashMap<String, Object>( );
         List<Category> listCategory = CategoryHome.getList( plugin );
-        listCategory = (List<Category>) RBACService.getAuthorizedCollection( listCategory,
-                CategoryResourceIdService.PERMISSION_MANAGE, getUser(  ) );
+        listCategory = (List<Category>) RBACService.getAuthorizedCollection( listCategory, CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) );
 
-        _strCurrentPageIndexExport = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX,
+        _strCurrentPageIndexExport = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndexExport );
+        _nItemsPerPageCategory = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPageCategory, _nDefaultItemsPerPage );
+
+        Paginator<Category> paginator = new Paginator<Category>( listCategory, _nItemsPerPageCategory, getJspManageCategory( request ), PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndexExport );
-        _nItemsPerPageCategory = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE,
-                _nItemsPerPageCategory, _nDefaultItemsPerPage );
-
-        Paginator<Category> paginator = new Paginator<Category>( listCategory, _nItemsPerPageCategory,
-                getJspManageCategory( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexExport );
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, SuggestUtils.EMPTY_STRING + _nItemsPerPageCategory );
-        model.put( MARK_CATEGORY_LIST, paginator.getPageItems(  ) );
+        model.put( MARK_CATEGORY_LIST, paginator.getPageItems( ) );
         setPageTitleProperty( PROPERTY_MANAGE_CATEGORY_TITLE );
 
         HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_CATEGORY, locale, model );
 
-        return getAdminPage( templateList.getHtml(  ) );
+        return getAdminPage( templateList.getHtml( ) );
     }
 
     /**
      * Gets the category creation page
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The category creation page
      */
     public String getCreateCategory( HttpServletRequest request )
     {
-        if ( !RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    CategoryResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
+        if ( !RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
             return getManageCategory( request );
         }
 
-        Locale locale = getLocale(  );
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Locale locale = getLocale( );
+        Map<String, Object> model = new HashMap<String, Object>( );
         setPageTitleProperty( PROPERTY_CREATE_CATEGORY_TITLE );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_CATEGORY, locale, model );
 
-        return getAdminPage( template.getHtml(  ) );
+        return getAdminPage( template.getHtml( ) );
     }
 
     /**
      * Perform the category creation
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The URL to go after performing the action
      */
     public String doCreateCategory( HttpServletRequest request )
     {
-        if ( !RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    CategoryResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
+        if ( !RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
             return getJspManageCategory( request );
         }
 
-        Category category = new Category(  );
+        Category category = new Category( );
         String strError = getCategoryData( request, category );
 
         if ( strError != null )
@@ -182,35 +182,36 @@ public class CategoryJspBean extends PluginAdminPageJspBean
             return strError;
         }
 
-        CategoryHome.create( category, getPlugin(  ) );
+        CategoryHome.create( category, getPlugin( ) );
 
         return getJspManageCategory( request );
     }
 
     /**
      * Gets the category modification page
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return the category modification page
      */
     public String getModifyCategory( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin(  );
-        Locale locale = getLocale(  );
+        Plugin plugin = getPlugin( );
+        Locale locale = getLocale( );
         Category category;
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
 
         int nIdCategory = -1;
 
-        if ( ( strIdCategory != null ) && !strIdCategory.equals( SuggestUtils.EMPTY_STRING ) &&
-                RBACService.isAuthorized( Category.RESOURCE_TYPE, strIdCategory,
-                    CategoryResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
+        if ( ( strIdCategory != null ) && !strIdCategory.equals( SuggestUtils.EMPTY_STRING )
+                && RBACService.isAuthorized( Category.RESOURCE_TYPE, strIdCategory, CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
             try
             {
                 nIdCategory = Integer.parseInt( strIdCategory );
             }
-            catch ( NumberFormatException ne )
+            catch( NumberFormatException ne )
             {
                 AppLogService.error( ne );
 
@@ -228,30 +229,31 @@ public class CategoryJspBean extends PluginAdminPageJspBean
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_CATEGORY, locale, model );
 
-        return getAdminPage( template.getHtml(  ) );
+        return getAdminPage( template.getHtml( ) );
     }
 
     /**
      * Perform the category modification
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The URL to go after performing the action
      */
     public String doModifyCategory( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin(  );
+        Plugin plugin = getPlugin( );
         Category category;
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         int nIdCategory = -1;
 
-        if ( ( strIdCategory != null ) && !strIdCategory.equals( SuggestUtils.EMPTY_STRING ) &&
-                RBACService.isAuthorized( Category.RESOURCE_TYPE, strIdCategory,
-                    CategoryResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
+        if ( ( strIdCategory != null ) && !strIdCategory.equals( SuggestUtils.EMPTY_STRING )
+                && RBACService.isAuthorized( Category.RESOURCE_TYPE, strIdCategory, CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
             try
             {
                 nIdCategory = Integer.parseInt( strIdCategory );
             }
-            catch ( NumberFormatException ne )
+            catch( NumberFormatException ne )
             {
                 AppLogService.error( ne );
 
@@ -263,7 +265,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
             return getJspManageCategory( request );
         }
 
-        category = new Category(  );
+        category = new Category( );
         category.setIdCategory( nIdCategory );
 
         String strError = getCategoryData( request, category );
@@ -280,7 +282,9 @@ public class CategoryJspBean extends PluginAdminPageJspBean
 
     /**
      * Gets the confirmation page of delete category
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return the confirmation page of delete category
      */
     public String getConfirmRemoveCategory( HttpServletRequest request )
@@ -295,30 +299,30 @@ public class CategoryJspBean extends PluginAdminPageJspBean
         UrlItem url = new UrlItem( JSP_DO_REMOVE_CATEGORY );
         url.addParameter( PARAMETER_ID_CATEGORY, strIdCategory );
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_CATEGORY, url.getUrl(  ),
-            AdminMessage.TYPE_CONFIRMATION );
+        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_CATEGORY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
     }
 
     /**
      * Perform the category supression
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The URL to go after performing the action
      */
     public String doRemoveCategory( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin(  );
+        Plugin plugin = getPlugin( );
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         int nIdCategory = -1;
 
-        if ( ( strIdCategory != null ) && !strIdCategory.equals( SuggestUtils.EMPTY_STRING ) &&
-                RBACService.isAuthorized( Category.RESOURCE_TYPE, strIdCategory,
-                    CategoryResourceIdService.PERMISSION_MANAGE, getUser(  ) ) )
+        if ( ( strIdCategory != null ) && !strIdCategory.equals( SuggestUtils.EMPTY_STRING )
+                && RBACService.isAuthorized( Category.RESOURCE_TYPE, strIdCategory, CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
             try
             {
                 nIdCategory = Integer.parseInt( strIdCategory );
             }
-            catch ( NumberFormatException ne )
+            catch( NumberFormatException ne )
             {
                 AppLogService.error( ne );
             }
@@ -328,8 +332,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
         {
             if ( CategoryHome.isAssociateToSuggest( nIdCategory, plugin ) )
             {
-                return AdminMessageService.getMessageUrl( request, MESSAGE_CATEGORY_ASSOCIATE_TO_SUGGEST,
-                    AdminMessage.TYPE_STOP );
+                return AdminMessageService.getMessageUrl( request, MESSAGE_CATEGORY_ASSOCIATE_TO_SUGGEST, AdminMessage.TYPE_STOP );
             }
 
             CategoryHome.remove( nIdCategory, plugin );
@@ -339,21 +342,19 @@ public class CategoryJspBean extends PluginAdminPageJspBean
     }
 
     /**
-     * Get the request data and if there is no error insert the data in the
-     * regularExpression object specified in parameter.
-     * return null if there is no error or else return the error page url
-     * @param request the request
-     * @param category the category Object
+     * Get the request data and if there is no error insert the data in the regularExpression object specified in parameter. return null if there is no error or
+     * else return the error page url
+     * 
+     * @param request
+     *            the request
+     * @param category
+     *            the category Object
      * @return null if there is no error or else return the error page url
      */
     private String getCategoryData( HttpServletRequest request, Category category )
     {
-        String strTitle = ( request.getParameter( PARAMETER_TITLE ) == null ) ? null
-                                                                              : request.getParameter( PARAMETER_TITLE )
-                                                                                       .trim(  );
-        String strColor = ( request.getParameter( PARAMETER_COLOR ) == null ) ? null
-                                                                              : request.getParameter( PARAMETER_COLOR )
-                                                                                       .trim(  );
+        String strTitle = ( request.getParameter( PARAMETER_TITLE ) == null ) ? null : request.getParameter( PARAMETER_TITLE ).trim( );
+        String strColor = ( request.getParameter( PARAMETER_COLOR ) == null ) ? null : request.getParameter( PARAMETER_COLOR ).trim( );
         String strFieldError = SuggestUtils.EMPTY_STRING;
 
         if ( ( strTitle == null ) || strTitle.equals( SuggestUtils.EMPTY_STRING ) )
@@ -366,13 +367,14 @@ public class CategoryJspBean extends PluginAdminPageJspBean
             strFieldError = FIELD_COLOR;
         }
 
-        //Mandatory fields
+        // Mandatory fields
         if ( !strFieldError.equals( SuggestUtils.EMPTY_STRING ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale(  ) ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, getLocale( ) )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         category.setTitle( strTitle );
@@ -383,7 +385,9 @@ public class CategoryJspBean extends PluginAdminPageJspBean
 
     /**
      * return the url of manage category
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return the url of manage category
      */
     private String getJspManageCategory( HttpServletRequest request )

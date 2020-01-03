@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,78 +38,79 @@ import com.mysql.jdbc.PacketTooBigException;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-
 /**
  *
- *class  GraphTypeDAO
+ * class GraphTypeDAO
  *
  */
 public class VideoTypeDAO implements IVideoTypeDAO
 {
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_suggest_submit,video_content,video_mime_type,credits FROM suggest_video WHERE id_suggest_submit=?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_video ( " +
-        "id_suggest_submit,video_content,video_mime_type,credits) VALUES(?,?,?,?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_video ( " + "id_suggest_submit,video_content,video_mime_type,credits) VALUES(?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM suggest_video WHERE id_suggest_submit = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE  suggest_video SET " +
-        "video_content=?,video_mime_type=?,credits=? WHERE id_suggest_submit=?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE  suggest_video SET " + "video_content=?,video_mime_type=?,credits=? WHERE id_suggest_submit=?";
 
     /**
      * Insert a new record in the table.
      *
-     * @param videoType instance of the VideoType object to insert
-     * @param plugin the plugin
+     * @param videoType
+     *            instance of the VideoType object to insert
+     * @param plugin
+     *            the plugin
      * @return the id of the new videoType
-     * @throws com.mysql.jdbc.PacketTooBigException exception
+     * @throws com.mysql.jdbc.PacketTooBigException
+     *             exception
      */
-    public int insert( VideoType videoType, Plugin plugin )
-        throws com.mysql.jdbc.PacketTooBigException
+    public int insert( VideoType videoType, Plugin plugin ) throws com.mysql.jdbc.PacketTooBigException
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
 
-        daoUtil.setInt( 1, videoType.getIdSuggestSubmit(  ) );
-        daoUtil.setBytes( 2, videoType.getVideo(  ) );
-        daoUtil.setString( 3, videoType.getMimeType(  ) );
-        daoUtil.setString( 4, videoType.getCredits(  ) );
+        daoUtil.setInt( 1, videoType.getIdSuggestSubmit( ) );
+        daoUtil.setBytes( 2, videoType.getVideo( ) );
+        daoUtil.setString( 3, videoType.getMimeType( ) );
+        daoUtil.setString( 4, videoType.getCredits( ) );
 
         try
         {
-            daoUtil.executeUpdate(  );
+            daoUtil.executeUpdate( );
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             throw new PacketTooBigException( 0, 0 );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
-        return videoType.getIdSuggestSubmit(  );
+        return videoType.getIdSuggestSubmit( );
     }
 
     /**
      * Load the data of the video from the table
      *
-     * @param nId The identifier of the video
-     * @param plugin the plugin
+     * @param nId
+     *            The identifier of the video
+     * @param plugin
+     *            the plugin
      * @return the instance of the VideoType
      */
     public VideoType load( int nId, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, nId );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         VideoType videoType = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            videoType = new VideoType(  );
+            videoType = new VideoType( );
             videoType.setIdSuggestSubmit( daoUtil.getInt( 1 ) );
             videoType.setVideo( daoUtil.getBytes( 2 ) );
             videoType.setMimeType( daoUtil.getString( 3 ) );
             videoType.setCredits( daoUtil.getString( 4 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return videoType;
     }
@@ -117,33 +118,37 @@ public class VideoTypeDAO implements IVideoTypeDAO
     /**
      * Delete a record from the table
      *
-     * @param nIdSuggestSubmit The identifier of the nIdSuggestSubmit / Video
-     * @param plugin the plugin
+     * @param nIdSuggestSubmit
+     *            The identifier of the nIdSuggestSubmit / Video
+     * @param plugin
+     *            the plugin
      */
     public void delete( int nIdSuggestSubmit, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nIdSuggestSubmit );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
      * Update the Video in the table
      *
-     * @param video instance of the VideoType object to update
-     * @param plugin the plugin
+     * @param video
+     *            instance of the VideoType object to update
+     * @param plugin
+     *            the plugin
      */
     public void store( VideoType video, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-        daoUtil.setBytes( 1, video.getVideo(  ) );
-        daoUtil.setString( 2, video.getMimeType(  ) );
-        daoUtil.setString( 3, video.getCredits(  ) );
-        daoUtil.setInt( 4, video.getIdSuggestSubmit(  ) );
+        daoUtil.setBytes( 1, video.getVideo( ) );
+        daoUtil.setString( 2, video.getMimeType( ) );
+        daoUtil.setString( 3, video.getCredits( ) );
+        daoUtil.setInt( 4, video.getIdSuggestSubmit( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 }

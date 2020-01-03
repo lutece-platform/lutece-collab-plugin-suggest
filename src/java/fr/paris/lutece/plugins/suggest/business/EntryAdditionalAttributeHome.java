@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
  *
  * class EntryAdditionalAttributeHome
@@ -47,23 +46,22 @@ import java.util.List;
 public final class EntryAdditionalAttributeHome
 {
     // Static variable pointed at the DAO instance
-    private static IEntryAdditionalAttributeDAO _dao = SpringContextService.getBean( 
-            "suggest.entryAdditionalAttributeDAO" );
+    private static IEntryAdditionalAttributeDAO _dao = SpringContextService.getBean( "suggest.entryAdditionalAttributeDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private EntryAdditionalAttributeHome(  )
+    private EntryAdditionalAttributeHome( )
     {
     }
 
     /**
      * Creation of an instance of EntryAdditionalAttribute
      *
-     * @param entryAdditionalAttribute The instance of the
-     *            EntryAdditionalAttribute which contains the informations to
-     *            store
-     * @param plugin the Plugin
+     * @param entryAdditionalAttribute
+     *            The instance of the EntryAdditionalAttribute which contains the informations to store
+     * @param plugin
+     *            the Plugin
      */
     public static void create( EntryAdditionalAttribute entryAdditionalAttribute, Plugin plugin )
     {
@@ -73,8 +71,10 @@ public final class EntryAdditionalAttributeHome
     /**
      * Returns a list of all additional attributes of an entry
      *
-     * @param idEntry the if of the entry
-     * @param plugin the plugin
+     * @param idEntry
+     *            the if of the entry
+     * @param plugin
+     *            the plugin
      * @return the list of entry
      */
     public static List<EntryAdditionalAttribute> getList( int idEntry, Plugin plugin )

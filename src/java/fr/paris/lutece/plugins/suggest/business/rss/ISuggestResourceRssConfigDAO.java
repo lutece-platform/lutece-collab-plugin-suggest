@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  *
  * ISuggestResourceRssConfigDAO
@@ -47,23 +46,31 @@ public interface ISuggestResourceRssConfigDAO
 {
     /**
      * Insert a new record in the table.
-     * @param config The Instance of the object config
-     * @param plugin the plugin
+     * 
+     * @param config
+     *            The Instance of the object config
+     * @param plugin
+     *            the plugin
      */
     void insert( SuggestResourceRssConfig config, Plugin plugin );
 
     /**
      * Update the record in the table
      *
-     * @param  config instance of config object to update
-     * @param plugin the plugin
+     * @param config
+     *            instance of config object to update
+     * @param plugin
+     *            the plugin
      */
     void store( SuggestResourceRssConfig config, Plugin plugin );
 
     /**
      * load the data of SuggestResourceRssConfig from the table
-     * @param nIdConfig the config id
-     * @param plugin the plugin
+     * 
+     * @param nIdConfig
+     *            the config id
+     * @param plugin
+     *            the plugin
      * @return The Instance of the object SuggestResourceRssConfig
      *
      */
@@ -71,14 +78,19 @@ public interface ISuggestResourceRssConfigDAO
 
     /**
      * Delete a record from the table
-     * @param nIdConfig The id of object SuggestResourceRssConfig
-     * @param plugin le plugin
+     * 
+     * @param nIdConfig
+     *            The id of object SuggestResourceRssConfig
+     * @param plugin
+     *            le plugin
      */
     void delete( int nIdConfig, Plugin plugin );
 
     /**
      * Return all record
-     * @param plugin le plugin
+     * 
+     * @param plugin
+     *            le plugin
      * @return List of SuggestResourceRssConfig
      */
     List<SuggestResourceRssConfig> loadAll( Plugin plugin );

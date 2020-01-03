@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,14 +41,15 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-
 public interface ICommentSubmitService
 {
     /**
      * Creation of an instance of commentSubmit
      *
-     * @param commentSubmit The instance of the commentSubmit which contains the informations to store
-     * @param plugin the Plugin
+     * @param commentSubmit
+     *            The instance of the commentSubmit which contains the informations to store
+     * @param plugin
+     *            the Plugin
      *
      */
     @Transactional( "suggest.transactionManager" )
@@ -57,8 +58,10 @@ public interface ICommentSubmitService
     /**
      * Update of the commentSubmit which is specified in parameter
      *
-     * @param commentSubmit The instance of the commentSubmit which contains the informations to update
-     * @param plugin the Plugin
+     * @param commentSubmit
+     *            The instance of the commentSubmit which contains the informations to update
+     * @param plugin
+     *            the Plugin
      *
      */
     @Transactional( "suggest.transactionManager" )
@@ -67,8 +70,10 @@ public interface ICommentSubmitService
     /**
      * Remove the commentSubmit whose identifier is specified in parameter
      *
-     * @param nIdCommentSubmit The commentSubmitId
-     * @param plugin the Plugin
+     * @param nIdCommentSubmit
+     *            The commentSubmitId
+     * @param plugin
+     *            the Plugin
      */
     @Transactional( "suggest.transactionManager" )
     void remove( int nIdCommentSubmit, Plugin plugin );
@@ -76,37 +81,49 @@ public interface ICommentSubmitService
     /**
      * Returns an instance of a CommentSubmitwhose identifier is specified in parameter
      *
-     * @param nKey The commentSubmit primary key
-     * @param plugin the Plugin
+     * @param nKey
+     *            The commentSubmit primary key
+     * @param plugin
+     *            the Plugin
      * @return an instance of commentSubmit
      */
     @Transactional( "suggest.transactionManager" )
     CommentSubmit findByPrimaryKey( int nKey, Plugin plugin );
 
     /**
-     * Load the data of all the commentSubmit who verify the filter and returns them in a  list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return  the list of commentSubmit
+     * Load the data of all the commentSubmit who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
+     * @return the list of commentSubmit
      */
     @Transactional( "suggest.transactionManager" )
     List<CommentSubmit> getCommentSubmitList( SubmitFilter filter, Plugin plugin );
 
     /**
-     * Load the data of all the commentSubmit who verify the filter and returns them in a  list
-     * @param filter the filter
-     * @param nLimitParentNumber limit the number of parent comment return
-     * @param plugin the plugin
-     * @return  the list of commentSubmit
+     * Load the data of all the commentSubmit who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param nLimitParentNumber
+     *            limit the number of parent comment return
+     * @param plugin
+     *            the plugin
+     * @return the list of commentSubmit
      */
     @Transactional( "suggest.transactionManager" )
     List<CommentSubmit> getCommentSubmitList( SubmitFilter filter, Integer nLimitParentNumber, Plugin plugin );
 
     /**
      * Load the number of all the commentSubmit who verify the filter
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return  the number of all the commentSubmit who verify the filter
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
+     * @return the number of all the commentSubmit who verify the filter
      */
     @Transactional( "suggest.transactionManager" )
     int getCountCommentSubmit( SubmitFilter filter, Plugin plugin );

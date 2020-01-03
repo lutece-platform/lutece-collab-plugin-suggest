@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,7 +54,6 @@ import org.apache.commons.lang.StringUtils;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  * Subscription provider for suggest and suggest submit
  */
@@ -78,11 +77,11 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
      *
      * @return The instance of the singleton
      */
-    public static SuggestSubscriptionProviderService getService(  )
+    public static SuggestSubscriptionProviderService getService( )
     {
         if ( _instance == null )
         {
-            synchronized ( SuggestSubscriptionProviderService.class )
+            synchronized( SuggestSubscriptionProviderService.class )
             {
                 _instance = SpringContextService.getBean( BEAN_NAME );
             }
@@ -95,7 +94,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
      * {@inheritDoc}
      */
     @Override
-    public String getProviderName(  )
+    public String getProviderName( )
     {
         return SUBSCRIPTION_PROVIDER_NAME;
     }
@@ -104,11 +103,9 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
      * {@inheritDoc}
      */
     @Override
-    public String getSubscriptionHtmlDescription( LuteceUser user, String strSubscriptionKey,
-        String strIdSubscribedResource, Locale locale )
+    public String getSubscriptionHtmlDescription( LuteceUser user, String strSubscriptionKey, String strIdSubscribedResource, Locale locale )
     {
-        int nId = ( ( strIdSubscribedResource != null ) && StringUtils.isNumeric( strIdSubscribedResource ) )
-            ? Integer.parseInt( strIdSubscribedResource ) : 0;
+        int nId = ( ( strIdSubscribedResource != null ) && StringUtils.isNumeric( strIdSubscribedResource ) ) ? Integer.parseInt( strIdSubscribedResource ) : 0;
 
         if ( nId > 0 )
         {
@@ -118,36 +115,42 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
                 if ( suggest != null )
                 {
-                    Object[] params = { suggest.getTitle(  ) };
+                    Object [ ] params = {
+                        suggest.getTitle( )
+                    };
 
                     return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_SUGGEST, params, locale );
                 }
             }
-            else if ( StringUtils.equals( SUBSCRIPTION_SUGGEST_SUBMIT, strSubscriptionKey ) )
-            {
-                SuggestSubmit suggestSubmit = SuggestSubmitService.getService(  )
-                                                         .findByPrimaryKey( nId, false,
-                        PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
-
-                if ( suggestSubmit != null )
+            else
+                if ( StringUtils.equals( SUBSCRIPTION_SUGGEST_SUBMIT, strSubscriptionKey ) )
                 {
-                    Object[] params = { suggestSubmit.getSuggestSubmitTitle(  ) };
+                    SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nId, false,
+                            PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
 
-                    return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_SUGGEST_SUBMIT, params, locale );
+                    if ( suggestSubmit != null )
+                    {
+                        Object [ ] params = {
+                            suggestSubmit.getSuggestSubmitTitle( )
+                        };
+
+                        return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_SUGGEST_SUBMIT, params, locale );
+                    }
                 }
-            }
-            else if ( StringUtils.equals( SUBSCRIPTION_SUGGEST_CATEGORY, strSubscriptionKey ) )
-            {
-                Category category = CategoryHome.findByPrimaryKey( nId,
-                        PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+                else
+                    if ( StringUtils.equals( SUBSCRIPTION_SUGGEST_CATEGORY, strSubscriptionKey ) )
+                    {
+                        Category category = CategoryHome.findByPrimaryKey( nId, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
 
-                if ( category != null )
-                {
-                    Object[] params = { category.getTitle(  ) };
+                        if ( category != null )
+                        {
+                            Object [ ] params = {
+                                category.getTitle( )
+                            };
 
-                    return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_SUGGEST_CATEGORY, params, locale );
-                }
-            }
+                            return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_SUGGEST_CATEGORY, params, locale );
+                        }
+                    }
         }
 
         return StringUtils.EMPTY;
@@ -169,7 +172,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
     @Override
     public String getUrlModifySubscription( LuteceUser user, String strSubscriptionKey, String strIdSubscribedResource )
     {
-        //No subscription modification for suggest nor suggest submits
+        // No subscription modification for suggest nor suggest submits
         return null;
     }
 
@@ -184,8 +187,11 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Remove a subscription of a user to a suggest
-     * @param user The user to remove the subscription of
-     * @param nIdSuggest The id of the suggest
+     * 
+     * @param user
+     *            The user to remove the subscription of
+     * @param nIdSuggest
+     *            The id of the suggest
      */
     public void removeSuggestSubscription( LuteceUser user, int nIdSuggest )
     {
@@ -194,8 +200,11 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Remove a subscription of a user to a suggest category
-     * @param user The user to remove the subscription of
-     * @param nIdCategory The id of the suggest category
+     * 
+     * @param user
+     *            The user to remove the subscription of
+     * @param nIdCategory
+     *            The id of the suggest category
      */
     public void removeSuggestCategorySubscription( LuteceUser user, int nIdCategory )
     {
@@ -204,8 +213,11 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Remove a subscription of a user to a suggest submit
-     * @param user The user to remove the subscription of
-     * @param nIdSuggestSubmit The id of the suggest submit
+     * 
+     * @param user
+     *            The user to remove the subscription of
+     * @param nIdSuggestSubmit
+     *            The id of the suggest submit
      */
     public void removeSuggestSubmitSubscription( LuteceUser user, int nIdSuggestSubmit )
     {
@@ -214,30 +226,36 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Remove a subscription to a suggest resource
-     * @param user The user to remove the subscription of
-     * @param nId The id of the subscribed resource
-     * @param strSubscriptionKey The subscription key
+     * 
+     * @param user
+     *            The user to remove the subscription of
+     * @param nId
+     *            The id of the subscribed resource
+     * @param strSubscriptionKey
+     *            The subscription key
      */
     private void removeSuggestSubmitSubscription( LuteceUser user, int nId, String strSubscriptionKey )
     {
-        SubscriptionFilter filter = new SubscriptionFilter( user.getName(  ), getProviderName(  ), strSubscriptionKey,
-                Integer.toString( nId ) );
+        SubscriptionFilter filter = new SubscriptionFilter( user.getName( ), getProviderName( ), strSubscriptionKey, Integer.toString( nId ) );
 
-        List<Subscription> listSubscription = SubscriptionService.getInstance(  ).findByFilter( filter );
+        List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( filter );
 
-        if ( ( listSubscription != null ) && ( listSubscription.size(  ) > 0 ) )
+        if ( ( listSubscription != null ) && ( listSubscription.size( ) > 0 ) )
         {
             for ( Subscription subscription : listSubscription )
             {
-                SubscriptionService.getInstance(  ).removeSubscription( subscription, false );
+                SubscriptionService.getInstance( ).removeSubscription( subscription, false );
             }
         }
     }
 
     /**
      * Create a new subscription to a suggest
-     * @param user The user to create a subscription of
-     * @param nIdSuggest The id of the suggest to subscribe to
+     * 
+     * @param user
+     *            The user to create a subscription of
+     * @param nIdSuggest
+     *            The id of the suggest to subscribe to
      */
     public void createSuggestSubscription( LuteceUser user, int nIdSuggest )
     {
@@ -249,8 +267,11 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Create a new subscription to a suggest
-     * @param user The user to create a subscription of
-     * @param nIdSuggest The id of the suggest to subscribe to
+     * 
+     * @param user
+     *            The user to create a subscription of
+     * @param nIdSuggest
+     *            The id of the suggest to subscribe to
      */
     public void createSuggestCategorySubscription( LuteceUser user, int nIdSuggest )
     {
@@ -262,8 +283,11 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Create a new subscription to a suggest submit
-     * @param user The user to create a subscription of
-     * @param nIdSuggestSubmit The id of the suggest submit to subscribe to
+     * 
+     * @param user
+     *            The user to create a subscription of
+     * @param nIdSuggestSubmit
+     *            The id of the suggest submit to subscribe to
      */
     public void createSuggestSubmitSubscription( LuteceUser user, int nIdSuggestSubmit )
     {
@@ -275,21 +299,22 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     private void createSubscription( LuteceUser user, int nId, String strSubscriptionKey )
     {
-        Subscription subscription = new Subscription(  );
+        Subscription subscription = new Subscription( );
         subscription.setIdSubscribedResource( Integer.toString( nId ) );
-        subscription.setUserId( user.getName(  ) );
+        subscription.setUserId( user.getName( ) );
         subscription.setSubscriptionKey( strSubscriptionKey );
-        subscription.setSubscriptionProvider( getProviderName(  ) );
-        SubscriptionService.getInstance(  ).createSubscription( subscription );
+        subscription.setSubscriptionProvider( getProviderName( ) );
+        SubscriptionService.getInstance( ).createSubscription( subscription );
     }
 
     /**
      * Check if a user has subscribed to a suggest category
-     * @param user The user
-     * @param nIdSuggestCategory The id of the suggest category to check the
-     *            subscription to
-     * @return True if the user has subscribed to the given suggest category, false
-     *         otherwise
+     * 
+     * @param user
+     *            The user
+     * @param nIdSuggestCategory
+     *            The id of the suggest category to check the subscription to
+     * @return True if the user has subscribed to the given suggest category, false otherwise
      */
     public boolean hasUserSubscribedToSuggestCategory( LuteceUser user, int nIdSuggestCategory )
     {
@@ -298,11 +323,12 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Check if a user has subscribed to a suggest submit
-     * @param user The user
-     * @param nIdSuggestSubmit The id of the suggest submit to check the subscription
-     *            to
-     * @return True if the user has subscribed to the given suggest submit, false
-     *         otherwise
+     * 
+     * @param user
+     *            The user
+     * @param nIdSuggestSubmit
+     *            The id of the suggest submit to check the subscription to
+     * @return True if the user has subscribed to the given suggest submit, false otherwise
      */
     public boolean hasUserSubscribedToSuggestSubmit( LuteceUser user, int nIdSuggestSubmit )
     {
@@ -311,10 +337,12 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Check if a user has subscribed to a suggest
-     * @param user The user
-     * @param nIdSuggest The id of the suggest to check the subscription to
-     * @return True if the user has subscribed to the given suggest, false
-     *         otherwise
+     * 
+     * @param user
+     *            The user
+     * @param nIdSuggest
+     *            The id of the suggest to check the subscription to
+     * @return True if the user has subscribed to the given suggest, false otherwise
      */
     public boolean hasUserSubscribedToSuggest( LuteceUser user, int nIdSuggest )
     {
@@ -323,18 +351,21 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Check if a user has subscribed to a resource
-     * @param user The user
-     * @param nId The id of the subscribed resource
-     * @param strSubscriptionKey The subscription key
+     * 
+     * @param user
+     *            The user
+     * @param nId
+     *            The id of the subscribed resource
+     * @param strSubscriptionKey
+     *            The subscription key
      * @return True if the user has subscribed to the resource, false otherwise
      */
     private boolean hasUserSubscribedToResource( LuteceUser user, int nId, String strSubscriptionKey )
     {
-        SubscriptionFilter filter = new SubscriptionFilter( user.getName(  ), getProviderName(  ), strSubscriptionKey,
-                Integer.toString( nId ) );
-        List<Subscription> listSubscription = SubscriptionService.getInstance(  ).findByFilter( filter );
+        SubscriptionFilter filter = new SubscriptionFilter( user.getName( ), getProviderName( ), strSubscriptionKey, Integer.toString( nId ) );
+        List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( filter );
 
-        if ( ( listSubscription != null ) && ( listSubscription.size(  ) > 0 ) )
+        if ( ( listSubscription != null ) && ( listSubscription.size( ) > 0 ) )
         {
             return true;
         }
@@ -343,8 +374,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
     }
 
     @Override
-    public String getSubscriptionHtmlDescriptionBis( LuteceUser user, String strSubscriptionKey,
-        String strIdSubscribedResource, Locale locale, String userSub )
+    public String getSubscriptionHtmlDescriptionBis( LuteceUser user, String strSubscriptionKey, String strIdSubscribedResource, Locale locale, String userSub )
     {
         // TODO is there a difference between getSubscriptionHtmlDescription and getSubscriptionHtmlDescriptionBis ?
         return getSubscriptionHtmlDescriptionBis( user, strSubscriptionKey, strIdSubscribedResource, locale, userSub );

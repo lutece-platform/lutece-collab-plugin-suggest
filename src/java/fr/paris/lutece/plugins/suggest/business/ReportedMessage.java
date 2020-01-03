@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,12 +35,11 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import java.sql.Timestamp;
 
-
 /**
-*
-* class reportedMessage
-*
-*/
+ *
+ * class reportedMessage
+ *
+ */
 public class ReportedMessage
 {
     private int _nIdReported;
@@ -49,17 +48,19 @@ public class ReportedMessage
     private String _strValue;
 
     /**
-      *
-      * @return the suggest submit of the reported
-      */
-    public SuggestSubmit getSuggestSubmit(  )
+     *
+     * @return the suggest submit of the reported
+     */
+    public SuggestSubmit getSuggestSubmit( )
     {
         return _suggestSubmit;
     }
 
     /**
      * set the suggest submit of the reported
-     * @param suggestSubmit the suggest submit of the reported
+     * 
+     * @param suggestSubmit
+     *            the suggest submit of the reported
      */
     public void setSuggestSubmit( SuggestSubmit suggestSubmit )
     {
@@ -67,17 +68,20 @@ public class ReportedMessage
     }
 
     /**
-     *  return the reported date
+     * return the reported date
+     * 
      * @return the reported date
      */
-    public Timestamp getDateReported(  )
+    public Timestamp getDateReported( )
     {
         return _tDateReported;
     }
 
     /**
      * set the reported date
-     * @param reportedDate the reported date
+     * 
+     * @param reportedDate
+     *            the reported date
      */
     public void setDateReported( Timestamp reportedDate )
     {
@@ -85,17 +89,19 @@ public class ReportedMessage
     }
 
     /**
-    *
-    * @return the value of the reported
-    */
-    public String getValue(  )
+     *
+     * @return the value of the reported
+     */
+    public String getValue( )
     {
         return _strValue;
     }
 
     /**
      * set the value of the reported
-     * @param strValue the value of the reported
+     * 
+     * @param strValue
+     *            the value of the reported
      */
     public void setValue( String strValue )
     {
@@ -106,14 +112,15 @@ public class ReportedMessage
      *
      * @return the reported id
      */
-    public int getIdReported(  )
+    public int getIdReported( )
     {
         return _nIdReported;
     }
 
     /**
      * 
-     * @param nIdReported the reported id
+     * @param nIdReported
+     *            the reported id
      */
     public void setIdReported( int nIdReported )
     {

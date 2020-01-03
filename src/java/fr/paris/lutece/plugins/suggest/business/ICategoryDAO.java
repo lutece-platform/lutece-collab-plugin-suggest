@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,10 +37,9 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  *
- *Interface IVoteTypeDAO
+ * Interface IVoteTypeDAO
  *
  */
 public interface ICategoryDAO
@@ -48,73 +47,94 @@ public interface ICategoryDAO
     /**
      * Insert a new record in the table.
      *
-     * @param category instance of the Category object to insert
-     * @param plugin the plugin
+     * @param category
+     *            instance of the Category object to insert
+     * @param plugin
+     *            the plugin
      */
     void insert( Category category, Plugin plugin );
 
     /**
      * update record in the table.
      *
-     * @param category instance of the Category object to update
-     * @param plugin the plugin
+     * @param category
+     *            instance of the Category object to update
+     * @param plugin
+     *            the plugin
      */
     void store( Category category, Plugin plugin );
 
     /**
      * Delete a record from the table
      *
-     * @param  nIdCategory The identifier of the category
-     * @param plugin the plugin
+     * @param nIdCategory
+     *            The identifier of the category
+     * @param plugin
+     *            the plugin
      */
     void delete( int nIdCategory, Plugin plugin );
 
     /**
      * Load the data of the category from the table
      *
-     * @param idKey The identifier of the category
-     * @param plugin the plugin
+     * @param idKey
+     *            The identifier of the category
+     * @param plugin
+     *            the plugin
      * @return The category
      */
     Category load( int idKey, Plugin plugin );
 
     /**
-     * Load the data of all category returns them in a  list
-     * @param plugin the plugin
-     * @return  the list of category
+     * Load the data of all category returns them in a list
+     * 
+     * @param plugin
+     *            the plugin
+     * @return the list of category
      */
     List<Category> select( Plugin plugin );
 
     /**
-     * Select all category associate to a suggest and returns them in a  list
-     * @param plugin the plugin
-     * @return  the list of category
+     * Select all category associate to a suggest and returns them in a list
+     * 
+     * @param plugin
+     *            the plugin
+     * @return the list of category
      */
     List<Category> select( int nIdSuggest, Plugin plugin );
 
     /**
-    * true if there is a  suggest associate to the category
-    * @param nIdCategory the key of the category
-    * @param plugin the plugin
-    * @return true if there is a suggest associate to the category
-    */
+     * true if there is a suggest associate to the category
+     * 
+     * @param nIdCategory
+     *            the key of the category
+     * @param plugin
+     *            the plugin
+     * @return true if there is a suggest associate to the category
+     */
     boolean isAssociateToSuggest( int nIdCategory, Plugin plugin );
 
     /**
      * Delete an association between suggest and categories
      *
-     * @param nIdSuggest The identifier of the suggest
-     * @param nIdCategory The identifier of the category
-     * @param plugin the plugin
+     * @param nIdSuggest
+     *            The identifier of the suggest
+     * @param nIdCategory
+     *            The identifier of the category
+     * @param plugin
+     *            the plugin
      */
     void deleteSuggestAssociation( int nIdSuggest, int nIdCategory, Plugin plugin );
 
     /**
-     * insert an association between  entry and a regular expression
+     * insert an association between entry and a regular expression
      *
-     * @param nIdSuggest The identifier of the suggest
-     * @param nIdCategory The identifier of the category
-     * @param plugin the plugin
+     * @param nIdSuggest
+     *            The identifier of the suggest
+     * @param nIdCategory
+     *            The identifier of the category
+     * @param plugin
+     *            the plugin
      */
     void insertSuggestAssociation( int nIdSuggest, int nIdCategory, Plugin plugin );
 }

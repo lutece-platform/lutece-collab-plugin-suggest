@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-
 
 /**
  * 
@@ -94,6 +93,7 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * true if the suggest submit have been reported by people
+     * 
      * @return true if the suggest submit have been reported by people
      */
     public boolean isReported( )
@@ -103,7 +103,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set true if the suggest submit have been reported by people
-     * @param reported true if the suggest submit have been reported by people
+     * 
+     * @param reported
+     *            true if the suggest submit have been reported by people
      */
     public void setReported( boolean reported )
     {
@@ -121,7 +123,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set the title of the suggest submit
-     * @param suggestSubmitTitle the title of the suggest submit
+     * 
+     * @param suggestSubmitTitle
+     *            the title of the suggest submit
      */
     public void setSuggestSubmitTitle( String suggestSubmitTitle )
     {
@@ -140,7 +144,9 @@ public class SuggestSubmit implements IExtendableResource
     /**
      * 
      * set the suggest associate to the submit
-     * @param suggest the suggest associate to the submit
+     * 
+     * @param suggest
+     *            the suggest associate to the submit
      */
     public void setSuggest( Suggest suggest )
     {
@@ -149,6 +155,7 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * return the id of the suggest submit
+     * 
      * @return the id of the suggest submit
      */
     public int getIdSuggestSubmit( )
@@ -158,7 +165,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set the id of the suggest submit
-     * @param idSuggestSubmit the id of the suggest submit
+     * 
+     * @param idSuggestSubmit
+     *            the id of the suggest submit
      */
     public void setIdSuggestSubmit( int idSuggestSubmit )
     {
@@ -167,6 +176,7 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * return the suggest submit date
+     * 
      * @return the suggest submit date
      */
     public Timestamp getDateResponse( )
@@ -176,7 +186,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set the suggest submit date
-     * @param dateResponse suggest submit date
+     * 
+     * @param dateResponse
+     *            suggest submit date
      */
     public void setDateResponse( Timestamp dateResponse )
     {
@@ -194,7 +206,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set the list of response associate to the suggest submit
-     * @param listResponse the list of response associate to the suggest submit
+     * 
+     * @param listResponse
+     *            the list of response associate to the suggest submit
      */
     public void setResponses( List<Response> listResponse )
     {
@@ -212,7 +226,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set the suggest submit state (published,enabled,disabled)
-     * @param submitState the suggest submit state (published,enabled,disabled)
+     * 
+     * @param submitState
+     *            the suggest submit state (published,enabled,disabled)
      */
     public void setSuggestSubmitState( SuggestSubmitState submitState )
     {
@@ -230,7 +246,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set the category associated to the suggest submit
-     * @param category the category associated to the suggest submit
+     * 
+     * @param category
+     *            the category associated to the suggest submit
      */
     public void setCategory( Category category )
     {
@@ -248,7 +266,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set the number of vote
-     * @param numberVote the number of vote
+     * 
+     * @param numberVote
+     *            the number of vote
      */
     public void setNumberVote( int numberVote )
     {
@@ -257,6 +277,7 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * return the score of the suggest submit
+     * 
      * @return the score of the suggest submit
      */
     public int getNumberScore( )
@@ -266,7 +287,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set the score of the suggest submit
-     * @param numberScore the score of the suggest submit
+     * 
+     * @param numberScore
+     *            the score of the suggest submit
      */
     public void setNumberScore( int numberScore )
     {
@@ -284,7 +307,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set the suggest submit value
-     * @param suggestSubmitValue the suggest submit value
+     * 
+     * @param suggestSubmitValue
+     *            the suggest submit value
      */
     public void setSuggestSubmitValue( String suggestSubmitValue )
     {
@@ -302,8 +327,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set the suggest submit value show in the list of suggest submit
-     * @param suggestSubmitValue the suggest submit value show in the list of suggest
-     *            submit
+     * 
+     * @param suggestSubmitValue
+     *            the suggest submit value show in the list of suggest submit
      */
     public void setSuggestSubmitValueShowInTheList( String suggestSubmitValue )
     {
@@ -321,8 +347,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set the number of enable comment associated to the suggest submit
-     * @param numberComment the number of enable comment associated to the suggest
-     *            submit
+     * 
+     * @param numberComment
+     *            the number of enable comment associated to the suggest submit
      */
     public void setNumberCommentEnable( int numberComment )
     {
@@ -340,7 +367,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set the number of comment associated to the suggest submit
-     * @param numberComment the number of comment associated to the suggest submit
+     * 
+     * @param numberComment
+     *            the number of comment associated to the suggest submit
      */
     public void setNumberComment( int numberComment )
     {
@@ -358,7 +387,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set the number of view associated to the suggest submit
-     * @param nNumberView the number of view associated to the suggest submit
+     * 
+     * @param nNumberView
+     *            the number of view associated to the suggest submit
      */
     public void setNumberView( int nNumberView )
     {
@@ -377,7 +408,9 @@ public class SuggestSubmit implements IExtendableResource
     /**
      * 
      * set the lutece user key associate to the suggest submit
-     * @param strLuteceUserKey the lutece user key associate to the suggest submit
+     * 
+     * @param strLuteceUserKey
+     *            the lutece user key associate to the suggest submit
      */
     public void setLuteceUserKey( String strLuteceUserKey )
     {
@@ -387,23 +420,24 @@ public class SuggestSubmit implements IExtendableResource
     /**
      * Returns the xml of this suggest submit
      * 
-     * @param request The HTTP Servlet request
-     * @param locale the Locale
+     * @param request
+     *            The HTTP Servlet request
+     * @param locale
+     *            the Locale
      * @return the xml of this suggest submit
      */
     public String getXml( HttpServletRequest request, Locale locale )
     {
         StringBuffer strXml = new StringBuffer( );
         XmlUtil.beginElement( strXml, TAG_SUGGEST_SUBMIT );
-        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_DATE_RESPONSE,
-                DateUtil.getDateString( this.getDateResponse( ), locale ) );
+        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_DATE_RESPONSE, DateUtil.getDateString( this.getDateResponse( ), locale ) );
         XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_SCORE, Integer.toString( this.getNumberScore( ) ) );
         XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_NUMBER_VOTE, Integer.toString( this.getNumberVote( ) ) );
         XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_NUMBER_COMMENT, Integer.toString( this.getNumberComment( ) ) );
-        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_CATEGORY, ( this.getCategory( ) != null ) ? this.getCategory( )
-                .getTitle( ) : SuggestUtils.EMPTY_STRING );
-        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_TYPE, ( this.getSuggestSubmitType( ) != null ) ? this
-                .getSuggestSubmitType( ).getName( ) : SuggestUtils.EMPTY_STRING );
+        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_CATEGORY, ( this.getCategory( ) != null ) ? this.getCategory( ).getTitle( )
+                : SuggestUtils.EMPTY_STRING );
+        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_TYPE, ( this.getSuggestSubmitType( ) != null ) ? this.getSuggestSubmitType( ).getName( )
+                : SuggestUtils.EMPTY_STRING );
         XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_TITLE, this.getSuggestSubmitTitle( ) );
 
         XmlUtil.beginElement( strXml, TAG_SUGGESTS_SUBMIT_RESPONSES );
@@ -425,7 +459,7 @@ public class SuggestSubmit implements IExtendableResource
                 }
                 else
                 {
-                    //add xml empty response for this suggest submit
+                    // add xml empty response for this suggest submit
                     Response responseEmpty = new Response( );
                     responseEmpty.setEntry( entry );
                     responseEmpty.setValueResponse( SuggestUtils.EMPTY_STRING );
@@ -454,7 +488,8 @@ public class SuggestSubmit implements IExtendableResource
     }
 
     /**
-     * @param listComments the _listComments to set
+     * @param listComments
+     *            the _listComments to set
      */
     public void setComments( List<CommentSubmit> listComments )
     {
@@ -470,7 +505,8 @@ public class SuggestSubmit implements IExtendableResource
     }
 
     /**
-     * @param nSuggestSubmitOrder the _nSuggestSubmitOrder to set
+     * @param nSuggestSubmitOrder
+     *            the _nSuggestSubmitOrder to set
      */
     public void setSuggestSubmitOrder( int nSuggestSubmitOrder )
     {
@@ -486,7 +522,8 @@ public class SuggestSubmit implements IExtendableResource
     }
 
     /**
-     * @param suggestSubmitType the suggestSubmitType to set
+     * @param suggestSubmitType
+     *            the suggestSubmitType to set
      */
     public void setSuggestSubmitType( SuggestSubmitType suggestSubmitType )
     {
@@ -512,7 +549,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set true if the vote is disable
-     * @param bDisable true if the vote is disable
+     * 
+     * @param bDisable
+     *            true if the vote is disable
      */
     public void setDisableVote( boolean bDisable )
     {
@@ -530,7 +569,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set true if the vote is disable
-     * @param bDisable true if the comment is disable
+     * 
+     * @param bDisable
+     *            true if the comment is disable
      */
     public void setDisableComment( boolean bDisable )
     {
@@ -548,7 +589,8 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * 
-     * @param bPinned true if the suggestsubmit is pinned
+     * @param bPinned
+     *            true if the suggestsubmit is pinned
      */
     public void setPinned( boolean bPinned )
     {
@@ -566,7 +608,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set the list of reported Messages
-     * @param listReportedMessages the list of reported Messages
+     * 
+     * @param listReportedMessages
+     *            the list of reported Messages
      */
     public void setReportedMessages( List<ReportedMessage> listReportedMessages )
     {
@@ -628,6 +672,7 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * the image id resource associate to the suggest submit
+     * 
      * @return the image id resource associate to the suggest submit
      */
     public Integer getIdImageResource( )
@@ -637,8 +682,9 @@ public class SuggestSubmit implements IExtendableResource
 
     /**
      * set the image id resource associate to the suggest submit
-     * @param nIdImageRessource the image id resource associate to the suggest
-     *            submit
+     * 
+     * @param nIdImageRessource
+     *            the image id resource associate to the suggest submit
      */
     public void setIdImageResource( Integer nIdImageRessource )
     {

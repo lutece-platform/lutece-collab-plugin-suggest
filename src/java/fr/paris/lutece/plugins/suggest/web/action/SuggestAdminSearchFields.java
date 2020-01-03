@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,10 +38,8 @@ import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import java.io.Serializable;
 import java.util.List;
 
-
 /**
- * Visualization of all needed session values. Many features depends on search
- * result or paginator. Those fields may be required for actions.
+ * Visualization of all needed session values. Many features depends on search result or paginator. Those fields may be required for actions.
  *
  */
 public final class SuggestAdminSearchFields implements Serializable
@@ -60,7 +58,7 @@ public final class SuggestAdminSearchFields implements Serializable
     private String _strQuery;
     private List<String> _selectedSuggestSubmit;
 
-    public int getIdSuggestSubmitSort(  )
+    public int getIdSuggestSubmitSort( )
     {
         return _nIdSuggestSubmitSort;
     }
@@ -70,7 +68,7 @@ public final class SuggestAdminSearchFields implements Serializable
         this._nIdSuggestSubmitSort = nIdSuggestSubmitSort;
     }
 
-    public int getIdSuggestSubmitReport(  )
+    public int getIdSuggestSubmitReport( )
     {
         return _nIdSuggestSubmitReport;
     }
@@ -80,7 +78,7 @@ public final class SuggestAdminSearchFields implements Serializable
         this._nIdSuggestSubmitReport = nIdSuggestSubmitReport;
     }
 
-    public int getIdSuggestSumitState(  )
+    public int getIdSuggestSumitState( )
     {
         return _nIdSuggestSumitState;
     }
@@ -90,7 +88,7 @@ public final class SuggestAdminSearchFields implements Serializable
         this._nIdSuggestSumitState = nIdSuggestSumitState;
     }
 
-    public String getQuery(  )
+    public String getQuery( )
     {
         return _strQuery;
     }
@@ -100,7 +98,7 @@ public final class SuggestAdminSearchFields implements Serializable
         this._strQuery = strQuery;
     }
 
-    public List<String> getSelectedSuggestSubmit(  )
+    public List<String> getSelectedSuggestSubmit( )
     {
         return _selectedSuggestSubmit;
     }
@@ -110,7 +108,7 @@ public final class SuggestAdminSearchFields implements Serializable
         this._selectedSuggestSubmit = selectedSuggestSubmit;
     }
 
-    public int getIdSuggest(  )
+    public int getIdSuggest( )
     {
         return _nIdSuggest;
     }
@@ -120,7 +118,7 @@ public final class SuggestAdminSearchFields implements Serializable
         this._nIdSuggest = nIdSuggest;
     }
 
-    public int getIdCategory(  )
+    public int getIdCategory( )
     {
         return _nIdCategory;
     }
@@ -130,7 +128,7 @@ public final class SuggestAdminSearchFields implements Serializable
         this._nIdCategory = nIdCategory;
     }
 
-    public int getIdType(  )
+    public int getIdType( )
     {
         return _nIdType;
     }
@@ -140,7 +138,7 @@ public final class SuggestAdminSearchFields implements Serializable
         this._nIdType = nIdType;
     }
 
-    public int getIdSuggestSubmitContainsCommentDisable(  )
+    public int getIdSuggestSubmitContainsCommentDisable( )
     {
         return _nIdSuggestSubmitContainsCommentDisable;
     }

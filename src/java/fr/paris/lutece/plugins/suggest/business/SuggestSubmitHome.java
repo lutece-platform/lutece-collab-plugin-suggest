@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,9 +45,8 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- *class FormSubmitHome
+ * class FormSubmitHome
  */
 public final class SuggestSubmitHome
 {
@@ -57,15 +56,17 @@ public final class SuggestSubmitHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private SuggestSubmitHome(  )
+    private SuggestSubmitHome( )
     {
     }
 
     /**
      * Creation of an instance of suggestSubmit
      *
-     * @param suggestSubmit The instance of the suggestSubmit which contains the informations to store
-     * @param plugin the Plugin
+     * @param suggestSubmit
+     *            The instance of the suggestSubmit which contains the informations to store
+     * @param plugin
+     *            the Plugin
      * @return the id of the new suggest submit
      *
      */
@@ -77,8 +78,10 @@ public final class SuggestSubmitHome
     /**
      * Update of the suggestSubmit which is specified in parameter
      *
-     * @param suggestSubmit The instance of the suggestSubmit which contains the informations to update
-     * @param plugin the Plugin
+     * @param suggestSubmit
+     *            The instance of the suggestSubmit which contains the informations to update
+     * @param plugin
+     *            the Plugin
      *
      */
     public static void update( SuggestSubmit suggestSubmit, Plugin plugin )
@@ -88,23 +91,26 @@ public final class SuggestSubmitHome
 
     /**
      * Update of the suggestSubmit which is specified in parameter
-     * @param suggestSubmit The suggest submit
-     * @param bUpdateIndex The update index
-     * @param plugin The plugin
+     * 
+     * @param suggestSubmit
+     *            The suggest submit
+     * @param bUpdateIndex
+     *            The update index
+     * @param plugin
+     *            The plugin
      */
     public static void update( SuggestSubmit suggestSubmit, boolean bUpdateIndex, Plugin plugin )
     {
         if ( bUpdateIndex )
         {
-            SuggestSubmit suggestSubmitStored = findByPrimaryKey( suggestSubmit.getIdSuggestSubmit(  ), plugin );
+            SuggestSubmit suggestSubmitStored = findByPrimaryKey( suggestSubmit.getIdSuggestSubmit( ), plugin );
 
-            //if state has changed
-            if ( suggestSubmit.getSuggestSubmitState(  ).getIdSuggestSubmitState(  ) != suggestSubmitStored.getSuggestSubmitState(  )
-                                                                                                   .getIdSuggestSubmitState(  ) )
+            // if state has changed
+            if ( suggestSubmit.getSuggestSubmitState( ).getIdSuggestSubmitState( ) != suggestSubmitStored.getSuggestSubmitState( ).getIdSuggestSubmitState( ) )
             {
-                String strIdSuggestSubmit = Integer.toString( suggestSubmit.getIdSuggestSubmit(  ) );
+                String strIdSuggestSubmit = Integer.toString( suggestSubmit.getIdSuggestSubmit( ) );
 
-                if ( suggestSubmit.getSuggestSubmitState(  ).getIdSuggestSubmitState(  ) == SuggestSubmit.STATE_PUBLISH )
+                if ( suggestSubmit.getSuggestSubmitState( ).getIdSuggestSubmitState( ) == SuggestSubmit.STATE_PUBLISH )
                 {
                     SuggestIndexerUtils.addIndexerAction( strIdSuggestSubmit, IndexerAction.TASK_CREATE );
                 }
@@ -114,8 +120,8 @@ public final class SuggestSubmitHome
                 }
             }
 
-            IndexationService.addIndexerAction( Integer.toString( suggestSubmit.getIdSuggestSubmit(  ) ),
-                AppPropertiesService.getProperty( SuggestIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_MODIFY );
+            IndexationService.addIndexerAction( Integer.toString( suggestSubmit.getIdSuggestSubmit( ) ),
+                    AppPropertiesService.getProperty( SuggestIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_MODIFY );
         }
 
         _dao.store( suggestSubmit, plugin );
@@ -124,43 +130,45 @@ public final class SuggestSubmitHome
     /**
      * Remove the SuggestSubmit whose identifier is specified in parameter
      *
-     * @param nIdSuggestSubmit The suggestSubmitId
-     * @param plugin the Plugin
+     * @param nIdSuggestSubmit
+     *            The suggestSubmitId
+     * @param plugin
+     *            the Plugin
      */
     public static void remove( int nIdSuggestSubmit, Plugin plugin )
     {
-        SubmitFilter filter = new SubmitFilter(  );
+        SubmitFilter filter = new SubmitFilter( );
         filter.setIdSuggestSubmit( nIdSuggestSubmit );
 
         List<Response> listResponses = ResponseHome.getResponseList( filter, plugin );
 
         for ( Response response : listResponses )
         {
-            if ( response.getIdImageResource(  ) != null )
+            if ( response.getIdImageResource( ) != null )
             {
-                ImageResourceHome.remove( response.getIdImageResource(  ), plugin );
+                ImageResourceHome.remove( response.getIdImageResource( ), plugin );
             }
 
-            ResponseHome.remove( response.getIdResponse(  ), plugin );
+            ResponseHome.remove( response.getIdResponse( ), plugin );
         }
 
-        List<CommentSubmit> listComments = CommentSubmitService.getService(  ).getCommentSubmitList( filter, plugin );
+        List<CommentSubmit> listComments = CommentSubmitService.getService( ).getCommentSubmitList( filter, plugin );
 
         for ( CommentSubmit comment : listComments )
         {
-            CommentSubmitService.getService(  ).remove( comment.getIdCommentSubmit(  ), plugin );
+            CommentSubmitService.getService( ).remove( comment.getIdCommentSubmit( ), plugin );
         }
 
-        //remove all reported associated to the suggest submit
+        // remove all reported associated to the suggest submit
         ReportedMessageHome.removeBySuggestSubmit( nIdSuggestSubmit, plugin );
 
         SuggestSubmit suggestSubmit = SuggestSubmitHome.findByPrimaryKey( nIdSuggestSubmit, plugin );
 
-        if ( suggestSubmit.getSuggestSubmitState(  ).getIdSuggestSubmitState(  ) == SuggestSubmit.STATE_PUBLISH )
+        if ( suggestSubmit.getSuggestSubmitState( ).getIdSuggestSubmitState( ) == SuggestSubmit.STATE_PUBLISH )
         {
             String strIdSuggestSubmit = Integer.toString( nIdSuggestSubmit );
             IndexationService.addIndexerAction( strIdSuggestSubmit + "_" + SuggestIndexer.SHORT_NAME,
-                AppPropertiesService.getProperty( SuggestIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_DELETE );
+                    AppPropertiesService.getProperty( SuggestIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_DELETE );
 
             SuggestIndexerUtils.addIndexerAction( strIdSuggestSubmit, IndexerAction.TASK_DELETE );
         }
@@ -168,15 +176,18 @@ public final class SuggestSubmitHome
         _dao.delete( nIdSuggestSubmit, plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Returns an instance of a SuggestSubmit whose identifier is specified in parameter
      *
-     * @param nKey The suggestSubmit primary key
-     * @param bLoadCommentList true if the comment list must be get
-     * @param plugin the Plugin
+     * @param nKey
+     *            The suggestSubmit primary key
+     * @param bLoadCommentList
+     *            true if the comment list must be get
+     * @param plugin
+     *            the Plugin
      * @return an instance of SuggestSubmit
      */
     public static SuggestSubmit findByPrimaryKey( int nKey, Plugin plugin )
@@ -185,16 +196,14 @@ public final class SuggestSubmitHome
 
         if ( suggestSubmit != null )
         {
-            if ( suggestSubmit.getSuggestSubmitType(  ) != null )
+            if ( suggestSubmit.getSuggestSubmitType( ) != null )
             {
-                suggestSubmit.setSuggestSubmitType( SuggestSubmitTypeHome.findByPrimaryKey( 
-                        suggestSubmit.getSuggestSubmitType(  ).getIdType(  ), plugin ) );
+                suggestSubmit.setSuggestSubmitType( SuggestSubmitTypeHome.findByPrimaryKey( suggestSubmit.getSuggestSubmitType( ).getIdType( ), plugin ) );
             }
 
-            if ( suggestSubmit.getCategory(  ) != null )
+            if ( suggestSubmit.getCategory( ) != null )
             {
-                suggestSubmit.setCategory( CategoryHome.findByPrimaryKey( suggestSubmit.getCategory(  ).getIdCategory(  ),
-                        plugin ) );
+                suggestSubmit.setCategory( CategoryHome.findByPrimaryKey( suggestSubmit.getCategory( ).getIdCategory( ), plugin ) );
             }
         }
 
@@ -202,10 +211,13 @@ public final class SuggestSubmitHome
     }
 
     /**
-     * Load the data of all the suggestSubmit who verify the filter and returns them in a  list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return  the list of suggestSubmit
+     * Load the data of all the suggestSubmit who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
+     * @return the list of suggestSubmit
      */
     public static List<SuggestSubmit> getSuggestSubmitList( SubmitFilter filter, Plugin plugin )
     {
@@ -213,25 +225,22 @@ public final class SuggestSubmitHome
 
         if ( listSuggestSubmit != null )
         {
-            SubmitFilter submmitFilterComment = new SubmitFilter(  );
+            SubmitFilter submmitFilterComment = new SubmitFilter( );
 
             for ( SuggestSubmit suggestSubmit : listSuggestSubmit )
             {
-                submmitFilterComment.setIdSuggestSubmit( suggestSubmit.getIdSuggestSubmit(  ) );
+                submmitFilterComment.setIdSuggestSubmit( suggestSubmit.getIdSuggestSubmit( ) );
                 submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
-                suggestSubmit.setComments( CommentSubmitService.getService(  )
-                                                            .getCommentSubmitList( submmitFilterComment, plugin ) );
+                suggestSubmit.setComments( CommentSubmitService.getService( ).getCommentSubmitList( submmitFilterComment, plugin ) );
 
-                if ( suggestSubmit.getSuggestSubmitType(  ) != null )
+                if ( suggestSubmit.getSuggestSubmitType( ) != null )
                 {
-                    suggestSubmit.setSuggestSubmitType( SuggestSubmitTypeHome.findByPrimaryKey( 
-                            suggestSubmit.getSuggestSubmitType(  ).getIdType(  ), plugin ) );
+                    suggestSubmit.setSuggestSubmitType( SuggestSubmitTypeHome.findByPrimaryKey( suggestSubmit.getSuggestSubmitType( ).getIdType( ), plugin ) );
                 }
 
-                if ( suggestSubmit.getCategory(  ) != null )
+                if ( suggestSubmit.getCategory( ) != null )
                 {
-                    suggestSubmit.setCategory( CategoryHome.findByPrimaryKey( 
-                            suggestSubmit.getCategory(  ).getIdCategory(  ), plugin ) );
+                    suggestSubmit.setCategory( CategoryHome.findByPrimaryKey( suggestSubmit.getCategory( ).getIdCategory( ), plugin ) );
                 }
             }
         }
@@ -240,10 +249,13 @@ public final class SuggestSubmitHome
     }
 
     /**
-     * Load the id of all the suggestSubmit who verify the filter and returns them in a  list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return  the list of suggestSubmit id
+     * Load the id of all the suggestSubmit who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
+     * @return the list of suggestSubmit id
      */
     public static List<Integer> getSuggestSubmitListId( SubmitFilter filter, Plugin plugin )
     {
@@ -251,24 +263,28 @@ public final class SuggestSubmitHome
     }
 
     /**
-     * Load the data of all the suggestSubmit who verify the filter and returns them in a  list
-     * @param filter the filter
-     * @param plugin the plugin
-     * @param nNumberMaxSuggestSubmit Max Number of Suggestsubmit return
-     * @return  the list of suggestSubmit
+     * Load the data of all the suggestSubmit who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
+     * @param nNumberMaxSuggestSubmit
+     *            Max Number of Suggestsubmit return
+     * @return the list of suggestSubmit
      */
     public static List<SuggestSubmit> getSuggestSubmitList( SubmitFilter filter, Plugin plugin, int nNumberMaxSuggestSubmit )
     {
         List<Integer> suggestSubmitListId = getSuggestSubmitListId( filter, plugin );
-        List<SuggestSubmit> suggestSubmitList = new ArrayList<SuggestSubmit>(  );
+        List<SuggestSubmit> suggestSubmitList = new ArrayList<SuggestSubmit>( );
         SuggestSubmit suggestSubmit = null;
-        Object[] suggestSubmitArrayId = suggestSubmitListId.toArray(  );
+        Object [ ] suggestSubmitArrayId = suggestSubmitListId.toArray( );
 
         for ( int cpt = 0; cpt < suggestSubmitArrayId.length; cpt++ )
         {
             if ( cpt < nNumberMaxSuggestSubmit )
             {
-                suggestSubmit = findByPrimaryKey( (Integer) suggestSubmitArrayId[cpt], plugin );
+                suggestSubmit = findByPrimaryKey( (Integer) suggestSubmitArrayId [cpt], plugin );
 
                 if ( suggestSubmit != null )
                 {
@@ -286,9 +302,12 @@ public final class SuggestSubmitHome
 
     /**
      * Load the number of all the suggestSubmit who verify the filter
-     * @param filter the filter
-     * @param plugin the plugin
-     * @return  the list of suggestSubmit
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
+     * @return the list of suggestSubmit
      */
     public static int getCountSuggestSubmit( SubmitFilter filter, Plugin plugin )
     {
@@ -297,9 +316,13 @@ public final class SuggestSubmitHome
 
     /**
      * Update the number order of suggestSubmit
-     * @param nIdSuggestSubmit the id of the suggestSubmit
-     * @param nNewOrder the new number of order
-     * @param plugin The Plugin object
+     * 
+     * @param nIdSuggestSubmit
+     *            the id of the suggestSubmit
+     * @param nNewOrder
+     *            the new number of order
+     * @param plugin
+     *            The Plugin object
      */
     public static void updateSuggestSubmitOrder( int nNewOrder, int nIdSuggestSubmit, Plugin plugin )
     {
@@ -308,9 +331,12 @@ public final class SuggestSubmitHome
 
     /**
      * Search the max order number of contacts for one list
-     * @param nIdSuggest the Id of the Suggest
+     * 
+     * @param nIdSuggest
+     *            the Id of the Suggest
      * @return int the max order
-     * @param plugin The Plugin object
+     * @param plugin
+     *            The Plugin object
      */
     public static int getMaxOrderList( int nIdSuggest, boolean bListPinned, Plugin plugin )
     {

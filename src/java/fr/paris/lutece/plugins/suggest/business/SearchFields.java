@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import java.io.Serializable;
 
-
 public class SearchFields implements Serializable
 {
     private static final long serialVersionUID = 2512978426472997213L;
@@ -47,7 +46,7 @@ public class SearchFields implements Serializable
     private int _nIdFilterCategory = SubmitFilter.ALL_INT;
     private int _nIdFilterSuggestSubmitType = SubmitFilter.ALL_INT;
 
-    public String getQuery(  )
+    public String getQuery( )
     {
         return _strQuery;
     }
@@ -57,7 +56,7 @@ public class SearchFields implements Serializable
         this._strQuery = strQuery;
     }
 
-    public int getIdFilterPeriod(  )
+    public int getIdFilterPeriod( )
     {
         return _nIdFilterPeriod;
     }
@@ -67,7 +66,7 @@ public class SearchFields implements Serializable
         this._nIdFilterPeriod = nIdFilterPeriod;
     }
 
-    public int getIdSuggestSubmitSort(  )
+    public int getIdSuggestSubmitSort( )
     {
         return _nIdSuggestSubmitSort;
     }
@@ -77,7 +76,7 @@ public class SearchFields implements Serializable
         this._nIdSuggestSubmitSort = nIdSuggestSubmitSort;
     }
 
-    public int getIdFilterCategory(  )
+    public int getIdFilterCategory( )
     {
         return _nIdFilterCategory;
     }
@@ -87,7 +86,7 @@ public class SearchFields implements Serializable
         this._nIdFilterCategory = nIdFilterCategory;
     }
 
-    public String getPageIndex(  )
+    public String getPageIndex( )
     {
         return _strPageIndex;
     }
@@ -97,7 +96,7 @@ public class SearchFields implements Serializable
         this._strPageIndex = strPageIndex;
     }
 
-    public int getIdFilterSuggestSubmitType(  )
+    public int getIdFilterSuggestSubmitType( )
     {
         return _nIdFilterSuggestSubmitType;
     }
@@ -107,11 +106,13 @@ public class SearchFields implements Serializable
         this._nIdFilterSuggestSubmitType = nIdFilterSuggestSubmitType;
     }
 
-	public String getLuteceUserName() {
-		return _strLuteceUserName;
-	}
+    public String getLuteceUserName( )
+    {
+        return _strLuteceUserName;
+    }
 
-	public void setLuteceUserName(String _strLuteceUserName) {
-		this._strLuteceUserName = _strLuteceUserName;
-	}
+    public void setLuteceUserName( String _strLuteceUserName )
+    {
+        this._strLuteceUserName = _strLuteceUserName;
+    }
 }

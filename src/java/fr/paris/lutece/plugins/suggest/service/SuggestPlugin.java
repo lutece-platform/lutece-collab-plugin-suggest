@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,6 @@ import javax.servlet.http.HttpServletRequest;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
 
-
 /**
  * class SuggestPlugin
  */
@@ -48,28 +47,29 @@ public class SuggestPlugin extends PluginDefaultImplementation implements Serial
 {
     public static final String PLUGIN_NAME = "suggest";
     private static final long serialVersionUID = 6341523117444246634L;
-    
+
     /**
      * Initialize the plugin suggest
      */
-    public void init(  )
+    public void init( )
     {
-        // Initialize the  suggest service
-        SuggestService.getInstance(  ).init(  );
-        ImageService.getInstance(  );
-       
-       
+        // Initialize the suggest service
+        SuggestService.getInstance( ).init( );
+        ImageService.getInstance( );
+
     }
 
     /**
      * Returns the theme the plugin use for rendering a Xpage
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return The theme
      */
     public Theme getXPageTheme( HttpServletRequest request )
     {
-       return SuggestService.getInstance().getXPageTheme(request);
-        
+        return SuggestService.getInstance( ).getXPageTheme( request );
+
     }
 
 }

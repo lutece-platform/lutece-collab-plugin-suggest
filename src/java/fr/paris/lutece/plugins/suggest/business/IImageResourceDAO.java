@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.suggest.business;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
-
 /**
  *
  * ImageResourceDAO
@@ -47,8 +46,10 @@ public interface IImageResourceDAO
     /**
      * Insert a new record in the table.
      *
-     * @param imageResource  instance of the ImageResource object to insert
-     * @param plugin the plugin
+     * @param imageResource
+     *            instance of the ImageResource object to insert
+     * @param plugin
+     *            the plugin
      * @return the id of the new ImageResource file
      */
     int insert( ImageResource imageResource, Plugin plugin );
@@ -56,8 +57,10 @@ public interface IImageResourceDAO
     /**
      * Load the data of the ImageResource from the table
      *
-     * @param nId The identifier of the file
-     * @param plugin the plugin
+     * @param nId
+     *            The identifier of the file
+     * @param plugin
+     *            the plugin
      * @return the instance of the PhysicalFile
      */
     ImageResource load( int nId, Plugin plugin );
@@ -65,8 +68,10 @@ public interface IImageResourceDAO
     /**
      * Delete a ImageResource from the table
      *
-     * @param nId The identifier of the ImageResource
-     * @param plugin the plugin
+     * @param nId
+     *            The identifier of the ImageResource
+     * @param plugin
+     *            the plugin
      */
     void delete( int nId, Plugin plugin );
 }

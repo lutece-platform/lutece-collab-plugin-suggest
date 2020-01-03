@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,87 +37,107 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  *
- *  Interface ISuggestSubmitTypeDAO
+ * Interface ISuggestSubmitTypeDAO
  *
  */
 public interface ISuggestSubmitTypeDAO
 {
     /**
-    * Insert a new record in the table.
-    *
-    * @param suggestSubmitType instance of the Suggest Submit Type object to insert
-    * @param plugin the plugin
-    * @return the id of the new Suggest
-    */
+     * Insert a new record in the table.
+     *
+     * @param suggestSubmitType
+     *            instance of the Suggest Submit Type object to insert
+     * @param plugin
+     *            the plugin
+     * @return the id of the new Suggest
+     */
     int insert( SuggestSubmitType suggestSubmitType, Plugin plugin );
 
     /**
      * Load the data of the suggestSubmitType from the table
      *
-     * @param nIdSuggestSubmitType The identifier of the formResponse
-     * @param plugin the plugin
+     * @param nIdSuggestSubmitType
+     *            The identifier of the formResponse
+     * @param plugin
+     *            the plugin
      * @return the instance of the suggestSubmitType
      */
     SuggestSubmitType load( int nIdSuggestSubmitType, Plugin plugin );
 
     /**
-     * Delete   the suggest submit type whose identifier is specified in parameter
+     * Delete the suggest submit type whose identifier is specified in parameter
      *
-     * @param nIdSuggestSubmitType The identifier of the suggest submit
-     * @param plugin the plugin
+     * @param nIdSuggestSubmitType
+     *            The identifier of the suggest submit
+     * @param plugin
+     *            the plugin
      */
     void delete( int nIdSuggestSubmitType, Plugin plugin );
 
     /**
      * Update the the suggestSubmitType in the table
      *
-     * @param suggestSubmitType instance of the suggestSubmit object to update
-     * @param plugin the plugin
+     * @param suggestSubmitType
+     *            instance of the suggestSubmit object to update
+     * @param plugin
+     *            the plugin
      */
     void store( SuggestSubmitType suggestSubmitType, Plugin plugin );
 
     /**
      * Load the list of the suggestSubmitType from the table
      *
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      * @return the instance of the suggestSubmitType
      */
     List<SuggestSubmitType> selectList( Plugin plugin );
 
     /**
      * Load the list of the suggestSubmitType from the table
-     * @param nIdSuggest the id Suggest
-     * @param plugin the plugin
+     * 
+     * @param nIdSuggest
+     *            the id Suggest
+     * @param plugin
+     *            the plugin
      * @return the instance of the suggestSubmitType
      */
     List<SuggestSubmitType> selectListByIdSuggest( int nIdSuggest, Plugin plugin );
 
     /**
-     * true if there is a  suggest associate to the suggest submit type
-     * @param nIdType the key of the type
-     * @param plugin the plugin
+     * true if there is a suggest associate to the suggest submit type
+     * 
+     * @param nIdType
+     *            the key of the type
+     * @param plugin
+     *            the plugin
      * @return true if there is a suggest associate to the type
      */
     boolean isAssociateToSuggest( int nIdType, Plugin plugin );
 
     /**
-    * Delete an association between suggest and a suggest submit type
-    *
-    * @param nIdSuggest The identifier of the suggest
-    * @param nIdSuggestSubmitType nIdSuggestSubmitType
-    * @param plugin the plugin
-    */
+     * Delete an association between suggest and a suggest submit type
+     *
+     * @param nIdSuggest
+     *            The identifier of the suggest
+     * @param nIdSuggestSubmitType
+     *            nIdSuggestSubmitType
+     * @param plugin
+     *            the plugin
+     */
     void deleteSuggestAssociation( int nIdSuggest, int nIdSuggestSubmitType, Plugin plugin );
 
     /**
      * insert an association between suggest and a suggest submit type
      *
-     * @param nIdSuggest The identifier of the suggest
-     * @param nIdSuggestSubmitType nIdSuggestSubmitType
-     * @param plugin the plugin
+     * @param nIdSuggest
+     *            The identifier of the suggest
+     * @param nIdSuggestSubmitType
+     *            nIdSuggestSubmitType
+     * @param plugin
+     *            the plugin
      */
     void insertSuggestAssociation( int nIdSuggest, int nIdSuggestSubmitType, Plugin plugin );
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.suggest.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-
 /**
  * class SuggestUserInfoHome
  */
@@ -48,14 +47,17 @@ public final class SuggestUserInfoHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private SuggestUserInfoHome(  )
+    private SuggestUserInfoHome( )
     {
     }
 
     /**
      * create suggestUserInfo
-     * @param suggestUserInfo suggestUserInfo
-     * @param plugin the plugin
+     * 
+     * @param suggestUserInfo
+     *            suggestUserInfo
+     * @param plugin
+     *            the plugin
      */
     public static void create( SuggestUserInfo suggestUserInfo, Plugin plugin )
     {
@@ -64,8 +66,11 @@ public final class SuggestUserInfoHome
 
     /**
      * update suggestUserInfo
-     * @param suggestUserInfo suggestUserInfo
-     * @param plugin the plugin
+     * 
+     * @param suggestUserInfo
+     *            suggestUserInfo
+     * @param plugin
+     *            the plugin
      */
     public static void update( SuggestUserInfo suggestUserInfo, Plugin plugin )
     {
@@ -74,21 +79,27 @@ public final class SuggestUserInfoHome
 
     /**
      * remove SuggestUserInfo
-     * @param strLuteceUserKey the key
-     * @param plugin the plugin
+     * 
+     * @param strLuteceUserKey
+     *            the key
+     * @param plugin
+     *            the plugin
      */
     public static void remove( String strLuteceUserKey, Plugin plugin )
     {
         _dao.delete( strLuteceUserKey, plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * find user info by key
-     * @param strLuteceUserKey strLuteceUserKey
-     * @param plugin the plugin
+     * 
+     * @param strLuteceUserKey
+     *            strLuteceUserKey
+     * @param plugin
+     *            the plugin
      * @return SuggestUserInfo
      */
     public static SuggestUserInfo findByKey( String strLuteceUserKey, Plugin plugin )

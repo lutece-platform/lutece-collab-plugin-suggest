@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.Map;
 
-
 /**
  *
  * ISuggestAttributeDAO
@@ -47,25 +46,36 @@ public interface ISuggestAttributeDAO
 {
     /**
      * Load the attributes of the suggest
-     * @param nIdSuggest the id suggest
-     * @param plugin the plugin
+     * 
+     * @param nIdSuggest
+     *            the id suggest
+     * @param plugin
+     *            the plugin
      * @return a map of key - value
      */
     Map<String, Object> load( int nIdSuggest, Plugin plugin );
 
     /**
      * Create the attributes of the directory
-     * @param nIdSuggest the id suggest
-     * @param strAttributeKey the attribute key
-     * @param attributeValue the attribute value
-     * @param plugin the plugin
+     * 
+     * @param nIdSuggest
+     *            the id suggest
+     * @param strAttributeKey
+     *            the attribute key
+     * @param attributeValue
+     *            the attribute value
+     * @param plugin
+     *            the plugin
      */
     void insert( int nIdSuggest, String strAttributeKey, Object attributeValue, Plugin plugin );
 
     /**
      * Remove the attributes of the suggest
-     * @param nIdSuggest the id suggest
-     * @param plugin the plugin
+     * 
+     * @param nIdSuggest
+     *            the id suggest
+     * @param plugin
+     *            the plugin
      */
     void remove( int nIdSuggest, Plugin plugin );
 }

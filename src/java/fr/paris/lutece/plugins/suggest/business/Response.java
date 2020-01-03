@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  * class Response
@@ -61,14 +60,16 @@ public class Response
      *
      * @return the suggest submit of the response
      */
-    public SuggestSubmit getSuggestSubmit(  )
+    public SuggestSubmit getSuggestSubmit( )
     {
         return _suggestSubmit;
     }
 
     /**
      * set the suggest submit of the response
-     * @param suggestSubmit the suggest submit of the response
+     * 
+     * @param suggestSubmit
+     *            the suggest submit of the response
      */
     public void setSuggestSubmit( SuggestSubmit suggestSubmit )
     {
@@ -76,17 +77,19 @@ public class Response
     }
 
     /**
-    *
-    * @return the entry associate to the response
-    */
-    public IEntry getEntry(  )
+     *
+     * @return the entry associate to the response
+     */
+    public IEntry getEntry( )
     {
         return _entry;
     }
 
     /**
      * set the entry associate to the response
-     * @param entry the entry associate to the response
+     * 
+     * @param entry
+     *            the entry associate to the response
      */
     public void setEntry( IEntry entry )
     {
@@ -97,14 +100,16 @@ public class Response
      *
      * @return the id of the response
      */
-    public int getIdResponse(  )
+    public int getIdResponse( )
     {
         return _nIdResponse;
     }
 
     /**
      * set the id of the response
-     * @param idResponse the id of the response
+     * 
+     * @param idResponse
+     *            the id of the response
      */
     public void setIdResponse( int idResponse )
     {
@@ -115,14 +120,16 @@ public class Response
      *
      * @return the value of the response
      */
-    public String getValueResponse(  )
+    public String getValueResponse( )
     {
         return _strValueResponse;
     }
 
     /**
      * set the value of the response
-     * @param strValueResponse Value of the response
+     * 
+     * @param strValueResponse
+     *            Value of the response
      */
     public void setValueResponse( String strValueResponse )
     {
@@ -131,16 +138,19 @@ public class Response
 
     /**
      * get Image
+     * 
      * @return Image Resource
      */
-    public ImageResource getImage(  )
+    public ImageResource getImage( )
     {
         return _image;
     }
 
     /**
      * set Image Resource
-     * @param image  Image Resource
+     * 
+     * @param image
+     *            Image Resource
      */
     public void setImage( ImageResource image )
     {
@@ -148,40 +158,45 @@ public class Response
     }
 
     /**
-    * Returns the xml of this suggest submit
-    *
-    * @param request The HTTP Servlet request
-    * @param locale the Locale
-    * @return the xml of this suggest submit
-    */
+     * Returns the xml of this suggest submit
+     *
+     * @param request
+     *            The HTTP Servlet request
+     * @param locale
+     *            the Locale
+     * @return the xml of this suggest submit
+     */
     public String getXml( HttpServletRequest request, Locale locale )
     {
-        StringBuffer strXml = new StringBuffer(  );
+        StringBuffer strXml = new StringBuffer( );
         XmlUtil.beginElement( strXml, TAG_RESPONSE );
-        XmlUtil.addElementHtml( strXml, TAG_RESPONSE_VALUE, this.getValueResponse(  ) );
+        XmlUtil.addElementHtml( strXml, TAG_RESPONSE_VALUE, this.getValueResponse( ) );
 
-        if ( this.getEntry(  ) != null )
+        if ( this.getEntry( ) != null )
         {
-            this.getEntry(  ).getXml( locale, strXml );
+            this.getEntry( ).getXml( locale, strXml );
         }
 
         XmlUtil.endElement( strXml, TAG_RESPONSE );
 
-        return strXml.toString(  );
+        return strXml.toString( );
     }
 
     /**
      * the image resource id associate to the response
+     * 
      * @return Resource Image
      */
-    public Integer getIdImageResource(  )
+    public Integer getIdImageResource( )
     {
         return _nIdImageResource;
     }
 
     /**
      * image resource id associate to the response
-     * @param idImageResource image resource id associate to the response
+     * 
+     * @param idImageResource
+     *            image resource id associate to the response
      */
     public void setIdImageResource( Integer idImageResource )
     {

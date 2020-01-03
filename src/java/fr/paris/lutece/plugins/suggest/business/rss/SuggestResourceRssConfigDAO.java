@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  *
  * class DirectoryResourceRssConfigDAO
@@ -47,20 +46,21 @@ import java.util.List;
  */
 public class SuggestResourceRssConfigDAO implements ISuggestResourceRssConfigDAO
 {
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_rss,id_suggest, is_submit_rss, id_suggest_submit " +
-        "FROM suggest_rss_cf  WHERE id_rss=?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_rss_cf( " +
-        "id_rss,id_suggest, is_submit_rss, id_suggest_submit)" + "VALUES (?,?,?,?)";
-    private static final String SQL_QUERY_UPDATE = "UPDATE suggest_rss_cf " +
-        "SET id_rss=?,id_suggest=?,is_submit_rss=?,id_suggest_submit=?" + " WHERE id_rss=?";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_rss,id_suggest, is_submit_rss, id_suggest_submit "
+            + "FROM suggest_rss_cf  WHERE id_rss=?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_rss_cf( " + "id_rss,id_suggest, is_submit_rss, id_suggest_submit)" + "VALUES (?,?,?,?)";
+    private static final String SQL_QUERY_UPDATE = "UPDATE suggest_rss_cf " + "SET id_rss=?,id_suggest=?,is_submit_rss=?,id_suggest_submit=?"
+            + " WHERE id_rss=?";
     private static final String SQL_QUERY_DELETE = "DELETE FROM suggest_rss_cf WHERE id_rss=? ";
-    private static final String SQL_QUERY_FIND_ALL = "SELECT id_rss,id_suggest, is_submit_rss, id_suggest_submit " +
-        "FROM suggest_rss_cf";
+    private static final String SQL_QUERY_FIND_ALL = "SELECT id_rss,id_suggest, is_submit_rss, id_suggest_submit " + "FROM suggest_rss_cf";
 
     /**
      * Insert a new record in the table.
-     * @param config The Instance of the object config
-     * @param plugin the plugin
+     * 
+     * @param config
+     *            The Instance of the object config
+     * @param plugin
+     *            the plugin
      */
     public synchronized void insert( SuggestResourceRssConfig config, Plugin plugin )
     {
@@ -68,20 +68,22 @@ public class SuggestResourceRssConfigDAO implements ISuggestResourceRssConfigDAO
 
         int nPos = 0;
 
-        daoUtil.setInt( ++nPos, config.getIdRss(  ) );
-        daoUtil.setInt( ++nPos, config.getIdSuggest(  ) );
-        daoUtil.setBoolean( ++nPos, config.isSubmitRss(  ) );
-        daoUtil.setInt( ++nPos, config.getIdSuggestSubmit(  ) );
+        daoUtil.setInt( ++nPos, config.getIdRss( ) );
+        daoUtil.setInt( ++nPos, config.getIdSuggest( ) );
+        daoUtil.setBoolean( ++nPos, config.isSubmitRss( ) );
+        daoUtil.setInt( ++nPos, config.getIdSuggestSubmit( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
      * Update the record in the table
      *
-     * @param  config instance of config object to update
-     * @param plugin the plugin
+     * @param config
+     *            instance of config object to update
+     * @param plugin
+     *            the plugin
      */
     public void store( SuggestResourceRssConfig config, Plugin plugin )
     {
@@ -89,20 +91,23 @@ public class SuggestResourceRssConfigDAO implements ISuggestResourceRssConfigDAO
 
         int nPos = 0;
 
-        daoUtil.setInt( ++nPos, config.getIdRss(  ) );
-        daoUtil.setInt( ++nPos, config.getIdSuggest(  ) );
-        daoUtil.setBoolean( ++nPos, config.isSubmitRss(  ) );
-        daoUtil.setInt( ++nPos, config.getIdSuggestSubmit(  ) );
+        daoUtil.setInt( ++nPos, config.getIdRss( ) );
+        daoUtil.setInt( ++nPos, config.getIdSuggest( ) );
+        daoUtil.setBoolean( ++nPos, config.isSubmitRss( ) );
+        daoUtil.setInt( ++nPos, config.getIdSuggestSubmit( ) );
 
-        daoUtil.setInt( ++nPos, config.getIdRss(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.setInt( ++nPos, config.getIdRss( ) );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
      * load the data of SuggestResourceRssConfig from the table
-     * @param nIdRss the Rss id
-     * @param plugin the plugin
+     * 
+     * @param nIdRss
+     *            the Rss id
+     * @param plugin
+     *            the plugin
      * @return The Instance of the object SuggestResourceRssConfig
      *
      */
@@ -113,55 +118,60 @@ public class SuggestResourceRssConfigDAO implements ISuggestResourceRssConfigDAO
 
         daoUtil.setInt( 1, nIdRss );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nPos = 0;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            config = new SuggestResourceRssConfig(  );
+            config = new SuggestResourceRssConfig( );
             config.setIdRss( daoUtil.getInt( ++nPos ) );
             config.setIdSuggest( daoUtil.getInt( ++nPos ) );
             config.setSubmitRss( daoUtil.getBoolean( ++nPos ) );
             config.setIdSuggestSubmit( daoUtil.getInt( ++nPos ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return config;
     }
 
     /**
      * Delete a record from the table
-     * @param nIdRss The id of object SuggestResourceRssConfig
-     * @param plugin le plugin
+     * 
+     * @param nIdRss
+     *            The id of object SuggestResourceRssConfig
+     * @param plugin
+     *            le plugin
      */
     public void delete( int nIdRss, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
 
         daoUtil.setInt( 1, nIdRss );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
      * Return all record
-     * @param plugin le plugin
+     * 
+     * @param plugin
+     *            le plugin
      * @return List of SuggestResourceRssConfig
      */
     public List<SuggestResourceRssConfig> loadAll( Plugin plugin )
     {
-        List<SuggestResourceRssConfig> configList = new ArrayList<SuggestResourceRssConfig>(  );
+        List<SuggestResourceRssConfig> configList = new ArrayList<SuggestResourceRssConfig>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ALL, plugin );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nPos = 0;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            SuggestResourceRssConfig config = new SuggestResourceRssConfig(  );
+            SuggestResourceRssConfig config = new SuggestResourceRssConfig( );
             config.setIdRss( daoUtil.getInt( ++nPos ) );
             config.setIdSuggest( daoUtil.getInt( ++nPos ) );
             config.setSubmitRss( daoUtil.getBoolean( ++nPos ) );
@@ -170,7 +180,7 @@ public class SuggestResourceRssConfigDAO implements ISuggestResourceRssConfigDAO
             configList.add( config );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return configList;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -76,7 +76,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-
 
 /**
  * DirectoryResourceRss.
@@ -247,11 +246,11 @@ public class SuggestResourceRss extends ResourceRss
      * {@inheritDoc}
      */
     @Override
-    public boolean contentResourceRss(  )
+    public boolean contentResourceRss( )
     {
         Plugin pluginSuggest = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
 
-        SuggestFilter filter = new SuggestFilter(  );
+        SuggestFilter filter = new SuggestFilter( );
         if ( SuggestHome.getSuggestList( filter, pluginSuggest ).size( ) > 0 )
         {
             return true;
@@ -279,8 +278,8 @@ public class SuggestResourceRss extends ResourceRss
             stridSuggestSubmit = "0";
         }
 
-        SuggestResourceRssConfig config = new SuggestResourceRssConfig(  );
-        config.setIdRss( this.getId(  ) );
+        SuggestResourceRssConfig config = new SuggestResourceRssConfig( );
+        config.setIdRss( this.getId( ) );
         config.setIdSuggest( Integer.parseInt( stridSuggest ) );
         config.setIdSuggestSubmit( Integer.parseInt( stridSuggestSubmit ) );
         config.setSubmitRss( bisSubmitRss );
@@ -305,8 +304,8 @@ public class SuggestResourceRss extends ResourceRss
             stridSuggestSubmit = "0";
         }
 
-        SuggestResourceRssConfig config = new SuggestResourceRssConfig(  );
-        config.setIdRss( this.getId(  ) );
+        SuggestResourceRssConfig config = new SuggestResourceRssConfig( );
+        config.setIdRss( this.getId( ) );
         config.setIdSuggest( Integer.parseInt( strIdSuggest ) );
         config.setIdSuggestSubmit( Integer.parseInt( stridSuggestSubmit ) );
         config.setSubmitRss( bisSubmitRss );
@@ -339,26 +338,24 @@ public class SuggestResourceRss extends ResourceRss
 
         if ( !strError.equals( "" ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         if ( bisSubmitRss )
         {
-            SuggestSubmit suggestSubmit = SuggestSubmitService.getService(  )
-                                                     .findByPrimaryKey( Integer.parseInt( stridSuggestSubmit ), false,
-                    pluginSuggest );
-            this.setName( suggestSubmit.getSuggestSubmitTitle(  ) );
-            this.setDescription( suggestSubmit.getSuggestSubmitValue(  ).replaceAll( "<div[^>]+>", "" )
-                                           .replaceAll( "</div>", "" ) );
+            SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( Integer.parseInt( stridSuggestSubmit ), false, pluginSuggest );
+            this.setName( suggestSubmit.getSuggestSubmitTitle( ) );
+            this.setDescription( suggestSubmit.getSuggestSubmitValue( ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
         }
         else
         {
             Suggest suggest = SuggestHome.findByPrimaryKey( Integer.parseInt( stridSuggest ), pluginSuggest );
-            this.setName( suggest.getTitle(  ) );
-            this.setDescription( suggest.getLibelleContribution(  ) );
+            this.setName( suggest.getTitle( ) );
+            this.setDescription( suggest.getLibelleContribution( ) );
         }
 
         return null;
@@ -372,32 +369,31 @@ public class SuggestResourceRss extends ResourceRss
     {
         Plugin pluginSuggest = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
 
-        SuggestFilter filter = new SuggestFilter(  );
+        SuggestFilter filter = new SuggestFilter( );
 
         List<Suggest> suggestList = SuggestHome.getSuggestList( filter, pluginSuggest );
-        ReferenceList referenceSuggest = new ReferenceList(  );
+        ReferenceList referenceSuggest = new ReferenceList( );
 
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
 
-        Map<String, ReferenceList> suggestMap = new HashMap<String, ReferenceList>(  );
+        Map<String, ReferenceList> suggestMap = new HashMap<String, ReferenceList>( );
 
         for ( Suggest suggest : suggestList )
         {
-            SubmitFilter submitFilter = new SubmitFilter(  );
-            submitFilter.setIdSuggest( suggest.getIdSuggest(  ) );
+            SubmitFilter submitFilter = new SubmitFilter( );
+            submitFilter.setIdSuggest( suggest.getIdSuggest( ) );
 
-            List<SuggestSubmit> suggestSubmitList = SuggestSubmitService.getService(  )
-                                                               .getSuggestSubmitList( submitFilter, pluginSuggest );
-            ReferenceList referenceSuggestSubmit = new ReferenceList(  );
+            List<SuggestSubmit> suggestSubmitList = SuggestSubmitService.getService( ).getSuggestSubmitList( submitFilter, pluginSuggest );
+            ReferenceList referenceSuggestSubmit = new ReferenceList( );
 
             for ( SuggestSubmit suggestSubmit : suggestSubmitList )
             {
-                referenceSuggestSubmit.addItem( suggestSubmit.getIdSuggestSubmit(  ),
-                    suggestSubmit.getSuggestSubmitValue(  ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
+                referenceSuggestSubmit.addItem( suggestSubmit.getIdSuggestSubmit( ), suggestSubmit.getSuggestSubmitValue( ).replaceAll( "<div[^>]+>", "" )
+                        .replaceAll( "</div>", "" ) );
             }
 
-            suggestMap.put( String.valueOf( suggest.getIdSuggest(  ) ), referenceSuggestSubmit );
-            referenceSuggest.addItem( suggest.getIdSuggest(  ), suggest.getTitle(  ) );
+            suggestMap.put( String.valueOf( suggest.getIdSuggest( ) ), referenceSuggestSubmit );
+            referenceSuggest.addItem( suggest.getIdSuggest( ), suggest.getTitle( ) );
         }
 
         model.put( MARK_SUGGESTSUBMIT_LIST, suggestMap );
@@ -407,7 +403,7 @@ public class SuggestResourceRss extends ResourceRss
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_EVALUATION_CREATE_CONFIG, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -417,13 +413,12 @@ public class SuggestResourceRss extends ResourceRss
     public String getDisplayModifyConfigForm( HttpServletRequest request, Locale locale )
     {
         Plugin pluginSuggest = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
-        SuggestFilter filter = new SuggestFilter(  );
+        SuggestFilter filter = new SuggestFilter( );
         List<Suggest> suggestList = SuggestHome.getSuggestList( filter, pluginSuggest );
-        ReferenceList referenceSuggest = new ReferenceList(  );
+        ReferenceList referenceSuggest = new ReferenceList( );
 
-        SuggestResourceRssConfig suggestResourceRssConfig = SuggestResourceRssConfigHome.findByPrimaryKey( this.getId(  ),
-                pluginSuggest );
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        SuggestResourceRssConfig suggestResourceRssConfig = SuggestResourceRssConfigHome.findByPrimaryKey( this.getId( ), pluginSuggest );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
 
         if ( request.getParameter( PARAMETER_ID_SUGGEST ) != null )
         {
@@ -433,28 +428,27 @@ public class SuggestResourceRss extends ResourceRss
         }
         else
         {
-            model.put( MARK_SUGGEST_LIST_DEFAULT_ITEM, suggestResourceRssConfig.getIdSuggest(  ) );
+            model.put( MARK_SUGGEST_LIST_DEFAULT_ITEM, suggestResourceRssConfig.getIdSuggest( ) );
         }
 
-        Map<String, ReferenceList> suggestMap = new HashMap<String, ReferenceList>(  );
+        Map<String, ReferenceList> suggestMap = new HashMap<String, ReferenceList>( );
 
         for ( Suggest suggest : suggestList )
         {
-            SubmitFilter submitFilter = new SubmitFilter(  );
-            submitFilter.setIdSuggest( suggest.getIdSuggest(  ) );
+            SubmitFilter submitFilter = new SubmitFilter( );
+            submitFilter.setIdSuggest( suggest.getIdSuggest( ) );
 
-            List<SuggestSubmit> suggestSubmitList = SuggestSubmitService.getService(  )
-                                                               .getSuggestSubmitList( submitFilter, pluginSuggest );
-            ReferenceList referenceSuggestSubmit = new ReferenceList(  );
+            List<SuggestSubmit> suggestSubmitList = SuggestSubmitService.getService( ).getSuggestSubmitList( submitFilter, pluginSuggest );
+            ReferenceList referenceSuggestSubmit = new ReferenceList( );
 
             for ( SuggestSubmit suggestSubmit : suggestSubmitList )
             {
-                referenceSuggestSubmit.addItem( suggestSubmit.getIdSuggestSubmit(  ),
-                    suggestSubmit.getSuggestSubmitValue(  ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
+                referenceSuggestSubmit.addItem( suggestSubmit.getIdSuggestSubmit( ), suggestSubmit.getSuggestSubmitValue( ).replaceAll( "<div[^>]+>", "" )
+                        .replaceAll( "</div>", "" ) );
             }
 
-            suggestMap.put( String.valueOf( suggest.getIdSuggest(  ) ), referenceSuggestSubmit );
-            referenceSuggest.addItem( suggest.getIdSuggest(  ), suggest.getTitle(  ) );
+            suggestMap.put( String.valueOf( suggest.getIdSuggest( ) ), referenceSuggestSubmit );
+            referenceSuggest.addItem( suggest.getIdSuggest( ), suggest.getTitle( ) );
         }
 
         if ( request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT ) != null )
@@ -465,26 +459,26 @@ public class SuggestResourceRss extends ResourceRss
         }
         else
         {
-            model.put( MARK_SUGGEST_SUBMIT_LIST_DEFAULT_ITEM, suggestResourceRssConfig.getIdSuggestSubmit(  ) );
+            model.put( MARK_SUGGEST_SUBMIT_LIST_DEFAULT_ITEM, suggestResourceRssConfig.getIdSuggestSubmit( ) );
         }
 
-        model.put( MARK_IS_SUGGEST_SUBMIT_RSS, suggestResourceRssConfig.isSubmitRss(  ) );
+        model.put( MARK_IS_SUGGEST_SUBMIT_RSS, suggestResourceRssConfig.isSubmitRss( ) );
         model.put( MARK_SUGGESTSUBMIT_LIST, suggestMap );
         model.put( MARK_SUGGEST_LIST, referenceSuggest );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_EVALUATION_MODIFY_CONFIG, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
      * {@inheritDoc}
      */
-    public String createHtmlRss(  )
+    public String createHtmlRss( )
     {
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
         Plugin pluginSuggestglike = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
-        SuggestResourceRssConfig config = SuggestResourceRssConfigHome.findByPrimaryKey( this.getId(  ), pluginSuggestglike );
+        SuggestResourceRssConfig config = SuggestResourceRssConfigHome.findByPrimaryKey( this.getId( ), pluginSuggestglike );
 
         String strRssFileLanguage = AppPropertiesService.getProperty( PROPERTY_SITE_LANGUAGE );
         Locale locale = new Locale( strRssFileLanguage );
@@ -492,86 +486,80 @@ public class SuggestResourceRss extends ResourceRss
         String strWebAppUrl = AppPropertiesService.getProperty( PROPERTY_WEBAPP_PROD_URL );
         String strSiteUrl = strWebAppUrl;
 
-        if ( config.isSubmitRss(  ) )
+        if ( config.isSubmitRss( ) )
         {
-            //Submit Rss
-            SuggestSubmit suggestSubmit = SuggestSubmitService.getService(  )
-                                                     .findByPrimaryKey( config.getIdSuggestSubmit(  ), false,
-                    pluginSuggestglike );
-            SuggestSubmitState suggestsubmitStage = suggestSubmit.getSuggestSubmitState(  );
-            Category category = suggestSubmit.getCategory(  );
-            model.put( MARK_RSS_SITE_NAME, suggestSubmit.getSuggestSubmitTitle(  ) );
-            model.put( MARK_RSS_SITE_ID, suggestSubmit.getIdSuggestSubmit(  ) );
+            // Submit Rss
+            SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( config.getIdSuggestSubmit( ), false, pluginSuggestglike );
+            SuggestSubmitState suggestsubmitStage = suggestSubmit.getSuggestSubmitState( );
+            Category category = suggestSubmit.getCategory( );
+            model.put( MARK_RSS_SITE_NAME, suggestSubmit.getSuggestSubmitTitle( ) );
+            model.put( MARK_RSS_SITE_ID, suggestSubmit.getIdSuggestSubmit( ) );
             model.put( MARK_RSS_FILE_LANGUAGE, strRssFileLanguage );
             model.put( MARK_RSS_SITE_URL, strSiteUrl );
 
-            model.put( MARK_RSS_NUMBER_VOTE, suggestSubmit.getNumberVote(  ) );
-            model.put( MARK_RSS_SCORE, suggestSubmit.getNumberScore(  ) );
+            model.put( MARK_RSS_NUMBER_VOTE, suggestSubmit.getNumberVote( ) );
+            model.put( MARK_RSS_SCORE, suggestSubmit.getNumberScore( ) );
 
-            model.put( MARK_RSS_SITE_STATE, suggestsubmitStage.getTitle(  ) );
-            model.put( MARK_RSS_SITE_DESCRIPTION,
-                suggestSubmit.getSuggestSubmitValue(  ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
+            model.put( MARK_RSS_SITE_STATE, suggestsubmitStage.getTitle( ) );
+            model.put( MARK_RSS_SITE_DESCRIPTION, suggestSubmit.getSuggestSubmitValue( ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
 
             if ( category != null )
             {
-                model.put( MARK_RSS_CATEGORY, category.getTitle(  ) );
+                model.put( MARK_RSS_CATEGORY, category.getTitle( ) );
             }
 
-            model.put( MARK_RSS_SITE_DATE,
-                new SimpleDateFormat( FORMAT_RSS_DATE, Locale.ENGLISH ).format( suggestSubmit.getDateResponse(  ) ) );
+            model.put( MARK_RSS_SITE_DATE, new SimpleDateFormat( FORMAT_RSS_DATE, Locale.ENGLISH ).format( suggestSubmit.getDateResponse( ) ) );
 
-            SubmitFilter submitFilter = new SubmitFilter(  );
-            submitFilter.setIdSuggestSubmit( config.getIdSuggestSubmit(  ) );
+            SubmitFilter submitFilter = new SubmitFilter( );
+            submitFilter.setIdSuggestSubmit( config.getIdSuggestSubmit( ) );
 
-            List<CommentSubmit> listResultCommentSubmit = CommentSubmitService.getService(  )
-                                                                              .getCommentSubmitList( submitFilter,
-                    pluginSuggestglike );
-            List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>(  );
+            List<CommentSubmit> listResultCommentSubmit = CommentSubmitService.getService( ).getCommentSubmitList( submitFilter, pluginSuggestglike );
+            List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>( );
 
-            //Descriptino of the comments
+            // Descriptino of the comments
             for ( CommentSubmit commentSubmit : listResultCommentSubmit )
             {
-                HashMap<String, Object> item = new HashMap<String, Object>(  );
+                HashMap<String, Object> item = new HashMap<String, Object>( );
 
-                if ( commentSubmit.getLuteceUserKey(  ) != null )
+                if ( commentSubmit.getLuteceUserKey( ) != null )
                 {
-                    item.put( MARK_RSS_ITEM_AUTHOR, commentSubmit.getLuteceUserKey(  ) );
+                    item.put( MARK_RSS_ITEM_AUTHOR, commentSubmit.getLuteceUserKey( ) );
                 }
                 else
                 {
                     item.put( MARK_RSS_ITEM_AUTHOR, null );
                 }
 
-                item.put( MARK_RSS_ITEM_STATE,
-                    commentSubmit.isActive(  ) ? I18nService.getLocalizedString( FIELD_STATE_ENABLE, locale )
-                                               : I18nService.getLocalizedString( FIELD_STATE_DISABLE, locale ) );
-                item.put( MARK_RSS_ITEM_DESCRIPTION, commentSubmit.getValue(  ) );
-                item.put( MARK_RSS_ID_SUBMIT, suggestSubmit.getIdSuggestSubmit(  ) );
-                item.put( MARK_RSS_ITEM_DATE,
-                    new SimpleDateFormat( FORMAT_RSS_DATE, Locale.ENGLISH ).format( commentSubmit.getDateComment(  ) ) );
+                item.put(
+                        MARK_RSS_ITEM_STATE,
+                        commentSubmit.isActive( ) ? I18nService.getLocalizedString( FIELD_STATE_ENABLE, locale ) : I18nService.getLocalizedString(
+                                FIELD_STATE_DISABLE, locale ) );
+                item.put( MARK_RSS_ITEM_DESCRIPTION, commentSubmit.getValue( ) );
+                item.put( MARK_RSS_ID_SUBMIT, suggestSubmit.getIdSuggestSubmit( ) );
+                item.put( MARK_RSS_ITEM_DATE, new SimpleDateFormat( FORMAT_RSS_DATE, Locale.ENGLISH ).format( commentSubmit.getDateComment( ) ) );
 
                 listItem.add( item );
             }
 
             model.put( MARK_ITEM_LIST, listItem );
 
-            model.put( MARK_RSS_ID_SUGGEST, config.getIdSuggest(  ) );
+            model.put( MARK_RSS_ID_SUGGEST, config.getIdSuggest( ) );
 
             HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_PUSH_RSS_XML_SUBMIT, locale, model );
 
-            return template.getHtml(  );
+            return template.getHtml( );
         }
         else
         {
-            //Suggest Rss
-            Suggest suggest = SuggestHome.findByPrimaryKey( config.getIdSuggest(  ), pluginSuggestglike );
+            // Suggest Rss
+            Suggest suggest = SuggestHome.findByPrimaryKey( config.getIdSuggest( ), pluginSuggestglike );
 
-            model.put( MARK_RSS_SITE_NAME, suggest.getTitle(  ) );
-            model.put( MARK_RSS_SITE_ID, suggest.getIdSuggest(  ) );
+            model.put( MARK_RSS_SITE_NAME, suggest.getTitle( ) );
+            model.put( MARK_RSS_SITE_ID, suggest.getIdSuggest( ) );
             model.put( MARK_RSS_FILE_LANGUAGE, strRssFileLanguage );
             model.put( MARK_RSS_SITE_URL, strSiteUrl );
 
-            if ( suggest.isActive(  ) )
+            if ( suggest.isActive( ) )
             {
                 model.put( MARK_RSS_SITE_DESCRIPTION, I18nService.getLocalizedString( FIELD_STATE_ENABLE, locale ) );
             }
@@ -580,48 +568,44 @@ public class SuggestResourceRss extends ResourceRss
                 model.put( MARK_RSS_SITE_DESCRIPTION, I18nService.getLocalizedString( FIELD_STATE_DISABLE, locale ) );
             }
 
-            model.put( MARK_RSS_SITE_DATE,
-                new SimpleDateFormat( FORMAT_RSS_DATE, Locale.ENGLISH ).format( suggest.getDateCreation(  ) ) );
+            model.put( MARK_RSS_SITE_DATE, new SimpleDateFormat( FORMAT_RSS_DATE, Locale.ENGLISH ).format( suggest.getDateCreation( ) ) );
 
-            SubmitFilter submitFilter = new SubmitFilter(  );
-            submitFilter.setIdSuggest( config.getIdSuggest(  ) );
+            SubmitFilter submitFilter = new SubmitFilter( );
+            submitFilter.setIdSuggest( config.getIdSuggest( ) );
 
-            List<SuggestSubmit> listResultSuggestSubmit = SuggestSubmitService.getService(  )
-                                                                     .getSuggestSubmitList( submitFilter, pluginSuggestglike );
-            List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>(  );
+            List<SuggestSubmit> listResultSuggestSubmit = SuggestSubmitService.getService( ).getSuggestSubmitList( submitFilter, pluginSuggestglike );
+            List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>( );
 
-            //Description of  the submits
+            // Description of the submits
             for ( SuggestSubmit suggestSubmit : listResultSuggestSubmit )
             {
-                HashMap<String, Object> item = new HashMap<String, Object>(  );
-                SuggestSubmitState suggestsubmitState = suggestSubmit.getSuggestSubmitState(  );
-                Category category = suggestSubmit.getCategory(  );
+                HashMap<String, Object> item = new HashMap<String, Object>( );
+                SuggestSubmitState suggestsubmitState = suggestSubmit.getSuggestSubmitState( );
+                Category category = suggestSubmit.getCategory( );
 
-                item.put( MARK_RSS_ITEM_TITLE, suggestSubmit.getSuggestSubmitTitle(  ) );
-                item.put( MARK_RSS_NUMBER_VOTE, suggestSubmit.getNumberVote(  ) );
-                item.put( MARK_RSS_SCORE, suggestSubmit.getNumberScore(  ) );
-                item.put( MARK_RSS_ITEM_STATE, suggestsubmitState.getTitle(  ) );
+                item.put( MARK_RSS_ITEM_TITLE, suggestSubmit.getSuggestSubmitTitle( ) );
+                item.put( MARK_RSS_NUMBER_VOTE, suggestSubmit.getNumberVote( ) );
+                item.put( MARK_RSS_SCORE, suggestSubmit.getNumberScore( ) );
+                item.put( MARK_RSS_ITEM_STATE, suggestsubmitState.getTitle( ) );
 
                 if ( category != null )
                 {
-                    item.put( MARK_RSS_CATEGORY, suggestSubmit.getSuggestSubmitTitle(  ) );
+                    item.put( MARK_RSS_CATEGORY, suggestSubmit.getSuggestSubmitTitle( ) );
                 }
 
-                item.put( MARK_RSS_ITEM_DESCRIPTION,
-                    suggestSubmit.getSuggestSubmitValue(  ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
-                item.put( MARK_RSS_ID_SUBMIT, suggestSubmit.getIdSuggestSubmit(  ) );
-                item.put( MARK_RSS_ITEM_DATE,
-                    new SimpleDateFormat( FORMAT_RSS_DATE, Locale.ENGLISH ).format( suggestSubmit.getDateResponse(  ) ) );
+                item.put( MARK_RSS_ITEM_DESCRIPTION, suggestSubmit.getSuggestSubmitValue( ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
+                item.put( MARK_RSS_ID_SUBMIT, suggestSubmit.getIdSuggestSubmit( ) );
+                item.put( MARK_RSS_ITEM_DATE, new SimpleDateFormat( FORMAT_RSS_DATE, Locale.ENGLISH ).format( suggestSubmit.getDateResponse( ) ) );
                 listItem.add( item );
             }
 
             model.put( MARK_ITEM_LIST, listItem );
 
-            model.put( MARK_RSS_ID_SUGGEST, config.getIdSuggest(  ) );
+            model.put( MARK_RSS_ID_SUGGEST, config.getIdSuggest( ) );
 
             HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_PUSH_RSS_XML_SUGGEST, locale, model );
 
-            return template.getHtml(  );
+            return template.getHtml( );
         }
     }
 
@@ -629,7 +613,7 @@ public class SuggestResourceRss extends ResourceRss
      * {@inheritDoc}
      */
     @Override
-    public IFeedResource getFeed(  )
+    public IFeedResource getFeed( )
     {
         String strRssFileLanguage = AppPropertiesService.getProperty( PROPERTY_SITE_LANGUAGE );
         Locale locale = new Locale( strRssFileLanguage );
@@ -638,100 +622,98 @@ public class SuggestResourceRss extends ResourceRss
         String strSiteUrl = strWebAppUrl;
 
         Plugin pluginSuggestglike = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
-        SuggestResourceRssConfig config = SuggestResourceRssConfigHome.findByPrimaryKey( this.getId(  ), pluginSuggestglike );
+        SuggestResourceRssConfig config = SuggestResourceRssConfigHome.findByPrimaryKey( this.getId( ), pluginSuggestglike );
 
-        if ( config.isSubmitRss(  ) )
+        if ( config.isSubmitRss( ) )
         {
-            //Submit Rss
-            SuggestSubmit suggestSubmit = SuggestSubmitService.getService(  )
-                                                     .findByPrimaryKey( config.getIdSuggestSubmit(  ), false,
-                    pluginSuggestglike );
-            SuggestSubmitState suggestsubmitStage = suggestSubmit.getSuggestSubmitState(  );
-            Category category = suggestSubmit.getCategory(  );
+            // Submit Rss
+            SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( config.getIdSuggestSubmit( ), false, pluginSuggestglike );
+            SuggestSubmitState suggestsubmitStage = suggestSubmit.getSuggestSubmitState( );
+            Category category = suggestSubmit.getCategory( );
 
-            IFeedResource resource = new FeedResource(  );
-            resource.setTitle( suggestSubmit.getSuggestSubmitTitle(  ) );
+            IFeedResource resource = new FeedResource( );
+            resource.setTitle( suggestSubmit.getSuggestSubmitTitle( ) );
             /**
-                     * The link is changed to access to the suggest in FO
-                     * @since v2.2.5
-                     */
+             * The link is changed to access to the suggest in FO
+             * 
+             * @since v2.2.5
+             */
 
             // resource.setLink( strSiteUrl + JSP_MANAGE_SUGGEST_SUBMIT + suggestSubmit.getIdSuggestSubmit( ) );
-            resource.setLink( buildUrlSuggest( strSiteUrl, suggestSubmit.getSuggest(  ) ) );
+            resource.setLink( buildUrlSuggest( strSiteUrl, suggestSubmit.getSuggest( ) ) );
             resource.setLanguage( strRssFileLanguage );
 
-            Date date = new Date( suggestSubmit.getDateResponse(  ).getTime(  ) );
+            Date date = new Date( suggestSubmit.getDateResponse( ).getTime( ) );
             resource.setDate( date );
 
-            IFeedResourceImage image = new FeedResourceImage(  );
+            IFeedResourceImage image = new FeedResourceImage( );
             image.setUrl( strSiteUrl + PARAMETER_URL_FEED_IMAGE );
-            image.setTitle( suggestSubmit.getSuggestSubmitTitle(  ) );
+            image.setTitle( suggestSubmit.getSuggestSubmitTitle( ) );
             image.setLink( strSiteUrl );
 
             resource.setImage( image );
 
             String strDescription;
-            Map<String, Object> model = new HashMap<String, Object>(  );
+            Map<String, Object> model = new HashMap<String, Object>( );
 
-            model.put( MARK_RSS_SITE_DESCRIPTION,
-                suggestSubmit.getSuggestSubmitValue(  ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
-            model.put( MARK_RSS_SITE_STATE, suggestsubmitStage.getTitle(  ) );
+            model.put( MARK_RSS_SITE_DESCRIPTION, suggestSubmit.getSuggestSubmitValue( ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
+            model.put( MARK_RSS_SITE_STATE, suggestsubmitStage.getTitle( ) );
 
             if ( category != null )
             {
-                model.put( MARK_RSS_CATEGORY, category.getTitle(  ) );
+                model.put( MARK_RSS_CATEGORY, category.getTitle( ) );
             }
 
-            model.put( MARK_RSS_NUMBER_VOTE, suggestSubmit.getNumberVote(  ) );
-            model.put( MARK_RSS_SCORE, suggestSubmit.getNumberScore(  ) );
+            model.put( MARK_RSS_NUMBER_VOTE, suggestSubmit.getNumberVote( ) );
+            model.put( MARK_RSS_SCORE, suggestSubmit.getNumberScore( ) );
 
             HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_RSS_SUBMIT_DESCRIPTION, locale, model );
-            strDescription = template.getHtml(  );
+            strDescription = template.getHtml( );
 
             resource.setDescription( strDescription );
 
-            SubmitFilter submitFilter = new SubmitFilter(  );
-            submitFilter.setIdSuggestSubmit( config.getIdSuggestSubmit(  ) );
+            SubmitFilter submitFilter = new SubmitFilter( );
+            submitFilter.setIdSuggestSubmit( config.getIdSuggestSubmit( ) );
 
-            List<CommentSubmit> listResultCommentSubmit = CommentSubmitService.getService(  )
-                                                                              .getCommentSubmitList( submitFilter,
-                    pluginSuggestglike );
-            List<IFeedResourceItem> listItems = new ArrayList<IFeedResourceItem>(  );
+            List<CommentSubmit> listResultCommentSubmit = CommentSubmitService.getService( ).getCommentSubmitList( submitFilter, pluginSuggestglike );
+            List<IFeedResourceItem> listItems = new ArrayList<IFeedResourceItem>( );
 
-            //Description of the comments	
+            // Description of the comments
             for ( CommentSubmit commentSubmit : listResultCommentSubmit )
             {
-                IFeedResourceItem item = new FeedResourceItem(  );
+                IFeedResourceItem item = new FeedResourceItem( );
 
                 String strTitleItem;
-                Map<String, Object> model2 = new HashMap<String, Object>(  );
+                Map<String, Object> model2 = new HashMap<String, Object>( );
 
-                if ( commentSubmit.getLuteceUserKey(  ) != null )
+                if ( commentSubmit.getLuteceUserKey( ) != null )
                 {
-                    model2.put( MARK_RSS_ITEM_AUTHOR, commentSubmit.getLuteceUserKey(  ) );
+                    model2.put( MARK_RSS_ITEM_AUTHOR, commentSubmit.getLuteceUserKey( ) );
                 }
                 else
                 {
                     model2.put( MARK_RSS_ITEM_AUTHOR, null );
                 }
 
-                model2.put( MARK_RSS_ITEM_STATE,
-                    commentSubmit.isActive(  ) ? I18nService.getLocalizedString( FIELD_STATE_ENABLE, locale )
-                                               : I18nService.getLocalizedString( FIELD_STATE_DISABLE, locale ) );
+                model2.put(
+                        MARK_RSS_ITEM_STATE,
+                        commentSubmit.isActive( ) ? I18nService.getLocalizedString( FIELD_STATE_ENABLE, locale ) : I18nService.getLocalizedString(
+                                FIELD_STATE_DISABLE, locale ) );
 
                 HtmlTemplate template2 = AppTemplateService.getTemplate( TEMPLATE_RSS_SUBMIT_ITEM_TITLE, locale, model2 );
-                strTitleItem = template2.getHtml(  );
+                strTitleItem = template2.getHtml( );
 
                 item.setTitle( strTitleItem );
                 /**
-                         * The link is changed to access to the suggest submit in FO
-                         * @since v2.2.5
-                         */
+                 * The link is changed to access to the suggest submit in FO
+                 * 
+                 * @since v2.2.5
+                 */
 
                 // item.setLink( strSiteUrl + JSP_MANAGE_COMMENT_SUBMIT + suggestSubmit.getIdSuggestSubmit( ) );
                 item.setLink( buildUrlSuggestSubmit( strSiteUrl, suggestSubmit ) );
-                item.setDescription( commentSubmit.getValue(  ) );
-                item.setDate( commentSubmit.getDateComment(  ) );
+                item.setDescription( commentSubmit.getValue( ) );
+                item.setDate( commentSubmit.getDateComment( ) );
 
                 listItems.add( item );
             }
@@ -742,82 +724,82 @@ public class SuggestResourceRss extends ResourceRss
         }
         else
         {
-            //Suggest Rss
-            Suggest suggest = SuggestHome.findByPrimaryKey( config.getIdSuggest(  ), pluginSuggestglike );
+            // Suggest Rss
+            Suggest suggest = SuggestHome.findByPrimaryKey( config.getIdSuggest( ), pluginSuggestglike );
 
-            IFeedResource resource = new FeedResource(  );
-            resource.setTitle( suggest.getTitle(  ) );
+            IFeedResource resource = new FeedResource( );
+            resource.setTitle( suggest.getTitle( ) );
             /**
-                     * The link is changed to access to the suggest in FO
-                     * @since v2.2.5
-                     */
+             * The link is changed to access to the suggest in FO
+             * 
+             * @since v2.2.5
+             */
 
-            // resource.setLink( strSiteUrl + JSP_MANAGE_SUGGEST_SUBMIT + suggest.getIdSuggest(  ) );
+            // resource.setLink( strSiteUrl + JSP_MANAGE_SUGGEST_SUBMIT + suggest.getIdSuggest( ) );
             resource.setLink( buildUrlSuggest( strSiteUrl, suggest ) );
             resource.setLanguage( strRssFileLanguage );
 
-            Date date = new Date( suggest.getDateCreation(  ).getTime(  ) );
+            Date date = new Date( suggest.getDateCreation( ).getTime( ) );
             resource.setDate( date );
 
-            IFeedResourceImage image = new FeedResourceImage(  );
+            IFeedResourceImage image = new FeedResourceImage( );
             image.setUrl( strSiteUrl + PARAMETER_URL_FEED_IMAGE );
-            image.setTitle( suggest.getTitle(  ) );
+            image.setTitle( suggest.getTitle( ) );
             image.setLink( strSiteUrl );
 
             resource.setImage( image );
 
-            if ( suggest.isActive(  ) )
+            if ( suggest.isActive( ) )
             {
-                resource.setDescription( I18nService.getLocalizedString( FIELD_STATE, locale ) + " : " +
-                    I18nService.getLocalizedString( FIELD_STATE_ENABLE, locale ) );
+                resource.setDescription( I18nService.getLocalizedString( FIELD_STATE, locale ) + " : "
+                        + I18nService.getLocalizedString( FIELD_STATE_ENABLE, locale ) );
             }
             else
             {
-                resource.setDescription( I18nService.getLocalizedString( FIELD_STATE, locale ) + " : " +
-                    I18nService.getLocalizedString( FIELD_STATE_DISABLE, locale ) );
+                resource.setDescription( I18nService.getLocalizedString( FIELD_STATE, locale ) + " : "
+                        + I18nService.getLocalizedString( FIELD_STATE_DISABLE, locale ) );
             }
 
-            SubmitFilter submitFilter = new SubmitFilter(  );
-            submitFilter.setIdSuggest( config.getIdSuggest(  ) );
+            SubmitFilter submitFilter = new SubmitFilter( );
+            submitFilter.setIdSuggest( config.getIdSuggest( ) );
 
-            List<SuggestSubmit> listResultSuggestSubmit = SuggestSubmitService.getService(  )
-                                                                     .getSuggestSubmitList( submitFilter, pluginSuggestglike );
-            List<IFeedResourceItem> listItems = new ArrayList<IFeedResourceItem>(  );
+            List<SuggestSubmit> listResultSuggestSubmit = SuggestSubmitService.getService( ).getSuggestSubmitList( submitFilter, pluginSuggestglike );
+            List<IFeedResourceItem> listItems = new ArrayList<IFeedResourceItem>( );
 
-            //Description of  the submits
+            // Description of the submits
             for ( SuggestSubmit suggestSubmit : listResultSuggestSubmit )
             {
-                IFeedResourceItem item = new FeedResourceItem(  );
+                IFeedResourceItem item = new FeedResourceItem( );
 
                 String strTitle;
-                Map<String, Object> model = new HashMap<String, Object>(  );
-                SuggestSubmitState suggestsubmitState = suggestSubmit.getSuggestSubmitState(  );
-                Category category = suggestSubmit.getCategory(  );
+                Map<String, Object> model = new HashMap<String, Object>( );
+                SuggestSubmitState suggestsubmitState = suggestSubmit.getSuggestSubmitState( );
+                Category category = suggestSubmit.getCategory( );
 
-                model.put( MARK_RSS_ITEM_TITLE, suggestSubmit.getSuggestSubmitTitle(  ) );
-                model.put( MARK_RSS_NUMBER_VOTE, suggestSubmit.getNumberVote(  ) );
-                model.put( MARK_RSS_SCORE, suggestSubmit.getNumberScore(  ) );
-                model.put( MARK_RSS_ITEM_STATE, suggestsubmitState.getTitle(  ) );
+                model.put( MARK_RSS_ITEM_TITLE, suggestSubmit.getSuggestSubmitTitle( ) );
+                model.put( MARK_RSS_NUMBER_VOTE, suggestSubmit.getNumberVote( ) );
+                model.put( MARK_RSS_SCORE, suggestSubmit.getNumberScore( ) );
+                model.put( MARK_RSS_ITEM_STATE, suggestsubmitState.getTitle( ) );
 
                 if ( category != null )
                 {
-                    model.put( MARK_RSS_CATEGORY, suggestSubmit.getSuggestSubmitTitle(  ) );
+                    model.put( MARK_RSS_CATEGORY, suggestSubmit.getSuggestSubmitTitle( ) );
                 }
 
                 HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_RSS_SUGGEST_ITEM_TITLE, locale, model );
-                strTitle = template.getHtml(  );
+                strTitle = template.getHtml( );
 
                 item.setTitle( strTitle );
                 /**
-                         * The link is changed to access to the suggest submit in FO
-                         * @since v2.2.5
-                         */
+                 * The link is changed to access to the suggest submit in FO
+                 * 
+                 * @since v2.2.5
+                 */
 
                 // item.setLink( strSiteUrl + JSP_MANAGE_COMMENT_SUBMIT + suggestSubmit.getIdSuggestSubmit( ) );
                 item.setLink( buildUrlSuggestSubmit( strSiteUrl, suggestSubmit ) );
-                item.setDescription( suggestSubmit.getSuggestSubmitValue(  ).replaceAll( "<div[^>]+>", "" )
-                                               .replaceAll( "</div>", "" ) );
-                item.setDate( suggestSubmit.getDateResponse(  ) );
+                item.setDescription( suggestSubmit.getSuggestSubmitValue( ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
+                item.setDate( suggestSubmit.getDateResponse( ) );
 
                 listItems.add( item );
             }
@@ -844,7 +826,7 @@ public class SuggestResourceRss extends ResourceRss
     @Override
     public Map<String, String> getParameterToApply( HttpServletRequest request )
     {
-        Map<String, String> map = new HashMap<String, String>(  );
+        Map<String, String> map = new HashMap<String, String>( );
 
         map.put( PARAMETER_ID_SUGGEST, request.getParameter( PARAMETER_ID_SUGGEST ) );
 
@@ -855,35 +837,36 @@ public class SuggestResourceRss extends ResourceRss
      * {@inheritDoc}
      */
     @Override
-    public boolean checkResource(  )
+    public boolean checkResource( )
     {
         Plugin pluginDirectory = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
-        SuggestResourceRssConfig config = SuggestResourceRssConfigHome.findByPrimaryKey( this.getId(  ), pluginDirectory );
-        Suggest suggest = SuggestHome.findByPrimaryKey( config.getIdSuggest(  ), pluginDirectory );
+        SuggestResourceRssConfig config = SuggestResourceRssConfigHome.findByPrimaryKey( this.getId( ), pluginDirectory );
+        Suggest suggest = SuggestHome.findByPrimaryKey( config.getIdSuggest( ), pluginDirectory );
 
         return ( suggest != null );
     }
 
     /**
-         * Builds the url suggest submit.
-         *
-         * @param strSiteUrl the str site url
-         * @param suggestSubmit the suggest submit
-         * @return the string
-         */
+     * Builds the url suggest submit.
+     *
+     * @param strSiteUrl
+     *            the str site url
+     * @param suggestSubmit
+     *            the suggest submit
+     * @return the string
+     */
     private static String buildUrlSuggestSubmit( String strSiteUrl, SuggestSubmit suggestSubmit )
     {
-        if ( ( suggestSubmit != null ) && ( suggestSubmit.getSuggest(  ) != null ) )
+        if ( ( suggestSubmit != null ) && ( suggestSubmit.getSuggest( ) != null ) )
         {
-            UrlItem url = new UrlItem( strSiteUrl + SLASH + AppPathService.getPortalUrl(  ) );
-            url.addParameter( XPageAppService.PARAM_XPAGE_APP,
-                AppPropertiesService.getProperty( PROPERTY_XPAGE_APPLICATION_ID, DEFAULT_XPAGE_ID ) );
-            url.addParameter( PARAMETER_ID_SUGGEST, suggestSubmit.getSuggest(  ).getIdSuggest(  ) );
-            url.addParameter( PARAMETER_ID_SUGGEST_SUBMIT, suggestSubmit.getIdSuggestSubmit(  ) );
+            UrlItem url = new UrlItem( strSiteUrl + SLASH + AppPathService.getPortalUrl( ) );
+            url.addParameter( XPageAppService.PARAM_XPAGE_APP, AppPropertiesService.getProperty( PROPERTY_XPAGE_APPLICATION_ID, DEFAULT_XPAGE_ID ) );
+            url.addParameter( PARAMETER_ID_SUGGEST, suggestSubmit.getSuggest( ).getIdSuggest( ) );
+            url.addParameter( PARAMETER_ID_SUGGEST_SUBMIT, suggestSubmit.getIdSuggestSubmit( ) );
             url.addParameter( PARAMETER_SUGGEST_COMMENT, "1" );
             url.addParameter( PARAMETER_SUGGEST_DETAIL, "1" );
 
-            return url.getUrl(  );
+            return url.getUrl( );
         }
 
         AppLogService.debug( "SuggestResourceRss - SuggestSubmit is null when trying to build the URL." );
@@ -894,20 +877,21 @@ public class SuggestResourceRss extends ResourceRss
     /**
      * Builds the url suggest submit.
      *
-     * @param strSiteUrl the str site url
-     * @param suggest the suggest
+     * @param strSiteUrl
+     *            the str site url
+     * @param suggest
+     *            the suggest
      * @return the string
      */
     private static String buildUrlSuggest( String strSiteUrl, Suggest suggest )
     {
         if ( suggest != null )
         {
-            UrlItem url = new UrlItem( strSiteUrl + SLASH + AppPathService.getPortalUrl(  ) );
-            url.addParameter( XPageAppService.PARAM_XPAGE_APP,
-                AppPropertiesService.getProperty( PROPERTY_XPAGE_APPLICATION_ID, DEFAULT_XPAGE_ID ) );
-            url.addParameter( PARAMETER_ID_SUGGEST, suggest.getIdSuggest(  ) );
+            UrlItem url = new UrlItem( strSiteUrl + SLASH + AppPathService.getPortalUrl( ) );
+            url.addParameter( XPageAppService.PARAM_XPAGE_APP, AppPropertiesService.getProperty( PROPERTY_XPAGE_APPLICATION_ID, DEFAULT_XPAGE_ID ) );
+            url.addParameter( PARAMETER_ID_SUGGEST, suggest.getIdSuggest( ) );
 
-            return url.getUrl(  );
+            return url.getUrl( );
         }
 
         AppLogService.debug( "SuggestResourceRss - Suggest is null when trying to build the URL." );

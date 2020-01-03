@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  * The Vote DAO interface
  *
@@ -47,32 +46,44 @@ public interface IVoteDAO
     /**
      * Insert a new record in the table.
      *
-     * @param vote instance of the Vote object to insert
-     * @param plugin the plugin
+     * @param vote
+     *            instance of the Vote object to insert
+     * @param plugin
+     *            the plugin
      */
     void insert( Vote vote, Plugin plugin );
 
     /**
      * Load the data of all vote associate to the suggest submit
-     * @param nIdSuggestSubmit the suggestsubmit id
-     * @param plugin the plugin
-     * @return  the list of vote button associated to the vote type  returns them in a  list
+     * 
+     * @param nIdSuggestSubmit
+     *            the suggestsubmit id
+     * @param plugin
+     *            the plugin
+     * @return the list of vote button associated to the vote type returns them in a list
      */
     List<Vote> selectVoteByIdSuggestSubmit( int nIdSuggestSubmit, Plugin plugin );
 
     /**
-         * return the number of vote for a lutece user on suggestSubmit
-         * @param nIdSuggestSubmit the id of the suggest submit
-         * @param strLuteceUserKey the LuteceUserKey
-         * @param plugin the plugin
-         * @return the number of vote for a lutece user on suggestSubmit
-         */
+     * return the number of vote for a lutece user on suggestSubmit
+     * 
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param strLuteceUserKey
+     *            the LuteceUserKey
+     * @param plugin
+     *            the plugin
+     * @return the number of vote for a lutece user on suggestSubmit
+     */
     int selectCountVoteByIdSuggestSubmitAndLuteceUserKey( int nIdSuggestSubmit, String strLuteceUserKey, Plugin plugin );
 
     /**
      * return the number of vote for a lutece user on suggestSubmit
-     * @param nIdSuggestSubmit the id of the suggest submit
-     * @param plugin the plugin
+     * 
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param plugin
+     *            the plugin
      * @return the number of vote for a lutece user on suggestSubmit
      */
     int selectCountVoteByIdSuggestSubmit( int nIdSuggestSubmit, Plugin plugin );

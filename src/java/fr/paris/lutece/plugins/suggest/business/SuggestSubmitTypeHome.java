@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,7 +41,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
  * class SuggestSubmitTypeHome
  */
@@ -49,29 +48,30 @@ public final class SuggestSubmitTypeHome
 {
     // Static variable pointed at the DAO instance
     private static ISuggestSubmitTypeDAO _dao = SpringContextService.getBean( "suggest.suggestSubmitTypeDAO" );
-    private static AbstractCacheableService _cache = new SuggestSubmitTypeCacheService(  );
+    private static AbstractCacheableService _cache = new SuggestSubmitTypeCacheService( );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private SuggestSubmitTypeHome(  )
+    private SuggestSubmitTypeHome( )
     {
     }
 
     /**
      * Creation of an instance of suggestSubmitType
      *
-     * @param suggestSubmitType The instance of the suggestSubmitType which contains
-     *            the informations to store
-     * @param plugin the Plugin
+     * @param suggestSubmitType
+     *            The instance of the suggestSubmitType which contains the informations to store
+     * @param plugin
+     *            the Plugin
      * @return the id of the new suggestSubmitType
      *
      */
     public static int create( SuggestSubmitType suggestSubmitType, Plugin plugin )
     {
-        if ( suggestSubmitType.getPictogram(  ) != null )
+        if ( suggestSubmitType.getPictogram( ) != null )
         {
-            suggestSubmitType.setIdImageResource( ImageResourceHome.create( suggestSubmitType.getPictogram(  ), plugin ) );
+            suggestSubmitType.setIdImageResource( ImageResourceHome.create( suggestSubmitType.getPictogram( ), plugin ) );
         }
 
         return _dao.insert( suggestSubmitType, plugin );
@@ -80,24 +80,25 @@ public final class SuggestSubmitTypeHome
     /**
      * Update of the suggestSubmitType which is specified in parameter
      *
-     * @param suggestSubmitType The instance of the suggestSubmitType which contains
-     *            the informations to update
-     * @param plugin the Plugin
+     * @param suggestSubmitType
+     *            The instance of the suggestSubmitType which contains the informations to update
+     * @param plugin
+     *            the Plugin
      *
      */
     public static void update( SuggestSubmitType suggestSubmitType, Plugin plugin )
     {
-        if ( suggestSubmitType.getPictogram(  ) != null )
+        if ( suggestSubmitType.getPictogram( ) != null )
         {
-            //remove old image if exist
-            if ( suggestSubmitType.getIdImageResource(  ) != null )
+            // remove old image if exist
+            if ( suggestSubmitType.getIdImageResource( ) != null )
             {
-                ImageResourceHome.remove( suggestSubmitType.getIdImageResource(  ), plugin );
+                ImageResourceHome.remove( suggestSubmitType.getIdImageResource( ), plugin );
             }
 
-            if ( suggestSubmitType.getPictogram(  ).getImage(  ) != null )
+            if ( suggestSubmitType.getPictogram( ).getImage( ) != null )
             {
-                suggestSubmitType.setIdImageResource( ImageResourceHome.create( suggestSubmitType.getPictogram(  ), plugin ) );
+                suggestSubmitType.setIdImageResource( ImageResourceHome.create( suggestSubmitType.getPictogram( ), plugin ) );
             }
             else
             {
@@ -106,37 +107,40 @@ public final class SuggestSubmitTypeHome
         }
 
         _dao.store( suggestSubmitType, plugin );
-        _cache.removeKey( SuggestUtils.EMPTY_STRING + suggestSubmitType.getIdType(  ) );
+        _cache.removeKey( SuggestUtils.EMPTY_STRING + suggestSubmitType.getIdType( ) );
     }
 
     /**
      * Remove the suggestSubmitType whose identifier is specified in parameter
      *
-     * @param nIdSuggestSubmitType The suggestSubmitType
-     * @param plugin the Plugin
+     * @param nIdSuggestSubmitType
+     *            The suggestSubmitType
+     * @param plugin
+     *            the Plugin
      */
     public static void remove( int nIdSuggestSubmitType, Plugin plugin )
     {
         SuggestSubmitType suggestSubmitType = findByPrimaryKey( nIdSuggestSubmitType, plugin );
 
-        if ( ( suggestSubmitType != null ) && ( suggestSubmitType.getIdImageResource(  ) != null ) )
+        if ( ( suggestSubmitType != null ) && ( suggestSubmitType.getIdImageResource( ) != null ) )
         {
-            ImageResourceHome.remove( suggestSubmitType.getIdImageResource(  ), plugin );
+            ImageResourceHome.remove( suggestSubmitType.getIdImageResource( ), plugin );
         }
 
         _dao.delete( nIdSuggestSubmitType, plugin );
         _cache.removeKey( SuggestUtils.EMPTY_STRING + nIdSuggestSubmitType );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
-     * Returns an instance of a suggestSubmitType whose identifier is specified in
-     * parameter
+     * Returns an instance of a suggestSubmitType whose identifier is specified in parameter
      *
-     * @param nKey The suggestSubmitType primary key
-     * @param plugin the Plugin
+     * @param nKey
+     *            The suggestSubmitType primary key
+     * @param plugin
+     *            the Plugin
      * @return an instance of SuggestSubmit
      */
     public static SuggestSubmitType findByPrimaryKey( int nKey, Plugin plugin )
@@ -153,9 +157,10 @@ public final class SuggestSubmitTypeHome
     }
 
     /**
-     * Load the data of all the suggestSubmitType who verify the filter and returns
-     * them in a list
-     * @param plugin the plugin
+     * Load the data of all the suggestSubmitType who verify the filter and returns them in a list
+     * 
+     * @param plugin
+     *            the plugin
      * @return the list of suggestSubmit
      */
     public static List<SuggestSubmitType> getList( Plugin plugin )
@@ -165,8 +170,11 @@ public final class SuggestSubmitTypeHome
 
     /**
      * Returns a list of all category associate to the suggest
-     * @param nIdSuggest the id suggest
-     * @param plugin the plugin
+     * 
+     * @param nIdSuggest
+     *            the id suggest
+     * @param plugin
+     *            the plugin
      * @return the list of category
      */
     public static List<SuggestSubmitType> getListByIdSuggest( int nIdSuggest, Plugin plugin )
@@ -176,8 +184,11 @@ public final class SuggestSubmitTypeHome
 
     /**
      * true if there is a suggest associate to the SuggestSubmitType
-     * @param nIdSuggestSubmitType the key of the suggest submit type
-     * @param plugin the plugin
+     * 
+     * @param nIdSuggestSubmitType
+     *            the key of the suggest submit type
+     * @param plugin
+     *            the plugin
      * @return true if there is a suggest associate to the SuggestSubmitType
      */
     public static boolean isAssociateToSuggest( int nIdSuggestSubmitType, Plugin plugin )
@@ -188,9 +199,12 @@ public final class SuggestSubmitTypeHome
     /**
      * Delete an association between suggest and a suggest submit type
      *
-     * @param nIdSuggest The identifier of the suggest
-     * @param nIdSuggestSubmitType nIdSuggestSubmitType
-     * @param plugin the plugin
+     * @param nIdSuggest
+     *            The identifier of the suggest
+     * @param nIdSuggestSubmitType
+     *            nIdSuggestSubmitType
+     * @param plugin
+     *            the plugin
      */
     public static void removeSuggestAssociation( int nIdSuggest, int nIdSuggestSubmitType, Plugin plugin )
     {
@@ -200,9 +214,12 @@ public final class SuggestSubmitTypeHome
     /**
      * insert an association between suggest and a suggest submit type
      *
-     * @param nIdSuggest The identifier of the suggest
-     * @param nIdSuggestSubmitType nIdSuggestSubmitType
-     * @param plugin the plugin
+     * @param nIdSuggest
+     *            The identifier of the suggest
+     * @param nIdSuggestSubmitType
+     *            nIdSuggestSubmitType
+     * @param plugin
+     *            the plugin
      */
     public static void createSuggestAssociation( int nIdSuggest, int nIdSuggestSubmitType, Plugin plugin )
     {

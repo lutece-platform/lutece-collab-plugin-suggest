@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,6 @@ import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.portal.ThemesService;
 
-
 /**
  *
  * SuggestService
@@ -53,16 +52,16 @@ import fr.paris.lutece.portal.service.portal.ThemesService;
  */
 public class SuggestService
 {
-    private static SuggestService _singleton = new SuggestService(  );
+    private static SuggestService _singleton = new SuggestService( );
     private static final String PARAMETER_ID_SUGGEST = "id_suggest";
 
     /**
      * Initialize the Suggest service
      *
      */
-    public void init(  )
+    public void init( )
     {
-        Suggest.init(  );
+        Suggest.init( );
     }
 
     /**
@@ -70,33 +69,35 @@ public class SuggestService
      *
      * @return The instance of the singleton
      */
-    public static SuggestService getInstance(  )
+    public static SuggestService getInstance( )
     {
         return _singleton;
     }
-    
-    
-   /**
-    * get the XpageTheme associate
-    * @param request HttpServletRequest
-    * @return Theme
-    */
-    public Theme getXPageTheme( HttpServletRequest request)
+
+    /**
+     * get the XpageTheme associate
+     * 
+     * @param request
+     *            HttpServletRequest
+     * @return Theme
+     */
+    public Theme getXPageTheme( HttpServletRequest request )
     {
-    	
-    	String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
-    	Suggest suggest=null;;
-    	int nIdSuggest=SuggestUtils.getIntegerParameter( strIdSuggest );
-        if(nIdSuggest == SuggestUtils.CONSTANT_ID_NULL)
-        {	
-         	nIdSuggest=getIdDefaultSuggest();
-         }
-         if(nIdSuggest != SuggestUtils.CONSTANT_ID_NULL)
-         {	
-        	 suggest= SuggestHome.findByPrimaryKey( nIdSuggest, PluginService.getPlugin(SuggestPlugin.PLUGIN_NAME ));
-        	 
-         }
-    	
+
+        String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
+        Suggest suggest = null;
+        ;
+        int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
+        if ( nIdSuggest == SuggestUtils.CONSTANT_ID_NULL )
+        {
+            nIdSuggest = getIdDefaultSuggest( );
+        }
+        if ( nIdSuggest != SuggestUtils.CONSTANT_ID_NULL )
+        {
+            suggest = SuggestHome.findByPrimaryKey( nIdSuggest, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+
+        }
+
         if ( suggest != null )
         {
             return ThemesService.getGlobalTheme( suggest.getCodeTheme( ) );
@@ -105,25 +106,21 @@ public class SuggestService
         return ThemesService.getGlobalThemeObject( );
     }
 
-    
-  
-    
-    
     /**
-    *
-    * @return the Id of the default Suggest
-    */
-   public int getIdDefaultSuggest(  )
-   {
-       int nIdDefaultSuggest;
-       SuggestFilter filterDefaultSuggest = new SuggestFilter(  );
-       filterDefaultSuggest.setIdDefaultSuggest( SuggestFilter.ID_TRUE );
+     *
+     * @return the Id of the default Suggest
+     */
+    public int getIdDefaultSuggest( )
+    {
+        int nIdDefaultSuggest;
+        SuggestFilter filterDefaultSuggest = new SuggestFilter( );
+        filterDefaultSuggest.setIdDefaultSuggest( SuggestFilter.ID_TRUE );
 
-       List listDefaultSuggest = SuggestHome.getSuggestList( filterDefaultSuggest, PluginService.getPlugin(SuggestPlugin.PLUGIN_NAME ) );
-       nIdDefaultSuggest = ( ( listDefaultSuggest != null ) && ( listDefaultSuggest.size(  ) > 0 ) )
-           ? ( (Suggest) listDefaultSuggest.get( 0 ) ).getIdSuggest(  ) : SuggestUtils.CONSTANT_ID_NULL;
+        List listDefaultSuggest = SuggestHome.getSuggestList( filterDefaultSuggest, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+        nIdDefaultSuggest = ( ( listDefaultSuggest != null ) && ( listDefaultSuggest.size( ) > 0 ) ) ? ( (Suggest) listDefaultSuggest.get( 0 ) ).getIdSuggest( )
+                : SuggestUtils.CONSTANT_ID_NULL;
 
-       return nIdDefaultSuggest;
-   }
+        return nIdDefaultSuggest;
+    }
 
 }

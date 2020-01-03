@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@ package fr.paris.lutece.plugins.suggest.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -70,25 +70,28 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
  */
 import java.util.List;
 
-
 /**
-*  interface IEntryTypeDAO
-*/
+ * interface IEntryTypeDAO
+ */
 public interface IEntryTypeDAO
 {
     /**
-         * Load the data of the entry type from the table
-         *
-         * @param idKey The identifier of the entry type
-         * @param plugin the plugin
-         * @return the instance of the EntryType
-         */
+     * Load the data of the entry type from the table
+     *
+     * @param idKey
+     *            The identifier of the entry type
+     * @param plugin
+     *            the plugin
+     * @return the instance of the EntryType
+     */
     EntryType load( int idKey, Plugin plugin );
 
     /**
-         * Load the data of all  entry type returns them in a  list
-         * @param plugin the plugin
-         * @return  the list of entry type
-         */
+     * Load the data of all entry type returns them in a list
+     * 
+     * @param plugin
+     *            the plugin
+     * @return the list of entry type
+     */
     List<EntryType> select( Plugin plugin );
 }

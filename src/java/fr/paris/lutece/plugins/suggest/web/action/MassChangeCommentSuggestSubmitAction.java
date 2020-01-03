@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,14 +58,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  *
  * MassChangeCommentSuggestSubmitAction
  *
  */
-public class MassChangeCommentSuggestSubmitAction extends AbstractPluginAction<SuggestAdminSearchFields>
-    implements ISuggestAction
+public class MassChangeCommentSuggestSubmitAction extends AbstractPluginAction<SuggestAdminSearchFields> implements ISuggestAction
 {
     private static final String ACTION_NAME = "Mass Change Comment SuggestSubmit ";
     private static final String MESSAGE_YOU_MUST_SELECT_SUGGEST_SUBMIT = "suggest.message.youMustSelectSuggestSubmit";
@@ -84,7 +82,7 @@ public class MassChangeCommentSuggestSubmitAction extends AbstractPluginAction<S
      * {@inheritDoc}
      */
     @Override
-    public String getName(  )
+    public String getName( )
     {
         return ACTION_NAME;
     }
@@ -93,7 +91,7 @@ public class MassChangeCommentSuggestSubmitAction extends AbstractPluginAction<S
      * {@inheritDoc}
      */
     @Override
-    public String getButtonTemplate(  )
+    public String getButtonTemplate( )
     {
         return null;
     }
@@ -104,38 +102,35 @@ public class MassChangeCommentSuggestSubmitAction extends AbstractPluginAction<S
     @Override
     public boolean isInvoked( HttpServletRequest request )
     {
-        return ( ( request.getParameter( PARAMETER_MASS_DISABLE_ACTION ) != null ) ||
-        ( request.getParameter( PARAMETER_MASS_ENABLE_ACTION ) != null ) );
+        return ( ( request.getParameter( PARAMETER_MASS_DISABLE_ACTION ) != null ) || ( request.getParameter( PARAMETER_MASS_ENABLE_ACTION ) != null ) );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser,
-        SuggestAdminSearchFields searchFields ) throws AccessDeniedException
+    public IPluginActionResult process( HttpServletRequest request, HttpServletResponse response, AdminUser adminUser, SuggestAdminSearchFields searchFields )
+            throws AccessDeniedException
     {
-        IPluginActionResult result = new DefaultPluginActionResult(  );
+        IPluginActionResult result = new DefaultPluginActionResult( );
 
         int nIdSuggestSubmit;
         String strRedirect = SuggestJspBean.getJspManageSuggestSubmit( request );
 
-        if ( ( searchFields.getSelectedSuggestSubmit(  ) != null ) && !searchFields.getSelectedSuggestSubmit(  ).isEmpty(  ) )
+        if ( ( searchFields.getSelectedSuggestSubmit( ) != null ) && !searchFields.getSelectedSuggestSubmit( ).isEmpty( ) )
         {
-            //test All ressource selected before update
-            for ( String strIdSuggestSubmit : searchFields.getSelectedSuggestSubmit(  ) )
+            // test All ressource selected before update
+            for ( String strIdSuggestSubmit : searchFields.getSelectedSuggestSubmit( ) )
             {
                 if ( StringUtils.isNotBlank( strIdSuggestSubmit ) && StringUtils.isNumeric( strIdSuggestSubmit ) )
                 {
                     nIdSuggestSubmit = SuggestUtils.getIntegerParameter( strIdSuggestSubmit );
 
-                    SuggestSubmit suggestSubmit = SuggestSubmitService.getService(  )
-                                                             .findByPrimaryKey( nIdSuggestSubmit, false, getPlugin(  ) );
+                    SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
 
-                    if ( ( suggestSubmit == null ) ||
-                            !RBACService.isAuthorized( Suggest.RESOURCE_TYPE,
-                                SuggestUtils.EMPTY_STRING + suggestSubmit.getSuggest(  ).getIdSuggest(  ),
-                                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, adminUser ) )
+                    if ( ( suggestSubmit == null )
+                            || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, SuggestUtils.EMPTY_STRING + suggestSubmit.getSuggest( ).getIdSuggest( ),
+                                    SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, adminUser ) )
                     {
                         throw new AccessDeniedException( "Access denied" );
                     }
@@ -144,25 +139,22 @@ public class MassChangeCommentSuggestSubmitAction extends AbstractPluginAction<S
 
             boolean isDisabledVote = ( request.getParameter( PARAMETER_MASS_DISABLE_ACTION ) != null );
 
-            //update all suggest submit selected
-            for ( String strIdSuggestSubmittoUpdate : searchFields.getSelectedSuggestSubmit(  ) )
+            // update all suggest submit selected
+            for ( String strIdSuggestSubmittoUpdate : searchFields.getSelectedSuggestSubmit( ) )
             {
-                if ( StringUtils.isNotBlank( strIdSuggestSubmittoUpdate ) &&
-                        StringUtils.isNumeric( strIdSuggestSubmittoUpdate ) )
+                if ( StringUtils.isNotBlank( strIdSuggestSubmittoUpdate ) && StringUtils.isNumeric( strIdSuggestSubmittoUpdate ) )
                 {
                     nIdSuggestSubmit = SuggestUtils.getIntegerParameter( strIdSuggestSubmittoUpdate );
 
-                    SuggestSubmit suggestSubmit = SuggestSubmitService.getService(  )
-                                                             .findByPrimaryKey( nIdSuggestSubmit, false, getPlugin(  ) );
+                    SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
                     suggestSubmit.setDisableComment( isDisabledVote );
-                    SuggestSubmitService.getService(  ).update( suggestSubmit, getPlugin(  ) );
+                    SuggestSubmitService.getService( ).update( suggestSubmit, getPlugin( ) );
                 }
             }
         }
         else
         {
-            strRedirect = AdminMessageService.getMessageUrl( request, MESSAGE_YOU_MUST_SELECT_SUGGEST_SUBMIT,
-                    AdminMessage.TYPE_INFO );
+            strRedirect = AdminMessageService.getMessageUrl( request, MESSAGE_YOU_MUST_SELECT_SUGGEST_SUBMIT, AdminMessage.TYPE_INFO );
         }
 
         result.setRedirect( strRedirect );
@@ -172,9 +164,10 @@ public class MassChangeCommentSuggestSubmitAction extends AbstractPluginAction<S
 
     /**
      * Gets the plugin
+     * 
      * @return the plugin
      */
-    private Plugin getPlugin(  )
+    private Plugin getPlugin( )
     {
         return PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
     }

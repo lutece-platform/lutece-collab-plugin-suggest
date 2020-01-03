@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,6 @@ import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * DocumentSearchService
  */
@@ -61,11 +60,11 @@ public class SuggestSearchService
     /**
      * @return the instance of the service
      */
-    public static SuggestSearchService getInstance(  )
+    public static SuggestSearchService getInstance( )
     {
         if ( _singleton == null )
         {
-            _singleton = new SuggestSearchService(  );
+            _singleton = new SuggestSearchService( );
         }
 
         return _singleton;
@@ -73,40 +72,42 @@ public class SuggestSearchService
 
     /**
      * Return search results
-     * @param strQuery The search query
-     * @param filter The filter
-     * @param plugin The plugin
+     * 
+     * @param strQuery
+     *            The search query
+     * @param filter
+     *            The filter
+     * @param plugin
+     *            The plugin
      * @return Results as a collection of {@link SuggestSubmit}
      */
     public List<Integer> getSearchResults( String strQuery, SubmitFilter filter, Plugin plugin )
     {
-        List<Integer> listSuggestSubmitResult = new ArrayList<Integer>(  );
+        List<Integer> listSuggestSubmitResult = new ArrayList<Integer>( );
         SuggestSearchEngine engine = SpringContextService.getBean( BEAN_SEARCH_ENGINE );
-        List<Integer> suggestSubmitListId = SuggestSubmitService.getService(  ).getSuggestSubmitListId( filter, plugin );
-        List<SuggestSearchItem> listSearchesults = StringUtils.isEmpty( strQuery ) ? null
-                                                                                    : engine.getSearchResults( strQuery,
-                filter );
+        List<Integer> suggestSubmitListId = SuggestSubmitService.getService( ).getSuggestSubmitListId( filter, plugin );
+        List<SuggestSearchItem> listSearchesults = StringUtils.isEmpty( strQuery ) ? null : engine.getSearchResults( strQuery, filter );
 
         if ( StringUtils.isEmpty( strQuery ) )
         {
             listSuggestSubmitResult = suggestSubmitListId;
         }
-        else if ( suggestSubmitListId != null )
-        {
-            for ( Integer nSuggestSubmitId : suggestSubmitListId )
+        else
+            if ( suggestSubmitListId != null )
             {
-                for ( SuggestSearchItem searchResult : listSearchesults )
+                for ( Integer nSuggestSubmitId : suggestSubmitListId )
                 {
-                    if ( ( searchResult.getType(  ) != null ) && ( searchResult.getId(  ) != null ) &&
-                            searchResult.getType(  ).equals( SuggestIndexer.INDEX_TYPE_SUGGEST ) &&
-                            searchResult.getIdSuggestSubmit(  ).matches( REGEX_ID ) &&
-                            ( Integer.parseInt( searchResult.getIdSuggestSubmit(  ) ) == nSuggestSubmitId ) )
+                    for ( SuggestSearchItem searchResult : listSearchesults )
                     {
-                        listSuggestSubmitResult.add( SuggestUtils.getIntegerParameter( searchResult.getIdSuggestSubmit(  ) ) );
+                        if ( ( searchResult.getType( ) != null ) && ( searchResult.getId( ) != null )
+                                && searchResult.getType( ).equals( SuggestIndexer.INDEX_TYPE_SUGGEST ) && searchResult.getIdSuggestSubmit( ).matches( REGEX_ID )
+                                && ( Integer.parseInt( searchResult.getIdSuggestSubmit( ) ) == nSuggestSubmitId ) )
+                        {
+                            listSuggestSubmitResult.add( SuggestUtils.getIntegerParameter( searchResult.getIdSuggestSubmit( ) ) );
+                        }
                     }
                 }
             }
-        }
 
         return listSuggestSubmitResult;
     }
