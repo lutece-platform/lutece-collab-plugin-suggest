@@ -93,6 +93,7 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.LocalVariables;
+import fr.paris.lutece.portal.web.l10n.LocaleService;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.portal.web.xpages.XPageApplication;
 import fr.paris.lutece.util.ReferenceList;
@@ -398,8 +399,8 @@ public class SuggestApp implements XPageApplication
         LuteceUser luteceUserConnected = SecurityService.getInstance( ).getRegisteredUser( request );
 
         String strContentSuggest = EMPTY_STRING;
-        page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale( ) ) );
-        page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale( ) ) );
+        page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, getLocale( request ) ) );
+        page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, getLocale( request ) ) );
 
         // show the suggests list
         String strCurrentPageIndexSuggest = "";
@@ -408,7 +409,7 @@ public class SuggestApp implements XPageApplication
         int nItemsPerPageSuggest = _nDefaultItemsPerPage;
         nItemsPerPageSuggest = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, nItemsPerPageSuggest, _nDefaultItemsPerPage );
 
-        strContentSuggest = getHtmlListSuggest( request.getLocale( ), _plugin, strCurrentPageIndexSuggest, nItemsPerPageSuggest, getNewUrlItemPage( ),
+        strContentSuggest = getHtmlListSuggest( getLocale( request ), _plugin, strCurrentPageIndexSuggest, nItemsPerPageSuggest, getNewUrlItemPage( ),
                 luteceUserConnected );
 
         model.put( MARK_CONTENT_SUGGEST, strContentSuggest );
@@ -480,7 +481,7 @@ public class SuggestApp implements XPageApplication
         urlSuggestXpage.addParameter( PARAMETER_ID_SUGGEST, nIdSuggest );
 
         SearchFields searchFields = getSearchFields( request );
-        addSuggestPageFrameset( getHtmlListSuggestSubmit( request.getLocale( ), _plugin, suggest, searchFields, urlSuggestXpage, luteceUserConnected ),
+        addSuggestPageFrameset( getHtmlListSuggestSubmit( getLocale( request ), _plugin, suggest, searchFields, urlSuggestXpage, luteceUserConnected ),
                 request, page, suggest, model, searchFields, luteceUserConnected );
 
         return page;
@@ -621,9 +622,9 @@ public class SuggestApp implements XPageApplication
         CommentSubmit commentSubmit = _commentSubmitService.findByPrimaryKey( nIdParentComment, _plugin );
         model.put( MARK_COMMENT_SUBMIT, commentSubmit );
         model.put( MARK_DISABLE_NEW_COMMENT_SUBMIT, suggest.isDisableNewComment( ) );
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_SUGGEST_SUB_COMMENT, request.getLocale( ), model );
-        page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale( ) ) );
-        page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale( ) ) );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_SUGGEST_SUB_COMMENT, getLocale( request ), model );
+        page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, getLocale( request ) ) );
+        page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, getLocale( request ) ) );
         page.setContent( template.getHtml( ) );
 
         return page;
@@ -737,7 +738,7 @@ public class SuggestApp implements XPageApplication
 
         if ( suggest.isEnableMailNewSuggestSubmit( ) && ( suggest.getIdMailingListSuggestSubmit( ) != SuggestUtils.CONSTANT_ID_NULL ) )
         {
-            SuggestUtils.sendNotificationNewSuggestSubmit( suggest, suggestSubmit, request.getLocale( ), request );
+            SuggestUtils.sendNotificationNewSuggestSubmit( suggest, suggestSubmit, getLocale( request ), request );
         }
 
         Map<String, Object> parameters = new HashMap<>( );
@@ -1004,7 +1005,7 @@ public class SuggestApp implements XPageApplication
 
         if ( suggest.isEnableMailNewCommentSubmit( ) && ( suggest.getIdMailingListSuggestSubmit( ) != SuggestUtils.CONSTANT_ID_NULL ) )
         {
-            SuggestUtils.sendNotificationNewCommentSubmit( suggest, commentSubmit, request.getLocale( ), request );
+            SuggestUtils.sendNotificationNewCommentSubmit( suggest, commentSubmit, getLocale( request ), request );
             strMessage = MESSAGE_NEW_COMMENT_SUBMIT_DISABLE;
         }
 
@@ -1092,7 +1093,7 @@ public class SuggestApp implements XPageApplication
 
         if ( suggest.isEnableMailNewReportedSubmit( ) && ( suggest.getIdMailingListSuggestSubmit( ) != SuggestUtils.CONSTANT_ID_NULL ) )
         {
-            SuggestUtils.sendNotificationNewReportedMessage( suggest, reportedMessage, request.getLocale( ), request );
+            SuggestUtils.sendNotificationNewReportedMessage( suggest, reportedMessage, getLocale( request ), request );
         }
 
         Map<String, Object> parameters = new HashMap<>( );
@@ -1471,7 +1472,7 @@ public class SuggestApp implements XPageApplication
 
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
         model.put( MARK_SUGGEST_SUBMIT_VOTE_TYPE,
-                getHtmlSuggestSubmitVoteType( suggestSubmit.getSuggest( ), suggestSubmit, CONSTANT_VIEW_SUGGEST_SUBMIT, request.getLocale( ) ) );
+                getHtmlSuggestSubmitVoteType( suggestSubmit.getSuggest( ), suggestSubmit, CONSTANT_VIEW_SUGGEST_SUBMIT, getLocale( request ) ) );
 
         model.put( MARK_AUTHORIZED_COMMENT, suggestSubmit.getSuggest( ).isAuthorizedComment( ) );
         model.put( MARK_AUTHORIZED_VOTE, !suggestSubmit.getSuggest( ).isDisableVote( ) );
@@ -1492,7 +1493,7 @@ public class SuggestApp implements XPageApplication
             model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode( ) );
         }
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_DETAIL_SUBMIT_SUGGEST, request.getLocale( ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_DETAIL_SUBMIT_SUGGEST, getLocale( request ), model );
 
         return template.getHtml( );
     }
@@ -1564,7 +1565,7 @@ public class SuggestApp implements XPageApplication
         model.put( MARK_ID_SUGGEST, suggestSubmit.getSuggest( ).getIdSuggest( ) );
         model.put( MARK_SUGGEST_SUBMIT, suggestSubmit );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_SUGGEST_REPORTED, request.getLocale( ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_SUGGEST_REPORTED, getLocale( request ), model );
 
         return template.getHtml( );
     }
@@ -1600,7 +1601,7 @@ public class SuggestApp implements XPageApplication
         model.put( MARK_ACTIVE_EDITOR_BBCODE, suggest.isActiveEditorBbcode( ) );
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_COMMENT_SUBMIT_SUGGEST, request.getLocale( ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_COMMENT_SUBMIT_SUGGEST, getLocale( request ), model );
 
         return template.getHtml( );
     }
@@ -1624,12 +1625,12 @@ public class SuggestApp implements XPageApplication
      */
     private String getHtmlForm( HttpServletRequest request, int nMode, Plugin plugin, Suggest suggest, int nIdDefaultCategory ) throws SiteMessageException
     {
-        Map<String, Object> model = SuggestUtils.getModelHtmlForm( suggest, plugin, request.getLocale( ), nIdDefaultCategory, false );
+        Map<String, Object> model = SuggestUtils.getModelHtmlForm( suggest, plugin, getLocale( request ), nIdDefaultCategory, false );
 
         // get form Recap
         model.put( MARK_DISABLE_NEW_SUGGEST_SUBMIT, suggest.isDisableNewSuggestSubmit( ) );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FORM_SUGGEST, request.getLocale( ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FORM_SUGGEST, getLocale( request ), model );
 
         return template.getHtml( );
     }
@@ -1658,7 +1659,7 @@ public class SuggestApp implements XPageApplication
     private SuggestSubmit doInsertSuggestSubmit( HttpServletRequest request, int nMode, Plugin plugin, Suggest suggest, int nIdCategory, int nIdType,
             LuteceUser user ) throws SiteMessageException
     {
-        Locale locale = request.getLocale( );
+        Locale locale = getLocale( request );
         List<Response> listResponse = new ArrayList<Response>( );
 
         if ( suggest.isActiveCaptcha( ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
@@ -1905,8 +1906,8 @@ public class SuggestApp implements XPageApplication
     private void addSuggestPageFrameset( String strContentSuggest, HttpServletRequest request, XPage page, Suggest suggest, Map<String, Object> model,
             SearchFields searchFields, LuteceUser luteceUserConnected )
     {
-        page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, request.getLocale( ) ) );
-        page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, request.getLocale( ) ) );
+        page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, getLocale( request ) ) );
+        page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, getLocale( request ) ) );
 
         if ( suggest.isActive( ) )
         {
@@ -1947,8 +1948,8 @@ public class SuggestApp implements XPageApplication
                 model.put( MARK_LIST_CATEGORIES_SUGGEST, suggest.getCategories( ) );
             }
 
-            ReferenceList refListSuggestSort = SuggestUtils.getRefListSuggestSort( request.getLocale( ), true );
-            ReferenceList refListFilterByPeriod = SuggestUtils.getRefListFilterByPeriod( request.getLocale( ) );
+            ReferenceList refListSuggestSort = SuggestUtils.getRefListSuggestSort( getLocale( request ), true );
+            ReferenceList refListFilterByPeriod = SuggestUtils.getRefListFilterByPeriod( getLocale( request ) );
 
             // model
             model.put( MARK_ID_SUGGEST, suggest.getIdSuggest( ) );
@@ -1986,7 +1987,7 @@ public class SuggestApp implements XPageApplication
 
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FRAME_SUGGEST, request.getLocale( ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FRAME_SUGGEST, getLocale( request ), model );
         page.setContent( template.getHtml( ) );
     }
 
@@ -2030,5 +2031,17 @@ public class SuggestApp implements XPageApplication
                     SiteMessageService.setMessage( request, MESSAGE_ACCESS_DENIED, SiteMessage.TYPE_STOP );
                 }
         }
+    }
+    
+    /**
+     * Default getLocale() implementation. Could be overriden
+     * 
+     * @param request
+     *            The HTTP request
+     * @return The Locale
+     */
+    protected Locale getLocale( HttpServletRequest request )
+    {
+        return LocaleService.getContextUserLocale( request );
     }
 }
