@@ -5,7 +5,7 @@
 		<p>
 	</#if>	
 		<#if response.idImageResource?has_content>
-			<img  src="image?resource_type=image_suggest&id=${response.idImageResource}" <#if response.entry.width!=-1> width="${response.entry.width}"</#if><#if response.entry.height!=-1>height="${response.entry.height}" </#if>/>
+			<img src="image?resource_type=image_suggest&id=${response.idImageResource}" <#if response.entry.width!=-1> width="${response.entry.width}"</#if><#if response.entry.height!=-1>height="${response.entry.height}" </#if>/>
 		</#if>
 	</p>
 </#if>

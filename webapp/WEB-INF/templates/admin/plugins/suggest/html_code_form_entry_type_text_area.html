@@ -1,10 +1,2 @@
-<div class="form-group">
-<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> : </label>
-	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-		<textarea class="form-control" name="${entry.idEntry}" id="${entry.idEntry}" data-limit="${entry.maxSizeEnter}" cols="${entry.width}" rows="${entry.height}"><#if entry.defaultValue?exists>${entry.defaultValue}</#if></textarea>
-		<div class="char-limit"></div>
-		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-			<span class="help-text">${entry.helpMessage}</span>&nbsp;
-		</#if>
-	</div>
-</div>
+<@formGroup labelFor='${entry.idEntry}' labelKey='${entry.title}' helpKey='${entry.helpMessage}!' mandatory='entry.mandatory'>	<@input type='textarea' name='${entry.idEntry}' id='${entry.idEntry}' params='data-limit="${entry.maxSizeEnter}"' cols=entry.width rows=entry.height><#if entry.defaultValue?exists>${entry.defaultValue}</#if></@input>
+</@formGroup>

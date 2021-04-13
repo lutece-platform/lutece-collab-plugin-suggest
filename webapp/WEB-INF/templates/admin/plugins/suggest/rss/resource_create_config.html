@@ -1,42 +1,26 @@
-<div class="form-group">
-	<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_suggest">#i18n{suggest.resource_rss.label_suggest} * </label>		     
-	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-		<@comboWithParams name="id_suggest" default_value="${suggest_list_default_item}" additionalParameters=" class=\"input-large\"" items=suggest_list />
-	</div>
-</div>
-<div class="form-group">
-	<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for=""></label>		     
-	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-		<label class="radio inline" for="rss_choice">#i18n{suggest.resource_rss.suggest_choice} 
-			<input checked="checked" type="radio" name="rss_choice" id="choice_suggest" value="suggest">
-		</label>
-	</div>
-</div>
-<div class="form-group">
-	<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for=""></label>		     
-	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">	
-		<label class="radio inline"  for="suggest_rss_choice">#i18n{suggest.resource_rss.suggest_submit_choice} 
-			<input type="radio" name="rss_choice" id = "choice_submit" value="suggest_submit">
-		</label>
-	</div>
-</div>	
-<div class="form-group">
-	<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for=""></label>		     
-	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">		
-		<#assign keys = suggestsubmit_list?keys/> 
-			<#list keys as submit>
-				<#if suggestsubmit_list[submit]?has_content>
-					<div id="suggest_submit${submit}" class="suggestSubmit">
-						<label for="id_suggest_submit${submit}">#i18n{suggest.resource_rss.submit_comment_choice}</label>
-						<@comboWithParams name="id_suggest_submit${submit}" default_value="-1" additionalParameters=" class=\"input-xxlarge\"" items=suggestsubmit_list[submit] />
-					</div>
-				<#else>
-					<div class="alert alert-error">#i18n{suggest.resource_rss.empty_suggest}</div>
-					<input type="hidden" value="empty_suggest" name="id_suggest_submit${submit}">
-				</#if>
-		</#list>
-	</div>
-</div>
+<@formGroup labelFor='id_suggest' labelKey='#i18n{suggest.resource_rss.label_suggest}' mandatory=true>
+	<@select name='id_suggest' default_value='${suggest_list_default_item}' items=suggest_list />
+</@formGroup>
+
+<@formGroup>
+	<@radioButton orientation='inline' labelFor='rss_choice' labelKey='#i18n{suggest.resource_rss.suggest_choice}' checked=true name='rss_choice' id='choice_suggest' value='suggest' />
+	<@radioButton orientation='inline' labelFor='suggest_rss_choice' labelKey='#i18n{suggest.resource_rss.suggest_submit_choice}' name='rss_choice' id='choice_submit' value='suggest_submit' />
+</@formGroup>
+
+<#assign keys = suggestsubmit_list?keys/> 
+<#list keys as submit>
+	<#if suggestsubmit_list[submit]?has_content>
+		<@formGroup id='suggest_submit${submit}' class='suggestSubmit' labelFor='id_suggest_submit${submit}' labelKey='#i18n{suggest.resource_rss.submit_comment_choice}'>
+			<@select name='id_suggest_submit${submit}' default_value='-1' items=suggestsubmit_list[submit] />
+		</@formGroup>
+	<#else>
+		<@formGroup>
+			<@alert color='danger'>#i18n{suggest.resource_rss.empty_suggest}</alert>
+			<@input type='hidden' value='empty_suggest' name='id_suggest_submit${submit}' />
+		</@formGroup>
+	</#if>
+</#list>
+
 <script>
 $(document).ready( function(){$("div.suggestSubmit").toggle();});
 $("#choice_suggest").click( function(){$("div.suggestSubmit").toggle();});

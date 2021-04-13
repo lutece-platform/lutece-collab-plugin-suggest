@@ -1,23 +1,23 @@
-<form method="post" class="form-inline pull-right" action="jsp/admin/plugins/suggest/DoModifySuggestSubmitOrder.jsp">
-	<input type="hidden" name="id_suggest_submit" value="${suggest_submit.idSuggestSubmit}">
-	<input type="hidden" name="id_suggest" value="${suggest.idSuggest}">
+<@tform method='post' type='inline' align='right' action='jsp/admin/plugins/suggest/DoModifySuggestSubmitOrder.jsp'>
+	<@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' />
+	<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
 	<#if suggest_submit.pinned>
-		<div class="input-group">
-			<@comboWithParams name="suggest_submit_order" default_value="${suggest_submit.suggestSubmitOrder}" items=order_list_pinned additionalParameters="class=\"form-control input-xs\"" />
-			<span class="input-group-btn">
-				<button type="submit" class="btn btn-primary btn-xs" title="#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}">
-					<i class="fa fa-arrows"></i>
-				</button>
-			</span>
-		</div>
+		<@formGroup>
+			<@inputGroup>
+				<@select name='suggest_submit_order' default_value='${suggest_submit.suggestSubmitOrder}' items=order_list_pinned />
+				<@inputGroupItem>
+					<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}' buttonIcon='arrows' />
+				</@inputGroupItem>
+			</@inputGroup>
+		</@formGroup>
 	<#else>
-		<div class="input-group">
-			<@comboWithParams name="suggest_submit_order" default_value="${suggest_submit.suggestSubmitOrder}" items=order_list additionalParameters="class=\"form-control input-xs\"" />
-			<span class="input-group-btn">
-			<button type="submit" class="btn btn-primary btn-xs" title="#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}">
-				<i class="fa fa-check"></i>
-			</button>
-		</span>
-	</div>
+		<@formGroup>
+			<@inputGroup>
+				<@select name='suggest_submit_order' default_value='${suggest_submit.suggestSubmitOrder}' items=order_list />
+				<@inputGroupItem>
+					<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}' buttonIcon='check' />
+				</@inputGroupItem>
+			</@inputGroup>
+		</@formGroup>
 	</#if>
-</form>
+</@tform>

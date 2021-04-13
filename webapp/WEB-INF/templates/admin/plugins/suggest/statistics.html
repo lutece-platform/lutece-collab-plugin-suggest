@@ -1,94 +1,56 @@
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<div class="nav-tabs-custom">
-			<ul class="nav nav-tabs" role="tablist">
-				<li>
-					<a href="jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelCategoryComment}" >
-						#i18n{suggest.manageAdvancedParameters.title}
-					</a>
-				</li>
-				<li>
-					<a href="jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelCategoryComment}" >
-						#i18n{suggest.manageAdvancedParameters.labelCategory}
-					</a>
-				</li>
-				<li>
-					<a href="jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelTypeComment}" >
-						#i18n{suggest.manageAdvancedParameters.labelType}
-					</a>
-				</li>
-				<li>
-					<a href="jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelDefaultMessageComment}">
-						#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}
-					</a>
-				</li>
-				<li>
-					<a href="jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelExportFormatComment}" >
-						#i18n{suggest.manageAdvancedParameters.labelExportFormat}
-					</a>
-				</li>
-				<li  class="active">
-					<a href="jsp/admin/plugins/suggest/Statistics.jsp"  title="#i18n{suggest.manageAdvancedParameters.labelStatisticsComment}" >
-						#i18n{suggest.manageAdvancedParameters.labelStatistics}
-					</a>
-				</li>
-			</ul>
-			<div class="tab-content">
-				<div class="tab-pane active">
-			<div class="row">
-				<div class="col-xs-12 col-sm-3">
-					<div class="box box-primary">
-				  	<div class="box-header">
-					  	<h3 class="box-title">#i18n{suggest.statistics.title}</h3>
-						</div>
-						<div class="box-body">
-							<form class="form" action="jsp/admin/plugins/suggest/Statistics.jsp" method="post" name="" id=""  >
-							<div class="form-group">
-							<label for="fist_response_date_filter">#i18n{suggest.statistics.labelSuggest}</label>
+<@row>
+	<@columns>
+		<@tabs>
+			<@tabList>
+				<@tabLink href='jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategoryComment}'>#i18n{suggest.manageAdvancedParameters.title}</@tabLink>
+				<@tabLink href='jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategoryComment}'>#i18n{suggest.manageAdvancedParameters.labelCategory}</@tabLink>
+				<@tabLink href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelTypeComment}'>#i18n{suggest.manageAdvancedParameters.labelType}</@tabLink>
+				<@tabLink href='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessageComment}'>#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}</@tabLink>
+				<@tabLink href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelExportFormatComment}'>#i18n{suggest.manageAdvancedParameters.labelExportFormat}</@tabLink>
+				<@tabLink active=true href='jsp/admin/plugins/suggest/Statistics.jsp' title='#i18n{suggest.manageAdvancedParameters.labelStatisticsComment}'>#i18n{suggest.manageAdvancedParameters.labelStatistics}</@tabLink>
+			</@tabList>
+			<@tabContent>
+				<@tabPanel active=true>
+					<h3>#i18n{suggest.statistics.title}</h3>
+					<@tform action='jsp/admin/plugins/suggest/Statistics.jsp' method='post'>
+						<@formGroup labelFor='fist_response_date_filter' labelKey='#i18n{suggest.statistics.labelSuggest}'>
 							<#if suggest?exists>
-								<@comboWithParams name="id_suggest" default_value="${suggest.idSuggest}" additionalParameters=" class=\"form-control\" " items=suggest_list />
+								<@select name='id_suggest' default_value='${suggest.idSuggest}' items=suggest_list />
 							<#else>
-								<@comboWithParams name="id_suggest" default_value="-1" additionalParameters=" class=\"form-control\" " items=suggest_list  />
+								<@select name='id_suggest' default_value='-1' items=suggest_list  />
 							</#if>
+						</@formGroup>
+						<@formGroup labelFor='fist_response_date_filter' labelKey='#i18n{suggest.statistics.labelValidationDate}'>
+							<div class="input-daterange">
+								<@inputGroup>
+									<#if first_date_filter?has_content><#assign value = first_date_filter?date /><#else><#assign value = '' /></#if>
+									<@input type='text' name='first_date_filter' id='first_date_filter' value=value />
+									<#if last_date_filter?has_content><#assign value = last_date_filter?if_exists?date /><#else><#assign value = '' /></#if>
+									<@inputGroupItem type='text'>#i18n{suggest.statistics.labelAnd}</@inputGroupItem>
+									<@input type='text' name='last_date_filter' id='last_date_filter' value=value />
+								</@inputGroup>
 							</div>
-							<div class="form-group">
-								<label lass="text-label" for="fist_response_date_filter">#i18n{suggest.statistics.labelValidationDate}</label>
-								<div class="col-xs-12 col-sm-6">
-								<div class="input-daterange">
-									<input type="text" name="first_date_filter" id="first_date_filter" class="form-control" value="<#if first_date_filter?has_content>${first_date_filter?date}</#if>">
-									<span class="add-on">#i18n{suggest.statistics.labelAnd}</span>
-									<input type="text" name="last_date_filter" id="last_date_filter" class="form-control" value="<#if last_date_filter?has_content>${last_date_filter?if_exists?date}</#if>">
-								</div>
-								</div>
-							</div>
-							<#if category_list?has_content>
-								<div class="form-group">
-									<label for="id_category">#i18n{suggest.statistics.labelSuggestSubmitCategory}</label>
-									<@comboWithParams name="id_category_filter" default_value="${suggest_submit_category_selected}" additionalParameters="class=\"form-control\"" items=category_list />
-								</div>
-							</#if>
-							<#if suggest_submit_type_list?has_content>
-								<div class="form-group">
-									<label for="id_type">#i18n{suggest.statistics.labelSuggestSubmitType}</label>
-								 	<@comboWithParams name="id_type" default_value="${suggest_submit_type_selected}" additionalParameters="class=\"form-control\"" items=suggest_submit_type_list />
-								</div>
-							</#if>
-							<div class="form-group">
-								<button class="btn btn-primary btn-xs btn-flat" type="submit" >
-									<i class="fa fa-search"></i>&nbsp;#i18n{suggest.statistics.buttonSearch}
-								</button>
-							</div>
-							</form>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-12 col-sm-9">
-					<div class="box box-primary">
-				  	<div class="box-header">
-					  	<h3 class="box-title"><#if suggest?exists>${suggest.title}</h3>
-						</div>
-						<div class="box-body">
-						<div class="callout callout-info">
+						</@formGroup>
+						<#if category_list?has_content>
+							<@formGroup labelfor='id_category' labelKey='#i18n{suggest.statistics.labelSuggestSubmitCategory}'>
+								<@select name='id_category_filter' default_value='${suggest_submit_category_selected}' items=category_list />
+							</@formGroup>
+						</#if>
+						<#if suggest_submit_type_list?has_content>
+							<@formGroup labelFor='id_type' labelKey='#i18n{suggest.statistics.labelSuggestSubmitType}'>
+								<@select name='id_type' default_value='${suggest_submit_type_selected}' items=suggest_submit_type_list />
+							</@formGroup>
+						</#if>
+						<@formGroup>
+							<@button type='submit' title='#i18n{suggest.statistics.buttonSearch}' buttonIcon='search' />
+						</@formGroup>
+					</@tform>
+					
+					<#if suggest?exists>
+					
+					<h3>${suggest.title}</h3>
+					
+						<@alert color='info'>
 							<#if category_filter?has_content>
 								<p><strong>#i18n{suggest.statistics.SuggestSubmitCategory}</strong>: ${category_filter.title}</p>
 							</#if>
@@ -100,23 +62,24 @@
 							<p>#i18n{suggest.statistics.labelNbCommentsPerSuggestsubmit} : <strong>${number_comments!0}</strong></p>
 							<p>#i18n{suggest.statistics.labelNbVotesPerSuggestsubmit} : <strong>${number_votes!0}</strong></p>
 							<p>#i18n{suggest.statistics.labelNbUsers}: <strong>${number_users!0}</strong></p>
-						</div>
-						<table class="table table-hover table-condensed">
-						<tr>
-							<th>#i18n{suggest.statistics.labelTitle}</th>
-							<th>#i18n{suggest.statistics.labelScore}</th>
-						</tr>
-						<#list high_scores as suggestsubmit>
-						<tr>
-							<td>${suggestsubmit.suggestSubmitTitle}</td>
-							<td class="text-center"><strong>${suggestsubmit.numberScore}</strong></td>
-						</tr>
-						</#list>
-						</table>
+						</@alert>
+						
+						<@table>
+							<@tr>
+								<@th>#i18n{suggest.statistics.labelTitle}</@th>
+								<@th>#i18n{suggest.statistics.labelScore}</@th>
+							</@tr>
+							<#list high_scores as suggestsubmit>
+							<@tr>
+								<@td>${suggestsubmit.suggestSubmitTitle}</@td>
+								<@td align='center'><strong>${suggestsubmit.numberScore}</strong></@td>
+							</@tr>
+							</#list>
+						</@table>
 					</#if>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+				</@tabPanel>
+			</@tabContent>
+		</@tabs>
+	</@columns>
+</@row>
 <@getDatePickerRangeBootstrap language="fr" />

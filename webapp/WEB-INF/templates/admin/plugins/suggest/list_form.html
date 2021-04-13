@@ -1,10 +1,6 @@
-<div class="form-group">
-<label class="control-label col-xs-12 col-sm-2" for="id_form">#i18n{form.listForm.labelForm} * :</label>
-	<div class="col-xs-12 col-sm-9">
-	<#if idForm?exists>
-		<@comboWithParams name="id_form" default_value=idForm additionalParameters=" class=\"form-control\" " items=form_list />
+<@formGroup labelFor='id_form' labelKey='#i18n{form.listForm.labelForm}' mandatory=true>	<#if idForm?exists>
+		<@select name='id_form' default_value=idForm items=form_list />
 	<#else>
-		<@combo name="id_form" default_value="-1"  additionalParameters=" class=\"form-control\" items=form_list />
+		<@select name='id_form' default_value='-1' items=form_list />
 	 </#if>
-	</div>
-</div>
+</@formGroup>

@@ -1,11 +1,4 @@
 <#include "/util/editor/editor.html" />
-<div class="form-group">
-	<label class="control-label col-xs-12 col-sm-3" for="${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> : </label>
-	<div class="col-xs-12 col-sm-9">
-		<textarea  name="${entry.idEntry}" id="${entry.idEntry}" class="form-control richtext" cols="${entry.width}" rows="${entry.height}"><#if entry.defaultValue?exists>${entry.defaultValue}</#if></textarea>
-		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-		<span class="help-text">${entry.helpMessage}</span>
-		</#if>
-	</div>
-</div>
+<@formGroup labelFor='${entry.idEntry}' labelKey='${entry.title}' helpKey='${entry.helpMessage}!' mandatory=entry.mandatory>	<@input type='textarea' name='${entry.idEntry}' id='${entry.idEntry}' richtext=true cols=entry.width rows=entry.height><#if entry.defaultValue?exists>${entry.defaultValue}</#if></@input>
+</@formGroup>
 <@initEditor />

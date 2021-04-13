@@ -1,64 +1,52 @@
-<div class="fixed-actionbar">
-	<button class="btn btn-default btn-sm" id="selectAll" name="selectAll" data-is="checked" type="button">
-		<i class="fa fa-square-o fa-2x"></i>
-	</button>
+<@div class='fixed-actionbar'>
+	<@button type='button' id='selectAll' name='selectAll' params='data-is="checked"' buttonIcon='square-o fa-2x' color='default' />
 	<#if !suggest.disableVote>
-		<div class="btn-group">
-			<button class="btn btn-default btn-sm" type="submit" name="mass_enable_vote_action" title="#i18n{suggest.manageSuggestSubmit.buttonEnableVote}" >
-				<i class="fa fa-star fa-2x"></i>
-			</button>
-			<button class="btn btn-default btn-sm" type="submit" name="mass_disable_vote_action" title="#i18n{suggest.manageSuggestSubmit.buttonDisableVote}">
-				<span class="fa-stack fa-sm">
-					<i class="fa fa-star fa-stack-1x"></i>
-					<i class="fa fa-ban fa-stack-2x text-danger"></i>
-				</span>
-			</button>
-		</div>
+		<@btnGroup>
+			<@button type='submit' name='mass_enable_vote_action' title='#i18n{suggest.manageSuggestSubmit.buttonEnableVote}' buttonIcon='star fa-2x' />
+			<@button type='submit' name='mass_disable_vote_action' title='#i18n{suggest.manageSuggestSubmit.buttonDisableVote}'>
+				<@iconStack>
+					<@icon style='star' class='fa-stack-1x' />
+					<@icon style='ban' class='fa-stack-2x text-danger' />
+				</@iconStack>
+			</@button>
+		</@btnGroup>
 	</#if>
 	<#if suggest.authorizedComment>
-		<div class="btn-group">
-			<button class="btn btn-default btn-sm" type="submit" name="mass_enable_comment_action" title="#i18n{suggest.manageSuggestSubmit.buttonEnableComment}">
-				<i class="fa fa-comments fa-2x"></i>
-  		</button>
-			<button class="btn btn-default btn-sm" type="submit" name="mass_disable_comment_action" title="#i18n{suggest.manageSuggestSubmit.buttonDisableComment}">
-				<span class="fa-stack fa-xs">
-					<i class="fa fa-comments fa-stack-1x"></i>
-					<i class="fa fa-ban fa-stack-2x text-danger"></i>
-				</span>
-			</button>
-		</div>
+		<@btnGroup>
+			<@button type='submit' name='mass_enable_comment_action' title='#i18n{suggest.manageSuggestSubmit.buttonEnableComment}' buttonIcon='comments fa-2x' color='default' />
+			<@button type='submit' name='mass_disable_comment_action' title='#i18n{suggest.manageSuggestSubmit.buttonDisableComment}' color='default'>
+				<@iconStack>
+					<@icon style='comments' class='fa-stack-1x' />
+					<@icon style='ban' class='fa-stack-2x' />
+				</@iconStack>
+			</@button>
+		</@btnGroup>
 	</#if>
-	<div class="btn-group">
-		<button class="btn btn-default btn-sm" type="submit" name="mass_pin_action" title="#i18n{suggest.manageSuggestSubmit.buttonPinSuggestSubmit}">
-			<i class="fa fa-thumb-tack fa-2x"></i>
-		</button>
-		<button class="btn btn-default btn-sm" type="submit" name="mass_unpin_action" title="#i18n{suggest.manageSuggestSubmit.buttonUnPinSuggestSubmit}">
-			<span class="fa-stack fa-sm">
-				<i class="fa fa-thumb-tack fa-stack-1x"></i>
-				<i class="fa fa-ban fa-stack-2x text-danger"></i>
-			</span>
-		</button>
-	</div>
+	<@btnGroup>
+		<@button type='submit' name='mass_pin_action' title='#i18n{suggest.manageSuggestSubmit.buttonPinSuggestSubmit}' buttonIcon='thumb-tack fa-2x' color='default' />
+		<@button type='submit' name='mass_unpin_action' title='#i18n{suggest.manageSuggestSubmit.buttonUnPinSuggestSubmit}' color='default'>
+			<@iconStack>
+				<@icon style='thumbtack' class='fa-stack-1x' />
+				<@icon style='ban' class='fa-stack-2x text-danger' />
+			</@iconStack>
+		</@button>
+	</@btnGroup>
 	<#if category_list?has_content>
-		<div class="btn-group">
-			<div class="input-group">
-				<@comboWithParams name="id_category" items=category_list default_value="-1" additionalParameters="class=\"form-control input-sm\"" />
-				<span class="input-group-btn">
-					<button class="btn btn-default btn-sm" type="submit" title="#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitCategory}" name="mass_change_category">
-						<i class="fa fa-check"></i>
-					</button>
-				</span>
-			</div>
-		</div>
+		<@btnGroup>
+			<@inputGroup>
+				<@select name='id_category' items=category_list default_value='-1' />
+				<@inputGroupItem>
+					<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitCategory}' name='mass_change_category' buttonIcon='check' color='default' />
+				</@inputGroupItem>
+			</@inputGroup>
+		</@btnGroup>
 	</#if>
-	<div class="btn-group">
-		<div class="input-group">
-	 		<@comboWithParams name="id_export_format" default_value="-1" additionalParameters="class=\"form-control input-sm\"" items=export_format_list />
-			<span class="input-group-btn">
-				<button class="btn btn-default btn-sm btn-flat" type="submit" title="#i18n{suggest.manageSuggestSubmit.labelSuggestExport}" name="export_search_all">
-					<i class="fa fa-download"></i>
-				</a>
-			</span>
-		</div>
-	</div>
-</div>
+	<@btnGroup>
+		<@inputGroup>
+			<@select name='id_export_format' default_value='-1' items=export_format_list />
+			<@inputGroupItem>
+				<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.labelSuggestExport}' name='export_search_all' buttonIcon='download' color='default' />
+			</@inputGroupItem>
+		</@inputGroup>
+	</@btnGroup>
+</@div>

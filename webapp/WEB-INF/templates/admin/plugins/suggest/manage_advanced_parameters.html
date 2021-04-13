@@ -1,57 +1,29 @@
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<div class="nav-tabs-custom">
-			<ul class="nav nav-tabs" role="tablist">
-				<li class="active">
-					<a href="jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelCategoryComment}">
-						#i18n{suggest.manageAdvancedParameters.title}
-					</a>
-				</li>
+<@row>
+	<@columns>
+		<@tabs>
+			<@tabList>
+				<@tabLink active=true href='jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategoryComment}'>#i18n{suggest.manageAdvancedParameters.title}</@tabLink>
 				<#if permission_manage_category>
-				<li>
-					<a href="jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelCategoryComment}" >
-						#i18n{suggest.manageAdvancedParameters.labelCategory}
-					</a>
-				</li>
-				<li>
-					<a href="jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelTypeComment}" >
-						#i18n{suggest.manageAdvancedParameters.labelType}
-					</a>
-				</li>
+				<@tabLink href='jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategoryComment}'>#i18n{suggest.manageAdvancedParameters.labelCategory}</@tabLink>
+				<@tabLink href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelTypeComment}'>#i18n{suggest.manageAdvancedParameters.labelType}</@tabLink>
 				</#if>
 				<#if permission_manage_default_message>
-				<li>
-					<a href="jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelDefaultMessageComment}" >
-						#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}
-					</a>
-				</li>
+				<@tabLink href='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessageComment}'>#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}</@tabLink>
 				</#if>
 				<#if permission_manage_export_format>
-				<li>
-					<a href="jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest"  title="#i18n{suggest.manageAdvancedParameters.labelExportFormatComment}" >
-						#i18n{suggest.manageAdvancedParameters.labelExportFormat}
-					</a>
-				</li>
+				<@tabLink href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelExportFormatComment}'>#i18n{suggest.manageAdvancedParameters.labelExportFormat}</@tabLink>
 				</#if>
-			</ul>
-			<div class="tab-content">
-				<div class="tab-pane active">
-					<form class="form-horizontal" method="post" action="jsp/admin/plugins/suggest/DoModifyAdvancedParameters.jsp">
-						<div class="form-group">
-							<label class="control-label col-xs-12 col-sm-2" for="id_default_suggest">#i18n{suggest.manageAdvancedParameters.labelDefaultSuggest}</label>
-							<div class="col-xs-12 col-sm-10">
-								<@comboWithParams name="id_default_suggest" default_value="${id_default_suggest}" additionalParameters=" class=\"form-control \"" items=suggest_list  />
-								<span class="help-text" >#i18n{suggest.manageAdvancedParameters.labelDefaultSuggestComment}</span>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-xs-12 col-sm-offset-2 col-sm-9">
-								<button class="btn btn-primary btn-flat" type="submit" ><i class="fa fa-check"></i>&nbsp;#i18n{suggest.manageAdvancedParameters.buttonModify}</button>
-							</div>
-						</div>
-					</form>
-			</div>
-		</div>
-		</div>
-	</div>
-</div>
+			</@tabList>
+			<@tabContent>
+				<@tform method='post' action='jsp/admin/plugins/suggest/DoModifyAdvancedParameters.jsp'>
+					<@formGroup labelFor='id_default_suggest' labelKey='#i18n{suggest.manageAdvancedParameters.labelDefaultSuggest}' helpKey='#i18n{suggest.manageAdvancedParameters.labelDefaultSuggestComment}'>
+						<@select name='id_default_suggest' default_value='${id_default_suggest}' items=suggest_list  />
+					</@formGroup>
+					<@formGroup>
+						<@button type='submit' title='#i18n{suggest.manageAdvancedParameters.buttonModify}' buttonIcon='save' />
+					</@formGroup>
+				</@tform>
+			</@tabContent>
+		</@tabs>
+	</@columns>
+</@row>
