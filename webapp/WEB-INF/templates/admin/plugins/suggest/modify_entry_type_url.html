@@ -1,7 +1,7 @@
 <@row>
 	<@columns>
 		<@box>
-			<@boxHeader title='#i18n{suggest.createEntry.titleQuestion}:'${entry.suggest.title}' &gt; #i18n{suggest.createEntry.labelType} :${entry.entryType.title}'>
+			<@boxHeader title='#i18n{suggest.createEntry.titleQuestion}: "${entry.suggest.title}" &gt; #i18n{suggest.createEntry.labelType}: ${entry.entryType.title}'>
 				<@button type='button' style='card-control collapse' size='sm' buttonTargetId='#createForm' buttonIcon='plus' />
 			</@boxHeader>
 			<@boxBody>
@@ -65,7 +65,7 @@
 			<@boxHeader title='#i18n{suggest.createEntry.manageRegularExpression.title}'>
 				<@tform method='post' type='inline' action='jsp/admin/plugins/suggest/DoInsertVerification.jsp#list'>
 					<@input type='hidden' name='id_entry' value='${entry.idEntry}' />
-					<@formGroup>
+					<@formGroup formStyle='inline'>
 						<@inputGroup>
 							<@select name='id_expression' default_value='-1' items=regular_expression_list />
 							<@inputGroupItem>

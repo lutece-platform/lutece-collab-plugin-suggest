@@ -1,4 +1,4 @@
-<@row>	<@columns>		<@box>			<@boxHeader title='#i18n{suggest.createEntry.titleQuestion}: "${entry.suggest.title}" &gt; #i18n{suggest.createEntry.labelType} : ${entry.entryType.title}' />			<@boxBody>
+<@row>	<@columns>		<@box>			<@boxHeader title='#i18n{suggest.createEntry.titleQuestion}: "${entry.suggest.title}" &gt; #i18n{suggest.createEntry.labelType}: ${entry.entryType.title}' />			<@boxBody>
                 <@tform method='post' action='jsp/admin/plugins/suggest/DoCreateEntry.jsp#list'>
                     <@input type='hidden' name='id_type' value='${entry.entryType.idType}' />
                     <@formGroup labelFor='title' labelKey='#i18n{suggest.createEntry.labelTitle}' helpKey='#i18n{suggest.createEntry.labelTitleComment}' mandatory=true>
@@ -30,7 +30,7 @@
                     <@formGroup labelFor='menu' labelKey='#i18n{suggest.createEntryVideo.labelMenu}'>						<@select name='menu' id='menu'>
 							<option value="false">#i18n{suggest.createEntryVideo.select.no}</option>
 							<option value="true">#i18n{suggest.createEntryVideo.select.yes}</option>
-						</@select>					</@formGroup>					<@formGroup helpKey='#i18n{suggest.createSuggest.labelShowInSuggestSubmitListComment'>						<@checkBox labelFor='show_in_suggest_submit_list' labelKey='#i18n{suggest.createEntry.labelShowInSuggestSubmitList}' id='show_in_suggest_submit_list' name='show_in_suggest_submit_list' value='1' checked=true />					</@formGroup>					<@formGroup>
+						</@select>					</@formGroup>					<@formGroup helpKey='#i18n{suggest.createSuggest.labelShowInSuggestSubmitListComment}'>						<@checkBox labelFor='show_in_suggest_submit_list' labelKey='#i18n{suggest.createEntry.labelShowInSuggestSubmitList}' id='show_in_suggest_submit_list' name='show_in_suggest_submit_list' value='1' checked=true />					</@formGroup>					<@formGroup>
                         <@button type='submit' name='save' title='#i18n{suggest.createEntry.buttonSave}' buttonIcon='save' />						<@aButton href='jsp/admin/plugins/suggest/ModifySuggest.jsp?plugin_name=suggest&amp;id_suggest=${entry.suggest.idSuggest}' title='#i18n{suggest.modifyEntry.buttonCancel}' buttonIcon='times' color='default' />					</@formGroup>				</@tform>			</@boxBody>		</@box>	</@columns></@row>
 <#include "/admin/util/editor/editor.html" />
 <@initEditor />

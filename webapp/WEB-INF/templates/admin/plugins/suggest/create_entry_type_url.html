@@ -1,7 +1,7 @@
 <@row>
 	<@columns>
 		<@box>
-			<@boxHeader title='#i18n{suggest.createEntry.titleQuestion}: "${entry.suggest.title}" &gt; #i18n{suggest.createEntry.labelType} : ${entry.entryType.title}' />
+			<@boxHeader title='#i18n{suggest.createEntry.titleQuestion}: "${entry.suggest.title}" &gt; #i18n{suggest.createEntry.labelType}: ${entry.entryType.title}' />
 			<@boxBody>
                 <@tform action='jsp/admin/plugins/suggest/DoCreateEntry.jsp#list' method='post'>
                     <@input type='hidden' name='id_type' value='${entry.entryType.idType}' />

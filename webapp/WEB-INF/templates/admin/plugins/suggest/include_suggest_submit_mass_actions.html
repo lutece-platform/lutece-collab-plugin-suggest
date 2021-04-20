@@ -1,10 +1,20 @@
 <@div class='fixed-actionbar'>
-	<@button type='button' id='selectAll' name='selectAll' params='data-is="checked"' buttonIcon='square-o fa-2x' color='default' />
+	<@button type='button' id='selectAll' name='selectAll' params='data-is="checked"' color='default'>
+		<@iconStack class='fa-1x'>
+			<@icon style='square' class='fa-stack-1x' />
+			<@icon style='circle' class='fa-stack-2x' style='color:transparent;' />
+		</@iconStack>
+	</@button>
 	<#if !suggest.disableVote>
 		<@btnGroup>
-			<@button type='submit' name='mass_enable_vote_action' title='#i18n{suggest.manageSuggestSubmit.buttonEnableVote}' buttonIcon='star fa-2x' />
+			<@button type='submit' name='mass_enable_vote_action' title='#i18n{suggest.manageSuggestSubmit.buttonEnableVote}'>
+				<@iconStack class='fa-1x'>
+					<@icon style='star' class='fa-stack-1x' />
+					<@icon style='circle' class='fa-stack-2x' style='color:transparent;' />
+				</@iconStack>
+			</@button>
 			<@button type='submit' name='mass_disable_vote_action' title='#i18n{suggest.manageSuggestSubmit.buttonDisableVote}'>
-				<@iconStack>
+				<@iconStack class='fa-1x'>
 					<@icon style='star' class='fa-stack-1x' />
 					<@icon style='ban' class='fa-stack-2x text-danger' />
 				</@iconStack>
@@ -23,9 +33,14 @@
 		</@btnGroup>
 	</#if>
 	<@btnGroup>
-		<@button type='submit' name='mass_pin_action' title='#i18n{suggest.manageSuggestSubmit.buttonPinSuggestSubmit}' buttonIcon='thumb-tack fa-2x' color='default' />
-		<@button type='submit' name='mass_unpin_action' title='#i18n{suggest.manageSuggestSubmit.buttonUnPinSuggestSubmit}' color='default'>
-			<@iconStack>
+		<@button type='submit' name='mass_pin_action' title='#i18n{suggest.manageSuggestSubmit.buttonPinSuggestSubmit}'>
+			<@iconStack class='fa-1x'>
+				<@icon style='thumbtack' class='fa-stack-1x' />
+				<@icon style='circle' class='fa-stack-2x' style='color:transparent;' />
+			</@iconStack>
+		</@button>
+		<@button type='submit' name='mass_unpin_action' title='#i18n{suggest.manageSuggestSubmit.buttonUnPinSuggestSubmit}'>
+			<@iconStack class='fa-1x'>
 				<@icon style='thumbtack' class='fa-stack-1x' />
 				<@icon style='ban' class='fa-stack-2x text-danger' />
 			</@iconStack>
@@ -36,7 +51,7 @@
 			<@inputGroup>
 				<@select name='id_category' items=category_list default_value='-1' />
 				<@inputGroupItem>
-					<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitCategory}' name='mass_change_category' buttonIcon='check' color='default' />
+					<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitCategory}' name='mass_change_category' buttonIcon='check' />
 				</@inputGroupItem>
 			</@inputGroup>
 		</@btnGroup>
@@ -45,7 +60,7 @@
 		<@inputGroup>
 			<@select name='id_export_format' default_value='-1' items=export_format_list />
 			<@inputGroupItem>
-				<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.labelSuggestExport}' name='export_search_all' buttonIcon='download' color='default' />
+				<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.labelSuggestExport}' name='export_search_all' buttonIcon='download' />
 			</@inputGroupItem>
 		</@inputGroup>
 	</@btnGroup>

@@ -1,7 +1,7 @@
 <@tform action='jsp/admin/plugins/suggest/DoModifySuggest.jsp' method='post' enctype='multipart/form-data'>
 	<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
 	<@input type='hidden' name='plugin_name' value='suggest' />
-	<@input type='hidden' name='panel' id='panel_id' value='${panel!\'#panel1\'}' />
+	<@input type='hidden' name='panel' id='panel_id' value='${panel!"#panel1"}' />
 	
 <@row>
 	<@columns>
@@ -84,13 +84,13 @@
 										<@td>
 											<@aButton href='jsp/admin/plugins/suggest/ModifyEntry.jsp?id_entry=${entry.idEntry}' title='' buttonIcon='pencil' size='sm' hideTitle=['all'] />
 											<#if id_entry_first_in_the_list!=entry.idEntry>
-											<@aButton href='jsp/admin/plugins/suggest/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}#panel6' title='#i18n{suggest.modifySuggest.manageEnter.titleMoveUp}' buttonIcon='chevron-up' size='sm' hideTitle=['all'] />
+											<@aButton href='jsp/admin/plugins/suggest/DoMoveUpEntry.jsp?id_entry=${entry.idEntry}#panel1' title='#i18n{suggest.modifySuggest.manageEnter.titleMoveUp}' buttonIcon='chevron-up' size='sm' hideTitle=['all'] />
 											</#if>
 											<#if id_entry_last_in_the_list!=entry.idEntry>
-											<@aButton href='jsp/admin/plugins/suggest/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}#panel6' title='#i18n{suggest.modifySuggest.manageEnter.titleMoveDown}' buttonIcon='chevron-down' size='sm' hideTitle=['all'] />
+											<@aButton href='jsp/admin/plugins/suggest/DoMoveDownEntry.jsp?id_entry=${entry.idEntry}#panel1' title='#i18n{suggest.modifySuggest.manageEnter.titleMoveDown}' buttonIcon='chevron-down' size='sm' hideTitle=['all'] />
 											</#if>
-											<@aButton href='jsp/admin/plugins/suggest/DoCopyEntry.jsp?id_entry=${entry.idEntry}#panel6' title='#i18n{suggest.modifySuggest.manageEnter.titleCopy}' buttonIcon='copy' size='sm' hideTitle=['all'] />
-											<@aButton href='jsp/admin/plugins/suggest/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}#panel6' title='#i18n{suggest.modifySuggest.manageEnter.titleDelete}' buttonIcon='trash' color='danger' size='sm' hideTitle=['all'] />
+											<@aButton href='jsp/admin/plugins/suggest/DoCopyEntry.jsp?id_entry=${entry.idEntry}#panel1' title='#i18n{suggest.modifySuggest.manageEnter.titleCopy}' buttonIcon='copy' size='sm' hideTitle=['all'] />
+											<@aButton href='jsp/admin/plugins/suggest/ConfirmRemoveEntry.jsp?id_entry=${entry.idEntry}#panel1' title='#i18n{suggest.modifySuggest.manageEnter.titleDelete}' buttonIcon='trash' color='danger' size='sm' hideTitle=['all'] />
 										</@td>
 									</@tr>
 								</#list>
@@ -161,7 +161,7 @@
 										<@td params='style="background-color:${suggestSubmitType.color!};width:5px;"'>&nbsp;</@td>
 										<@td>${suggestSubmitType.name}</@td>
 										<@td>
-											<@aButton href='jsp/admin/plugins/suggest/DoRemoveSuggestSubmitTypeAssociation.jsp?id_suggest=${suggest.idSuggest}&id_suggest_submit_type=${suggestSubmitType.idType}#panel8' title='#i18n{suggest.modifySuggest.titleDeleteSuggestSubmitType}' buttonIcon='trash' size='sm' />
+											<@aButton href='jsp/admin/plugins/suggest/DoRemoveSuggestSubmitTypeAssociation.jsp?id_suggest=${suggest.idSuggest}&id_suggest_submit_type=${suggestSubmitType.idType}#panel8' title='#i18n{suggest.modifySuggest.titleDeleteSuggestSubmitType}' buttonIcon='trash' size='sm' hideTitle=['all'] color='danger' />
 										</@td>
 									</@tr>
 									</#list>
