@@ -1,21 +1,21 @@
-<@tform method='post' type='inline' align='right' action='jsp/admin/plugins/suggest/DoModifySuggestSubmitOrder.jsp'>
+<@tform method='post' type='inline' action='jsp/admin/plugins/suggest/DoModifySuggestSubmitOrder.jsp'>
 	<@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' />
 	<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
 	<#if suggest_submit.pinned>
-		<@formGroup>
+		<@formGroup formStyle='inline'>
 			<@inputGroup>
 				<@select name='suggest_submit_order' default_value='${suggest_submit.suggestSubmitOrder}' items=order_list_pinned />
 				<@inputGroupItem>
-					<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}' buttonIcon='arrows' />
+					<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}' buttonIcon='arrows' hideTitle=['all'] />
 				</@inputGroupItem>
 			</@inputGroup>
 		</@formGroup>
 	<#else>
-		<@formGroup>
+		<@formGroup formStyle='inline'>
 			<@inputGroup>
 				<@select name='suggest_submit_order' default_value='${suggest_submit.suggestSubmitOrder}' items=order_list />
 				<@inputGroupItem>
-					<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}' buttonIcon='check' />
+					<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}' buttonIcon='check' hideTitle=['all'] />
 				</@inputGroupItem>
 			</@inputGroup>
 		</@formGroup>

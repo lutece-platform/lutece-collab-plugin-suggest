@@ -2,16 +2,16 @@
 	<@columns>
 		<@tabs>
 			<@tabList>
-				<@tabLink active=true href='jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategoryComment}'>#i18n{suggest.manageAdvancedParameters.title}</@tabLink>
+				<@tabLink active=true href='jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.title}' />
 				<#if permission_manage_category>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategoryComment}'>#i18n{suggest.manageAdvancedParameters.labelCategory}</@tabLink>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelTypeComment}'>#i18n{suggest.manageAdvancedParameters.labelType}</@tabLink>
+				<@tabLink href='jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategory}' />
+				<@tabLink href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelType}' />
 				</#if>
 				<#if permission_manage_default_message>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessageComment}'>#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}</@tabLink>
+				<@tabLink href='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}' />
 				</#if>
 				<#if permission_manage_export_format>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelExportFormatComment}'>#i18n{suggest.manageAdvancedParameters.labelExportFormat}</@tabLink>
+				<@tabLink href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelExportFormat}' />
 				</#if>
 			</@tabList>
 			<@tabContent>

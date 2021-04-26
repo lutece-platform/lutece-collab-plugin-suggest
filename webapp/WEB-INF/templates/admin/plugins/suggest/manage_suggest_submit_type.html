@@ -2,49 +2,47 @@
 	<@columns>
 		<@tabs>
 			<@tabList>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategoryComment}'>#i18n{suggest.manageAdvancedParameters.title}</@tabLink>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategoryComment}'>#i18n{suggest.manageAdvancedParameters.labelCategory}</@tabLink>
-				<@tabLink active=true href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelTypeComment}'>#i18n{suggest.manageAdvancedParameters.labelType}</@tabLink>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessageComment}'>#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}</@tabLink>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelExportFormatComment}'>#i18n{suggest.manageAdvancedParameters.labelExportFormat}</@tabLink>
-				<@tabLink href='jsp/admin/plugins/suggest/Statistics.jsp' title='#i18n{suggest.manageAdvancedParameters.labelStatisticsComment}'>#i18n{suggest.manageAdvancedParameters.labelStatistics}</@tabLink>
+				<@tabLink href='jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.title}' />
+				<@tabLink href='jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategory}' />
+				<@tabLink active=true href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelType}' />
+				<@tabLink href='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}' />
+				<@tabLink href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelExportFormat}' />
+				<@tabLink href='jsp/admin/plugins/suggest/Statistics.jsp' title='#i18n{suggest.manageAdvancedParameters.labelStatistics}' />
 			</@tabList>
-			<@tabcontent>
+			<@tabContent>
 				<@tform align='right' method='post' type='inline' action='jsp/admin/plugins/suggest/CreateSuggestSubmitType.jsp'>
 					<@button type='submit' buttonIcon='plus-square' title='#i18n{suggest.manageSuggestSubmitType.buttonCreate}' />
 				</@tform>
-				
-				<@tabPanel>
-					<@table>
-						<thead>
-							<@tr>
-								<@th></@th>
-								<@th>#i18n{suggest.manageSuggestSubmitType.rowName}</@th>
-								<@th>#i18n{suggest.manageSuggestSubmitType.rowParameterizable}</@th>
-								<@th>#i18n{suggest.manageSuggestSubmitType.rowActions}</@th>
-							</@tr>
-						</thead>
-						<tbody>
-							<#list type_list as type>
-							<@tr>
-								<#if type.color?exists><#assign params = 'style="background-color:${type.color}"' /><#else><#assign params='' /></#if>
-								<@td params=params title='#i18n{suggest.manageSuggestSubmitType.rowColor}'></@td>
-								<@td>
-								<#if type.idImageResource?has_content >
-									<img class="img-responsive img-thumbnail thumbnail-sm pull-left" src="image?resource_type=image_suggest&id=${type.idImageResource}" title="img">
-								</#if>
-								 <strong>${type.name}</strong>
-								</@td>
-								<@td>${type.parameterizableInFO?string("#i18n{suggest.manageSuggestSubmitType.yes}","#i18n{suggest.manageSuggestSubmitType.no}")}</@td>
-								<@td>
-									<@aButton href='jsp/admin/plugins/suggest/ModifySuggestSubmitType.jsp?id_type=${type.idType}' title='' buttonIcon='pencil' size='sm' />
-									<@aButton href='jsp/admin/plugins/suggest/ConfirmRemoveSuggestSubmitType.jsp?id_type=${type.idType}' title='#i18n{suggest.manageSuggestSubmitType.altDelete}' buttonIcon='trash' size='sm' color='danger' />
-								</@td>
-							</@tr>
-							</#list>
-						</tbody>
-					</@table>
-				</@tabPanel>
+			
+				<@table>
+					<thead>
+						<@tr>
+							<@th></@th>
+							<@th>#i18n{suggest.manageSuggestSubmitType.rowName}</@th>
+							<@th>#i18n{suggest.manageSuggestSubmitType.rowParameterizable}</@th>
+							<@th>#i18n{suggest.manageSuggestSubmitType.rowActions}</@th>
+						</@tr>
+					</thead>
+					<tbody>
+						<#list type_list as type>
+						<@tr>
+							<#if type.color?exists><#assign params = 'style="background-color:${type.color}"' /><#else><#assign params='' /></#if>
+							<@td params=params title='#i18n{suggest.manageSuggestSubmitType.rowColor}'></@td>
+							<@td>
+							<#if type.idImageResource?has_content >
+								<img style="max-width:3em; height:auto;" src="image?resource_type=image_suggest&id=${type.idImageResource}" title="img">
+							</#if>
+							 <strong>${type.name}</strong>
+							</@td>
+							<@td>${type.parameterizableInFO?string("#i18n{suggest.manageSuggestSubmitType.yes}","#i18n{suggest.manageSuggestSubmitType.no}")}</@td>
+							<@td>
+								<@aButton href='jsp/admin/plugins/suggest/ModifySuggestSubmitType.jsp?id_type=${type.idType}' title='' hideTitle=['all'] buttonIcon='pencil' size='sm' />
+								<@aButton href='jsp/admin/plugins/suggest/ConfirmRemoveSuggestSubmitType.jsp?id_type=${type.idType}' title='#i18n{suggest.manageSuggestSubmitType.altDelete}' hideTitle=['all'] buttonIcon='trash' size='sm' color='danger' />
+							</@td>
+						</@tr>
+						</#list>
+					</tbody>
+				</@table>
 			</@tabContent>
 		</@tabs>
 	</@columns>

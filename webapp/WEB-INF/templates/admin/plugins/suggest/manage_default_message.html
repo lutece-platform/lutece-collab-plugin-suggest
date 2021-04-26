@@ -2,43 +2,41 @@
 	<@columns>
 		<@tabs>
 			<@tabList>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategoryComment}'>#i18n{suggest.manageAdvancedParameters.title}</@tabLink>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategoryComment}'>#i18n{suggest.manageAdvancedParameters.labelCategory}</@tabLink>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelTypeComment}'>#i18n{suggest.manageAdvancedParameters.labelType}</@tabLink>
-				<@tabLink active=true href='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessageComment}'>#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}</@tabLink>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelExportFormatComment}'>#i18n{suggest.manageAdvancedParameters.labelExportFormat}</@tabLink>
-				<@tabLink href='jsp/admin/plugins/suggest/Statistics.jsp' title='#i18n{suggest.manageAdvancedParameters.labelStatisticsComment}'>#i18n{suggest.manageAdvancedParameters.labelStatistics}</@tabLink>
+				<@tabLink href='jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.title}' />
+				<@tabLink href='jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategory}' />
+				<@tabLink href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelType}' />
+				<@tabLink active=true href='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}' />
+				<@tabLink href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelExportFormat}' />
+				<@tabLink href='jsp/admin/plugins/suggest/Statistics.jsp' title='#i18n{suggest.manageAdvancedParameters.labelStatistics}' />
 			</@tabList>
 			<@tabContent>
-				<@tabPanel active=true>
-					<@tform action='jsp/admin/plugins/suggest/DoModifyDefaultMessage.jsp'>
-						<@formGroup labelFor='libelle_contribution' labelKey='#i18n{suggest.manageDefaultMessage.labelLibelleContribution}' mandatory=true>							<@input type='text' name='libelle_contribution' id='libelle_contribution' value='${default_message.libelleContribution}' />
-						</@formGroup>
-						<@formGroup labelFor='unavailability_message' labelKey='#i18n{suggest.manageDefaultMessage.labelUnavailabilityMessage}' mandatory=true>							<@input type='textarea' name='unavailability_message' id='unavailability_message' richtext=true rows=5>${default_message.unavailabilityMessage}</@input>
-						</@formGroup>
-						<@formGroup labelFor='libelle_validate_button' labelKey='#i18n{suggest.manageDefaultMessage.labelLibelleValidateButton}'>
-							<@input type='text' name='libelle_validate_button' id='libelle_validate_button' value='${default_message.libelleValidateButton}' />
-						</@formGroup>
-						<@formGroup labelFor='number_suggest_submit_in_top_score' labelKey='#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitInTopScore}' mandatory=true>							<@input type='text' name='number_suggest_submit_in_top_score' id='number_suggest_submit_in_top_score' value='${default_message.numberSuggestSubmitInTopScore}' maxlength=10 />
-						</@formGroup>
-						<@formGroup labelFor='number_suggest_submit_in_top_comment' labelKey='#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitInTopComment}' mandatory=true>							<@input type='text' name='number_suggest_submit_in_top_comment' id='number_suggest_submit_in_top_comment' value='${default_message.numberSuggestSubmitInTopComment}' maxlength=10 />
-						</@formGroup>
-						<@formGroup labelFor='number_suggest_submit_caracters_shown' labelKey='#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitCaractersShown}' helpKey='#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitCaractersShownComment}'>
-							<@input type='text' name='number_suggest_submit_caracters_shown' id='number_suggest_submit_caracters_shown' value='${default_message.numberSuggestSubmitCaractersShown}' maxlength=10 />
-						</@formGroup>
-						<@formGroup labelFor='notification_new_comment_title' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewCommentTitle}' mandatory=true>							<@input type='textarea' name='notification_new_comment_title' id='notification_new_comment_title' richtext=true rows=5>${default_message.notificationNewCommentTitle!}</@input>
-						</@formGroup>
-						<@formGroup labelFor='notification_new_comment_body' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewCommentBody}' mandatory=true>							<@input type='textarea' name='notification_new_comment_body' id='notification_new_comment_body' richtext=true rows=5>${default_message.notificationNewCommentBody!}</@input>
-						</@formGroup>
-						<@formGroup labelFor='notification_new_suggest_submit_title' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewSuggestSubmitTitle}' mandatory=true>							<@input type='textarea' name='notification_new_suggest_submit_title' id='notification_new_suggest_submit_title' richtext=true rows=5>${default_message.notificationNewSuggestSubmitTitle!}</@input>
-						</@formGroup>
-						<@formGroup labelFor='notification_new_suggest_submit_body' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewSuggestSubmitBody}' mandatory=true>							<@input type='textarea' name='notification_new_suggest_submit_body' id='notification_new_suggest_submit_body' richtext=true rows=5>${default_message.notificationNewSuggestSubmitBody!}</@input>
-						</@formGroup>
-						<@formGroup>
-							<@button type='submit' name='save' title='#i18n{suggest.createSuggest.buttonSave}' buttonIcon='save' />
-						</@formGroup>
-					</@tform>
-				</@tabPanel>
+				<@tform action='jsp/admin/plugins/suggest/DoModifyDefaultMessage.jsp'>
+					<@formGroup labelFor='libelle_contribution' labelKey='#i18n{suggest.manageDefaultMessage.labelLibelleContribution}' mandatory=true>						<@input type='text' name='libelle_contribution' id='libelle_contribution' value='${default_message.libelleContribution}' />
+					</@formGroup>
+					<@formGroup labelFor='unavailability_message' labelKey='#i18n{suggest.manageDefaultMessage.labelUnavailabilityMessage}' mandatory=true>						<@input type='textarea' name='unavailability_message' id='unavailability_message' richtext=true rows=5>${default_message.unavailabilityMessage}</@input>
+					</@formGroup>
+					<@formGroup labelFor='libelle_validate_button' labelKey='#i18n{suggest.manageDefaultMessage.labelLibelleValidateButton}'>
+						<@input type='text' name='libelle_validate_button' id='libelle_validate_button' value='${default_message.libelleValidateButton}' />
+					</@formGroup>
+					<@formGroup labelFor='number_suggest_submit_in_top_score' labelKey='#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitInTopScore}' mandatory=true>						<@input type='text' name='number_suggest_submit_in_top_score' id='number_suggest_submit_in_top_score' value='${default_message.numberSuggestSubmitInTopScore}' maxlength=10 />
+					</@formGroup>
+					<@formGroup labelFor='number_suggest_submit_in_top_comment' labelKey='#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitInTopComment}' mandatory=true>						<@input type='text' name='number_suggest_submit_in_top_comment' id='number_suggest_submit_in_top_comment' value='${default_message.numberSuggestSubmitInTopComment}' maxlength=10 />
+					</@formGroup>
+					<@formGroup labelFor='number_suggest_submit_caracters_shown' labelKey='#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitCaractersShown}' helpKey='#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitCaractersShownComment}'>
+						<@input type='text' name='number_suggest_submit_caracters_shown' id='number_suggest_submit_caracters_shown' value='${default_message.numberSuggestSubmitCaractersShown}' maxlength=10 />
+					</@formGroup>
+					<@formGroup labelFor='notification_new_comment_title' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewCommentTitle}' mandatory=true>						<@input type='textarea' name='notification_new_comment_title' id='notification_new_comment_title' richtext=true rows=5>${default_message.notificationNewCommentTitle!}</@input>
+					</@formGroup>
+					<@formGroup labelFor='notification_new_comment_body' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewCommentBody}' mandatory=true>						<@input type='textarea' name='notification_new_comment_body' id='notification_new_comment_body' richtext=true rows=5>${default_message.notificationNewCommentBody!}</@input>
+					</@formGroup>
+					<@formGroup labelFor='notification_new_suggest_submit_title' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewSuggestSubmitTitle}' mandatory=true>						<@input type='textarea' name='notification_new_suggest_submit_title' id='notification_new_suggest_submit_title' richtext=true rows=5>${default_message.notificationNewSuggestSubmitTitle!}</@input>
+					</@formGroup>
+					<@formGroup labelFor='notification_new_suggest_submit_body' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewSuggestSubmitBody}' mandatory=true>						<@input type='textarea' name='notification_new_suggest_submit_body' id='notification_new_suggest_submit_body' richtext=true rows=5>${default_message.notificationNewSuggestSubmitBody!}</@input>
+					</@formGroup>
+					<@formGroup>
+						<@button type='submit' name='save' title='#i18n{suggest.createSuggest.buttonSave}' buttonIcon='save' />
+					</@formGroup>
+				</@tform>
 			</@tabContent>
 		</@tabs>
 	</@columns>

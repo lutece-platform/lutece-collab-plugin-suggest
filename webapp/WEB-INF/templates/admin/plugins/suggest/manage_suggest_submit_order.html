@@ -17,10 +17,11 @@
 
 <script>
 $( function () {
-$(".preview").toggle();
-$(".full").click(function(){
-	$(this).next(".preview").toggle();
-	$(this).toggleClass("fa-plus-square").toggleClass("fa-minus-square");
+	$(".preview").toggle();
+	$(".full").click(function(){
+		$(this).next(".preview").toggle();
+		$(this).find('i').toggleClass("fa-plus-square").toggleClass("fa-minus-square");
+	});
 });
-});
+
 </script>

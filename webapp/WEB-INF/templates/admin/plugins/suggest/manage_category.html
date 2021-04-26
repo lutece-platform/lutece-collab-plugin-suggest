@@ -2,42 +2,40 @@
 	<@columns>
 		<@tabs>
 			<@tabList>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategoryComment}'>#i18n{suggest.manageAdvancedParameters.title}</@tabLink>
-				<@tabLink active=true href='jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategoryComment}'>#i18n{suggest.manageAdvancedParameters.labelCategory}</@tabLink>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelTypeComment}'>#i18n{suggest.manageAdvancedParameters.labelType}</@tabLink>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessageComment}'>#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}</@tabLink>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelExportFormatComment}'>#i18n{suggest.manageAdvancedParameters.labelExportFormat}</@tabLink>
-				<@tabLink href='jsp/admin/plugins/suggest/Statistics.jsp' title='#i18n{suggest.manageAdvancedParameters.labelStatisticsComment}'>#i18n{suggest.manageAdvancedParameters.labelStatistics}</@tabLink>
+				<@tabLink href='jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.title}' />
+				<@tabLink active=true href='jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategory}' />
+				<@tabLink href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelType}' />
+				<@tabLink href='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}' />
+				<@tabLink href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelExportFormat}' />
+				<@tabLink href='jsp/admin/plugins/suggest/Statistics.jsp' title='#i18n{suggest.manageAdvancedParameters.labelStatistics}' />
 			</@tabList>
-			<@tabcontent>
-				<@tform method='post' action='jsp/admin/plugins/suggest/CreateCategory.jsp'>
+			<@tabContent>
+				<@tform method='post' align='right' action='jsp/admin/plugins/suggest/CreateCategory.jsp'>
 					<@button type='submit' buttonIcon='plus' title='#i18n{suggest.manageCategory.buttonCreate}' />
 				</@tform>
 
-				<@tabPanel>
-					<@paginationAdmin paginator=paginator combo=1 /><!-- #i18n{suggest.manageCategory.buttonItemsPerPage}-->
-					<@table>
-						<thead>
-							<@tr>
-								<@th></@th>
-								<@th>#i18n{suggest.manageCategory.rowTitle}</@th>
-								<@th>#i18n{suggest.manageCategory.rowActions}</@th>
-							</@tr>
-						</thead>
-						<tbody>
-							<#list category_list as category>
-							<@tr>
-								<@td params='background-color:${category.color!}'></@td>
-								<@td>${category.title}</@td>
-								<@td>
-								   <@aButton href='jsp/admin/plugins/suggest/ModifyCategory.jsp?id_category=${category.idCategory}' buttonIcon='edit' size='sm' />
-								   <@aButton href='jsp/admin/plugins/suggest/ConfirmRemoveCategory.jsp?id_category=${category.idCategory}' title='#i18n{suggest.manageCategory.altDelete}' buttonIcon='trash' size='sm' />
-								</@td>
-							</@tr>
-							</#list>
-						</tbody>
-					</@table>
-				</@tabPanel>
+				<@paginationAdmin paginator=paginator combo=1 /><!-- #i18n{suggest.manageCategory.buttonItemsPerPage}-->
+				<@table>
+					<thead>
+						<@tr>
+							<@th></@th>
+							<@th>#i18n{suggest.manageCategory.rowTitle}</@th>
+							<@th>#i18n{suggest.manageCategory.rowActions}</@th>
+						</@tr>
+					</thead>
+					<tbody>
+						<#list category_list as category>
+						<@tr>
+							<@td params='background-color:${category.color!}'></@td>
+							<@td>${category.title}</@td>
+							<@td>
+							   <@aButton href='jsp/admin/plugins/suggest/ModifyCategory.jsp?id_category=${category.idCategory}' buttonIcon='edit' size='sm' />
+							   <@aButton href='jsp/admin/plugins/suggest/ConfirmRemoveCategory.jsp?id_category=${category.idCategory}' title='#i18n{suggest.manageCategory.altDelete}' buttonIcon='trash' color='danger' size='sm' />
+							</@td>
+						</@tr>
+						</#list>
+					</tbody>
+				</@table>
 			</@tabContent>
 		</@tabs>
 	</@columns>
