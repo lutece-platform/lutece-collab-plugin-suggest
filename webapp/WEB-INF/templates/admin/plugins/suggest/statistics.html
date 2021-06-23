@@ -24,7 +24,7 @@
 							<div class="input-daterange">
 								<@inputGroup>
 									<#if first_date_filter?has_content><#assign value = first_date_filter?date /><#else><#assign value = '' /></#if>
-									<@input type='text' name='first_date_filter' id='first_date_filter' value=value />
+									<@input type='daterange' dateRangeEndId='last_date_filter' name='first_date_filter' id='first_date_filter' value=value />
 									<#if last_date_filter?has_content><#assign value = last_date_filter?if_exists?date /><#else><#assign value = '' /></#if>
 									<@inputGroupItem type='text'>#i18n{suggest.statistics.labelAnd}</@inputGroupItem>
 									<@input type='text' name='last_date_filter' id='last_date_filter' value=value />
