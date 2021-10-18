@@ -10,7 +10,7 @@
 				<@tabLink active=true href='jsp/admin/plugins/suggest/Statistics.jsp' title='#i18n{suggest.manageAdvancedParameters.labelStatisticsComment}'>#i18n{suggest.manageAdvancedParameters.labelStatistics}</@tabLink>
 			</@tabList>
 			<@tabContent>
-				<@tabPanel active=true>
+				<@tabPanel active=true id='tre'>
 					<h3>#i18n{suggest.statistics.title}</h3>
 					<@tform action='jsp/admin/plugins/suggest/Statistics.jsp' method='post'>
 						<@formGroup labelFor='fist_response_date_filter' labelKey='#i18n{suggest.statistics.labelSuggest}'>
@@ -21,15 +21,13 @@
 							</#if>
 						</@formGroup>
 						<@formGroup labelFor='fist_response_date_filter' labelKey='#i18n{suggest.statistics.labelValidationDate}'>
-							<div class="input-daterange">
-								<@inputGroup>
-									<#if first_date_filter?has_content><#assign value = first_date_filter?date /><#else><#assign value = '' /></#if>
-									<@input type='daterange' dateRangeEndId='last_date_filter' name='first_date_filter' id='first_date_filter' value=value />
-									<#if last_date_filter?has_content><#assign value = last_date_filter?if_exists?date /><#else><#assign value = '' /></#if>
-									<@inputGroupItem type='text'>#i18n{suggest.statistics.labelAnd}</@inputGroupItem>
-									<@input type='text' name='last_date_filter' id='last_date_filter' value=value />
-								</@inputGroup>
-							</div>
+							<@inputGroup>
+								<#if first_date_filter?has_content><#assign value = first_date_filter?date /><#else><#assign value = '' /></#if>
+								<@input type='daterange' dateRangeEndId='last_date_filter' name='first_date_filter' id='first_date_filter' value=value />
+								<#if last_date_filter?has_content><#assign value = last_date_filter?if_exists?date /><#else><#assign value = '' /></#if>
+								<@inputGroupItem type='text'>#i18n{suggest.statistics.labelAnd}</@inputGroupItem>
+								<@input type='text' name='last_date_filter' id='last_date_filter' value=value />
+							</@inputGroup>
 						</@formGroup>
 						<#if category_list?has_content>
 							<@formGroup labelfor='id_category' labelKey='#i18n{suggest.statistics.labelSuggestSubmitCategory}'>
@@ -82,4 +80,3 @@
 		</@tabs>
 	</@columns>
 </@row>
-<@getDatePickerRangeBootstrap language="fr" />
