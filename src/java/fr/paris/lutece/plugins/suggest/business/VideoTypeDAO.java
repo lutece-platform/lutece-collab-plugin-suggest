@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-import com.mysql.jdbc.PacketTooBigException;
+import com.mysql.cj.jdbc.exceptions.PacketTooBigException;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -61,7 +61,7 @@ public class VideoTypeDAO implements IVideoTypeDAO
      * @throws com.mysql.jdbc.PacketTooBigException
      *             exception
      */
-    public int insert( VideoType videoType, Plugin plugin ) throws com.mysql.jdbc.PacketTooBigException
+    public int insert( VideoType videoType, Plugin plugin ) throws PacketTooBigException
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
 

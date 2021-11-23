@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import com.mysql.cj.jdbc.exceptions.PacketTooBigException;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
@@ -75,10 +77,9 @@ public final class VideoTypeHome
      * @param plugin
      *            the Plugin
      * @return the id of the new videoType
-     * @throws com.mysql.jdbc.PacketTooBigException
-     *             Exception
+     * @throws PacketTooBigException 
      */
-    public static int create( VideoType videoType, Plugin plugin ) throws com.mysql.jdbc.PacketTooBigException
+    public static int create( VideoType videoType, Plugin plugin ) throws PacketTooBigException
     {
         return _dao.insert( videoType, plugin );
     }

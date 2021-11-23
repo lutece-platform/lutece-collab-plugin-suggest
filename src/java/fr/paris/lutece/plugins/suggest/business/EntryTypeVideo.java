@@ -49,6 +49,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
 
+import com.mysql.cj.jdbc.exceptions.PacketTooBigException;
+
 /**
  *
  * class EntryTypeVideo
@@ -320,7 +322,7 @@ public class EntryTypeVideo extends Entry
 
                 response.setValueResponse( strResponse );
             }
-            catch( com.mysql.jdbc.PacketTooBigException e )
+            catch( PacketTooBigException e )
             {
                 // Remove the suggest submit potentially created
                 SuggestSubmitService.getService( ).remove( nIdSuggestSubmit, plugin );

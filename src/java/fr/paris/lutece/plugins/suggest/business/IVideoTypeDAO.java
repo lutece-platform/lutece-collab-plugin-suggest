@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-import com.mysql.jdbc.PacketTooBigException;
+import com.mysql.cj.jdbc.exceptions.PacketTooBigException;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
