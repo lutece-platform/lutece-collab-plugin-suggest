@@ -64,17 +64,17 @@ public class SuggestResourceRssConfigDAO implements ISuggestResourceRssConfigDAO
      */
     public synchronized void insert( SuggestResourceRssConfig config, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-
-        int nPos = 0;
-
-        daoUtil.setInt( ++nPos, config.getIdRss( ) );
-        daoUtil.setInt( ++nPos, config.getIdSuggest( ) );
-        daoUtil.setBoolean( ++nPos, config.isSubmitRss( ) );
-        daoUtil.setInt( ++nPos, config.getIdSuggestSubmit( ) );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        {    
+            int nPos = 0;
+    
+            daoUtil.setInt( ++nPos, config.getIdRss( ) );
+            daoUtil.setInt( ++nPos, config.getIdSuggest( ) );
+            daoUtil.setBoolean( ++nPos, config.isSubmitRss( ) );
+            daoUtil.setInt( ++nPos, config.getIdSuggestSubmit( ) );
+    
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -87,18 +87,18 @@ public class SuggestResourceRssConfigDAO implements ISuggestResourceRssConfigDAO
      */
     public void store( SuggestResourceRssConfig config, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-
-        int nPos = 0;
-
-        daoUtil.setInt( ++nPos, config.getIdRss( ) );
-        daoUtil.setInt( ++nPos, config.getIdSuggest( ) );
-        daoUtil.setBoolean( ++nPos, config.isSubmitRss( ) );
-        daoUtil.setInt( ++nPos, config.getIdSuggestSubmit( ) );
-
-        daoUtil.setInt( ++nPos, config.getIdRss( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
+            int nPos = 0;
+    
+            daoUtil.setInt( ++nPos, config.getIdRss( ) );
+            daoUtil.setInt( ++nPos, config.getIdSuggest( ) );
+            daoUtil.setBoolean( ++nPos, config.isSubmitRss( ) );
+            daoUtil.setInt( ++nPos, config.getIdSuggestSubmit( ) );
+    
+            daoUtil.setInt( ++nPos, config.getIdRss( ) );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -114,24 +114,24 @@ public class SuggestResourceRssConfigDAO implements ISuggestResourceRssConfigDAO
     public SuggestResourceRssConfig load( int nIdRss, Plugin plugin )
     {
         SuggestResourceRssConfig config = null;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+        {    
+            daoUtil.setInt( 1, nIdRss );
+    
+            daoUtil.executeQuery( );
+    
+            int nPos = 0;
+    
+            if ( daoUtil.next( ) )
+            {
+                config = new SuggestResourceRssConfig( );
+                config.setIdRss( daoUtil.getInt( ++nPos ) );
+                config.setIdSuggest( daoUtil.getInt( ++nPos ) );
+                config.setSubmitRss( daoUtil.getBoolean( ++nPos ) );
+                config.setIdSuggestSubmit( daoUtil.getInt( ++nPos ) );
+            }
 
-        daoUtil.setInt( 1, nIdRss );
-
-        daoUtil.executeQuery( );
-
-        int nPos = 0;
-
-        if ( daoUtil.next( ) )
-        {
-            config = new SuggestResourceRssConfig( );
-            config.setIdRss( daoUtil.getInt( ++nPos ) );
-            config.setIdSuggest( daoUtil.getInt( ++nPos ) );
-            config.setSubmitRss( daoUtil.getBoolean( ++nPos ) );
-            config.setIdSuggestSubmit( daoUtil.getInt( ++nPos ) );
         }
-
-        daoUtil.free( );
 
         return config;
     }
@@ -146,11 +146,11 @@ public class SuggestResourceRssConfigDAO implements ISuggestResourceRssConfigDAO
      */
     public void delete( int nIdRss, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-
-        daoUtil.setInt( 1, nIdRss );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdRss );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -162,26 +162,26 @@ public class SuggestResourceRssConfigDAO implements ISuggestResourceRssConfigDAO
      */
     public List<SuggestResourceRssConfig> loadAll( Plugin plugin )
     {
-        List<SuggestResourceRssConfig> configList = new ArrayList<SuggestResourceRssConfig>( );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ALL, plugin );
+        List<SuggestResourceRssConfig> configList = new ArrayList<>( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ALL, plugin ) )
+        {    
+            daoUtil.executeQuery( );
+    
+            int nPos = 0;
+    
+            if ( daoUtil.next( ) )
+            {
+                SuggestResourceRssConfig config = new SuggestResourceRssConfig( );
+                config.setIdRss( daoUtil.getInt( ++nPos ) );
+                config.setIdSuggest( daoUtil.getInt( ++nPos ) );
+                config.setSubmitRss( daoUtil.getBoolean( ++nPos ) );
+                config.setIdSuggestSubmit( daoUtil.getInt( ++nPos ) );
+    
+                configList.add( config );
+            }
 
-        daoUtil.executeQuery( );
-
-        int nPos = 0;
-
-        if ( daoUtil.next( ) )
-        {
-            SuggestResourceRssConfig config = new SuggestResourceRssConfig( );
-            config.setIdRss( daoUtil.getInt( ++nPos ) );
-            config.setIdSuggest( daoUtil.getInt( ++nPos ) );
-            config.setSubmitRss( daoUtil.getBoolean( ++nPos ) );
-            config.setIdSuggestSubmit( daoUtil.getInt( ++nPos ) );
-
-            configList.add( config );
         }
-
-        daoUtil.free( );
-
+        
         return configList;
     }
 }

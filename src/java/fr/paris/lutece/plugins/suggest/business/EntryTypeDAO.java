@@ -60,21 +60,21 @@ public class EntryTypeDAO implements IEntryTypeDAO
      */
     public EntryType load( int idKey, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
-        daoUtil.setInt( 1, idKey );
-        daoUtil.executeQuery( );
-
         EntryType entryType = null;
-
-        if ( daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
-            entryType = new EntryType( );
-            entryType.setIdType( daoUtil.getInt( 1 ) );
-            entryType.setTitle( daoUtil.getString( 2 ) );
-            entryType.setClassName( daoUtil.getString( 3 ) );
-        }
+            daoUtil.setInt( 1, idKey );
+            daoUtil.executeQuery( );
+    
+            if ( daoUtil.next( ) )
+            {
+                entryType = new EntryType( );
+                entryType.setIdType( daoUtil.getInt( 1 ) );
+                entryType.setTitle( daoUtil.getString( 2 ) );
+                entryType.setClassName( daoUtil.getString( 3 ) );
+            }
 
-        daoUtil.free( );
+        }
 
         return entryType;
     }
@@ -88,22 +88,23 @@ public class EntryTypeDAO implements IEntryTypeDAO
      */
     public List<EntryType> select( Plugin plugin )
     {
-        List<EntryType> listEntryType = new ArrayList<EntryType>( );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.executeQuery( );
-
-        EntryType entryType = null;
-
-        while ( daoUtil.next( ) )
+        List<EntryType> listEntryType = new ArrayList<>( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
-            entryType = new EntryType( );
-            entryType.setIdType( daoUtil.getInt( 1 ) );
-            entryType.setTitle( daoUtil.getString( 2 ) );
-            entryType.setClassName( daoUtil.getString( 3 ) );
-            listEntryType.add( entryType );
-        }
+            daoUtil.executeQuery( );
+    
+            EntryType entryType = null;
+    
+            while ( daoUtil.next( ) )
+            {
+                entryType = new EntryType( );
+                entryType.setIdType( daoUtil.getInt( 1 ) );
+                entryType.setTitle( daoUtil.getString( 2 ) );
+                entryType.setClassName( daoUtil.getString( 3 ) );
+                listEntryType.add( entryType );
+            }
 
-        daoUtil.free( );
+        }
 
         return listEntryType;
     }

@@ -63,19 +63,19 @@ public final class ExportFormatDAO implements IExportFormatDAO
      */
     public int newPrimaryKey( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery( );
-
         int nKey;
-
-        if ( !daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
         {
-            // if the table is empty
-            nKey = 1;
+            daoUtil.executeQuery( );
+    
+            if ( !daoUtil.next( ) )
+            {
+                // if the table is empty
+                nKey = 1;
+            }
+    
+            nKey = daoUtil.getInt( 1 ) + 1;
         }
-
-        nKey = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free( );
 
         return nKey;
     }
@@ -90,15 +90,16 @@ public final class ExportFormatDAO implements IExportFormatDAO
      */
     public synchronized void insert( ExportFormat exportFormat, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        exportFormat.setIdExport( newPrimaryKey( plugin ) );
-        daoUtil.setInt( 1, exportFormat.getIdExport( ) );
-        daoUtil.setString( 2, exportFormat.getTitle( ) );
-        daoUtil.setString( 3, exportFormat.getDescription( ) );
-        daoUtil.setString( 4, exportFormat.getExtension( ) );
-        daoUtil.setBytes( 5, exportFormat.getXsl( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        {
+            exportFormat.setIdExport( newPrimaryKey( plugin ) );
+            daoUtil.setInt( 1, exportFormat.getIdExport( ) );
+            daoUtil.setString( 2, exportFormat.getTitle( ) );
+            daoUtil.setString( 3, exportFormat.getDescription( ) );
+            daoUtil.setString( 4, exportFormat.getExtension( ) );
+            daoUtil.setBytes( 5, exportFormat.getXsl( ) );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**

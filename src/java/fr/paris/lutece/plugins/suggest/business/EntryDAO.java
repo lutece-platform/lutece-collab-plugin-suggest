@@ -81,19 +81,19 @@ public final class EntryDAO implements IEntryDAO
      */
     private int newPrimaryKey( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery( );
-
         int nKey;
-
-        if ( !daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
         {
-            // if the table is empty
-            nKey = 1;
+            daoUtil.executeQuery( );
+    
+            if ( !daoUtil.next( ) )
+            {
+                // if the table is empty
+                nKey = 1;
+            }
+    
+            nKey = daoUtil.getInt( 1 ) + 1;
         }
-
-        nKey = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free( );
 
         return nKey;
     }
@@ -107,21 +107,21 @@ public final class EntryDAO implements IEntryDAO
      */
     private int newPosition( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_POSITION, plugin );
-        daoUtil.executeQuery( );
-
         int nPos;
-
-        if ( !daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_POSITION, plugin ) )
         {
-            // if the table is empty
-            nPos = 1;
+            daoUtil.executeQuery( );
+    
+            if ( !daoUtil.next( ) )
+            {
+                // if the table is empty
+                nPos = 1;
+            }
+    
+            nPos = daoUtil.getInt( 1 ) + 1;
+    
+            return nPos;
         }
-
-        nPos = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free( );
-
-        return nPos;
     }
 
     /**
@@ -135,27 +135,28 @@ public final class EntryDAO implements IEntryDAO
      */
     public int insert( IEntry entry, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        entry.setIdEntry( newPrimaryKey( plugin ) );
-
-        daoUtil.setInt( 1, entry.getIdEntry( ) );
-        daoUtil.setInt( 2, entry.getSuggest( ).getIdSuggest( ) );
-        daoUtil.setInt( 3, entry.getEntryType( ).getIdType( ) );
-        daoUtil.setString( 4, entry.getTitle( ) );
-        daoUtil.setString( 5, entry.getHelpMessage( ) );
-        daoUtil.setString( 6, entry.getComment( ) );
-        daoUtil.setBoolean( 7, entry.isMandatory( ) );
-        daoUtil.setInt( 8, newPosition( plugin ) );
-        daoUtil.setString( 9, entry.getDefaultValue( ) );
-        daoUtil.setInt( 10, entry.getHeight( ) );
-        daoUtil.setInt( 11, entry.getWidth( ) );
-        daoUtil.setInt( 12, entry.getMaxSizeEnter( ) );
-        daoUtil.setBoolean( 13, entry.isShowInSuggestSubmitList( ) );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
-
-        return entry.getIdEntry( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        {
+            entry.setIdEntry( newPrimaryKey( plugin ) );
+    
+            daoUtil.setInt( 1, entry.getIdEntry( ) );
+            daoUtil.setInt( 2, entry.getSuggest( ).getIdSuggest( ) );
+            daoUtil.setInt( 3, entry.getEntryType( ).getIdType( ) );
+            daoUtil.setString( 4, entry.getTitle( ) );
+            daoUtil.setString( 5, entry.getHelpMessage( ) );
+            daoUtil.setString( 6, entry.getComment( ) );
+            daoUtil.setBoolean( 7, entry.isMandatory( ) );
+            daoUtil.setInt( 8, newPosition( plugin ) );
+            daoUtil.setString( 9, entry.getDefaultValue( ) );
+            daoUtil.setInt( 10, entry.getHeight( ) );
+            daoUtil.setInt( 11, entry.getWidth( ) );
+            daoUtil.setInt( 12, entry.getMaxSizeEnter( ) );
+            daoUtil.setBoolean( 13, entry.isShowInSuggestSubmitList( ) );
+    
+            daoUtil.executeUpdate( );
+    
+            return entry.getIdEntry( );
+        }
     }
 
     /**
@@ -169,68 +170,55 @@ public final class EntryDAO implements IEntryDAO
      */
     public IEntry load( int nId, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
-        daoUtil.setInt( 1, nId );
-        daoUtil.executeQuery( );
-
         IEntry entry = null;
-        EntryType entryType = null;
-        Suggest suggest = null;
-
-        if ( daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
-            entryType = new EntryType( );
-            entryType.setIdType( daoUtil.getInt( 1 ) );
-            entryType.setTitle( daoUtil.getString( 2 ) );
-            entryType.setClassName( daoUtil.getString( 3 ) );
-
-            try
+            daoUtil.setInt( 1, nId );
+            daoUtil.executeQuery( );
+    
+            EntryType entryType = null;
+            Suggest suggest = null;
+    
+            if ( daoUtil.next( ) )
             {
-                entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
+                entryType = new EntryType( );
+                entryType.setIdType( daoUtil.getInt( 1 ) );
+                entryType.setTitle( daoUtil.getString( 2 ) );
+                entryType.setClassName( daoUtil.getString( 3 ) );
+    
+                try
+                {
+                    entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
+                }
+                catch( ClassNotFoundException | InstantiationException | IllegalAccessException e )
+                {
+                    // class doesn't exist, is abstract or is an interface or haven't accessible builder or can't access to rhe class
+                    AppLogService.error( e );
+    
+                    return null;
+                }
+    
+                entry.setEntryType( entryType );
+                entry.setIdEntry( daoUtil.getInt( 4 ) );
+                // insert form
+                suggest = new Suggest( );
+                suggest.setIdSuggest( daoUtil.getInt( 5 ) );
+                suggest.setTitle( daoUtil.getString( 6 ) );
+                entry.setSuggest( suggest );
+    
+                entry.setTitle( daoUtil.getString( 7 ) );
+                entry.setHelpMessage( daoUtil.getString( 8 ) );
+                entry.setComment( daoUtil.getString( 9 ) );
+                entry.setMandatory( daoUtil.getBoolean( 10 ) );
+                entry.setPosition( daoUtil.getInt( 11 ) );
+                entry.setDefaultValue( daoUtil.getString( 12 ) );
+                entry.setHeight( daoUtil.getInt( 13 ) );
+                entry.setWidth( daoUtil.getInt( 14 ) );
+                entry.setMaxSizeEnter( daoUtil.getInt( 15 ) );
+                entry.setShowInSuggestSubmitList( daoUtil.getBoolean( 16 ) );
             }
-            catch( ClassNotFoundException e )
-            {
-                // class doesn't exist
-                AppLogService.error( e );
 
-                return null;
-            }
-            catch( InstantiationException e )
-            {
-                // Class is abstract or is an interface or haven't accessible builder
-                AppLogService.error( e );
-
-                return null;
-            }
-            catch( IllegalAccessException e )
-            {
-                // can't access to rhe class
-                AppLogService.error( e );
-
-                return null;
-            }
-
-            entry.setEntryType( entryType );
-            entry.setIdEntry( daoUtil.getInt( 4 ) );
-            // insert form
-            suggest = new Suggest( );
-            suggest.setIdSuggest( daoUtil.getInt( 5 ) );
-            suggest.setTitle( daoUtil.getString( 6 ) );
-            entry.setSuggest( suggest );
-
-            entry.setTitle( daoUtil.getString( 7 ) );
-            entry.setHelpMessage( daoUtil.getString( 8 ) );
-            entry.setComment( daoUtil.getString( 9 ) );
-            entry.setMandatory( daoUtil.getBoolean( 10 ) );
-            entry.setPosition( daoUtil.getInt( 11 ) );
-            entry.setDefaultValue( daoUtil.getString( 12 ) );
-            entry.setHeight( daoUtil.getInt( 13 ) );
-            entry.setWidth( daoUtil.getInt( 14 ) );
-            entry.setMaxSizeEnter( daoUtil.getInt( 15 ) );
-            entry.setShowInSuggestSubmitList( daoUtil.getBoolean( 16 ) );
         }
-
-        daoUtil.free( );
 
         return entry;
     }
@@ -245,10 +233,11 @@ public final class EntryDAO implements IEntryDAO
      */
     public void delete( int nIdEntry, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1, nIdEntry );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdEntry );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -261,25 +250,25 @@ public final class EntryDAO implements IEntryDAO
      */
     public void store( IEntry entry, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-
-        daoUtil.setInt( 1, entry.getIdEntry( ) );
-        daoUtil.setInt( 2, entry.getSuggest( ).getIdSuggest( ) );
-        daoUtil.setInt( 3, entry.getEntryType( ).getIdType( ) );
-        daoUtil.setString( 4, entry.getTitle( ) );
-        daoUtil.setString( 5, entry.getHelpMessage( ) );
-        daoUtil.setString( 6, entry.getComment( ) );
-        daoUtil.setBoolean( 7, entry.isMandatory( ) );
-        daoUtil.setInt( 8, entry.getPosition( ) );
-        daoUtil.setString( 9, entry.getDefaultValue( ) );
-        daoUtil.setInt( 10, entry.getHeight( ) );
-        daoUtil.setInt( 11, entry.getWidth( ) );
-        daoUtil.setInt( 12, entry.getMaxSizeEnter( ) );
-        daoUtil.setBoolean( 13, entry.isShowInSuggestSubmitList( ) );
-        daoUtil.setInt( 14, entry.getIdEntry( ) );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
+            daoUtil.setInt( 1, entry.getIdEntry( ) );
+            daoUtil.setInt( 2, entry.getSuggest( ).getIdSuggest( ) );
+            daoUtil.setInt( 3, entry.getEntryType( ).getIdType( ) );
+            daoUtil.setString( 4, entry.getTitle( ) );
+            daoUtil.setString( 5, entry.getHelpMessage( ) );
+            daoUtil.setString( 6, entry.getComment( ) );
+            daoUtil.setBoolean( 7, entry.isMandatory( ) );
+            daoUtil.setInt( 8, entry.getPosition( ) );
+            daoUtil.setString( 9, entry.getDefaultValue( ) );
+            daoUtil.setInt( 10, entry.getHeight( ) );
+            daoUtil.setInt( 11, entry.getWidth( ) );
+            daoUtil.setInt( 12, entry.getMaxSizeEnter( ) );
+            daoUtil.setBoolean( 13, entry.isShowInSuggestSubmitList( ) );
+            daoUtil.setInt( 14, entry.getIdEntry( ) );
+    
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -293,7 +282,7 @@ public final class EntryDAO implements IEntryDAO
      */
     public List<IEntry> selectEntryListByFilter( EntryFilter filter, Plugin plugin )
     {
-        List<IEntry> entryList = new ArrayList<IEntry>( );
+        List<IEntry> entryList = new ArrayList<>( );
         IEntry entry = null;
         EntryType entryType = null;
         Suggest suggest = null;
@@ -303,68 +292,56 @@ public final class EntryDAO implements IEntryDAO
 
         strSQL += SQL_ORDER_BY_POSITION;
 
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
-        int nIndex = 1;
-
-        if ( filter.containsIdSuggest( ) )
+        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdSuggest( ) );
-            nIndex++;
+            int nIndex = 1;
+    
+            if ( filter.containsIdSuggest( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdSuggest( ) );
+                nIndex++;
+            }
+    
+            daoUtil.executeQuery( );
+            
+    
+            while ( daoUtil.next( ) )
+            {
+                entryType = new EntryType( );
+                entryType.setIdType( daoUtil.getInt( 1 ) );
+                entryType.setTitle( daoUtil.getString( 2 ) );
+                entryType.setClassName( daoUtil.getString( 3 ) );
+    
+                try
+                {
+                    entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
+                }
+                catch( ClassNotFoundException | InstantiationException | IllegalAccessException e )
+                {
+                    // class doesn't exist or Class is abstract or is an interface or haven't accessible builder or can't access to rhe class
+                    AppLogService.error( e );
+    
+                    return new ArrayList<>( );
+                }
+    
+                entry.setEntryType( entryType );
+                entry.setIdEntry( daoUtil.getInt( 4 ) );
+                // insert form
+                suggest = new Suggest( );
+                suggest.setIdSuggest( daoUtil.getInt( 5 ) );
+                entry.setSuggest( suggest );
+    
+                entry.setTitle( daoUtil.getString( 6 ) );
+                entry.setHelpMessage( daoUtil.getString( 7 ) );
+                entry.setComment( daoUtil.getString( 8 ) );
+                entry.setMandatory( daoUtil.getBoolean( 9 ) );
+                entry.setPosition( daoUtil.getInt( 10 ) );
+                entry.setShowInSuggestSubmitList( daoUtil.getBoolean( 11 ) );
+    
+                entryList.add( entry );
+            }
+
         }
-
-        daoUtil.executeQuery( );
-
-        while ( daoUtil.next( ) )
-        {
-            entryType = new EntryType( );
-            entryType.setIdType( daoUtil.getInt( 1 ) );
-            entryType.setTitle( daoUtil.getString( 2 ) );
-            entryType.setClassName( daoUtil.getString( 3 ) );
-
-            try
-            {
-                entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
-            }
-            catch( ClassNotFoundException e )
-            {
-                // class doesn't exist
-                AppLogService.error( e );
-
-                return null;
-            }
-            catch( InstantiationException e )
-            {
-                // Class is abstract or is an interface or haven't accessible builder
-                AppLogService.error( e );
-
-                return null;
-            }
-            catch( IllegalAccessException e )
-            {
-                // can't access to rhe class
-                AppLogService.error( e );
-
-                return null;
-            }
-
-            entry.setEntryType( entryType );
-            entry.setIdEntry( daoUtil.getInt( 4 ) );
-            // insert form
-            suggest = new Suggest( );
-            suggest.setIdSuggest( daoUtil.getInt( 5 ) );
-            entry.setSuggest( suggest );
-
-            entry.setTitle( daoUtil.getString( 6 ) );
-            entry.setHelpMessage( daoUtil.getString( 7 ) );
-            entry.setComment( daoUtil.getString( 8 ) );
-            entry.setMandatory( daoUtil.getBoolean( 9 ) );
-            entry.setPosition( daoUtil.getInt( 10 ) );
-            entry.setShowInSuggestSubmitList( daoUtil.getBoolean( 11 ) );
-
-            entryList.add( entry );
-        }
-
-        daoUtil.free( );
 
         return entryList;
     }
@@ -386,23 +363,24 @@ public final class EntryDAO implements IEntryDAO
 
         strSQL += SQL_ORDER_BY_POSITION;
 
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
-        int nIndex = 1;
-
-        if ( filter.containsIdSuggest( ) )
+        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
-            daoUtil.setInt( nIndex, filter.getIdSuggest( ) );
-            nIndex++;
+            int nIndex = 1;
+    
+            if ( filter.containsIdSuggest( ) )
+            {
+                daoUtil.setInt( nIndex, filter.getIdSuggest( ) );
+                nIndex++;
+            }
+    
+            daoUtil.executeQuery( );
+    
+            if ( daoUtil.next( ) )
+            {
+                nNumberEntry = daoUtil.getInt( 1 );
+            }
+
         }
-
-        daoUtil.executeQuery( );
-
-        if ( daoUtil.next( ) )
-        {
-            nNumberEntry = daoUtil.getInt( 1 );
-        }
-
-        daoUtil.free( );
 
         return nNumberEntry;
     }
@@ -419,11 +397,12 @@ public final class EntryDAO implements IEntryDAO
      */
     public void deleteVerifyBy( int nIdEntry, int nIdExpression, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_VERIF_BY, plugin );
-        daoUtil.setInt( 1, nIdEntry );
-        daoUtil.setInt( 2, nIdExpression );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_VERIF_BY, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdEntry );
+            daoUtil.setInt( 2, nIdExpression );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -438,11 +417,12 @@ public final class EntryDAO implements IEntryDAO
      */
     public void insertVerifyBy( int nIdEntry, int nIdExpression, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_VERIF_BY, plugin );
-        daoUtil.setInt( 1, nIdEntry );
-        daoUtil.setInt( 2, nIdExpression );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_VERIF_BY, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdEntry );
+            daoUtil.setInt( 2, nIdExpression );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -457,16 +437,17 @@ public final class EntryDAO implements IEntryDAO
     public List<Integer> selectListRegularExpressionKeyByIdEntry( int nIdEntry, Plugin plugin )
     {
         List<Integer> regularExpressionList = new ArrayList<>( );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_ENTRY, plugin );
-        daoUtil.setInt( 1, nIdEntry );
-        daoUtil.executeQuery( );
-
-        while ( daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_ENTRY, plugin ) )
         {
-            regularExpressionList.add( daoUtil.getInt( 1 ) );
-        }
+            daoUtil.setInt( 1, nIdEntry );
+            daoUtil.executeQuery( );
+    
+            while ( daoUtil.next( ) )
+            {
+                regularExpressionList.add( daoUtil.getInt( 1 ) );
+            }
 
-        daoUtil.free( );
+        }
 
         return regularExpressionList;
     }
@@ -484,16 +465,16 @@ public final class EntryDAO implements IEntryDAO
     {
         int nNumberEntry = 0;
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_ENTRY_BY_ID_REGULAR_EXPRESSION, plugin );
-        daoUtil.setInt( 1, nIdExpression );
-        daoUtil.executeQuery( );
-
-        if ( daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_ENTRY_BY_ID_REGULAR_EXPRESSION, plugin ) )
         {
-            nNumberEntry = daoUtil.getInt( 1 );
+            daoUtil.setInt( 1, nIdExpression );
+            daoUtil.executeQuery( );
+    
+            if ( daoUtil.next( ) )
+            {
+                nNumberEntry = daoUtil.getInt( 1 );
+            }
         }
-
-        daoUtil.free( );
 
         return nNumberEntry != 0;
     }

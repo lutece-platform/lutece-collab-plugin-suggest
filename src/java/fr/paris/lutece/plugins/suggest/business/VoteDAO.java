@@ -64,11 +64,12 @@ public class VoteDAO implements IVoteDAO
      */
     public void insert( Vote vote, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        daoUtil.setInt( 1, vote.getIdSuggestSubmit( ) );
-        daoUtil.setString( 2, vote.getLuteceUserKey( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        {
+            daoUtil.setInt( 1, vote.getIdSuggestSubmit( ) );
+            daoUtil.setString( 2, vote.getLuteceUserKey( ) );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -82,22 +83,24 @@ public class VoteDAO implements IVoteDAO
      */
     public List<Vote> selectVoteByIdSuggestSubmit( int nIdSuggestSubmit, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_VOTE_BY_ID_SUGGEST_SUBMIT, plugin );
-        daoUtil.setInt( 1, nIdSuggestSubmit );
-        daoUtil.executeQuery( );
-
-        Vote vote = null;
-        List<Vote> listVote = new ArrayList<Vote>( );
-
-        while ( daoUtil.next( ) )
+        List<Vote> listVote = new ArrayList<>( );
+        
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_VOTE_BY_ID_SUGGEST_SUBMIT, plugin ) )
         {
-            vote = new Vote( );
-            vote.setIdSuggestSubmit( daoUtil.getInt( 1 ) );
-            vote.setLuteceUserKey( daoUtil.getString( 2 ) );
-            listVote.add( vote );
-        }
+            daoUtil.setInt( 1, nIdSuggestSubmit );
+            daoUtil.executeQuery( );
+    
+            Vote vote = null;
+    
+            while ( daoUtil.next( ) )
+            {
+                vote = new Vote( );
+                vote.setIdSuggestSubmit( daoUtil.getInt( 1 ) );
+                vote.setLuteceUserKey( daoUtil.getString( 2 ) );
+                listVote.add( vote );
+            }
 
-        daoUtil.free( );
+        }
 
         return listVote;
     }
@@ -116,17 +119,18 @@ public class VoteDAO implements IVoteDAO
     public int selectCountVoteByIdSuggestSubmitAndLuteceUserKey( int nIdSuggestSubmit, String strLuteceUserKey, Plugin plugin )
     {
         int nIdCount = 0;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_VOTE_BY_ID_SUGGEST_SUBMIT_AND_LUTECE_USER_KEY, plugin );
-        daoUtil.setInt( 1, nIdSuggestSubmit );
-        daoUtil.setString( 2, strLuteceUserKey );
-        daoUtil.executeQuery( );
-
-        if ( daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_VOTE_BY_ID_SUGGEST_SUBMIT_AND_LUTECE_USER_KEY, plugin ) )
         {
-            nIdCount = daoUtil.getInt( 1 );
-        }
+            daoUtil.setInt( 1, nIdSuggestSubmit );
+            daoUtil.setString( 2, strLuteceUserKey );
+            daoUtil.executeQuery( );
+    
+            if ( daoUtil.next( ) )
+            {
+                nIdCount = daoUtil.getInt( 1 );
+            }
 
-        daoUtil.free( );
+        }
 
         return nIdCount;
     }
@@ -143,16 +147,17 @@ public class VoteDAO implements IVoteDAO
     public int selectCountVoteByIdSuggestSubmit( int nIdSuggestSubmit, Plugin plugin )
     {
         int nIdCount = 0;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_VOTE_BY_ID_SUGGEST_SUBMIT, plugin );
-        daoUtil.setInt( 1, nIdSuggestSubmit );
-        daoUtil.executeQuery( );
-
-        if ( daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_VOTE_BY_ID_SUGGEST_SUBMIT, plugin ) )
         {
-            nIdCount = daoUtil.getInt( 1 );
-        }
+            daoUtil.setInt( 1, nIdSuggestSubmit );
+            daoUtil.executeQuery( );
+    
+            if ( daoUtil.next( ) )
+            {
+                nIdCount = daoUtil.getInt( 1 );
+            }
 
-        daoUtil.free( );
+        }
 
         return nIdCount;
     }

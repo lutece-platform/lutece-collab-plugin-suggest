@@ -78,9 +78,7 @@ public final class ResponseDAO implements IResponseDAO
             daoUtil.executeQuery( );
             daoUtil.next( );
 
-            int nKey = daoUtil.getInt( 1 ) + 1;
-
-            return nKey;
+            return daoUtil.getInt( 1 ) + 1;
         }
     }
 
@@ -156,21 +154,9 @@ public final class ResponseDAO implements IResponseDAO
                 {
                     entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
                 }
-                catch( ClassNotFoundException e )
+                catch( ClassNotFoundException | InstantiationException | IllegalAccessException e )
                 {
-                    // class doesn't exist
-                    AppLogService.error( e );
-                    bException = true;
-                }
-                catch( InstantiationException e )
-                {
-                    // Class is abstract or is an interface or haven't accessible builder
-                    AppLogService.error( e );
-                    bException = true;
-                }
-                catch( IllegalAccessException e )
-                {
-                    // can't access to rhe class
+                    // class doesn't exist or class is abstract or is an interface or haven't accessible builder or can't access to rhe class
                     AppLogService.error( e );
                     bException = true;
                 }
@@ -307,28 +293,16 @@ public final class ResponseDAO implements IResponseDAO
                 {
                     entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
                 }
-                catch( ClassNotFoundException e )
+                catch( ClassNotFoundException | InstantiationException | IllegalAccessException e )
                 {
-                    // class doesn't exist
-                    AppLogService.error( e );
-                    bException = true;
-                }
-                catch( InstantiationException e )
-                {
-                    // Class is abstract or is an interface or haven't accessible builder
-                    AppLogService.error( e );
-                    bException = true;
-                }
-                catch( IllegalAccessException e )
-                {
-                    // can't access to rhe class
+                    // class doesn't exist or class is abstract or is an interface or haven't accessible builder or can't access to rhe class
                     AppLogService.error( e );
                     bException = true;
                 }
 
                 if ( bException )
                 {
-                    return null;
+                    return new ArrayList<>( );
                 }
 
                 entry.setEntryType( entryType );

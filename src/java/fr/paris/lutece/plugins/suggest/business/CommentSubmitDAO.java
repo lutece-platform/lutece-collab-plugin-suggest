@@ -210,7 +210,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public List<CommentSubmit> selectListByFilter( SubmitFilter filter, Integer nLimit, Plugin plugin )
     {
-        List<CommentSubmit> commentSubmitList = new ArrayList<CommentSubmit>( );
+        List<CommentSubmit> commentSubmitList = new ArrayList<>( );
         CommentSubmit commentSubmit = null;
         SuggestSubmit suggestSubmit = null;
         List<String> listStrFilter = new ArrayList<>( );
