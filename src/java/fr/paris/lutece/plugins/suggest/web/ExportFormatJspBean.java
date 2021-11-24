@@ -161,8 +161,6 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
 
         HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_EXPORT, locale, model );
 
-        // ReferenceList refMailingList;
-        // refMailingList=AdminMailingListService.getMailingLists(adminUser);
         return getAdminPage( templateList.getHtml( ) );
     }
 
