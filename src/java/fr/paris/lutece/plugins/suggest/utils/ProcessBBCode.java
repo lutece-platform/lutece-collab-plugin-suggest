@@ -431,16 +431,16 @@ public class ProcessBBCode implements Serializable
     static class MutableCharSequence implements CharSequence
     {
         /** */
-        public CharSequence base;
+        private CharSequence base;
 
         /** */
-        public int start;
+        private int start;
 
         /** */
-        public int length;
+        private int length;
 
         /** */
-        public String param = null;
+        private String param = null;
 
         /**
          */
