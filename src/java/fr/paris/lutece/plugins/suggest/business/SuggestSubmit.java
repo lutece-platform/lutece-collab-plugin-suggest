@@ -442,9 +442,9 @@ public class SuggestSubmit implements IExtendableResource
 
         XmlUtil.beginElement( strXml, TAG_SUGGESTS_SUBMIT_RESPONSES );
 
-        if ( ( getResponses( ) != null ) && ( getResponses( ).size( ) != 0 ) )
+        if ( ( getResponses( ) != null ) && ( !getResponses( ).isEmpty( ) ) )
         {
-            HashMap<Integer, Response> hashResponsesEntry = new HashMap<Integer, Response>( );
+            HashMap<Integer, Response> hashResponsesEntry = new HashMap<>( );
 
             for ( Response response : getResponses( ) )
             {
@@ -472,7 +472,7 @@ public class SuggestSubmit implements IExtendableResource
 
         XmlUtil.beginElement( strXml, TAG_SUGGESTS_SUBMIT_COMMENTS );
 
-        if ( ( getComments( ) != null ) && ( getComments( ).size( ) != 0 ) )
+        if ( ( getComments( ) != null ) && ( !getComments( ).isEmpty( ) ) )
         {
             for ( CommentSubmit commentSubmit : getComments( ) )
             {

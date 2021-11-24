@@ -125,7 +125,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
         _strCurrentPageIndexExport = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndexExport );
         _nItemsPerPageCategory = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPageCategory, _nDefaultItemsPerPage );
 
-        Paginator<Category> paginator = new Paginator<Category>( listCategory, _nItemsPerPageCategory, getJspManageCategory( request ), PARAMETER_PAGE_INDEX,
+        Paginator<Category> paginator = new Paginator<>( listCategory, _nItemsPerPageCategory, getJspManageCategory( request ), PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndexExport );
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, SuggestUtils.EMPTY_STRING + _nItemsPerPageCategory );

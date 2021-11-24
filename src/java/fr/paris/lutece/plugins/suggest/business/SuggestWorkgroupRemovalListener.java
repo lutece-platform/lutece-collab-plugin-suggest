@@ -67,7 +67,7 @@ public class SuggestWorkgroupRemovalListener implements RemovalListener
 
         Collection<Suggest> listSuggest = SuggestHome.getSuggestList( filter, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
 
-        if ( ( listSuggest != null ) && ( listSuggest.size( ) > 0 ) )
+        if ( ( listSuggest != null ) && ( !listSuggest.isEmpty( ) ) )
         {
             return false;
         }

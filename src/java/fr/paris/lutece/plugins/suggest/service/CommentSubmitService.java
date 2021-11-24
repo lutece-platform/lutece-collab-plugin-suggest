@@ -154,9 +154,7 @@ public class CommentSubmitService implements ICommentSubmitService
         // get All parent
         filter.setIdParent( SubmitFilter.ID_PARENT_NULL );
 
-        List<CommentSubmit> commentSubmitList = CommentSubmitHome.getCommentSubmitList( filter, nLimitParentNumber, plugin );
-
-        return commentSubmitList;
+        return CommentSubmitHome.getCommentSubmitList( filter, nLimitParentNumber, plugin );
     }
 
     /**

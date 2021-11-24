@@ -44,22 +44,6 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/*
- * Copyright 2004 JavaFree.org
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 /**
  * $Id: ProcessBBCode.java,v 1.18.2.2.4.4 2007/04/17 17:27:08 daltoncamargo Exp $
  * 
@@ -113,7 +97,7 @@ public class ProcessBBCode implements Serializable
 
     /**
      * @param texto
-     * @return TODO unuseful parameters.
+     * @return text.
      */
     public String preparePostText( String texto )
     {
@@ -303,10 +287,10 @@ public class ProcessBBCode implements Serializable
     {
         String str = buffer.toString( );
 
-        Stack<MutableCharSequence> openStack = new Stack<MutableCharSequence>( );
-        Set<MutableCharSequence> subsOpen = new HashSet<MutableCharSequence>( );
-        Set<MutableCharSequence> subsClose = new HashSet<MutableCharSequence>( );
-        Set<MutableCharSequence> subsInternal = new HashSet<MutableCharSequence>( );
+        Stack<MutableCharSequence> openStack = new Stack<>( );
+        Set<MutableCharSequence> subsOpen = new HashSet<>( );
+        Set<MutableCharSequence> subsClose = new HashSet<>( );
+        Set<MutableCharSequence> subsInternal = new HashSet<>( );
 
         String openTag = CR_LF + "\\[" + tagName + ( acceptParam ? ( requiresQuotedParam ? "(?:=\"(.*?)\")?" : "(?:=\"?(.*?)\"?)?" ) : "" ) + "\\]" + CR_LF;
         String closeTag = CR_LF + "\\[/" + tagName + "\\]" + CR_LF;
@@ -379,13 +363,9 @@ public class ProcessBBCode implements Serializable
                     {
                         subsInternal.add( matchedSeq );
                     }
-                    else
-                    {
-                        // assert (false);
-                    }
         }
 
-        LinkedList<MutableCharSequence> subst = new LinkedList<MutableCharSequence>( );
+        LinkedList<MutableCharSequence> subst = new LinkedList<>( );
         subst.addAll( subsOpen );
         subst.addAll( subsClose );
         subst.addAll( subsInternal );

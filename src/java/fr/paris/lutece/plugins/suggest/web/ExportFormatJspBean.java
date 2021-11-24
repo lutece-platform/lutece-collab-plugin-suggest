@@ -151,7 +151,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
         _strCurrentPageIndexExport = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndexExport );
         _nItemsPerPageExportFormat = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPageExportFormat, _nDefaultItemsPerPage );
 
-        Paginator<ExportFormat> paginator = new Paginator<ExportFormat>( listExportFormat, _nItemsPerPageExportFormat, getJspManageExportFormat( request ),
+        Paginator<ExportFormat> paginator = new Paginator<>( listExportFormat, _nItemsPerPageExportFormat, getJspManageExportFormat( request ),
                 PARAMETER_PAGE_INDEX, _strCurrentPageIndexExport );
 
         model.put( MARK_PAGINATOR, paginator );
