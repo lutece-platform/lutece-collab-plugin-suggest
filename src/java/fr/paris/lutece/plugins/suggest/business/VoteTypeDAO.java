@@ -66,23 +66,24 @@ public class VoteTypeDAO implements IVoteTypeDAO
      */
     public VoteType load( int idKey, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
-        daoUtil.setInt( 1, idKey );
-        daoUtil.executeQuery( );
-
         VoteType voteType = null;
-
-        if ( daoUtil.next( ) )
+        
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
-            voteType = new VoteType( );
-            voteType.setIdVoteType( daoUtil.getInt( 1 ) );
-            voteType.setTitle( daoUtil.getString( 2 ) );
-            voteType.setTemplateFileName( daoUtil.getString( 3 ) );
+            daoUtil.setInt( 1, idKey );
+            daoUtil.executeQuery( );
+            
+            if ( daoUtil.next( ) )
+            {
+                voteType = new VoteType( );
+                voteType.setIdVoteType( daoUtil.getInt( 1 ) );
+                voteType.setTitle( daoUtil.getString( 2 ) );
+                voteType.setTemplateFileName( daoUtil.getString( 3 ) );
+    
+                // voteType.setVoteButtons(selectListVoteButton(voteType.getIdVoteType(), plugin ));
+            }
 
-            // voteType.setVoteButtons(selectListVoteButton(voteType.getIdVoteType(), plugin ));
         }
-
-        daoUtil.free( );
 
         return voteType;
     }
@@ -96,23 +97,25 @@ public class VoteTypeDAO implements IVoteTypeDAO
      */
     public List<VoteType> select( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.executeQuery( );
-
-        VoteType voteType = null;
-        List<VoteType> listVoteType = new ArrayList<VoteType>( );
-
-        while ( daoUtil.next( ) )
+        List<VoteType> listVoteType = new ArrayList<>( );
+        
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
-            voteType = new VoteType( );
-            voteType.setIdVoteType( daoUtil.getInt( 1 ) );
-            voteType.setTitle( daoUtil.getString( 2 ) );
-            voteType.setTemplateFileName( daoUtil.getString( 3 ) );
+            daoUtil.executeQuery( );
+    
+            VoteType voteType = null;
+    
+            while ( daoUtil.next( ) )
+            {
+                voteType = new VoteType( );
+                voteType.setIdVoteType( daoUtil.getInt( 1 ) );
+                voteType.setTitle( daoUtil.getString( 2 ) );
+                voteType.setTemplateFileName( daoUtil.getString( 3 ) );
+    
+                listVoteType.add( voteType );
+            }
 
-            listVoteType.add( voteType );
         }
-
-        daoUtil.free( );
 
         return listVoteType;
     }
@@ -159,10 +162,11 @@ public class VoteTypeDAO implements IVoteTypeDAO
      */
     public void deleteAllAssociatedVoteButtons( int nIdVoteType, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_VOTE_BUTTON_ASSOCIATED_BY_ID_VOTE_TYPE, plugin );
-        daoUtil.setInt( 1, nIdVoteType );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_VOTE_BUTTON_ASSOCIATED_BY_ID_VOTE_TYPE, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdVoteType );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -179,12 +183,13 @@ public class VoteTypeDAO implements IVoteTypeDAO
      */
     public void insertVoteButtonAssociated( int nIdVoteType, int nIdVoteButton, int nNumero, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_ASSOCIATED_VOTE_BUTTON, plugin );
-        daoUtil.setInt( 1, nIdVoteType );
-        daoUtil.setInt( 2, nIdVoteButton );
-        daoUtil.setInt( 3, nNumero );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_ASSOCIATED_VOTE_BUTTON, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdVoteType );
+            daoUtil.setInt( 2, nIdVoteButton );
+            daoUtil.setInt( 3, nNumero );
+    
+            daoUtil.executeUpdate( );
+        }
     }
 }

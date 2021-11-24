@@ -44,7 +44,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.suggest.business.Category;
 import fr.paris.lutece.plugins.suggest.business.CategoryHome;
@@ -105,6 +105,10 @@ import fr.paris.lutece.util.url.UrlItem;
  */
 public class SuggestApp implements XPageApplication
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -1994396667980739722L;
     public static final String ANCHOR_SUGGEST_SUBMIT = "suggest";
     public static final String ANCHOR_FRAMESET_CONTENT_SUGGEST = "frameset_content_suggest";
     public static final String PARAMETER_CLEAR_FILTER = "clear_filter";
