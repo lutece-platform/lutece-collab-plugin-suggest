@@ -1412,11 +1412,11 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * 
-     * @param _strNotificationNewCommentSenderName
+     * @param strNotificationNewCommentSenderName
      */
-    public void setNotificationNewCommentSenderName( String _strNotificationNewCommentSenderName )
+    public void setNotificationNewCommentSenderName( String strNotificationNewCommentSenderName )
     {
-        this._strNotificationNewCommentSenderName = _strNotificationNewCommentSenderName;
+        this._strNotificationNewCommentSenderName = strNotificationNewCommentSenderName;
     }
 
     /**
@@ -1430,11 +1430,11 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * 
-     * @param _strNotificationNewCommentTitle
+     * @param strNotificationNewCommentTitle
      */
-    public void setNotificationNewCommentTitle( String _strNotificationNewCommentTitle )
+    public void setNotificationNewCommentTitle( String strNotificationNewCommentTitle )
     {
-        this._strNotificationNewCommentTitle = _strNotificationNewCommentTitle;
+        this._strNotificationNewCommentTitle = strNotificationNewCommentTitle;
     }
 
     /**
@@ -1448,11 +1448,11 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * 
-     * @param _strNotificationNewCommentBody
+     * @param strNotificationNewCommentBody
      */
-    public void setNotificationNewCommentBody( String _strNotificationNewCommentBody )
+    public void setNotificationNewCommentBody( String strNotificationNewCommentBody )
     {
-        this._strNotificationNewCommentBody = _strNotificationNewCommentBody;
+        this._strNotificationNewCommentBody = strNotificationNewCommentBody;
     }
 
     /**
@@ -1466,11 +1466,11 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * 
-     * @param _strNotificationNewSuggestSubmitSenderName
+     * @param strNotificationNewSuggestSubmitSenderName
      */
-    public void setNotificationNewSuggestSubmitSenderName( String _strNotificationNewSuggestSubmitSenderName )
+    public void setNotificationNewSuggestSubmitSenderName( String strNotificationNewSuggestSubmitSenderName )
     {
-        this._strNotificationNewSuggestSubmitSenderName = _strNotificationNewSuggestSubmitSenderName;
+        this._strNotificationNewSuggestSubmitSenderName = strNotificationNewSuggestSubmitSenderName;
     }
 
     /**
@@ -1484,11 +1484,11 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * 
-     * @param _strNotificationNewSuggestSubmitTitle
+     * @param strNotificationNewSuggestSubmitTitle
      */
-    public void setNotificationNewSuggestSubmitTitle( String _strNotificationNewSuggestSubmitTitle )
+    public void setNotificationNewSuggestSubmitTitle( String strNotificationNewSuggestSubmitTitle )
     {
-        this._strNotificationNewSuggestSubmitTitle = _strNotificationNewSuggestSubmitTitle;
+        this._strNotificationNewSuggestSubmitTitle = strNotificationNewSuggestSubmitTitle;
     }
 
     /**
@@ -1502,10 +1502,10 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * 
-     * @param _strNotificationSuggestSubmitBody
+     * @param strNotificationSuggestSubmitBody
      */
-    public void setNotificationNewSuggestSubmitBody( String _strNotificationSuggestSubmitBody )
+    public void setNotificationNewSuggestSubmitBody( String strNotificationSuggestSubmitBody )
     {
-        this._strNotificationNewSuggestSubmitBody = _strNotificationSuggestSubmitBody;
+        this._strNotificationNewSuggestSubmitBody = strNotificationSuggestSubmitBody;
     }
 }

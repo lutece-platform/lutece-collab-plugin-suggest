@@ -111,8 +111,8 @@ public class SearchFields implements Serializable
         return _strLuteceUserName;
     }
 
-    public void setLuteceUserName( String _strLuteceUserName )
+    public void setLuteceUserName( String strLuteceUserName )
     {
-        this._strLuteceUserName = _strLuteceUserName;
+        this._strLuteceUserName = strLuteceUserName;
     }
 }
