@@ -53,6 +53,14 @@ public final class SuggestAttributeHome
     private static ISuggestAttributeDAO _dao = SpringContextService.getBean( BEAN_SUGGEST_ATTRIBUTE_DAO );
 
     /**
+     * Private constructor - this class needs not to be instantiated
+     */
+    private SuggestAttributeHome( )
+    {
+        
+    }
+    
+    /**
      * Load the attributes of the suggest
      * 
      * @param nIdSuggest
