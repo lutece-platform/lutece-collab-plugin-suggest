@@ -250,11 +250,7 @@ public final class SuggestHome
             {
                 BeanUtils.populate( suggest, mapAttributes );
             }
-            catch( IllegalAccessException e )
-            {
-                AppLogService.error( e );
-            }
-            catch( InvocationTargetException e )
+            catch( IllegalAccessException | InvocationTargetException e )
             {
                 AppLogService.error( e );
             }
@@ -284,11 +280,7 @@ public final class SuggestHome
             {
                 BeanUtils.populate( suggest, mapAttributes );
             }
-            catch( IllegalAccessException e )
-            {
-                AppLogService.error( e );
-            }
-            catch( InvocationTargetException e )
+            catch( IllegalAccessException | InvocationTargetException e )
             {
                 AppLogService.error( e );
             }
