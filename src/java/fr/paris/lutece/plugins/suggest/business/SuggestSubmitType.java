@@ -185,12 +185,7 @@ public class SuggestSubmitType implements RBACResource, Serializable
      */
     public boolean equals( Object obj )
     {
-        if ( obj instanceof SuggestSubmitType && ( (SuggestSubmitType) obj ).getIdType( ) == _nIdType )
-        {
-            return true;
-        }
-
-        return false;
+        return obj != null && obj == this.getClass() && ( (SuggestSubmitType) obj ).getIdType( ) == _nIdType;
     }
 
     /**
