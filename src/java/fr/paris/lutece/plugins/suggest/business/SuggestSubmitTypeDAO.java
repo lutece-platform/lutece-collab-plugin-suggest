@@ -290,14 +290,8 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
             daoUtil.setInt( 1, nIdType );
             daoUtil.executeQuery( );
     
-            if ( daoUtil.next( ) && daoUtil.getInt( 1 ) != 0)
-            {
-                return true;
-            }
-
+            return daoUtil.next( ) && daoUtil.getInt( 1 ) != 0;
         }
-
-        return false;
     }
 
     /**

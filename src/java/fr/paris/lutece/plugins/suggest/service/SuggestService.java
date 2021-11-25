@@ -117,7 +117,7 @@ public class SuggestService
         filterDefaultSuggest.setIdDefaultSuggest( SuggestFilter.ID_TRUE );
 
         List<Suggest> listDefaultSuggest = SuggestHome.getSuggestList( filterDefaultSuggest, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
-        nIdDefaultSuggest = ( ( listDefaultSuggest != null ) && ( !listDefaultSuggest.isEmpty( ) ) ) ? ( (Suggest) listDefaultSuggest.get( 0 ) ).getIdSuggest( )
+        nIdDefaultSuggest = ( ( listDefaultSuggest != null ) && ( !listDefaultSuggest.isEmpty( ) ) ) ? ( listDefaultSuggest.get( 0 ) ).getIdSuggest( )
                 : SuggestUtils.CONSTANT_ID_NULL;
 
         return nIdDefaultSuggest;

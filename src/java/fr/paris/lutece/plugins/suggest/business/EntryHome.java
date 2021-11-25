@@ -155,13 +155,13 @@ public final class EntryHome
     public static IEntry findByPrimaryKey( int nKey, Plugin plugin )
     {
         IEntry entry = _dao.load( nKey, plugin );
-        List<RegularExpression> listRegularExpression = new ArrayList<RegularExpression>( );
+        List<RegularExpression> listRegularExpression = new ArrayList<>( );
 
         if ( RegularExpressionService.getInstance( ).isAvailable( ) )
         {
             List<Integer> listRegularExpressionKeyEntry = getListRegularExpressionKeyByIdEntry( nKey, plugin );
 
-            if ( ( listRegularExpressionKeyEntry != null ) && ( listRegularExpressionKeyEntry.size( ) != 0 ) )
+            if ( ( listRegularExpressionKeyEntry != null ) && ( !listRegularExpressionKeyEntry.isEmpty( ) ) )
             {
                 RegularExpression regularExpression = null;
 

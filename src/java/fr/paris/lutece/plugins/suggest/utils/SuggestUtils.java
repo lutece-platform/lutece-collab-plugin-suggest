@@ -222,7 +222,7 @@ public final class SuggestUtils
         }
         catch( Exception e )
         {
-            AppLogService.error( "Error during Notify new suggest submit  : ", e.getMessage( ) );
+            AppLogService.error( e );
         }
     }
 

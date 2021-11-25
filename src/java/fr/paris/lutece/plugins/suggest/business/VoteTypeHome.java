@@ -49,7 +49,7 @@ public final class VoteTypeHome
     private static IVoteTypeDAO _dao = SpringContextService.getBean( "suggest.voteTypeDAO" );
 
     /**
-     * Private constructor - this class needs not to be instantiated
+     * Private constructor - this class does not need to to be instantiated
      */
     private VoteTypeHome( )
     {

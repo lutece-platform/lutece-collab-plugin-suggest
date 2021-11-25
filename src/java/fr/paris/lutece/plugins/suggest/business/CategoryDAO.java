@@ -72,9 +72,7 @@ public class CategoryDAO implements ICategoryDAO
         {
             daoUtil.executeQuery( );
             daoUtil.next( );
-            int nKey = daoUtil.getInt( 1 ) + 1;
-
-            return nKey;
+            return daoUtil.getInt( 1 ) + 1;
         }
     }
 

@@ -516,7 +516,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
         try
         {
             SAXParserFactory factory = SAXParserFactory.newInstance( );
-            ((XMLReader) factory).setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
+            ( ( XMLReader) factory ).setProperty( XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE );
             SAXParser analyzer = factory.newSAXParser( );
             InputSource is = new InputSource( new ByteArrayInputStream( baXslSource ) );
             analyzer.getXMLReader( ).parse( is );

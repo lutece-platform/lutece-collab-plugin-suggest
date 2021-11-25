@@ -261,7 +261,7 @@ public class SuggestIndexer implements SearchIndexer
         }
         catch( SAXException | TikaException e )
         {
-            throw new AppException( "Error during page parsing." );
+            throw new AppException( "Error during page parsing : " + e.getMessage( ), e );
         }
 
         // the content of the article is recovered in the parser because this one

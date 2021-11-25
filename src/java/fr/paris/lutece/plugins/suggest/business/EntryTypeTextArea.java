@@ -210,7 +210,7 @@ public class EntryTypeTextArea extends Entry
 
         if ( strValueEntry != null )
         {
-            if ( this.isMandatory( ) && strValueEntry.equals( SuggestUtils.EMPTY_STRING ))
+            if ( this.isMandatory( ) && strValueEntry.equals( SuggestUtils.EMPTY_STRING ) )
             {
                 FormError formError = new FormError( );
                 formError.setMandatoryError( true );

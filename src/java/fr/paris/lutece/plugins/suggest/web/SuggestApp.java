@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -247,6 +248,7 @@ public class SuggestApp implements XPageApplication
     private static final String CONSTANT_VIEW_REPORT = "view_report";
     private static final String CONSTANT_VIEW_CREATE_SUGGEST_SUBMIT = "view_create_suggest_submit";
     private static final String CONSTANT_SUGGEST = "suggest";
+    private static final Pattern DO_VOTE_CASES = Pattern.compile( "-2|-1|1|2" );
 
     // session filter
     private static final String SESSION_SEARCH_FIELDS = "search_fields";
@@ -1186,7 +1188,7 @@ public class SuggestApp implements XPageApplication
         // Increment vote
         int nScore;
 
-        if ( ( strVote != null ) && strVote.matches( ( "-2|-1|1|2" ) ) )
+        if ( ( strVote != null ) && DO_VOTE_CASES.matcher( strVote ).find( ) )
         {
             nScore = Integer.parseInt( strVote );
             SuggestUtils.doVoteSuggestSubmit( nIdSubmitSuggest, nScore, strUserKey, plugin );
@@ -1214,7 +1216,7 @@ public class SuggestApp implements XPageApplication
      *             SiteMessageException {@link SiteMessageException}
      */
     private String getHtmlListSuggestSubmit( Locale locale, Plugin plugin, Suggest suggest, SearchFields searchFields, UrlItem urlSuggestXPage,
-            LuteceUser luteceUserConnected ) throws SiteMessageException
+            LuteceUser luteceUserConnected )
     {
         Map<String, Object> model = new HashMap<>( );
 
@@ -1321,12 +1323,9 @@ public class SuggestApp implements XPageApplication
      *            the suggest detail
      * @param locale
      *            the locale
-     * @throws SiteMessageException
-     *             SiteMessageException
      * @return a collection which contains suggest submit and lutece user associate
      */
     private Collection<HashMap> getSuggestSubmitDisplayList( Collection<Integer> listSuggestSubmit, Suggest suggest, Locale locale, Plugin plugin )
-            throws SiteMessageException
     {
         SuggestUserInfo luteceUserInfo;
         SuggestSubmit suggestSubmit;
