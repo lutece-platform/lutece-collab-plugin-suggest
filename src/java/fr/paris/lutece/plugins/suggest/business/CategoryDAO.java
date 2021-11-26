@@ -214,18 +214,8 @@ public class CategoryDAO implements ICategoryDAO
             daoUtil.setInt( 1, nIdCategory );
             daoUtil.executeQuery( );
 
-            if ( daoUtil.next( ) )
-            {
-                if ( daoUtil.getInt( 1 ) != 0 )
-                {
-                    daoUtil.free( );
-
-                    return true;
-                }
-            }
+            return daoUtil.next( ) && daoUtil.getInt( 1 ) != 0;
         }
-
-        return false;
     }
 
     @Override
