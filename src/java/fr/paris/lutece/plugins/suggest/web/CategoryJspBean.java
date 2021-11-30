@@ -213,7 +213,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
             }
             catch( NumberFormatException ne )
             {
-                AppLogService.error( ne );
+                AppLogService.error( ne.getMessage( ), ne );
 
                 return getManageCategory( request );
             }
@@ -255,7 +255,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
             }
             catch( NumberFormatException ne )
             {
-                AppLogService.error( ne );
+                AppLogService.error( ne.getMessage( ), ne );
 
                 return getJspManageCategory( request );
             }
@@ -324,7 +324,7 @@ public class CategoryJspBean extends PluginAdminPageJspBean
             }
             catch( NumberFormatException ne )
             {
-                AppLogService.error( ne );
+                AppLogService.error( ne.getMessage( ), ne );
             }
         }
 

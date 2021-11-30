@@ -252,7 +252,7 @@ public final class SuggestHome
             }
             catch( IllegalAccessException | InvocationTargetException e )
             {
-                AppLogService.error( e );
+                AppLogService.error( e.getMessage( ), e );
             }
         }
 
@@ -282,7 +282,7 @@ public final class SuggestHome
             }
             catch( IllegalAccessException | InvocationTargetException e )
             {
-                AppLogService.error( e );
+                AppLogService.error( e.getMessage( ), e );
             }
         }
 

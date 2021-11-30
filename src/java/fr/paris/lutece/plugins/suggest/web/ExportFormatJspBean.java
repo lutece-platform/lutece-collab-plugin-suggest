@@ -240,7 +240,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
             }
             catch( NumberFormatException ne )
             {
-                AppLogService.error( ne );
+                AppLogService.error( ne.getMessage( ), ne );
 
                 return getManageExportFormat( request );
             }
@@ -283,7 +283,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
             }
             catch( NumberFormatException ne )
             {
-                AppLogService.error( ne );
+                AppLogService.error( ne.getMessage( ), ne );
 
                 return getHomeUrl( request );
             }
@@ -352,7 +352,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
         }
         catch( NumberFormatException ne )
         {
-            AppLogService.error( ne );
+            AppLogService.error( ne.getMessage( ), ne );
 
             return getHomeUrl( request );
         }
@@ -466,7 +466,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
             }
             catch( NumberFormatException ne )
             {
-                AppLogService.error( ne );
+                AppLogService.error( ne.getMessage( ), ne );
 
                 return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_DURING_DOWNLOAD_FILE, AdminMessage.TYPE_STOP );
             }
@@ -493,7 +493,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
             }
             catch( IOException e )
             {
-                AppLogService.error( e );
+                AppLogService.error( e.getMessage( ), e );
 
                 return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_DURING_DOWNLOAD_FILE, AdminMessage.TYPE_STOP );
             }

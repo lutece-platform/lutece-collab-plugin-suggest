@@ -232,7 +232,7 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
             }
             catch( IOException e )
             {
-                AppLogService.error( e );
+                AppLogService.error( e.getMessage( ), e );
 
                 result.setRedirect( AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_DURING_DOWNLOAD_FILE, AdminMessage.TYPE_STOP ) );
             }

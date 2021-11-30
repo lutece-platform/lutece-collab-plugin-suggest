@@ -222,7 +222,7 @@ public final class SuggestUtils
         }
         catch( Exception e )
         {
-            AppLogService.error( e );
+            AppLogService.error( e.getMessage( ), e );
         }
     }
 
@@ -267,7 +267,7 @@ public final class SuggestUtils
         }
         catch( Exception e )
         {
-            AppLogService.error( "Error during Notify new suggest submit disable  : " + e.getMessage( ) );
+            AppLogService.error( "Error during Notify new suggest submit disable  : " + e.getMessage( ), e );
         }
     }
 
@@ -308,7 +308,7 @@ public final class SuggestUtils
         }
         catch( Exception e )
         {
-            AppLogService.error( "Error during Notify new comment : " + e.getMessage( ) );
+            AppLogService.error( "Error during Notify new comment : " + e.getMessage( ), e );
         }
     }
 
@@ -349,7 +349,7 @@ public final class SuggestUtils
         }
         catch( Exception e )
         {
-            AppLogService.error( "Error during Notify new repported message  : " + e.getMessage( ) );
+            AppLogService.error( "Error during Notify new repported message  : " + e.getMessage( ), e );
         }
     }
 
@@ -605,7 +605,7 @@ public final class SuggestUtils
             }
             catch( NumberFormatException ne )
             {
-                AppLogService.error( ne );
+                AppLogService.error( ne.getMessage( ), ne );
 
                 return null;
             }
@@ -626,7 +626,7 @@ public final class SuggestUtils
         catch( ClassNotFoundException | InstantiationException | IllegalAccessException e )
         {
             // class doesn't exist or class is abstract or is an interface or haven't accessible builder or can't access to rhe class
-            AppLogService.error( e );
+            AppLogService.error( e.getMessage( ), e );
         }
 
         return entry;
@@ -998,7 +998,7 @@ public final class SuggestUtils
         }
         catch( NumberFormatException ne )
         {
-            AppLogService.error( ne );
+            AppLogService.error( ne.getMessage( ), ne );
         }
 
         return nIdParameter;
@@ -1574,7 +1574,7 @@ public final class SuggestUtils
                 }
                 catch( SecurityException e )
                 {
-                    AppLogService.error( e );
+                    AppLogService.error( e.getMessage( ), e );
                 }
             }
         }

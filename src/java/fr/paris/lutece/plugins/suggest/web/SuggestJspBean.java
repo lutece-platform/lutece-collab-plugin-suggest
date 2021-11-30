@@ -1416,7 +1416,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         }
         catch( UserNotSignedException e )
         {
-            AppLogService.error( "User not identified" );
+            AppLogService.error( "User not identified", e );
         }
 
         if ( user != null )
