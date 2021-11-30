@@ -315,7 +315,7 @@ public class SubmitFilter
      */
     public boolean containsSortBy( )
     {
-        return ( ( _listSortBy != null ) && ( _listSortBy.size( ) != 0 ) );
+        return ( ( _listSortBy != null ) && ( !_listSortBy.isEmpty( ) ) );
     }
 
     /**
@@ -325,7 +325,7 @@ public class SubmitFilter
      */
     public boolean containsSortBy( Integer nSort )
     {
-        if ( ( nSort != null ) && ( _listSortBy != null ) && ( _listSortBy.size( ) != 0 ) )
+        if ( ( nSort != null ) && ( _listSortBy != null ) && ( !_listSortBy.isEmpty( ) ) )
         {
             for ( Integer nSortBy : _listSortBy )
             {
@@ -348,12 +348,7 @@ public class SubmitFilter
      */
     public boolean convertIdBoolean( int nIdBoolean )
     {
-        if ( nIdBoolean == ID_TRUE )
-        {
-            return true;
-        }
-
-        return false;
+        return nIdBoolean == ID_TRUE;
     }
 
     /**

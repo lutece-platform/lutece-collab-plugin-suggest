@@ -72,7 +72,7 @@ public class SuggestLuceneSearchEngine implements SuggestSearchEngine
      */
     public List<SuggestSearchItem> getSearchResults( String strQuery, SubmitFilter filter )
     {
-        List<SuggestSearchItem> listResults = new ArrayList<SuggestSearchItem>( );
+        List<SuggestSearchItem> listResults = new ArrayList<>( );
         IndexSearcher searcher = null;
 
         try
@@ -82,7 +82,7 @@ public class SuggestLuceneSearchEngine implements SuggestSearchEngine
 
             Collection<String> queries = new ArrayList<>( );
             Collection<String> fields = new ArrayList<>( );
-            Collection<BooleanClause.Occur> flags = new ArrayList<BooleanClause.Occur>( );
+            Collection<BooleanClause.Occur> flags = new ArrayList<>( );
 
             // filter on content
             if ( ( strQuery != null ) && !strQuery.equals( "" ) )

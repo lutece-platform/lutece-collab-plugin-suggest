@@ -199,9 +199,9 @@ public final class SuggestUtils
             String strSenderEmail = MailService.getNoReplyEmail( );
 
             // we have to replace the src='image? string by a string containing the server url
-            if ( suggestSubmit.getSuggestSubmitValue( ).toString( ).contains( "src='image?" ) )
+            if ( suggestSubmit.getSuggestSubmitValue( ).contains( "src='image?" ) )
             {
-                suggestSubmit.setSuggestSubmitValue( suggestSubmit.getSuggestSubmitValue( ).toString( )
+                suggestSubmit.setSuggestSubmitValue( suggestSubmit.getSuggestSubmitValue( )
                         .replace( "src='image?", "src='" + AppPropertiesService.getProperty( PROPERTY_PROD_URL ) + "/image?" ) );
             }
 
@@ -222,7 +222,7 @@ public final class SuggestUtils
         }
         catch( Exception e )
         {
-            AppLogService.error( "Error during Notify new suggest submit  : " + e.getMessage( ) );
+            AppLogService.error( e.getMessage( ), e );
         }
     }
 
@@ -247,7 +247,7 @@ public final class SuggestUtils
             // we have to replace the src='image? string by a string containing the server url
             if ( suggestSubmit.getSuggestSubmitValue( ).toString( ).contains( "src='image?" ) )
             {
-                suggestSubmit.setSuggestSubmitValue( suggestSubmit.getSuggestSubmitValue( ).toString( )
+                suggestSubmit.setSuggestSubmitValue( suggestSubmit.getSuggestSubmitValue( )
                         .replace( "src='image?", "src='" + AppPropertiesService.getProperty( PROPERTY_PROD_URL ) + "/image?" ) );
             }
 
@@ -267,7 +267,7 @@ public final class SuggestUtils
         }
         catch( Exception e )
         {
-            AppLogService.error( "Error during Notify new suggest submit disable  : " + e.getMessage( ) );
+            AppLogService.error( "Error during Notify new suggest submit disable  : " + e.getMessage( ), e );
         }
     }
 
@@ -308,7 +308,7 @@ public final class SuggestUtils
         }
         catch( Exception e )
         {
-            AppLogService.error( "Error during Notify new comment : " + e.getMessage( ) );
+            AppLogService.error( "Error during Notify new comment : " + e.getMessage( ), e );
         }
     }
 
@@ -349,7 +349,7 @@ public final class SuggestUtils
         }
         catch( Exception e )
         {
-            AppLogService.error( "Error during Notify new repported message  : " + e.getMessage( ) );
+            AppLogService.error( "Error during Notify new repported message  : " + e.getMessage( ), e );
         }
     }
 
@@ -378,9 +378,7 @@ public final class SuggestUtils
             caldate.set( Calendar.HOUR_OF_DAY, caldate.getActualMaximum( Calendar.HOUR_OF_DAY ) );
             caldate.set( Calendar.MINUTE, caldate.getActualMaximum( Calendar.MINUTE ) );
 
-            Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
-
-            return timeStamp;
+            return new Timestamp( caldate.getTimeInMillis( ) );
         }
         catch( ParseException e )
         {
@@ -413,9 +411,7 @@ public final class SuggestUtils
             caldate.set( Calendar.HOUR_OF_DAY, caldate.getActualMinimum( Calendar.HOUR_OF_DAY ) );
             caldate.set( Calendar.MINUTE, caldate.getActualMinimum( Calendar.MINUTE ) );
 
-            Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
-
-            return timeStamp;
+            return new Timestamp( caldate.getTimeInMillis( ) );
         }
         catch( ParseException e )
         {
@@ -440,9 +436,7 @@ public final class SuggestUtils
         caldate.set( Calendar.MINUTE, caldate.getActualMinimum( Calendar.MINUTE ) );
         caldate.set( Calendar.DAY_OF_WEEK, caldate.getFirstDayOfWeek( ) );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
-
-        return timeStamp;
+        return new Timestamp( caldate.getTimeInMillis( ) );
     }
 
     /**
@@ -462,9 +456,7 @@ public final class SuggestUtils
         caldate.set( Calendar.MINUTE, caldate.getActualMaximum( Calendar.MINUTE ) );
         caldate.set( Calendar.DAY_OF_WEEK, caldate.getFirstDayOfWeek( ) + 6 );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
-
-        return timeStamp;
+        return new Timestamp( caldate.getTimeInMillis( ) );
     }
 
     /**
@@ -483,9 +475,7 @@ public final class SuggestUtils
         caldate.set( Calendar.HOUR_OF_DAY, caldate.getActualMinimum( Calendar.HOUR_OF_DAY ) );
         caldate.set( Calendar.MINUTE, caldate.getActualMinimum( Calendar.MINUTE ) );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
-
-        return timeStamp;
+        return new Timestamp( caldate.getTimeInMillis( ) );
     }
 
     /**
@@ -504,9 +494,7 @@ public final class SuggestUtils
         caldate.set( Calendar.HOUR_OF_DAY, caldate.getActualMaximum( Calendar.HOUR_OF_DAY ) );
         caldate.set( Calendar.MINUTE, caldate.getActualMaximum( Calendar.MINUTE ) );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
-
-        return timeStamp;
+        return new Timestamp( caldate.getTimeInMillis( ) );
     }
 
     /**
@@ -526,9 +514,7 @@ public final class SuggestUtils
         caldate.set( Calendar.MINUTE, caldate.getActualMinimum( Calendar.MINUTE ) );
         caldate.set( Calendar.DAY_OF_MONTH, caldate.getActualMinimum( Calendar.DAY_OF_MONTH ) );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
-
-        return timeStamp;
+        return new Timestamp( caldate.getTimeInMillis( ) );
     }
 
     /**
@@ -548,9 +534,7 @@ public final class SuggestUtils
         caldate.set( Calendar.MINUTE, caldate.getActualMaximum( Calendar.MINUTE ) );
         caldate.set( Calendar.DAY_OF_MONTH, caldate.getActualMaximum( Calendar.DAY_OF_MONTH ) );
 
-        Timestamp timeStamp = new Timestamp( caldate.getTimeInMillis( ) );
-
-        return timeStamp;
+        return new Timestamp( caldate.getTimeInMillis( ) );
     }
 
     /**
@@ -621,7 +605,7 @@ public final class SuggestUtils
             }
             catch( NumberFormatException ne )
             {
-                AppLogService.error( ne );
+                AppLogService.error( ne.getMessage( ), ne );
 
                 return null;
             }
@@ -639,20 +623,10 @@ public final class SuggestUtils
             entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
             entry.setEntryType( entryType );
         }
-        catch( ClassNotFoundException e )
+        catch( ClassNotFoundException | InstantiationException | IllegalAccessException e )
         {
-            // class doesn't exist
-            AppLogService.error( e );
-        }
-        catch( InstantiationException e )
-        {
-            // Class is abstract or is an interface or haven't accessible builder
-            AppLogService.error( e );
-        }
-        catch( IllegalAccessException e )
-        {
-            // can't access to rhe class
-            AppLogService.error( e );
+            // class doesn't exist or class is abstract or is an interface or haven't accessible builder or can't access to rhe class
+            AppLogService.error( e.getMessage( ), e );
         }
 
         return entry;
@@ -704,7 +678,7 @@ public final class SuggestUtils
         filter.setIdSuggest( suggest.getIdSuggest( ) );
         listEntryFirstLevel = EntryHome.getEntryList( filter, plugin );
 
-        ArrayList<Category> listCats = new ArrayList<Category>( );
+        ArrayList<Category> listCats = new ArrayList<>( );
         Category category = new Category( );
 
         category.setIdCategory( -1 );
@@ -719,7 +693,7 @@ public final class SuggestUtils
 
         SuggestSubmitType type = new SuggestSubmitType( );
         List<SuggestSubmitType> listTypes = suggest.getSuggestSubmitTypes( );
-        List<SuggestSubmitType> listTypes2Show = new ArrayList<SuggestSubmitType>( );
+        List<SuggestSubmitType> listTypes2Show = new ArrayList<>( );
 
         type.setIdType( -1 );
         type.setName( I18nService.getLocalizedString( PROPERTY_CHOOSE_TYPE, locale ) );
@@ -940,7 +914,7 @@ public final class SuggestUtils
         filter.setIdSuggest( suggestSubmit.getSuggest( ).getIdSuggest( ) );
         listEntry = EntryHome.getEntryList( filter, plugin );
 
-        List<Response> listResponse = new ArrayList<Response>( );
+        List<Response> listResponse = new ArrayList<>( );
         suggestSubmit.setResponses( listResponse );
 
         for ( IEntry entry : listEntry )
@@ -1024,7 +998,7 @@ public final class SuggestUtils
         }
         catch( NumberFormatException ne )
         {
-            AppLogService.error( ne );
+            AppLogService.error( ne.getMessage( ), ne );
         }
 
         return nIdParameter;
@@ -1600,7 +1574,7 @@ public final class SuggestUtils
                 }
                 catch( SecurityException e )
                 {
-                    AppLogService.error( e );
+                    AppLogService.error( e.getMessage( ), e );
                 }
             }
         }

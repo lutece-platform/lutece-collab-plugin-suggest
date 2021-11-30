@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.suggest.business.rss;
 
-//import fr.paris.lutece.plugins.suggest.service.DirectoryPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
@@ -105,9 +104,7 @@ public final class SuggestResourceRssConfigHome
      */
     public static SuggestResourceRssConfig findByPrimaryKey( int nIdSuggestResourceRssConfig, Plugin plugin )
     {
-        SuggestResourceRssConfig taskNotifyDirectoryConfig = _dao.load( nIdSuggestResourceRssConfig, plugin );
-
-        return taskNotifyDirectoryConfig;
+        return _dao.load( nIdSuggestResourceRssConfig, plugin );
     }
 
     /**
@@ -120,8 +117,6 @@ public final class SuggestResourceRssConfigHome
      */
     public static List<SuggestResourceRssConfig> getAll( Plugin plugin )
     {
-        List<SuggestResourceRssConfig> listTaskNotifySuggestConfig = _dao.loadAll( plugin );
-
-        return listTaskNotifySuggestConfig;
+        return _dao.loadAll( plugin );
     }
 }

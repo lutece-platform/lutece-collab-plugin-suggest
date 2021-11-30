@@ -193,7 +193,7 @@ public final class EntryDAO implements IEntryDAO
                 catch( ClassNotFoundException | InstantiationException | IllegalAccessException e )
                 {
                     // class doesn't exist, is abstract or is an interface or haven't accessible builder or can't access to rhe class
-                    AppLogService.error( e );
+                    AppLogService.error( e.getMessage( ), e );
     
                     return null;
                 }
@@ -319,7 +319,7 @@ public final class EntryDAO implements IEntryDAO
                 catch( ClassNotFoundException | InstantiationException | IllegalAccessException e )
                 {
                     // class doesn't exist or Class is abstract or is an interface or haven't accessible builder or can't access to rhe class
-                    AppLogService.error( e );
+                    AppLogService.error( e.getMessage( ), e );
     
                     return new ArrayList<>( );
                 }

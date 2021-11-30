@@ -240,7 +240,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
         List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( filter );
 
-        if ( ( listSubscription != null ) && ( listSubscription.size( ) > 0 ) )
+        if ( ( listSubscription != null ) && ( !listSubscription.isEmpty( ) ) )
         {
             for ( Subscription subscription : listSubscription )
             {
@@ -365,12 +365,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
         SubscriptionFilter filter = new SubscriptionFilter( user.getName( ), getProviderName( ), strSubscriptionKey, Integer.toString( nId ) );
         List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( filter );
 
-        if ( ( listSubscription != null ) && ( listSubscription.size( ) > 0 ) )
-        {
-            return true;
-        }
-
-        return false;
+        return listSubscription != null  && !listSubscription.isEmpty( );
     }
 
     @Override

@@ -180,7 +180,7 @@ public class SuggestResourceIdService extends ResourceIdService
         }
         catch( NumberFormatException ne )
         {
-            AppLogService.error( ne );
+            AppLogService.error( ne.getMessage( ), ne );
         }
 
         Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );

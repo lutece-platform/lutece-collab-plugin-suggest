@@ -251,12 +251,7 @@ public class SuggestResourceRss extends ResourceRss
         Plugin pluginSuggest = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
 
         SuggestFilter filter = new SuggestFilter( );
-        if ( SuggestHome.getSuggestList( filter, pluginSuggest ).size( ) > 0 )
-        {
-            return true;
-        }
-
-        return false;
+        return !SuggestHome.getSuggestList( filter, pluginSuggest ).isEmpty( );
     }
 
     /**
@@ -271,7 +266,7 @@ public class SuggestResourceRss extends ResourceRss
         String strRssChoice = request.getParameter( PARAMETER_RSS_CHOICE );
         String stridSuggestSubmit = request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT + stridSuggest );
 
-        boolean bisSubmitRss = strRssChoice.equals( PARAMETER_RSS_CHOICE_SUBMIT ) ? true : false;
+        boolean bisSubmitRss = strRssChoice.equals( PARAMETER_RSS_CHOICE_SUBMIT );
 
         if ( stridSuggestSubmit.equals( MARK_EMPTY_SUGGEST ) )
         {
@@ -297,7 +292,7 @@ public class SuggestResourceRss extends ResourceRss
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
         String strRssChoice = request.getParameter( PARAMETER_RSS_CHOICE );
         String stridSuggestSubmit = request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT + strIdSuggest );
-        boolean bisSubmitRss = strRssChoice.equals( PARAMETER_RSS_CHOICE_SUBMIT ) ? true : false;
+        boolean bisSubmitRss = strRssChoice.equals( PARAMETER_RSS_CHOICE_SUBMIT );
 
         if ( stridSuggestSubmit.equals( MARK_EMPTY_SUGGEST ) )
         {
@@ -324,7 +319,7 @@ public class SuggestResourceRss extends ResourceRss
         String stridSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
         String stridSuggestSubmit = request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT + stridSuggest );
         String strRssChoice = request.getParameter( PARAMETER_RSS_CHOICE );
-        boolean bisSubmitRss = strRssChoice.equals( PARAMETER_RSS_CHOICE_SUBMIT ) ? true : false;
+        boolean bisSubmitRss = strRssChoice.equals( PARAMETER_RSS_CHOICE_SUBMIT );
 
         if ( stridSuggest == null )
         {
@@ -514,7 +509,7 @@ public class SuggestResourceRss extends ResourceRss
             submitFilter.setIdSuggestSubmit( config.getIdSuggestSubmit( ) );
 
             List<CommentSubmit> listResultCommentSubmit = CommentSubmitService.getService( ).getCommentSubmitList( submitFilter, pluginSuggestglike );
-            List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>( );
+            List<Map<String, Object>> listItem = new ArrayList<>( );
 
             // Descriptino of the comments
             for ( CommentSubmit commentSubmit : listResultCommentSubmit )
@@ -574,7 +569,7 @@ public class SuggestResourceRss extends ResourceRss
             submitFilter.setIdSuggest( config.getIdSuggest( ) );
 
             List<SuggestSubmit> listResultSuggestSubmit = SuggestSubmitService.getService( ).getSuggestSubmitList( submitFilter, pluginSuggestglike );
-            List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>( );
+            List<Map<String, Object>> listItem = new ArrayList<>( );
 
             // Description of the submits
             for ( SuggestSubmit suggestSubmit : listResultSuggestSubmit )
@@ -639,7 +634,6 @@ public class SuggestResourceRss extends ResourceRss
              * @since v2.2.5
              */
 
-            // resource.setLink( strSiteUrl + JSP_MANAGE_SUGGEST_SUBMIT + suggestSubmit.getIdSuggestSubmit( ) );
             resource.setLink( buildUrlSuggest( strSiteUrl, suggestSubmit.getSuggest( ) ) );
             resource.setLanguage( strRssFileLanguage );
 
@@ -676,7 +670,7 @@ public class SuggestResourceRss extends ResourceRss
             submitFilter.setIdSuggestSubmit( config.getIdSuggestSubmit( ) );
 
             List<CommentSubmit> listResultCommentSubmit = CommentSubmitService.getService( ).getCommentSubmitList( submitFilter, pluginSuggestglike );
-            List<IFeedResourceItem> listItems = new ArrayList<IFeedResourceItem>( );
+            List<IFeedResourceItem> listItems = new ArrayList<>( );
 
             // Description of the comments
             for ( CommentSubmit commentSubmit : listResultCommentSubmit )
@@ -710,7 +704,6 @@ public class SuggestResourceRss extends ResourceRss
                  * @since v2.2.5
                  */
 
-                // item.setLink( strSiteUrl + JSP_MANAGE_COMMENT_SUBMIT + suggestSubmit.getIdSuggestSubmit( ) );
                 item.setLink( buildUrlSuggestSubmit( strSiteUrl, suggestSubmit ) );
                 item.setDescription( commentSubmit.getValue( ) );
                 item.setDate( commentSubmit.getDateComment( ) );
@@ -735,7 +728,6 @@ public class SuggestResourceRss extends ResourceRss
              * @since v2.2.5
              */
 
-            // resource.setLink( strSiteUrl + JSP_MANAGE_SUGGEST_SUBMIT + suggest.getIdSuggest( ) );
             resource.setLink( buildUrlSuggest( strSiteUrl, suggest ) );
             resource.setLanguage( strRssFileLanguage );
 
@@ -764,7 +756,7 @@ public class SuggestResourceRss extends ResourceRss
             submitFilter.setIdSuggest( config.getIdSuggest( ) );
 
             List<SuggestSubmit> listResultSuggestSubmit = SuggestSubmitService.getService( ).getSuggestSubmitList( submitFilter, pluginSuggestglike );
-            List<IFeedResourceItem> listItems = new ArrayList<IFeedResourceItem>( );
+            List<IFeedResourceItem> listItems = new ArrayList<>( );
 
             // Description of the submits
             for ( SuggestSubmit suggestSubmit : listResultSuggestSubmit )
@@ -826,7 +818,7 @@ public class SuggestResourceRss extends ResourceRss
     @Override
     public Map<String, String> getParameterToApply( HttpServletRequest request )
     {
-        Map<String, String> map = new HashMap<String, String>( );
+        Map<String, String> map = new HashMap<>( );
 
         map.put( PARAMETER_ID_SUGGEST, request.getParameter( PARAMETER_ID_SUGGEST ) );
 

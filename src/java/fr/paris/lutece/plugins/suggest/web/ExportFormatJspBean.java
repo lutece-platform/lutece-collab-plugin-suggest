@@ -58,6 +58,7 @@ import fr.paris.lutece.util.url.UrlItem;
 import org.apache.commons.fileupload.FileItem;
 
 import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -73,6 +74,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.stream.XMLInputFactory;
 
 /**
  *
@@ -149,7 +151,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
         _strCurrentPageIndexExport = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndexExport );
         _nItemsPerPageExportFormat = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPageExportFormat, _nDefaultItemsPerPage );
 
-        Paginator<ExportFormat> paginator = new Paginator<ExportFormat>( listExportFormat, _nItemsPerPageExportFormat, getJspManageExportFormat( request ),
+        Paginator<ExportFormat> paginator = new Paginator<>( listExportFormat, _nItemsPerPageExportFormat, getJspManageExportFormat( request ),
                 PARAMETER_PAGE_INDEX, _strCurrentPageIndexExport );
 
         model.put( MARK_PAGINATOR, paginator );
@@ -159,8 +161,6 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
 
         HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_EXPORT, locale, model );
 
-        // ReferenceList refMailingList;
-        // refMailingList=AdminMailingListService.getMailingLists(adminUser);
         return getAdminPage( templateList.getHtml( ) );
     }
 
@@ -240,7 +240,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
             }
             catch( NumberFormatException ne )
             {
-                AppLogService.error( ne );
+                AppLogService.error( ne.getMessage( ), ne );
 
                 return getManageExportFormat( request );
             }
@@ -283,7 +283,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
             }
             catch( NumberFormatException ne )
             {
-                AppLogService.error( ne );
+                AppLogService.error( ne.getMessage( ), ne );
 
                 return getHomeUrl( request );
             }
@@ -352,7 +352,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
         }
         catch( NumberFormatException ne )
         {
-            AppLogService.error( ne );
+            AppLogService.error( ne.getMessage( ), ne );
 
             return getHomeUrl( request );
         }
@@ -466,7 +466,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
             }
             catch( NumberFormatException ne )
             {
-                AppLogService.error( ne );
+                AppLogService.error( ne.getMessage( ), ne );
 
                 return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_DURING_DOWNLOAD_FILE, AdminMessage.TYPE_STOP );
             }
@@ -493,7 +493,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
             }
             catch( IOException e )
             {
-                AppLogService.error( e );
+                AppLogService.error( e.getMessage( ), e );
 
                 return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_DURING_DOWNLOAD_FILE, AdminMessage.TYPE_STOP );
             }
@@ -516,6 +516,7 @@ public class ExportFormatJspBean extends PluginAdminPageJspBean
         try
         {
             SAXParserFactory factory = SAXParserFactory.newInstance( );
+            ( ( XMLReader) factory ).setProperty( XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE );
             SAXParser analyzer = factory.newSAXParser( );
             InputSource is = new InputSource( new ByteArrayInputStream( baXslSource ) );
             analyzer.getXMLReader( ).parse( is );

@@ -65,12 +65,12 @@ public class DefaultMessage implements RBACResource
 
     /**
      * 
-     * @param _strNotificationNewCommentTitle
+     * @param strNotificationNewCommentTitle
      *            NotificationNewCommentTitle
      */
-    public void setNotificationNewCommentTitle( String _strNotificationNewCommentTitle )
+    public void setNotificationNewCommentTitle( String strNotificationNewCommentTitle )
     {
-        this._strNotificationNewCommentTitle = _strNotificationNewCommentTitle;
+        this._strNotificationNewCommentTitle = strNotificationNewCommentTitle;
     }
 
     /**
@@ -84,12 +84,12 @@ public class DefaultMessage implements RBACResource
 
     /**
      * 
-     * @param _strNotificationNewCommentBody
+     * @param strNotificationNewCommentBody
      *            NotificationNewCommentBody
      */
-    public void setNotificationNewCommentBody( String _strNotificationNewCommentBody )
+    public void setNotificationNewCommentBody( String strNotificationNewCommentBody )
     {
-        this._strNotificationNewCommentBody = _strNotificationNewCommentBody;
+        this._strNotificationNewCommentBody = strNotificationNewCommentBody;
     }
 
     /**
@@ -103,12 +103,12 @@ public class DefaultMessage implements RBACResource
 
     /**
      * 
-     * @param _strNotificationNewSuggestSubmitTitle
+     * @param strNotificationNewSuggestSubmitTitle
      *            NotificationNewSuggestSubmitTitle
      */
-    public void setNotificationNewSuggestSubmitTitle( String _strNotificationNewSuggestSubmitTitle )
+    public void setNotificationNewSuggestSubmitTitle( String strNotificationNewSuggestSubmitTitle )
     {
-        this._strNotificationNewSuggestSubmitTitle = _strNotificationNewSuggestSubmitTitle;
+        this._strNotificationNewSuggestSubmitTitle = strNotificationNewSuggestSubmitTitle;
     }
 
     /**
@@ -122,12 +122,12 @@ public class DefaultMessage implements RBACResource
 
     /**
      * 
-     * @param _strNotificationSuggestSubmitBody
+     * @param strNotificationSuggestSubmitBody
      *            NotificationSuggestSubmitBody
      */
-    public void setNotificationNewSuggestSubmitBody( String _strNotificationSuggestSubmitBody )
+    public void setNotificationNewSuggestSubmitBody( String strNotificationSuggestSubmitBody )
     {
-        this._strNotificationNewSuggestSubmitBody = _strNotificationSuggestSubmitBody;
+        this._strNotificationNewSuggestSubmitBody = strNotificationSuggestSubmitBody;
     }
 
     /**

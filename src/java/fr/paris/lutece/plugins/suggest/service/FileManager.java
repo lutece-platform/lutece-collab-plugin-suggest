@@ -85,29 +85,4 @@ public class FileManager
         return null;
     }
 
-    // /**
-    // * Get the XML data corresponding to the attribute to build the document XML content
-    // * @param document The document
-    // * @param attribute The attribute
-    // * @return The XML value of the attribute
-    // */
-    // public String getAttributeXmlValue( Document document, DocumentAttribute attribute )
-    // {
-    // StringBuffer sbXml = new StringBuffer( );
-    //
-    // if ( attribute.getBinaryValue( ).length != 0 )
-    // {
-    // XmlUtil.beginElement( sbXml, TAG_FILE_RESOURCE );
-    // XmlUtil.addElement( sbXml, TAG_DOCUMENT_ID, document.getId( ) );
-    // XmlUtil.addElement( sbXml, TAG_ATTRIBUTE_ID, attribute.getId( ) );
-    // XmlUtil.addElement( sbXml, TAG_CONTENT_TYPE, attribute.getValueContentType( ) );
-    // XmlUtil.endElement( sbXml, TAG_FILE_RESOURCE );
-    //
-    // return sbXml.toString( );
-    // }
-    // else
-    // {
-    // return "";
-    // }
-    // }
 }

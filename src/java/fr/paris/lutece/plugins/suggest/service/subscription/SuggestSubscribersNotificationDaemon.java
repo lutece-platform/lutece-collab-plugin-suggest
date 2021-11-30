@@ -101,10 +101,10 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
                 // We get the list of comments posted after the last run of this daemon
                 List<CommentSubmit> listComment = CommentSubmitHome.findSuggestCommentByDate( dateLastRun, plugin );
-                if ( ( listComment != null ) && ( listComment.size( ) > 0 ) )
+                if ( ( listComment != null ) && ( !listComment.isEmpty( ) ) )
                 {
                     // We order the list of comments by suggest submit
-                    Map<Integer, List<CommentSubmit>> mapCommentsBySuggestSubmitId = new HashMap<Integer, List<CommentSubmit>>( listComment.size( ) );
+                    Map<Integer, List<CommentSubmit>> mapCommentsBySuggestSubmitId = new HashMap<>( listComment.size( ) );
 
                     for ( CommentSubmit comment : listComment )
                     {
@@ -121,7 +121,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
                     List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( subscriptionFilter );
 
-                    if ( ( listSubscription != null ) && ( listSubscription.size( ) > 0 ) )
+                    if ( ( listSubscription != null ) && ( !listSubscription.isEmpty( ) ) )
                     {
                         for ( Subscription subscription : listSubscription )
                         {
@@ -131,7 +131,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
                                 int nIdSuggestSubmit = Integer.parseInt( subscription.getIdSubscribedResource( ) );
                                 List<CommentSubmit> listComments = mapCommentsBySuggestSubmitId.get( nIdSuggestSubmit );
 
-                                if ( ( listComments != null ) && ( listComments.size( ) > 0 ) )
+                                if ( ( listComments != null ) && ( !listComments.isEmpty( ) ) )
                                 {
                                     registerCommentNotificationToSend( listComments, subscription.getUserId( ) );
                                 }
@@ -149,7 +149,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
                 List<SuggestSubmit> listCreatedSuggestSubmit = SuggestSubmitService.getService( ).getSuggestSubmitList( submitFilter, plugin );
 
-                if ( ( listCreatedSuggestSubmit != null ) && ( listCreatedSuggestSubmit.size( ) > 0 ) )
+                if ( ( listCreatedSuggestSubmit != null ) && ( !listCreatedSuggestSubmit.isEmpty( ) ) )
                 {
                     // We get the list of subscriptions to suggest categories
                     SubscriptionFilter subscriptionFilter = new SubscriptionFilter( );
@@ -158,7 +158,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
                     List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( subscriptionFilter );
 
-                    if ( ( listSubscription != null ) && ( listSubscription.size( ) > 0 ) )
+                    if ( ( listSubscription != null ) && ( !listSubscription.isEmpty( ) ) )
                     {
                         for ( Subscription subscription : listSubscription )
                         {
@@ -184,7 +184,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
                     subscriptionFilter.setSubscriptionProvider( SuggestSubscriptionProviderService.getService( ).getProviderName( ) );
                     listSubscription = SubscriptionService.getInstance( ).findByFilter( subscriptionFilter );
 
-                    if ( ( listSubscription != null ) && ( listSubscription.size( ) > 0 ) )
+                    if ( ( listSubscription != null ) && ( !listSubscription.isEmpty( ) ) )
                     {
                         for ( Subscription subscription : listSubscription )
                         {
@@ -226,7 +226,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
         if ( listComments == null )
         {
-            listComments = new ArrayList<CommentSubmit>( );
+            listComments = new ArrayList<>( );
             mapCommentsBySuggestSubmitId.put( comment.getSuggestSubmit( ).getIdSuggestSubmit( ), listComments );
         }
 
@@ -238,8 +238,8 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
      */
     private void resetNotifSend( )
     {
-        this._mapCommentNotif = new HashMap<String, List<CommentSubmit>>( );
-        this._mapSuggestSubmitNotif = new HashMap<String, List<SuggestSubmit>>( );
+        this._mapCommentNotif = new HashMap<>( );
+        this._mapSuggestSubmitNotif = new HashMap<>( );
     }
 
     /**
@@ -256,12 +256,12 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
         if ( listRegisteredCopmments == null )
         {
-            listRegisteredCopmments = new ArrayList<CommentSubmit>( listComments );
+            listRegisteredCopmments = new ArrayList<>( listComments );
             _mapCommentNotif.put( strUserId, listRegisteredCopmments );
         }
         else
         {
-            List<CommentSubmit> listCommentsToAdd = new ArrayList<CommentSubmit>( );
+            List<CommentSubmit> listCommentsToAdd = new ArrayList<>( );
 
             for ( CommentSubmit comment : listComments )
             {
@@ -304,7 +304,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
             for ( Entry<String, List<CommentSubmit>> entry : _mapCommentNotif.entrySet( ) )
             {
-                List<CommentSubmit> listCommentSubmitsTmp = new ArrayList<CommentSubmit>( );
+                List<CommentSubmit> listCommentSubmitsTmp = new ArrayList<>( );
 
                 for ( CommentSubmit commentSubmitTmp : entry.getValue( ) )
                 {
@@ -372,7 +372,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
         if ( listRegisteredSuggestSubmit == null )
         {
-            listRegisteredSuggestSubmit = new ArrayList<SuggestSubmit>( );
+            listRegisteredSuggestSubmit = new ArrayList<>( );
             listRegisteredSuggestSubmit.add( suggestSubmit );
             _mapSuggestSubmitNotif.put( strUserName, listRegisteredSuggestSubmit );
         }
@@ -414,7 +414,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
             for ( Entry<String, List<SuggestSubmit>> entry : _mapSuggestSubmitNotif.entrySet( ) )
             {
-                List<SuggestSubmit> listSuggestSubmitTmp = new ArrayList<SuggestSubmit>( );
+                List<SuggestSubmit> listSuggestSubmitTmp = new ArrayList<>( );
 
                 for ( SuggestSubmit suggestSubmitTmp : entry.getValue( ) )
                 {

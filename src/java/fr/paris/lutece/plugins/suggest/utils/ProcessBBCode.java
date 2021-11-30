@@ -34,31 +34,31 @@
 package fr.paris.lutece.plugins.suggest.utils;
 
 import java.io.Serializable;
-
+import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /*
- * Copyright 2004 JavaFree.org
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+* Copyright 2004 JavaFree.org
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 
 /**
  * $Id: ProcessBBCode.java,v 1.18.2.2.4.4 2007/04/17 17:27:08 daltoncamargo Exp $
@@ -113,7 +113,7 @@ public class ProcessBBCode implements Serializable
 
     /**
      * @param texto
-     * @return TODO unuseful parameters.
+     * @return text.
      */
     public String preparePostText( String texto )
     {
@@ -303,10 +303,10 @@ public class ProcessBBCode implements Serializable
     {
         String str = buffer.toString( );
 
-        Stack<MutableCharSequence> openStack = new Stack<MutableCharSequence>( );
-        Set<MutableCharSequence> subsOpen = new HashSet<MutableCharSequence>( );
-        Set<MutableCharSequence> subsClose = new HashSet<MutableCharSequence>( );
-        Set<MutableCharSequence> subsInternal = new HashSet<MutableCharSequence>( );
+        Deque<MutableCharSequence> openStack = new ArrayDeque<>( );
+        Set<MutableCharSequence> subsOpen = new HashSet<>( );
+        Set<MutableCharSequence> subsClose = new HashSet<>( );
+        Set<MutableCharSequence> subsInternal = new HashSet<>( );
 
         String openTag = CR_LF + "\\[" + tagName + ( acceptParam ? ( requiresQuotedParam ? "(?:=\"(.*?)\")?" : "(?:=\"?(.*?)\"?)?" ) : "" ) + "\\]" + CR_LF;
         String closeTag = CR_LF + "\\[/" + tagName + "\\]" + CR_LF;
@@ -352,7 +352,7 @@ public class ProcessBBCode implements Serializable
             {
                 if ( acceptParam && ( matcher.group( paramGroup ) != null ) )
                 {
-                    matchedSeq.param = matcher.group( paramGroup );
+                    matchedSeq._param = matcher.group( paramGroup );
                 }
 
                 openStack.push( matchedSeq );
@@ -366,7 +366,7 @@ public class ProcessBBCode implements Serializable
 
                     if ( acceptParam )
                     {
-                        matchedSeq.param = openSeq.param;
+                        matchedSeq._param = openSeq._param;
                     }
 
                     subsOpen.add( openSeq );
@@ -379,13 +379,9 @@ public class ProcessBBCode implements Serializable
                     {
                         subsInternal.add( matchedSeq );
                     }
-                    else
-                    {
-                        // assert (false);
-                    }
         }
 
-        LinkedList<MutableCharSequence> subst = new LinkedList<MutableCharSequence>( );
+        LinkedList<MutableCharSequence> subst = new LinkedList<>( );
         subst.addAll( subsOpen );
         subst.addAll( subsClose );
         subst.addAll( subsInternal );
@@ -394,7 +390,7 @@ public class ProcessBBCode implements Serializable
         {
             public int compare( MutableCharSequence o1, MutableCharSequence o2 )
             {
-                return -( o1.start - o2.start );
+                return -( o1._start - o2._start );
             }
         } );
 
@@ -405,11 +401,11 @@ public class ProcessBBCode implements Serializable
         while ( !subst.isEmpty( ) )
         {
             MutableCharSequence seq = subst.removeLast( );
-            buffer.append( str.substring( start, seq.start ) );
+            buffer.append( str.substring( start, seq._start ) );
 
             if ( subsClose.contains( seq ) )
             {
-                if ( seq.param != null )
+                if ( seq._param != null )
                 {
                     buffer.append( closeSubstWithParam );
                 }
@@ -426,14 +422,14 @@ public class ProcessBBCode implements Serializable
                 else
                     if ( subsOpen.contains( seq ) )
                     {
-                        Matcher m = Pattern.compile( openTag ).matcher( str.substring( seq.start, seq.start + seq.length ) );
+                        Matcher m = Pattern.compile( openTag ).matcher( str.substring( seq._start, seq._start + seq._length ) );
 
                         if ( m.matches( ) )
                         {
-                            if ( acceptParam && ( seq.param != null ) )
+                            if ( acceptParam && ( seq._param != null ) )
                             {
                                 buffer.append( //
-                                openSubstWithParam.replaceAll( "\\{BBCODE_PARAM\\}", seq.param ) );
+                                openSubstWithParam.replaceAll( "\\{BBCODE_PARAM\\}", seq._param ) );
                             }
                             else
                             {
@@ -442,7 +438,7 @@ public class ProcessBBCode implements Serializable
                         }
                     }
 
-            start = seq.start + seq.length;
+            start = seq._start + seq._length;
         }
 
         buffer.append( str.substring( start ) );
@@ -451,16 +447,16 @@ public class ProcessBBCode implements Serializable
     static class MutableCharSequence implements CharSequence
     {
         /** */
-        public CharSequence base;
+        private CharSequence _base;
 
         /** */
-        public int start;
+        private int _start;
 
         /** */
-        public int length;
+        private int _length;
 
         /** */
-        public String param = null;
+        private String _param = null;
 
         /**
          */
@@ -484,7 +480,7 @@ public class ProcessBBCode implements Serializable
          */
         public int length( )
         {
-            return this.length;
+            return this._length;
         }
 
         /**
@@ -492,7 +488,7 @@ public class ProcessBBCode implements Serializable
          */
         public char charAt( int index )
         {
-            return this.base.charAt( this.start + index );
+            return this._base.charAt( this._start + index );
         }
 
         /**
@@ -500,7 +496,7 @@ public class ProcessBBCode implements Serializable
          */
         public CharSequence subSequence( int pStart, int end )
         {
-            return new MutableCharSequence( this.base, this.start + pStart, this.start + ( end - pStart ) );
+            return new MutableCharSequence( this._base, this._start + pStart, this._start + ( end - pStart ) );
         }
 
         /**
@@ -511,9 +507,9 @@ public class ProcessBBCode implements Serializable
          */
         public CharSequence reset( CharSequence pBase, int pStart, int pLength )
         {
-            this.base = pBase;
-            this.start = pStart;
-            this.length = pLength;
+            this._base = pBase;
+            this._start = pStart;
+            this._length = pLength;
 
             return this;
         }
@@ -525,9 +521,9 @@ public class ProcessBBCode implements Serializable
         {
             StringBuffer sb = new StringBuffer( );
 
-            for ( int i = this.start; i < ( this.start + this.length ); i++ )
+            for ( int i = this._start; i < ( this._start + this._length ); i++ )
             {
-                sb.append( this.base.charAt( i ) );
+                sb.append( this._base.charAt( i ) );
             }
 
             return sb.toString( );

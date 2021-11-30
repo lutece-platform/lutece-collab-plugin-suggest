@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -247,6 +248,7 @@ public class SuggestApp implements XPageApplication
     private static final String CONSTANT_VIEW_REPORT = "view_report";
     private static final String CONSTANT_VIEW_CREATE_SUGGEST_SUBMIT = "view_create_suggest_submit";
     private static final String CONSTANT_SUGGEST = "suggest";
+    private static final Pattern DO_VOTE_CASES = Pattern.compile( "-2|-1|1|2" );
 
     // session filter
     private static final String SESSION_SEARCH_FIELDS = "search_fields";
@@ -1186,29 +1188,12 @@ public class SuggestApp implements XPageApplication
         // Increment vote
         int nScore;
 
-        if ( ( strVote != null ) && strVote.equals( "-2" ) )
+        if ( ( strVote != null ) && DO_VOTE_CASES.matcher( strVote ).find( ) )
         {
             nScore = Integer.parseInt( strVote );
             SuggestUtils.doVoteSuggestSubmit( nIdSubmitSuggest, nScore, strUserKey, plugin );
         }
-        else
-            if ( ( strVote != null ) && strVote.equals( "-1" ) )
-            {
-                nScore = Integer.parseInt( strVote );
-                SuggestUtils.doVoteSuggestSubmit( nIdSubmitSuggest, nScore, strUserKey, plugin );
-            }
-            else
-                if ( ( strVote != null ) && strVote.equals( "1" ) )
-                {
-                    nScore = Integer.parseInt( strVote );
-                    SuggestUtils.doVoteSuggestSubmit( nIdSubmitSuggest, nScore, strUserKey, plugin );
-                }
-                else
-                    if ( ( strVote != null ) && strVote.equals( "2" ) )
-                    {
-                        nScore = Integer.parseInt( strVote );
-                        SuggestUtils.doVoteSuggestSubmit( nIdSubmitSuggest, nScore, strUserKey, plugin );
-                    }
+            
     }
 
     /**
@@ -1231,7 +1216,7 @@ public class SuggestApp implements XPageApplication
      *             SiteMessageException {@link SiteMessageException}
      */
     private String getHtmlListSuggestSubmit( Locale locale, Plugin plugin, Suggest suggest, SearchFields searchFields, UrlItem urlSuggestXPage,
-            LuteceUser luteceUserConnected ) throws SiteMessageException
+            LuteceUser luteceUserConnected )
     {
         Map<String, Object> model = new HashMap<>( );
 
@@ -1259,7 +1244,7 @@ public class SuggestApp implements XPageApplication
 
         if ( suggest.isActiveSuggestSubmitPaginator( ) && ( suggest.getNumberSuggestSubmitPerPage( ) > 0 ) )
         {
-            Paginator<Integer> paginator = new Paginator<Integer>( listIdSuggestSubmit, suggest.getNumberSuggestSubmitPerPage( ), urlSuggestXPage.getUrl( ),
+            Paginator<Integer> paginator = new Paginator<>( listIdSuggestSubmit, suggest.getNumberSuggestSubmitPerPage( ), urlSuggestXPage.getUrl( ),
                     PARAMETER_FILTER_PAGE_INDEX, searchFields.getPageIndex( ) );
             listIdSuggestSubmit = paginator.getPageItems( );
             model.put( MARK_PAGINATOR, paginator );
@@ -1303,19 +1288,17 @@ public class SuggestApp implements XPageApplication
      *            the url of the suggest xpage
      * @param luteceUserConnected
      *            luteceUser
-     * @throws SiteMessageException
-     *             SiteMessageException
      * @return the html list of suggest
      */
     private String getHtmlListSuggest( Locale locale, Plugin plugin, String strCurrentPageIndexSuggest, int nItemsPerPageSuggest, UrlItem urlSuggestXPage,
-            LuteceUser luteceUserConnected ) throws SiteMessageException
+            LuteceUser luteceUserConnected )
     {
         SuggestFilter filter = new SuggestFilter( );
         filter.setIdState( Suggest.STATE_ENABLE );
 
         List<Suggest> listSuggest = SuggestHome.getSuggestList( filter, plugin );
         HashMap<String, Object> model = new HashMap<>( );
-        Paginator<Suggest> paginator = new Paginator<Suggest>( listSuggest, nItemsPerPageSuggest, urlSuggestXPage.getUrl( ), PARAMETER_PAGE_INDEX,
+        Paginator<Suggest> paginator = new Paginator<>( listSuggest, nItemsPerPageSuggest, urlSuggestXPage.getUrl( ), PARAMETER_PAGE_INDEX,
                 strCurrentPageIndexSuggest );
 
         model.put( MARK_PAGINATOR, paginator );
@@ -1340,16 +1323,13 @@ public class SuggestApp implements XPageApplication
      *            the suggest detail
      * @param locale
      *            the locale
-     * @throws SiteMessageException
-     *             SiteMessageException
      * @return a collection which contains suggest submit and lutece user associate
      */
     private Collection<HashMap> getSuggestSubmitDisplayList( Collection<Integer> listSuggestSubmit, Suggest suggest, Locale locale, Plugin plugin )
-            throws SiteMessageException
     {
         SuggestUserInfo luteceUserInfo;
         SuggestSubmit suggestSubmit;
-        Collection<HashMap> listHashSuggest = new ArrayList<HashMap>( );
+        Collection<HashMap> listHashSuggest = new ArrayList<>( );
 
         for ( Integer idSuggestSubmit : listSuggestSubmit )
         {
@@ -1390,7 +1370,7 @@ public class SuggestApp implements XPageApplication
      */
     private Collection<HashMap> getCommentSubmitDisplayList( Collection<CommentSubmit> listCommentSubmit, Plugin plugin )
     {
-        Collection<HashMap> listHashComment = new ArrayList<HashMap>( );
+        Collection<HashMap> listHashComment = new ArrayList<>( );
         SuggestUserInfo luteceUserInfo;
 
         for ( CommentSubmit commentSubmit : listCommentSubmit )
@@ -1515,10 +1495,8 @@ public class SuggestApp implements XPageApplication
      * @param locale
      *            the locale
      * @return the Html type of vote
-     * @throws SiteMessageException
-     *             SiteMessageException
      */
-    private String getHtmlSuggestSubmitVoteType( Suggest suggest, SuggestSubmit suggestSubmit, String strView, Locale locale ) throws SiteMessageException
+    private String getHtmlSuggestSubmitVoteType( Suggest suggest, SuggestSubmit suggestSubmit, String strView, Locale locale )
     {
         if ( !suggest.isDisableVote( ) && !suggestSubmit.isDisableVote( ) )
         {
@@ -1663,7 +1641,7 @@ public class SuggestApp implements XPageApplication
             LuteceUser user ) throws SiteMessageException
     {
         Locale locale = request.getLocale( );
-        List<Response> listResponse = new ArrayList<Response>( );
+        List<Response> listResponse = new ArrayList<>( );
 
         if ( suggest.isActiveCaptcha( ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
         {

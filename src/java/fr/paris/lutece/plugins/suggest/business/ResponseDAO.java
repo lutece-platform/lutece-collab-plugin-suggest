@@ -157,7 +157,7 @@ public final class ResponseDAO implements IResponseDAO
                 catch( ClassNotFoundException | InstantiationException | IllegalAccessException e )
                 {
                     // class doesn't exist or class is abstract or is an interface or haven't accessible builder or can't access to rhe class
-                    AppLogService.error( e );
+                    AppLogService.error( e.getMessage( ), e );
                     bException = true;
                 }
 
@@ -296,7 +296,7 @@ public final class ResponseDAO implements IResponseDAO
                 catch( ClassNotFoundException | InstantiationException | IllegalAccessException e )
                 {
                     // class doesn't exist or class is abstract or is an interface or haven't accessible builder or can't access to rhe class
-                    AppLogService.error( e );
+                    AppLogService.error( e.getMessage( ), e );
                     bException = true;
                 }
 
