@@ -84,21 +84,23 @@
 							</@formGroup>
 						</#if>
 					</@tabPanel>
-					<@tabPanel id='panel4' labelKey='#i18n{suggest.createSuggest.labelMailSuggestSubmit}'>
-						<@formGroup>
-							<@checkBox orientation='inline' labelFor='enable_mail_new_suggest_submit' labelKey='#i18n{suggest.createSuggest.labelMailNewSuggestSubmit}' name='enable_mail_new_suggest_submit' id='enable_mail_new_suggest_submit' value='${yes_value}' />
-							<@checkBox orientation='inline' labelFor='enable_mail_new_comment_submit' labelKey='#i18n{suggest.createSuggest.labelMailNewCommentSubmit}' name='enable_mail_new_comment_submit' id='enable_mail_new_comment_submit' value='${yes_value}' />
-							<@checkBox orientation='inline' labelFor='enable_mail_new_reported_submit' labelKey='#i18n{suggest.createSuggest.labelMailNewReportedSubmit}' name='enable_mail_new_reported_submit' id='enable_mail_new_reported_submit' value='${yes_value}' />
-						</@formGroup>
-						<@formGroup labelFor='id_mailing_list_suggest_submit' labelKey='#i18n{suggest.createSuggest.labelMailingList}' helpKey='#i18n{suggest.createSuggest.labelMailingListComment}'>							<@select name='id_mailing_list_suggest_submit' items=mailing_list default_value='-1' />						</@formGroup>
-						<@formGroup labelFor='notification_new_comment_sender_name' labelKey='#i18n{suggest.createSuggest.labelNotificationNewCommentSenderName}'>							<@input type='text' name='notification_new_comment_sender_name' id='notification_new_comment_sender_name' maxlength='255' value='' />						</@formGroup>
-						<@formGroup labelFor='notification_new_comment_title' labelKey='#i18n{suggest.createSuggest.labelNotificationNewCommentTitle}' mandatory=true>							<@input type='textarea' name='notification_new_comment_title' id='notification_new_comment_title' richtext=true rows=10>${default_message.notificationNewCommentTitle!}</@input>						</@formGroup>
-						 <@formGroup labelFor='notification_new_comment_body' labelKey='#i18n{suggest.createSuggest.labelNotificationNewCommentBody}' mandatory=true>							<@input type='textarea' name='notification_new_comment_body' id='notification_new_comment_body' richtext=true rows=10>${default_message.notificationNewCommentBody!}</@input>						</@formGroup>
-						<@formGroup labelFor='notification_new_suggest_submit_sender_name' labelKey='#i18n{suggest.createSuggest.labelNotificationNewSuggestSubmitSenderName}'>							<@input type='text' name='notification_new_suggest_submit_sender_name' id='notification_new_suggest_submit_sender_name' maxlength=255 value='' />						</@formGroup>
-						 <@formGroup labelFor='notification_new_suggest_submit_title' labelKey='#i18n{suggest.createSuggest.labelNotificationNewSuggestSubmitTitle}' mandatory=true>							<@input type='textarea' name='notification_new_suggest_submit_title' id='notification_new_suggest_submit_title' richtext=true rows=10>${default_message.notificationNewSuggestSubmitTitle!}</@input>						</@formGroup>
-						<@formGroup labelFor='notification_new_suggest_submit_body' labelKey='#i18n{suggest.createSuggest.labelNotificationNewSuggestSubmitBody}' mandatory=true>
-							<@input type='textarea' name='notification_new_suggest_submit_body' id='notification_new_suggest_submit_body' richtext=true rows=10>${default_message.notificationNewSuggestSubmitBody!}</@input>
-						</@formGroup>
+					<@tabPanel id='panel4'>
+						<@fieldSet>
+							<@formGroup labelKey='#i18n{suggest.createSuggest.labelMailSuggestSubmit}'>
+								<@checkBox orientation='inline' labelFor='enable_mail_new_suggest_submit' labelKey='#i18n{suggest.createSuggest.labelMailNewSuggestSubmit}' name='enable_mail_new_suggest_submit' id='enable_mail_new_suggest_submit' value='${yes_value}' />
+								<@checkBox orientation='inline' labelFor='enable_mail_new_comment_submit' labelKey='#i18n{suggest.createSuggest.labelMailNewCommentSubmit}' name='enable_mail_new_comment_submit' id='enable_mail_new_comment_submit' value='${yes_value}' />
+								<@checkBox orientation='inline' labelFor='enable_mail_new_reported_submit' labelKey='#i18n{suggest.createSuggest.labelMailNewReportedSubmit}' name='enable_mail_new_reported_submit' id='enable_mail_new_reported_submit' value='${yes_value}' />
+							</@formGroup>
+							<@formGroup labelFor='id_mailing_list_suggest_submit' labelKey='#i18n{suggest.createSuggest.labelMailingList}' helpKey='#i18n{suggest.createSuggest.labelMailingListComment}'>								<@select name='id_mailing_list_suggest_submit' items=mailing_list default_value='-1' />							</@formGroup>
+							<@formGroup labelFor='notification_new_comment_sender_name' labelKey='#i18n{suggest.createSuggest.labelNotificationNewCommentSenderName}'>								<@input type='text' name='notification_new_comment_sender_name' id='notification_new_comment_sender_name' maxlength=255 value='' />							</@formGroup>
+							<@formGroup labelFor='notification_new_comment_title' labelKey='#i18n{suggest.createSuggest.labelNotificationNewCommentTitle}' mandatory=true>								<@input type='textarea' name='notification_new_comment_title' id='notification_new_comment_title' richtext=true rows=10>${default_message.notificationNewCommentTitle!}</@input>							</@formGroup>
+							 <@formGroup labelFor='notification_new_comment_body' labelKey='#i18n{suggest.createSuggest.labelNotificationNewCommentBody}' mandatory=true>								<@input type='textarea' name='notification_new_comment_body' id='notification_new_comment_body' richtext=true rows=10>${default_message.notificationNewCommentBody!}</@input>							</@formGroup>
+							<@formGroup labelFor='notification_new_suggest_submit_sender_name' labelKey='#i18n{suggest.createSuggest.labelNotificationNewSuggestSubmitSenderName}'>								<@input type='text' name='notification_new_suggest_submit_sender_name' id='notification_new_suggest_submit_sender_name' maxlength=255 value='' />							</@formGroup>
+							 <@formGroup labelFor='notification_new_suggest_submit_title' labelKey='#i18n{suggest.createSuggest.labelNotificationNewSuggestSubmitTitle}' mandatory=true>								<@input type='textarea' name='notification_new_suggest_submit_title' id='notification_new_suggest_submit_title' richtext=true rows=10>${default_message.notificationNewSuggestSubmitTitle!}</@input>							</@formGroup>
+							<@formGroup labelFor='notification_new_suggest_submit_body' labelKey='#i18n{suggest.createSuggest.labelNotificationNewSuggestSubmitBody}' mandatory=true>
+								<@input type='textarea' name='notification_new_suggest_submit_body' id='notification_new_suggest_submit_body' richtext=true rows=10>${default_message.notificationNewSuggestSubmitBody!}</@input>
+							</@formGroup>
+						</@fieldSet>
 					</@tabPanel>
 					<@tabPanel id='panel5'>
 						<@fieldSet>
@@ -109,7 +111,7 @@
 								<@input type='file' id='image_source' name='image_source' maxlength=100 />
 							</@formGroup>
 						</@fieldSet>
-						<@formGroup labelFor='number_day_required' labelKey='#i18n{suggest.createSuggest.labelNumberDayRequired}' helpKey='#i18n{suggest.createSuggest.labelNumberDayRequiredComment}'>							<@input type='text' name='number_day_required' id='number_day_required' value=' />						</@formGroup>
+						<@formGroup labelFor='number_day_required' labelKey='#i18n{suggest.createSuggest.labelNumberDayRequired}' helpKey='#i18n{suggest.createSuggest.labelNumberDayRequiredComment}'>							<@input type='text' name='number_day_required' id='number_day_required' value='' />						</@formGroup>
 						<#if is_active_captcha>
 							<@formGroup helpKey='#i18n{suggest.createSuggest.labelActiveCaptchaComment}'>
 								<@checkBox labelFor='active_captcha' labelKey='#i18n{suggest.createSuggest.labelActiveCaptcha}' name='active_captcha' id='active_captcha' value='${yes_value}' />
@@ -125,7 +127,7 @@
 						<@button type='submit' name='apply' title='&nbsp;#i18n{suggest.modifySuggest.buttonApply}' buttonIcon='check' />
 						<@button type='submit' name='cancel' title='&nbsp;#i18n{suggest.createSuggest.buttonCancel}' buttonIcon='remove' color='default' />
 					</@formGroup>
-				</@tfodrm>
+				</@tform>
 			</@tabContent>
 		</@tabs>
 	</@columns>
