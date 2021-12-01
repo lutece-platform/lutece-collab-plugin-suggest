@@ -4,11 +4,11 @@
 					<@formGroup labelFor='name' labelKey='#i18n{suggest.createSuggestSubmitType.labelName}' mandatory=true>						<@input type='text' id='name' name='name' maxlength=200 value='${type.name}' />					</@formGroup>
 					<@formGroup labelFor='color' labelKey='#i18n{suggest.createSuggestSubmitType.labelColor}'>						<@input type='text' id='color' params='style="border:2px solid ${type.color!};"' name='color' maxlength=7 value='${type.color}' />					</@formGroup>
 					<@formGroup mandatory=true>						<@checkBox labelFor='parameterizable' labelKey='#i18n{suggest.createSuggestSubmitType.labelParameterizable}' id='parameterizable' name='parameterizable' checked=type.parameterizableInFO />					</@formGroup>					<@formGroup labelFor='image_source' labelKey='#i18n{suggest.createSuggestSubmitType.labelImage}'>						<@input type='file' id='image_source' name='image_source' maxlength=100 />
+					</@formGroup>					<@formGroup labelFor='update_file'>
 						<@checkBox labelFor='update_file' labelKey='#i18n{suggest.createSuggestSubmitType.labelUpdateFile}' id='update_file' name='update_file' />
 						<#if type.idImageResource?has_content >
 							<img class="img-responsive img-thumbnail" src='image?resource_type=image_suggest&id=${type.idImageResource}' title="img">
-						</#if>
-					</@formGroup>
+						</#if>					</@formGroup>
 					<@formGroup>						<@button type='submit' name='save' title='#i18n{suggest.createExportFormat.buttonSave}' buttonIcon='save' />
 						<@aButton href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' name='cancel' title='#i18n{suggest.createExportFormat.buttonCancel}' buttonIcon='times' color='default' />					</@formGroup>
                 </@tform>			</@boxBody>		</@box>	</@columns></@row>

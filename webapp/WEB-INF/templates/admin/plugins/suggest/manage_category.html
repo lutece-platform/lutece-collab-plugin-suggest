@@ -11,7 +11,7 @@
 			</@tabList>
 			<@tabContent>
 				<@tform method='post' align='right' action='jsp/admin/plugins/suggest/CreateCategory.jsp'>
-					<@button type='submit' buttonIcon='plus' title='#i18n{suggest.manageCategory.buttonCreate}' />
+					<@button type='submit' buttonIcon='plus' title='#i18n{suggest.manageCategory.buttonCreate}' hideTitle=['xs','sm','md'] size='sm' />
 				</@tform>
 
 				<@paginationAdmin paginator=paginator combo=1 /><!-- #i18n{suggest.manageCategory.buttonItemsPerPage}-->

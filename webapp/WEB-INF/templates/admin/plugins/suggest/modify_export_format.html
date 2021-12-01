@@ -19,8 +19,11 @@
 					
 					<@formGroup labelFor='stylesheet_source' labelKey='#i18n{suggest.createExportFormat.labelXsl}' mandatory=true>
 						<@input type='file' id='stylesheet_source' name='stylesheet_source' maxlength=100 />
-						<@checkBox labelFor='update_file' labelKey='#i18n{suggest.createSuggestSubmitType.labelUpdateFile}' id='update_file' name='update_file' />
+					</@formGroup>
+					
+					<@formGroup labelFor='update_file'>
 						<@aButton href='jsp/admin/plugins/suggest/DoDownloadXslFile.jsp?id_export=${export.idExport}' target='_blank' buttonIcon='download' title='#i18n{suggest.modifyExportFormat.labelDownloafXslFile}' />
+						<@checkBox labelFor='update_file' labelKey='#i18n{suggest.createSuggestSubmitType.labelUpdateFile}' id='update_file' name='update_file' />
 					</@formGroup>
 					
 					<@formGroup>

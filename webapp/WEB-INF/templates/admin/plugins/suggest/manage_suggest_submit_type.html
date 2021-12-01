@@ -11,20 +11,17 @@
 			</@tabList>
 			<@tabContent>
 				<@tform align='right' method='post' type='inline' action='jsp/admin/plugins/suggest/CreateSuggestSubmitType.jsp'>
-					<@button type='submit' buttonIcon='plus-square' title='#i18n{suggest.manageSuggestSubmitType.buttonCreate}' />
+					<@button type='submit' title='#i18n{suggest.manageSuggestSubmitType.buttonCreate}' hideTitle=['xs','sm','md'] buttonIcon='plus-square' size='sm' />
 				</@tform>
 			
-				<@table>
-					<thead>
-						<@tr>
-							<@th></@th>
-							<@th>#i18n{suggest.manageSuggestSubmitType.rowName}</@th>
-							<@th>#i18n{suggest.manageSuggestSubmitType.rowParameterizable}</@th>
-							<@th>#i18n{suggest.manageSuggestSubmitType.rowActions}</@th>
-						</@tr>
-					</thead>
-					<tbody>
-						<#list type_list as type>
+				<@table headBody=true>
+					<@tr>
+						<@th></@th>
+						<@th>#i18n{suggest.manageSuggestSubmitType.rowName}</@th>
+						<@th>#i18n{suggest.manageSuggestSubmitType.rowParameterizable}</@th>
+						<@th>#i18n{suggest.manageSuggestSubmitType.rowActions}</@th>
+					</@tr>
+					<#list type_list as type>
 						<@tr>
 							<#if type.color?exists><#assign params = 'style="background-color:${type.color}"' /><#else><#assign params='' /></#if>
 							<@td params=params title='#i18n{suggest.manageSuggestSubmitType.rowColor}'></@td>
@@ -40,8 +37,7 @@
 								<@aButton href='jsp/admin/plugins/suggest/ConfirmRemoveSuggestSubmitType.jsp?id_type=${type.idType}' title='#i18n{suggest.manageSuggestSubmitType.altDelete}' hideTitle=['all'] buttonIcon='trash' size='sm' color='danger' />
 							</@td>
 						</@tr>
-						</#list>
-					</tbody>
+					</#list>
 				</@table>
 			</@tabContent>
 		</@tabs>

@@ -1,6 +1,6 @@
 <@row>	<@columns>		<@box>			<@boxHeader title='#i18n{suggest.modifyCategory.title}' />			<@boxBody>
 				<@tform method='post' action='jsp/admin/plugins/suggest/DoModifyCategory.jsp'>
-					<@input type='hidden' name='id_category' value='${category.idCategory} />
+					<@input type='hidden' name='id_category' value='${category.idCategory}' />
 					<@formGroup labelFor='title' labelKey='#i18n{suggest.createCategory.labelTitle}' mandatory=true>						<@input type='text' id='title' name='title' maxlength=50 value='${category.title}' />					</@formGroup>
 					<@formGroup labelFor='color' labelKey='#i18n{suggest.createCategory.labelColor} :' mandatory=true>						<@input type='text' value='${category.color!}' params='style="border:2px solid ${category.color!};"' id='color' name='color' maxlength=7 />					</@formGroup>					<@formGroup>						<@button name='save' type='submit' title='#i18n{suggest.createCategory.buttonSave}' buttonIcon='save' />
 						<@aButton href='jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest' title='#i18n{suggest.createCategory.buttonCancel}' buttonIcon='times' color='default' />					</@formGroup>				</@tform>

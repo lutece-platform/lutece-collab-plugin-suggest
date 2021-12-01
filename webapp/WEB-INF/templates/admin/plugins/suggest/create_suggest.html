@@ -1,15 +1,15 @@
 <@row>
 	<@columns>
-		<@tabs>
-			<@tabList>
-				<@tabLink active=true href='#panel1' title='#i18n{suggest.creatSuggest.navTab.labelGeneral}' />
-				<@tabLink href='#panel2' title='#i18n{suggest.creatSuggest.navTab.labelPresentation}' />
-				<@tabLink href='#panel3' title='#i18n{suggest.creatSuggest.navTab.labelPermission}' />
-				<@tabLink href='#panel4' title='#i18n{suggest.creatSuggest.navTab.labelNotification}' />
-				<@tabLink href='#panel5' title='#i18n{suggest.creatSuggest.navTab.labelAdvancedParameters}' />
-			</@tabList>
-			<@tabContent>
-				<@tform action='jsp/admin/plugins/suggest/DoCreateSuggest.jsp?plugin_name=suggest' method='post' enctype='multipart/form-data'>
+		<@tform action='jsp/admin/plugins/suggest/DoCreateSuggest.jsp?plugin_name=suggest' method='post' enctype='multipart/form-data'>
+			<@tabs>
+				<@tabList>
+					<@tabLink active=true href='#panel1' title='#i18n{suggest.creatSuggest.navTab.labelGeneral}' />
+					<@tabLink href='#panel2' title='#i18n{suggest.creatSuggest.navTab.labelPresentation}' />
+					<@tabLink href='#panel3' title='#i18n{suggest.creatSuggest.navTab.labelPermission}' />
+					<@tabLink href='#panel4' title='#i18n{suggest.creatSuggest.navTab.labelNotification}' />
+					<@tabLink href='#panel5' title='#i18n{suggest.creatSuggest.navTab.labelAdvancedParameters}' />
+				</@tabList>
+				<@tabContent>
 					<@tabPanel id='panel1' active=true>
 						<@formGroup labelFor='title' labelKey='#i18n{suggest.createSuggest.labelTitle}' helpKey='#i18n{suggest.createSuggest.labelTitleComment}' mandatory=true>							<@input type='text' name='title' id='title' value='' maxlength=255 />						</@formGroup>
 						<@formGroup labelFor='libelle_contribution' labelKey='#i18n{suggest.createSuggest.labelLibelleContribution}' helpKey='#i18n{suggest.createSuggest.labelLibelleContributionComment}' mandatory=true>							<@input type='text' name='libelle_contribution' id='libelle_contribution' value='${default_message.libelleContribution}' maxlength=255 />						</@formGroup>
@@ -20,7 +20,7 @@
 						<@formGroup helpKey='#i18n{suggest.createSuggest.labelAuthorizedCommentSubmitComment}'>							<@checkBox labelFor='authorized_comment' labelKey='#i18n{suggest.createSuggest.labelAuthorizedCommentSubmit}' id='authorized_comment' name='authorized_comment' params='onclick="displayAuthorizedComment()"' />						</@formGroup>
 						<@formGroup labelFor='unavailability_message' labelKey='#i18n{suggest.createSuggest.labelUnavailabilityMessage} *'>							<@input type='textarea' name='unavailability_message' id='unavailability_message' rows=4 richtext=true>${default_message.unavailabilityMessage}</@input>						</@formGroup>
 					</@tabPanel>
-					<@tabPanel id='panel2'>
+					<@tabPanel id='panel2' active=false>
 						<@formGroup helpKey='#i18n{suggest.createSuggest.labelActiveSuggestSubmitPaginatorComment}'>
 							<@checkBox labelFor='active_suggest_submit_paginator' labelKey='#i18n{suggest.createSuggest.labelActiveSuggestSubmitPaginator}' name='active_suggest_submit_paginator' id='active_suggest_submit_paginator' value='${yes_value}' checked=true />
 						</@formGroup>
@@ -56,7 +56,7 @@
 						<@formGroup labelFor='confirmation_message' labelKey='#i18n{suggest.createSuggest.labelConfirmationMessage}' helpKey='#i18n{suggest.createSuggest.labelConfirmationMessageComment}'>							<@input type='textarea' name='confirmation_message' id='confirmation_message' rows=4 richtext=true />						</@formGroup>
 						<@formGroup labelFor='terms_of_use' labelKey='#i18n{suggest.createSuggest.labelTermsOfUse}' helpKey='#i18n{suggest.createSuggest.labelTermsOfUseComment}'>							<@input type='textarea' name='terms_of_use' id='terms_of_use' rows=4 richtext=true />						</@formGroup>
 					</@tabPanel>
-					<@tabPanel id='panel3'>
+					<@tabPanel id='panel3' active=false>
 						<@formGroup labelFor='workgroup' labelKey='#i18n{suggest.createSuggest.labelWorkgroup}' helpKey='#i18n{suggest.createSuggest.labelWorkgroupComment}'>							<@select name='workgroup' items=user_workgroup_list default_value='' />						</@formGroup>
 						<@formGroup labelFor='role' labelKey='#i18n{suggest.createSuggest.labelRole}' helpKey='#i18n{suggest.createSuggest.labelRoleComment}'>							<@select name='role' default_value='${default_value_role}' items=role_list />						</@formGroup>
 						<@formGroup helpKey='#i18n{suggest.createSuggest.labelDisableNewSuggestSubmitComment}'>
@@ -84,12 +84,12 @@
 							</@formGroup>
 						</#if>
 					</@tabPanel>
-					<@tabPanel id='panel4'>
+					<@tabPanel id='panel4' active=false>
 						<@fieldSet>
 							<@formGroup labelKey='#i18n{suggest.createSuggest.labelMailSuggestSubmit}'>
-								<@checkBox orientation='inline' labelFor='enable_mail_new_suggest_submit' labelKey='#i18n{suggest.createSuggest.labelMailNewSuggestSubmit}' name='enable_mail_new_suggest_submit' id='enable_mail_new_suggest_submit' value='${yes_value}' />
-								<@checkBox orientation='inline' labelFor='enable_mail_new_comment_submit' labelKey='#i18n{suggest.createSuggest.labelMailNewCommentSubmit}' name='enable_mail_new_comment_submit' id='enable_mail_new_comment_submit' value='${yes_value}' />
-								<@checkBox orientation='inline' labelFor='enable_mail_new_reported_submit' labelKey='#i18n{suggest.createSuggest.labelMailNewReportedSubmit}' name='enable_mail_new_reported_submit' id='enable_mail_new_reported_submit' value='${yes_value}' />
+								<@checkBox labelFor='enable_mail_new_suggest_submit' labelKey='#i18n{suggest.createSuggest.labelMailNewSuggestSubmit}' name='enable_mail_new_suggest_submit' id='enable_mail_new_suggest_submit' value='${yes_value}' />
+								<@checkBox labelFor='enable_mail_new_comment_submit' labelKey='#i18n{suggest.createSuggest.labelMailNewCommentSubmit}' name='enable_mail_new_comment_submit' id='enable_mail_new_comment_submit' value='${yes_value}' />
+								<@checkBox labelFor='enable_mail_new_reported_submit' labelKey='#i18n{suggest.createSuggest.labelMailNewReportedSubmit}' name='enable_mail_new_reported_submit' id='enable_mail_new_reported_submit' value='${yes_value}' />
 							</@formGroup>
 							<@formGroup labelFor='id_mailing_list_suggest_submit' labelKey='#i18n{suggest.createSuggest.labelMailingList}' helpKey='#i18n{suggest.createSuggest.labelMailingListComment}'>								<@select name='id_mailing_list_suggest_submit' items=mailing_list default_value='-1' />							</@formGroup>
 							<@formGroup labelFor='notification_new_comment_sender_name' labelKey='#i18n{suggest.createSuggest.labelNotificationNewCommentSenderName}'>								<@input type='text' name='notification_new_comment_sender_name' id='notification_new_comment_sender_name' maxlength=255 value='' />							</@formGroup>
@@ -102,7 +102,7 @@
 							</@formGroup>
 						</@fieldSet>
 					</@tabPanel>
-					<@tabPanel id='panel5'>
+					<@tabPanel id='panel5' active=false>
 						<@fieldSet>
 							<@formGroup labelFor='description' labelKey='#i18n{suggest.createSuggest.labelDescription}'>
 								<@input type='textarea' name='description' id='description' rows=4 richtext=true></@input>
@@ -127,9 +127,9 @@
 						<@button type='submit' name='apply' title='&nbsp;#i18n{suggest.modifySuggest.buttonApply}' buttonIcon='check' />
 						<@button type='submit' name='cancel' title='&nbsp;#i18n{suggest.createSuggest.buttonCancel}' buttonIcon='remove' color='default' />
 					</@formGroup>
-				</@tform>
-			</@tabContent>
-		</@tabs>
+				</@tabContent>
+			</@tabs>
+		</@tform>
 	</@columns>
 </@row>
 
