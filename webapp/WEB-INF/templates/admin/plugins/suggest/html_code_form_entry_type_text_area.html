@@ -1,2 +1,2 @@
-<@formGroup labelFor='${entry.idEntry}' labelKey='${entry.title}' helpKey='${entry.helpMessage}!' mandatory='entry.mandatory'>	<@input type='textarea' name='${entry.idEntry}' id='${entry.idEntry}' params='data-limit="${entry.maxSizeEnter}"' cols=entry.width rows=entry.height><#if entry.defaultValue?exists>${entry.defaultValue}</#if></@input>
+<@formGroup labelFor='${entry.idEntry}' labelKey='${entry.title}' helpKey='${entry.helpMessage}!' mandatory=entry.mandatory>	<@input type='textarea' name='${entry.idEntry}' id='${entry.idEntry}' params='data-limit="${entry.maxSizeEnter}"' cols=entry.width rows=entry.height><#if entry.defaultValue?exists>${entry.defaultValue}</#if></@input>
 </@formGroup>
