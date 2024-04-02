@@ -49,7 +49,7 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Locale;
@@ -240,7 +240,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
         List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( filter );
 
-        if ( ( listSubscription != null ) && ( listSubscription.size( ) > 0 ) )
+        if ( ( listSubscription != null ) && ( !listSubscription.isEmpty( ) ) )
         {
             for ( Subscription subscription : listSubscription )
             {
@@ -365,12 +365,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
         SubscriptionFilter filter = new SubscriptionFilter( user.getName( ), getProviderName( ), strSubscriptionKey, Integer.toString( nId ) );
         List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( filter );
 
-        if ( ( listSubscription != null ) && ( listSubscription.size( ) > 0 ) )
-        {
-            return true;
-        }
-
-        return false;
+        return listSubscription != null  && !listSubscription.isEmpty( );
     }
 
     @Override

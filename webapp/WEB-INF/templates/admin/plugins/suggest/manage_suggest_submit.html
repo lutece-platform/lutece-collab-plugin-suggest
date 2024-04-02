@@ -1,90 +1,58 @@
 <section class="content">
-	<div class="row">
-	  <div class="col-xs-12 col-sm-3">
-			<a class="btn btn-primary btn-block" title="#i18n{suggest.manageSuggestSubmit.buttonAddSuggestSubmit}" href="jsp/admin/plugins/suggest/CreateSuggestSubmit.jsp?id_suggest=${suggest.idSuggest}">
-				<i class="fa fa-plus"></i> #i18n{suggest.manageSuggestSubmit.buttonAddSuggestSubmit}
-			</a>
-			<div class="box">
-				<div class="box-header">
-					<h3 class="box-title">#i18n{suggest.manageSuggestSubmit.buttonSearch}</h3>
-					<div class="box-tools">
-			      <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-			    </div>
-			</div>
-			<div class="box-body">
-				<form class="form-" action="jsp/admin/plugins/suggest/ManageSuggestSubmit.jsp" method="post" name="" id="filter">
-				<input type="hidden" name="id_suggest" value="${suggest.idSuggest}" >
-				<input type="hidden" name="session" id="session" value="session">
-				<input name="page" value="suggest" type="hidden">
-				<input type="hidden" name="page" value="search">
-				<div class="form-group">
-					<label for="query">#i18n{suggest.manageSuggestSubmit.buttonSearch}</label>
-					<input type="text" name="query" id="query" placeholder="#i18n{suggest.manageSuggestSubmit.labelSearch}" class="form-control" value="<#if query?exists>${query}</#if>" title="#i18n{suggest.manageSuggestSubmit.buttonSearch}">
-				</div>
-				<#if category_list?has_content>
-					<div class="form-group">
-						<label for="id_category">#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitCategory}</label>
-						<@comboWithParams name="id_category_filter" default_value="${suggest_submit_category_selected}" additionalParameters="class=\"form-control input-sm\"" items=category_list />
-					</div>
-				</#if>
-				<#if suggest_submit_type_list?has_content>
-					<div class="form-group">
-						<label for="id_type">#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitType}</label>
-						<@comboWithParams name="id_type" default_value="${suggest_submit_type_selected}" additionalParameters="class=\"form-control\"" items=suggest_submit_type_list />
-					</div>
-				</#if>
-				<div class="form-group">
-					<label for="id_suggest_submit_state">#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitState}</label>
-					<@comboWithParams name="id_suggest_submit_state" default_value="${suggest_submit_state_selected}" additionalParameters="class=\"form-control\"" items=suggest_submit_state_list />
-				</div>
-				<div class="form-group">
-					<label for="id_suggest_submit_report">#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitReport}</label>
-					<@comboWithParams name="id_suggest_submit_report" default_value="${suggest_submit_report_selected}" additionalParameters="class=\"form-control\"" items=suggest_submit_report_list />
-				</div>
-				<div class="form-group">
-					<label  for="id_contains_comment_disable">#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitContainsCommentDisable}</label>
-					<@comboWithParams name="id_contains_comment_disable" default_value="${suggest_submit_contains_comment_disable_selected}" additionalParameters="class=\"form-control\"" items=suggest_submit_contains_comment_disable_list />
-				</div>
-				<div class="form-group">
-					<label for="id_suggest_submit_report">#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitSort}</label>
-					<@comboWithParams name="id_suggest_submit_sort" default_value="${suggest_submit_sort_selected}" additionalParameters="class=\"form-control\"" items=suggest_submit_sort_list />
-				</div>
-				<div class="form-group">
-					<button class="btn btn-primary btn-flat" type="submit">
-						<i class="fa fa-search"></i>&nbsp;#i18n{suggest.manageSuggestSubmit.buttonSearch}
-					</button>
-					<button id="reinit" class="btn btn-flat btn-danger" type="button">
-						<i class="fa fa-refresh"></i> R&eacute;initialiser la recherche
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-xs-12 col-sm-9">
-		<form class="form" action="jsp/admin/plugins/suggest/ManageSuggestSubmit.jsp" method="post" name="" id="filter">
-			<input type="hidden" name="id_suggest" value="${suggest.idSuggest}">
-			<input type="hidden" name="session" id="session" value="session">
-			<input name="page" value="suggest" type="hidden">
-			<div class="nav-tabs-custom">
-				<ul class="nav nav-tabs">
-					<li class="active">
-						<a href="jsp/admin/plugins/suggest/ManageSuggestSubmit.jsp?id_suggest=${suggest.idSuggest}">#i18n{suggest.manageSuggestSubmit.title}</a>
-					</li>
-					<li>
-						<a href="jsp/admin/plugins/suggest/ManageSuggestSubmitOrder.jsp?id_suggest=${suggest.idSuggest}">#i18n{suggest.manageSuggestSubmitOrder.title}</a>
-					</li>
-					<li class="pull-right"><@paginationAdmin paginator=paginator combo=1 form=0 showcount=0 /></li>
-				</ul>
-				<div class="tab-content">
-					<#include "include_suggest_submit_mass_actions.html">
-					<#assign include_suggest_submit_actions ="include_suggest_submit_actions.html">
-					<#assign display_check_actions =true>
-					<#include "include_suggest_submit_list.html">
-				</div>
-			</div>
-		</form>
-	</div>
-</div>
+	<@row>
+		<@columns>
+			<@box>
+				<@boxHeader title='#i18n{suggest.manageSuggestSubmit.buttonSearch}'>
+					<@aButton href='jsp/admin/plugins/suggest/CreateSuggestSubmit.jsp?id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmit.buttonAddSuggestSubmit}' buttonIcon='plus-square' size='sm' />
+					<@button type='button' style='card-control collapse' buttonTargetId='#filter' buttonIcon='plus' size='sm' />
+				</@boxHeader>
+				<@boxBody>
+					<@tform action='jsp/admin/plugins/suggest/ManageSuggestSubmit.jsp' id='filter'>
+						<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
+						<@input type='hidden' name='session' id='session' value='session' />
+						<@input type='hidden' name='page' value='suggest' />
+						<@input type='hidden' name='page' value='search' />
+						<@formGroup labelFor='query' labelKey='#i18n{suggest.manageSuggestSubmit.buttonSearch}'>
+							<#if query?exists><#assign value = query /><#else><#assign value='' /></#if>							<@input type='text' name='query' id='query' placeHolder='#i18n{suggest.manageSuggestSubmit.labelSearch}' value=value />						</@formGroup>
+						<#if category_list?has_content>
+							<@formGroup labelFor='id_category' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitCategory}'>								<@select name='id_category_filter' default_value='${suggest_submit_category_selected}' items=category_list />							</@formGroup>
+						</#if>
+						<#if suggest_submit_type_list?has_content>
+							<@formGroup labelFor='id_type' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitType}'>								<@select name='id_type' default_value='${suggest_submit_type_selected}' items=suggest_submit_type_list />							</@formGroup>
+						</#if>
+						<@formGroup labelFor='id_suggest_submit_state' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitState}'>							<@select name='id_suggest_submit_state' default_value='${suggest_submit_state_selected}' items=suggest_submit_state_list />						</@formGroup>
+						<@formGroup labelFor='id_suggest_submit_report' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitReport}'>							<@select name='id_suggest_submit_report' default_value='${suggest_submit_report_selected}' items=suggest_submit_report_list />						</@formGroup>
+						<@formGroup labelFor='id_contains_comment_disable' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitContainsCommentDisable}'>							<@select name='id_contains_comment_disable' default_value='${suggest_submit_contains_comment_disable_selected}' items=suggest_submit_contains_comment_disable_list />						</@formGroup>
+						<@formGroup labelFor='id_suggest_submit_report' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitSort}'>							<@select name='id_suggest_submit_sort' default_value='${suggest_submit_sort_selected}' items=suggest_submit_sort_list />						</@formGroup>
+						<@formGroup>
+							<@button type='submit' buttonIcon='search' title='#i18n{suggest.manageSuggestSubmit.buttonSearch}' />
+							<@button type='button' id='reinit' buttonIcon='sync' title='R&eacute;initialiser la recherche' />
+						</@formGroup>
+					</@tform>
+			
+					<@tform action='jsp/admin/plugins/suggest/ManageSuggestSubmit.jsp' method='post' id='filter'>
+						<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
+						<@input type='hidden' name='session' id='session' value='session' />
+						<@input type='hidden' name='page' value='suggest' />
+						
+						<@tabs>
+							<@tabList>
+								<@tabLink active=true href='jsp/admin/plugins/suggest/ManageSuggestSubmit.jsp?id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmit.title}' />
+								<@tabLink href='jsp/admin/plugins/suggest/ManageSuggestSubmitOrder.jsp?id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmitOrder.title}' />
+							</@tabList>
+							<@tabContent>
+								<@div align='right'><@paginationAdmin paginator=paginator combo=1 form=0 showcount=0 /></@div>
+								<#include "include_suggest_submit_mass_actions.html">
+								<#assign include_suggest_submit_actions ="include_suggest_submit_actions.html">
+								<#assign display_check_actions =true>
+								<#include "include_suggest_submit_list.html">
+							</@tabContent>
+						</@tabs>
+					</@tform>
+				</@boxBody>
+			</@box>
+		</@columns>
+	</@row>
 </section>
 <script>
 $( function () {

@@ -8,17 +8,33 @@
 		</div>
 	<#else>
 		<#if view?has_content && view !="view_suggest_submit_list" >
-			<a class="btn btn-default btn-xs backlink" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=view_suggest_submit_list" target="_top">
-				<i class="glyphicon glyphicon-chevron-left"></i>  #i18n{suggest.suggestFrame.backToList}
-			</a>
+            <div class="row pb-5">
+                <a class="btn btn-default btn-xs backlink " href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=view_suggest_submit_list" target="_top">
+                    <i class="fa fa-chevron-left"></i>  #i18n{suggest.suggestFrame.backToList}
+                </a>
+            </div
 		</#if>
 		<#if view?has_content && view == "view_suggest_submit_list">
-			<h2>
-				${label_suggest}
-				<form class="form-inline pull-right" name="search" id="search" method="post" action="jsp/site/Portal.jsp?page=suggest">
+            <form class="form-inline pull-right" name="search" id="search" method="post" action="jsp/site/Portal.jsp?page=suggest">
 					<input name="action" value="view_suggest_submit_list" type="hidden">
 					<input name="id_suggest" value="${id_suggest}" type="hidden">
 					<input type="hidden" name="page" value="search">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-8">
+                            <h2>${label_suggest}</h2>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            <#if view?has_content && view == "view_suggest_submit_list" >
+                                <a class="btn btn-block btn-lg btn-primary" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=create_suggest_submit" target="_top">
+                                    #i18n{suggest.suggestFrame.labelProposal}
+                                </a>
+                            <#else>
+                                <a class="btn btn-default btn-xs backlink" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=view_suggest_submit_list" target="_top">
+                                    <i class="fa fa-chevron-left"></i>  #i18n{suggest.suggestFrame.backToList}
+                                </a>
+                             </#if>
+                        </div>
+                    </div>
 					<div class="input-group">
 						<input type="text" class="form-control" name="query" id="query" placeholder="#i18n{suggest.suggestFrame.altSearch}" value="<#if query?exists>${query}</#if>">
 						<span class="input-group-btn">
@@ -33,7 +49,7 @@
 						</span>
 					</div>
 				</form>
-			</h2>
+
 		</#if>
 		<#if lutece_user_connected?? && user_subscribed??>
 			<span class="pull-right suggest-subscribe">
@@ -73,12 +89,12 @@
 		<#if view?has_content && view =="view_suggest_submit_list" && header_suggest?has_content>
 			<div class="alert alert-info">${header_suggest}</div>
 		</#if>
-		
+		    <div class="row">
                 <div class="col-xs-12 col-sm-<#if view?has_content && view =="view_suggest_submit_list">8<#else>12</#if>">
                     <#if view?has_content && view =="view_suggest_submit_list">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12">
-                                <ul class="nav nav-pills">
+                                <ul class="nav nav-pills d-flex justify-content-between">
                                 <#if id_suggest_submit_sort?string==""><assign id_suggest_submit_sort="1"></#if>
                                         <#list list_suggest_submit_sort as item >
                                                 <#if item.name?trim !="" >
@@ -105,19 +121,6 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12">
                                 &nbsp;
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-offset-1 col-sm-10">
-                                <#if view?has_content && view == "view_suggest_submit_list" >
-                                        <a class="btn btn-block btn-lg btn-primary" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=create_suggest_submit" target="_top">
-                                                #i18n{suggest.suggestFrame.labelProposal}
-                                        </a>
-                                <#else>
-                                        <a class="btn btn-default btn-xs backlink" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=view_suggest_submit_list" target="_top">
-                                                <i class="fa fa-chevron-left"></i>  #i18n{suggest.suggestFrame.backToList}
-                                        </a>
-                                </#if>
                         </div>
                     </div>
                     
@@ -207,17 +210,10 @@
                             @Extender[${id_suggest},SUGGEST_SUGGEST_TYPE,opengraph,{footer:true}]@
                     </#if>
                 </div>
+            </div>
                 </#if>
 	</#if>
-        
-        <#if view?has_content && view =="view_suggest_submit_list" >
-        <#else>
-                <a class="btn btn-default btn-xs backlink" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&action=view_suggest_submit_list" target="_top">
-                        <i class="fa fa-chevron-left"></i>  #i18n{suggest.suggestFrame.backToList}
-                </a>
-        </#if>
-                    
-                    
+
         </div>
     </div>
 </div>

@@ -208,7 +208,7 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
             }
             catch( NumberFormatException ne )
             {
-                AppLogService.error( ne );
+                AppLogService.error( ne.getMessage( ), ne );
 
                 return getManageSuggestSubmitType( request );
             }
@@ -250,7 +250,7 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
             }
             catch( NumberFormatException ne )
             {
-                AppLogService.error( ne );
+                AppLogService.error( ne.getMessage( ), ne );
 
                 return getHomeUrl( request );
             }

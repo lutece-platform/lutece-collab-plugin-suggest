@@ -58,24 +58,25 @@ public class SuggestActionDAO implements ISuggestActionDAO
      */
     public List<SuggestAction> selectActionsBySuggestState( int nState, Plugin plugin )
     {
-        List<SuggestAction> listActions = new ArrayList<SuggestAction>( );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ACTIONS, plugin );
-        daoUtil.setInt( 1, nState );
-        daoUtil.executeQuery( );
-
-        while ( daoUtil.next( ) )
+        List<SuggestAction> listActions = new ArrayList<>( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ACTIONS, plugin ) )
         {
-            SuggestAction action = new SuggestAction( );
-            action.setNameKey( daoUtil.getString( 1 ) );
-            action.setDescriptionKey( daoUtil.getString( 2 ) );
-            action.setUrl( daoUtil.getString( 3 ) );
-            action.setIconUrl( daoUtil.getString( 4 ) );
-            action.setPermission( daoUtil.getString( 5 ) );
-            action.setSuggestState( daoUtil.getInt( 6 ) );
-            listActions.add( action );
-        }
+            daoUtil.setInt( 1, nState );
+            daoUtil.executeQuery( );
+    
+            while ( daoUtil.next( ) )
+            {
+                SuggestAction action = new SuggestAction( );
+                action.setNameKey( daoUtil.getString( 1 ) );
+                action.setDescriptionKey( daoUtil.getString( 2 ) );
+                action.setUrl( daoUtil.getString( 3 ) );
+                action.setIconUrl( daoUtil.getString( 4 ) );
+                action.setPermission( daoUtil.getString( 5 ) );
+                action.setSuggestState( daoUtil.getInt( 6 ) );
+                listActions.add( action );
+            }
 
-        daoUtil.free( );
+        }
 
         return listActions;
     }

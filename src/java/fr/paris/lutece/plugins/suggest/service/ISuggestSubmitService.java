@@ -147,14 +147,6 @@ public interface ISuggestSubmitService
      */
     List<SuggestSubmit> getSuggestSubmitList( SubmitFilter filter, Plugin plugin );
 
-    // /**
-    // * Load the data of all the suggestSubmit with the number of comment by suggest submit who verify the filter and returns them in a list
-    // * @param filter the filter
-    // * @param plugin the plugin
-    // * @return the list of suggestSubmit
-    // */
-    // List<SuggestSubmit> getSuggestSubmitListWithNumberComment( SubmitFilter filter, Plugin plugin );
-
     /**
      * Load the id of all the suggestSubmit who verify the filter and returns them in a list
      * 

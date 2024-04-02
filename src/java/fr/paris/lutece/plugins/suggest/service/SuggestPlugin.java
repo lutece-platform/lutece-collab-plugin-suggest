@@ -51,6 +51,7 @@ public class SuggestPlugin extends PluginDefaultImplementation implements Serial
     /**
      * Initialize the plugin suggest
      */
+    @Override
     public void init( )
     {
         // Initialize the suggest service

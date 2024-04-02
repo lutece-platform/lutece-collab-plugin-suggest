@@ -86,7 +86,7 @@ public class SuggestService
 
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
         Suggest suggest = null;
-        ;
+
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
         if ( nIdSuggest == SuggestUtils.CONSTANT_ID_NULL )
         {
@@ -116,8 +116,8 @@ public class SuggestService
         SuggestFilter filterDefaultSuggest = new SuggestFilter( );
         filterDefaultSuggest.setIdDefaultSuggest( SuggestFilter.ID_TRUE );
 
-        List listDefaultSuggest = SuggestHome.getSuggestList( filterDefaultSuggest, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
-        nIdDefaultSuggest = ( ( listDefaultSuggest != null ) && ( listDefaultSuggest.size( ) > 0 ) ) ? ( (Suggest) listDefaultSuggest.get( 0 ) ).getIdSuggest( )
+        List<Suggest> listDefaultSuggest = SuggestHome.getSuggestList( filterDefaultSuggest, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+        nIdDefaultSuggest = ( ( listDefaultSuggest != null ) && ( !listDefaultSuggest.isEmpty( ) ) ) ? ( listDefaultSuggest.get( 0 ) ).getIdSuggest( )
                 : SuggestUtils.CONSTANT_ID_NULL;
 
         return nIdDefaultSuggest;

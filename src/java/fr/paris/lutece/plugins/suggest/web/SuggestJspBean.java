@@ -48,7 +48,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.suggest.business.Category;
 import fr.paris.lutece.plugins.suggest.business.CategoryHome;
@@ -1416,7 +1416,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         }
         catch( UserNotSignedException e )
         {
-            AppLogService.error( "User not identified" );
+            AppLogService.error( "User not identified", e );
         }
 
         if ( user != null )

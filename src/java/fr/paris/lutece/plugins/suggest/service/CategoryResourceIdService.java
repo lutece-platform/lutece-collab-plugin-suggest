@@ -113,7 +113,7 @@ public class CategoryResourceIdService extends ResourceIdService
         }
         catch( NumberFormatException ne )
         {
-            AppLogService.error( ne );
+            AppLogService.error( ne.getMessage( ), ne );
         }
 
         Category category = CategoryHome.findByPrimaryKey( nIdCategory, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );

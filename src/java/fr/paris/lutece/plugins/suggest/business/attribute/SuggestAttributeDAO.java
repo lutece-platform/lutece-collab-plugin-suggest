@@ -56,19 +56,20 @@ public class SuggestAttributeDAO implements ISuggestAttributeDAO
     public Map<String, Object> load( int nIdDirectory, Plugin plugin )
     {
         Map<String, Object> mapAttributes = new HashMap<>( );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.setInt( 1, nIdDirectory );
-        daoUtil.executeQuery( );
-
-        while ( daoUtil.next( ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
-            int nIndex = 1;
-            String strAttributeKey = daoUtil.getString( nIndex++ );
-            Object attributeValue = daoUtil.getObject( nIndex++ );
-            mapAttributes.put( strAttributeKey, attributeValue );
-        }
+            daoUtil.setInt( 1, nIdDirectory );
+            daoUtil.executeQuery( );
+    
+            while ( daoUtil.next( ) )
+            {
+                int nIndex = 1;
+                String strAttributeKey = daoUtil.getString( nIndex++ );
+                Object attributeValue = daoUtil.getObject( nIndex++ );
+                mapAttributes.put( strAttributeKey, attributeValue );
+            }
 
-        daoUtil.free( );
+        }
 
         return mapAttributes;
     }
@@ -79,14 +80,16 @@ public class SuggestAttributeDAO implements ISuggestAttributeDAO
     public synchronized void insert( int nIdDirectory, String strAttributeKey, Object attributeValue, Plugin plugin )
     {
         int nIndex = 1;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        daoUtil.setInt( nIndex++, nIdDirectory );
-        daoUtil.setString( nIndex++, strAttributeKey );
-        daoUtil.setString( nIndex++, ( attributeValue != null ) ? attributeValue.toString( ) : null );
+        
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        {
+            daoUtil.setInt( nIndex++, nIdDirectory );
+            daoUtil.setString( nIndex++, strAttributeKey );
+            daoUtil.setString( nIndex++, ( attributeValue != null ) ? attributeValue.toString( ) : null );
+    
+            daoUtil.executeUpdate( );
 
-        daoUtil.executeUpdate( );
-
-        daoUtil.free( );
+        }
     }
 
     /**
@@ -94,11 +97,10 @@ public class SuggestAttributeDAO implements ISuggestAttributeDAO
      */
     public void remove( int nIdDirectory, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1, nIdDirectory );
-
-        daoUtil.executeUpdate( );
-
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdDirectory );
+            daoUtil.executeUpdate( );
+        }
     }
 }

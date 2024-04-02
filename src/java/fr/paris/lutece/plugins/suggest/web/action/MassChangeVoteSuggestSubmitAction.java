@@ -51,7 +51,7 @@ import fr.paris.lutece.portal.web.pluginaction.AbstractPluginAction;
 import fr.paris.lutece.portal.web.pluginaction.DefaultPluginActionResult;
 import fr.paris.lutece.portal.web.pluginaction.IPluginActionResult;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 

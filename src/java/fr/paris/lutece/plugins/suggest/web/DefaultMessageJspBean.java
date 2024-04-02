@@ -38,7 +38,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.suggest.business.DefaultMessage;
 import fr.paris.lutece.plugins.suggest.business.DefaultMessageHome;
@@ -122,7 +122,7 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
     public String getManageDefaultMessage( HttpServletRequest request )
     {
         Locale locale = getLocale( );
-        HashMap model = new HashMap( );
+        HashMap<String, Object> model = new HashMap<>( );
         DefaultMessage defaultMessage = DefaultMessageHome.find( getPlugin( ) );
         model.put( MARK_DEFAULT_MESSAGE, defaultMessage );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );

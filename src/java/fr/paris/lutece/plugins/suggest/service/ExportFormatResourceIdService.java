@@ -112,7 +112,7 @@ public class ExportFormatResourceIdService extends ResourceIdService
         }
         catch( NumberFormatException ne )
         {
-            AppLogService.error( ne );
+            AppLogService.error( ne.getMessage( ), ne );
         }
 
         ExportFormat export = ExportFormatHome.findByPrimaryKey( nIdExport, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );

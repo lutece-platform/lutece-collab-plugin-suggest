@@ -92,9 +92,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
             daoUtil.executeQuery( );
 
             daoUtil.next( );
-            int nKey = daoUtil.getInt( 1 ) + 1;
-
-            return nKey;
+            return daoUtil.getInt( 1 ) + 1;
         }
     }
 
@@ -210,7 +208,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public List<CommentSubmit> selectListByFilter( SubmitFilter filter, Integer nLimit, Plugin plugin )
     {
-        List<CommentSubmit> commentSubmitList = new ArrayList<CommentSubmit>( );
+        List<CommentSubmit> commentSubmitList = new ArrayList<>( );
         CommentSubmit commentSubmit = null;
         SuggestSubmit suggestSubmit = null;
         List<String> listStrFilter = new ArrayList<>( );

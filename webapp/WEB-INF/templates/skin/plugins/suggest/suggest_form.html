@@ -4,7 +4,7 @@
 		<input name="page" value="suggest" type="hidden">
 		<input name="id_suggest" value="${suggest.idSuggest}" type="hidden">
 		<input name="action" value="do_create_suggest_submit" type="hidden">
-		<h2>#i18n{suggest.suggestForm.title} <#if disable_new_suggest_submit>(#i18n{suggest.suggestForm.titleDisableNewSuggestSubmit})</#if></h2>
+		<h2 class="mb-5">#i18n{suggest.suggestForm.title} <#if disable_new_suggest_submit>(#i18n{suggest.suggestForm.titleDisableNewSuggestSubmit})</#if></h2>
 		${str_entry}
 		<#if category_list?has_content>
 			<div class="form-group">

@@ -53,16 +53,17 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
     public void insert( SuggestUserInfo suggestUserInfo, Plugin plugin )
     {
         int ncpt = 1;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-
-        daoUtil.setString( ncpt++, suggestUserInfo.getLuteceUserKey( ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getFirstName( ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getLastName( ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getBusinessMail( ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getHomeMail( ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getLogin( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        {    
+            daoUtil.setString( ncpt++, suggestUserInfo.getLuteceUserKey( ) );
+            daoUtil.setString( ncpt++, suggestUserInfo.getFirstName( ) );
+            daoUtil.setString( ncpt++, suggestUserInfo.getLastName( ) );
+            daoUtil.setString( ncpt++, suggestUserInfo.getBusinessMail( ) );
+            daoUtil.setString( ncpt++, suggestUserInfo.getHomeMail( ) );
+            daoUtil.setString( ncpt++, suggestUserInfo.getLogin( ) );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -72,16 +73,16 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
     public void update( SuggestUserInfo suggestUserInfo, Plugin plugin )
     {
         int ncpt = 1;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-
-        daoUtil.setString( ncpt++, suggestUserInfo.getFirstName( ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getLastName( ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getBusinessMail( ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getHomeMail( ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getLogin( ) );
-        daoUtil.setString( ncpt++, suggestUserInfo.getLuteceUserKey( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {    
+            daoUtil.setString( ncpt++, suggestUserInfo.getFirstName( ) );
+            daoUtil.setString( ncpt++, suggestUserInfo.getLastName( ) );
+            daoUtil.setString( ncpt++, suggestUserInfo.getBusinessMail( ) );
+            daoUtil.setString( ncpt++, suggestUserInfo.getHomeMail( ) );
+            daoUtil.setString( ncpt++, suggestUserInfo.getLogin( ) );
+            daoUtil.setString( ncpt++, suggestUserInfo.getLuteceUserKey( ) );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -94,25 +95,25 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
 
         int ncpt = 1;
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+        {    
+            daoUtil.setString( 1, strLuteceUserKey );
+    
+            daoUtil.executeQuery( );
+    
+            if ( daoUtil.next( ) )
+            {
+                submitUserInfo = new SuggestUserInfo( );
+    
+                submitUserInfo.setLuteceUserKey( strLuteceUserKey );
+                submitUserInfo.setFirstName( daoUtil.getString( ncpt++ ) );
+                submitUserInfo.setLastName( daoUtil.getString( ncpt++ ) );
+                submitUserInfo.setBusinesMail( daoUtil.getString( ncpt++ ) );
+                submitUserInfo.setHomeMail( daoUtil.getString( ncpt++ ) );
+                submitUserInfo.setLogin( daoUtil.getString( ncpt++ ) );
+            }
 
-        daoUtil.setString( 1, strLuteceUserKey );
-
-        daoUtil.executeQuery( );
-
-        if ( daoUtil.next( ) )
-        {
-            submitUserInfo = new SuggestUserInfo( );
-
-            submitUserInfo.setLuteceUserKey( strLuteceUserKey );
-            submitUserInfo.setFirstName( daoUtil.getString( ncpt++ ) );
-            submitUserInfo.setLastName( daoUtil.getString( ncpt++ ) );
-            submitUserInfo.setBusinesMail( daoUtil.getString( ncpt++ ) );
-            submitUserInfo.setHomeMail( daoUtil.getString( ncpt++ ) );
-            submitUserInfo.setLogin( daoUtil.getString( ncpt++ ) );
         }
-
-        daoUtil.free( );
 
         return submitUserInfo;
     }
@@ -123,9 +124,10 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
     @Override
     public void delete( String strLuteceUserKey, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setString( 1, strLuteceUserKey );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setString( 1, strLuteceUserKey );
+            daoUtil.executeUpdate( );
+        }
     }
 }

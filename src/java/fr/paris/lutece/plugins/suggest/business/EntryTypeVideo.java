@@ -49,6 +49,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
 
+import com.mysql.cj.jdbc.exceptions.PacketTooBigException;
+
 /**
  *
  * class EntryTypeVideo
@@ -64,10 +66,10 @@ public class EntryTypeVideo extends Entry
     private static final String PARAMETER_MENU = "menu";
     private static final String MESSAGE_FILE_TOO_HEAVY = "suggest.message.fileTooHeavy";
     private static final String PROPERTY_CREDITS = "suggest.createEntry.labelCredits";
-    private final String _template_create = "admin/plugins/suggest/create_entry_type_video.html";
-    private final String _template_modify = "admin/plugins/suggest/modify_entry_type_video.html";
-    private final String _template_html_code_form = "admin/plugins/suggest/html_code_form_entry_type_video.html";
-    private final String _template_html_code_response = "admin/plugins/suggest/html_code_response_entry_type_video.html";
+    private static final String TEMPLATE_CREATE = "admin/plugins/suggest/create_entry_type_video.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/suggest/modify_entry_type_video.html";
+    private static final String TEMPLATE_HTML_CODE_FORM = "admin/plugins/suggest/html_code_form_entry_type_video.html";
+    private static final String TEMPLATE_HTML_CODE_RESPONSE = "admin/plugins/suggest/html_code_response_entry_type_video.html";
 
     /**
      * Get the HtmlCode of the entry
@@ -75,9 +77,10 @@ public class EntryTypeVideo extends Entry
      * @return the HtmlCode of the entry
      *
      * */
+    @Override
     public String getTemplateHtmlCodeForm( )
     {
-        return _template_html_code_form;
+        return TEMPLATE_HTML_CODE_FORM;
     }
 
     /**
@@ -89,6 +92,7 @@ public class EntryTypeVideo extends Entry
      *            the local
      * @return null if all data required are in the request else the url of jsp error
      */
+    @Override
     public String getRequestData( HttpServletRequest request, Locale locale )
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
@@ -157,7 +161,7 @@ public class EntryTypeVideo extends Entry
             return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
-        List<EntryAdditionalAttribute> entryAdditionalAttributeList = new ArrayList<EntryAdditionalAttribute>( );
+        List<EntryAdditionalAttribute> entryAdditionalAttributeList = new ArrayList<>( );
         EntryAdditionalAttribute entryAdditionalAttributeAutostart = new EntryAdditionalAttribute( );
         entryAdditionalAttributeAutostart.setName( PARAMETER_AUTOSTART );
         entryAdditionalAttributeAutostart.setValue( strAutostart );
@@ -193,23 +197,8 @@ public class EntryTypeVideo extends Entry
 
         this.setEntryAdditionalAttributeList( entryAdditionalAttributeList );
 
-        if ( strMandatory != null )
-        {
-            this.setMandatory( true );
-        }
-        else
-        {
-            this.setMandatory( false );
-        }
-
-        if ( strShowInSuggestSubmitList != null )
-        {
-            this.setShowInSuggestSubmitList( true );
-        }
-        else
-        {
-            this.setShowInSuggestSubmitList( false );
-        }
+        this.setMandatory( strMandatory != null );
+        this.setShowInSuggestSubmitList( strShowInSuggestSubmitList != null );
 
         return null;
     }
@@ -219,9 +208,10 @@ public class EntryTypeVideo extends Entry
      * 
      * @return template create url of the entry
      */
+    @Override
     public String getTemplateCreate( )
     {
-        return _template_create;
+        return TEMPLATE_CREATE;
     }
 
     /**
@@ -229,9 +219,10 @@ public class EntryTypeVideo extends Entry
      * 
      * @return template modify url of the entry
      */
+    @Override
     public String getTemplateModify( )
     {
-        return _template_modify;
+        return TEMPLATE_MODIFY;
     }
 
     /**
@@ -249,6 +240,7 @@ public class EntryTypeVideo extends Entry
      *            the plugin
      * @return a Form error object if there is an error in the response
      */
+    @Override
     public FormError getResponseData( int nIdSuggestSubmit, HttpServletRequest request, List<Response> listResponse, Locale locale, Plugin plugin )
     {
         String strCredits = request.getParameter( PARAMETER_CREDITS + this.getIdEntry( ) );
@@ -276,7 +268,6 @@ public class EntryTypeVideo extends Entry
                 String strMenu = "false";
                 String strLoop = "false";
                 String strAutostart = "false";
-                // String strAlignment = "bottom";
                 String strQuality = "low";
 
                 for ( EntryAdditionalAttribute attr : this.getEntryAdditionalAttributeList( ) )
@@ -285,10 +276,6 @@ public class EntryTypeVideo extends Entry
                     {
                         strAutostart = attr.getValue( );
                     }
-                    // else if ( attr.getName( ).equals( PARAMETER_ALIGNMENT ) )
-                    // {
-                    // strAlignment = attr.getValue( );
-                    // }
                     else
                         if ( attr.getName( ).equals( PARAMETER_LOOP ) )
                         {
@@ -320,7 +307,7 @@ public class EntryTypeVideo extends Entry
 
                 response.setValueResponse( strResponse );
             }
-            catch( com.mysql.jdbc.PacketTooBigException e )
+            catch( PacketTooBigException e )
             {
                 // Remove the suggest submit potentially created
                 SuggestSubmitService.getService( ).remove( nIdSuggestSubmit, plugin );
@@ -356,8 +343,9 @@ public class EntryTypeVideo extends Entry
      * 
      * @return the template of the html code of the response value associate to the entry
      */
+    @Override
     public String getTemplateHtmlCodeResponse( )
     {
-        return _template_html_code_response;
+        return TEMPLATE_HTML_CODE_RESPONSE;
     }
 }

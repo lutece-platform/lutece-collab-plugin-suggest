@@ -1,74 +1,48 @@
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<div class="box box-primary">
-			<div class="box-header">
-				<h3 class="box-title">#i18n{suggest.manageSuggest.title}</h3>
-				<div class="box-tools">
-					<form class="form-inline pull-right" method="post" action="jsp/admin/plugins/suggest/ManageSuggest.jsp">
-						<label for="">#i18n{suggest.manageSuggest.labelActive}</label>
-						<@comboWithParams name="id_suggest_state" default_value=suggest_state_selected?string additionalParameters=" class=\"form-control \"" items=suggest_state_list />
-						<span>#i18n{suggest.manageSuggest.labelWorkGroup}</span>
-						<@comboWithParams name="workgroup" default_value=user_workgroup_selected?string additionalParameters=" class=\"form-control\"" items=user_workgroup_list  />
-						<button type="submit" class="btn btn-primary btn-flat spaced">
-							<i class="fa fa-filter"></i> <span class="hidden-xs">#i18n{suggest.manageSuggest.buttonSearch}</span>
-						</button>
-					</form>
-					<#if permission_manage_advanced_parameters>
-						<form class="form-inline pull-right spaced" method="post" action="jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp">
-							<button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-cog"></i><span class="hidden-xs"> #i18n{suggest.manageSuggest.buttonManageAdvancedParameters}</span></button>
-						</form>
-					</#if>
-					<#if permission_create_suggest?exists && permission_create_suggest>
-						<form class="form-inline pull-left" method="post"  action="jsp/admin/plugins/suggest/CreateSuggest.jsp">
-							<button type="submit" class="btn btn-primary btn-flat">
-								<i class="fa fa-plus"></i> <span class="hidden-xs">#i18n{suggest.manageSuggest.buttonCreate}</span>
-							</button>
-						</form>
-					</#if>
-				</div>
-				<div class="box-body table-responsive">
-				  	<table class="table table-hover table-striped">
-						<tr>
-							<th>#i18n{suggest.manageSuggest.rowState}</th>
-							<th>#i18n{suggest.manageSuggest.rowTitle}</th>
-							<th></th>
-							<th>#i18n{suggest.manageSuggest.rowActions}</th>
-						</tr>
-						<#list suggest_list as suggest>
-						<tr>
-							<td style="width:3%">
-								<span class="label <#if suggest.active>label-success"><i class="fa fa-check fa-fw"></i><#else>label-danger"><i class="fa fa-remove"></i></span></#if>
-							</td>
-							<td>
-								<a href="jsp/admin/plugins/suggest/ModifySuggest.jsp?id_suggest=${suggest.idSuggest}" target="_blank" title="#i18n{suggest.action.modify.description}">
-									${suggest.title} 
-								</a>
-							</td>
-							<td>
-								<form class="form-inline" method="post" action="jsp/admin/plugins/suggest/Statistics.jsp">
-									<input type="hidden" name="id_suggest" value="${suggest.idSuggest}" >
-									<a class="btn btn-default" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${suggest.idSuggest}" target="_blank" title="Voir"><i class="fa fa-globe" title="${suggest.title}"></i></a>
-									<#if suggest.active>
-									<button type="submit" class="btn btn-default" title="#i18n{suggest.manageAdvancedParameters.labelStatistics}">
-										<i class="fa fa-signal"></i>
-									</button>
-									</#if>
-								</form>
-							</td>	
-							<td>
-								<#if suggest.actions?exists>
-									<#list suggest.actions as action>
-										<a class="btn btn-flat <#if action.permission=='DELETE' || action.nameKey=='suggest.action.disable.name'>btn-danger<#elseif action.nameKey=='suggest.action.enable.name' >btn-success<#else >btn-primary</#if>" href="${action.url}?id_suggest=${suggest.idSuggest}" title="${action.description}">
-											<i class="${action.iconUrl}"></i>
-										</a>
-									</#list>
+<@row>	<@columns>		<@box>			<@boxHeader title='#i18n{suggest.manageSuggest.title}'>				<@tform type='inline' method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp'>
+					<@formGroup labelKey='#i18n{suggest.manageSuggest.labelActive}' hideLabel=['all'] formStyle='inline'>
+						<@select name='id_suggest_state' default_value=suggest_state_selected?string items=suggest_state_list />					</@formGroup>					<@formGroup labelKey='#i18n{suggest.manageSuggest.labelWorkGroup}' hideLabel=['all'] formStyle='inline'>						<@inputGroup>							<@select name='workgroup' default_value=user_workgroup_selected?string items=user_workgroup_list />							<@inputGroupItem>								<@button type='submit' buttonIcon='filter' title='#i18n{suggest.manageSuggest.buttonSearch}' hideTitle=['all'] size='sm' />							</@inputGroupItem>						</@inputGroup>					</@formGroup>				</@tform>								<#if permission_manage_advanced_parameters>
+					<@tform method='post' action='jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp'>
+						<@button type='submit' buttonIcon='cog' title='#i18n{suggest.manageSuggest.buttonManageAdvancedParameters}' hideTitle=['all'] size='sm' />					</@tform>				</#if>					
+				<#if permission_create_suggest?exists && permission_create_suggest>
+					<@tform method='post' action='jsp/admin/plugins/suggest/CreateSuggest.jsp'>
+						<@button type='submit' buttonIcon='plus-square' title='#i18n{suggest.manageSuggest.buttonCreate}' hideTitle=['all'] size='sm' />					</@tform>
+				</#if>
+			</@boxHeader>
+			<@boxBody>
+				<@table>
+					<@tr>
+						<@th>#i18n{suggest.manageSuggest.rowState}</@th>
+						<@th>#i18n{suggest.manageSuggest.rowTitle}</@th>
+						<@th></@th>
+						<@th>#i18n{suggest.manageSuggest.rowActions}</@th>
+					</@tr>
+					<#list suggest_list as suggest>
+					<@tr>
+						<@td params='style="width:3%;"'>							<#if suggest.active><#assign tagColor='success' /><#assign tagIcon='check' />							<#else><#assign tagColor='danger' /><#assign tagIcon='times' />							</#if>							<@tag color=tagColor><@icon style=tagIcon /></@tag>
+						</@td>
+						<@td>
+							<@link href='jsp/admin/plugins/suggest/ModifySuggest.jsp?id_suggest=${suggest.idSuggest}' target='_blank' title='#i18n{suggest.action.modify.description}'>
+								${suggest.title} 
+							</@link>
+						</@td>
+						<@td>
+							<@tform method='post' action='jsp/admin/plugins/suggest/Statistics.jsp'>
+								<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
+								<@aButton href='jsp/site/Portal.jsp?page=suggest&id_suggest=${suggest.idSuggest}' target='_blank' buttonIcon='globe' title='${suggest.title}' hideTitle=['all'] size='sm' />
+								<#if suggest.active>
+								<@button type='submit' title='#i18n{suggest.manageAdvancedParameters.labelStatistics}' hideTitle=['all'] buttonIcon='signal' size='sm' />
 								</#if>
-							</td>
-			    		</tr>
-			  			</#list>
-		   			</table>
-		   		<@paginationAdmin paginator=paginator combo=1 />
-			</div>
-		</div>
-	</div>
-</div>
+							</@tform>
+						</@td>	
+						<@td>
+							<#if suggest.actions?exists>
+								<#list suggest.actions as action>									<#if action.permission=='DELETE' || action.nameKey=='suggest.action.disable.name'>										<#assign buttonColor='danger' />									<#elseif action.nameKey=='suggest.action.enable.name'>										<#assign buttonColor='success' />									<#else>										<#assign buttonColor='primary' />									</#if>
+									<@aButton href='${action.url}?id_suggest=${suggest.idSuggest}' title='${action.description}' hideTitle=['all'] color=buttonColor size='sm' buttonIcon=action.iconUrl />
+								</#list>
+							</#if>
+						</@td>
+					</@tr>
+					</#list>
+				</@table>
+				<@paginationAdmin paginator=paginator combo=1 />
+			</@boxBody>		</@box>	</@columns></@row>

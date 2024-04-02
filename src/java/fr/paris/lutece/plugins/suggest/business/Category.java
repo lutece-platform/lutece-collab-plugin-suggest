@@ -100,12 +100,8 @@ public class Category implements RBACResource, Serializable
      */
     public boolean equals( Object obj )
     {
-        if ( obj instanceof Category && ( (Category) obj ).getIdCategory( ) == _nIdCategory )
-        {
-            return true;
-        }
+        return obj != null && this.getClass( ).isInstance( obj ) && ( (Category) obj ).getIdCategory( ) == _nIdCategory;
 
-        return false;
     }
 
     /**

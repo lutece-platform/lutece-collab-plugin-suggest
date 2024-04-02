@@ -183,7 +183,7 @@ public class SuggestSubmitService implements ISuggestSubmitService
 
         List<Integer> listIdSuggestDubmit = getSuggestSubmitListId( filter, plugin );
 
-        if ( ( listIdSuggestDubmit != null ) && ( listIdSuggestDubmit.size( ) > 0 ) )
+        if ( ( listIdSuggestDubmit != null ) && ( !listIdSuggestDubmit.isEmpty( ) ) )
         {
             if ( ( nPositionElement != null ) && ( nNewPositionElement != null ) && ( !nPositionElement.equals( nNewPositionElement ) ) )
             {
@@ -391,18 +391,6 @@ public class SuggestSubmitService implements ISuggestSubmitService
         return SuggestSubmitHome.getSuggestSubmitListId( filter, plugin );
     }
 
-    // @Override
-    // public List<SuggestSubmit> getSuggestSubmitListWithNumberComment( SubmitFilter filter, Plugin plugin )
-    // {
-    // if ( !filter.containsSortBy( ) )
-    // {
-    // //use default sort
-    // SuggestUtils.initSubmitFilterBySort( filter, SuggestUtils.CONSTANT_ID_NULL );
-    // }
-    //
-    // return SuggestSubmitHome.getSuggestSubmitListWithNumberComment( filter, plugin );
-    // }
-
     /**
      * {@inheritDoc}
      */
@@ -435,7 +423,7 @@ public class SuggestSubmitService implements ISuggestSubmitService
     public void updateAllDisplayOfSuggestSubmit( Integer nIdSuggest, Plugin plugin, Locale locale )
     {
         Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
-        HashMap<Integer, IEntry> mapEntry = new HashMap<Integer, IEntry>( );
+        HashMap<Integer, IEntry> mapEntry = new HashMap<>( );
         EntryFilter entryFilter = new EntryFilter( );
         entryFilter.setIdSuggest( suggest.getIdSuggest( ) );
 

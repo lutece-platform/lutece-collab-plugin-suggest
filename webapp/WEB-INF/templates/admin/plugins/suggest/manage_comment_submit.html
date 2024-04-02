@@ -1,9 +1,9 @@
 <section class="content">
-	<div class="row">
-	  <div class="col-xs-12 col-sm-12">
-			<div class="box box-primary">
-				<div class="box-header">
-					<h3 class="box-title">#i18n{suggest.manageCommentSubmit.rowTitleSuggestSubmitTitle} :
+	<@row>
+		<@columns>
+			<@box>
+				<#assign boxHeaderTitle>
+					#i18n{suggest.manageCommentSubmit.rowTitleSuggestSubmitTitle} :
 						<#if suggest_submit.suggestSubmitTitle?exists>
 							<#if suggest_submit.suggestSubmitTitle?length &gt; 100>
 								${suggest_submit.suggestSubmitTitle?substring(0,100)}...
@@ -11,233 +11,185 @@
 								${suggest_submit.suggestSubmitTitle}
 							</#if>
 						</#if>
-						<#if suggest_submit.reported><span class="label label-important">#i18n{suggest.manageSuggestSubmit.altWarning}</span></#if>
-					</h3>
-					<div class="box-tools">
-						<#if suggest_submit.suggestSubmitState.number=disable_state_number>
-			        <a class="btn btn-xs btn-flat btn-primary" href="jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${waiting_for_publish_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}">
-								<i class="fa fa-info-circle"></i>
-							</a>
-							<a class="btn btn-xs btn-flat btn-success" href="jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${publish_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.altPublish}">
-								<i class="fa fa-check"></i>
-							</a>
-						<#elseif suggest_submit.suggestSubmitState.number=waiting_for_publish_state_number >
-						<a class="btn btn-xs btn-flat btn-warning" href="jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${disable_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.altDisable}">
-							<i class="fa fa-pause"></i>
-						</a>
-						 <a class="btn btn-xs btn-flat btn-success" href="jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${publish_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.altPublish}">
-						   <i class="fa fa-check"></i>
-						</a>
+						<#if suggest_submit.reported><@tag color='danger'>#i18n{suggest.manageSuggestSubmit.altWarning}</@tag></#if>
+				</#assign>
+				<@boxHeader title=boxHeaderTitle>
+					<#if suggest_submit.suggestSubmitState.number=disable_state_number>
+						<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${waiting_for_publish_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}' buttonIcon='info-circle' />
+						<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${publish_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altPublish}' buttonIcon='check' />
+					<#elseif suggest_submit.suggestSubmitState.number=waiting_for_publish_state_number >
+						<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${disable_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altDisable}' buttonIcon='pause' />
+						 <@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${publish_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altPublish}' buttonIcon='check' />
 						<#elseif suggest_submit.suggestSubmitState.number=publish_state_number >
-			        <a class="btn btn-xs btn-flat btn-primary" href="jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${disable_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.altDisable}">
-								<i class="fa fa-remove"></i>
-							</a>
-							<a class="btn btn-xs btn-flat btn-success" href="jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${waiting_for_publish_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}">
-								<i class="fa fa-check"></i>
-							</a>
-						</#if>
-						<a class="btn btn-xs btn-flat btn-danger" href="jsp/admin/plugins/suggest/ConfirmRemoveSuggestSubmit.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.altDelete}">
-							<i class="fa fa-trash"></i>
-						</a>
-						<#if suggest_submit_prev!=-1>
-						<a class="btn btn-xs btn-flat btn-primary" href="jsp/admin/plugins/suggest/ManageCommentSubmit.jsp?id_suggest_submit=${suggest_submit_prev}" title="#i18n{suggest.manageCommentSubmit.altPrevSuggestSubmit}">
-					  		<i class="fa fa-arrow-circle-o-left"></i>
-						</a>
-						</#if>
-						<#if suggest_submit_next!=-1>
-						<a class="btn btn-xs btn-flat btn-primary" href="jsp/admin/plugins/suggest/ManageCommentSubmit.jsp?id_suggest_submit=${suggest_submit_next}" title="#i18n{suggest.manageCommentSubmit.altNextSuggestSubmit}">
-							<i class="fa fa-arrow-circle-o-right"></i>
-						</a>
-						</#if>
-						<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col-xs-12 col-sm-3">
-		<div class="box box-primary">
-			<div class="box-header">
-				<h3 class="box-title"></h3>
-			</div>
-			<div class="box-body">
-				<form action="jsp/admin/plugins/suggest/ManageCommentSubmit.jsp" method="post" name="" id="filter">
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_comment_state">#i18n{suggest.manageCommentSubmit.labelState}</label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<@comboWithParams name="id_comment_state" default_value=comment_state_selected?string additionalParameters=" class=\"input-medium\"" items=comment_state_list />
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_contains_sub_comment_disable">#i18n{suggest.manageCommentSubmit.labelContainsSubCommentDisable}</label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<@comboWithParams name="id_contains_sub_comment_disable" default_value=comment_contains_sub_comment_disable_selected?string  additionalParameters=" class=\"input-small\"" items=comment_contains_sub_comment_disable_list  />
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_comment_sort">#i18n{suggest.manageCommentSubmit.labelSort}</label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<@comboWithParams name="id_comment_sort" default_value=comment_sort_selected?string additionalParameters=" class=\"input-medium\"" items=comment_sort_list />
-					</div>
-				</div>
-				<button class="btn btn-primary btn-xs btn-flat" type="submit">
-					<i class="fa fa-filter"></i>&nbsp;#i18n{suggest.manageCommentSubmit.buttonSearch}
-				</button>
-			</form>
-		</div>
-		</div>
-		<div class="box box-primary">
-			<div class="box-header">
-				<h3 class="box-title"></h3>
-			</div>
-			<div class="box-body">
-						<#if suggest_submit.reported>
-								<span class="label label-important">#i18n{suggest.manageSuggestSubmit.altWarning}</span>
-								<span class="pull-right">
-									<i id="display_advert" class="glyphicon glyphicon-chevron-down" title="Afficher les signalements"></i>
-								</span>
-								<#if suggest_submit.reportedMessages?has_content>
-									<#list suggest_submit.reportedMessages  as  reported_messages>
-						         ${reported_messages.value}
-							      	<small>${reported_messages.dateReported}</small>
-							  	  </#list>
-									</#if>
-						</#if>
-						#i18n{suggest.manageCommentSubmit.rowDateSuggestSubmit}: <strong>${suggest_submit.dateResponse?date?string.short}</strong>
-						#i18n{suggest.manageCommentSubmit.rowStateSuggestSubmit}: <#if suggest_submit.suggestSubmitState.number=publish_state_number>
-						<span class="label label-success" title="#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState}"><i class="fa fa-check"></i> ;#i18n{suggest.manageSuggestSubmit.altPublish}</span>
-				<#elseif suggest_submit.suggestSubmitState.number=waiting_for_publish_state_number>
-						<span class="label label-warning" title="#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState}"><i class="glyphicon glyphicon-white icon-pause"></i>&nbsp;#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}</span>
-				<#else>
-						<span class="label label-important" title="#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState}"><i class="glyphicon glyphicon-white icon-remove"></i>&nbsp;#i18n{suggest.manageSuggestSubmit.altDisable}</span>
-				</#if>
-				<#if suggest.suggestSubmitTypes?has_content && suggest.suggestSubmitTypes?size &gt; 0 >
-					<p>#i18n{suggest.manageCommentSubmit.rowSuggestSubmitType}:
-							<#if suggest_submit.suggestSubmitType?has_content>
-								<strong>${suggest_submit.suggestSubmitType.name}</strong>
-							</#if>
-						</p>
+						<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${disable_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altDisable}' buttonIcon='remove' />
+						<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${waiting_for_publish_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}' buttonIcon='check' />
 					</#if>
-					<p>#i18n{suggest.manageCommentSubmit.rowCategory}:</p>
-						<#if category_list?has_content>
-					<form method="post" class="form-horizontal" action="jsp/admin/plugins/suggest/DoChangeSuggestSubmitCategory.jsp">
-						<input name="id_suggest_submit" value="${suggest_submit.idSuggestSubmit}" type="hidden">
-						<input name="comment" value="comment" type="hidden">
-						<#if suggest_submit.category?exists>
-							<@combo name="id_category" items=category_list default_value="${suggest_submit.category.idCategory}" />
-						<#else>
-							<@combo name="id_category" items=category_list default_value="-1" />
+					<@aButton href='jsp/admin/plugins/suggest/ConfirmRemoveSuggestSubmit.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altDelete}' buttonIcon='trash' />
+					<#if suggest_submit_prev!=-1>
+					<@aButton href='jsp/admin/plugins/suggest/ManageCommentSubmit.jsp?id_suggest_submit=${suggest_submit_prev}' title='#i18n{suggest.manageCommentSubmit.altPrevSuggestSubmit}' buttonIcon='arrow-circle-o-left' />
+					</#if>
+					<#if suggest_submit_next!=-1>
+					<@aButton href='jsp/admin/plugins/suggest/ManageCommentSubmit.jsp?id_suggest_submit=${suggest_submit_next}' title='#i18n{suggest.manageCommentSubmit.altNextSuggestSubmit}' buttonIcon='arrow-circle-o-right' />
+					</#if>
+				</@boxHeader>
+				<@boxBody>
+					<@tform action='jsp/admin/plugins/suggest/ManageCommentSubmit.jsp' id='filter'>
+						<@formGroup labelFor='id_comment_state' labelKey='#i18n{suggest.manageCommentSubmit.labelState}'>							<@select name='id_comment_state' default_value=comment_state_selected?string items=comment_state_list />						</@formGroup>
+						<@formGroup labelFor='id_contains_sub_comment_disable' labelKey='#i18n{suggest.manageCommentSubmit.labelContainsSubCommentDisable}'>							<@select name='id_contains_sub_comment_disable' default_value=comment_contains_sub_comment_disable_selected?string items=comment_contains_sub_comment_disable_list  />						</@formGroup>
+						<@formGroup labelFor='id_comment_sort' labelKey='#i18n{suggest.manageCommentSubmit.labelSort}'>							<@select name='id_comment_sort' default_value=comment_sort_selected?string items=comment_sort_list />						</@formGroup>
+						<@formGroup>
+							<@button type='submit' title='#i18n{suggest.manageCommentSubmit.buttonSearch}' buttonIcon='filter' />
+						</@formGroup>
+					</@tform>
+
+					<#if suggest_submit.reported>
+						<@tag color='danger'>#i18n{suggest.manageSuggestSubmit.altWarning}</@tag>
+						<@div align='right'>
+							<@icon style='chevron-down' id='display_advert' title='Afficher les signalements' />
+						</@div>
+						<#if suggest_submit.reportedMessages?has_content>
+							<#list suggest_submit.reportedMessages  as  reported_messages>
+							${reported_messages.value}
+							<small>${reported_messages.dateReported}</small>
+						  </#list>
 						</#if>
-						<button type="submit" class="btn btn-primary btn-xs btn-flat" title="#i18n{suggest.manageSuggestSubmit.buttonModify}">
-							<i class="fa fa-chek"></i>
-						</button>
-						</form>
+					</#if>
+					
+					#i18n{suggest.manageCommentSubmit.rowDateSuggestSubmit}: <strong>${suggest_submit.dateResponse?date?string.short}</strong>
+					#i18n{suggest.manageCommentSubmit.rowStateSuggestSubmit}:
+					<#if suggest_submit.suggestSubmitState.number=publish_state_number>
+						<@tag color='success' title='#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState}'> <@icon style='check' /> #i18n{suggest.manageSuggestSubmit.altPublish}</@tag>
+					<#elseif suggest_submit.suggestSubmitState.number=waiting_for_publish_state_number>
+						<@tag color='warning' title='#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState}'><@icon style='pause' /> #i18n{suggest.manageSuggestSubmit.altWaitingForPublish}</@tag>
+					<#else>
+						<@tag color='danger' title='#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState}'><@icon style='times' />#i18n{suggest.manageSuggestSubmit.altDisable}</@tag>
+					</#if>
+					
+					<#if suggest.suggestSubmitTypes?has_content && suggest.suggestSubmitTypes?size &gt; 0 >
+					<p>
+						#i18n{suggest.manageCommentSubmit.rowSuggestSubmitType}:
+						<#if suggest_submit.suggestSubmitType?has_content>
+							<strong>${suggest_submit.suggestSubmitType.name}</strong>
+						</#if>
+					</p>
+					</#if>
+					
+					<p>#i18n{suggest.manageCommentSubmit.rowCategory}:</p>
+					
+					<#if category_list?has_content>
+					<@tform action='jsp/admin/plugins/suggest/DoChangeSuggestSubmitCategory.jsp'>
+						<@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' />
+						<@input type='hidden' name='comment' value='comment' />
+						<#if suggest_submit.category?exists>
+							<@select name='id_category' items=category_list default_value='${suggest_submit.category.idCategory}' />
+						<#else>
+							<@select name='id_category' items=category_list default_value='-1' />
+						</#if>
+						<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonModify}' buttonIcon='save' />
+					</@tform>
 					</#if>
 				<#if !suggest_submit.disableVote>
-					<i class="fa fa-star"></i>&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberVote} : ${suggest_submit.numberVote}
-					<i class="fa fa-thumbs-up"></i>&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberScore} : ${suggest_submit.numberScore}
+					<@icon style='star' />&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberVote} : ${suggest_submit.numberVote}
+					<@icon style='thumbs-up' />&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberScore} : ${suggest_submit.numberScore}
 				</#if>
 				<#if !suggest_submit.disableComment>
-					<div class="label label-info">
-						<i class="fa fa-comment"></i>&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberComment} : ${suggest_submit.numberComment}
+					<@tag color='info'>
+						<@icon style='comment' />&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberComment} : ${suggest_submit.numberComment}
 						#i18n{suggest.manageSuggestSubmit.rowNumberCommentEnable} : ${suggest_submit.numberCommentEnable} /
 						#i18n{suggest.manageSuggestSubmit.rowNumberCommentIdle} : ${suggest_submit.numberComment - suggest_submit.numberCommentEnable}
-					</div>
+					</@tag>
 				</#if>
-				<form method="post" class="form-horizontal" action="jsp/admin/plugins/suggest/DoSubmitOfficialAnswer.jsp" id="addOfficialComment">
+				<@tform method='post' action='jsp/admin/plugins/suggest/DoSubmitOfficialAnswer.jsp' id='addOfficialComment'>
 					<h3>#i18n{suggest.manageCommentSubmit.officialAnswer} <small>#i18n{suggest.manageCommentSubmit.labelAddOfficialAnswer}</h3>
-					<input name="id_suggest_submit" value="${suggest_submit.idSuggestSubmit}" type="hidden">
-					<textarea name="comment_value" id="comment_value" rows="6" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" <#if suggest.activeEditorBbcode> class='markitup'</#if>></textarea>
-					<button type="submit" class="btn btn-primary btn-xs btn-flat" name="add">
-						<i class="fa fa-plus"></i>&nbsp;#i18n{suggest.manageCommentSubmit.buttonAdd}
-					</button>
-				</form>
-			</div>
-			</div>
-			</div>
-			<div class="col-xs-12 col-sm-9">
-				<div class="box box-primary">
-					<div class="box-header">
-						<h3 class="box-title"></h3>
-					</div>
-					<div class="box-body">
-					<@paginationAdmin paginator=paginator combo=1 />
-					<#list comment_submit_list as comment_submit>
-						<div class="callout callout-info">
-							<#if comment_submit.isOfficialAnswer()><span class="badge badge-info pull-right">#i18n{suggest.manageCommentSubmit.officialAnswer}</span></#if>
-							<p id="comment${comment_submit.idCommentSubmit}">
-								<strong>#i18n{suggest.manageCommentSubmit.rowValueCommentSubmit}
-								<#if comment_submit.active>
-									<span class="label label-success">#i18n{suggest.manageCommentSubmit.stateEnable}</span>
-								<#else>
-									<span class="label label-important" id="not_published_${comment_submit.idCommentSubmit}">#i18n{suggest.manageCommentSubmit.stateDisable}</span>
-								</#if>
-								</strong>
-							</p>
-							<pre>${suggest.parseBbcodeValue(comment_submit.value)}</pre>
-							<form method="post" class="form-inline pull-right" action="jsp/admin/plugins/suggest/DoChangeCommentSubmit.jsp#comment${comment_submit.idCommentSubmit}">
-								<input name="id_comment_submit" value="${comment_submit.idCommentSubmit}" type="hidden">
-								<#if comment_submit.active>
-									<button type="submit" class="btn btn-xs btn-flat btn-primary" name="disable">
-										<i class="fa fa-remove"></i> #i18n{suggest.manageCommentSubmit.buttonDisable}
-									</button>
-								<#else>
-									<button type="submit" class="btn btn-xs btn-flat btn-primary" name="enable">
-										<i class="fa fa-check"></i>&nbsp;#i18n{suggest.manageCommentSubmit.buttonEnable}
-									</button>
-								</#if>
-									<button type="submit" class="btn btn-xs btn-flat btn-danger" name="delete">
-										<i class="fa fa-trash"></i>&nbsp;#i18n{suggest.manageCommentSubmit.buttonDelete}
-									</button>
-							</form>
-							<p>
-							<p>
+					<@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' />
+					<@formGroup>
+						<#if suggest.activeEditorBbcode>
+							<#assign class='markitup' />
+						<#else>
+							<#assign class='' />
+						</#if>
+						<@input type='textarea' name='comment_value' id='comment_value' rows=6 class=class></@input>
+					</@formGroup>
+					<@formGroup>
+						<@button type='submit' name='add' buttonIcon='plus' title='#i18n{suggest.manageCommentSubmit.buttonAdd}' />
+					</@formGroup>
+				</@tform>
+
+
+				<@paginationAdmin paginator=paginator combo=1 />
+				<#list comment_submit_list as comment_submit>
+					<@alert color='info'>
+						<#if comment_submit.isOfficialAnswer()><@tag color='info' align='right'>#i18n{suggest.manageCommentSubmit.officialAnswer}</@tag></#if>
+						<@p id="comment${comment_submit.idCommentSubmit}">
+							<strong>#i18n{suggest.manageCommentSubmit.rowValueCommentSubmit}
+							<#if comment_submit.active>
+								<@tag color='success'>#i18n{suggest.manageCommentSubmit.stateEnable}</@tag>
+							<#else>
+								<@tag color='danger' id='not_published_${comment_submit.idCommentSubmit}'>#i18n{suggest.manageCommentSubmit.stateDisable}</@tag>
+							</#if>
+							</strong>
+						</@p>
+						<pre>${suggest.parseBbcodeValue(comment_submit.value)}</pre>
+						<@tform method='post' action='jsp/admin/plugins/suggest/DoChangeCommentSubmit.jsp#comment${comment_submit.idCommentSubmit}'>
+							<@input type='hidden' name='id_comment_submit' value='${comment_submit.idCommentSubmit}' />
+							<#if comment_submit.active>
+								<@button type='submit' name='disable' title='#i18n{suggest.manageCommentSubmit.buttonDisable}' buttonIcon='remove' color='primary' />
+							<#else>
+								<@button type='submit' name='enable' title='#i18n{suggest.manageCommentSubmit.buttonEnable}' buttonIcon='check' color='primary' />
+							</#if>
+								<@button type='submit' name='delete' title='#i18n{suggest.manageCommentSubmit.buttonDelete}' buttonIcon='trash' color='danger' />
+						</@tform>
+
+						<p>
 							#i18n{suggest.manageCommentSubmit.rowDateCommentSubmit}: <strong>${comment_submit.dateComment!}&nbsp;</strong>
 							<#if comment_submit.comments?has_content>
 							<span>
 							&nbsp;#i18n{suggest.manageCommentSubmit.rowLastDateCommentSubmit}: <strong>${comment_submit.dateModify!}&nbsp;</strong>
 							</span>
 							</#if>
-							</p>
-							<#if comment_submit.comments?has_content>
-							<p class="comment_toggle" id="comment_toggle${comment_submit.idCommentSubmit}"><i class="fa fa-chevron-down"></i>&nbsp;#i18n{suggest.manageCommentSubmit.ShowSubComments}</p>
-							<div class="commentComments">
-								<#list comment_submit.comments as comment_comment>
-								<blockquote id="comment${comment_comment.idCommentSubmit}">
-									<#if comment_comment.isOfficialAnswer()><span class="badge badge-info pull-right">#i18n{suggest.manageCommentSubmit.officialAnswer}</span></#if>
-									<p>
-									<strong>#i18n{suggest.manageCommentSubmit.rowValueCommentSubmit}
+						</p>
+						
+						<#if comment_submit.comments?has_content>
+						<p class="comment_toggle" id="comment_toggle${comment_submit.idCommentSubmit}">
+							<@icon style='chevron-down' />&nbsp;#i18n{suggest.manageCommentSubmit.ShowSubComments}
+						</p>
+						
+						<@div class='commentComments'>
+							<#list comment_submit.comments as comment_comment>
+							<blockquote id="comment${comment_comment.idCommentSubmit}">
+								<#if comment_comment.isOfficialAnswer()><@span align='right'><@tag color='info'>#i18n{suggest.manageCommentSubmit.officialAnswer}</@tag></@span></#if>
+								<p>
+								<strong>#i18n{suggest.manageCommentSubmit.rowValueCommentSubmit} 
+								<#if comment_comment.active>
+									<@tag color='success'>#i18n{suggest.manageCommentSubmit.stateEnable}</@tag>
+								<#else>
+									<@tag color='danger'>#i18n{suggest.manageCommentSubmit.stateDisable}</@tag>
+								</#if>
+								</strong>
+								</p>
+								<pre>${suggest.parseBbcodeValue(comment_comment.value)}</pre>
+								<p>#i18n{suggest.manageCommentSubmit.rowDateCommentSubmit}: ${comment_comment.dateComment!}</p>
+								
+								<@tform method='post' action='jsp/admin/plugins/suggest/DoChangeCommentSubmit.jsp#comment${comment_comment.idCommentSubmit}'>
+									<@input type='hidden' name='id_comment_submit' value='${comment_comment.idCommentSubmit}' />
+									<@input type='hidden' name='id_parent' value='${comment_submit.idCommentSubmit}' />
 									<#if comment_comment.active>
-										<span class="label label-success">#i18n{suggest.manageCommentSubmit.stateEnable}</span>
+										<@button type='submit' name='disable' title='#i18n{suggest.manageCommentSubmit.buttonDisable}' buttonIcon='remove' color='primary' />
 									<#else>
-										<span class="label label-important">#i18n{suggest.manageCommentSubmit.stateDisable}</span>
+										<@button type='submit' name='enable' title='#i18n{suggest.manageCommentSubmit.buttonEnable}' buttonIcon='check' color='primary' />
 									</#if>
-									</strong>
-									</p>
-									<pre>${suggest.parseBbcodeValue(comment_comment.value)}</pre>
-									<p>#i18n{suggest.manageCommentSubmit.rowDateCommentSubmit}:  ${comment_comment.dateComment!} </p>
-									<form method="post" action="jsp/admin/plugins/suggest/DoChangeCommentSubmit.jsp#comment${comment_comment.idCommentSubmit}">
-									<input name="id_comment_submit" value="${comment_comment.idCommentSubmit}" type="hidden">
-									<input name="id_parent" value="${comment_submit.idCommentSubmit}" type="hidden">
-									<#if comment_comment.active>
-										<button type="submit" class="btn btn-xs btn-flat btn-primary" name="disable"><i class="fa fa-remove"></i>&nbsp;#i18n{suggest.manageCommentSubmit.buttonDisable}</button>
-									<#else>
-										<button type="submit" class="btn btn-xs btn-flat btn-primary" name="enable"><i class="fa fa-check"></i>&nbsp;#i18n{suggest.manageCommentSubmit.buttonEnable}</button>
-									</#if>
-									<button type="submit" class="btn btn-xs btn-flat btn-danger" name="delete"><i class="fa fa-trash"></i>&nbsp;#i18n{suggest.manageCommentSubmit.buttonDelete}</button>
-									</form>
-								</blockquote>
-								</#list>
-							</div>
-							</#if>
-						</div>
-					</#list>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+									<@button type='submit' name='delete' title='#i18n{suggest.manageCommentSubmit.buttonDelete}' buttonIcon='trash' color='danger' />
+								</@tform>
+							</blockquote>
+							</#list>
+						</@div>
+						</#if>
+					</@alert>
+				</#list>
+				</@boxBody>
+			</@box>
+		</@columns>
+	</@row>
 </section>
 
 

@@ -58,11 +58,10 @@ public class EntryTypeImage extends Entry
 {
     private static final String PARAMETER_WIDTH = "width";
     private static final String PARAMETER_HEIGHT = "height";
-    private static final String MESSAGE_IMAGE_TOO_HEAVY = "suggest.message.imageTooHeavy";
-    private final String _template_create = "admin/plugins/suggest/create_entry_type_image.html";
-    private final String _template_modify = "admin/plugins/suggest/modify_entry_type_image.html";
-    private final String _template_html_code_form = "admin/plugins/suggest/html_code_form_entry_type_image.html";
-    private final String _template_html_code_response = "admin/plugins/suggest/html_code_response_entry_type_image.html";
+    private static final String TEMPLATE_CREATE = "admin/plugins/suggest/create_entry_type_image.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/suggest/modify_entry_type_image.html";
+    private static final String TEMPLATE_HTML_CODE_FORM = "admin/plugins/suggest/html_code_form_entry_type_image.html";
+    private static final String TEMPLATE_HTML_CODE_RESPONSE = "admin/plugins/suggest/html_code_response_entry_type_image.html";
 
     /**
      * Get the HtmlCode of the entry
@@ -70,9 +69,10 @@ public class EntryTypeImage extends Entry
      * @return the HtmlCode of the entry
      *
      * */
+    @Override
     public String getTemplateHtmlCodeForm( )
     {
-        return _template_html_code_form;
+        return TEMPLATE_HTML_CODE_FORM;
     }
 
     /**
@@ -84,6 +84,7 @@ public class EntryTypeImage extends Entry
      *            the locale
      * @return null if all data requiered are in the request else the url of jsp error
      */
+    @Override
     public String getRequestData( HttpServletRequest request, Locale locale )
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
@@ -155,23 +156,8 @@ public class EntryTypeImage extends Entry
         this.setWidth( nWidth );
         this.setHeight( nHeight );
 
-        if ( strMandatory != null )
-        {
-            this.setMandatory( true );
-        }
-        else
-        {
-            this.setMandatory( false );
-        }
-
-        if ( strShowInSuggestSubmitList != null )
-        {
-            this.setShowInSuggestSubmitList( true );
-        }
-        else
-        {
-            this.setShowInSuggestSubmitList( false );
-        }
+        this.setMandatory( strMandatory != null );
+        this.setShowInSuggestSubmitList( strShowInSuggestSubmitList != null );
 
         return null;
     }
@@ -181,9 +167,10 @@ public class EntryTypeImage extends Entry
      * 
      * @return template create url of the entry
      */
+    @Override
     public String getTemplateCreate( )
     {
-        return _template_create;
+        return TEMPLATE_CREATE;
     }
 
     /**
@@ -191,9 +178,10 @@ public class EntryTypeImage extends Entry
      * 
      * @return template modify url of the entry
      */
+    @Override
     public String getTemplateModify( )
     {
-        return _template_modify;
+        return TEMPLATE_MODIFY;
     }
 
     /**
@@ -211,6 +199,7 @@ public class EntryTypeImage extends Entry
      *            the plugin
      * @return a Form error object if there is an error in the response
      */
+    @Override
     public FormError getResponseData( int nIdSuggestSubmit, HttpServletRequest request, List<Response> listResponse, Locale locale, Plugin plugin )
     {
         MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
@@ -251,8 +240,9 @@ public class EntryTypeImage extends Entry
      * 
      * @return the template of the html code of the response value associate to the entry
      */
+    @Override
     public String getTemplateHtmlCodeResponse( )
     {
-        return _template_html_code_response;
+        return TEMPLATE_HTML_CODE_RESPONSE;
     }
 }

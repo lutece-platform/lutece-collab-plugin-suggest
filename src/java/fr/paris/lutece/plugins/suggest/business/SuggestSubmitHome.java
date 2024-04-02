@@ -276,7 +276,7 @@ public final class SuggestSubmitHome
     public static List<SuggestSubmit> getSuggestSubmitList( SubmitFilter filter, Plugin plugin, int nNumberMaxSuggestSubmit )
     {
         List<Integer> suggestSubmitListId = getSuggestSubmitListId( filter, plugin );
-        List<SuggestSubmit> suggestSubmitList = new ArrayList<SuggestSubmit>( );
+        List<SuggestSubmit> suggestSubmitList = new ArrayList<>( );
         SuggestSubmit suggestSubmit = null;
         Object [ ] suggestSubmitArrayId = suggestSubmitListId.toArray( );
 

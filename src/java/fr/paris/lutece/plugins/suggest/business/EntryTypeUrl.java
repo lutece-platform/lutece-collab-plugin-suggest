@@ -55,10 +55,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class EntryTypeUrl extends Entry
 {
-    private final String _template_create = "admin/plugins/suggest/create_entry_type_url.html";
-    private final String _template_modify = "admin/plugins/suggest/modify_entry_type_url.html";
-    private final String _template_html_code_form = "admin/plugins/suggest/html_code_form_entry_type_url.html";
-    private final String _template_html_code_response = "admin/plugins/suggest/html_code_response_entry_type_url.html";
+    private static final String TEMPLATE_CREATE = "admin/plugins/suggest/create_entry_type_url.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/suggest/modify_entry_type_url.html";
+    private static final String TEMPLATE_HTML_CODE_FORM = "admin/plugins/suggest/html_code_form_entry_type_url.html";
+    private static final String TEMPLATE_HTML_CODE_RESPONSE = "admin/plugins/suggest/html_code_response_entry_type_url.html";
 
     /**
      * Get the HtmlCode of the entry
@@ -66,9 +66,10 @@ public class EntryTypeUrl extends Entry
      * @return the HtmlCode of the entry
      *
      * */
+    @Override
     public String getTemplateHtmlCodeForm( )
     {
-        return _template_html_code_form;
+        return TEMPLATE_HTML_CODE_FORM;
     }
 
     /**
@@ -80,6 +81,7 @@ public class EntryTypeUrl extends Entry
      *            the locale
      * @return null if all data requiered are in the request else the url of jsp error
      */
+    @Override
     public String getRequestData( HttpServletRequest request, Locale locale )
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
@@ -154,23 +156,8 @@ public class EntryTypeUrl extends Entry
         this.setWidth( nWidth );
         this.setMaxSizeEnter( nMaxSizeEnter );
 
-        if ( strMandatory != null )
-        {
-            this.setMandatory( true );
-        }
-        else
-        {
-            this.setMandatory( false );
-        }
-
-        if ( strShowInSuggestSubmitList != null )
-        {
-            this.setShowInSuggestSubmitList( true );
-        }
-        else
-        {
-            this.setShowInSuggestSubmitList( false );
-        }
+        this.setMandatory( strMandatory != null );
+        this.setShowInSuggestSubmitList( strShowInSuggestSubmitList != null );
 
         return null;
     }
@@ -180,9 +167,10 @@ public class EntryTypeUrl extends Entry
      * 
      * @return template create url of the entry
      */
+    @Override
     public String getTemplateCreate( )
     {
-        return _template_create;
+        return TEMPLATE_CREATE;
     }
 
     /**
@@ -190,9 +178,10 @@ public class EntryTypeUrl extends Entry
      * 
      * @return template modify url of the entry
      */
+    @Override
     public String getTemplateModify( )
     {
-        return _template_modify;
+        return TEMPLATE_MODIFY;
     }
 
     /**
@@ -208,6 +197,7 @@ public class EntryTypeUrl extends Entry
      *            The current page index
      * @return the paginator who is use in the template modify of the entry
      */
+    @Override
     public Paginator getPaginator( int nItemPerPage, String strBaseUrl, String strPageIndexParameterName, String strPageIndex )
     {
         return new Paginator( this.getRegularExpressionList( ), nItemPerPage, strBaseUrl, strPageIndexParameterName, strPageIndex );
@@ -222,6 +212,7 @@ public class EntryTypeUrl extends Entry
      *            the plugin
      * @return the list of regular expression whose not associate to the entry
      */
+    @Override
     public ReferenceList getReferenceListRegularExpression( IEntry entry, Plugin plugin )
     {
         ReferenceList refListRegularExpression = new ReferenceList( );
@@ -253,6 +244,7 @@ public class EntryTypeUrl extends Entry
      *            the locale
      * @return a Form error object if there is an error in the response
      */
+    @Override
     public FormError getResponseData( HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
         String strValueEntry = request.getParameter( SuggestUtils.EMPTY_STRING + this.getIdEntry( ) ).trim( );
@@ -262,19 +254,16 @@ public class EntryTypeUrl extends Entry
 
         if ( strValueEntry != null )
         {
-            if ( this.isMandatory( ) )
+            if ( this.isMandatory( ) && strValueEntry.equals( SuggestUtils.EMPTY_STRING ) )
             {
-                if ( strValueEntry.equals( SuggestUtils.EMPTY_STRING ) )
-                {
-                    FormError formError = new FormError( );
-                    formError.setMandatoryError( true );
-                    formError.setTitleQuestion( this.getTitle( ) );
+                FormError formError = new FormError( );
+                formError.setMandatoryError( true );
+                formError.setTitleQuestion( this.getTitle( ) );
 
-                    return formError;
-                }
+                return formError;
             }
 
-            if ( ( listRegularExpression != null ) && ( listRegularExpression.size( ) != 0 ) && RegularExpressionService.getInstance( ).isAvailable( ) )
+            if ( ( listRegularExpression != null ) && ( !listRegularExpression.isEmpty( ) ) && RegularExpressionService.getInstance( ).isAvailable( ) )
             {
                 for ( RegularExpression regularExpression : listRegularExpression )
                 {
@@ -313,6 +302,7 @@ public class EntryTypeUrl extends Entry
      *            the plugin
      * @return a Form error object if there is an error in the response
      */
+    @Override
     public FormError getResponseData( int nIdSuggestSubmit, HttpServletRequest request, List<Response> listResponse, Locale locale, Plugin plugin )
     {
         return getResponseData( request, listResponse, locale );
@@ -323,8 +313,9 @@ public class EntryTypeUrl extends Entry
      * 
      * @return the template of the html code of the response value associate to the entry
      */
+    @Override
     public String getTemplateHtmlCodeResponse( )
     {
-        return _template_html_code_response;
+        return TEMPLATE_HTML_CODE_RESPONSE;
     }
 }

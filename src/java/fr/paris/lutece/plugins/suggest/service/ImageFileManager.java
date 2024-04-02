@@ -45,6 +45,7 @@ public class ImageFileManager extends FileManager
      * 
      * @return The template to enter the attribute value
      */
+    @Override
     String getCreateTemplate( )
     {
         return TEMPLATE_CREATE_ATTRIBUTE;

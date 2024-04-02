@@ -1,30 +1,14 @@
 <#if !suggest_submit.disableComment>
-<a class="btn btn-xs btn-flat btn-primary" href="jsp/admin/plugins/suggest/ManageCommentSubmit.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.altManageComment}">
-	<i class="fa fa-comment"></i>
-</a>
+<@aButton href='jsp/admin/plugins/suggest/ManageCommentSubmit.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altManageComment}' hideTitle=['all'] buttonIcon='comment' color='primary' size='sm' />
 </#if>
 <#if suggest_submit.suggestSubmitState.number=disable_state_number>
-	<a class="btn btn-xs btn-flat btn-warning" href="jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${waiting_for_publish_state_number}#suggest${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}">
-			<i class="fa fa-pause"></i>
-	</a>
-	<a class="btn btn-xs btn-flat btn-success" href="jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${publish_state_number}#suggest${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.altPublish}">
-		<i class="fa fa-check"></i>
-	</a>
+	<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${waiting_for_publish_state_number}#suggest${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}' hideTitle=['all'] buttonIcon='pause' color='warning' size='sm' />
+	<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${publish_state_number}#suggest${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altPublish}' hideTitle=['all'] buttonIcon='check' color='success' size='sm' />
 <#elseif suggest_submit.suggestSubmitState.number=waiting_for_publish_state_number >
-	<a class="btn btn-xs btn-flat btn-danger" href="jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${disable_state_number}#suggest${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.altDisable}">
-		<i class="fa fa-remove"></i>
-	</a>
- 	<a class="btn btn-xs btn-flat btn-success" href="jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${publish_state_number}#suggest${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.altPublish}">
-   		<i class="fa fa-check"></i>
-	</a>
+	<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${disable_state_number}#suggest${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altDisable}' hideTitle=['all'] buttonIcon='times' color='danger' size='sm' />
+ 	<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${publish_state_number}#suggest${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altPublish}' hideTitle=['all'] buttonIcon='check' color='success' size='sm' />
 <#elseif suggest_submit.suggestSubmitState.number=publish_state_number >
-	<a class="btn btn-xs btn-flat btn-danger" href="jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${disable_state_number}#suggest${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.altDisable}">
-		<i class="fa fa-remove"></i>
-	</a>
-	<a class="btn btn-xs btn-flat btn-warning" href="jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${waiting_for_publish_state_number}#suggest${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}">
-		<i class="fa fa-pause"></i>
-	</a>
+	<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${disable_state_number}#suggest${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altDisable}' hideTitle=['all'] buttonIcon='times' color='danger' size='sm' />
+	<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${waiting_for_publish_state_number}#suggest${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}' hideTitle=['all'] buttonIcon='pause' color='warning' size='sm' />
 </#if>
-<a class="btn btn-xs btn-flat btn-danger" href="jsp/admin/plugins/suggest/ConfirmRemoveSuggestSubmit.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.altDelete}">
-	<i class="fa fa-trash"></i>
-</a>
+<@aButton href='jsp/admin/plugins/suggest/ConfirmRemoveSuggestSubmit.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altDelete}' hideTitle=['all'] buttonIcon='trash' color='danger' size='sm' />

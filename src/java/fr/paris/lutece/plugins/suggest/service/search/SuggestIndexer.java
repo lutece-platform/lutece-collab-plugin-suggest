@@ -129,7 +129,6 @@ public class SuggestIndexer implements SearchIndexer
         List<Integer> suggestSubmitActivatedList;
 
         SubmitFilter submitFilter = new SubmitFilter( );
-        // submitFilter.setIdSuggestSubmitState( SuggestSubmit.STATE_PUBLISH );
         submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_SCORE_DESC );
         submitFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
 
@@ -140,8 +139,6 @@ public class SuggestIndexer implements SearchIndexer
 
             for ( Integer idSuggestSubmit : suggestSubmitActivatedList )
             {
-                // url.addParameter( SuggestApp.PARAMETER_CLEAR_FILTER,SuggestApp.PARAMETER_CLEAR_FILTER);
-                // url.setAnchor(SuggestApp.ANCHOR_SUGGEST_SUBMIT+suggestSubmit.getIdSuggestSubmit());
                 List<Document> listDocSuggestSubmit = null;
 
                 try
@@ -154,7 +151,7 @@ public class SuggestIndexer implements SearchIndexer
                     IndexationService.error( this, e, strMessage );
                 }
 
-                if ( ( listDocSuggestSubmit != null ) && ( listDocSuggestSubmit.size( ) != 0 ) )
+                if ( ( listDocSuggestSubmit != null ) && ( !listDocSuggestSubmit.isEmpty( ) ) )
                 {
                     for ( Document docSuggestSubmit : listDocSuggestSubmit )
                     {
@@ -180,33 +177,26 @@ public class SuggestIndexer implements SearchIndexer
      */
     public List<Document> getDocuments( String strIdSuggestSubmit ) throws IOException, InterruptedException, SiteMessageException
     {
-        List<org.apache.lucene.document.Document> listDocs = new ArrayList<org.apache.lucene.document.Document>( );
+        List<org.apache.lucene.document.Document> listDocs = new ArrayList<>( );
         String strPortalUrl = AppPathService.getPortalUrl( );
         Integer nIdSuggestSubmit = Integer.parseInt( strIdSuggestSubmit );
         Plugin plugin = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
         SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, true, plugin );
 
-        //
-        // SubmitFilter commentFilter=new SubmitFilter();
-        // commentFilter.setIdSuggestSubmit(nIdSuggestSubmit);
         if ( suggestSubmit != null )
         {
             // Add comment
-            // suggestSubmit.setComments(CommentSubmitHome.getCommentSubmitList(commentFilter, plugin));
             UrlItem url = new UrlItem( strPortalUrl );
-            url.addParameter( XPageAppService.PARAM_XPAGE_APP, AppPropertiesService.getProperty( PROPERTY_XPAGE_APPLICATION_ID, "suggest" ) );
+            url.addParameter( XPageAppService.PARAM_XPAGE_APP, AppPropertiesService.getProperty( PROPERTY_XPAGE_APPLICATION_ID, INDEX_TYPE_SUGGEST ) );
             url.addParameter( PARAMETER_ID_SUGGEST, suggestSubmit.getSuggest( ).getIdSuggest( ) );
             url.addParameter( PARAMETER_ID_SUGGEST_SUBMIT, suggestSubmit.getIdSuggestSubmit( ) );
             url.addParameter( PARAMETER_ACTION, PARAMETER_SUGGEST_VIEW_DETAIL );
             url.addParameter( SuggestApp.PARAMETER_SUGGEST_DETAIL, 1 );
 
-            // url.addParameter( SuggestApp.PARAMETER_CLEAR_FILTER,SuggestApp.PARAMETER_CLEAR_FILTER);
-            // url.setAnchor(SuggestApp.ANCHOR_SUGGEST_SUBMIT+suggestSubmit.getIdSuggestSubmit());
             org.apache.lucene.document.Document docSuggestSubmit = getDocument( suggestSubmit, url.getUrl( ) );
             listDocs.add( docSuggestSubmit );
         }
 
-        // }
         return listDocs;
     }
 
@@ -224,7 +214,7 @@ public class SuggestIndexer implements SearchIndexer
      * @throws InterruptedException
      *             The InterruptedException
      */
-    public static org.apache.lucene.document.Document getDocument( SuggestSubmit suggestSubmit, String strUrl ) throws IOException, InterruptedException
+    public static org.apache.lucene.document.Document getDocument( SuggestSubmit suggestSubmit, String strUrl ) throws IOException
     {
         // make a new, empty document
         org.apache.lucene.document.Document doc = new org.apache.lucene.document.Document( );
@@ -269,13 +259,9 @@ public class SuggestIndexer implements SearchIndexer
         {
             new HtmlParser( ).parse( new ByteArrayInputStream( writerFieldContent.toString( ).getBytes( ) ), handler, metadata, new ParseContext( ) );
         }
-        catch( SAXException e )
+        catch( SAXException | TikaException e )
         {
-            throw new AppException( "Error during page parsing." );
-        }
-        catch( TikaException e )
-        {
-            throw new AppException( "Error during page parsing." );
+            throw new AppException( "Error during page parsing : " + e.getMessage( ), e );
         }
 
         // the content of the article is recovered in the parser because this one
@@ -291,7 +277,6 @@ public class SuggestIndexer implements SearchIndexer
 
         // Add the summary as an UnIndexed field, so that it is stored and returned
         // with hit documents for display.
-        // doc.add( new Field( SearchItem.FIELD_SUMMARY, suggestSubmit.getSuggestSubmitValueShowInTheList(), Field.Store.YES, Field.Index.NO ) );
         doc.add( new Field( SearchItem.FIELD_TYPE, INDEX_TYPE_SUGGEST, ft ) );
 
         Plugin plugin = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );

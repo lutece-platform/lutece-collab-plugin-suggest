@@ -281,7 +281,7 @@ public class CommentSubmit
 
         XmlUtil.beginElement( strXml, TAG_SUGGESTS_SUBMIT_COMMENTS );
 
-        if ( ( getComments( ) != null ) && ( getComments( ).size( ) != 0 ) )
+        if ( ( getComments( ) != null ) && ( !getComments( ).isEmpty( ) ) )
         {
             for ( CommentSubmit commentSubmit : getComments( ) )
             {

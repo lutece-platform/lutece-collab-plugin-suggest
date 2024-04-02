@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-import com.mysql.jdbc.PacketTooBigException;
+import com.mysql.cj.jdbc.exceptions.PacketTooBigException;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -61,25 +61,25 @@ public class VideoTypeDAO implements IVideoTypeDAO
      * @throws com.mysql.jdbc.PacketTooBigException
      *             exception
      */
-    public int insert( VideoType videoType, Plugin plugin ) throws com.mysql.jdbc.PacketTooBigException
+    public int insert( VideoType videoType, Plugin plugin ) throws PacketTooBigException
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        {    
+            daoUtil.setInt( 1, videoType.getIdSuggestSubmit( ) );
+            daoUtil.setBytes( 2, videoType.getVideo( ) );
+            daoUtil.setString( 3, videoType.getMimeType( ) );
+            daoUtil.setString( 4, videoType.getCredits( ) );
+    
+            try
+            {
+                daoUtil.executeUpdate( );
+            }
+            catch( Exception e )
+            {
+                throw new PacketTooBigException( 0, 0 );
+            }
 
-        daoUtil.setInt( 1, videoType.getIdSuggestSubmit( ) );
-        daoUtil.setBytes( 2, videoType.getVideo( ) );
-        daoUtil.setString( 3, videoType.getMimeType( ) );
-        daoUtil.setString( 4, videoType.getCredits( ) );
-
-        try
-        {
-            daoUtil.executeUpdate( );
         }
-        catch( Exception e )
-        {
-            throw new PacketTooBigException( 0, 0 );
-        }
-
-        daoUtil.free( );
 
         return videoType.getIdSuggestSubmit( );
     }
@@ -95,22 +95,23 @@ public class VideoTypeDAO implements IVideoTypeDAO
      */
     public VideoType load( int nId, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
-        daoUtil.setInt( 1, nId );
-        daoUtil.executeQuery( );
-
         VideoType videoType = null;
-
-        if ( daoUtil.next( ) )
+        
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
-            videoType = new VideoType( );
-            videoType.setIdSuggestSubmit( daoUtil.getInt( 1 ) );
-            videoType.setVideo( daoUtil.getBytes( 2 ) );
-            videoType.setMimeType( daoUtil.getString( 3 ) );
-            videoType.setCredits( daoUtil.getString( 4 ) );
-        }
+            daoUtil.setInt( 1, nId );
+            daoUtil.executeQuery( );
+    
+            if ( daoUtil.next( ) )
+            {
+                videoType = new VideoType( );
+                videoType.setIdSuggestSubmit( daoUtil.getInt( 1 ) );
+                videoType.setVideo( daoUtil.getBytes( 2 ) );
+                videoType.setMimeType( daoUtil.getString( 3 ) );
+                videoType.setCredits( daoUtil.getString( 4 ) );
+            }
 
-        daoUtil.free( );
+        }
 
         return videoType;
     }
@@ -125,10 +126,11 @@ public class VideoTypeDAO implements IVideoTypeDAO
      */
     public void delete( int nIdSuggestSubmit, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1, nIdSuggestSubmit );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdSuggestSubmit );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -141,14 +143,14 @@ public class VideoTypeDAO implements IVideoTypeDAO
      */
     public void store( VideoType video, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-
-        daoUtil.setBytes( 1, video.getVideo( ) );
-        daoUtil.setString( 2, video.getMimeType( ) );
-        daoUtil.setString( 3, video.getCredits( ) );
-        daoUtil.setInt( 4, video.getIdSuggestSubmit( ) );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {    
+            daoUtil.setBytes( 1, video.getVideo( ) );
+            daoUtil.setString( 2, video.getMimeType( ) );
+            daoUtil.setString( 3, video.getCredits( ) );
+            daoUtil.setInt( 4, video.getIdSuggestSubmit( ) );
+    
+            daoUtil.executeUpdate( );
+        }
     }
 }

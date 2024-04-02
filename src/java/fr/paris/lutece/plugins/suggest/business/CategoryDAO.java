@@ -72,9 +72,7 @@ public class CategoryDAO implements ICategoryDAO
         {
             daoUtil.executeQuery( );
             daoUtil.next( );
-            int nKey = daoUtil.getInt( 1 ) + 1;
-
-            return nKey;
+            return daoUtil.getInt( 1 ) + 1;
         }
     }
 
@@ -216,18 +214,8 @@ public class CategoryDAO implements ICategoryDAO
             daoUtil.setInt( 1, nIdCategory );
             daoUtil.executeQuery( );
 
-            if ( daoUtil.next( ) )
-            {
-                if ( daoUtil.getInt( 1 ) != 0 )
-                {
-                    daoUtil.free( );
-
-                    return true;
-                }
-            }
+            return daoUtil.next( ) && daoUtil.getInt( 1 ) != 0;
         }
-
-        return false;
     }
 
     @Override

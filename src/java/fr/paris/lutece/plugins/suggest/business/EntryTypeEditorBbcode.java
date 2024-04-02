@@ -42,8 +42,8 @@ import fr.paris.lutece.portal.service.editor.EditorBbcodeService;
  */
 public class EntryTypeEditorBbcode extends EntryTypeTextArea
 {
-    private final String _template_html_code_form = "admin/plugins/suggest/html_code_form_entry_type_editor_bbcode.html";
-    private final String _template_html_code_response = "admin/plugins/suggest/html_code_response_entry_type_editor_bbcode.html";
+    private static final String TEMPLATE_HTML_CODE_FORM = "admin/plugins/suggest/html_code_form_entry_type_editor_bbcode.html";
+    private static final String TEMPLATE_HTML_CODE_RESPONSE = "admin/plugins/suggest/html_code_response_entry_type_editor_bbcode.html";
 
     /**
      * Get the HtmlCode of the entry
@@ -51,9 +51,10 @@ public class EntryTypeEditorBbcode extends EntryTypeTextArea
      * @return the HtmlCode of the entry
      *
      * */
+    @Override
     public String getTemplateHtmlCodeForm( )
     {
-        return _template_html_code_form;
+        return TEMPLATE_HTML_CODE_FORM;
     }
 
     /**
@@ -61,9 +62,10 @@ public class EntryTypeEditorBbcode extends EntryTypeTextArea
      * 
      * @return the template of the html code of the response value associate to the entry
      */
+    @Override
     public String getTemplateHtmlCodeResponse( )
     {
-        return _template_html_code_response;
+        return TEMPLATE_HTML_CODE_RESPONSE;
     }
 
     public String parseBbcodeValue( String strValue )

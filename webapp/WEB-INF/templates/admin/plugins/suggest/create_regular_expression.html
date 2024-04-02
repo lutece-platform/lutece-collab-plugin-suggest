@@ -1,41 +1,37 @@
 <#include "/admin/util/editor/editor.html" />
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	<fieldset>
-    <legend> #i18n{suggest.createRegularExpression.title}</legend>
-    <form class="form-horizontal" method="post" action="jsp/admin/plugins/suggest/DoCreateRegularExpression.jsp" >
-		 <div class="form-group">
-			<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title" >#i18n{suggest.createRegularExpression.labelTitle}* </label>
-			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="title" >#i18n{suggest.createRegularExpression.labelTitle}* </label>
-					<input type="text" id="title" name="title" maxlength="20"/>
-			</div>
-			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-			<label for="value" >#i18n{suggest.createRegularExpression.labelValue}* </label>
-				<input type="text" class="form-control input-sm" id="value" name="value"  value=""/>
-			</div>
-			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="valid_exemple">#i18n{suggest.createRegularExpression.labelValidExemple}* </label>
-				<input type="text" name="valid_exemple" value="" class="input-xxlarge" />
-				<span class="help-text">#i18n{suggest.createRegularExpression.labelValidExempleComment}</span>
-			</div>
-			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-				<label for="information_message">	#i18n{suggest.createRegularExpression.labelInformationMessage}* </label>
-				<textarea class="richtext" name="information_message" id="information_message" class="span4" rows="2"></textarea>
-				<span class="help-text">#i18n{suggest.createRegularExpression.labelInformationMessageComment}</span>
-			</div>
-			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-				<label for="error_message">#i18n{suggest.createRegularExpression.labelErrorMessage}* </label>
-				<textarea class="richtext" name="error_message" id="error_message" class="span4" rows="2"></textarea>
-				<span class="help-text">#i18n{suggest.createRegularExpression.labelErrorMessageComment} </span>  
-			</div>
-		</div>
-		<div class="form-group">
-			<button class="btn btn-primary btn-sm btn-flat" type="submit" name="save"><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{suggest.createRegularExpression.buttonSave}</button>
-			<button class="btn btn-primary btn-sm btn-flat" onclick="javascript:window.history.back();" name="cancel"><i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{suggest.createRegularExpression.buttonCancel}</button>
-		</div>
-		</form>
-	</fieldset>
-	</div>
-</div>
-   <@initEditor />
+<@row>
+	<@columns>
+		<@box>
+			<@boxHeader title='#i18n{suggest.createRegularExpression.title}' />
+			<@boxBody>
+				<@tform method='post' action='jsp/admin/plugins/suggest/DoCreateRegularExpression.jsp'>
+					<@formGroup labelFor='title' labelKey='#i18n{suggest.createRegularExpression.labelTitle}' mandatory=true>
+						<@input type='text' id='title' name='title' maxlength=20 />
+					</@formGroup>
+					
+					<@formGroup labelFor='value' labelKey='#i18n{suggest.createRegularExpression.labelValue}' mandatory=true>
+						<@input type='text' id='value' name='value' value='' />
+					</@formGroup>
+					
+					<@formGroup labelFor='valid_exemple' labelKey='#i18n{suggest.createRegularExpression.labelValidExemple}' helpKey='#i18n{suggest.createRegularExpression.labelValidExempleComment}' mandatory=true>
+						<@input type='text' name='valid_exemple' value='' />
+					</@formGroup>
+					
+					<@formGroup labelFor='information_message' labelKey='#i18n{suggest.createRegularExpression.labelInformationMessage}' helpKey='#i18n{suggest.createRegularExpression.labelInformationMessageComment}' mandatory=true>
+						<@input type='textarea' name='information_message' id='information_message' rows=2 richtext=true />
+					</@formGroup>
+					
+					<@formGroup labelFor='error_message' labelKey='#i18n{suggest.createRegularExpression.labelErrorMessage}' helpKey='#i18n{suggest.createRegularExpression.labelErrorMessageComment}' mandatory=true>
+						<@input type='textarea' name='error_message' id='error_message' rows=2 richtext=true />
+					</@formGroup>
+					
+					<@formGroup>
+						<@button type='submit' name='save' title='#i18n{suggest.createRegularExpression.buttonSave}' buttonIcon='save' />
+						<@button type='button' params='onclick="javascript:window.history.back();"' name='cancel' title='#i18n{suggest.createRegularExpression.buttonCancel}' buttonIcon='times' color='default' />
+					</@formGroup>
+				</@tform>
+			</@boxBody>
+		</@box>
+	</@columns>
+</@row>
+<@initEditor />
