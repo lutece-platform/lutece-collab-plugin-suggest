@@ -1,14 +1,18 @@
 <#list list_suggest_submit as suggest_submit_display>
 <div class="row suggest-item" id="suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
-  <div class="col-xs-12 col-sm-12">
-    <h3>
-      <#if suggest_submit_display.suggest_submit.category?exists>
-      <p>
-        <small class="text-info" style="background-color:${suggest_submit_display.suggest_submit.category.color!''};">
-          ${suggest_submit_display.suggest_submit.category.title}
-        </small>
-      </p>
-      </#if>
+  <div class="col">
+    <#if suggest_submit_display.suggest_submit.category?exists>
+      <div class="row justify-content-end">
+        <div class="col-auto">
+          <p>
+            <small class="text-info" style="background-color:${suggest_submit_display.suggest_submit.category.color!''};">
+              ${suggest_submit_display.suggest_submit.category.title}
+            </small>
+          </p>
+        </div>
+      </div>
+    </#if>
+    <h3 class="d-flex justify-content-between align-items-center">
       <a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;action=view_suggest_submit#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
         <#if suggest_submit_display.suggest_submit.suggestSubmitTitle?length &gt;45>
           ${suggest_submit_display.suggest_submit.suggestSubmitTitle?substring(0,42)}...
@@ -17,16 +21,16 @@
         </#if>
       </a>
       <#if authorized_vote && !suggest_submit_display.suggest_submit.disableVote && suggest_submit_display.suggest_submit.numberScore?exists>
-      <span class="label suggest-score label-info pull-right">
-        #i18n{suggest.manageSuggestSubmit.rowNumberScore}&nbsp;${suggest_submit_display.suggest_submit.numberScore}
-      </span>
-      &nbsp;
-      <div class="btn-group pull-right">
-        <#if suggest_submit_display.suggest_submit_vote_type?exists>
-          ${suggest_submit_display.suggest_submit_vote_type}
-        </#if>
-      </div>
-    </#if>
+        <span class="label suggest-score label-info float-right">
+          #i18n{suggest.manageSuggestSubmit.rowNumberScore}&nbsp;${suggest_submit_display.suggest_submit.numberScore}
+        </span>
+        &nbsp;
+        <div class="btn-group float-right">
+          <#if suggest_submit_display.suggest_submit_vote_type?exists>
+            ${suggest_submit_display.suggest_submit_vote_type}
+          </#if>
+        </div>
+      </#if>
     </h3>
     <h4>
     <#if suggest_submit_display.lutece_user?exists>
@@ -70,7 +74,7 @@
       <a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;action=view_suggest_submit#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
       <#if suggest_submit_display.suggest_submit.suggestSubmitValueShowInTheList?exists>
         <#if suggest_submit_display.suggest_submit.suggestSubmitValueShowInTheList?length &gt; 500>
-          <!-- span class="pull-right badge badge-inverse">
+          <!-- span class="float-right badge badge-inverse">
             <i class="glyphicon glyphicon-chevron-up"></i>
           </span -->
           ${suggest_submit_display.suggest_submit.suggestSubmitValueShowInTheList}
@@ -80,7 +84,7 @@
       </#if>
       </a>
     </div>
-    <p class="pull-right hidden">
+    <p class="float-right d-none">
       <a class="btn btn-default" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;suggest_comment=1&amp;action=view_suggest_submit#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
         #i18n{suggest.suggestListSubmit.labelReadMore} &gt;
       </a>
@@ -101,8 +105,8 @@
                 <#else>
                   ${comment.value[0..cumber_char_comments-1]}...
                 </#if>
-                </li>
-              </#if>
+              </li>
+            </#if>
           </#list>
         </ul>
       </div>
@@ -113,12 +117,12 @@
 <#if list_suggest_submit?has_content>
   <div class="row mt-5">
     <#if paginator?exists>
-      <div class="col-xs-12 col-sm-6">
+      <div class="col">
         <!-- #i18n{suggest.suggestListSubmit.paginator.labelResultsCount} :  -->
         #i18n{suggest.suggestListSubmit.paginator.labelResultsRange} :
         <strong>${paginator.rangeMin} - ${paginator.rangeMax} / ${paginator.itemsCount}</strong>
       </div>
-      <div class="col-xs-12 col-sm-6 text-right">
+      <div class="col text-right">
         <@pagination paginator=paginator />
       </div>
     </#if>
