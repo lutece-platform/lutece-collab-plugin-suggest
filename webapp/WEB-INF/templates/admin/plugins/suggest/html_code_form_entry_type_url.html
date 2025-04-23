@@ -1,4 +1,1 @@
-<@formGroup labelFor='${entry.idEntry}' labelKey='${entry.title}' helpKey='${entry.helpMessage}!' mandatory=entry.mandatory>	<#if entry.defaultValue?exists><#assign value = entry.defaultValue /></#if>
-	<#if entry.maxSizeEnter!=-1><#assign maxlength = entry.maxSizeEnter /><#else><#assign maxlength = 0 /></#if>
-	<@input type='text' name='${entry.idEntry}' id='${entry.idEntry}' inputSize='${entry.width}' value=value maxlength=maxlength />
-</@formGroup>
+<@formGroup labelFor='${entry.idEntry}' labelKey='${entry.title}' helpKey='${entry.helpMessage}!' mandatory=entry.mandatory>	<#if entry.defaultValue?exists><#assign value = entry.defaultValue /></#if>	<#if entry.maxSizeEnter!=-1><#assign maxlength = entry.maxSizeEnter /><#else><#assign maxlength = 0 /></#if>	<@input type='text' name='${entry.idEntry}' id='${entry.idEntry}' inputSize=entry.width value=value maxlength=maxlength /></@formGroup>

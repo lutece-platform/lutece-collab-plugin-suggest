@@ -511,7 +511,7 @@ public class SuggestResourceRss extends ResourceRss
             List<CommentSubmit> listResultCommentSubmit = CommentSubmitService.getService( ).getCommentSubmitList( submitFilter, pluginSuggestglike );
             List<Map<String, Object>> listItem = new ArrayList<>( );
 
-            // Descriptino of the comments
+            // Description of the comments
             for ( CommentSubmit commentSubmit : listResultCommentSubmit )
             {
                 HashMap<String, Object> item = new HashMap<>( );

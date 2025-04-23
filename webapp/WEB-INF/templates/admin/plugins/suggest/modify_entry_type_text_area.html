@@ -1,4 +1,3 @@
-<#include "/admin/util/editor/editor.html" />
 <@row>
 	<@columns>
 		<@box>
@@ -6,10 +5,18 @@
 			<@boxBody>
 				<@tform action='jsp/admin/plugins/suggest/DoModifyEntry.jsp#list'>
 					<@input type='hidden' name='id_entry' value='${entry.idEntry}' />
-					<@formGroup labelFor='title' labelKey='#i18n{suggest.createEntry.labelTitle}' helpKey='#i18n{suggest.createEntry.labelTitleComment}' mandatory=true>						<@input type='text' name='title' id='title' value='${entry.title}' maxlength=255 />					</@formGroup>
-					<@formGroup labelFor='help_message' labelKey='#i18n{suggest.createEntry.labelHelpMessage}' helpKey='#i18n{suggest.createEntry.labelHelpMessageComment}'>						<@input type='textarea' name='help_message' id='help_message' rows=4>${entry.helpMessage}</@input>					</@formGroup>
-					<@formGroup labelFor='comment' labelKey='#i18n{suggest.createEntry.labelComment}'>						<@input type='textarea' name='comment' rows=2>${entry.comment}</@input>					</@formGroup>
-					<@formGroup labelFor='value' labelKey='#i18n{suggest.createEntry.labelValueDefault}'>						<@input type='textarea' name='value' id='value' rows=4>${entry.defaultValue}</@input>					</@formGroup>
+					<@formGroup labelFor='title' labelKey='#i18n{suggest.createEntry.labelTitle}' helpKey='#i18n{suggest.createEntry.labelTitleComment}' mandatory=true>
+						<@input type='text' name='title' id='title' value='${entry.title}' maxlength=255 />
+					</@formGroup>
+					<@formGroup labelFor='help_message' labelKey='#i18n{suggest.createEntry.labelHelpMessage}' helpKey='#i18n{suggest.createEntry.labelHelpMessageComment}'>
+						<@input type='textarea' name='help_message' id='help_message' rows=4>${entry.helpMessage}</@input>
+					</@formGroup>
+					<@formGroup labelFor='comment' labelKey='#i18n{suggest.createEntry.labelComment}'>
+						<@input type='textarea' name='comment' rows=2>${entry.comment}</@input>
+					</@formGroup>
+					<@formGroup labelFor='value' labelKey='#i18n{suggest.createEntry.labelValueDefault}'>
+						<@input type='textarea' name='value' id='value' rows=4>${entry.defaultValue}</@input>
+					</@formGroup>
 					<@formGroup>
 						<@checkBox labelFor='mandatory' labelKey='#i18n{suggest.createEntry.labelMandatory}' name='mandatory' id='mandatory' value='1' checked=entry.mandatory />
 					</@formGroup>
@@ -18,19 +25,25 @@
 							<#assign value = entry.width />
 						<#else>
 							<#assign value = '' />
-						</#if>						<@input type='text' name='width' id='width' value=value />					</@formGroup>
+						</#if>
+						<@input type='text' name='width' id='width' value=value />
+					</@formGroup>
 					<@formGroup labelFor='height' labelKey='#i18n{suggest.createEntry.labelHeight}' mandatory=true>
 						<#if entry.height!=-1>
 							<#assign value = entry.height />
 						<#else>
 							<#assign value = '' />
-						</#if>						<@input type='text' name='height' id='height' value=value />					</@formGroup>
+						</#if>
+						<@input type='text' name='height' id='height' value=value />
+					</@formGroup>
 					<@formGroup labelFor='max_size_enter' labelKey='#i18n{suggest.createEntry.labelMaxSizeEnter}'>
 						<#if entry.maxSizeEnter!=-1>
 							<#assign value = entry.maxSizeEnter />
 						<#else>
 							<#assign value = '' />
-						</#if>						<@input type='text' name='max_size_enter' id='max_size_enter' value=value />					</@formGroup>
+						</#if>
+						<@input type='text' name='max_size_enter' id='max_size_enter' value=value />
+					</@formGroup>
 					<@formGroup helpKey='#i18n{suggest.createSuggest.labelShowInSuggestSubmitListComment}'>
 						<@checkBox labelFor='mandatory' labelKey='#i18n{suggest.createEntry.labelShowInSuggestSubmitList}' name='show_in_suggest_submit_list' id='show_in_suggest_submit_list' value='1' mandatory=entry.showInSuggestSubmitList />
 					</@formGroup>
@@ -43,5 +56,3 @@
 		</@box>
 	</@columns>
 </@row>
- <@initEditor />
- 

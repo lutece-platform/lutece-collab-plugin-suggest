@@ -34,9 +34,15 @@
 				</@boxHeader>
 				<@boxBody>
 					<@tform action='jsp/admin/plugins/suggest/ManageCommentSubmit.jsp' id='filter'>
-						<@formGroup labelFor='id_comment_state' labelKey='#i18n{suggest.manageCommentSubmit.labelState}'>							<@select name='id_comment_state' default_value=comment_state_selected?string items=comment_state_list />						</@formGroup>
-						<@formGroup labelFor='id_contains_sub_comment_disable' labelKey='#i18n{suggest.manageCommentSubmit.labelContainsSubCommentDisable}'>							<@select name='id_contains_sub_comment_disable' default_value=comment_contains_sub_comment_disable_selected?string items=comment_contains_sub_comment_disable_list  />						</@formGroup>
-						<@formGroup labelFor='id_comment_sort' labelKey='#i18n{suggest.manageCommentSubmit.labelSort}'>							<@select name='id_comment_sort' default_value=comment_sort_selected?string items=comment_sort_list />						</@formGroup>
+						<@formGroup labelFor='id_comment_state' labelKey='#i18n{suggest.manageCommentSubmit.labelState}'>
+							<@select name='id_comment_state' default_value=comment_state_selected?string items=comment_state_list />
+						</@formGroup>
+						<@formGroup labelFor='id_contains_sub_comment_disable' labelKey='#i18n{suggest.manageCommentSubmit.labelContainsSubCommentDisable}'>
+							<@select name='id_contains_sub_comment_disable' default_value=comment_contains_sub_comment_disable_selected?string items=comment_contains_sub_comment_disable_list  />
+						</@formGroup>
+						<@formGroup labelFor='id_comment_sort' labelKey='#i18n{suggest.manageCommentSubmit.labelSort}'>
+							<@select name='id_comment_sort' default_value=comment_sort_selected?string items=comment_sort_list />
+						</@formGroup>
 						<@formGroup>
 							<@button type='submit' title='#i18n{suggest.manageCommentSubmit.buttonSearch}' buttonIcon='filter' />
 						</@formGroup>

@@ -34,9 +34,12 @@
 package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
+import fr.paris.lutece.portal.service.editor.RichTextContentService;
+import fr.paris.lutece.portal.service.editor.RichTextParsingException;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,6 +157,22 @@ public final class EntryHome
      */
     public static IEntry findByPrimaryKey( int nKey, Plugin plugin )
     {
+    	return findByPrimaryKey( nKey, plugin, false );
+    }
+    
+    /**
+     * Returns an instance of a Entry whose identifier is specified in parameter
+     *
+     * @param nKey
+     *            The entry primary key
+     * @param plugin
+     *            the Plugin
+     * @param bForEditor
+     *            True if the template is to be displayed in an editor           
+     * @return an instance of Entry
+     */
+    public static IEntry findByPrimaryKey( int nKey, Plugin plugin, boolean bForEditor )
+    {
         IEntry entry = _dao.load( nKey, plugin );
         List<RegularExpression> listRegularExpression = new ArrayList<>( );
 
@@ -179,13 +198,29 @@ public final class EntryHome
 
         entry.setRegularExpressionList( listRegularExpression );
 
+        /*
+        When attributes are generated in an textarea input with richtext option (from markdown editors or html editors), 
+        then attributes must be transformed in html by the RichTextContentService 
+        */
+        if ( !bForEditor )
+        {
+            try
+            {
+            	formatRichTextAttributes(entry);
+            }
+            catch( RichTextParsingException e )
+            {
+                AppLogService.error( e.getMessage( ), e );
+            }
+        }
+
         List<EntryAdditionalAttribute> additionalAttribute = _daoAA.selectEntryAdditionalAttributeList( nKey, plugin );
         entry.setEntryAdditionalAttributeList( additionalAttribute );
 
         return entry;
     }
 
-    /**
+   /**
      * Load the data of all the entry who verify the filter and returns them in a list
      * 
      * @param filter
@@ -196,14 +231,66 @@ public final class EntryHome
      */
     public static List<IEntry> getEntryList( EntryFilter filter, Plugin plugin )
     {
+    	return getEntryList( filter, plugin, false );
+    }
+    
+    /**
+     * Load the data of all the entry who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
+     * @param bForEditor
+     *            True if the template is to be displayed in an editor 
+     * @return the list of entry
+     */
+    public static List<IEntry> getEntryList( EntryFilter filter, Plugin plugin, boolean bForEditor )
+    {
         List<IEntry> entries = _dao.selectEntryListByFilter( filter, plugin );
 
-        for ( IEntry e : entries )
+        for ( IEntry entry : entries )
         {
-            e.setEntryAdditionalAttributeList( _daoAA.selectEntryAdditionalAttributeList( e.getIdEntry( ), plugin ) );
+            entry.setEntryAdditionalAttributeList( _daoAA.selectEntryAdditionalAttributeList( entry.getIdEntry( ), plugin ) );
+            
+            /*
+            When attributes are generated in an textarea input with richtext option (from markdown editors or html editors), 
+            then attributes must be transformed in html by the RichTextContentService 
+            */
+            if ( !bForEditor )
+            {
+                try
+                {
+                	formatRichTextAttributes(entry);
+                }
+                catch( RichTextParsingException e )
+                {
+                    AppLogService.error( e.getMessage( ), e );
+                }
+            }
         }
 
         return entries;
+    }
+
+    /**
+     * Returns an instance of a suggest with some formated attributes
+     *
+     * @param suggest
+     *            The suggest to modify
+     * @return the suggest with modification
+     */
+    private static void formatRichTextAttributes(IEntry entry) throws RichTextParsingException 
+    {
+    	entry.setHelpMessage( RichTextContentService.getContent( entry.getHelpMessage( ) ) );
+    	entry.setComment( RichTextContentService.getContent( entry.getComment( ) ) );
+        entry.setDefaultValue( RichTextContentService.getContent( entry.getDefaultValue( ) ) );
+    	
+    	if( entry.getSuggest( )!=null )
+    	{
+    		SuggestHome.formatRichTextAttributes(entry.getSuggest( ) );
+    	}
+    
     }
 
     /**

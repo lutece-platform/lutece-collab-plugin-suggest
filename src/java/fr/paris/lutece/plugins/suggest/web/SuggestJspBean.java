@@ -2076,7 +2076,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         if ( ( strIdSuggest != null ) && !strIdSuggest.equals( EMPTY_STRING ) )
         {
             nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
-            suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
+            suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin, true );
         }
 
         if ( ( suggest == null )
@@ -2205,7 +2205,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
                 && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
         {
             Plugin plugin = getPlugin( );
-            Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
+            Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin, true ); //bForEditor to true, richtext attributes are loaded without modifications
             String strError = getSuggestData( multipartRequest, suggest );
 
             if ( strError != null )
@@ -2435,7 +2435,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             return getJspManageSuggest( request );
         }
 
-        suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
+        suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin, true ); //bForEditor to true, richtext attributes are loaded without modifications
 
         Object [ ] tabSuggestTileCopy = {
             suggest.getTitle( )
@@ -2545,8 +2545,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = SuggestUtils.getIntegerParameter( strIdEntry );
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
-        entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
-        List<EntryAdditionalAttribute> entryAdditionalAttributeList = EntryAdditionalAttributeHome.getList( nIdEntry, plugin );
+        entry = EntryHome.findByPrimaryKey( nIdEntry, plugin, true );
+        
+	List<EntryAdditionalAttribute> entryAdditionalAttributeList = EntryAdditionalAttributeHome.getList( nIdEntry, plugin );
 
         if ( ( entry == null ) || ( suggest == null )
                 || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
@@ -2606,7 +2607,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = SuggestUtils.getIntegerParameter( strIdEntry );
 
-        entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
+        entry = EntryHome.findByPrimaryKey( nIdEntry, plugin, true );
 
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
 
@@ -2700,7 +2701,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = SuggestUtils.getIntegerParameter( strIdEntry );
         IEntry entry;
-        entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
+        entry = EntryHome.findByPrimaryKey( nIdEntry, plugin, true );
 
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
 
@@ -2739,7 +2740,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = SuggestUtils.getIntegerParameter( strIdEntry );
 
-        entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
+        entry = EntryHome.findByPrimaryKey( nIdEntry, plugin, true ); //bForEditor to true, richtext attributes are loaded without modifications
 
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
 
@@ -2761,7 +2762,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             int nNewPosition;
             IEntry entryToInversePosition;
             entryToInversePosition = listEntry.get( nIndexEntry - 1 );
-            entryToInversePosition = EntryHome.findByPrimaryKey( entryToInversePosition.getIdEntry( ), plugin );
+            entryToInversePosition = EntryHome.findByPrimaryKey( entryToInversePosition.getIdEntry( ), plugin, true ); //bForEditor to true, richtext attributes are loaded without modifications
             nNewPosition = entryToInversePosition.getPosition( );
             entryToInversePosition.setPosition( entry.getPosition( ) );
             entry.setPosition( nNewPosition );
@@ -2787,7 +2788,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
         int nIdEntry = SuggestUtils.getIntegerParameter( strIdEntry );
 
-        entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
+        entry = EntryHome.findByPrimaryKey( nIdEntry, plugin, true ); //bForEditor to true, richtext attributes are loaded without modifications
 
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
 
@@ -2809,7 +2810,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             int nNewPosition;
             IEntry entryToInversePosition;
             entryToInversePosition = listEntry.get( nIndexEntry + 1 );
-            entryToInversePosition = EntryHome.findByPrimaryKey( entryToInversePosition.getIdEntry( ), plugin );
+            entryToInversePosition = EntryHome.findByPrimaryKey( entryToInversePosition.getIdEntry( ), plugin, true ); //bForEditor to true, richtext attributes are loaded without modifications
             nNewPosition = entryToInversePosition.getPosition( );
             entryToInversePosition.setPosition( entry.getPosition( ) );
             entry.setPosition( nNewPosition );
@@ -2859,7 +2860,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         Plugin plugin = getPlugin( );
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
-        suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
+        suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin, true ); //bForEditor to true, richtext attributes are loaded without modifications
 
         if ( ( suggest != null )
                 && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + nIdSuggest, SuggestResourceIdService.PERMISSION_CHANGE_STATE, getUser( ) ) )
@@ -2896,7 +2897,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         Plugin plugin = getPlugin( );
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
-        suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
+        suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin, true ); //bForEditor to true, richtext attributes are loaded without modifications
 
         if ( ( suggest != null )
                 && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + nIdSuggest, SuggestResourceIdService.PERMISSION_CHANGE_STATE, getUser( ) ) )
@@ -3511,19 +3512,19 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         SuggestFilter filter = new SuggestFilter( );
         filter.setIdDefaultSuggest( SuggestFilter.ID_TRUE );
 
-        List<Suggest> listDefaultSuggest = SuggestHome.getSuggestList( filter, plugin );
+        List<Suggest> listDefaultSuggest = SuggestHome.getSuggestList( filter, plugin, true ); //bForEditor to true, richtext attributes are loaded without modifications
 
         // update default suggest
         for ( Suggest defaultSuggest : listDefaultSuggest )
         {
-            suggest = SuggestHome.findByPrimaryKey( defaultSuggest.getIdSuggest( ), plugin );
+            suggest = SuggestHome.findByPrimaryKey( defaultSuggest.getIdSuggest( ), plugin, true ); //bForEditor to true, richtext attributes are loaded without modifications
             suggest.setDefaultSuggest( false );
             SuggestHome.update( suggest, plugin );
         }
 
         if ( nIdDefaultSuggest != SuggestUtils.CONSTANT_ID_NULL )
         {
-            Suggest suggestDefault = SuggestHome.findByPrimaryKey( nIdDefaultSuggest, plugin );
+            Suggest suggestDefault = SuggestHome.findByPrimaryKey( nIdDefaultSuggest, plugin, true ); //bForEditor to true, richtext attributes are loaded without modifications
 
             if ( suggestDefault != null )
             {
