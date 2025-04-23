@@ -625,7 +625,7 @@ public final class SuggestUtils
         }
         catch( ClassNotFoundException | InstantiationException | IllegalAccessException e )
         {
-            // class doesn't exist or class is abstract or is an interface or haven't accessible builder or can't access to rhe class
+            // class doesn't exist or class is abstract or is an interface or haven't accessible builder or can't access to the class
             AppLogService.error( e.getMessage( ), e );
         }
 

@@ -184,8 +184,6 @@ public final class SuggestSubmitHome
      *
      * @param nKey
      *            The suggestSubmit primary key
-     * @param bLoadCommentList
-     *            true if the comment list must be get
      * @param plugin
      *            the Plugin
      * @return an instance of SuggestSubmit

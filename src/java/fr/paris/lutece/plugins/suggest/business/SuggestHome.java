@@ -35,6 +35,8 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.plugins.suggest.business.attribute.SuggestAttributeHome;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
+import fr.paris.lutece.portal.service.editor.RichTextContentService;
+import fr.paris.lutece.portal.service.editor.RichTextParsingException;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -109,7 +111,7 @@ public final class SuggestHome
 
         for ( IEntry entry : listEntry )
         {
-            entry = EntryHome.findByPrimaryKey( entry.getIdEntry( ), plugin );
+            entry = EntryHome.findByPrimaryKey( entry.getIdEntry( ), plugin, true ); //bForEditor to true, richtext attributes are loaded without modificationss
             entry.setSuggest( suggestCopy );
             EntryHome.copy( entry, plugin );
         }
@@ -237,6 +239,22 @@ public final class SuggestHome
      */
     public static Suggest findByPrimaryKey( int nKey, Plugin plugin )
     {
+     return findByPrimaryKey( nKey, plugin, false );
+    }
+
+    /**
+     * Returns an instance of a suggest whose identifier is specified in parameter
+     *
+     * @param nKey
+     *            The suggest primary key
+     * @param plugin
+     *            the Plugin
+     * @param bForEditor
+     *            True if the template is to be displayed in an editor
+     * @return an instance of Suggest
+     */
+    public static Suggest findByPrimaryKey( int nKey, Plugin plugin, Boolean bForEditor )
+    {
         Suggest suggest = _dao.load( nKey, plugin );
 
         if ( suggest != null )
@@ -254,6 +272,20 @@ public final class SuggestHome
             {
                 AppLogService.error( e.getMessage( ), e );
             }
+
+	        //When attributes are generated in an textarea input with richtext option (from markdown editors or html editors), 
+            //then attributes must be transformed in html by the RichTextContentService 
+            if ( !bForEditor )
+            {
+                try
+                {
+                	formatRichTextAttributes(suggest);
+                }
+                catch( RichTextParsingException e )
+                {
+                    AppLogService.error( e.getMessage( ), e );
+                }
+            }
         }
 
         return suggest;
@@ -270,6 +302,22 @@ public final class SuggestHome
      */
     public static List<Suggest> getSuggestList( SuggestFilter filter, Plugin plugin )
     {
+	return getSuggestList( filter, plugin, false );
+    }
+    
+    /**
+     * Load the data of all the suggests who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
+     * @param bForEditor
+     *            True if the template is to be displayed in an editor
+     * @return the list of suggests, or an empty list if no suggest was found
+     */
+    public static List<Suggest> getSuggestList( SuggestFilter filter, Plugin plugin, boolean bForEditor )
+    {
         List<Suggest> listSuggest = _dao.selectSuggestList( filter, plugin );
 
         for ( Suggest suggest : listSuggest )
@@ -284,21 +332,55 @@ public final class SuggestHome
             {
                 AppLogService.error( e.getMessage( ), e );
             }
+
+	//When attributes are generated in an textarea input with richtext option (from markdown editors or html editors), 
+            //then attributes must be transformed in html by the RichTextContentService 
+            if ( !bForEditor )
+            {
+                try
+                {
+                	formatRichTextAttributes(suggest);
+                }
+                catch( RichTextParsingException e )
+                {
+                    AppLogService.error( e.getMessage( ), e );
+                }
+            }
         }
 
         return listSuggest;
     }
 
+	/**
+     * Returns an instance of a suggest with some formated attributes
+     *
+     * @param suggest
+     *            The suggest to modify
+     * @return the suggest with modification
+     */
+    public static void formatRichTextAttributes(Suggest suggest) throws RichTextParsingException 
+    {
+    	suggest.setHeader( RichTextContentService.getContent( suggest.getHeader( ) ) );
+    	suggest.setConfirmationMessage( RichTextContentService.getContent( suggest.getConfirmationMessage( ) ) );
+    	suggest.setUnavailabilityMessage( RichTextContentService.getContent( suggest.getUnavailabilityMessage( ) ) );
+    	suggest.setTermsOfUse( RichTextContentService.getContent( suggest.getTermsOfUse( ) ) );
+    	suggest.setDescription( RichTextContentService.getContent( suggest.getDescription( ) ) );
+    	suggest.setNotificationNewCommentTitle( RichTextContentService.getContent( suggest.getNotificationNewCommentTitle( ) ) );
+    	suggest.setNotificationNewCommentBody( RichTextContentService.getContent( suggest.getNotificationNewCommentBody( ) ) );
+    	suggest.setNotificationNewSuggestSubmitTitle( RichTextContentService.getContent( suggest.getNotificationNewSuggestSubmitTitle( ) ) );
+    	suggest.setNotificationNewSuggestSubmitBody( RichTextContentService.getContent( suggest.getNotificationNewSuggestSubmitBody( ) ) );
+	}
+
     /**
      * Update the value of the field which will be use to sort the suggestSubmit
      * 
-     * @param nIdSuggest
+     * @param nIdSuggest                
      *            the id of the suggestSubmit
      * @param nNewField
      *            the new number of order
      * @param plugin
      *            The Plugin object
-     */
+     */                                                                                                                                                                                                                                             
     public static void updateSuggestSortField( int nNewField, int nIdSuggest, Plugin plugin )
     {
         _dao.storeSuggestOrderField( nIdSuggest, nNewField, plugin );
