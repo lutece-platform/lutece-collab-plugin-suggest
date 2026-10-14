@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.service.subscription;
 
+import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
+import jakarta.enterprise.inject.spi.CDI;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,7 +54,6 @@ import fr.paris.lutece.plugins.suggest.business.SuggestHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitHome;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
-import fr.paris.lutece.plugins.suggest.service.SuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.plugins.subscribe.business.Subscription;
@@ -117,9 +118,9 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
                     // We get the list of subscriptions to suggest submits
                     SubscriptionFilter subscriptionFilter = new SubscriptionFilter( );
                     subscriptionFilter.setSubscriptionKey( SuggestSubscriptionProviderService.SUBSCRIPTION_SUGGEST_SUBMIT );
-                    subscriptionFilter.setSubscriptionProvider( SuggestSubscriptionProviderService.getService( ).getProviderName( ) );
+                    subscriptionFilter.setSubscriptionProvider( CDI.current( ).select( SuggestSubscriptionProviderService.class ).get( ).getProviderName( ) );
 
-                    List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( subscriptionFilter );
+                    List<Subscription> listSubscription = CDI.current( ).select( SubscriptionService.class ).get( ).findByFilter( subscriptionFilter );
 
                     if ( ( listSubscription != null ) && ( !listSubscription.isEmpty( ) ) )
                     {
@@ -147,16 +148,16 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
                 SubmitFilter submitFilter = new SubmitFilter( );
                 submitFilter.setDateFirst( new Timestamp( dateLastRun.getTime( ) ) );
 
-                List<SuggestSubmit> listCreatedSuggestSubmit = SuggestSubmitService.getService( ).getSuggestSubmitList( submitFilter, plugin );
+                List<SuggestSubmit> listCreatedSuggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter, plugin );
 
                 if ( ( listCreatedSuggestSubmit != null ) && ( !listCreatedSuggestSubmit.isEmpty( ) ) )
                 {
                     // We get the list of subscriptions to suggest categories
                     SubscriptionFilter subscriptionFilter = new SubscriptionFilter( );
                     subscriptionFilter.setSubscriptionKey( SuggestSubscriptionProviderService.SUBSCRIPTION_SUGGEST_CATEGORY );
-                    subscriptionFilter.setSubscriptionProvider( SuggestSubscriptionProviderService.getService( ).getProviderName( ) );
+                    subscriptionFilter.setSubscriptionProvider( CDI.current( ).select( SuggestSubscriptionProviderService.class ).get( ).getProviderName( ) );
 
-                    List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( subscriptionFilter );
+                    List<Subscription> listSubscription = CDI.current( ).select( SubscriptionService.class ).get( ).findByFilter( subscriptionFilter );
 
                     if ( ( listSubscription != null ) && ( !listSubscription.isEmpty( ) ) )
                     {
@@ -181,8 +182,8 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
                     subscriptionFilter = new SubscriptionFilter( );
                     subscriptionFilter.setSubscriptionKey( SuggestSubscriptionProviderService.SUBSCRIPTION_SUGGEST );
-                    subscriptionFilter.setSubscriptionProvider( SuggestSubscriptionProviderService.getService( ).getProviderName( ) );
-                    listSubscription = SubscriptionService.getInstance( ).findByFilter( subscriptionFilter );
+                    subscriptionFilter.setSubscriptionProvider( CDI.current( ).select( SuggestSubscriptionProviderService.class ).get( ).getProviderName( ) );
+                    listSubscription = CDI.current( ).select( SubscriptionService.class ).get( ).findByFilter( subscriptionFilter );
 
                     if ( ( listSubscription != null ) && ( !listSubscription.isEmpty( ) ) )
                     {

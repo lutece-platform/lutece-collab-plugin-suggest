@@ -1,19 +1,31 @@
-<@row>	<@columns>		<@box>			<@boxHeader title='#i18n{suggest.createSuggestSubmitType.title}' />			<@boxBody>
-				<@tform method='post' action='jsp/admin/plugins/suggest/DoCreateSuggestSubmitType.jsp' enctype='multipart/form-data'>
-					<@formGroup labelFor='name' labelKey='#i18n{suggest.createSuggestSubmitType.labelName}' mandatory=true>						<@input type='text' name='name' id='name' maxlength=200 />					</@formGroup>
-					<@formGroup labelFor='color' labelKey='#i18n{suggest.createSuggestSubmitType.labelColor}'>						<@input type='text' name='color' id='color' maxlength=7 />					</@formGroup>
-					<@formGroup mandatory=true>						<@checkBox labelFor='parameterizable' labelKey='#i18n{suggest.createSuggestSubmitType.labelParameterizable}' name='parameterizable' id='parameterizable' />					</@formGroup>
-					<@formGroup labelFor='image_source' labelKey='#i18n{suggest.createSuggestSubmitType.labelImage}'>						<@input type='file' name='image_source' id='image_source' maxlength=100 />					</@formGroup>
-					<@formGroup>
-						<@button type='submit' name='save' title='#i18n{suggest.createExportFormat.buttonSave}' buttonIcon='save' />
-						<@aButton href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' name='cancel' buttonIcon='times' title='#i18n{suggest.createExportFormat.buttonCancel}' color='default' />					</@formGroup>
-				</@tform>			</@boxBody>		</@box>	</@columns></@row>
-<script src="js/bootstrap-colorpicker.js"></script>
-<script>
-$( function(){
-	$("#color").colorpicker().on('changeColor',
-	function(ev){
-		$(this).css("border","2px solid " + ev.color.toHex());
-	});
-});
-</script>
+<@pageContainer>
+	<@pageColumn>
+		<@pageHeader title='#i18n{suggest.createSuggestSubmitType.title}' />
+		<@row>
+			<@columns>
+				<@box>
+					<@boxBody>
+						<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp' enctype='multipart/form-data'><@input type='hidden' name='action' value='createSuggestSubmitType' />
+							<@formGroup labelFor='name' labelKey='#i18n{suggest.createSuggestSubmitType.labelName}' mandatory=true>
+								<@input type='text' name='name' id='name' maxlength=200 />
+							</@formGroup>
+							<@formGroup labelFor='color' labelKey='#i18n{suggest.createSuggestSubmitType.labelColor}'>
+								<@input type='color' class='form-control-color' name='color' id='color' value='#000000' />
+							</@formGroup>
+							<@formGroup mandatory=true>
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggestSubmitType.labelParameterizable}' name='parameterizable' id='parameterizable' value='1' />
+							</@formGroup>
+							<@formGroup labelFor='image_source' labelKey='#i18n{suggest.createSuggestSubmitType.labelImage}'>
+								<@input type='file' name='image_source' id='image_source' maxlength=100 />
+							</@formGroup>
+							<@formGroup>
+								<@button type='submit' name='save' title='#i18n{suggest.createExportFormat.buttonSave}' buttonIcon='device-floppy' />
+								<@aButton href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' name='cancel' buttonIcon='x' title='#i18n{suggest.createExportFormat.buttonCancel}' color='light' />
+							</@formGroup>
+						</@tform>
+					</@boxBody>
+				</@box>
+			</@columns>
+		</@row>
+	</@pageColumn>
+</@pageContainer>

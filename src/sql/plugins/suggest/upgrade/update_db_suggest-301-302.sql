@@ -1,3 +1,7 @@
+-- liquibase formatted sql
+-- changeset suggest:update_db_suggest-301-302.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:1 SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM suggest_action WHERE icon_url LIKE 'icon-%'
 --
 -- Table structure for table suggest_default_message
 --

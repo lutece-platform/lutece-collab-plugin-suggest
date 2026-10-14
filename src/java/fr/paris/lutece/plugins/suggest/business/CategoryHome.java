@@ -35,9 +35,8 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.plugins.suggest.service.SuggestCategoryCacheService;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
-import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.util.List;
 
@@ -49,8 +48,8 @@ import java.util.List;
 public final class CategoryHome
 {
     // Static variable pointed at the DAO instance
-    private static ICategoryDAO _dao = SpringContextService.getBean( "suggest.categoryDAO" );
-    private static AbstractCacheableService _cache = new SuggestCategoryCacheService( );
+    private static ICategoryDAO _dao = CDI.current( ).select( ICategoryDAO.class ).get( );
+    private static SuggestCategoryCacheService _cache = CDI.current( ).select( SuggestCategoryCacheService.class ).get( );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -84,7 +83,7 @@ public final class CategoryHome
     public static void update( Category category, Plugin plugin )
     {
         _dao.store( category, plugin );
-        _cache.removeKey( SuggestUtils.EMPTY_STRING + category.getIdCategory( ) );
+        _cache.remove( SuggestUtils.EMPTY_STRING + category.getIdCategory( ) );
     }
 
     /**
@@ -98,7 +97,7 @@ public final class CategoryHome
     public static void remove( int nIdCategory, Plugin plugin )
     {
         _dao.delete( nIdCategory, plugin );
-        _cache.removeKey( SuggestUtils.EMPTY_STRING + nIdCategory );
+        _cache.remove( SuggestUtils.EMPTY_STRING + nIdCategory );
     }
 
     /**
@@ -112,12 +111,12 @@ public final class CategoryHome
      */
     public static Category findByPrimaryKey( int idKey, Plugin plugin )
     {
-        Category category = (Category) _cache.getFromCache( SuggestUtils.EMPTY_STRING + idKey );
+        Category category = _cache.get( SuggestUtils.EMPTY_STRING + idKey );
 
         if ( category == null )
         {
             category = _dao.load( idKey, plugin );
-            _cache.putInCache( SuggestUtils.EMPTY_STRING + idKey, category );
+            _cache.put( SuggestUtils.EMPTY_STRING + idKey, category );
         }
 
         return category;

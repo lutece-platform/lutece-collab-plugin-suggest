@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 /**
  * This class provides instances management methods (create, find, ...) for ImageResource objects
@@ -43,7 +43,7 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public final class ImageResourceHome
 {
     // Static variable pointed at the DAO instance
-    private static IImageResourceDAO _dao = SpringContextService.getBean( "suggest.imageResourceDAO" );
+    private static IImageResourceDAO _dao = CDI.current( ).select( IImageResourceDAO.class ).get( );
 
     /**
      * Private constructor - this class need not be instantiated

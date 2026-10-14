@@ -1,27 +1,32 @@
-<@row>
-	<@columns>
+<@pageContainer>
+	<@pageColumn>
+		<@pageHeader title='${suggest.title!}'>
+			<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp' buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' hideTitle=['xs','sm','md'] />
+		</@pageHeader>
 		<@tabs>
-			<@tabList>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageSuggestSubmit.jsp?id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmit.title}' />
-				<@tabLink active=true href='jsp/admin/plugins/suggest/ManageSuggestSubmitOrder.jsp?id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmitOrder.title}' />
-			</@tabList>
-			<@tabContent>
-				<@paginationAdmin paginator=paginator combo=1 form=0 showcount=0 />
-				<#assign include_suggest_submit_actions="include_suggest_submit_actions_change_order.html">
-				<#assign display_check_actions = false>
-				<#include "include_suggest_submit_list.html">
-			</@tabContent>
-		</@tabs>
-	</@columns>
-</@row>
+				<@tabList>
+					<@tabLink href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmit&id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmit.title}' />
+					<@tabLink active=true href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmitOrder&id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmitOrder.title}' />
+				</@tabList>
+				<@tabContent>
+					<#if suggest_submit_list?has_content>
+					<@paginationAdmin paginator=paginator combo=1 form=0 showcount=0 />
+					<#assign include_suggest_submit_actions="include_suggest_submit_actions_change_order.html">
+					<#assign display_check_actions = false>
+					<#include "include_suggest_submit_list.html">
+					<#else>
+					<@empty title='#i18n{portal.util.labelNoItem}' iconName='message-off' />
+					</#if>
+				</@tabContent>
+			</@tabs>
+	</@pageColumn>
+</@pageContainer>
 
+<script src="js/admin/plugins/suggest/suggest.js"></script>
 <script>
-$( function () {
-	$(".preview").toggle();
-	$(".full").click(function(){
-		$(this).next(".preview").toggle();
-		$(this).find('i').toggleClass("fa-plus-square").toggleClass("fa-minus-square");
+document.addEventListener( 'DOMContentLoaded', function( ){
+	document.querySelectorAll( '.preview' ).forEach( function( element ){
+		element.style.display = 'none';
 	});
 });
-
 </script>

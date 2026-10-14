@@ -1,3 +1,7 @@
+-- liquibase formatted sql
+-- changeset suggest:update_db_suggest-228-231.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_suggest' AND column_name = 'notification_new_comment_sender'
 --
 -- Table structure for table suggest_default_message
 --

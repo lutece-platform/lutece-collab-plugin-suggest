@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -44,6 +46,7 @@ import java.util.List;
  * class VoteDAO
  *
  */
+@ApplicationScoped
 public class VoteDAO implements IVoteDAO
 {
     private static final String SQL_QUERY_SELECT_VOTE_BY_ID_SUGGEST_SUBMIT = "SELECT id_suggest_submit,lutece_user_key "

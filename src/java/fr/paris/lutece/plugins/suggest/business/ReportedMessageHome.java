@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ import java.util.List;
 public final class ReportedMessageHome
 {
     // Static variable pointed at the DAO instance
-    private static IReportedMessageDAO _dao = SpringContextService.getBean( "suggest.reportedMessageDAO" );
+    private static IReportedMessageDAO _dao = CDI.current( ).select( IReportedMessageDAO.class ).get( );
 
     /**
      * Private constructor - this class need not be instantiated

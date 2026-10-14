@@ -33,10 +33,19 @@
  */
 package fr.paris.lutece.plugins.suggest.web;
 
-import java.util.HashMap;
-import java.util.Locale;
+import fr.paris.lutece.api.user.User;
+import fr.paris.lutece.portal.web.cdi.mvc.Models;
+import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
+import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
+import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
+import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Named;
+import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.plugin.PluginService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -50,18 +59,22 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
-import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPathService;
-import fr.paris.lutece.portal.web.admin.PluginAdminPageJspBean;
-import fr.paris.lutece.util.html.HtmlTemplate;
 
 /**
  *
  * class DefaultMessageJspBean
  *
  */
-public class DefaultMessageJspBean extends PluginAdminPageJspBean
+@RequestScoped
+@Named( "suggestDefaultMessageJspBean" )
+@Controller( controllerJsp = "ManageDefaultMessage.jsp", controllerPath = "jsp/admin/plugins/suggest/", right = ManageSuggestJspBean.RIGHT_MANAGE_SUGGEST_LIKE, securityTokenEnabled = true )
+public class DefaultMessageJspBean extends MVCAdminJspBean
 {
+
+    // views and actions
+    private static final String VIEW_MANAGE_DEFAULT_MESSAGE = "manageDefaultMessage";
+    private static final String ACTION_MODIFY_DEFAULT_MESSAGE = "modifyDefaultMessage";
 
     /**
 	 * 
@@ -110,28 +123,26 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
     private static final String MESSAGE_ILLOGICAL_NUMBER_SUGGEST_SUBMIT_CARACTERS_SHOWN = "suggest.message.illogicalNumberSuggestSubmitCaractersShown";
 
     // properties
-    private static final String PROPERTY_MANAGE_DEFAULT_MESSAGE_TITLE = "form.manageDefaultMessage.title";
+    private static final String PROPERTY_MANAGE_DEFAULT_MESSAGE_TITLE = "suggest.manageDefaultMessage.title";
 
     /**
      * gets the manage default message page
      * 
      * @param request
      *            the Http request
+     * @param model
+     *            the model
      * @return the manage default message page
      */
-    public String getManageDefaultMessage( HttpServletRequest request )
+    @View( value = VIEW_MANAGE_DEFAULT_MESSAGE, defaultView = true )
+    public String getManageDefaultMessage( HttpServletRequest request, Models model )
     {
-        Locale locale = getLocale( );
-        HashMap<String, Object> model = new HashMap<>( );
         DefaultMessage defaultMessage = DefaultMessageHome.find( getPlugin( ) );
         model.put( MARK_DEFAULT_MESSAGE, defaultMessage );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage( ) );
-        setPageTitleProperty( PROPERTY_MANAGE_DEFAULT_MESSAGE_TITLE );
 
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_DEFAULT_MESSAGE, locale, model );
-
-        return getAdminPage( templateList.getHtml( ) );
+        return getPage( PROPERTY_MANAGE_DEFAULT_MESSAGE_TITLE, TEMPLATE_MANAGE_DEFAULT_MESSAGE );
     }
 
     /**
@@ -141,22 +152,23 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
      *            the Http request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_MODIFY_DEFAULT_MESSAGE, securityTokenAction = VIEW_MANAGE_DEFAULT_MESSAGE )
     public String doModifyDefaultMessage( HttpServletRequest request )
     {
-        if ( RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, DefaultMessageResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
+        if ( RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, DefaultMessageResourceIdService.PERMISSION_MANAGE, (User) getUser( ) ) )
         {
             DefaultMessage defaultMessage = new DefaultMessage( );
             String strError = getDefaultMessageData( request, defaultMessage );
 
             if ( strError != null )
             {
-                return strError;
+                return redirect( request, strError );
             }
 
             DefaultMessageHome.update( defaultMessage, getPlugin( ) );
         }
 
-        return getHomeUrl( request );
+        return redirect( request, getHomeUrl( request ) );
     }
 
     /**
@@ -283,5 +295,16 @@ public class DefaultMessageJspBean extends PluginAdminPageJspBean
         defaultMessage.setNotificationNewSuggestSubmitBody( strNotificationNewSuggestSubmitBody );
 
         return null;
+    }
+
+    /**
+     * Returns the suggest plugin.
+     *
+     * @return the plugin
+     */
+    @Override
+    public Plugin getPlugin( )
+    {
+        return PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
     }
 }

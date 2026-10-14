@@ -1,15 +1,31 @@
-<@row>	<@columns>		<@box>			<@boxHeader title='#i18n{suggest.createExportFormat.title}' />			<@boxBody>
-				<@tform method='post' action='jsp/admin/plugins/suggest/DoCreateExportFormat.jsp' enctype='multipart/form-data'>
-					<@formGroup labelFor='title' labelKey='#i18n{suggest.createExportFormat.labelTitle} * '>						<@input type='text' id='title' name='title' maxlength=20 />					</@formGroup>
-					<@formGroup labelFor='description' labelKey='#i18n{suggest.createExportFormat.labelDescription}' mandatory=true>						<@input type='text' id='description' name='description' maxlength=255 value='' />					</@formGroup>
-					<@formGroup labelFor='extension' labelKey='#i18n{suggest.createExportFormat.labelExtension}' mandatory=true>						<@input type='text' id='extension' name='extension' maxlength=10 value='' />					</@formGroup>
-					<@formGroup labelFor='stylesheet_source' labelKey='#i18n{suggest.createExportFormat.labelXsl}' mandatory=true>						<@input type='file' id='stylesheet_source' name='stylesheet_source' maxlength=100 />					</@formGroup>
-					<@formGroup>
-						<@button type='submit' name='save' title='#i18n{suggest.createExportFormat.buttonSave}' buttonIcon='save' />
-						<@aButton href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest' title='#i18n{suggest.createExportFormat.buttonCancel}' buttonIcon='times' color='default' />
-					</@formGroup>
-				</@tform>
-			</@boxBody>
-		</@box>
-	</@columns>
-</@row>
+<@pageContainer>
+	<@pageColumn>
+		<@pageHeader title='#i18n{suggest.createExportFormat.title}' />
+		<@row>
+			<@columns>
+				<@box>
+					<@boxBody>
+						<@tform method='post' action='jsp/admin/plugins/suggest/ManageExportFormat.jsp' enctype='multipart/form-data'><@input type='hidden' name='action' value='createExportFormat' />
+							<@formGroup labelFor='title' labelKey='#i18n{suggest.createExportFormat.labelTitle}' mandatory=true>
+								<@input type='text' id='title' name='title' maxlength=20 />
+							</@formGroup>
+							<@formGroup labelFor='description' labelKey='#i18n{suggest.createExportFormat.labelDescription}' mandatory=true>
+								<@input type='text' id='description' name='description' maxlength=255 value='' />
+							</@formGroup>
+							<@formGroup labelFor='extension' labelKey='#i18n{suggest.createExportFormat.labelExtension}' mandatory=true>
+								<@input type='text' id='extension' name='extension' maxlength=10 value='' />
+							</@formGroup>
+							<@formGroup labelFor='stylesheet_source' labelKey='#i18n{suggest.createExportFormat.labelXsl}' mandatory=true>
+								<@input type='file' id='stylesheet_source' name='stylesheet_source' maxlength=100 />
+							</@formGroup>
+							<@formGroup>
+								<@button type='submit' name='save' title='#i18n{suggest.createExportFormat.buttonSave}' buttonIcon='device-floppy' />
+								<@aButton href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest' title='#i18n{suggest.createExportFormat.buttonCancel}' buttonIcon='x' color='light' />
+							</@formGroup>
+						</@tform>
+					</@boxBody>
+				</@box>
+			</@columns>
+		</@row>
+	</@pageColumn>
+</@pageContainer>

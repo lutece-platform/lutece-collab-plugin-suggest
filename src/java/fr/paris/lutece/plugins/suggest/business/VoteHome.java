@@ -34,7 +34,7 @@
 package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ import java.util.List;
 public final class VoteHome
 {
     // Static variable pointed at the DAO instance
-    private static IVoteDAO _dao = SpringContextService.getBean( "suggest.voteDAO" );
+    private static IVoteDAO _dao = CDI.current( ).select( IVoteDAO.class ).get( );
 
     /**
      * Private constructor - this class need not be instantiated

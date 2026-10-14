@@ -33,6 +33,10 @@
  */
 package fr.paris.lutece.plugins.suggest.web.action;
 
+import fr.paris.lutece.api.user.User;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
 import fr.paris.lutece.plugins.suggest.business.Suggest;
 import fr.paris.lutece.plugins.suggest.business.SuggestHome;
@@ -42,10 +46,11 @@ import fr.paris.lutece.plugins.suggest.business.EntryHome;
 import fr.paris.lutece.plugins.suggest.business.ExportFormat;
 import fr.paris.lutece.plugins.suggest.business.ExportFormatHome;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
-import fr.paris.lutece.plugins.suggest.service.CommentSubmitService;
-import fr.paris.lutece.plugins.suggest.service.SuggestSubmitService;
+import fr.paris.lutece.plugins.suggest.service.ICommentSubmitService;
+import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
 import fr.paris.lutece.plugins.suggest.service.SuggestResourceIdService;
+import fr.paris.lutece.plugins.suggest.service.SuggestService;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
@@ -55,7 +60,6 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.pluginaction.AbstractPluginAction;
@@ -71,16 +75,24 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
  * Exports records (search records or all records)
  *
  */
+@ApplicationScoped
+@Named( "suggest.exportSuggestSubmitAction" )
 public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdminSearchFields> implements ISuggestAction
 {
+    @Inject
+    private ICommentSubmitService _commentSubmitService;
+
+    @Inject
+    private ISuggestSubmitService _suggestSubmitService;
+
     private static final String ACTION_NAME = "Export Suggest XSL";
     private static final String MESSAGE_YOU_ARE_NOT_ALLOWED_TO_DOWLOAD_THIS_FILE = "suggest.message.youAreNotAllowedToDownloadFile";
     private static final String MESSAGE_YOU_MUST_SELECT_EXPORT_FORMAT = "suggest.message.youMustSelectExportFormat";
@@ -154,8 +166,7 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
         Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
 
         if ( ( suggest == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, Integer.toString( suggest.getIdSuggest( ) ),
-                        SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, adminUser ) )
+                || !SuggestService.isAuthorized( suggest.getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) adminUser ) )
         {
             throw new AccessDeniedException( I18nService.getLocalizedString( MESSAGE_YOU_ARE_NOT_ALLOWED_TO_DOWLOAD_THIS_FILE, request.getLocale( ) ) );
         }
@@ -175,7 +186,7 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
             suggest.setEntries( EntryHome.getEntryList( entryfilter, plugin ) );
 
             SubmitFilter filter = SuggestUtils.getSuggestSubmitFilter( searchFields );
-            List<Integer> listIdSuggestSubmit = SuggestSubmitService.getService( ).getSuggestSubmitListId( filter, plugin );
+            List<Integer> listIdSuggestSubmit = _suggestSubmitService.getSuggestSubmitListId( filter, plugin );
 
             StringBuffer strBufferListSuggestSubmitXml = new StringBuffer( );
             SuggestSubmit suggestSubmit = null;
@@ -185,9 +196,9 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
 
             for ( Integer nIdSuggestSubmit : listIdSuggestSubmit )
             {
-                suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, false, true, plugin );
+                suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, true, plugin );
                 filter.setIdSuggestSubmit( nIdSuggestSubmit );
-                listCommentSubmit = CommentSubmitService.getService( ).getCommentSubmitList( filter, plugin );
+                listCommentSubmit = _commentSubmitService.getCommentSubmitList( filter, plugin );
                 suggestSubmit.setComments( listCommentSubmit );
                 suggestSubmit.setSuggest( suggest );
                 strBufferListSuggestSubmitXml.append( suggestSubmit.getXml( request, adminUser.getLocale( ) ) );

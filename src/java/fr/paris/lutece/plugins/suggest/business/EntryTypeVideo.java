@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-import fr.paris.lutece.plugins.suggest.service.SuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -41,15 +40,18 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 
+import fr.paris.lutece.portal.service.template.AppTemplateService;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.FileItem;
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 
-import com.mysql.cj.jdbc.exceptions.PacketTooBigException;
 
 /**
  *
@@ -64,8 +66,13 @@ public class EntryTypeVideo extends Entry
     private static final String PARAMETER_QUALITY = "quality";
     private static final String PARAMETER_ALIGNMENT = "alignment";
     private static final String PARAMETER_MENU = "menu";
-    private static final String MESSAGE_FILE_TOO_HEAVY = "suggest.message.fileTooHeavy";
-    private static final String PROPERTY_CREDITS = "suggest.createEntry.labelCredits";
+    private static final String TEMPLATE_VIDEO_PLAYER = "skin/plugins/suggest/video_player.html";
+    private static final String MARK_ID_SUGGEST_SUBMIT = "id_suggest_submit";
+    private static final String MARK_WIDTH = "width";
+    private static final String MARK_HEIGHT = "height";
+    private static final String MARK_AUTOPLAY = "autoplay";
+    private static final String MARK_LOOP = "loop";
+    private static final String MARK_CREDITS = "credits";
     private static final String TEMPLATE_CREATE = "admin/plugins/suggest/create_entry_type_video.html";
     private static final String TEMPLATE_MODIFY = "admin/plugins/suggest/modify_entry_type_video.html";
     private static final String TEMPLATE_HTML_CODE_FORM = "admin/plugins/suggest/html_code_form_entry_type_video.html";
@@ -246,80 +253,20 @@ public class EntryTypeVideo extends Entry
         String strCredits = request.getParameter( PARAMETER_CREDITS + this.getIdEntry( ) );
 
         MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
-        FileItem item = mRequest.getFile( SuggestUtils.EMPTY_STRING + this.getIdEntry( ) );
+        MultipartItem item = mRequest.getFile( SuggestUtils.EMPTY_STRING + this.getIdEntry( ) );
 
-        byte [ ] bytes = item.get( );
+        byte [ ] bytes = ( item != null ) ? item.get( ) : null;
 
         Response response = new Response( );
         response.setEntry( this );
 
-        if ( bytes != null )
+        if ( ( bytes != null ) && ( bytes.length > 0 ) )
         {
             VideoType video = new VideoType( );
             video.setVideo( bytes );
             video.setMimeType( item.getContentType( ) );
             video.setCredits( strCredits );
-            video.setIdSuggestSubmit( nIdSuggestSubmit );
-
-            try
-            {
-                VideoTypeHome.create( video, plugin );
-
-                String strMenu = "false";
-                String strLoop = "false";
-                String strAutostart = "false";
-                String strQuality = "low";
-
-                for ( EntryAdditionalAttribute attr : this.getEntryAdditionalAttributeList( ) )
-                {
-                    if ( attr.getName( ).equals( PARAMETER_AUTOSTART ) )
-                    {
-                        strAutostart = attr.getValue( );
-                    }
-                    else
-                        if ( attr.getName( ).equals( PARAMETER_LOOP ) )
-                        {
-                            strLoop = attr.getValue( );
-                        }
-                        else
-                            if ( attr.getName( ).equals( PARAMETER_QUALITY ) )
-                            {
-                                strQuality = attr.getValue( );
-                            }
-                            else
-                                if ( attr.getName( ).equals( PARAMETER_MENU ) )
-                                {
-                                    strMenu = attr.getValue( );
-                                }
-                }
-
-                String strResponse = "<div id='mediaspace" + nIdSuggestSubmit + "'></div>"
-                        + "<script type='text/javascript' src='js/player/swfobject.js'></script>" + "<script type='text/javascript'>"
-                        + " var so = new SWFObject('js/player/player.swf','mpl','" + this.getWidth( ) + "','" + this.getHeight( ) + "','9');"
-                        + "  so.addParam('allowfullscreen','true');" + "  so.addParam('allowscriptaccess','always');" + "  so.addParam('wmode','opaque');"
-                        + "  so.addParam('quality','" + strQuality + "');" + "  so.addParam('menu','" + strMenu + "');"
-                        + "  so.addVariable('file','../../jsp/site/plugins/suggest/getVideo.jsp?video_id=" + nIdSuggestSubmit + "');"
-                        + "  so.addVariable('provider','video');" + "  so.addVariable('autostart','" + strAutostart + "');"
-                        + "  so.addVariable('icons','false');" + "  so.addVariable('repeat','" + strLoop + "');" + "  so.write('mediaspace" + nIdSuggestSubmit
-                        + "');" + "</script>";
-
-                strResponse += ( "<br /><b>" + I18nService.getLocalizedString( PROPERTY_CREDITS, locale ) + "&nbsp;:&nbsp;</b>" + strCredits );
-
-                response.setValueResponse( strResponse );
-            }
-            catch( PacketTooBigException e )
-            {
-                // Remove the suggest submit potentially created
-                SuggestSubmitService.getService( ).remove( nIdSuggestSubmit, plugin );
-                // Remove the video potentially created
-                VideoTypeHome.remove( nIdSuggestSubmit, plugin );
-
-                FormError formError = new FormError( );
-                formError.setTitleQuestion( this.getTitle( ) );
-                formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_FILE_TOO_HEAVY, locale ) );
-
-                return formError;
-            }
+            response.setVideo( video );
         }
         else
         {
@@ -336,6 +283,46 @@ public class EntryTypeVideo extends Entry
         listResponse.add( response );
 
         return null;
+    }
+
+    /**
+     * Renders the HTML5 player of a proposal video.
+     *
+     * @param nIdSuggestSubmit
+     *            the id of the proposal the video belongs to
+     * @param strCredits
+     *            the credits of the video
+     * @param locale
+     *            the locale
+     * @return the HTML of the player
+     */
+    public String getVideoHtml( int nIdSuggestSubmit, String strCredits, Locale locale )
+    {
+        boolean bAutostart = false;
+        boolean bLoop = false;
+
+        for ( EntryAdditionalAttribute attr : this.getEntryAdditionalAttributeList( ) )
+        {
+            if ( attr.getName( ).equals( PARAMETER_AUTOSTART ) )
+            {
+                bAutostart = Boolean.parseBoolean( attr.getValue( ) );
+            }
+            else
+                if ( attr.getName( ).equals( PARAMETER_LOOP ) )
+                {
+                    bLoop = Boolean.parseBoolean( attr.getValue( ) );
+                }
+        }
+
+        Map<String, Object> model = new HashMap<>( );
+        model.put( MARK_ID_SUGGEST_SUBMIT, nIdSuggestSubmit );
+        model.put( MARK_WIDTH, this.getWidth( ) );
+        model.put( MARK_HEIGHT, this.getHeight( ) );
+        model.put( MARK_AUTOPLAY, bAutostart );
+        model.put( MARK_LOOP, bLoop );
+        model.put( MARK_CREDITS, strCredits );
+
+        return AppTemplateService.getTemplate( TEMPLATE_VIDEO_PLAYER, locale, model ).getHtml( );
     }
 
     /**

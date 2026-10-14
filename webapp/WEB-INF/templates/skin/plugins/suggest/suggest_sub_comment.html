@@ -1,28 +1,26 @@
 <div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<form action="jsp/site/Portal.jsp?page=suggest" method="post" name="" id="comment-comment" class="form-horizontal">
-			<input name="action" value="do_create_comment" type="hidden">
-			<input name="id_suggest" value="${id_suggest}" type="hidden">
-			<input name="id_suggest_submit" value="${comment_submit.suggestSubmit.idSuggestSubmit}" type="hidden">
-			<input name="id_suggest_comment" value="${comment_submit.idCommentSubmit}"type="hidden">
-			<div class="form-group">
-				<label class="control-label col-xs-12 col-sm-3" for="reported_value">
+	<div class="col-12 col-sm-12 col-md-12 col-lg-12">
+		<@cForm action='jsp/site/Portal.jsp?page=suggest' id='comment-comment'>
+			<@cInput type='hidden' name='action' value='do_create_comment' />
+			<@cInput type='hidden' name='id_suggest' value='${id_suggest}' />
+			<@cInput type='hidden' name='id_suggest_submit' value='${comment_submit.suggestSubmit.idSuggestSubmit}' />
+			<@cInput type='hidden' name='id_suggest_comment' value='${comment_submit.idCommentSubmit}' />
+			<div class="mb-3">
+				<label class="form-label" for="reported_value">
 					#i18n{suggest.suggestComment.labelComment} <#if disable_new_comment_submit>(#i18n{suggest.suggestComment.labelDisableNewCommentSubmit})</#if>
 				</label>
-				<div class="col-xs-12 col-sm-9">
+				<div>
 					<textarea name="comment_value" id="comment_value"	class="form-control markitup"></textarea>
 				</div>
 			</div>
-			<#if jcaptcha?exists>
-				<div class="form-group">${jcaptcha}</div>
+			<#if captcha??>
+				<div class="mb-3">${captcha}</div>
 			</#if>
-			<div class="form-group">
-				<div class="col-xs-12 col-sm-offset-3 col-sm-9">
-					<button class="btn btn-primary btn-sm" type="submit" name="submit_comment">
-						<i class="fa fa-comment"></i>&nbsp;#i18n{suggest.suggestComment.labelCommentAComment}
-					</button>
+			<div class="mb-3">
+				<div class="d-flex gap-2">
+					<@cBtn label='#i18n{suggest.suggestComment.labelCommentAComment}' class='primary btn-sm' type='submit' params='name="submit_comment"'><@cIcon name='message' /></@cBtn>
 				</div>
 			</div>
-		</form>
+		</@cForm>
 	</div>
 </div>

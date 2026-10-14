@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -44,6 +46,7 @@ import java.util.List;
  * class EntryTypeDAO
  *
  */
+@ApplicationScoped
 public class EntryTypeDAO implements IEntryTypeDAO
 {
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_type,title,class_name" + " FROM suggest_entry_type WHERE id_type=?";

@@ -12,7 +12,7 @@
 						<h6 class="mb-0">
 							<#if comment_submit_lutece_user.comment_submit.isOfficialAnswer()>
 								<span class="badge bg-warning me-2">
-									<i class="fa fa-star"></i>
+									<@cIcon name='star' />
 									#i18n{suggest.manageCommentSubmit.officialAnswer}
 								</span>
 							</#if>
@@ -23,7 +23,7 @@
 						<#if comment_submit_lutece_user.avatar?has_content>
 							<img class="avatar avatar-suggest img-circle" src="${comment_submit_lutece_user.avatar}" alt="">
 						<#else>
-							<i class="fa fa-user"></i>
+							<@cIcon name='user' />
 						</#if>
 						<#if comment_submit_lutece_user.lutece_user?exists>
 							${comment_submit_lutece_user.lutece_user}
@@ -34,7 +34,7 @@
 					</#if>
 					<div class="flex-shrink-0">
 						<small class="text-muted">
-							<i class="fa fa-calendar me-1"></i> ${comment_submit_lutece_user.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}
+							<@cIcon name='calendar' class='me-1' /> ${comment_submit_lutece_user.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}
 						</small>
 					</div>
 				</div>
@@ -47,7 +47,7 @@
 						<div class="card mt-3">
 							<p>
 								<#if comment_comment.comment_submit.isOfficialAnswer()>
-									<i class="fa fa-star"></i>
+									<@cIcon name='star' />
 									<span class="badge bg-info">#i18n{suggest.manageCommentSubmit.officialAnswer}</span> |
 								</#if>
 								<#if comment_comment.lutece_user?exists>
@@ -55,7 +55,7 @@
 									<#if comment_comment.avatar?has_content>
 										<img class="avatar avatar-suggest img-circle" src="${comment_comment.avatar}" alt="avatar provided by gravatar.com">
 									<#else>
-										<i class="fa fa-user"></i>
+										<@cIcon name='user' />
 									</#if>
 									<#if comment_comment.lutece_user?exists>
 										${comment_comment.lutece_user}
@@ -64,7 +64,7 @@
 										${comment_comment.lutece_user.getUserInfo("user.name.family")}
 									</#if>
 								</#if>
-								<i class="fa fa-calendar"></i> ${comment_comment.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}
+								<@cIcon name='calendar' /> ${comment_comment.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}
 							</p>
 							<div class="card-body">
 								${suggest.parseBbcodeValue(comment_comment.comment_submit.value)}
@@ -75,14 +75,14 @@
 			</div>
 			<div class="card-footer">
 				<a class="btn btn-primary btn-sm" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_comment=${comment_submit_lutece_user.comment_submit.idCommentSubmit}&action=create_sub_comment">
-					<i class="fa fa-comment-o"></i> #i18n{suggest.suggestComment.labelCommentAComment}
+					<@cIcon name='message' /> #i18n{suggest.suggestComment.labelCommentAComment}
 				</a>
 			</div>
 		</div>
 	</#list>
 		<p>
-			<a href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_submit=${id_suggest_submit}&action=view_suggest_submit" class="link-top label">
-				<i class="fa fa-chevron-up"></i>&nbsp;#i18n{suggest.suggestListSubmit.labelPageTop}
+			<a href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_submit=${id_suggest_submit}&action=view_suggest_submit" class="link-top badge bg-secondary">
+				<@cIcon name='chevron-up' />&nbsp;#i18n{suggest.suggestListSubmit.labelPageTop}
 			</a>
 		</p>
 	</div>

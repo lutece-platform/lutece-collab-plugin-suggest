@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.suggest.service.workflow;
 
+import jakarta.enterprise.inject.spi.CDI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -69,9 +70,9 @@ public class SuggestWorkflowService
      */
     public static void processActionOnSuggestSubmitCreation( Suggest suggest, SuggestSubmit suggestSubmit, User user )
     {
-        WorkflowService.getInstance( ).getState( suggestSubmit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, suggest.getIdWorkflow( ),
+        CDI.current( ).select( WorkflowService.class ).get( ).getState( suggestSubmit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, suggest.getIdWorkflow( ),
                 suggest.getIdSuggest( ) );
-        WorkflowService.getInstance( ).executeActionAutomatic( suggestSubmit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, suggest.getIdWorkflow( ),
+        CDI.current( ).select( WorkflowService.class ).get( ).executeActionAutomatic( suggestSubmit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, suggest.getIdWorkflow( ),
                 suggest.getIdSuggest( ), user );
     }
 
@@ -87,7 +88,7 @@ public class SuggestWorkflowService
      */
     public static void removeResources( int nIdWorkflow, int nIdSuggest, User user )
     {
-        WorkflowService workflowService = WorkflowService.getInstance( );
+        WorkflowService workflowService = CDI.current( ).select( WorkflowService.class ).get( );
         if ( workflowService.isAvailable( ) )
         {
             List<Integer> listIdWorkflowState = getListIdWorkflowState( nIdWorkflow, user );
@@ -112,7 +113,7 @@ public class SuggestWorkflowService
     public static List<Integer> getListIdWorkflowState( int nIdWorkflow, User user )
     {
         List<Integer> listIdState = new ArrayList<>( );
-        Collection<State> collectionStates = WorkflowService.getInstance( ).getAllStateByWorkflow( nIdWorkflow, user );
+        Collection<State> collectionStates = CDI.current( ).select( WorkflowService.class ).get( ).getAllStateByWorkflow( nIdWorkflow, user );
 
         for ( State state : collectionStates )
         {

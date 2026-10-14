@@ -34,7 +34,7 @@
 package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.sql.Timestamp;
 
@@ -47,7 +47,7 @@ import java.util.List;
 public final class CommentSubmitHome
 {
     // Static variable pointed at the DAO instance
-    private static ICommentSubmitDAO _dao = SpringContextService.getBean( "suggest.commentSubmitDAO" );
+    private static ICommentSubmitDAO _dao = CDI.current( ).select( ICommentSubmitDAO.class ).get( );
 
     /**
      * Private constructor - this class need not be instantiated

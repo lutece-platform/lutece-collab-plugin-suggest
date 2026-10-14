@@ -1,3 +1,7 @@
+-- liquibase formatted sql
+-- changeset suggest:update_db_suggest-225-226.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = database() AND table_name = 'suggest_suggest_user_info'
 DROP TABLE IF EXISTS suggest_action;
 CREATE TABLE IF NOT EXISTS suggest_action (
   id_action int(11) NOT NULL DEFAULT '0',

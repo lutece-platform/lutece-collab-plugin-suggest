@@ -1,82 +1,78 @@
-<@row>
-	<@columns>
-		<@tabs>
-			<@tabList>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.title}' />
-				<@tabLink href='jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategory}' />
-				<@tabLink href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelType}' />
-				<@tabLink href='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}' />
-				<@tabLink href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelExportFormat}' />
-				<@tabLink active=true href='jsp/admin/plugins/suggest/Statistics.jsp' title='#i18n{suggest.manageAdvancedParameters.labelStatistics}' />
-			</@tabList>
-			<@tabContent>
-				<@tabPanel active=true id='tre'>
-					<h3>#i18n{suggest.statistics.title}</h3>
-					<@tform action='jsp/admin/plugins/suggest/Statistics.jsp' method='post'>
-						<@formGroup labelFor='fist_response_date_filter' labelKey='#i18n{suggest.statistics.labelSuggest}'>
-							<#if suggest?exists>
-								<@select name='id_suggest' default_value='${suggest.idSuggest}' items=suggest_list />
-							<#else>
-								<@select name='id_suggest' default_value='-1' items=suggest_list  />
-							</#if>
-						</@formGroup>
-						<@formGroup labelFor='fist_response_date_filter' labelKey='#i18n{suggest.statistics.labelValidationDate}'>
-							<@inputGroup>
-								<#if first_date_filter?has_content><#assign value = first_date_filter?date /><#else><#assign value = '' /></#if>
-								<@input type='daterange' dateRangeEndId='last_date_filter' name='first_date_filter' id='first_date_filter' value=value />
-								<#if last_date_filter?has_content><#assign value = last_date_filter?if_exists?date /><#else><#assign value = '' /></#if>
-								<@inputGroupItem type='text'>#i18n{suggest.statistics.labelAnd}</@inputGroupItem>
-								<@input type='text' name='last_date_filter' id='last_date_filter' value=value />
-							</@inputGroup>
-						</@formGroup>
-						<#if category_list?has_content>
-							<@formGroup labelfor='id_category' labelKey='#i18n{suggest.statistics.labelSuggestSubmitCategory}'>
-								<@select name='id_category_filter' default_value='${suggest_submit_category_selected}' items=category_list />
-							</@formGroup>
-						</#if>
-						<#if suggest_submit_type_list?has_content>
-							<@formGroup labelFor='id_type' labelKey='#i18n{suggest.statistics.labelSuggestSubmitType}'>
-								<@select name='id_type' default_value='${suggest_submit_type_selected}' items=suggest_submit_type_list />
-							</@formGroup>
-						</#if>
-						<@formGroup>
-							<@button type='submit' title='#i18n{suggest.statistics.buttonSearch}' buttonIcon='search' />
-						</@formGroup>
-					</@tform>
-					
+<#assign advanced_tab = 'statistics' />
+<@pageContainer>
+	<@pageColumn>
+		<@pageHeader title='#i18n{suggest.manageAdvancedParameters.title}' />
+		<#include "include_advanced_parameters_tabs.html" />
+		<@messages infos=infos![] errors=errors![] warnings=warnings![] />
+			<h3>#i18n{suggest.statistics.title}</h3>
+			<@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp' method='post'><@input type='hidden' name='view' value='statistics' />
+				<@formGroup labelFor='fist_response_date_filter' labelKey='#i18n{suggest.statistics.labelSuggest}'>
 					<#if suggest?exists>
-					
-					<h3>${suggest.title}</h3>
-					
-						<@alert color='info'>
-							<#if category_filter?has_content>
-								<p><strong>#i18n{suggest.statistics.SuggestSubmitCategory}</strong>: ${category_filter.title}</p>
-							</#if>
-							<#if type_filter?has_content>
-								<p><strong>#i18n{suggest.statistics.SuggestSubmitType}</strong>: ${type_filter.name}</p>
-							</#if>
-
-							<p>#i18n{suggest.statistics.SuggestSubmitNumber} : <strong>${number_suggestsubmit_published} / ${number_suggestsubmit_waiting} / ${number_suggestsubmit_disabled}</strong></p>
-							<p>#i18n{suggest.statistics.labelNbCommentsPerSuggestsubmit} : <strong>${number_comments!0}</strong></p>
-							<p>#i18n{suggest.statistics.labelNbVotesPerSuggestsubmit} : <strong>${number_votes!0}</strong></p>
-							<p>#i18n{suggest.statistics.labelNbUsers}: <strong>${number_users!0}</strong></p>
-						</@alert>
-						
-						<@table>
-							<@tr>
-								<@th>#i18n{suggest.statistics.labelTitle}</@th>
-								<@th>#i18n{suggest.statistics.labelScore}</@th>
-							</@tr>
-							<#list high_scores as suggestsubmit>
-							<@tr>
-								<@td>${suggestsubmit.suggestSubmitTitle}</@td>
-								<@td align='center'><strong>${suggestsubmit.numberScore}</strong></@td>
-							</@tr>
-							</#list>
-						</@table>
+						<@select name='id_suggest' default_value='${suggest.idSuggest}' items=suggest_list />
+					<#else>
+						<@select name='id_suggest' default_value='-1' items=suggest_list  />
 					</#if>
-				</@tabPanel>
-			</@tabContent>
-		</@tabs>
-	</@columns>
-</@row>
+				</@formGroup>
+				<@formGroup labelFor='fist_response_date_filter' labelKey='#i18n{suggest.statistics.labelValidationDate}'>
+					<@inputGroup>
+						<#if first_date_filter?has_content><#assign value = first_date_filter?date /><#else><#assign value = '' /></#if>
+						<@input type='daterange' dateRangeEndId='last_date_filter' name='first_date_filter' id='first_date_filter' value=value />
+						<#if last_date_filter?has_content><#assign value = last_date_filter?if_exists?date /><#else><#assign value = '' /></#if>
+						<@inputGroupItem type='text'>#i18n{suggest.statistics.labelAnd}</@inputGroupItem>
+						<@input type='text' name='last_date_filter' id='last_date_filter' value=value />
+					</@inputGroup>
+				</@formGroup>
+				<#if category_list?has_content>
+					<@formGroup labelFor='id_category' labelKey='#i18n{suggest.statistics.labelSuggestSubmitCategory}'>
+						<@select name='id_category_filter' default_value='${suggest_submit_category_selected}' items=category_list />
+					</@formGroup>
+				</#if>
+				<#if suggest_submit_type_list?has_content>
+					<@formGroup labelFor='id_type' labelKey='#i18n{suggest.statistics.labelSuggestSubmitType}'>
+						<@select name='id_type' default_value='${suggest_submit_type_selected}' items=suggest_submit_type_list />
+					</@formGroup>
+				</#if>
+				<@formGroup>
+					<@button type='submit' title='#i18n{suggest.statistics.buttonSearch}' buttonIcon='search' />
+				</@formGroup>
+			</@tform>
+			
+			<#if suggest?exists>
+			
+			<h3>${suggest.title}</h3>
+			
+				<@alert color='info'>
+					<#if category_filter?has_content>
+						<p><strong>#i18n{suggest.statistics.SuggestSubmitCategory}</strong>: ${category_filter.title}</p>
+					</#if>
+					<#if type_filter?has_content>
+						<p><strong>#i18n{suggest.statistics.SuggestSubmitType}</strong>: ${type_filter.name}</p>
+					</#if>
+
+					<p>#i18n{suggest.statistics.SuggestSubmitNumber} : <strong>${number_suggestsubmit_published} / ${number_suggestsubmit_waiting} / ${number_suggestsubmit_disabled}</strong></p>
+					<p>#i18n{suggest.statistics.labelNbCommentsPerSuggestsubmit} : <strong>${number_comments!0}</strong></p>
+					<p>#i18n{suggest.statistics.labelNbVotesPerSuggestsubmit} : <strong>${number_votes!0}</strong></p>
+					<p>#i18n{suggest.statistics.labelNbUsers}: <strong>${number_users!0}</strong></p>
+				</@alert>
+				
+				<#if high_scores?has_content>
+				<@table>
+					<@tr>
+						<@th>#i18n{suggest.statistics.labelTitle}</@th>
+						<@th>#i18n{suggest.statistics.labelScore}</@th>
+					</@tr>
+					<#list high_scores as suggestsubmit>
+					<@tr>
+						<@td>${suggestsubmit.suggestSubmitTitle!}</@td>
+						<@td align='center'><strong>${suggestsubmit.numberScore}</strong></@td>
+					</@tr>
+					</#list>
+				</@table>
+				<#else>
+				<@empty title='#i18n{portal.util.labelNoItem}' iconName='chart-bar-off' class='h-auto' />
+				</#if>
+			</#if>
+		
+	
+	</@pageColumn>
+</@pageContainer>

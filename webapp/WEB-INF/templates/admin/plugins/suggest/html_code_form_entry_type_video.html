@@ -2,6 +2,6 @@
 	<@input type='file' name='${entry.idEntry}' id='${entry.idEntry}' value='' />
 </@formGroup>
 
-<@formGroup labelFor='${entry.idEntry}' labelKey='#i18n{suggest.createEntry.labelCredits}' helpKey='${entry.helpMessage}!' mandatory=entry.mandatory>
+<@formGroup labelFor='${entry.idEntry}' labelKey='#i18n{suggest.createEntry.labelCredits}' helpKey=entry.helpMessage!'' mandatory=entry.mandatory>
 	<@input type='text' name='credits${entry.idEntry}' id='credist${entry.idEntry}' value='' />
 </@formGroup>

@@ -1,9 +1,9 @@
 <@formGroup labelFor='id_suggest' labelKey='#i18n{suggest.resource_rss.label_suggest}' mandatory=true>
-	<@select name='id_suggest' default_value='${suggest_list_default_item}' params='onchange="javascript:select_submit();"' items=suggest_list />
+	<@select name='id_suggest' default_value='${suggest_list_default_item}' items=suggest_list />
 </@formGroup>
 <@formGroup>
 	<@radioButton orientation='inline' labelFor='rss_choice' labelKey='#i18n{suggest.resource_rss.suggest_choice}' name='rss_choice' id='choice_suggest' value='suggest' checked=suggest_is_suggest_submit_rss />
-	<@radioButton orientation='inline' labelFor='suggest_rss_choice' labelKey='#i18n{suggest.resource_rss.suggest_submit_choice}' name='rss_choice' id='choice_submit' value='suggest_submit' checked=suggest_is_suggest_submit_rss params='onclick="javascript:select_submit();"' />
+	<@radioButton orientation='inline' labelFor='suggest_rss_choice' labelKey='#i18n{suggest.resource_rss.suggest_submit_choice}' name='rss_choice' id='choice_submit' value='suggest_submit' checked=suggest_is_suggest_submit_rss />
 </@formGroup>
 
 <#assign keys = suggestsubmit_list?keys/> 
@@ -22,12 +22,24 @@
 </#list>
 
 <script>
-$("p.suggestSubmit").toggle();
-
-$("#choice_suggest").click( function(){
-	$("p.suggestSubmit").toggle();
-});
-$("#choice_submit").click( function(){
-	$("p.suggestSubmit").toggle();
+function select_submit( ) {
+	var suggest = document.querySelector( 'select[name="id_suggest"]' );
+	var choiceSubmit = document.getElementById( 'choice_submit' );
+	document.querySelectorAll( '.suggestSubmit' ).forEach( function( block ){
+		block.style.display = ( choiceSubmit && choiceSubmit.checked && suggest && block.id === 'suggest_submit' + suggest.value ) ? '' : 'none';
+	});
+}
+document.addEventListener( 'DOMContentLoaded', function( ){
+	[ 'choice_suggest', 'choice_submit' ].forEach( function( id ){
+		var radio = document.getElementById( id );
+		if ( radio ) {
+			radio.addEventListener( 'change', select_submit );
+		}
+	});
+	var suggest = document.querySelector( 'select[name="id_suggest"]' );
+	if ( suggest ) {
+		suggest.addEventListener( 'change', select_submit );
+	}
+	select_submit( );
 });
 </script>

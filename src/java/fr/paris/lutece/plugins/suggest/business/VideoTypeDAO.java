@@ -33,7 +33,9 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-import com.mysql.cj.jdbc.exceptions.PacketTooBigException;
+import jakarta.enterprise.context.ApplicationScoped;
+
+import java.sql.SQLException;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -43,6 +45,7 @@ import fr.paris.lutece.util.sql.DAOUtil;
  * class GraphTypeDAO
  *
  */
+@ApplicationScoped
 public class VideoTypeDAO implements IVideoTypeDAO
 {
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_suggest_submit,video_content,video_mime_type,credits FROM suggest_video WHERE id_suggest_submit=?";
@@ -58,10 +61,10 @@ public class VideoTypeDAO implements IVideoTypeDAO
      * @param plugin
      *            the plugin
      * @return the id of the new videoType
-     * @throws com.mysql.jdbc.PacketTooBigException
+     * @throws SQLException
      *             exception
      */
-    public int insert( VideoType videoType, Plugin plugin ) throws PacketTooBigException
+    public int insert( VideoType videoType, Plugin plugin ) throws SQLException
     {
         try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {    
@@ -76,7 +79,7 @@ public class VideoTypeDAO implements IVideoTypeDAO
             }
             catch( Exception e )
             {
-                throw new PacketTooBigException( 0, 0 );
+                throw new SQLException( e );
             }
 
         }

@@ -1,38 +1,46 @@
-<@row>
-	<@columns>
-		<@box>
-			<@boxHeader title='#i18n{suggest.createEntry.titleQuestion}: "${entry.suggest.title}" &gt; #i18n{suggest.createEntry.labelType}: ${entry.entryType.title}' />
-			<@boxBody>
-                <@tform action='jsp/admin/plugins/suggest/DoCreateEntry.jsp#list' method='post'>
-                    <@input type='hidden' name='id_type' value='${entry.entryType.idType}' />
-                    <@formGroup labelFor='title' labelKey='#i18n{suggest.createEntry.labelTitle}' helpKey='#i18n{suggest.createEntry.labelTitleComment}' mandatory=true>
-						<@input type='text' name='title' id='title' value='' maxlength=255 />
-					</@formGroup>
-                    <@formGroup labelFor='help_message' labelKey='#i18n{suggest.createEntry.labelHelpMessage}' helpKey='#i18n{suggest.createEntry.labelHelpMessageComment}'>
-						<@input type='textarea' name='help_message' id='help_message' rows=4 richtext=true />
-					</@formGroup>
-                    <@formGroup labelFor='comment' labelKey='#i18n{suggest.createEntry.labelComment}'>						<@input type='textarea' name='comment' rows=2 richtext=true />					</@formGroup>
-                    <@formGroup labelFor='value' labelKey='#i18n{suggest.createEntry.labelValueDefault}'>						<@input type='textarea' name='value' id='value' rows=4 richtext=true />					</@formGroup>
-                    <@formGroup>
-						<@checkBox labelFor='mandatory' labelKey='#i18n{suggest.createEntry.labelMandatory}' id='mandatory' name='mandatory' value='1' />
-					</@formGroup>
-                    <@formGroup labelFor='width' labelKey='#i18n{suggest.createEntry.labelWidth}' mandatory=true>
-						<@input type='text' name='width' id='width' value='' />
-					</@formGroup>
-					<@formGroup labelFor='max_size_enter' labelKey='#i18n{suggest.createEntry.labelMaxSizeEnter}'>
-						<@input type='text' name='max_size_enter' id='max_size_enter' value='' />
-					</@formGroup>
-                    <@formGroup helpKey='#i18n{suggest.createSuggest.labelShowInSuggestSubmitListComment}'>
-						<@checkBox labelFor='show_in_suggest_submit_list' labelKey='#i18n{suggest.createEntry.labelShowInSuggestSubmitList}' id='show_in_suggest_submit_list' name='show_in_suggest_submit_list' value='1' checked=true />
-					</@formGroup>
-					<@formGroup>
-						<@button type='submit' name='save' title='#i18n{suggest.createEntry.buttonSave}' buttonIcon='save' />
-						<@aButton href='jsp/admin/plugins/suggest/ModifySuggest.jsp?plugin_name=suggest&amp;id_suggest=${entry.suggest.idSuggest}' title='#i18n{suggest.modifyEntry.buttonCancel}' buttonIcon='times' color='default' />
-					</@formGroup>
-				</@tform>
-			</@boxBody>
-		</@box>
-	</@columns>
-</@row>
-<#include "/admin/util/editor/editor.html" />
-<@initEditor />
+<@pageContainer>
+	<@pageColumn>
+		<@pageHeader title='#i18n{suggest.createEntry.titleQuestion}: "${entry.suggest.title}" &gt; #i18n{suggest.createEntry.labelType}: ${entry.entryType.title}' />
+		<@row>
+			<@columns>
+				<@box>
+					<@boxBody>
+		                <@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp#list' method='post'><@input type='hidden' name='action' value='createEntry' />
+		                    <@input type='hidden' name='id_type' value='${entry.entryType.idType}' />
+		                    <@formGroup labelFor='title' labelKey='#i18n{suggest.createEntry.labelTitle}' helpKey='#i18n{suggest.createEntry.labelTitleComment}' mandatory=true>
+								<@input type='text' name='title' id='title' value='' maxlength=255 />
+							</@formGroup>
+		                    <@formGroup labelFor='help_message' labelKey='#i18n{suggest.createEntry.labelHelpMessage}' helpKey='#i18n{suggest.createEntry.labelHelpMessageComment}'>
+								<@input type='textarea' name='help_message' id='help_message' rows=4 richtext=true />
+							</@formGroup>
+		                    <@formGroup labelFor='comment' labelKey='#i18n{suggest.createEntry.labelComment}'>
+								<@input type='textarea' name='comment' rows=2 richtext=true />
+							</@formGroup>
+		                    <@formGroup labelFor='value' labelKey='#i18n{suggest.createEntry.labelValueDefault}'>
+								<@input type='textarea' name='value' id='value' rows=4 richtext=true />
+							</@formGroup>
+		                    <@formGroup>
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createEntry.labelMandatory}' id='mandatory' name='mandatory' value='1' />
+							</@formGroup>
+		                    <@formGroup labelFor='width' labelKey='#i18n{suggest.createEntry.labelWidth}' mandatory=true>
+								<@input type='text' name='width' id='width' value='' />
+							</@formGroup>
+							<@formGroup labelFor='max_size_enter' labelKey='#i18n{suggest.createEntry.labelMaxSizeEnter}'>
+								<@input type='text' name='max_size_enter' id='max_size_enter' value='' />
+							</@formGroup>
+		                    <@formGroup helpKey='#i18n{suggest.createSuggest.labelShowInSuggestSubmitListComment}'>
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createEntry.labelShowInSuggestSubmitList}' id='show_in_suggest_submit_list' name='show_in_suggest_submit_list' value='1' checked=true />
+							</@formGroup>
+							<@formGroup>
+								<@button type='submit' name='save' title='#i18n{suggest.createEntry.buttonSave}' buttonIcon='device-floppy' />
+								<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=modifySuggest&plugin_name=suggest&amp;id_suggest=${entry.suggest.idSuggest}' title='#i18n{suggest.modifyEntry.buttonCancel}' buttonIcon='x' color='light' />
+							</@formGroup>
+						</@tform>
+					</@boxBody>
+				</@box>
+			</@columns>
+		</@row>
+		<#include "/admin/util/editor/editor.html" />
+		<@initEditor />
+	</@pageColumn>
+</@pageContainer>

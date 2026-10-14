@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-import com.mysql.cj.jdbc.exceptions.PacketTooBigException;
+import java.sql.SQLException;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
@@ -63,10 +63,10 @@ public interface IVideoTypeDAO
      * @param plugin
      *            the plugin
      * @return the id of the new video
-     * @throws PacketTooBigException
+     * @throws SQLException
      *             exception
      */
-    int insert( VideoType video, Plugin plugin ) throws PacketTooBigException;
+    int insert( VideoType video, Plugin plugin ) throws SQLException;
 
     /**
      * Update the video in the table

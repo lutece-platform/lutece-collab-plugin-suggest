@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -44,6 +46,7 @@ import java.util.List;
  * class CategoryDAO
  *
  */
+@ApplicationScoped
 public class CategoryDAO implements ICategoryDAO
 {
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_category) FROM suggest_category";
@@ -52,8 +55,8 @@ public class CategoryDAO implements ICategoryDAO
     private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_category (id_category,title,color )VALUES(?,?,?)";
     private static final String SQL_QUERY_UPDATE = "UPDATE suggest_category SET id_category=?,title=?,color=? WHERE id_category=?";
     private static final String SQL_QUERY_DELETE = "DELETE FROM suggest_category WHERE id_category = ? ";
-    private static final String SQL_QUERY_COUNT_NUMBER_OF_SUGGEST_ASSOCIATE_TO_THE_CATEGORY = "select COUNT(id_category) "
-            + " FROM suggest_suggest_category WHERE id_category=? ";
+    private static final String SQL_QUERY_COUNT_NUMBER_OF_SUGGEST_ASSOCIATE_TO_THE_CATEGORY = "SELECT ( SELECT COUNT(id_category) FROM suggest_suggest_category WHERE id_category=? ) "
+            + " + ( SELECT COUNT(id_suggest_submit) FROM suggest_suggest_submit WHERE id_category=? )";
     private static final String SQL_QUERY_SELECT_BY_ID_SUGGEST = "SELECT c.id_category,c.title,c.color FROM suggest_category c,suggest_suggest_category dc "
             + "WHERE c.id_category=dc.id_category AND dc.id_suggest=? ORDER BY title";
     private static final String SQL_QUERY_DELETE_ASSOCIATED_CATEGORIE = "DELETE FROM suggest_suggest_category WHERE id_suggest = ? and id_category= ? ";
@@ -198,13 +201,13 @@ public class CategoryDAO implements ICategoryDAO
     }
 
     /**
-     * true if there is a suggest associate to the category
+     * true if there is a suggest or a suggest submit associate to the category
      * 
      * @param nIdCategory
      *            the key of the category
      * @param plugin
      *            the plugin
-     * @return true if there is a suggest associate to the category
+     * @return true if there is a suggest or a suggest submit associate to the category
      */
     @Override
     public boolean isAssociateToSuggest( int nIdCategory, Plugin plugin )
@@ -212,6 +215,7 @@ public class CategoryDAO implements ICategoryDAO
         try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_NUMBER_OF_SUGGEST_ASSOCIATE_TO_THE_CATEGORY, plugin ) )
         {
             daoUtil.setInt( 1, nIdCategory );
+            daoUtil.setInt( 2, nIdCategory );
             daoUtil.executeQuery( );
 
             return daoUtil.next( ) && daoUtil.getInt( 1 ) != 0;

@@ -33,6 +33,18 @@
  */
 package fr.paris.lutece.plugins.suggest.web;
 
+import fr.paris.lutece.portal.web.cdi.mvc.Models;
+import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
+import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
+import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
+import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Named;
+import jakarta.inject.Inject;
+import fr.paris.lutece.portal.web.util.Pager;
+import fr.paris.lutece.portal.web.util.IPager;
+import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
+import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitType;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitTypeHome;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
@@ -42,33 +54,38 @@ import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import fr.paris.lutece.portal.web.admin.PluginAdminPageJspBean;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
-import fr.paris.lutece.util.html.HtmlTemplate;
-import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
-import org.apache.commons.fileupload.FileItem;
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *
  * class SuggestSubmitTypeJspBean
  *
  */
-public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
+@RequestScoped
+@Named( "suggestSubmitTypeJspBean" )
+@Controller( controllerJsp = "ManageSuggestSubmitType.jsp", controllerPath = "jsp/admin/plugins/suggest/", right = ManageSuggestJspBean.RIGHT_MANAGE_SUGGEST_LIKE, securityTokenEnabled = true )
+public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
 {
     private static final long serialVersionUID = 2466547668533718657L;
+
+    // views and actions
+    private static final String VIEW_MANAGE_SUGGEST_SUBMIT_TYPE = "manageSuggestSubmitType";
+    private static final String VIEW_CREATE_SUGGEST_SUBMIT_TYPE = "createSuggestSubmitType";
+    private static final String ACTION_CREATE_SUGGEST_SUBMIT_TYPE = "createSuggestSubmitType";
+    private static final String VIEW_MODIFY_SUGGEST_SUBMIT_TYPE = "modifySuggestSubmitType";
+    private static final String ACTION_MODIFY_SUGGEST_SUBMIT_TYPE = "modifySuggestSubmitType";
+    private static final String VIEW_CONFIRM_REMOVE_SUGGEST_SUBMIT_TYPE = "confirmRemoveSuggestSubmitType";
+    private static final String ACTION_REMOVE_SUGGEST_SUBMIT_TYPE = "removeSuggestSubmitType";
 
     // templates
     private static final String TEMPLATE_MANAGE_SUGGEST_SUBMIT_TYPE = "admin/plugins/suggest/manage_suggest_submit_type.html";
@@ -78,11 +95,8 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
     // Markers
     private static final String MARK_SUGGEST_SUBMIT_TYPE_LIST = "type_list";
     private static final String MARK_SUGGEST_SUBMIT_TYPE = "type";
-    private static final String MARK_PAGINATOR = "paginator";
-    private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
 
     // parameters form
-    private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String PARAMETER_ID_SUGGEST_SUBMIT_TYPE = "id_type";
     private static final String PARAMETER_NAME = "name";
     private static final String PARAMETER_COLOR = "color";
@@ -107,40 +121,30 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
 
     // Jsp Definition
     private static final String JSP_MANAGE_SUGGEST_SUBMIT_TYPE = "jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp";
-    private static final String JSP_DO_REMOVE_SUGGEST_SUBMIT_TYPE = "jsp/admin/plugins/suggest/DoRemoveSuggestSubmitType.jsp";
+    private static final String JSP_DO_REMOVE_SUGGEST_SUBMIT_TYPE = "jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?action=" + ACTION_REMOVE_SUGGEST_SUBMIT_TYPE;
 
-    // session fields
-    private int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_ITEM_PER_PAGE, 15 );
-    private String _strCurrentPageIndex;
-    private int _nItemsPerPage;
+    @Inject
+    @Pager( name = "suggest.suggestSubmitTypes", listBookmark = MARK_SUGGEST_SUBMIT_TYPE_LIST, defaultItemsPerPage = PROPERTY_ITEM_PER_PAGE, baseUrl = "jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp" )
+    private IPager<SuggestSubmitType, SuggestSubmitType> _pager;
+
 
     /**
      * Return management suggest submit type
      * 
      * @param request
      *            The Http request
+     * @param model
+     *            the model
      * @return Html ExportFormat
      */
-    public String getManageSuggestSubmitType( HttpServletRequest request )
+    @View( value = VIEW_MANAGE_SUGGEST_SUBMIT_TYPE, defaultView = true )
+    public String getManageSuggestSubmitType( HttpServletRequest request, Models model )
     {
         Plugin plugin = getPlugin( );
-        Locale locale = getLocale( );
-        Map<String, Object> model = new HashMap<>( );
         List<SuggestSubmitType> listSuggestSubmitType = SuggestSubmitTypeHome.getList( plugin );
-        _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
-        _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage, _nDefaultItemsPerPage );
+        _pager.withListItem( listSuggestSubmitType ).populateModels( request, model, getLocale( ) );
 
-        Paginator<SuggestSubmitType> paginator = new Paginator<SuggestSubmitType>( listSuggestSubmitType, _nItemsPerPage,
-                getJspManageSuggestSubmitType( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
-
-        model.put( MARK_PAGINATOR, paginator );
-        model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPage );
-        model.put( MARK_SUGGEST_SUBMIT_TYPE_LIST, paginator.getPageItems( ) );
-        setPageTitleProperty( PROPERTY_MANAGE_SUGGEST_SUBMIT_TYPE_TITLE );
-
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_SUGGEST_SUBMIT_TYPE, locale, model );
-
-        return getAdminPage( templateList.getHtml( ) );
+        return getPage( PROPERTY_MANAGE_SUGGEST_SUBMIT_TYPE_TITLE, TEMPLATE_MANAGE_SUGGEST_SUBMIT_TYPE );
     }
 
     /**
@@ -148,17 +152,14 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
      * 
      * @param request
      *            The HTTP request
+     * @param model
+     *            the model
      * @return The export format creation page
      */
-    public String getCreateSuggestSubmitType( HttpServletRequest request )
+    @View( VIEW_CREATE_SUGGEST_SUBMIT_TYPE )
+    public String getCreateSuggestSubmitType( HttpServletRequest request, Models model )
     {
-        Locale locale = getLocale( );
-        Map<String, Object> model = new HashMap<>( );
-        setPageTitleProperty( PROPERTY_CREATE_SUGGEST_SUBMIT_TYPE_TITLE );
-
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_SUGGEST_SUBMIT_TYPE, locale, model );
-
-        return getAdminPage( template.getHtml( ) );
+        return getPage( PROPERTY_CREATE_SUGGEST_SUBMIT_TYPE_TITLE, TEMPLATE_CREATE_SUGGEST_SUBMIT_TYPE );
     }
 
     /**
@@ -168,6 +169,7 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( ACTION_CREATE_SUGGEST_SUBMIT_TYPE )
     public String doCreateSuggestSubmitType( HttpServletRequest request )
     {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -176,12 +178,12 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
 
         if ( strError != null )
         {
-            return strError;
+            return redirect( request, strError );
         }
 
         SuggestSubmitTypeHome.create( suggestSubmitType, getPlugin( ) );
 
-        return getJspManageSuggestSubmitType( request );
+        return redirect( request, getJspManageSuggestSubmitType( request ) );
     }
 
     /**
@@ -189,15 +191,16 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
      * 
      * @param request
      *            The HTTP request
+     * @param model
+     *            the model
      * @return The export format creation page
      */
-    public String getModifySuggestSubmitType( HttpServletRequest request )
+    @View( VIEW_MODIFY_SUGGEST_SUBMIT_TYPE )
+    public String getModifySuggestSubmitType( HttpServletRequest request, Models model )
     {
         Plugin plugin = getPlugin( );
-        Locale locale = getLocale( );
         SuggestSubmitType suggestSubmitType;
         String strIdSuggestSubmitType = request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT_TYPE );
-        Map<String, Object> model = new HashMap<>( );
         int nIdSuggestSubmitType = -1;
 
         if ( ( strIdSuggestSubmitType != null ) && !strIdSuggestSubmitType.equals( EMPTY_STRING ) )
@@ -210,21 +213,24 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
             {
                 AppLogService.error( ne.getMessage( ), ne );
 
-                return getManageSuggestSubmitType( request );
+                return getManageSuggestSubmitType( request, model );
             }
         }
         else
         {
-            return getManageSuggestSubmitType( request );
+            return getManageSuggestSubmitType( request, model );
         }
 
         suggestSubmitType = SuggestSubmitTypeHome.findByPrimaryKey( nIdSuggestSubmitType, plugin );
+
+        if ( suggestSubmitType == null )
+        {
+            return getManageSuggestSubmitType( request, model );
+        }
+
         model.put( MARK_SUGGEST_SUBMIT_TYPE, suggestSubmitType );
-        setPageTitleProperty( PROPERTY_MODIFY_SUGGEST_SUBMIT_TYPE_TITLE );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_SUGGEST_SUBMIT_TYPE, locale, model );
-
-        return getAdminPage( template.getHtml( ) );
+        return getPage( PROPERTY_MODIFY_SUGGEST_SUBMIT_TYPE_TITLE, TEMPLATE_MODIFY_SUGGEST_SUBMIT_TYPE );
     }
 
     /**
@@ -234,6 +240,7 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( ACTION_MODIFY_SUGGEST_SUBMIT_TYPE )
     public String doModifySuggestSubmitType( HttpServletRequest request )
     {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -252,12 +259,12 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
             {
                 AppLogService.error( ne.getMessage( ), ne );
 
-                return getHomeUrl( request );
+                return redirect( request, getHomeUrl( request ) );
             }
         }
         else
         {
-            return getHomeUrl( request );
+            return redirect( request, getHomeUrl( request ) );
         }
 
         suggestSubmitType = SuggestSubmitTypeHome.findByPrimaryKey( nIdSuggestSubmitType, plugin );
@@ -266,12 +273,12 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
 
         if ( strError != null )
         {
-            return strError;
+            return redirect( request, strError );
         }
 
         SuggestSubmitTypeHome.update( suggestSubmitType, getPlugin( ) );
 
-        return getJspManageSuggestSubmitType( request );
+        return redirect( request, getJspManageSuggestSubmitType( request ) );
     }
 
     /**
@@ -281,11 +288,12 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The forward URL
      */
+    @View( value = VIEW_CONFIRM_REMOVE_SUGGEST_SUBMIT_TYPE, securityTokenAction = ACTION_REMOVE_SUGGEST_SUBMIT_TYPE )
     public String removeSuggestSubmitType( HttpServletRequest request )
     {
         if ( request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT_TYPE ) == null )
         {
-            return getHomeUrl( request );
+            return redirect( request, getHomeUrl( request ) );
         }
 
         String strIdSuggestSubmitType = request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT_TYPE );
@@ -293,7 +301,7 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
         UrlItem url = new UrlItem( JSP_DO_REMOVE_SUGGEST_SUBMIT_TYPE );
         url.addParameter( PARAMETER_ID_SUGGEST_SUBMIT_TYPE, strIdSuggestSubmitType );
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_SUGGEST_SUBMIT_TYPE, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
+        return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_SUGGEST_SUBMIT_TYPE, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
     }
 
     /**
@@ -303,6 +311,7 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( ACTION_REMOVE_SUGGEST_SUBMIT_TYPE )
     public String doRemoveSuggestSubmitType( HttpServletRequest request )
     {
         String strIdSuggestSubmitType = request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT_TYPE );
@@ -311,7 +320,7 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
 
         if ( SuggestSubmitTypeHome.isAssociateToSuggest( nIdSuggestSubmitType, plugin ) )
         {
-            return AdminMessageService.getMessageUrl( request, MESSAGE_SUGGEST_SUBMIT_TYPE_ASSOCIATE_TO_SUGGEST, AdminMessage.TYPE_STOP );
+            return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_SUGGEST_SUBMIT_TYPE_ASSOCIATE_TO_SUGGEST, AdminMessage.TYPE_STOP ) );
         }
 
         if ( nIdSuggestSubmitType != -1 )
@@ -319,7 +328,7 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
             SuggestSubmitTypeHome.remove( nIdSuggestSubmitType, plugin );
         }
 
-        return getJspManageSuggestSubmitType( request );
+        return redirect( request, getJspManageSuggestSubmitType( request ) );
     }
 
     /**
@@ -339,7 +348,7 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
         String strParameterizable = multipartRequest.getParameter( PARAMETER_PARAMETERIZABLE );
         Boolean bParameterizable = true;
         String strFieldError = EMPTY_STRING;
-        FileItem imageSource = multipartRequest.getFile( PARAMETER_IMAGE_SOURCE );
+        MultipartItem imageSource = multipartRequest.getFile( PARAMETER_IMAGE_SOURCE );
         String strImageName = FileUploadService.getFileNameOnly( imageSource );
         String strUpdateFile = multipartRequest.getParameter( PARAMETER_UPDATE_FILE );
 
@@ -395,5 +404,16 @@ public class SuggestSubmitTypeJspBean extends PluginAdminPageJspBean
     private String getJspManageSuggestSubmitType( HttpServletRequest request )
     {
         return AppPathService.getBaseUrl( request ) + JSP_MANAGE_SUGGEST_SUBMIT_TYPE;
+    }
+
+    /**
+     * Returns the suggest plugin.
+     *
+     * @return the plugin
+     */
+    @Override
+    public Plugin getPlugin( )
+    {
+        return PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
     }
 }

@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import jakarta.enterprise.inject.spi.CDI;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -46,7 +47,7 @@ import fr.paris.lutece.util.html.Paginator;
 import java.util.List;
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -217,9 +218,9 @@ public class EntryTypeUrl extends Entry
     {
         ReferenceList refListRegularExpression = new ReferenceList( );
 
-        if ( RegularExpressionService.getInstance( ).isAvailable( ) )
+        if ( CDI.current( ).select( RegularExpressionService.class ).get( ).isAvailable( ) )
         {
-            List<RegularExpression> listRegularExpression = RegularExpressionService.getInstance( ).getAllRegularExpression( );
+            List<RegularExpression> listRegularExpression = CDI.current( ).select( RegularExpressionService.class ).get( ).getAllRegularExpression( );
 
             for ( RegularExpression regularExpression : listRegularExpression )
             {
@@ -263,11 +264,11 @@ public class EntryTypeUrl extends Entry
                 return formError;
             }
 
-            if ( ( listRegularExpression != null ) && ( !listRegularExpression.isEmpty( ) ) && RegularExpressionService.getInstance( ).isAvailable( ) )
+            if ( ( listRegularExpression != null ) && ( !listRegularExpression.isEmpty( ) ) && CDI.current( ).select( RegularExpressionService.class ).get( ).isAvailable( ) )
             {
                 for ( RegularExpression regularExpression : listRegularExpression )
                 {
-                    if ( !RegularExpressionService.getInstance( ).isMatches( strValueEntry, regularExpression ) )
+                    if ( !CDI.current( ).select( RegularExpressionService.class ).get( ).isMatches( strValueEntry, regularExpression ) )
                     {
                         FormError formError = new FormError( );
                         formError.setMandatoryError( false );

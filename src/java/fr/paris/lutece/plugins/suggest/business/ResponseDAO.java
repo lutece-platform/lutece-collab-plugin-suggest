@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -43,6 +45,7 @@ import java.util.List;
 /**
  * This class provides Data Access methods for Response objects
  */
+@ApplicationScoped
 public final class ResponseDAO implements IResponseDAO
 {
     // Constants
@@ -152,9 +155,9 @@ public final class ResponseDAO implements IResponseDAO
 
                 try
                 {
-                    entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
+                    entry = (IEntry) Class.forName( entryType.getClassName( ) ).getDeclaredConstructor( ).newInstance( );
                 }
-                catch( ClassNotFoundException | InstantiationException | IllegalAccessException e )
+                catch( ReflectiveOperationException e )
                 {
                     // class doesn't exist or class is abstract or is an interface or haven't accessible builder or can't access to rhe class
                     AppLogService.error( e.getMessage( ), e );
@@ -291,9 +294,9 @@ public final class ResponseDAO implements IResponseDAO
 
                 try
                 {
-                    entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
+                    entry = (IEntry) Class.forName( entryType.getClassName( ) ).getDeclaredConstructor( ).newInstance( );
                 }
-                catch( ClassNotFoundException | InstantiationException | IllegalAccessException e )
+                catch( ReflectiveOperationException e )
                 {
                     // class doesn't exist or class is abstract or is an interface or haven't accessible builder or can't access to rhe class
                     AppLogService.error( e.getMessage( ), e );

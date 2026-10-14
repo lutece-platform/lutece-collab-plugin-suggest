@@ -1,3 +1,7 @@
+-- liquibase formatted sql
+-- changeset suggest:update_db_suggest-202-203.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_suggest' AND column_name = 'show_category_block'
 ALTER TABLE suggest_suggest ADD COLUMN show_category_block smallint default 0;
 ALTER TABLE suggest_suggest ADD COLUMN show_top_score_block smallint default 0;
 ALTER TABLE suggest_suggest ADD COLUMN show_top_comment_block smallint default 0;

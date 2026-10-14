@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business.rss;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -44,6 +46,7 @@ import java.util.List;
  * class DirectoryResourceRssConfigDAO
  *
  */
+@ApplicationScoped
 public class SuggestResourceRssConfigDAO implements ISuggestResourceRssConfigDAO
 {
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_rss,id_suggest, is_submit_rss, id_suggest_submit "

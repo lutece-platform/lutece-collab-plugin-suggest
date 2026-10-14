@@ -35,47 +35,65 @@ package fr.paris.lutece.plugins.suggest.service;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
-import org.springframework.transaction.annotation.Transactional;
 
 import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.suggest.business.Suggest;
 import fr.paris.lutece.plugins.suggest.business.SuggestFilter;
 import fr.paris.lutece.plugins.suggest.business.SuggestHome;
+import fr.paris.lutece.plugins.suggest.business.SuggestRegularExpressionRemovalListener;
+import fr.paris.lutece.plugins.suggest.business.SuggestRoleRemovalListener;
+import fr.paris.lutece.plugins.suggest.business.SuggestWorkgroupRemovalListener;
 import fr.paris.lutece.plugins.suggest.service.workflow.SuggestWorkflowService;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.portal.ThemesService;
+import fr.paris.lutece.portal.service.rbac.RBACService;
+import fr.paris.lutece.portal.service.util.BeanUtils;
+import fr.paris.lutece.portal.service.util.RemovalListenerService;
+import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Initialized;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.ServletContext;
 
 /**
  *
  * SuggestService
  *
  */
+@ApplicationScoped
 public class SuggestService
 {
-    private static SuggestService _singleton = new SuggestService( );
     private static final String PARAMETER_ID_SUGGEST = "id_suggest";
 
-    /**
-     * Initialize the Suggest service
-     *
-     */
-    public void init( )
-    {
-        Suggest.init( );
-    }
+    @Inject
+    @Named( BeanUtils.BEAN_WORKGROUP_REMOVAL_SERVICE )
+    private RemovalListenerService _workgroupRemovalService;
+
+    @Inject
+    @Named( BeanUtils.BEAN_REGULAR_EXPRESSION_REMOVAL_SERVICE )
+    private RemovalListenerService _regularExpressionRemovalService;
+
+    @Inject
+    @Named( BeanUtils.BEAN_ROLE_REMOVAL_SERVICE )
+    private RemovalListenerService _roleRemovalService;
 
     /**
-     * Returns the instance of the singleton
+     * Registers the removal listeners when the application starts.
      *
-     * @return The instance of the singleton
+     * @param context
+     *            the servlet context
      */
-    public static SuggestService getInstance( )
+    public void initializedService( @Observes @Initialized( ApplicationScoped.class ) ServletContext context )
     {
-        return _singleton;
+        _workgroupRemovalService.registerListener( new SuggestWorkgroupRemovalListener( ) );
+        _regularExpressionRemovalService.registerListener( new SuggestRegularExpressionRemovalListener( ) );
+        _roleRemovalService.registerListener( new SuggestRoleRemovalListener( ) );
     }
 
     /**
@@ -128,6 +146,25 @@ public class SuggestService
     }
 
     /**
+     * Tells whether the user holds the permission on the suggest and belongs to its workgroup
+     * 
+     * @param nIdSuggest
+     *            The suggest id
+     * @param strPermission
+     *            The permission
+     * @param user
+     *            The user
+     * @return true if the suggest exists and the user may act on it
+     */
+    public static boolean isAuthorized( int nIdSuggest, String strPermission, User user )
+    {
+        Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+
+        return ( suggest != null ) && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, Integer.toString( nIdSuggest ), strPermission, user )
+                && AdminWorkgroupService.isAuthorized( suggest, user );
+    }
+
+    /**
      * Remove the specified Suggest and all its associated elements ( SuggestSubmit, workflow resources... )
      * 
      * @param nIdSuggest
@@ -135,13 +172,14 @@ public class SuggestService
      * @param user
      *            The user
      */
-    @Transactional( "suggest.transactionManager" )
-    public static void removeSuggest( int nIdSuggest, User user )
+    public void removeSuggest( int nIdSuggest, User user )
     {
-        // Remove the Suggest's workflow related resources
-        removeSuggestWorkflowResources( nIdSuggest, user );
-        // Remove the Suggest and its content
-        SuggestHome.remove( nIdSuggest, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+        SuggestSubmitService.inTransaction( PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ), ( ) -> {
+            // Remove the Suggest's workflow related resources
+            removeSuggestWorkflowResources( nIdSuggest, user );
+            // Remove the Suggest and its content
+            SuggestHome.remove( nIdSuggest, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+        } );
     }
 
     /**

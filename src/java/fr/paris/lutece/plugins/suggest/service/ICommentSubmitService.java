@@ -39,7 +39,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
 
 public interface ICommentSubmitService
 {
@@ -52,7 +51,6 @@ public interface ICommentSubmitService
      *            the Plugin
      *
      */
-    @Transactional( "suggest.transactionManager" )
     void create( CommentSubmit commentSubmit, Plugin plugin );
 
     /**
@@ -64,7 +62,6 @@ public interface ICommentSubmitService
      *            the Plugin
      *
      */
-    @Transactional( "suggest.transactionManager" )
     void update( CommentSubmit commentSubmit, Plugin plugin );
 
     /**
@@ -75,7 +72,6 @@ public interface ICommentSubmitService
      * @param plugin
      *            the Plugin
      */
-    @Transactional( "suggest.transactionManager" )
     void remove( int nIdCommentSubmit, Plugin plugin );
 
     /**
@@ -87,7 +83,6 @@ public interface ICommentSubmitService
      *            the Plugin
      * @return an instance of commentSubmit
      */
-    @Transactional( "suggest.transactionManager" )
     CommentSubmit findByPrimaryKey( int nKey, Plugin plugin );
 
     /**
@@ -99,7 +94,6 @@ public interface ICommentSubmitService
      *            the plugin
      * @return the list of commentSubmit
      */
-    @Transactional( "suggest.transactionManager" )
     List<CommentSubmit> getCommentSubmitList( SubmitFilter filter, Plugin plugin );
 
     /**
@@ -113,7 +107,6 @@ public interface ICommentSubmitService
      *            the plugin
      * @return the list of commentSubmit
      */
-    @Transactional( "suggest.transactionManager" )
     List<CommentSubmit> getCommentSubmitList( SubmitFilter filter, Integer nLimitParentNumber, Plugin plugin );
 
     /**
@@ -125,6 +118,5 @@ public interface ICommentSubmitService
      *            the plugin
      * @return the number of all the commentSubmit who verify the filter
      */
-    @Transactional( "suggest.transactionManager" )
     int getCountCommentSubmit( SubmitFilter filter, Plugin plugin );
 }

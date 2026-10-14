@@ -2,7 +2,7 @@
 <rss version="2.0">
     <channel>
         <title>${site_name}</title>
-        <link>${site_url}/jsp/admin/plugins/suggest/ManageSuggestSubmit.jsp?id_suggest=${id_suggest}</link>
+        <link>${site_url}/jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmit&id_suggest=${id_suggest}</link>
         <language>${file_language}</language>
         <pubDate>${site_date}</pubDate>
         <image>
@@ -30,7 +30,7 @@
             	</#if>
             	#i18n{suggest.resource_rss.state} : ${item.state}
             </title>
-            <link>${site_url}/jsp/admin/plugins/suggest/ManageCommentSubmit.jsp?id_suggest_submit=${item.id_submit}</link>
+            <link>${site_url}/jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageCommentSubmit&id_suggest_submit=${item.id_submit}</link>
             <description>${item.item_description}</description>
         	<pubDate>${item.item_date}</pubDate>
         </item>

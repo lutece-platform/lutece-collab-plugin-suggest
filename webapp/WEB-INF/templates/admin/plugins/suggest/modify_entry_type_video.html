@@ -1,101 +1,105 @@
-<@row>
-	<@columns>
-		<@box>
-			<@boxHeader title='#i18n{suggest.createEntry.titleQuestion}: "${entry.suggest.title}" &gt; #i18n{suggest.createEntry.labelType}: ${entry.entryType.title}' />
-			<@boxBody>
-				<@tform method='post' action='jsp/admin/plugins/suggest/DoModifyEntry.jsp'>
-					<@input type='hidden' name='id_entry' value='${entry.idEntry}' />
+<@pageContainer>
+	<@pageColumn>
+		<@pageHeader title='#i18n{suggest.modifyEntry.titleQuestion}: "${entry.suggest.title}" &gt; #i18n{suggest.createEntry.labelType}: ${entry.entryType.title}' />
+		<@row>
+			<@columns>
+				<@box>
+					<@boxBody>
+						<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp'><@input type='hidden' name='action' value='modifyEntry' />
+							<@input type='hidden' name='id_entry' value='${entry.idEntry}' />
 					
-					<@formGroup labelFor='title' labelKey='#i18n{suggest.createEntry.labelTitle}' helpKey='#i18n{suggest.createEntry.labelTitleComment}' mandatory=true>
-						<@input type='text' name='title' id='title' value='${entry.title}' maxlength=255 />
-					</@formGroup>
+							<@formGroup labelFor='title' labelKey='#i18n{suggest.createEntry.labelTitle}' helpKey='#i18n{suggest.createEntry.labelTitleComment}' mandatory=true>
+								<@input type='text' name='title' id='title' value='${entry.title}' maxlength=255 />
+							</@formGroup>
 					
-					<@formGroup labelFor='help_message' labelKey='#i18n{suggest.createEntry.labelHelpMessage}' helpKey='#i18n{suggest.createEntry.labelHelpMessageComment}'>
-						<@input type='textarea' name='help_message' id='help_message' rows=4 richtext=true>${entry.helpMessage}</@input>
-					</@formGroup>
+							<@formGroup labelFor='help_message' labelKey='#i18n{suggest.createEntry.labelHelpMessage}' helpKey='#i18n{suggest.createEntry.labelHelpMessageComment}'>
+								<@input type='textarea' name='help_message' id='help_message' rows=4 richtext=true>${entry.helpMessage}</@input>
+							</@formGroup>
 					
-					<@formGroup labelFor='comment' labelKey='#i18n{suggest.createEntry.labelComment}'>
-						<@input type='textarea' name='comment' richtext=true rows=2>${entry.comment}</@input>
-					</@formGroup>
+							<@formGroup labelFor='comment' labelKey='#i18n{suggest.createEntry.labelComment}'>
+								<@input type='textarea' name='comment' richtext=true rows=2>${entry.comment}</@input>
+							</@formGroup>
 					
-                    <@formGroup labelFor='value' labelKey='#i18n{suggest.createEntry.labelValueDefault}'>
-						<@input type='textarea' name='value' id='value' rows=4 richtext=true>${entry.defaultValue}</@input>
-					</@formGroup>
+		                    <@formGroup labelFor='value' labelKey='#i18n{suggest.createEntry.labelValueDefault}'>
+								<@input type='textarea' name='value' id='value' rows=4 richtext=true>${entry.defaultValue}</@input>
+							</@formGroup>
 					
-					<@formGroup>
-						<@checkBox labelFor='mandatory' labelKey='#i18n{suggest.createEntry.labelMandatory}' name='mandatory' id='mandatory' value='1' checked=entry.mandatory />
-					</@formGroup>
+							<@formGroup>
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createEntry.labelMandatory}' name='mandatory' id='mandatory' value='1' checked=entry.mandatory />
+							</@formGroup>
 					
-                    <@formGroup labelFor='width' labelKey='#i18n{suggest.createEntryVideo.labelWidth}'>
-						<#if entry.width!=-1>
-							<#assign value = entry.width />
-						<#else>
-							<#assign value = '' />
-						</#if>
-						<@input type='text' name='width' id='width' value=value />
-					</@formGroup>
+		                    <@formGroup labelFor='width' labelKey='#i18n{suggest.createEntryVideo.labelWidth}'>
+								<#if entry.width!=-1>
+									<#assign value = entry.width />
+								<#else>
+									<#assign value = '' />
+								</#if>
+								<@input type='text' name='width' id='width' value=value />
+							</@formGroup>
 					
-					<@formGroup labelFor='height' labelKey='#i18n{suggest.createEntryVideo.labelHeight}'>
-						<#if entry.height!=-1>
-							<#assign value = entry.height />
-						<#else>
-							<#assign value = '' />
-						</#if>
-						<@input type='text' name='height' id='height' value=value />
-					</@formGroup>
+							<@formGroup labelFor='height' labelKey='#i18n{suggest.createEntryVideo.labelHeight}'>
+								<#if entry.height!=-1>
+									<#assign value = entry.height />
+								<#else>
+									<#assign value = '' />
+								</#if>
+								<@input type='text' name='height' id='height' value=value />
+							</@formGroup>
 					
-					<@formGroup labelFor='autostart' labelKey='#i18n{suggest.createEntryVideo.labelAutostart}'>
-						<@select name='autostart' id='autostart'>
-							<option value="true" <#if autostart = "true">selected</#if>>#i18n{suggest.createEntryVideo.select.yes}</option>
-							<option value="false" <#if autostart = "false">selected</#if>>#i18n{suggest.createEntryVideo.select.no}</option>
-						</@select>
-					</@formGroup>
+							<@formGroup labelFor='autostart' labelKey='#i18n{suggest.createEntryVideo.labelAutostart}'>
+								<@select name='autostart' id='autostart'>
+									<@option value='true' label='#i18n{suggest.createEntryVideo.select.yes}' selected=(autostart! == 'true') />
+									<@option value='false' label='#i18n{suggest.createEntryVideo.select.no}' selected=(autostart! == 'false') />
+								</@select>
+							</@formGroup>
 					
-					<@formGroup labelFor='loop' labelKey='#i18n{suggest.createEntryVideo.labelLoop}'>
-						<@select name='loop' id='loop'>
-							<option value="true" <#if loop = "true">selected</#if>>#i18n{suggest.createEntryVideo.select.yes}</option>
-							<option value="false" <#if loop = "false">selected</#if>>#i18n{suggest.createEntryVideo.select.no}</option>
-						</@select>
-					</@formGroup>
+							<@formGroup labelFor='loop' labelKey='#i18n{suggest.createEntryVideo.labelLoop}'>
+								<@select name='loop' id='loop'>
+									<@option value='true' label='#i18n{suggest.createEntryVideo.select.yes}' selected=(loop! == 'true') />
+									<@option value='false' label='#i18n{suggest.createEntryVideo.select.no}' selected=(loop! == 'false') />
+								</@select>
+							</@formGroup>
 					
-					<@formGroup labelFor='quality' labelKey='#i18n{suggest.createEntryVideo.labelQuality}'>
-                        <@select name='quality' id='quality'>
-                            <option value="low" <#if quality = "low">selected</#if>>#i18n{suggest.createEntryVideo.select.low}</option>
-                            <option value="high" <#if quality = "high">selected</#if>>#i18n{suggest.createEntryVideo.select.high}</option>
-                            <option value="autolow" <#if quality = "autolow">selected</#if>>#i18n{suggest.createEntryVideo.select.autolow}</option>
-                            <option value="autohigh" <#if quality = "autohigh">selected</#if>>#i18n{suggest.createEntryVideo.select.autohigh}</option>
-                            <option value="best" <#if quality = "best">selected</#if>>#i18n{suggest.createEntryVideo.select.best}</option>
-						</@select>
-					</@formGroup>
+							<@formGroup labelFor='quality' labelKey='#i18n{suggest.createEntryVideo.labelQuality}'>
+		                        <@select name='quality' id='quality'>
+		                            <@option value='low' label='#i18n{suggest.createEntryVideo.select.low}' selected=(quality! == 'low') />
+		                            <@option value='high' label='#i18n{suggest.createEntryVideo.select.high}' selected=(quality! == 'high') />
+		                            <@option value='autolow' label='#i18n{suggest.createEntryVideo.select.autolow}' selected=(quality! == 'autolow') />
+		                            <@option value='autohigh' label='#i18n{suggest.createEntryVideo.select.autohigh}' selected=(quality! == 'autohigh') />
+		                            <@option value='best' label='#i18n{suggest.createEntryVideo.select.best}' selected=(quality! == 'best') />
+								</@select>
+							</@formGroup>
 					
-					<@formGroup labelFor='alignment' labelKey='#i18n{suggest.createEntryVideo.labelAlignment}'>
-                      	<@select name='alignment' id='alignment'>
-							<option value="left" <#if alignment = "left">selected</#if>>#i18n{suggest.createEntryVideo.select.left}</option>
-							<option value="right" <#if alignment = "right">selected</#if>>#i18n{suggest.createEntryVideo.select.right}</option>
-							<option value="top" <#if alignment = "top">selected</#if>>#i18n{suggest.createEntryVideo.select.top}</option>
-							<option value="bottom" <#if alignment = "bottom">selected</#if>>#i18n{suggest.createEntryVideo.select.bottom}</option>
-						</@select>
-					</@formGroup>
+							<@formGroup labelFor='alignment' labelKey='#i18n{suggest.createEntryVideo.labelAlignment}'>
+		                      	<@select name='alignment' id='alignment'>
+									<@option value='left' label='#i18n{suggest.createEntryVideo.select.left}' selected=(alignment! == 'left') />
+									<@option value='right' label='#i18n{suggest.createEntryVideo.select.right}' selected=(alignment! == 'right') />
+									<@option value='top' label='#i18n{suggest.createEntryVideo.select.top}' selected=(alignment! == 'top') />
+									<@option value='bottom' label='#i18n{suggest.createEntryVideo.select.bottom}' selected=(alignment! == 'bottom') />
+								</@select>
+							</@formGroup>
 					
-                    <@formGroup labelFor='menu' labelKey='#i18n{suggest.createEntryVideo.labelMenu}'>
-                    	<@select name='menu' id='menu'>
-							<option value="false" <#if menu = "true">selected</#if>>#i18n{suggest.createEntryVideo.select.no}</option>
-							<option value="true" <#if menu = "false">selected</#if>>#i18n{suggest.createEntryVideo.select.yes}</option>
-						</@select>
-					</@formGroup>
+		                    <@formGroup labelFor='menu' labelKey='#i18n{suggest.createEntryVideo.labelMenu}'>
+		                    	<@select name='menu' id='menu'>
+									<@option value='false' label='#i18n{suggest.createEntryVideo.select.no}' selected=(menu! == 'true') />
+									<@option value='true' label='#i18n{suggest.createEntryVideo.select.yes}' selected=(menu! == 'false') />
+								</@select>
+							</@formGroup>
 					
-					<@formGroup labelKey='#i18n{suggest.createSuggest.labelShowInSuggestSubmitListComment}'>
-						<@checkBox labelFor='show_in_suggest_submit_list' labelKey='#i18n{suggest.createEntry.labelShowInSuggestSubmitList}' id='show_in_suggest_submit_list' name='show_in_suggest_submit_list' value='1' checked=true />
-					</@formGroup>
+							<@formGroup labelKey='#i18n{suggest.createSuggest.labelShowInSuggestSubmitListComment}'>
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createEntry.labelShowInSuggestSubmitList}' id='show_in_suggest_submit_list' name='show_in_suggest_submit_list' value='1' checked=true />
+							</@formGroup>
 					
-					<@formGroup>
-						<@button type='submit' name='save' buttonIcon='check' title='#i18n{suggest.createEntry.buttonSave}' />
-						<@aButton href='jsp/admin/plugins/suggest/ModifySuggest.jsp?plugin_name=suggest&amp;id_suggest=${entry.suggest.idSuggest}' buttonIcon='times' title='#i18n{suggest.modifyEntry.buttonCancel}' color='default' />
-					</@formGroup>
-                </@tform>
-			</@boxBody>
-		</@box>
-	</@columns>
-</@row>
-<#include "/admin/util/editor/editor.html" />
-<@initEditor />
+							<@formGroup>
+								<@button type='submit' name='save' buttonIcon='check' title='#i18n{suggest.createEntry.buttonSave}' />
+								<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=modifySuggest&plugin_name=suggest&amp;id_suggest=${entry.suggest.idSuggest}' buttonIcon='x' title='#i18n{suggest.modifyEntry.buttonCancel}' color='light' />
+							</@formGroup>
+		                </@tform>
+					</@boxBody>
+				</@box>
+			</@columns>
+		</@row>
+		<#include "/admin/util/editor/editor.html" />
+		<@initEditor />
+	</@pageColumn>
+</@pageContainer>

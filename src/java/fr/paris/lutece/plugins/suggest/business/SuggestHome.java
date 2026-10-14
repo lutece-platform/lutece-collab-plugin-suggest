@@ -37,7 +37,7 @@ import fr.paris.lutece.plugins.suggest.business.attribute.SuggestAttributeHome;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.lang.reflect.InvocationTargetException;
@@ -52,7 +52,7 @@ import org.apache.commons.beanutils.BeanUtils;
 public final class SuggestHome
 {
     // Static variable pointed at the DAO instance
-    private static ISuggestDAO _dao = SpringContextService.getBean( "suggest.suggestDAO" );
+    private static ISuggestDAO _dao = CDI.current( ).select( ISuggestDAO.class ).get( );
 
     /**
      * Private constructor - this class need not be instantiated

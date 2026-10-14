@@ -33,10 +33,10 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-import com.mysql.cj.jdbc.exceptions.PacketTooBigException;
+import java.sql.SQLException;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 /**
  *
@@ -46,7 +46,7 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public final class VideoTypeHome
 {
     // Static variable pointed at the DAO instance
-    private static IVideoTypeDAO _dao = SpringContextService.getBean( "suggest.videoTypeDAO" );
+    private static IVideoTypeDAO _dao = CDI.current( ).select( IVideoTypeDAO.class ).get( );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -77,9 +77,9 @@ public final class VideoTypeHome
      * @param plugin
      *            the Plugin
      * @return the id of the new videoType
-     * @throws PacketTooBigException 
+     * @throws SQLException 
      */
-    public static int create( VideoType videoType, Plugin plugin ) throws PacketTooBigException
+    public static int create( VideoType videoType, Plugin plugin ) throws SQLException
     {
         return _dao.insert( videoType, plugin );
     }

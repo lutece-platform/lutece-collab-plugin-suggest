@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -44,6 +46,7 @@ import java.util.List;
  * class SuggestSubmitStateDAO
  *
  */
+@ApplicationScoped
 public class SuggestSubmitStateDAO implements ISuggestSubmitStateDAO
 {
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_state,title,number FROM suggest_suggest_submit_state WHERE id_state=?";

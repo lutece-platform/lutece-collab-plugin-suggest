@@ -1,19 +1,8 @@
-<!--
-<p class="lead"> #i18n{suggest.suggestVoteTypeScore.labelVoteTitle}</p>
-<p>
-	<a class="btn btn-sm btn-danger" title="#i18n{suggest.suggestVoteTypeScore.titleVoteAgainstMore}" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_submit=${id_suggest_submit}&vote=-2&view=${view}&action=do_vote#suggest${id_suggest_submit}">
-		<i class="glyphicon glyphicon-thumbs-down"></i>
-	</a>
--->
-<a class="btn btn-danger btn-sm" title="#i18n{suggest.suggestVoteTypeScore.titleVoteAgainst}" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_submit=${id_suggest_submit}&vote=-1&view=${view}&action=do_vote#suggest${id_suggest_submit}">
-	<i class="fa fa-times"></i>
-</a>
-<a class="btn btn-primary btn-sm" title="#i18n{suggest.suggestVoteTypeScore.titleVoteFor}" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_submit=${id_suggest_submit}&vote=1&view=${view}&action=do_vote#suggest${id_suggest_submit}">
-	<i class="fa fa-check"></i>
-</a>
-<!--
-<a class="btn btn-primary disabled" title="#i18n{suggest.suggestVoteTypeScore.titleVoteForMore}" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_submit=${id_suggest_submit}&vote=2&view=${view}&action=do_vote#suggest${id_suggest_submit}">
-	<i class="glyphicon glyphicon-thumbs-up"></i>
-</a>
-</p>
--->
+<@cForm action='jsp/site/Portal.jsp?page=suggest#suggest${id_suggest_submit}' id='form_vote_score${id_suggest_submit}' class='d-inline'>
+	<@cInput type='hidden' name='action' id='action_vote_score${id_suggest_submit}' value='do_vote' />
+	<@cInput type='hidden' name='id_suggest' id='id_suggest_vote_score${id_suggest_submit}' value='${id_suggest}' />
+	<@cInput type='hidden' name='id_suggest_submit' id='id_suggest_submit_vote_score${id_suggest_submit}' value='${id_suggest_submit}' />
+	<@cInput type='hidden' name='view' id='view_vote_score${id_suggest_submit}' value='${view}' />
+	<@cBtn label='' class='secondary btn-sm' type='submit' params='name="vote" value="-1" title="#i18n{suggest.suggestVoteTypeScore.titleVoteAgainst}" aria-label="#i18n{suggest.suggestVoteTypeScore.titleVoteAgainst}"'><@cIcon name='x' params='aria-hidden="true"' /></@cBtn>
+	<@cBtn label='' class='primary btn-sm' type='submit' params='name="vote" value="1" title="#i18n{suggest.suggestVoteTypeScore.titleVoteFor}" aria-label="#i18n{suggest.suggestVoteTypeScore.titleVoteFor}"'><@cIcon name='check' params='aria-hidden="true"' /></@cBtn>
+</@cForm>

@@ -1,3 +1,7 @@
+-- liquibase formatted sql
+-- changeset suggest:init_db_suggest_data_sample.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM suggest_suggest
 
 --
 -- Dumping data for table suggest_suggest_attribute

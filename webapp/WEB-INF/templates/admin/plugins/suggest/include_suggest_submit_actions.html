@@ -1,25 +1,25 @@
 <#if !suggest_submit.disableComment>
-<@aButton href='jsp/admin/plugins/suggest/ManageCommentSubmit.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altManageComment}' hideTitle=['all'] buttonIcon='comment' color='primary' size='sm' />
+<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageCommentSubmit&id_suggest_submit=${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altManageComment}' hideTitle=['all'] buttonIcon='comment' color='primary' size='sm' />
 </#if>
 <#if suggest_submit.suggestSubmitState.number=disable_state_number>
-	<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${waiting_for_publish_state_number}#suggest${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}' hideTitle=['all'] buttonIcon='pause' color='warning' size='sm' />
-	<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${publish_state_number}#suggest${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altPublish}' hideTitle=['all'] buttonIcon='check' color='success' size='sm' />
+	<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=changeSuggestSubmitState&id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${waiting_for_publish_state_number}#suggest${suggest_submit.idSuggestSubmit}"'  title='#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}' hideTitle=['all'] buttonIcon='player-pause' color='warning' size='sm' />
+	<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=changeSuggestSubmitState&id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${publish_state_number}#suggest${suggest_submit.idSuggestSubmit}"'  title='#i18n{suggest.manageSuggestSubmit.altPublish}' hideTitle=['all'] buttonIcon='check' color='success' size='sm' />
 <#elseif suggest_submit.suggestSubmitState.number=waiting_for_publish_state_number >
-	<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${disable_state_number}#suggest${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altDisable}' hideTitle=['all'] buttonIcon='times' color='danger' size='sm' />
- 	<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${publish_state_number}#suggest${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altPublish}' hideTitle=['all'] buttonIcon='check' color='success' size='sm' />
+	<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=changeSuggestSubmitState&id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${disable_state_number}#suggest${suggest_submit.idSuggestSubmit}"'  title='#i18n{suggest.manageSuggestSubmit.altDisable}' hideTitle=['all'] buttonIcon='x' color='danger' size='sm' />
+ 	<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=changeSuggestSubmitState&id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${publish_state_number}#suggest${suggest_submit.idSuggestSubmit}"'  title='#i18n{suggest.manageSuggestSubmit.altPublish}' hideTitle=['all'] buttonIcon='check' color='success' size='sm' />
 <#elseif suggest_submit.suggestSubmitState.number=publish_state_number >
-	<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${disable_state_number}#suggest${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altDisable}' hideTitle=['all'] buttonIcon='times' color='danger' size='sm' />
-	<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${waiting_for_publish_state_number}#suggest${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}' hideTitle=['all'] buttonIcon='pause' color='warning' size='sm' />
+	<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=changeSuggestSubmitState&id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${disable_state_number}#suggest${suggest_submit.idSuggestSubmit}"'  title='#i18n{suggest.manageSuggestSubmit.altDisable}' hideTitle=['all'] buttonIcon='x' color='danger' size='sm' />
+	<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=changeSuggestSubmitState&id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${waiting_for_publish_state_number}#suggest${suggest_submit.idSuggestSubmit}"'  title='#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}' hideTitle=['all'] buttonIcon='player-pause' color='warning' size='sm' />
 </#if>
-<#if suggest_submit.listWorkflowActions?? && suggest_submit.listWorkflowActions?size &gt; 0>
+<#if suggest_submit.listWorkflowActions?? && suggest_submit.listWorkflowActions?size gt 0>
 	<#list suggest_submit.listWorkflowActions as action>
-		<@aButton href='jsp/admin/plugins/suggest/DoProcessWorkflowAction.jsp?id_action=${action.id}&id_suggest_submit=${suggest_submit.idSuggestSubmit}#suggest${suggest_submit.idSuggestSubmit}' size='sm'>
-			<img src='image?resource_type=workflow_icon_img&id=${action.icon.id}'
-				<#if action.icon.width!=-1> width="${action.icon.width}"</#if>
-				<#if action.icon.height!=-1> height="${action.icon.height}"</#if>
-				title="${action.name}"
-				alt="${action.name}" />
-		</@aButton>
+		<#if (action.icon.id)?? && action.icon.id gt 0>
+		<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=processWorkflowAction&id_action=${action.id}&id_suggest_submit=${suggest_submit.idSuggestSubmit}#suggest${suggest_submit.idSuggestSubmit}"' title='${action.name}' size='sm'>
+			<img src='image?resource_type=workflow_icon_img&id=${action.icon.id}'<#if action.icon.width!=-1> width="${action.icon.width}"</#if><#if action.icon.height!=-1> height="${action.icon.height}"</#if> alt="${action.name}" />
+		</@button>
+		<#else>
+		<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=processWorkflowAction&id_action=${action.id}&id_suggest_submit=${suggest_submit.idSuggestSubmit}#suggest${suggest_submit.idSuggestSubmit}"' title='${action.name}' buttonIcon='player-play' color='light' size='sm' />
+		</#if>
 	</#list>
 </#if>
-<@aButton href='jsp/admin/plugins/suggest/ConfirmRemoveSuggestSubmit.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altDelete}' hideTitle=['all'] buttonIcon='trash' color='danger' size='sm' />
+<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=confirmRemoveSuggestSubmit&id_suggest_submit=${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altDelete}' hideTitle=['all'] buttonIcon='trash' color='danger' size='sm' />

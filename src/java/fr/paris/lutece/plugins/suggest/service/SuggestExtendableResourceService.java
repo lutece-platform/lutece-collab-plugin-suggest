@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.suggest.service;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.plugins.suggest.business.Suggest;
 import fr.paris.lutece.plugins.suggest.business.SuggestHome;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -51,6 +52,7 @@ import java.util.Locale;
  * DocumentExtendableResourceService
  *
  */
+@ApplicationScoped
 public class SuggestExtendableResourceService implements IExtendableResourceService
 {
     private static final String MESSAGE_SUGGEST_RESOURCE_TYPE_DESCRIPTION = "suggest.resource.suggestResourceTypeDescription";

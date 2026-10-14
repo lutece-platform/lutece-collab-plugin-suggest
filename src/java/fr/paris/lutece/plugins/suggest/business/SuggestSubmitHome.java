@@ -33,13 +33,13 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-import fr.paris.lutece.plugins.suggest.service.CommentSubmitService;
+import fr.paris.lutece.plugins.suggest.service.ICommentSubmitService;
 import fr.paris.lutece.plugins.suggest.service.search.SuggestIndexer;
 import fr.paris.lutece.plugins.suggest.utils.SuggestIndexerUtils;
 import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.search.IndexationService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ import java.util.List;
 public final class SuggestSubmitHome
 {
     // Static variable pointed at the DAO instance
-    private static ISuggestSubmitDAO _dao = SpringContextService.getBean( "suggest.suggestSubmitDAO" );
+    private static ISuggestSubmitDAO _dao = CDI.current( ).select( ISuggestSubmitDAO.class ).get( );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -152,11 +152,11 @@ public final class SuggestSubmitHome
             ResponseHome.remove( response.getIdResponse( ), plugin );
         }
 
-        List<CommentSubmit> listComments = CommentSubmitService.getService( ).getCommentSubmitList( filter, plugin );
+        List<CommentSubmit> listComments = CDI.current( ).select( ICommentSubmitService.class ).get( ).getCommentSubmitList( filter, plugin );
 
         for ( CommentSubmit comment : listComments )
         {
-            CommentSubmitService.getService( ).remove( comment.getIdCommentSubmit( ), plugin );
+            CDI.current( ).select( ICommentSubmitService.class ).get( ).remove( comment.getIdCommentSubmit( ), plugin );
         }
 
         // remove all reported associated to the suggest submit
@@ -231,7 +231,7 @@ public final class SuggestSubmitHome
             {
                 submmitFilterComment.setIdSuggestSubmit( suggestSubmit.getIdSuggestSubmit( ) );
                 submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
-                suggestSubmit.setComments( CommentSubmitService.getService( ).getCommentSubmitList( submmitFilterComment, plugin ) );
+                suggestSubmit.setComments( CDI.current( ).select( ICommentSubmitService.class ).get( ).getCommentSubmitList( submmitFilterComment, plugin ) );
 
                 if ( suggestSubmit.getSuggestSubmitType( ) != null )
                 {

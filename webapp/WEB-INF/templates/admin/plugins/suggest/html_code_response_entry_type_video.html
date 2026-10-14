@@ -1,7 +1,9 @@
-<#if is_title?exists && is_title>
+<#if response.valueResponse?has_content>
+	<#if is_title?exists && is_title>
 	<p class="lead">
-<#else>
+	<#else>
 	<p>
-</#if>	  
+	</#if>
 		${response.valueResponse}
 	</p>
+</#if>

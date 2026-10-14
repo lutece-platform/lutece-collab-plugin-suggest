@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business.attribute;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -44,6 +46,7 @@ import java.util.Map;
  * SuggestAttributeDAO
  *
  */
+@ApplicationScoped
 public class SuggestAttributeDAO implements ISuggestAttributeDAO
 {
     private static final String SQL_QUERY_SELECT = " SELECT attribute_key, attribute_value FROM suggest_suggest_attribute WHERE id_suggest = ? ";

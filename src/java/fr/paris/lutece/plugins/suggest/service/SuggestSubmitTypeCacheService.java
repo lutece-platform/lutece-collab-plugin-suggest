@@ -34,18 +34,25 @@
 package fr.paris.lutece.plugins.suggest.service;
 
 import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import fr.paris.lutece.plugins.suggest.business.SuggestSubmitType;
 
 /**
  * Suggest Submit Type Cache Service
  */
-public class SuggestSubmitTypeCacheService extends AbstractCacheableService
+@ApplicationScoped
+public class SuggestSubmitTypeCacheService extends AbstractCacheableService<String, SuggestSubmitType>
 {
     private static final String CACHE_SERVICE_NAME = "Suggest Submit Type Cache Service";
 
-    /** Constructor */
-    public SuggestSubmitTypeCacheService( )
+    /**
+     * Initializes the cache.
+     */
+    @PostConstruct
+    public void init( )
     {
-        initCache( );
+        initCache( CACHE_SERVICE_NAME, String.class, SuggestSubmitType.class );
     }
 
     /**

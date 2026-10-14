@@ -33,88 +33,53 @@
  */
 package fr.paris.lutece.plugins.suggest.web;
 
-import fr.paris.lutece.plugins.suggest.business.Category;
-import fr.paris.lutece.plugins.suggest.business.DefaultMessage;
-import fr.paris.lutece.plugins.suggest.business.ExportFormat;
-import fr.paris.lutece.plugins.suggest.service.CategoryResourceIdService;
-import fr.paris.lutece.plugins.suggest.service.DefaultMessageResourceIdService;
-import fr.paris.lutece.plugins.suggest.service.ExportFormatResourceIdService;
-import fr.paris.lutece.portal.business.rbac.RBAC;
-import fr.paris.lutece.portal.business.user.AdminUser;
-import fr.paris.lutece.portal.service.rbac.RBACService;
-import fr.paris.lutece.portal.service.template.AppTemplateService;
-import fr.paris.lutece.portal.web.admin.PluginAdminPageJspBean;
-import fr.paris.lutece.util.html.HtmlTemplate;
+import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
+import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
+import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Named;
+import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.util.AppPathService;
 
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * class ManageFormJspBean
  */
-public class ManageSuggestJspBean extends PluginAdminPageJspBean
+@RequestScoped
+@Named( "suggestManagePluginJspBean" )
+@Controller( controllerJsp = "ManagePluginSuggest.jsp", controllerPath = "jsp/admin/plugins/suggest/", right = ManageSuggestJspBean.RIGHT_MANAGE_SUGGEST_LIKE, securityTokenEnabled = true )
+public class ManageSuggestJspBean extends MVCAdminJspBean
 {
+    private static final String VIEW_MANAGE_PLUGIN_SUGGEST = "managePluginSuggest";
+    private static final String JSP_MANAGE_SUGGEST = "jsp/admin/plugins/suggest/ManageSuggest.jsp";
     public static final String RIGHT_MANAGE_SUGGEST_LIKE = "SUGGEST_MANAGEMENT";
     private static final long serialVersionUID = -4559529824052770950L;
 
-    // templates
-    private static final String TEMPLATE_MANAGE_SUGGEST = "admin/plugins/suggest/accueil.html";
-
-    // other constants
-    private static final String EMPTY_STRING = "";
-
-    // Markers
-    private static final String MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE = "permission_manage_default_message";
-    private static final String MARK_PERMISSION_MANAGE_CATEGORY = "permission_manage_category";
-    private static final String MARK_PERMISSION_MANAGE_EXPORT_FORMAT = "permission_manage_export_format";
-
-    /*-------------------------------MANAGEMENT  FORM-----------------------------*/
-
     /**
-     * Return management page of plugin form
-     * 
+     * Redirects to the management of the consultations.
+     *
      * @param request
-     *            The Http request
-     * @return Html management page of plugin form
+     *            the request
+     * @return null, the response is redirected
      */
+    @View( value = VIEW_MANAGE_PLUGIN_SUGGEST, defaultView = true )
     public String getManageSuggest( HttpServletRequest request )
     {
-        AdminUser adminUser = getUser( );
-        setPageTitleProperty( EMPTY_STRING );
+        return redirect( request, AppPathService.getBaseUrl( request ) + JSP_MANAGE_SUGGEST );
+    }
 
-        Map<String, Object> model = new HashMap<>( );
-
-        if ( RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, ExportFormatResourceIdService.PERMISSION_MANAGE, adminUser ) )
-        {
-            model.put( MARK_PERMISSION_MANAGE_EXPORT_FORMAT, true );
-        }
-        else
-        {
-            model.put( MARK_PERMISSION_MANAGE_EXPORT_FORMAT, false );
-        }
-
-        if ( RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, CategoryResourceIdService.PERMISSION_MANAGE, adminUser ) )
-        {
-            model.put( MARK_PERMISSION_MANAGE_CATEGORY, true );
-        }
-        else
-        {
-            model.put( MARK_PERMISSION_MANAGE_CATEGORY, false );
-        }
-
-        if ( RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, DefaultMessageResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
-        {
-            model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE, true );
-        }
-        else
-        {
-            model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE, false );
-        }
-
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_SUGGEST, getLocale( ), model );
-
-        return getAdminPage( templateList.getHtml( ) );
+    /**
+     * Returns the suggest plugin.
+     *
+     * @return the plugin
+     */
+    @Override
+    public Plugin getPlugin( )
+    {
+        return PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
     }
 }

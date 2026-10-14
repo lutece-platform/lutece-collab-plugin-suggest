@@ -1,104 +1,102 @@
-<section class="content">
-	<@row>
-		<@columns>
-			<@box>
-				<@boxHeader title='#i18n{suggest.manageSuggestSubmit.buttonSearch}'>
-					<@aButton href='jsp/admin/plugins/suggest/CreateSuggestSubmit.jsp?id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmit.buttonAddSuggestSubmit}' buttonIcon='plus-square' size='sm' />
-					<@button type='button' style='card-control collapse' buttonTargetId='#filter' buttonIcon='plus' size='sm' />
-				</@boxHeader>
-				<@boxBody>
-					<@tform action='jsp/admin/plugins/suggest/ManageSuggestSubmit.jsp' id='filter'>
-						<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
-						<@input type='hidden' name='session' id='session' value='session' />
-						<@input type='hidden' name='page' value='suggest' />
-						<@input type='hidden' name='page' value='search' />
-						<@formGroup labelFor='query' labelKey='#i18n{suggest.manageSuggestSubmit.buttonSearch}'>
-							<#if query?exists><#assign value = query /><#else><#assign value='' /></#if>							<@input type='text' name='query' id='query' placeHolder='#i18n{suggest.manageSuggestSubmit.labelSearch}' value=value />						</@formGroup>
-						<#if category_list?has_content>
-							<@formGroup labelFor='id_category' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitCategory}'>								<@select name='id_category_filter' default_value='${suggest_submit_category_selected}' items=category_list />							</@formGroup>
-						</#if>
-						<#if suggest_submit_type_list?has_content>
-							<@formGroup labelFor='id_type' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitType}'>								<@select name='id_type' default_value='${suggest_submit_type_selected}' items=suggest_submit_type_list />							</@formGroup>
-						</#if>
-						<@formGroup labelFor='id_suggest_submit_state' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitState}'>							<@select name='id_suggest_submit_state' default_value='${suggest_submit_state_selected}' items=suggest_submit_state_list />						</@formGroup>
-						<@formGroup labelFor='id_suggest_submit_report' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitReport}'>							<@select name='id_suggest_submit_report' default_value='${suggest_submit_report_selected}' items=suggest_submit_report_list />						</@formGroup>
-						<@formGroup labelFor='id_contains_comment_disable' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitContainsCommentDisable}'>							<@select name='id_contains_comment_disable' default_value='${suggest_submit_contains_comment_disable_selected}' items=suggest_submit_contains_comment_disable_list />						</@formGroup>
-						<@formGroup labelFor='id_suggest_submit_report' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitSort}'>							<@select name='id_suggest_submit_sort' default_value='${suggest_submit_sort_selected}' items=suggest_submit_sort_list />						</@formGroup>
-						<@formGroup>
-							<@button type='submit' buttonIcon='search' title='#i18n{suggest.manageSuggestSubmit.buttonSearch}' />
-							<@button type='button' id='reinit' buttonIcon='sync' title='R&eacute;initialiser la recherche' />
-						</@formGroup>
-					</@tform>
-			
-					<@tform action='jsp/admin/plugins/suggest/ManageSuggestSubmit.jsp' method='post' id='filter'>
-						<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
-						<@input type='hidden' name='session' id='session' value='session' />
-						<@input type='hidden' name='page' value='suggest' />
-						
-						<@tabs>
-							<@tabList>
-								<@tabLink active=true href='jsp/admin/plugins/suggest/ManageSuggestSubmit.jsp?id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmit.title}' />
-								<@tabLink href='jsp/admin/plugins/suggest/ManageSuggestSubmitOrder.jsp?id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmitOrder.title}' />
-							</@tabList>
-							<@tabContent>
-								<@div align='right'><@paginationAdmin paginator=paginator combo=1 form=0 showcount=0 /></@div>
-								<#include "include_suggest_submit_mass_actions.html">
-								<#assign include_suggest_submit_actions ="include_suggest_submit_actions.html">
-								<#assign display_check_actions =true>
-								<#include "include_suggest_submit_list.html">
-							</@tabContent>
-						</@tabs>
-					</@tform>
-				</@boxBody>
-			</@box>
-		</@columns>
-	</@row>
-</section>
+<@pageContainer>
+	<@pageColumn>
+		<@pageHeader title='${suggest.title!}'>
+			<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp' buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' hideTitle=['xs','sm','md'] />
+			<@button type='button' title='#i18n{suggest.manageSuggestSubmit.buttonSearch}' buttonIcon='filter' color='light' hideTitle=['xs','sm','md'] params='data-bs-toggle="modal" data-bs-target="#suggestSubmitFilterModal"' />
+			<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=createSuggestSubmit&id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmit.buttonAddSuggestSubmit}' buttonIcon='plus' color='primary' />
+		</@pageHeader>
+		<@modal id='suggestSubmitFilterModal'>
+			<@modalHeader modalTitle='#i18n{suggest.manageSuggestSubmit.buttonSearch}' />
+			<@modalBody>
+				<@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp' id='filter'>
+					<@input type='hidden' name='view' value='manageSuggestSubmit' />
+					<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
+					<@input type='hidden' name='session' id='session' value='session' />
+				<@formGroup labelFor='query' labelKey='#i18n{suggest.manageSuggestSubmit.buttonSearch}'>
+					<#if query?exists><#assign value = query /><#else><#assign value='' /></#if>
+					<@input type='text' name='query' id='query' placeHolder='#i18n{suggest.manageSuggestSubmit.labelSearch}' value=value />
+				</@formGroup>
+				<#if category_list?has_content>
+					<@formGroup labelFor='id_category_filter' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitCategory}'>
+						<@select name='id_category_filter' default_value='${suggest_submit_category_selected}' items=category_list />
+					</@formGroup>
+				</#if>
+				<#if suggest_submit_type_list?has_content>
+					<@formGroup labelFor='id_type' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitType}'>
+						<@select name='id_type' default_value='${suggest_submit_type_selected}' items=suggest_submit_type_list />
+					</@formGroup>
+				</#if>
+				<@formGroup labelFor='id_suggest_submit_state' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitState}'>
+					<@select name='id_suggest_submit_state' default_value='${suggest_submit_state_selected}' items=suggest_submit_state_list />
+				</@formGroup>
+				<@formGroup labelFor='id_suggest_submit_report' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitReport}'>
+					<@select name='id_suggest_submit_report' default_value='${suggest_submit_report_selected}' items=suggest_submit_report_list />
+				</@formGroup>
+				<@formGroup labelFor='id_contains_comment_disable' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitContainsCommentDisable}'>
+					<@select name='id_contains_comment_disable' default_value='${suggest_submit_contains_comment_disable_selected}' items=suggest_submit_contains_comment_disable_list />
+				</@formGroup>
+				<@formGroup labelFor='id_suggest_submit_sort' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitSort}'>
+					<@select name='id_suggest_submit_sort' default_value='${suggest_submit_sort_selected}' items=suggest_submit_sort_list />
+				</@formGroup>
+				</@tform>
+			</@modalBody>
+			<@modalFooter>
+				<@button type='button' id='reinit' buttonIcon='refresh' title='#i18n{suggest.manageSuggestSubmit.buttonReinitSearch}' color='light' />
+				<@button type='submit' formId='filter' buttonIcon='search' title='#i18n{suggest.manageSuggestSubmit.buttonSearch}' color='primary' />
+			</@modalFooter>
+		</@modal>
+		<@tabs>
+			<@tabList>
+				<@tabLink active=true href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmit&id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmit.title}' />
+				<@tabLink href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmitOrder&id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmitOrder.title}' />
+			</@tabList>
+		</@tabs>
+		<@messages infos=infos![] errors=errors![] warnings=warnings![] />
+		<#if suggest_submit_list?has_content>
+			<@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp' method='post' id='mass_action'>
+				<@input type='hidden' name='action' value='suggestSubmitMassAction' />
+				<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
+				<#include "include_suggest_submit_mass_actions.html">
+				<#assign include_suggest_submit_actions ="include_suggest_submit_actions.html">
+				<#assign display_check_actions =true>
+				<#include "include_suggest_submit_list.html">
+			</@tform>
+			<@paginationAdmin paginator=paginator combo=1 />
+		<#else>
+			<@empty title='#i18n{portal.util.labelNoItem}' iconName='message-off' actionTitle='#i18n{suggest.manageSuggestSubmit.buttonAddSuggestSubmit}' actionUrl='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=createSuggestSubmit&id_suggest=${suggest.idSuggest}' />
+		</#if>
+		<@tform id='suggest_export_form' action='jsp/admin/plugins/suggest/DoDownloadSuggestExport.jsp'><@input type='hidden' name='view' value='exportSuggestSubmit' /><@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' /></@tform>
+		<@tform id='suggest_row_action_form' action='jsp/admin/plugins/suggest/ManageSuggest.jsp'></@tform>
+	</@pageColumn>
+</@pageContainer>
+<script src="js/admin/plugins/suggest/suggest.js"></script>
 <script>
-$( function () {
-	/* Add reinit button if a query has been set*/
-	$("#reinit").click( function(){
-		$("form#filter select option:selected").each( function(){
-			$(this).val(-1);
+document.addEventListener( 'DOMContentLoaded', function( ){
+	document.querySelectorAll( '.preview' ).forEach( function( element ){
+		element.style.display = 'none';
+	});
+	var filter = document.getElementById( 'filter' );
+	var reinit = document.getElementById( 'reinit' );
+	if ( filter && reinit ) {
+		reinit.addEventListener( 'click', function( ){
+			filter.querySelectorAll( 'select' ).forEach( function( select ){
+				select.value = '-1';
+			});
+			var query = document.getElementById( 'query' );
+			if ( query ) {
+				query.value = '';
+			}
+			var session = document.getElementById( 'session' );
+			if ( session ) {
+				session.value = '';
+			}
+			filter.submit( );
 		});
-		$("form#filter input#query").val("");
-		$("form#filter input#session").val("");
-		$("form#filter").submit();
-	});
-
-	/* Toggle submit list */
-	$(".preview").toggle();
-
-	$(".full").click(function(){
-		$(this).next(".preview").toggle();
-		$(this).toggleClass("fa-plus-square").toggleClass("fa-minus-square");
-	});
-
-	var toGo = location.hash;
-	if (toGo != ""){ $('html, body').animate( {'scrollTop':$(toGo).offset().top - 120 },0 ); 	}
-
-	// For multi selection
-	$("#selectAll").click( function(){
-		var isCheck = $(this).attr('data-is');
-		$(".selected-id").prop('checked', isCheck );
-		if (isCheck == ''){
-			$(this).attr('data-is','checked');
-			$('.fa-check-square-o').toggleClass('fa-square-o').toggleClass('fa-check-square-o');
-		} else {
-			$(this).attr('data-is','');
-			$('.fa-square-o').toggleClass('fa-square-o').toggleClass('fa-check-square-o');
-		}
-
-	});
-
-	/* Top fixed on scroll */
-	var nav = $('.fixed-actionbar');
-  $(window).scroll(function () {
-	  if ($(this).scrollTop() > 200) {
-	      nav.addClass("f-nav col-xs-12 col-sm-12 col-md-12 col-lg-12");
-	  } else {
-	      nav.removeClass("f-nav col-xs-12 col-sm-12 col-md-12 col-lg-12");
-	  }
-	});
+	}
+	var target = location.hash ? document.getElementById( location.hash.substring( 1 ) ) : null;
+	if ( target ) {
+		window.scrollTo( 0, target.getBoundingClientRect( ).top + window.scrollY - 120 );
+	}
+	suggestToggleAll( 'selectAll', 'input.selected-id, .selected-id input[type=checkbox]' );
 });
 </script>
