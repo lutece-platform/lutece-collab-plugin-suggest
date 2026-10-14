@@ -50,10 +50,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -66,6 +68,7 @@ import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.suggest.business.Category;
 import fr.paris.lutece.plugins.suggest.business.CategoryHome;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
+import fr.paris.lutece.plugins.suggest.business.SuggestUserInfo;
 import fr.paris.lutece.plugins.suggest.business.DefaultMessage;
 import fr.paris.lutece.plugins.suggest.business.DefaultMessageHome;
 import fr.paris.lutece.plugins.suggest.business.Suggest;
@@ -98,6 +101,7 @@ import fr.paris.lutece.plugins.suggest.service.SuggestResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.SuggestService;
 import fr.paris.lutece.plugins.suggest.service.ExportFormatResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.ICommentSubmitService;
+import fr.paris.lutece.plugins.suggest.service.ISuggestUserInfoService;
 import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.suggestsearch.SuggestSearchService;
 import fr.paris.lutece.plugins.suggest.service.search.SuggestIndexer;
@@ -313,6 +317,8 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String MARK_SUGGEST_LIST = "suggest_list";
     private static final String MARK_SUGGEST_SUBMIT_LIST = "suggest_submit_list";
     private static final String MARK_COMMENT_SUBMIT_LIST = "comment_submit_list";
+    private static final String MARK_USERS_INFO = "users_info";
+    private static final String MARK_WORKFLOW_STATES = "workflow_states";
     private static final String MARK_VOTE_TYPE_LIST = "vote_type_list";
     private static final String MARK_CATEGORY_LIST = "category_list";
     private static final String MARK_SUGGEST_SUBMIT_TYPE_LIST = "suggest_submit_type_list";
@@ -522,6 +528,8 @@ public class SuggestJspBean extends MVCAdminJspBean
     private ISuggestSubmitService _suggestSubmitService;
     @Inject
     private ICommentSubmitService _commentSubmitService;
+    @Inject
+    private ISuggestUserInfoService _suggestUserInfoService;
     @Inject
     private SuggestSearchService _suggestSearchService;
     @Inject
@@ -764,32 +772,7 @@ public class SuggestJspBean extends MVCAdminJspBean
             model.put( MARK_SUGGEST_SUBMIT_TYPE_SELECTED, getSearchFields( ).getIdType( ) );
         }
 
-        // Get the workflow state of the suggest items
-        if ( ( suggest.getIdWorkflow( ) > 0 ) && _workflowService.isAvailable( ) && _stateServiceInstance.isResolvable( ) )
-        {
-            IStateService stateService = _stateServiceInstance.get( );
-            int nIdWorkflow = suggest.getIdWorkflow( );
-            // Retrieve the workflow data for each suggestion submitted
-            for ( SuggestSubmit submit : listSuggestSubmitDisplay )
-            {
-                // Get the state of the suggestion submitted
-                State stateSuggestSubmit = stateService.findByResource( submit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, nIdWorkflow );
-                if ( stateSuggestSubmit != null )
-                {
-                    // Set the State for this SuggestSubmit
-                    submit.setState( stateSuggestSubmit );
-                }
-                else
-                {
-                    // Set the State for this SuggestSubmit
-                    submit.setState( _workflowService.getState( submit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, nIdWorkflow,
-                            suggest.getIdSuggest( ) ) );
-                }
-                // Set the list of available workflow actions for this SuggestSubmit
-                submit.setListWorkflowActions( _workflowService.getActions( submit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE,
-                        suggest.getIdWorkflow( ), (User) getUser( ) ) );
-            }
-        }
+        setWorkflowData( suggest, listSuggestSubmitDisplay );
 
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageSuggestSubmit );
@@ -1120,6 +1103,83 @@ public class SuggestJspBean extends MVCAdminJspBean
     }
 
     /**
+     * Sets the workflow state and the actions available to the current user on each suggest submit
+     *
+     * @param suggest
+     *            the suggest of the submits
+     * @param listSuggestSubmit
+     *            the suggest submits to fill
+     */
+    private void setWorkflowData( Suggest suggest, List<SuggestSubmit> listSuggestSubmit )
+    {
+        if ( ( suggest.getIdWorkflow( ) <= 0 ) || !_workflowService.isAvailable( ) || !_stateServiceInstance.isResolvable( ) )
+        {
+            return;
+        }
+
+        IStateService stateService = _stateServiceInstance.get( );
+        int nIdWorkflow = suggest.getIdWorkflow( );
+
+        for ( SuggestSubmit submit : listSuggestSubmit )
+        {
+            State stateSuggestSubmit = stateService.findByResource( submit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, nIdWorkflow );
+
+            if ( stateSuggestSubmit != null )
+            {
+                submit.setState( stateSuggestSubmit );
+            }
+            else
+            {
+                submit.setState( _workflowService.getState( submit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, nIdWorkflow, suggest.getIdSuggest( ) ) );
+            }
+
+            submit.setListWorkflowActions( _workflowService.getActions( submit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, nIdWorkflow,
+                    (User) getUser( ) ) );
+        }
+    }
+
+    /**
+     * Returns the user infos of the author of the suggest submit and of the authors of its comments, by lutece user key
+     *
+     * @param suggestSubmit
+     *            the suggest submit
+     * @param listCommentSubmit
+     *            its comments
+     * @param plugin
+     *            the plugin
+     * @return the user infos by lutece user key
+     */
+    private Map<String, SuggestUserInfo> getUsersInfo( SuggestSubmit suggestSubmit, List<CommentSubmit> listCommentSubmit, Plugin plugin )
+    {
+        Set<String> setKeys = new HashSet<>( );
+        setKeys.add( suggestSubmit.getLuteceUserKey( ) );
+
+        for ( CommentSubmit comment : listCommentSubmit )
+        {
+            setKeys.add( comment.getLuteceUserKey( ) );
+
+            if ( comment.getComments( ) != null )
+            {
+                comment.getComments( ).forEach( c -> setKeys.add( c.getLuteceUserKey( ) ) );
+            }
+        }
+
+        Map<String, SuggestUserInfo> mapUsersInfo = new HashMap<>( );
+
+        for ( String strKey : setKeys )
+        {
+            SuggestUserInfo userInfo = ( strKey != null ) ? _suggestUserInfoService.findSuggestUserInfoByKey( strKey, plugin ) : null;
+
+            if ( userInfo != null )
+            {
+                mapUsersInfo.put( strKey, userInfo );
+            }
+        }
+
+        return mapUsersInfo;
+    }
+
+    /**
      * Return management CommentSubmit( list of comment submit)
      *
      * @param request
@@ -1217,7 +1277,13 @@ public class SuggestJspBean extends MVCAdminJspBean
         model.put( MARK_CONTAINS_SUB_COMMENT_DISABLE_LIST, refListAllYesNo );
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageCommentSubmit );
+        setWorkflowData( suggest, List.of( suggestSubmit ) );
+        if ( ( suggest.getIdWorkflow( ) > 0 ) && _workflowService.isAvailable( ) )
+        {
+            model.put( MARK_WORKFLOW_STATES, _workflowService.getAllStateByWorkflow( suggest.getIdWorkflow( ), (User) getUser( ) ) );
+        }
         model.put( MARK_COMMENT_SUBMIT_LIST, paginator.getPageItems( ) );
+        model.put( MARK_USERS_INFO, getUsersInfo( suggestSubmit, paginator.getPageItems( ), plugin ) );
         model.put( MARK_SUGGEST_SUBMIT, suggestSubmit );
         model.put( MARK_ID_SUGGEST_SUBMIT_PREV, _suggestSubmitService.findPrevIdSuggestSubmitInTheList( _nIdSuggestSubmit, filter, plugin ) );
         model.put( MARK_ID_SUGGEST_SUBMIT_NEXT, _suggestSubmitService.findNextIdSuggestSubmitInTheList( _nIdSuggestSubmit, filter, plugin ) );
@@ -3782,6 +3848,11 @@ public class SuggestJspBean extends MVCAdminJspBean
             // Otherwise, just execute the task
             _workflowService.doProcessAction( nIdSuggestSubmit, SuggestSubmit.RESOURCE_TYPE, nIdAction, submit.getSuggest( ).getIdSuggest( ),
                     request, getLocale( ), false, getUser( ) );
+
+            if ( request.getParameter( PARAMETER_COMMENT ) != null )
+            {
+                return redirect( request, getJspManageCommentSubmit( request ) );
+            }
         }
         return redirect( request, getJspManageSuggestSubmit( request ) );
     }
