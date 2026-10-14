@@ -33,15 +33,22 @@
  */
 package fr.paris.lutece.plugins.suggest.service.workflow;
 
+import jakarta.enterprise.inject.Instance;
+import jakarta.enterprise.inject.literal.NamedLiteral;
 import jakarta.enterprise.inject.spi.CDI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.suggest.business.Suggest;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
+import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
+import fr.paris.lutece.plugins.workflowcore.service.state.IStateService;
+import fr.paris.lutece.plugins.workflowcore.service.state.StateService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 
 /**
@@ -120,5 +127,61 @@ public class SuggestWorkflowService
             listIdState.add( state.getId( ) );
         }
         return listIdState;
+    }
+
+    /**
+     * Returns the current workflow state of a suggest submit, read without creating its workflow resource.
+     *
+     * @param suggest
+     *            the suggest owning the submit
+     * @param suggestSubmit
+     *            the suggest submit
+     * @return the state, or null when the suggest has no workflow or the workflow is not installed
+     */
+    public static State getState( Suggest suggest, SuggestSubmit suggestSubmit )
+    {
+        Instance<IStateService> stateService = getStateService( );
+
+        if ( ( suggest.getIdWorkflow( ) <= 0 ) || stateService.isUnsatisfied( ) )
+        {
+            return null;
+        }
+
+        return stateService.get( ).findByResource( suggestSubmit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, suggest.getIdWorkflow( ) );
+    }
+
+    /**
+     * Returns every state of the workflow of a suggest, in workflow order.
+     *
+     * @param suggest
+     *            the suggest
+     * @return the states, empty when the suggest has no workflow or the workflow is not installed
+     */
+    public static List<State> getStates( Suggest suggest )
+    {
+        Instance<IStateService> stateService = getStateService( );
+
+        if ( ( suggest.getIdWorkflow( ) <= 0 ) || stateService.isUnsatisfied( ) )
+        {
+            return Collections.emptyList( );
+        }
+
+        StateFilter filter = new StateFilter( );
+        filter.setIdWorkflow( suggest.getIdWorkflow( ) );
+
+        List<State> listStates = new ArrayList<>( stateService.get( ).getListStateByFilter( filter ) );
+        listStates.sort( Comparator.comparingInt( State::getOrder ) );
+
+        return listStates;
+    }
+
+    /**
+     * Returns the workflow state service, unsatisfied when plugin-workflow is not deployed.
+     *
+     * @return the state service instance
+     */
+    private static Instance<IStateService> getStateService( )
+    {
+        return CDI.current( ).select( IStateService.class, NamedLiteral.of( StateService.BEAN_SERVICE ) );
     }
 }
