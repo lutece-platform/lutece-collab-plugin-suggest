@@ -177,6 +177,11 @@ public class SuggestApp extends MVCApplication
     private static final String MARK_VIEW = "view";
     private static final String MARK_USER_SUBSCRIBED = "user_subscribed";
     private static final String MARK_IS_EXTEND_INSTALLED = "isExtendInstalled";
+    private static final String MARK_WORKFLOW_STATE = "workflow_state";
+    private static final String MARK_WORKFLOW_STATES = "workflow_states";
+    private static final String MARK_LIST_SUGGEST_SUBMIT_TYPES = "list_suggest_submit_types";
+    private static final String MARK_LUTECE_USER_NAME_FILTER = "lutece_user_name_filter";
+    private static final String MARK_USER_VOTED = "user_voted";
 
     // templates
     private static final String TEMPLATE_XPAGE_FRAME_SUGGEST = "skin/plugins/suggest/suggest_frame.html";
@@ -1446,7 +1451,7 @@ public class SuggestApp extends MVCApplication
         }
 
         model.put( MARK_SUGGEST, suggest );
-        model.put( MARK_LIST_SUGGEST_SUBMIT, getSuggestSubmitDisplayList( listIdSuggestSubmit, suggest, locale, plugin ) );
+        model.put( MARK_LIST_SUGGEST_SUBMIT, getSuggestSubmitDisplayList( listIdSuggestSubmit, suggest, locale, plugin, luteceUserConnected ) );
 
         model.put( MARK_AUTHORIZED_COMMENT, suggest.isAuthorizedComment( ) );
         model.put( MARK_AUTHORIZED_VOTE, !suggest.isDisableVote( ) );
@@ -1518,9 +1523,14 @@ public class SuggestApp extends MVCApplication
      *            the suggest detail
      * @param locale
      *            the locale
+     * @param plugin
+     *            the plugin
+     * @param luteceUserConnected
+     *            the connected user, or null
      * @return a collection which contains suggest submit and lutece user associate
      */
-    private Collection<HashMap> getSuggestSubmitDisplayList( Collection<Integer> listSuggestSubmit, Suggest suggest, Locale locale, Plugin plugin )
+    private Collection<HashMap> getSuggestSubmitDisplayList( Collection<Integer> listSuggestSubmit, Suggest suggest, Locale locale, Plugin plugin,
+            LuteceUser luteceUserConnected )
     {
         SuggestUserInfo luteceUserInfo;
         SuggestSubmit suggestSubmit;
@@ -1543,11 +1553,12 @@ public class SuggestApp extends MVCApplication
 
             modelSuggest.put( MARK_LUTECE_USER, luteceUserInfo );
             SuggestUtils.addAvatarToModel( modelSuggest, luteceUserInfo );
+            modelSuggest.put( MARK_WORKFLOW_STATE, SuggestWorkflowService.getState( suggest, suggestSubmit ) );
 
             if ( !suggest.isDisableVote( ) )
             {
                 modelSuggest.put( MARK_SUGGEST_SUBMIT_VOTE_TYPE,
-                        getHtmlSuggestSubmitVoteType( suggest, suggestSubmit, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT, locale ) );
+                        getHtmlSuggestSubmitVoteType( suggest, suggestSubmit, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT, locale, luteceUserConnected ) );
             }
 
             listHashSuggest.add( modelSuggest );
@@ -1647,10 +1658,13 @@ public class SuggestApp extends MVCApplication
         model.put( MARK_SUGGEST_SUBMIT, suggestSubmit );
         model.put( MARK_LUTECE_USER, luteceUserInfo );
         SuggestUtils.addAvatarToModel( model, luteceUserInfo );
+        model.put( MARK_WORKFLOW_STATE, SuggestWorkflowService.getState( suggestSubmit.getSuggest( ), suggestSubmit ) );
+        model.put( MARK_WORKFLOW_STATES, SuggestWorkflowService.getStates( suggestSubmit.getSuggest( ) ) );
 
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
         model.put( MARK_SUGGEST_SUBMIT_VOTE_TYPE,
-                getHtmlSuggestSubmitVoteType( suggestSubmit.getSuggest( ), suggestSubmit, CONSTANT_VIEW_SUGGEST_SUBMIT, getLocale( request ) ) );
+                getHtmlSuggestSubmitVoteType( suggestSubmit.getSuggest( ), suggestSubmit, CONSTANT_VIEW_SUGGEST_SUBMIT, getLocale( request ),
+                        luteceUserConnected ) );
 
         model.put( MARK_AUTHORIZED_COMMENT, suggestSubmit.getSuggest( ).isAuthorizedComment( ) );
         model.put( MARK_AUTHORIZED_VOTE, !suggestSubmit.getSuggest( ).isDisableVote( ) );
@@ -1687,9 +1701,11 @@ public class SuggestApp extends MVCApplication
      *            the view which is display the vote type
      * @param locale
      *            the locale
+     * @param luteceUserConnected
+     *            the connected user, or null
      * @return the Html type of vote
      */
-    private String getHtmlSuggestSubmitVoteType( Suggest suggest, SuggestSubmit suggestSubmit, String strView, Locale locale )
+    private String getHtmlSuggestSubmitVoteType( Suggest suggest, SuggestSubmit suggestSubmit, String strView, Locale locale, LuteceUser luteceUserConnected )
     {
         if ( !suggest.isDisableVote( ) && !suggestSubmit.isDisableVote( ) )
         {
@@ -1700,6 +1716,8 @@ public class SuggestApp extends MVCApplication
             model.put( MARK_ID_SUGGEST, suggest.getIdSuggest( ) );
             model.put( MARK_ID_SUGGEST_SUBMIT, suggestSubmit.getIdSuggestSubmit( ) );
             model.put( MARK_VIEW, strView );
+            model.put( MARK_USER_VOTED, ( luteceUserConnected != null )
+                    && ( VoteHome.getUserNumberVoteOnSuggestSubmit( suggestSubmit.getIdSuggestSubmit( ), luteceUserConnected.getName( ), _plugin ) > 0 ) );
 
             HtmlTemplate template = AppTemplateService.getTemplate( strFilePath, locale, model );
 
@@ -1803,6 +1821,11 @@ public class SuggestApp extends MVCApplication
 
         // get form Recap
         model.put( MARK_DISABLE_NEW_SUGGEST_SUBMIT, suggest.isDisableNewSuggestSubmit( ) );
+
+        if ( SecurityService.isAuthenticationEnable( ) )
+        {
+            model.put( MARK_LUTECE_USER_CONNECTED, SecurityService.getInstance( ).getRegisteredUser( request ) );
+        }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FORM_SUGGEST, getLocale( request ), model );
 
@@ -2130,6 +2153,8 @@ public class SuggestApp extends MVCApplication
             model.put( MARK_ID_FILTER_PERIOD, searchFields.getIdFilterPeriod( ) );
             model.put( MARK_ID_FILTER_CATEGORY_SUGGEST, searchFields.getIdFilterCategory( ) );
             model.put( MARK_ID_FILTER_TYPE, searchFields.getIdFilterSuggestSubmitType( ) );
+            model.put( MARK_LIST_SUGGEST_SUBMIT_TYPES, SuggestSubmitTypeHome.getListByIdSuggest( suggest.getIdSuggest( ), _plugin ) );
+            model.put( MARK_LUTECE_USER_NAME_FILTER, searchFields.getLuteceUserName( ) );
 
             if ( searchFields.getIdFilterSuggestSubmitType( ) != SuggestUtils.CONSTANT_ID_NULL )
             {
