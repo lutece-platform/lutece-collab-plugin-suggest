@@ -706,6 +706,12 @@ public class SuggestApp extends MVCApplication
         String strIdSubmitSuggest = request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST );
         int nIdSubmitSuggest = SuggestUtils.getIntegerParameter( strIdSubmitSuggest );
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSubmitSuggest, true, _plugin );
+
+        if ( suggestSubmit == null )
+        {
+            SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
+        }
+
         suggestSubmit.setSuggest( SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), _plugin ) );
 
         // testAuthorizationAccess
@@ -848,6 +854,12 @@ public class SuggestApp extends MVCApplication
         String strIdSubmitSuggest = request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST );
         int nIdSubmitSuggest = SuggestUtils.getIntegerParameter( strIdSubmitSuggest );
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSubmitSuggest, true, _plugin );
+
+        if ( suggestSubmit == null )
+        {
+            SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
+        }
+
         suggestSubmit.setSuggest( SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), _plugin ) );
         model.put( MARK_VIEW, CONSTANT_VIEW_REPORT );
 
