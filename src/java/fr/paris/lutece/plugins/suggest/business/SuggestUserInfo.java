@@ -43,6 +43,7 @@ public class SuggestUserInfo
     private String _strBusinnessMail;
     private String _strHomeMail;
     private String _strLogin;
+    private String _strDepartment;
 
     public String getLuteceUserKey( )
     {
@@ -150,5 +151,26 @@ public class SuggestUserInfo
     public String toString( )
     {
         return getLogin( );
+    }
+
+    /**
+     * Returns the department the user belongs to.
+     *
+     * @return the department, or null when unknown
+     */
+    public String getDepartment( )
+    {
+        return _strDepartment;
+    }
+
+    /**
+     * Sets the department the user belongs to.
+     *
+     * @param strDepartment
+     *            the department
+     */
+    public void setDepartment( String strDepartment )
+    {
+        this._strDepartment = strDepartment;
     }
 }

@@ -41,12 +41,12 @@ import fr.paris.lutece.util.sql.DAOUtil;
 @ApplicationScoped
 public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
 {
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT first_name,last_name,business_mail,home_mail,login "
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT first_name,last_name,business_mail,home_mail,login,department "
             + "FROM suggest_suggest_user_info WHERE lutece_user_key = ?  ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_suggest_user_info ( lutece_user_key,first_name,last_name,business_mail,home_mail,login ) "
-            + "VALUES(?,?,?,?,?,?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_suggest_user_info ( lutece_user_key,first_name,last_name,business_mail,home_mail,login,department ) "
+            + "VALUES(?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM suggest_suggest_user_info WHERE lutece_user_key= ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE suggest_suggest_user_info SET " + "first_name= ?,last_name= ?,business_mail=?,home_mail=?,login= ?"
+    private static final String SQL_QUERY_UPDATE = "UPDATE suggest_suggest_user_info SET " + "first_name= ?,last_name= ?,business_mail=?,home_mail=?,login= ?,department= ?"
             + " WHERE lutece_user_key= ? ";
 
     /**
@@ -65,6 +65,7 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
             daoUtil.setString( ncpt++, suggestUserInfo.getBusinessMail( ) );
             daoUtil.setString( ncpt++, suggestUserInfo.getHomeMail( ) );
             daoUtil.setString( ncpt++, suggestUserInfo.getLogin( ) );
+            daoUtil.setString( ncpt++, suggestUserInfo.getDepartment( ) );
             daoUtil.executeUpdate( );
         }
     }
@@ -83,6 +84,7 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
             daoUtil.setString( ncpt++, suggestUserInfo.getBusinessMail( ) );
             daoUtil.setString( ncpt++, suggestUserInfo.getHomeMail( ) );
             daoUtil.setString( ncpt++, suggestUserInfo.getLogin( ) );
+            daoUtil.setString( ncpt++, suggestUserInfo.getDepartment( ) );
             daoUtil.setString( ncpt++, suggestUserInfo.getLuteceUserKey( ) );
             daoUtil.executeUpdate( );
         }
@@ -114,6 +116,7 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
                 submitUserInfo.setBusinesMail( daoUtil.getString( ncpt++ ) );
                 submitUserInfo.setHomeMail( daoUtil.getString( ncpt++ ) );
                 submitUserInfo.setLogin( daoUtil.getString( ncpt++ ) );
+                submitUserInfo.setDepartment( daoUtil.getString( ncpt ) );
             }
 
         }

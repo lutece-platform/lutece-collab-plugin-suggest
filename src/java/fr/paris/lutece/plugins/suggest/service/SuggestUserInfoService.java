@@ -65,6 +65,7 @@ public class SuggestUserInfoService implements ISuggestUserInfoService
             suggestUserInfo.setLogin( luteceUserConnected.getName( ) );
             suggestUserInfo.setBusinesMail( luteceUserConnected.getUserInfos( ).get( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL ) );
             suggestUserInfo.setHomeMail( luteceUserConnected.getUserInfos( ).get( LuteceUser.HOME_INFO_ONLINE_EMAIL ) );
+            suggestUserInfo.setDepartment( luteceUserConnected.getUserInfos( ).get( LuteceUser.DEPARTMENT ) );
 
             if ( suggestUserInfoStrored == null )
             {
