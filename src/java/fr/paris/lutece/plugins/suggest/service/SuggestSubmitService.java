@@ -39,6 +39,8 @@ import fr.paris.lutece.plugins.suggest.business.VideoTypeHome;
 import fr.paris.lutece.plugins.suggest.business.VideoType;
 import fr.paris.lutece.plugins.suggest.business.EntryTypeVideo;
 import jakarta.inject.Inject;
+import jakarta.enterprise.event.Event;
+import jakarta.enterprise.event.NotificationOptions;
 import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
@@ -54,11 +56,14 @@ import fr.paris.lutece.plugins.suggest.business.ImageResourceHome;
 import fr.paris.lutece.plugins.suggest.business.Response;
 import fr.paris.lutece.plugins.suggest.business.ResponseHome;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
+import fr.paris.lutece.plugins.suggest.service.event.SuggestSubmitEvent;
 import fr.paris.lutece.plugins.suggest.service.search.SuggestIndexer;
 import fr.paris.lutece.plugins.suggest.service.workflow.SuggestWorkflowService;
 import fr.paris.lutece.plugins.suggest.utils.SuggestIndexerUtils;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
+import fr.paris.lutece.portal.service.event.EventAction;
+import fr.paris.lutece.portal.service.event.Type.TypeQualifier;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -70,6 +75,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.RejectedExecutionException;
 
 import fr.paris.lutece.util.sql.TransactionManager;
 import java.util.function.Supplier;
@@ -83,13 +89,16 @@ public class SuggestSubmitService implements ISuggestSubmitService
     @Inject
     private WorkflowService _workflowService;
 
+    @Inject
+    private Event<SuggestSubmitEvent> _suggestSubmitEvent;
+
     /**
      * {@inheritDoc}
      */
     @Override
     public int create( SuggestSubmit suggestSubmit, Plugin plugin, Locale locale, User user )
     {
-        return inTransaction( plugin, ( ) -> {
+        int nIdCreated = inTransaction( plugin, ( ) -> {
             // update creation date
             suggestSubmit.setDateResponse( SuggestUtils.getCurrentDate( ) );
     
@@ -149,6 +158,9 @@ public class SuggestSubmitService implements ISuggestSubmitService
     
             return nIdSuggestSubmit;
         } );
+        fireEvent( EventAction.CREATE, suggestSubmit );
+
+        return nIdCreated;
     }
 
     /**
@@ -160,6 +172,7 @@ public class SuggestSubmitService implements ISuggestSubmitService
         inTransaction( plugin, ( ) -> {
             SuggestSubmitHome.update( suggestSubmit, plugin );
         } );
+        fireEvent( EventAction.UPDATE, suggestSubmit );
     }
 
     /**
@@ -171,6 +184,7 @@ public class SuggestSubmitService implements ISuggestSubmitService
         inTransaction( plugin, ( ) -> {
             SuggestSubmitHome.update( suggestSubmit, bUpdateIndex, plugin );
         } );
+        fireEvent( EventAction.UPDATE, suggestSubmit );
     }
 
     /**
@@ -189,6 +203,7 @@ public class SuggestSubmitService implements ISuggestSubmitService
                 int nIdSuggest = suggestSubmit.getSuggest( ).getIdSuggest( );
                 // remove
                 SuggestSubmitHome.remove( nIdSuggestSubmit, plugin );
+                fireEvent( EventAction.REMOVE, suggestSubmit );
                 // update suggest submit order
                 updateSuggestSubmitOrder( null, null, nIdSuggest, suggestSubmit.isPinned( ), plugin );
             }
@@ -209,6 +224,7 @@ public class SuggestSubmitService implements ISuggestSubmitService
                 int nIdSuggest = suggestSubmit.getSuggest( ).getIdSuggest( );
                 // Remove the specified SuggestSubmit element
                 SuggestSubmitHome.remove( nIdSuggestSubmit, plugin );
+                fireEvent( EventAction.REMOVE, suggestSubmit );
                 // Update the order of the remaining SuggestSubmit elements
                 updateSuggestSubmitOrder( null, null, nIdSuggest, suggestSubmit.isPinned( ), plugin );
                 // Remove related workflow resources
@@ -587,6 +603,32 @@ public class SuggestSubmitService implements ISuggestSubmitService
         catch( SQLException e )
         {
             throw new AppException( e.getMessage( ), e );
+        }
+    }
+
+    /**
+     * Fires a suggest submit event to the asynchronous observers. While the server stops, its executor refuses new tasks: the observers are then
+     * notified in the current thread.
+     *
+     * @param action
+     *            the event action
+     * @param suggestSubmit
+     *            the suggest submit
+     */
+    private void fireEvent( EventAction action, SuggestSubmit suggestSubmit )
+    {
+        int nIdSuggest = ( suggestSubmit.getSuggest( ) != null ) ? suggestSubmit.getSuggest( ).getIdSuggest( ) : SuggestUtils.CONSTANT_ID_NULL;
+        SuggestSubmitEvent event = new SuggestSubmitEvent( suggestSubmit.getIdSuggestSubmit( ), nIdSuggest );
+        Event<SuggestSubmitEvent> qualifiedEvent = _suggestSubmitEvent.select( new TypeQualifier( action ) );
+
+        try
+        {
+            qualifiedEvent.fireAsync( event );
+        }
+        catch( RejectedExecutionException e )
+        {
+            AppLogService.info( "Executor unavailable (server stopping): suggest submit event {} notified in the current thread", event.getIdSuggestSubmit( ) );
+            qualifiedEvent.fireAsync( event, NotificationOptions.ofExecutor( Runnable::run ) );
         }
     }
 
