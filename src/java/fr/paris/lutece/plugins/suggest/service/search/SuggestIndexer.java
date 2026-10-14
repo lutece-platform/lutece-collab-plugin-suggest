@@ -66,6 +66,7 @@ import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexOptions;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 
 /**
@@ -246,7 +247,8 @@ public class SuggestIndexer implements SearchIndexer
             }
         }
 
-        StringBuilder sb = new StringBuilder( Jsoup.parse( writerFieldContent.toString( ) ).text( ) );
+        StringBuilder sb = new StringBuilder( StringUtils.defaultString( suggestSubmit.getSuggestSubmitTitle( ) ) ).append( ' ' )
+                .append( Jsoup.parse( writerFieldContent.toString( ) ).text( ) );
         // Add the tag-stripped contents as a Reader-valued Text field so it will
         // get tokenized and indexed.
         doc.add( new Field( SearchItem.FIELD_CONTENTS, sb.toString( ), TextField.TYPE_NOT_STORED ) );

@@ -41,21 +41,24 @@ import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
 import fr.paris.lutece.portal.service.search.SearchItem;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
+import org.jsoup.parser.Parser;
 
 /**
  * LuceneSearchEngine
@@ -67,7 +70,7 @@ public class SuggestLuceneSearchEngine implements SuggestSearchEngine
      * Return search results
      * 
      * @param strQuery
-     *            The search query
+     *            The search query, every word of which must match
      * @param filter
      *            the filter
      * @return Results as a collection of SearchResult
@@ -75,70 +78,71 @@ public class SuggestLuceneSearchEngine implements SuggestSearchEngine
     public List<SuggestSearchItem> getSearchResults( String strQuery, SubmitFilter filter )
     {
         List<SuggestSearchItem> listResults = new ArrayList<>( );
-        IndexSearcher searcher = null;
 
-        try
+        try ( DirectoryReader reader = DirectoryReader.open( IndexationService.getDirectoryIndex( ) ) )
         {
-            IndexReader ir = DirectoryReader.open( IndexationService.getDirectoryIndex( ) );
-            searcher = new IndexSearcher( ir );
+            BooleanQuery.Builder query = new BooleanQuery.Builder( );
 
-            Collection<String> queries = new ArrayList<>( );
-            Collection<String> fields = new ArrayList<>( );
-            Collection<BooleanClause.Occur> flags = new ArrayList<>( );
-
-            // filter on content
-            if ( ( strQuery != null ) && !strQuery.equals( "" ) )
+            if ( StringUtils.isNotBlank( strQuery ) )
             {
-                Query queryContent = new TermQuery( new Term( SearchItem.FIELD_CONTENTS, strQuery ) );
-                queries.add( queryContent.toString( ) );
-                fields.add( SearchItem.FIELD_CONTENTS );
-                flags.add( BooleanClause.Occur.MUST );
+                query.add( buildTextQuery( strQuery ), BooleanClause.Occur.MUST );
             }
 
-            // filter on content id suggest
             if ( filter.containsIdSuggest( ) )
             {
-                Query queryIdSuggest = new TermQuery( new Term( SuggestSearchItem.FIELD_ID_SUGGEST, String.valueOf( filter.getIdSuggest( ) ) ) );
-                queries.add( queryIdSuggest.toString( ) );
-                fields.add( SuggestSearchItem.FIELD_ID_SUGGEST );
-                flags.add( BooleanClause.Occur.MUST );
+                query.add( new TermQuery( new Term( SuggestSearchItem.FIELD_ID_SUGGEST, String.valueOf( filter.getIdSuggest( ) ) ) ), BooleanClause.Occur.FILTER );
             }
 
-            // filter on suggest submit state
             if ( filter.containsIdSuggestSubmitState( ) )
             {
-                Query queryState = new TermQuery( new Term( SearchItem.FIELD_STATE, String.valueOf( filter.getIdSuggestSubmitState( ) ) ) );
-                queries.add( queryState.toString( ) );
-                fields.add( SearchItem.FIELD_STATE );
-                flags.add( BooleanClause.Occur.MUST );
+                query.add( new TermQuery( new Term( SearchItem.FIELD_STATE, String.valueOf( filter.getIdSuggestSubmitState( ) ) ) ), BooleanClause.Occur.FILTER );
             }
 
-            // filter on suggest type
-            Query queryTypeSuggest = new TermQuery( new Term( SearchItem.FIELD_TYPE, SuggestIndexer.INDEX_TYPE_SUGGEST ) );
-            queries.add( queryTypeSuggest.toString( ) );
-            fields.add( SearchItem.FIELD_TYPE );
-            flags.add( BooleanClause.Occur.MUST );
+            query.add( new TermQuery( new Term( SearchItem.FIELD_TYPE, SuggestIndexer.INDEX_TYPE_SUGGEST ) ), BooleanClause.Occur.FILTER );
 
-            Query queryMulti = MultiFieldQueryParser.parse( (String [ ]) queries.toArray( new String [ queries.size( )] ),
-                    (String [ ]) fields.toArray( new String [ fields.size( )] ),
-                    (BooleanClause.Occur [ ]) flags.toArray( new BooleanClause.Occur [ flags.size( )] ), IndexationService.getAnalyser( ) );
+            IndexSearcher searcher = new IndexSearcher( reader );
+            TopDocs topDocs = searcher.search( query.build( ), LuceneSearchEngine.MAX_RESPONSES );
 
-            TopDocs topDocs = searcher.search( queryMulti, LuceneSearchEngine.MAX_RESPONSES );
-            ScoreDoc [ ] hits = topDocs.scoreDocs;
-
-            for ( int i = 0; i < hits.length; i++ )
+            for ( ScoreDoc hit : topDocs.scoreDocs )
             {
-                int docId = hits [i].doc;
-                Document document = searcher.doc( docId );
-                SuggestSearchItem si = new SuggestSearchItem( document );
-                listResults.add( si );
+                Document document = searcher.doc( hit.doc );
+                listResults.add( new SuggestSearchItem( document ) );
             }
         }
-        catch( Exception e )
+        catch( IOException e )
         {
             AppLogService.error( e.getMessage( ), e );
         }
 
         return listResults;
+    }
+
+    /**
+     * Builds the query matching the documents whose contents hold every word of a text, analyzed as the indexed contents are.
+     *
+     * @param strText
+     *            the text typed by the user, possibly entity-encoded by the request filter
+     * @return the query, matching nothing when the text holds no searchable word
+     * @throws IOException
+     *             if the analysis fails
+     */
+    private static Query buildTextQuery( String strText ) throws IOException
+    {
+        BooleanQuery.Builder builder = new BooleanQuery.Builder( );
+
+        try ( TokenStream stream = IndexationService.getAnalyser( ).tokenStream( SearchItem.FIELD_CONTENTS, Parser.unescapeEntities( strText, false ) ) )
+        {
+            CharTermAttribute term = stream.addAttribute( CharTermAttribute.class );
+            stream.reset( );
+
+            while ( stream.incrementToken( ) )
+            {
+                builder.add( new TermQuery( new Term( SearchItem.FIELD_CONTENTS, term.toString( ) ) ), BooleanClause.Occur.MUST );
+            }
+
+            stream.end( );
+        }
+
+        return builder.build( );
     }
 }
