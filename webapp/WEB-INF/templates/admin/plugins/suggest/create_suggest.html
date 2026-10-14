@@ -1,6 +1,6 @@
 <@row>
 	<@columns>
-		<@tform action='jsp/admin/plugins/suggest/DoCreateSuggest.jsp?plugin_name=suggest' method='post' enctype='multipart/form-data'>
+		<@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp' method='post' enctype='multipart/form-data'><@input type='hidden' name='plugin_name' value='suggest' /><@input type='hidden' name='action' value='createSuggest' />
 			<@tabs>
 				<@tabList>
 					<@tabLink active=true href='#panel1' title='#i18n{suggest.creatSuggest.navTab.labelGeneral}' />
@@ -11,43 +11,59 @@
 				</@tabList>
 				<@tabContent>
 					<@tabPanel id='panel1' active=true>
-						<@formGroup labelFor='title' labelKey='#i18n{suggest.createSuggest.labelTitle}' helpKey='#i18n{suggest.createSuggest.labelTitleComment}' mandatory=true>							<@input type='text' name='title' id='title' value='' maxlength=255 />						</@formGroup>
-						<@formGroup labelFor='libelle_contribution' labelKey='#i18n{suggest.createSuggest.labelLibelleContribution}' helpKey='#i18n{suggest.createSuggest.labelLibelleContributionComment}' mandatory=true>							<@input type='text' name='libelle_contribution' id='libelle_contribution' value='${default_message.libelleContribution}' maxlength=255 />						</@formGroup>
-						<@formGroup labelFor='libelle_validate_button' labelKey='#i18n{suggest.createSuggest.labelLibelleValidateButton} *'>							<@input type='text' name='libelle_validate_button' id='libelle_validate_button' value='${default_message.libelleValidateButton}' maxlength=255 />						</@formGroup>
-						<@formGroup labelFor='number_suggest_submit_caracters_shown' labelKey='#i18n{suggest.createSuggest.labelNumberSuggestSubmitCaractersShown} *' helpKey='#i18n{suggest.createSuggest.labelNumberSuggestSubmitCaractersShownComment}' mandatory=CHECK>							<@input type='text' name='number_suggest_submit_caracters_shown' id='number_suggest_submit_caracters_shown' value='${default_message.numberSuggestSubmitCaractersShown}' maxlength=10 />						</@formGroup>
+						<@formGroup labelFor='title' labelKey='#i18n{suggest.createSuggest.labelTitle}' helpKey='#i18n{suggest.createSuggest.labelTitleComment}' mandatory=true>
+							<@input type='text' name='title' id='title' value='' maxlength=255 />
+						</@formGroup>
+						<@formGroup labelFor='libelle_contribution' labelKey='#i18n{suggest.createSuggest.labelLibelleContribution}' helpKey='#i18n{suggest.createSuggest.labelLibelleContributionComment}' mandatory=true>
+							<@input type='text' name='libelle_contribution' id='libelle_contribution' value='${default_message.libelleContribution}' maxlength=255 />
+						</@formGroup>
+						<@formGroup labelFor='libelle_validate_button' labelKey='#i18n{suggest.createSuggest.labelLibelleValidateButton}'>
+							<@input type='text' name='libelle_validate_button' id='libelle_validate_button' value='${default_message.libelleValidateButton}' maxlength=255 />
+						</@formGroup>
+						<@formGroup labelFor='number_suggest_submit_caracters_shown' labelKey='#i18n{suggest.createSuggest.labelNumberSuggestSubmitCaractersShown}' mandatory=true helpKey='#i18n{suggest.createSuggest.labelNumberSuggestSubmitCaractersShownComment}'>
+							<@input type='text' name='number_suggest_submit_caracters_shown' id='number_suggest_submit_caracters_shown' value='${default_message.numberSuggestSubmitCaractersShown}' maxlength=10 />
+						</@formGroup>
 						<#if workflow_list?has_content && workflow_list?size gt 1>
 							<@formGroup labelFor='id_workflow' labelKey='#i18n{suggest.createSuggest.workflow.label}' helpKey='#i18n{suggest.createSuggest.workflow.label.help}' rows=2>
 								<@select name='id_workflow' items=workflow_list default_value='' />
 							</@formGroup>
 						</#if>
-						<@formGroup labelFor='id_vote_type' labelKey='#i18n{suggest.createSuggest.labelVoteType}' helpKey='#i18n{suggest.createSuggest.labelVoteTypeComment}' mandatory=CHECK>							<@select name='id_vote_type' default_value='-1' items=vote_type_list />						</@formGroup>
-						<@formGroup helpKey='#i18n{suggest.createSuggest.labelDisableVoteComment}'>							<@checkBox labelFor='disable_vote' labelKey='#i18n{suggest.createSuggest.labelDisableVote}' name='disable_vote' id='disable_vote' value='disable_vote' />						</@formGroup>
-						<@formGroup helpKey='#i18n{suggest.createSuggest.labelAuthorizedCommentSubmitComment}'>							<@checkBox labelFor='authorized_comment' labelKey='#i18n{suggest.createSuggest.labelAuthorizedCommentSubmit}' id='authorized_comment' name='authorized_comment' params='onclick="displayAuthorizedComment()"' />						</@formGroup>
-						<@formGroup labelFor='unavailability_message' labelKey='#i18n{suggest.createSuggest.labelUnavailabilityMessage} *'>							<@input type='textarea' name='unavailability_message' id='unavailability_message' rows=4 richtext=true>${default_message.unavailabilityMessage}</@input>						</@formGroup>
+						<@formGroup labelFor='id_vote_type' labelKey='#i18n{suggest.createSuggest.labelVoteType}' helpKey='#i18n{suggest.createSuggest.labelVoteTypeComment}'>
+							<@select name='id_vote_type' default_value='-1' items=vote_type_list />
+						</@formGroup>
+						<@formGroup helpKey='#i18n{suggest.createSuggest.labelDisableVoteComment}'>
+							<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelDisableVote}' name='disable_vote' id='disable_vote' value='disable_vote' />
+						</@formGroup>
+						<@formGroup helpKey='#i18n{suggest.createSuggest.labelAuthorizedCommentSubmitComment}'>
+							<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelAuthorizedCommentSubmit}' id='authorized_comment' name='authorized_comment' value='1' />
+						</@formGroup>
+						<@formGroup labelFor='unavailability_message' labelKey='#i18n{suggest.createSuggest.labelUnavailabilityMessage} *'>
+							<@input type='textarea' name='unavailability_message' id='unavailability_message' rows=4 richtext=true>${default_message.unavailabilityMessage}</@input>
+						</@formGroup>
 					</@tabPanel>
 					<@tabPanel id='panel2' active=false>
 						<@formGroup helpKey='#i18n{suggest.createSuggest.labelActiveSuggestSubmitPaginatorComment}'>
-							<@checkBox labelFor='active_suggest_submit_paginator' labelKey='#i18n{suggest.createSuggest.labelActiveSuggestSubmitPaginator}' name='active_suggest_submit_paginator' id='active_suggest_submit_paginator' value='${yes_value}' checked=true />
+							<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelActiveSuggestSubmitPaginator}' name='active_suggest_submit_paginator' id='active_suggest_submit_paginator' value='${yes_value}' checked=true />
 						</@formGroup>
 						<@formGroup id='nb_submit_per_page' labelFor='number_suggest_submit_per_page' labelKey='#i18n{suggest.createSuggest.labelNumberSuggestSubmitPerPage}' helpKey='#i18n{suggest.createSuggest.labelNumberSuggestSubmitPerPageComment}'>
 							<@input type='text' name='number_suggest_submit_per_page' id='number_suggest_submit_per_page' value='20' maxlength=10 />
 						</@formGroup>
 						<@formGroup labelKey='#i18n{suggest.createSuggest.labelShowBlock}'>
-							<@checkBox labelFor='show_category_block' labelKey='#i18n{suggest.createSuggest.labelCategoryBlock}' name='show_category_block' id='show_category_block' value='show_category_block' checked=true />
-							<@checkBox labelFor='show_top_score_block' labelKey='#i18n{suggest.createSuggest.labelTopScoreBlock}' name='show_top_score_block' id='show_top_score_block' value='show_top_score_block' checked=true />
+							<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelCategoryBlock}' name='show_category_block' id='show_category_block' value='show_category_block' checked=true />
+							<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelTopScoreBlock}' name='show_top_score_block' id='show_top_score_block' value='show_top_score_block' checked=true />
 						</@formGroup>
-						<@formGroup labelFor='number_suggest_submit_in_top_score' title='#i18n{suggest.createSuggest.labelNumberSuggestSubmitInTopScore}' helpKey='#i18n{suggest.createSuggest.labelNumberSuggestSubmitInTopScoreComment}'>
-							<@input type='text' name='number_suggest_submit_in_top_score' id='number_suggest_submit_in_top_score' name='number_suggest_submit_in_top_score' value='${default_message.numberSuggestSubmitInTopScore}' maxlength=10 />
+						<@formGroup labelFor='number_suggest_submit_in_top_score' labelKey='#i18n{suggest.createSuggest.labelNumberSuggestSubmitInTopScore}' helpKey='#i18n{suggest.createSuggest.labelNumberSuggestSubmitInTopScoreComment}'>
+							<@input type='text' name='number_suggest_submit_in_top_score' id='number_suggest_submit_in_top_score' value='${default_message.numberSuggestSubmitInTopScore}' maxlength=10 />
 						</@formGroup>
 						<@formGroup>
-							<@checkBox labelFor='show_top_comment_block' labelKey='#i18n{suggest.createSuggest.labelTopCommentBlock}' name='show_top_comment_block' id='show_top_comment_block' value='show_top_comment_block' checked=true />
+							<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelTopCommentBlock}' name='show_top_comment_block' id='show_top_comment_block' value='show_top_comment_block' checked=true />
 						</@formGroup>
-						<@formGroup labelFor='number_suggest_submit_in_top_comment' title='#i18n{suggest.createSuggest.labelNumberSuggestSubmitInTopComment}' helpKey='#i18n{suggest.createSuggest.labelShowBlockComment}'>
+						<@formGroup labelFor='number_suggest_submit_in_top_comment' labelKey='#i18n{suggest.createSuggest.labelNumberSuggestSubmitInTopComment}' helpKey='#i18n{suggest.createSuggest.labelShowBlockComment}'>
 							<@input type='text' name='number_suggest_submit_in_top_comment' id='number_suggest_submit_in_top_comment' value='${default_message.numberSuggestSubmitInTopComment}' maxlength=10 />
 							<!-- span class="help-text help-suggest">#i18n{suggest.createSuggest.labelNumberSuggestSubmitInTopCommentComment}</span -->
 						</@formGroup>
 						<@formGroup helpKey='#i18n{suggest.createSuggest.labelDisplayCommentInSuggestSubmitListComment}'>
-							<@checkBox labelFor='display_comment_in_suggest_submit_list' labelKey='#i18n{suggest.createSuggest.labelDisplayCommentInSuggestSubmitList}'  name='display_comment_in_suggest_submit_list' id='display_comment_in_suggest_submit_list' value='display_comment_in_suggest_submit_list' />
+							<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelDisplayCommentInSuggestSubmitList}'  name='display_comment_in_suggest_submit_list' id='display_comment_in_suggest_submit_list' value='display_comment_in_suggest_submit_list' />
 						</@formGroup>
 						<@formGroup labelFor='number_comment_display_in_suggest_submit_list' labelKey='#i18n{suggest.createSuggest.labelNumberCommentDisplayInSuggestSubmitList}' helpKey='#i18n{suggest.createSuggest.labelNumberCommentDisplayInSuggestSubmitListComment}'>
 							<@input type='text' name='number_comment_display_in_suggest_submit_list' id='number_comment_display_in_suggest_submit_list' value='3' maxlength=10 />
@@ -55,53 +71,79 @@
 						<@formGroup labelFor='number_char_comment_display_in_suggest_submit_list' labelKey='#i18n{suggest.createSuggest.labelNumberCharCommentDisplayInSuggestSubmitList}' helpKey='#i18n{suggest.createSuggest.labelNumberCharCommentDisplayInSuggestSubmitListComment}'>
 							<@input type='text' name='number_char_comment_display_in_suggest_submit_list' id='number_char_comment_display_in_suggest_submit_list' value='30' maxlength=10 />
 						</@formGroup>
-						<@formGroup labelFor='id_default_sort' labelKey='#i18n{suggest.createSuggest.labelDefaultSort}' helpKey='#i18n{suggest.createSuggest.labelDefaultSortComment}'>							<@select name='id_default_sort' items=suggest_submit_sort_list default_value='-1' />						</@formGroup>
-						<@formGroup labelFor='id_theme_list' labelKey='#i18n{suggest.createSuggest.labelThemeXpage}' helpKey='#i18n{suggest.createSuggest.labelThemeXpageComment}'>							<@select name='id_theme_list' items=theme_list default_value=default_theme />						</@formGroup>
-						<@formGroup labelFor='header' labelKey='#i18n{suggest.createSuggest.labelHeader}' helpKey='#i18n{suggest.createSuggest.labelHeaderComment}'>							<@input type='textarea' name='header' id='header' rows=4 richtext=true />						</@formGroup>
-						<@formGroup labelFor='confirmation_message' labelKey='#i18n{suggest.createSuggest.labelConfirmationMessage}' helpKey='#i18n{suggest.createSuggest.labelConfirmationMessageComment}'>							<@input type='textarea' name='confirmation_message' id='confirmation_message' rows=4 richtext=true />						</@formGroup>
-						<@formGroup labelFor='terms_of_use' labelKey='#i18n{suggest.createSuggest.labelTermsOfUse}' helpKey='#i18n{suggest.createSuggest.labelTermsOfUseComment}'>							<@input type='textarea' name='terms_of_use' id='terms_of_use' rows=4 richtext=true />						</@formGroup>
+						<@formGroup labelFor='id_default_sort' labelKey='#i18n{suggest.createSuggest.labelDefaultSort}' helpKey='#i18n{suggest.createSuggest.labelDefaultSortComment}'>
+							<@select name='id_default_sort' items=suggest_submit_sort_list default_value='-1' />
+						</@formGroup>
+						<@formGroup labelFor='id_theme_list' labelKey='#i18n{suggest.createSuggest.labelThemeXpage}' helpKey='#i18n{suggest.createSuggest.labelThemeXpageComment}'>
+							<@select name='id_theme_list' items=theme_list default_value=default_theme />
+						</@formGroup>
+						<@formGroup labelFor='header' labelKey='#i18n{suggest.createSuggest.labelHeader}' helpKey='#i18n{suggest.createSuggest.labelHeaderComment}'>
+							<@input type='textarea' name='header' id='header' rows=4 richtext=true />
+						</@formGroup>
+						<@formGroup labelFor='confirmation_message' labelKey='#i18n{suggest.createSuggest.labelConfirmationMessage}' helpKey='#i18n{suggest.createSuggest.labelConfirmationMessageComment}'>
+							<@input type='textarea' name='confirmation_message' id='confirmation_message' rows=4 richtext=true />
+						</@formGroup>
+						<@formGroup labelFor='terms_of_use' labelKey='#i18n{suggest.createSuggest.labelTermsOfUse}' helpKey='#i18n{suggest.createSuggest.labelTermsOfUseComment}'>
+							<@input type='textarea' name='terms_of_use' id='terms_of_use' rows=4 richtext=true />
+						</@formGroup>
 					</@tabPanel>
 					<@tabPanel id='panel3' active=false>
-						<@formGroup labelFor='workgroup' labelKey='#i18n{suggest.createSuggest.labelWorkgroup}' helpKey='#i18n{suggest.createSuggest.labelWorkgroupComment}'>							<@select name='workgroup' items=user_workgroup_list default_value='' />						</@formGroup>
-						<@formGroup labelFor='role' labelKey='#i18n{suggest.createSuggest.labelRole}' helpKey='#i18n{suggest.createSuggest.labelRoleComment}'>							<@select name='role' default_value='${default_value_role}' items=role_list />						</@formGroup>
+						<@formGroup labelFor='workgroup' labelKey='#i18n{suggest.createSuggest.labelWorkgroup}' helpKey='#i18n{suggest.createSuggest.labelWorkgroupComment}'>
+							<@select name='workgroup' items=user_workgroup_list default_value='' />
+						</@formGroup>
+						<@formGroup labelFor='role' labelKey='#i18n{suggest.createSuggest.labelRole}' helpKey='#i18n{suggest.createSuggest.labelRoleComment}'>
+							<@select name='role' default_value='${default_value_role}' items=role_list />
+						</@formGroup>
 						<@formGroup helpKey='#i18n{suggest.createSuggest.labelDisableNewSuggestSubmitComment}'>
-							<@checkBox labelFor='disable_new_suggest_submit' labelKey='#i18n{suggest.createSuggest.labelDisableNewSuggestSubmit}' name='disable_new_suggest_submit' id='disable_new_suggest_submit' value='${yes_value}' />
+							<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelDisableNewSuggestSubmit}' name='disable_new_suggest_submit' id='disable_new_suggest_submit' value='${yes_value}' />
 						</@formGroup>
 						<@formGroup helpKey='#i18n{suggest.createSuggest.labelDisableNewCommentSubmitComment}'>
-							<@checkBox labelFor='disable_new_comment' labelKey='#i18n{suggest.createSuggest.labelDisableNewCommentSubmit}' name='disable_new_comment' id='disable_new_comment' value='${yes_value}' params='onclick="displayId(\'p_id_mailing_list_comment\')' />
+							<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelDisableNewCommentSubmit}' name='disable_new_comment' id='disable_new_comment' value='${yes_value}' />
 						</@formGroup>
 						<@formGroup helpKey='#i18n{suggest.createSuggest.labelEnableReportsComment}'>
-							<@checkBox labelFor='enable_reports' labelKey='#i18n{suggest.createSuggest.labelEnableReports}' name='enable_reports' id='enable_reports' value='${yes_value}' />
+							<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelEnableReports}' name='enable_reports' id='enable_reports' value='${yes_value}' />
 						</@formGroup>
 						<@formGroup helpKey='#i18n{suggest.createSuggest.labelEnableTermsOfUseComment}'>
-							<@checkBox labelFor='enable_terms_of_use' labelKey='#i18n{suggest.createSuggest.labelEnableTermsOfUse}' name='enable_terms_of_use' id='enable_terms_of_use' value='${yes_value}' />
+							<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelEnableTermsOfUse}' name='enable_terms_of_use' id='enable_terms_of_use' value='${yes_value}' />
 						</@formGroup>
 						<@formGroup helpKey='#i18n{suggest.createSuggest.labelLimitNumberVoteComment}'>
-							<@checkBox labelFor='limit_number_vote' labelKey='#i18n{suggest.createSuggest.labelLimitNumberVote}' name='limit_number_vote' id='limit_number_vote' value='${yes_value}' />
+							<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelLimitNumberVote}' name='limit_number_vote' id='limit_number_vote' value='${yes_value}' />
 						</@formGroup>
 						<#if authentification_enable>
 							<@formGroup labelKey='#i18n{suggest.createSuggest.labelRequiredAuthentification}'>
-								<@checkBox labelFor='active_suggest_submit_authentification' labelKey='#i18n{suggest.createSuggest.labelRequiredAuthentificationCreation}' name='active_suggest_submit_authentification' id='active_suggest_submit_authentification' value='${yes_value}' />
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelRequiredAuthentificationCreation}' name='active_suggest_submit_authentification' id='active_suggest_submit_authentification' value='${yes_value}' />
 							</@formGroup>
 							<@formGroup helpKey='#i18n{suggest.createSuggest.labelRequiredAuthentificationComment}'>
-								<@checkBox labelFor='active_vote_authentification' labelKey='#i18n{suggest.createSuggest.labelRequiredAuthentificationVote}' name='active_vote_authentification' id='active_vote_authentification' value='${yes_value}' />
-								<@checkBox labelFor='active_comment_authentification' labelKey='#i18n{suggest.createSuggest.labelRequiredAuthentificationCommentSubmit}' name='active_comment_authentification' id='active_comment_authentification' value='active_comment_authentification' />
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelRequiredAuthentificationVote}' name='active_vote_authentification' id='active_vote_authentification' value='${yes_value}' />
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelRequiredAuthentificationCommentSubmit}' name='active_comment_authentification' id='active_comment_authentification' value='active_comment_authentification' />
 							</@formGroup>
 						</#if>
 					</@tabPanel>
 					<@tabPanel id='panel4' active=false>
 						<@fieldSet>
 							<@formGroup labelKey='#i18n{suggest.createSuggest.labelMailSuggestSubmit}'>
-								<@checkBox labelFor='enable_mail_new_suggest_submit' labelKey='#i18n{suggest.createSuggest.labelMailNewSuggestSubmit}' name='enable_mail_new_suggest_submit' id='enable_mail_new_suggest_submit' value='${yes_value}' />
-								<@checkBox labelFor='enable_mail_new_comment_submit' labelKey='#i18n{suggest.createSuggest.labelMailNewCommentSubmit}' name='enable_mail_new_comment_submit' id='enable_mail_new_comment_submit' value='${yes_value}' />
-								<@checkBox labelFor='enable_mail_new_reported_submit' labelKey='#i18n{suggest.createSuggest.labelMailNewReportedSubmit}' name='enable_mail_new_reported_submit' id='enable_mail_new_reported_submit' value='${yes_value}' />
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelMailNewSuggestSubmit}' name='enable_mail_new_suggest_submit' id='enable_mail_new_suggest_submit' value='${yes_value}' />
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelMailNewCommentSubmit}' name='enable_mail_new_comment_submit' id='enable_mail_new_comment_submit' value='${yes_value}' />
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelMailNewReportedSubmit}' name='enable_mail_new_reported_submit' id='enable_mail_new_reported_submit' value='${yes_value}' />
 							</@formGroup>
-							<@formGroup labelFor='id_mailing_list_suggest_submit' labelKey='#i18n{suggest.createSuggest.labelMailingList}' helpKey='#i18n{suggest.createSuggest.labelMailingListComment}'>								<@select name='id_mailing_list_suggest_submit' items=mailing_list default_value='-1' />							</@formGroup>
-							<@formGroup labelFor='notification_new_comment_sender_name' labelKey='#i18n{suggest.createSuggest.labelNotificationNewCommentSenderName}'>								<@input type='text' name='notification_new_comment_sender_name' id='notification_new_comment_sender_name' maxlength=255 value='' />							</@formGroup>
-							<@formGroup labelFor='notification_new_comment_title' labelKey='#i18n{suggest.createSuggest.labelNotificationNewCommentTitle}' mandatory=true>								<@input type='textarea' name='notification_new_comment_title' id='notification_new_comment_title' richtext=true rows=10>${default_message.notificationNewCommentTitle!}</@input>							</@formGroup>
-							 <@formGroup labelFor='notification_new_comment_body' labelKey='#i18n{suggest.createSuggest.labelNotificationNewCommentBody}' mandatory=true>								<@input type='textarea' name='notification_new_comment_body' id='notification_new_comment_body' richtext=true rows=10>${default_message.notificationNewCommentBody!}</@input>							</@formGroup>
-							<@formGroup labelFor='notification_new_suggest_submit_sender_name' labelKey='#i18n{suggest.createSuggest.labelNotificationNewSuggestSubmitSenderName}'>								<@input type='text' name='notification_new_suggest_submit_sender_name' id='notification_new_suggest_submit_sender_name' maxlength=255 value='' />							</@formGroup>
-							 <@formGroup labelFor='notification_new_suggest_submit_title' labelKey='#i18n{suggest.createSuggest.labelNotificationNewSuggestSubmitTitle}' mandatory=true>								<@input type='textarea' name='notification_new_suggest_submit_title' id='notification_new_suggest_submit_title' richtext=true rows=10>${default_message.notificationNewSuggestSubmitTitle!}</@input>							</@formGroup>
+							<@formGroup labelFor='id_mailing_list_suggest_submit' labelKey='#i18n{suggest.createSuggest.labelMailingList}' helpKey='#i18n{suggest.createSuggest.labelMailingListComment}'>
+								<@select name='id_mailing_list_suggest_submit' items=mailing_list default_value='-1' />
+							</@formGroup>
+							<@formGroup labelFor='notification_new_comment_sender_name' labelKey='#i18n{suggest.createSuggest.labelNotificationNewCommentSenderName}'>
+								<@input type='text' name='notification_new_comment_sender_name' id='notification_new_comment_sender_name' maxlength=255 value='' />
+							</@formGroup>
+							<@formGroup labelFor='notification_new_comment_title' labelKey='#i18n{suggest.createSuggest.labelNotificationNewCommentTitle}' mandatory=true>
+								<@input type='textarea' name='notification_new_comment_title' id='notification_new_comment_title' richtext=true rows=10>${default_message.notificationNewCommentTitle!}</@input>
+							</@formGroup>
+							 <@formGroup labelFor='notification_new_comment_body' labelKey='#i18n{suggest.createSuggest.labelNotificationNewCommentBody}' mandatory=true>
+								<@input type='textarea' name='notification_new_comment_body' id='notification_new_comment_body' richtext=true rows=10>${default_message.notificationNewCommentBody!}</@input>
+							</@formGroup>
+							<@formGroup labelFor='notification_new_suggest_submit_sender_name' labelKey='#i18n{suggest.createSuggest.labelNotificationNewSuggestSubmitSenderName}'>
+								<@input type='text' name='notification_new_suggest_submit_sender_name' id='notification_new_suggest_submit_sender_name' maxlength=255 value='' />
+							</@formGroup>
+							 <@formGroup labelFor='notification_new_suggest_submit_title' labelKey='#i18n{suggest.createSuggest.labelNotificationNewSuggestSubmitTitle}' mandatory=true>
+								<@input type='textarea' name='notification_new_suggest_submit_title' id='notification_new_suggest_submit_title' richtext=true rows=10>${default_message.notificationNewSuggestSubmitTitle!}</@input>
+							</@formGroup>
 							<@formGroup labelFor='notification_new_suggest_submit_body' labelKey='#i18n{suggest.createSuggest.labelNotificationNewSuggestSubmitBody}' mandatory=true>
 								<@input type='textarea' name='notification_new_suggest_submit_body' id='notification_new_suggest_submit_body' richtext=true rows=10>${default_message.notificationNewSuggestSubmitBody!}</@input>
 							</@formGroup>
@@ -116,21 +158,23 @@
 								<@input type='file' id='image_source' name='image_source' maxlength=100 />
 							</@formGroup>
 						</@fieldSet>
-						<@formGroup labelFor='number_day_required' labelKey='#i18n{suggest.createSuggest.labelNumberDayRequired}' helpKey='#i18n{suggest.createSuggest.labelNumberDayRequiredComment}'>							<@input type='text' name='number_day_required' id='number_day_required' value='' />						</@formGroup>
+						<@formGroup labelFor='number_day_required' labelKey='#i18n{suggest.createSuggest.labelNumberDayRequired}' helpKey='#i18n{suggest.createSuggest.labelNumberDayRequiredComment}'>
+							<@input type='text' name='number_day_required' id='number_day_required' value='' />
+						</@formGroup>
 						<#if is_active_captcha>
 							<@formGroup helpKey='#i18n{suggest.createSuggest.labelActiveCaptchaComment}'>
-								<@checkBox labelFor='active_captcha' labelKey='#i18n{suggest.createSuggest.labelActiveCaptcha}' name='active_captcha' id='active_captcha' value='${yes_value}' />
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelActiveCaptcha}' name='active_captcha' id='active_captcha' value='${yes_value}' />
 							</@formGroup>
 						</#if>
 						<@formGroup helpKey='#i18n{suggest.createSuggest.labelActiveEditorBbcodeOnCommentComment}'>
-							<@checkBox labelFor='active_editor_bbcode_on_comment' labelKey='#i18n{suggest.createSuggest.labelActiveEditorBbcodeOnComment}' name='active_editor_bbcode_on_comment' id='active_editor_bbcode_on_comment' value='${yes_value}' />
+							<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelActiveEditorBbcodeOnComment}' name='active_editor_bbcode_on_comment' id='active_editor_bbcode_on_comment' value='${yes_value}' />
 						</@formGroup>
 					</@tabPanel>
 					
 					<@formGroup>
-						<@button type='submit' name='save' title='&nbsp;#i18n{suggest.createSuggest.buttonSave}' buttonIcon='save' />
+						<@button type='submit' name='save' title='&nbsp;#i18n{suggest.createSuggest.buttonSave}' buttonIcon='device-floppy' />
 						<@button type='submit' name='apply' title='&nbsp;#i18n{suggest.modifySuggest.buttonApply}' buttonIcon='check' />
-						<@button type='submit' name='cancel' title='&nbsp;#i18n{suggest.createSuggest.buttonCancel}' buttonIcon='remove' color='default' />
+						<@button type='submit' name='cancel' title='&nbsp;#i18n{suggest.createSuggest.buttonCancel}' buttonIcon='x' color='light' />
 					</@formGroup>
 				</@tabContent>
 			</@tabs>
@@ -138,23 +182,11 @@
 	</@columns>
 </@row>
 
+<script src="js/admin/plugins/suggest/suggest.js"></script>
 <script>
-$(function(){
-	if ( $("#active_suggest_submit_paginator").prop('checked') == false ){
-		$("#nb_submit_per_page").toggle();
-	}
-	// For multi selection
-	$("#active_suggest_submit_paginator").change(function(){
-		$("#nb_submit_per_page").toggle();
-	});
-
-	// Function to activate the tab
-  function activateTab() {
-    var activeTab = $('[href=' + window.location.hash.replace('/', '') + ']');
-    activeTab && activeTab.tab('show');
-  }
-	// Trigger when the page loads
-  activateTab();
+document.addEventListener( 'DOMContentLoaded', function( ){
+	suggestShowWhenChecked( 'active_suggest_submit_paginator', '#nb_submit_per_page' );
+	suggestActivateTab( );
 });
 </script>
 <#include "/admin/util/editor/editor.html" />

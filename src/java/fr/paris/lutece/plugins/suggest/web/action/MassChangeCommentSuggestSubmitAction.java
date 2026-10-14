@@ -33,11 +33,15 @@
  */
 package fr.paris.lutece.plugins.suggest.web.action;
 
-import fr.paris.lutece.plugins.suggest.business.Suggest;
+import fr.paris.lutece.api.user.User;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
-import fr.paris.lutece.plugins.suggest.service.SuggestSubmitService;
+import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
 import fr.paris.lutece.plugins.suggest.service.SuggestResourceIdService;
+import fr.paris.lutece.plugins.suggest.service.SuggestService;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.plugins.suggest.web.SuggestJspBean;
 import fr.paris.lutece.portal.business.user.AdminUser;
@@ -46,7 +50,6 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.web.pluginaction.AbstractPluginAction;
 import fr.paris.lutece.portal.web.pluginaction.DefaultPluginActionResult;
 import fr.paris.lutece.portal.web.pluginaction.IPluginActionResult;
@@ -55,16 +58,21 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
  * MassChangeCommentSuggestSubmitAction
  *
  */
+@ApplicationScoped
+@Named( "suggest.massChangeCommentSuggestSubmitAction" )
 public class MassChangeCommentSuggestSubmitAction extends AbstractPluginAction<SuggestAdminSearchFields> implements ISuggestAction
 {
+    @Inject
+    private ISuggestSubmitService _suggestSubmitService;
+
     private static final String ACTION_NAME = "Mass Change Comment SuggestSubmit ";
     private static final String MESSAGE_YOU_MUST_SELECT_SUGGEST_SUBMIT = "suggest.message.youMustSelectSuggestSubmit";
     private static final String PARAMETER_MASS_DISABLE_ACTION = "mass_disable_comment_action";
@@ -126,11 +134,10 @@ public class MassChangeCommentSuggestSubmitAction extends AbstractPluginAction<S
                 {
                     nIdSuggestSubmit = SuggestUtils.getIntegerParameter( strIdSuggestSubmit );
 
-                    SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
+                    SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
 
                     if ( ( suggestSubmit == null )
-                            || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, SuggestUtils.EMPTY_STRING + suggestSubmit.getSuggest( ).getIdSuggest( ),
-                                    SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, adminUser ) )
+                            || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) adminUser ) )
                     {
                         throw new AccessDeniedException( "Access denied" );
                     }
@@ -146,9 +153,9 @@ public class MassChangeCommentSuggestSubmitAction extends AbstractPluginAction<S
                 {
                     nIdSuggestSubmit = SuggestUtils.getIntegerParameter( strIdSuggestSubmittoUpdate );
 
-                    SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
+                    SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
                     suggestSubmit.setDisableComment( isDisabledVote );
-                    SuggestSubmitService.getService( ).update( suggestSubmit, getPlugin( ) );
+                    _suggestSubmitService.update( suggestSubmit, getPlugin( ) );
                 }
             }
         }

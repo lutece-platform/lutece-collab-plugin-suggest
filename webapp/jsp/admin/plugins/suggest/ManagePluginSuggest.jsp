@@ -1,9 +1,9 @@
 <%@ page errorPage="../../ErrorPage.jsp" %>
+
+${ pageContext.setAttribute( 'strContent', suggestManagePluginJspBean.processController( pageContext.request , pageContext.response ) ) }
+
 <jsp:include page="../../AdminHeader.jsp" />
 
-<jsp:useBean id="suggestManagePluginSuggest" scope="session" class="fr.paris.lutece.plugins.suggest.web.ManageSuggestJspBean" />
-
-<% suggestManagePluginSuggest.init( request, fr.paris.lutece.plugins.suggest.web.ManageSuggestJspBean.RIGHT_MANAGE_SUGGEST_LIKE ); %>
-<%= suggestManagePluginSuggest.getManageSuggest( request ) %>
+${ pageContext.getAttribute( 'strContent' ) }
 
 <%@ include file="../../AdminFooter.jsp" %>

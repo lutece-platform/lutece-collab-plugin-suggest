@@ -34,6 +34,10 @@
 package fr.paris.lutece.plugins.suggest.service;
 
 import fr.paris.lutece.plugins.suggest.business.ImageResourceHome;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Initialized;
+import jakarta.enterprise.event.Observes;
+import jakarta.servlet.ServletContext;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.image.ImageResourceManager;
 import fr.paris.lutece.portal.service.image.ImageResourceProvider;
@@ -44,27 +48,20 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
  * This classe provide services for Category
  *
  */
+@ApplicationScoped
 public class ImageService implements ImageResourceProvider
 {
-    private static ImageService _singleton = new ImageService( );
     private static final String IMAGE_RESOURCE_TYPE_ID = "image_suggest";
 
     /**
-     * Creates a new instance of CategoryService
+     * Registers the image provider when the application starts.
+     *
+     * @param context
+     *            the servlet context
      */
-    ImageService( )
+    public void initializedService( @Observes @Initialized( ApplicationScoped.class ) ServletContext context )
     {
         ImageResourceManager.registerProvider( this );
-    }
-
-    /**
-     * Get the unique instance of the service
-     *
-     * @return The unique instance
-     */
-    public static ImageService getInstance( )
-    {
-        return _singleton;
     }
 
     /**

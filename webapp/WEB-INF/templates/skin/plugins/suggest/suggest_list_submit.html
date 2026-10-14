@@ -5,7 +5,7 @@
       <div class="row justify-content-end">
         <div class="col-auto">
           <p>
-            <small class="text-info" style="background-color:${suggest_submit_display.suggest_submit.category.color!''};">
+            <small class="text-dark"><span class="d-inline-block rounded-circle me-1 align-middle" style="width:.6rem;height:.6rem;background-color:${suggest_submit_display.suggest_submit.category.color!''}"></span>
               ${suggest_submit_display.suggest_submit.category.title}
             </small>
           </p>
@@ -21,11 +21,11 @@
         </#if>
       </a>
       <#if authorized_vote && !suggest_submit_display.suggest_submit.disableVote && suggest_submit_display.suggest_submit.numberScore?exists>
-        <span class="label suggest-score label-info float-right">
+        <span class="badge bg-secondary suggest-score float-end">
           #i18n{suggest.manageSuggestSubmit.rowNumberScore}&nbsp;${suggest_submit_display.suggest_submit.numberScore}
         </span>
         &nbsp;
-        <div class="btn-group float-right">
+        <div class="btn-group float-end">
           <#if suggest_submit_display.suggest_submit_vote_type?exists>
             ${suggest_submit_display.suggest_submit_vote_type}
           </#if>
@@ -36,16 +36,16 @@
     <#if suggest_submit_display.lutece_user?exists>
       <a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&lutece_user_name_filter=${suggest_submit_display.lutece_user}" title="#i18n{suggest.suggestListSubmit.labelFilterByUserName}">
         <#if suggest_submit_display.avatar?has_content>
-        <img class="avatar avatar-suggest img-circle" src="${suggest_submit_display.avatar}" alt="avatar provided by gravatar.com" /><#else><i class="glyphicon glyphicon-user"></i></#if></a>
+        <img class="avatar avatar-suggest img-circle" src="${suggest_submit_display.avatar}" alt="avatar provided by gravatar.com" /><#else><@cIcon name='user' /></#if></a>
       <#if suggest_submit_display.lutece_user?exists>
         ${suggest_submit_display.lutece_user!""}
       <#else>
         ${suggest_submit_display.lutece_user.getUserInfo("user.name.given")} ${suggest_submit_display.lutece_user.getUserInfo("user.name.family")}
       </#if> |
     </#if>
-    <i class="glyphicon glyphicon-calendar"></i> ${suggest_submit_display.suggest_submit.dateResponse} |
+    <@cIcon name='calendar' /> ${suggest_submit_display.suggest_submit.dateResponse} |
       <#if authorized_comment && !suggest_submit_display.suggest_submit.disableComment>
-        <i class="fa fa-comments"></i>
+        <@cIcon name='messages' />
         <#if suggest_submit_display.suggest_submit.numberCommentEnable &gt; 0 >
           <a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;action=view_suggest_submit#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
             ${suggest_submit_display.suggest_submit.numberCommentEnable} #i18n{suggest.suggestListSubmit.labelComments}
@@ -56,12 +56,12 @@
       </#if>
       <#if enable_suggest_reports>
          |<a class="btn btn-link" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;action=create_report#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
-          <i class="fa fa-flag"></i> #i18n{suggest.suggestListSubmit.labelReport}
+          <@cIcon name='flag' /> #i18n{suggest.suggestListSubmit.labelReport}
         </a>
       </#if>
       <#if suggest_submit_display.suggest_submit.suggestSubmitType?exists>
-        <span class="label label-info" style="background-color:${suggest_submit_display.suggest_submit.suggestSubmitType.color!};">
-          <a href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_filter_type=${suggest_submit_display.suggest_submit.suggestSubmitType.idType}&action=view_suggest_submit_list" style="color:#fff;">
+        <span class="badge text-dark border"><span class="d-inline-block rounded-circle me-1 align-middle" style="width:.6rem;height:.6rem;background-color:${suggest_submit_display.suggest_submit.suggestSubmitType.color!}"></span>
+          <a href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_filter_type=${suggest_submit_display.suggest_submit.suggestSubmitType.idType}&action=view_suggest_submit_list">
           <#if suggest_submit_display.suggest_submit.suggestSubmitType.idImageResource?has_content>
             <img class="img-circle img-thumbnail thumblist-small" src="image?resource_type=image_suggest&id=${suggest_submit_display.suggest_submit.suggestSubmitType.idImageResource}" title="${suggest_submit_display.suggest_submit.suggestSubmitType.name} " alt="${suggest_submit_display.suggest_submit.suggestSubmitType.name} ">
           </#if>
@@ -74,8 +74,8 @@
       <a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;action=view_suggest_submit#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
       <#if suggest_submit_display.suggest_submit.suggestSubmitValueShowInTheList?exists>
         <#if suggest_submit_display.suggest_submit.suggestSubmitValueShowInTheList?length &gt; 500>
-          <!-- span class="float-right badge badge-inverse">
-            <i class="glyphicon glyphicon-chevron-up"></i>
+          <!-- span class="float-end badge badge-inverse">
+            <@cIcon name='chevron-up' />
           </span -->
           ${suggest_submit_display.suggest_submit.suggestSubmitValueShowInTheList}
         <#else>
@@ -84,8 +84,8 @@
       </#if>
       </a>
     </div>
-    <p class="float-right d-none">
-      <a class="btn btn-default" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;suggest_comment=1&amp;action=view_suggest_submit#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
+    <p class="float-end d-none">
+      <a class="btn btn-secondary" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit_display.suggest_submit.idSuggestSubmit}&amp;suggest_comment=1&amp;action=view_suggest_submit#suggest${suggest_submit_display.suggest_submit.idSuggestSubmit}">
         #i18n{suggest.suggestListSubmit.labelReadMore} &gt;
       </a>
     </p>
@@ -99,7 +99,7 @@
           <#list suggest_submit_display.suggest_submit.comments as comment>
             <#if nbComments <= number_comments>
               <li>
-                <i class="fa fa-comment-o"></i>
+                <@cIcon name='message' />
                 <#if comment.value?length <= cumber_char_comments>
                   ${comment.value[0..]}
                 <#else>
@@ -122,18 +122,18 @@
         #i18n{suggest.suggestListSubmit.paginator.labelResultsRange} :
         <strong>${paginator.rangeMin} - ${paginator.rangeMax} / ${paginator.itemsCount}</strong>
       </div>
-      <div class="col text-right">
-        <@pagination paginator=paginator />
+      <div class="col text-end">
+        <@cPagination paginator=paginator />
       </div>
     </#if>
   </div>
 </#if>
 <br>
 <script>
-$( function () {
-    var toGo = location.hash;
-    if( toGo !=''){
-        $('html, body').animate( {'scrollTop':$(toGo).offset().top - 120 },0 );
+document.addEventListener( 'DOMContentLoaded', function( ){
+    var target = location.hash ? document.getElementById( location.hash.substring( 1 ) ) : null;
+    if ( target ) {
+        window.scrollTo( 0, target.getBoundingClientRect( ).top + window.scrollY - 120 );
     }
 });
 </script>

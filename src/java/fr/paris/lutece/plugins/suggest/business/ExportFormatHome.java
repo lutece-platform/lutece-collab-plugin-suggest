@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.portal.service.html.XmlTransformerService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
@@ -46,7 +46,7 @@ import java.util.List;
 public final class ExportFormatHome
 {
     // Static variable pointed at the DAO instance
-    private static IExportFormatDAO _dao = SpringContextService.getBean( "suggest.exportFormatDAO" );
+    private static IExportFormatDAO _dao = CDI.current( ).select( IExportFormatDAO.class ).get( );
 
     /**
      * Private constructor - this class need not be instantiated

@@ -1,3 +1,7 @@
+-- liquibase formatted sql
+-- changeset suggest:update_db_suggest-221-223.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_suggest' AND column_name = 'active_editor_bbcode'
 --
 -- Insert action for updating all suggest submit
 --

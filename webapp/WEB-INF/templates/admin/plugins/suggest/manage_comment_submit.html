@@ -1,4 +1,8 @@
-<section class="content">
+<@pageContainer>
+	<@pageColumn>
+		<@pageHeader title='${suggest.title!}'>
+			<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmit&id_suggest=${suggest.idSuggest}' buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' hideTitle=['xs','sm','md'] />
+		</@pageHeader>
 	<@row>
 		<@columns>
 			<@box>
@@ -15,28 +19,34 @@
 				</#assign>
 				<@boxHeader title=boxHeaderTitle>
 					<#if suggest_submit.suggestSubmitState.number=disable_state_number>
-						<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${waiting_for_publish_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}' buttonIcon='info-circle' />
-						<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${publish_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altPublish}' buttonIcon='check' />
+						<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#${suggest_submit.idSuggestSubmit}' class='d-inline'><@input type='hidden' name='action' value='changeSuggestSubmitState' /><@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' /><@input type='hidden' name='state_number' value='${waiting_for_publish_state_number}' /><@input type='hidden' name='comment' value='comment' /><@button type='submit'  title='#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}' buttonIcon='player-pause' color='warning' size='sm' hideTitle=['all'] /></@tform>
+						<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#${suggest_submit.idSuggestSubmit}' class='d-inline'><@input type='hidden' name='action' value='changeSuggestSubmitState' /><@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' /><@input type='hidden' name='state_number' value='${publish_state_number}' /><@input type='hidden' name='comment' value='comment' /><@button type='submit'  title='#i18n{suggest.manageSuggestSubmit.altPublish}' buttonIcon='check' color='success' size='sm' hideTitle=['all'] /></@tform>
 					<#elseif suggest_submit.suggestSubmitState.number=waiting_for_publish_state_number >
-						<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${disable_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altDisable}' buttonIcon='pause' />
-						 <@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${publish_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altPublish}' buttonIcon='check' />
+						<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#${suggest_submit.idSuggestSubmit}' class='d-inline'><@input type='hidden' name='action' value='changeSuggestSubmitState' /><@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' /><@input type='hidden' name='state_number' value='${disable_state_number}' /><@input type='hidden' name='comment' value='comment' /><@button type='submit'  title='#i18n{suggest.manageSuggestSubmit.altDisable}' buttonIcon='x' color='danger' size='sm' hideTitle=['all'] /></@tform>
+						 <@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#${suggest_submit.idSuggestSubmit}' class='d-inline'><@input type='hidden' name='action' value='changeSuggestSubmitState' /><@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' /><@input type='hidden' name='state_number' value='${publish_state_number}' /><@input type='hidden' name='comment' value='comment' /><@button type='submit'  title='#i18n{suggest.manageSuggestSubmit.altPublish}' buttonIcon='check' color='success' size='sm' hideTitle=['all'] /></@tform>
 						<#elseif suggest_submit.suggestSubmitState.number=publish_state_number >
-						<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${disable_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altDisable}' buttonIcon='remove' />
-						<@aButton href='jsp/admin/plugins/suggest/DoChangeSuggestSubmitState.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}&state_number=${waiting_for_publish_state_number}&comment=comment#${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}' buttonIcon='check' />
+						<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#${suggest_submit.idSuggestSubmit}' class='d-inline'><@input type='hidden' name='action' value='changeSuggestSubmitState' /><@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' /><@input type='hidden' name='state_number' value='${disable_state_number}' /><@input type='hidden' name='comment' value='comment' /><@button type='submit'  title='#i18n{suggest.manageSuggestSubmit.altDisable}' buttonIcon='x' color='danger' size='sm' hideTitle=['all'] /></@tform>
+						<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#${suggest_submit.idSuggestSubmit}' class='d-inline'><@input type='hidden' name='action' value='changeSuggestSubmitState' /><@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' /><@input type='hidden' name='state_number' value='${waiting_for_publish_state_number}' /><@input type='hidden' name='comment' value='comment' /><@button type='submit'  title='#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}' buttonIcon='player-pause' color='warning' size='sm' hideTitle=['all'] /></@tform>
 					</#if>
-					<@aButton href='jsp/admin/plugins/suggest/ConfirmRemoveSuggestSubmit.jsp?id_suggest_submit=${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altDelete}' buttonIcon='trash' />
+					<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=confirmRemoveSuggestSubmit&id_suggest_submit=${suggest_submit.idSuggestSubmit}' title='#i18n{suggest.manageSuggestSubmit.altDelete}' buttonIcon='trash' color='danger' size='sm' hideTitle=['all'] />
 					<#if suggest_submit_prev!=-1>
-					<@aButton href='jsp/admin/plugins/suggest/ManageCommentSubmit.jsp?id_suggest_submit=${suggest_submit_prev}' title='#i18n{suggest.manageCommentSubmit.altPrevSuggestSubmit}' buttonIcon='arrow-circle-o-left' />
+					<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageCommentSubmit&id_suggest_submit=${suggest_submit_prev}' title='#i18n{suggest.manageCommentSubmit.altPrevSuggestSubmit}' buttonIcon='circle-arrow-left' color='light' size='sm' hideTitle=['all'] />
 					</#if>
 					<#if suggest_submit_next!=-1>
-					<@aButton href='jsp/admin/plugins/suggest/ManageCommentSubmit.jsp?id_suggest_submit=${suggest_submit_next}' title='#i18n{suggest.manageCommentSubmit.altNextSuggestSubmit}' buttonIcon='arrow-circle-o-right' />
+					<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageCommentSubmit&id_suggest_submit=${suggest_submit_next}' title='#i18n{suggest.manageCommentSubmit.altNextSuggestSubmit}' buttonIcon='circle-arrow-right' color='light' size='sm' hideTitle=['all'] />
 					</#if>
 				</@boxHeader>
 				<@boxBody>
-					<@tform action='jsp/admin/plugins/suggest/ManageCommentSubmit.jsp' id='filter'>
-						<@formGroup labelFor='id_comment_state' labelKey='#i18n{suggest.manageCommentSubmit.labelState}'>							<@select name='id_comment_state' default_value=comment_state_selected?string items=comment_state_list />						</@formGroup>
-						<@formGroup labelFor='id_contains_sub_comment_disable' labelKey='#i18n{suggest.manageCommentSubmit.labelContainsSubCommentDisable}'>							<@select name='id_contains_sub_comment_disable' default_value=comment_contains_sub_comment_disable_selected?string items=comment_contains_sub_comment_disable_list  />						</@formGroup>
-						<@formGroup labelFor='id_comment_sort' labelKey='#i18n{suggest.manageCommentSubmit.labelSort}'>							<@select name='id_comment_sort' default_value=comment_sort_selected?string items=comment_sort_list />						</@formGroup>
+					<@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp' id='filter'><@input type='hidden' name='view' value='manageCommentSubmit' />
+						<@formGroup labelFor='id_comment_state' labelKey='#i18n{suggest.manageCommentSubmit.labelState}'>
+							<@select name='id_comment_state' default_value=comment_state_selected?string items=comment_state_list />
+						</@formGroup>
+						<@formGroup labelFor='id_contains_sub_comment_disable' labelKey='#i18n{suggest.manageCommentSubmit.labelContainsSubCommentDisable}'>
+							<@select name='id_contains_sub_comment_disable' default_value=comment_contains_sub_comment_disable_selected?string items=comment_contains_sub_comment_disable_list  />
+						</@formGroup>
+						<@formGroup labelFor='id_comment_sort' labelKey='#i18n{suggest.manageCommentSubmit.labelSort}'>
+							<@select name='id_comment_sort' default_value=comment_sort_selected?string items=comment_sort_list />
+						</@formGroup>
 						<@formGroup>
 							<@button type='submit' title='#i18n{suggest.manageCommentSubmit.buttonSearch}' buttonIcon='filter' />
 						</@formGroup>
@@ -55,14 +65,14 @@
 						</#if>
 					</#if>
 					
-					#i18n{suggest.manageCommentSubmit.rowDateSuggestSubmit}: <strong>${suggest_submit.dateResponse?date?string.short}</strong>
+					#i18n{suggest.manageCommentSubmit.rowDateSuggestSubmit}: <strong>${(suggest_submit.dateResponse?date?string.short)!}</strong>
 					#i18n{suggest.manageCommentSubmit.rowStateSuggestSubmit}:
 					<#if suggest_submit.suggestSubmitState.number=publish_state_number>
 						<@tag color='success' title='#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState}'> <@icon style='check' /> #i18n{suggest.manageSuggestSubmit.altPublish}</@tag>
 					<#elseif suggest_submit.suggestSubmitState.number=waiting_for_publish_state_number>
-						<@tag color='warning' title='#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState}'><@icon style='pause' /> #i18n{suggest.manageSuggestSubmit.altWaitingForPublish}</@tag>
+						<@tag color='warning' title='#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState}'><@icon style='player-pause' /> #i18n{suggest.manageSuggestSubmit.altWaitingForPublish}</@tag>
 					<#else>
-						<@tag color='danger' title='#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState}'><@icon style='times' />#i18n{suggest.manageSuggestSubmit.altDisable}</@tag>
+						<@tag color='danger' title='#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState}'><@icon style='x' />#i18n{suggest.manageSuggestSubmit.altDisable}</@tag>
 					</#if>
 					
 					<#if suggest.suggestSubmitTypes?has_content && suggest.suggestSubmitTypes?size &gt; 0 >
@@ -77,7 +87,7 @@
 					<p>#i18n{suggest.manageCommentSubmit.rowCategory}:</p>
 					
 					<#if category_list?has_content>
-					<@tform action='jsp/admin/plugins/suggest/DoChangeSuggestSubmitCategory.jsp'>
+					<@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp'><@input type='hidden' name='action' value='changeSuggestSubmitCategory' />
 						<@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' />
 						<@input type='hidden' name='comment' value='comment' />
 						<#if suggest_submit.category?exists>
@@ -85,12 +95,12 @@
 						<#else>
 							<@select name='id_category' items=category_list default_value='-1' />
 						</#if>
-						<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonModify}' buttonIcon='save' />
+						<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonModify}' buttonIcon='device-floppy' />
 					</@tform>
 					</#if>
 				<#if !suggest_submit.disableVote>
 					<@icon style='star' />&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberVote} : ${suggest_submit.numberVote}
-					<@icon style='thumbs-up' />&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberScore} : ${suggest_submit.numberScore}
+					<@icon style='thumb-up' />&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberScore} : ${suggest_submit.numberScore}
 				</#if>
 				<#if !suggest_submit.disableComment>
 					<@tag color='info'>
@@ -99,7 +109,7 @@
 						#i18n{suggest.manageSuggestSubmit.rowNumberCommentIdle} : ${suggest_submit.numberComment - suggest_submit.numberCommentEnable}
 					</@tag>
 				</#if>
-				<@tform method='post' action='jsp/admin/plugins/suggest/DoSubmitOfficialAnswer.jsp' id='addOfficialComment'>
+				<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp' id='addOfficialComment'><@input type='hidden' name='action' value='submitOfficialAnswer' />
 					<h3>#i18n{suggest.manageCommentSubmit.officialAnswer} <small>#i18n{suggest.manageCommentSubmit.labelAddOfficialAnswer}</h3>
 					<@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' />
 					<@formGroup>
@@ -119,7 +129,7 @@
 				<@paginationAdmin paginator=paginator combo=1 />
 				<#list comment_submit_list as comment_submit>
 					<@alert color='info'>
-						<#if comment_submit.isOfficialAnswer()><@tag color='info' align='right'>#i18n{suggest.manageCommentSubmit.officialAnswer}</@tag></#if>
+						<#if comment_submit.isOfficialAnswer()><@tag color='info'>#i18n{suggest.manageCommentSubmit.officialAnswer}</@tag></#if>
 						<@p id="comment${comment_submit.idCommentSubmit}">
 							<strong>#i18n{suggest.manageCommentSubmit.rowValueCommentSubmit}
 							<#if comment_submit.active>
@@ -129,11 +139,11 @@
 							</#if>
 							</strong>
 						</@p>
-						<pre>${suggest.parseBbcodeValue(comment_submit.value)}</pre>
-						<@tform method='post' action='jsp/admin/plugins/suggest/DoChangeCommentSubmit.jsp#comment${comment_submit.idCommentSubmit}'>
+						<div class="text-break">${suggest.parseBbcodeValue(comment_submit.value)}</div>
+						<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#comment${comment_submit.idCommentSubmit}'><@input type='hidden' name='action' value='changeCommentSubmit' />
 							<@input type='hidden' name='id_comment_submit' value='${comment_submit.idCommentSubmit}' />
 							<#if comment_submit.active>
-								<@button type='submit' name='disable' title='#i18n{suggest.manageCommentSubmit.buttonDisable}' buttonIcon='remove' color='primary' />
+								<@button type='submit' name='disable' title='#i18n{suggest.manageCommentSubmit.buttonDisable}' buttonIcon='x' color='primary' />
 							<#else>
 								<@button type='submit' name='enable' title='#i18n{suggest.manageCommentSubmit.buttonEnable}' buttonIcon='check' color='primary' />
 							</#if>
@@ -167,14 +177,14 @@
 								</#if>
 								</strong>
 								</p>
-								<pre>${suggest.parseBbcodeValue(comment_comment.value)}</pre>
+								<div class="text-break">${suggest.parseBbcodeValue(comment_comment.value)}</div>
 								<p>#i18n{suggest.manageCommentSubmit.rowDateCommentSubmit}: ${comment_comment.dateComment!}</p>
 								
-								<@tform method='post' action='jsp/admin/plugins/suggest/DoChangeCommentSubmit.jsp#comment${comment_comment.idCommentSubmit}'>
+								<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#comment${comment_comment.idCommentSubmit}'><@input type='hidden' name='action' value='changeCommentSubmit' />
 									<@input type='hidden' name='id_comment_submit' value='${comment_comment.idCommentSubmit}' />
 									<@input type='hidden' name='id_parent' value='${comment_submit.idCommentSubmit}' />
 									<#if comment_comment.active>
-										<@button type='submit' name='disable' title='#i18n{suggest.manageCommentSubmit.buttonDisable}' buttonIcon='remove' color='primary' />
+										<@button type='submit' name='disable' title='#i18n{suggest.manageCommentSubmit.buttonDisable}' buttonIcon='x' color='primary' />
 									<#else>
 										<@button type='submit' name='enable' title='#i18n{suggest.manageCommentSubmit.buttonEnable}' buttonIcon='check' color='primary' />
 									</#if>
@@ -190,87 +200,43 @@
 			</@box>
 		</@columns>
 	</@row>
-</section>
+	</@pageColumn>
+</@pageContainer>
 
 
 <script>
-$(document).ready( function () {
-	/* Search modal */
-	$("head").append('<link href="css/admin/bootstrap-modal.css" rel="stylesheet">');
-	$("#myModalCommentSearch").addClass("modal hide fade modal-top");
-
-	/* Add reinit button if a query has been set */
-	var nQuery=0;
-	$("#myModalCommentSearch select option:selected").each( function(){
-		if( $(this).val() >= 0  ){nQuery++;}
+document.addEventListener( 'DOMContentLoaded', function( ){
+	var target = location.hash ? document.getElementById( location.hash.substring( 1 ) ) : null;
+	if ( target ) {
+		window.scrollTo( 0, target.getBoundingClientRect( ).top + window.scrollY - 600 );
+	}
+	document.querySelectorAll( 'div.commentComments' ).forEach( function( element ){
+		element.style.display = 'none';
 	});
-
-	if( nQuery > 0){
-		$('#myModalLabelCommentSearch').after('<a href="#" id="init" class="btn btn-xs btn-flat btn-danger spaced"><i class="glyphicon glyphicon-refresh"></i> #i18n{suggest.manageSuggestSubmit.buttonReinitSearch} </a>');
-		$("a#init").click( function(){
-			$("#myModalCommentSearch select option:selected").each( function(){
-				$(this).val(-1);
-			});
-			$("input#session").val("");
-			$("form#filter").submit();
-			return false;
+	document.querySelectorAll( '.comment_toggle' ).forEach( function( toggle ){
+		toggle.addEventListener( 'click', function( ){
+			var next = toggle.nextElementSibling;
+			if ( next ) {
+				next.style.display = ( next.style.display === 'none' ) ? '' : 'none';
+			}
 		});
-	}
-
-	var toGo = location.hash;
-	if (toGo != ""){
-		$('html, body').animate( {'scrollTop':$(toGo).offset().top - 600 },0 );
-	}
-
-	var nav = $('.fixed-actionbar');
-    $(window).scroll(function () {
-        if ($(this).scrollTop() > 200) {
-            nav.addClass("f-nav offset3 span9");
-        } else {
-            nav.removeClass("f-nav offset3 span9");
-        }
-    });
-
-	var addUp = true;
-	$("div.commentComments").toggle();
-	doToggle( ".comment_toggle" );
-	$("#advert_content").toggle();
-	$("#display_advert").click( function(){
-		$("#advert_content").toggle();
-		if ( addUp ){
-			$(this).addClass("icon-chevron-up");
-			$(this).removeClass("icon-chevron-down");
-			addUp = true;
-		} else {
-			$(this).removeClass("icon-chevron-up");
-			$(this).addClass("icon-chevron-down");
-			addUp = false;
-		}
 	});
-
-	$(".comment_toggle").each( function(){
-		var cId= $(this).attr("id");
-		var n = $(this).next().find("span").hasClass("label-important");
-		console.log( n  );
-			if( $(this).next().find("span").hasClass("label-important") ){
-				// Add all unpublished comments info
-				$(this).append(" <span class=\"badge badge-warning\"><i class=\"icon-exclamation-sign\"></i>#i18n{suggest.manageCommentSubmit.buttonContainsEnableSubComment}</span>")
-			};
-
+	var advert = document.getElementById( 'advert_content' );
+	var displayAdvert = document.getElementById( 'display_advert' );
+	if ( advert ) {
+		advert.style.display = 'none';
+		if ( displayAdvert ) {
+			displayAdvert.addEventListener( 'click', function( ){
+				advert.style.display = ( advert.style.display === 'none' ) ? '' : 'none';
+			});
 		}
-	);
-
+	}
 	<#if id_parent?has_content>
-		$("#comment_toggle${id_parent}").next().toggle();
+	var parentToggle = document.getElementById( 'comment_toggle${id_parent}' );
+	if ( parentToggle && parentToggle.nextElementSibling ) {
+		parentToggle.nextElementSibling.style.display = '';
+	}
 	</#if>
 });
-
-function doToggle( idParent ){
-	$( idParent ).click( function(){
-		$(this).next().toggle();
-	});
-}
 </script>
 
-<#include "/util/editor/editor.html" />
-<@initEditor  />

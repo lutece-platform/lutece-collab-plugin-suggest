@@ -1,24 +1,38 @@
-<@row>	<@columns>		<@box>			<@boxHeader title='#i18n{suggest.modifySuggestSubmitType.title}' />			<@boxBody>
-				<@tform method='post' action='jsp/admin/plugins/suggest/DoModifySuggestSubmitType.jsp' enctype='multipart/form-data'>
-					<@input type='hidden' name='id_type' value='${type.idType}' />
-					<@formGroup labelFor='name' labelKey='#i18n{suggest.createSuggestSubmitType.labelName}' mandatory=true>						<@input type='text' id='name' name='name' maxlength=200 value='${type.name}' />					</@formGroup>
-					<@formGroup labelFor='color' labelKey='#i18n{suggest.createSuggestSubmitType.labelColor}'>						<@input type='text' id='color' params='style="border:2px solid ${type.color!};"' name='color' maxlength=7 value='${type.color}' />					</@formGroup>
-					<@formGroup mandatory=true>						<@checkBox labelFor='parameterizable' labelKey='#i18n{suggest.createSuggestSubmitType.labelParameterizable}' id='parameterizable' name='parameterizable' checked=type.parameterizableInFO />					</@formGroup>					<@formGroup labelFor='image_source' labelKey='#i18n{suggest.createSuggestSubmitType.labelImage}'>						<@input type='file' id='image_source' name='image_source' maxlength=100 />
-					</@formGroup>					<@formGroup labelFor='update_file'>
-						<@checkBox labelFor='update_file' labelKey='#i18n{suggest.createSuggestSubmitType.labelUpdateFile}' id='update_file' name='update_file' />
-						<#if type.idImageResource?has_content >
-							<img class="img-responsive img-thumbnail" src='image?resource_type=image_suggest&id=${type.idImageResource}' title="img">
-						</#if>					</@formGroup>
-					<@formGroup>						<@button type='submit' name='save' title='#i18n{suggest.createExportFormat.buttonSave}' buttonIcon='save' />
-						<@aButton href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' name='cancel' title='#i18n{suggest.createExportFormat.buttonCancel}' buttonIcon='times' color='default' />					</@formGroup>
-                </@tform>			</@boxBody>		</@box>	</@columns></@row>
-<script src="js/bootstrap-colorpicker.js"></script>
-<script>
-$( function(){
-	$("#color").colorpicker().on('changeColor',
-	function(ev){
-		$(this).css("border","2px solid " + ev.color.toHex());
-	});
-});
-
-</script>
+<@pageContainer>
+	<@pageColumn>
+		<@pageHeader title='#i18n{suggest.modifySuggestSubmitType.title}' />
+		<@row>
+			<@columns>
+				<@box>
+					<@boxBody>
+						<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp' enctype='multipart/form-data'><@input type='hidden' name='action' value='modifySuggestSubmitType' />
+							<@input type='hidden' name='id_type' value='${type.idType}' />
+							<@formGroup labelFor='name' labelKey='#i18n{suggest.createSuggestSubmitType.labelName}' mandatory=true>
+								<@input type='text' id='name' name='name' maxlength=200 value='${type.name}' />
+							</@formGroup>
+							<@formGroup labelFor='color' labelKey='#i18n{suggest.createSuggestSubmitType.labelColor}'>
+								<@input type='color' class='form-control-color' id='color' name='color' value='${type.color!"#000000"}' />
+							</@formGroup>
+							<@formGroup mandatory=true>
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggestSubmitType.labelParameterizable}' id='parameterizable' name='parameterizable' checked=type.parameterizableInFO value='1' />
+							</@formGroup>
+							<@formGroup labelFor='image_source' labelKey='#i18n{suggest.createSuggestSubmitType.labelImage}'>
+								<@input type='file' id='image_source' name='image_source' maxlength=100 />
+							</@formGroup>
+							<@formGroup labelFor='update_file'>
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggestSubmitType.labelUpdateFile}' id='update_file' name='update_file' value='1' />
+								<#if type.idImageResource?has_content >
+									<img class="img-thumbnail d-block mt-2 align-self-start" src='image?resource_type=image_suggest&id=${type.idImageResource}' title="img">
+								</#if>
+							</@formGroup>
+							<@formGroup>
+								<@button type='submit' name='save' title='#i18n{suggest.createExportFormat.buttonSave}' buttonIcon='device-floppy' />
+								<@aButton href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' name='cancel' title='#i18n{suggest.createExportFormat.buttonCancel}' buttonIcon='x' color='light' />
+							</@formGroup>
+		                </@tform>
+					</@boxBody>
+				</@box>
+			</@columns>
+		</@row>
+	</@pageColumn>
+</@pageContainer>

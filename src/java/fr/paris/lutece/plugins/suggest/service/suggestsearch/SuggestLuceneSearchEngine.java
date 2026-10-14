@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.suggest.service.suggestsearch;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
 import fr.paris.lutece.plugins.suggest.service.search.SuggestIndexer;
 import fr.paris.lutece.portal.service.search.IndexationService;
@@ -59,6 +60,7 @@ import org.apache.lucene.search.TopDocs;
 /**
  * LuceneSearchEngine
  */
+@ApplicationScoped
 public class SuggestLuceneSearchEngine implements SuggestSearchEngine
 {
     /**

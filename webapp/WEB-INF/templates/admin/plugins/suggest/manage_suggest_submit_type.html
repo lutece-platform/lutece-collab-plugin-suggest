@@ -1,45 +1,38 @@
-<@row>
-	<@columns>
-		<@tabs>
-			<@tabList>
-				<@tabLink href='jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.title}' />
-				<@tabLink href='jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelCategory}' />
-				<@tabLink active=true href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelType}' />
-				<@tabLink href='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}' />
-				<@tabLink href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?plugin_name=suggest' title='#i18n{suggest.manageAdvancedParameters.labelExportFormat}' />
-				<@tabLink href='jsp/admin/plugins/suggest/Statistics.jsp' title='#i18n{suggest.manageAdvancedParameters.labelStatistics}' />
-			</@tabList>
-			<@tabContent>
-				<@tform align='right' method='post' type='inline' action='jsp/admin/plugins/suggest/CreateSuggestSubmitType.jsp'>
-					<@button type='submit' title='#i18n{suggest.manageSuggestSubmitType.buttonCreate}' hideTitle=['xs','sm','md'] buttonIcon='plus-square' size='sm' />
-				</@tform>
-			
-				<@table headBody=true>
-					<@tr>
-						<@th></@th>
-						<@th>#i18n{suggest.manageSuggestSubmitType.rowName}</@th>
-						<@th>#i18n{suggest.manageSuggestSubmitType.rowParameterizable}</@th>
-						<@th>#i18n{suggest.manageSuggestSubmitType.rowActions}</@th>
-					</@tr>
-					<#list type_list as type>
-						<@tr>
-							<#if type.color?exists><#assign params = 'style="background-color:${type.color}"' /><#else><#assign params='' /></#if>
-							<@td params=params title='#i18n{suggest.manageSuggestSubmitType.rowColor}'></@td>
-							<@td>
-							<#if type.idImageResource?has_content >
-								<img style="max-width:3em; height:auto;" src="image?resource_type=image_suggest&id=${type.idImageResource}" title="img">
-							</#if>
-							 <strong>${type.name}</strong>
-							</@td>
-							<@td>${type.parameterizableInFO?string("#i18n{suggest.manageSuggestSubmitType.yes}","#i18n{suggest.manageSuggestSubmitType.no}")}</@td>
-							<@td>
-								<@aButton href='jsp/admin/plugins/suggest/ModifySuggestSubmitType.jsp?id_type=${type.idType}' title='' hideTitle=['all'] buttonIcon='pencil' size='sm' />
-								<@aButton href='jsp/admin/plugins/suggest/ConfirmRemoveSuggestSubmitType.jsp?id_type=${type.idType}' title='#i18n{suggest.manageSuggestSubmitType.altDelete}' hideTitle=['all'] buttonIcon='trash' size='sm' color='danger' />
-							</@td>
-						</@tr>
-					</#list>
-				</@table>
-			</@tabContent>
-		</@tabs>
-	</@columns>
-</@row>
+<#assign advanced_tab = 'type' />
+<@pageContainer>
+	<@pageColumn>
+		<@pageHeader title='#i18n{suggest.manageAdvancedParameters.title}'>
+			<@aButton href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?view=createSuggestSubmitType' buttonIcon='plus' title='#i18n{suggest.manageSuggestSubmitType.buttonCreate}' color='primary' />
+		</@pageHeader>
+		<#include "include_advanced_parameters_tabs.html" />
+		<@messages infos=infos![] errors=errors![] warnings=warnings![] />
+		<#if type_list?has_content>
+			<@manageFeature>
+				<#list type_list as type>
+				<@manageFeatureItem>
+					<@manageFeatureItemColumn auto=true>
+						<@tag color='' class='text-white' params=' style="background-color:${type.color!}"'>&nbsp;</@tag>
+					</@manageFeatureItemColumn>
+					<@manageFeatureItemColumn>
+						<#if type.idImageResource?has_content>
+							<img class="avatar avatar-sm me-2" src="image?resource_type=image_suggest&id=${type.idImageResource}" alt="">
+						</#if>
+						<strong>${type.name!}</strong>
+					</@manageFeatureItemColumn>
+					<@manageFeatureItemColumn auto=true flex=false valign='top'>
+						<@p class='fw-bold fs-3'>#i18n{suggest.manageSuggestSubmitType.rowParameterizable}</@p>
+						${type.parameterizableInFO?string("#i18n{suggest.manageSuggestSubmitType.yes}","#i18n{suggest.manageSuggestSubmitType.no}")}
+					</@manageFeatureItemColumn>
+					<@manageFeatureItemColumn auto=true align='end'>
+						<@aButton href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?view=modifySuggestSubmitType&id_type=${type.idType}' title='#i18n{portal.util.labelModify}' buttonIcon='edit' class='me-1' hideTitle=['all'] />
+						<@aButton href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?view=confirmRemoveSuggestSubmitType&id_type=${type.idType}' title='#i18n{suggest.manageSuggestSubmitType.altDelete}' buttonIcon='trash' color='danger' hideTitle=['all'] />
+					</@manageFeatureItemColumn>
+				</@manageFeatureItem>
+				</#list>
+			</@manageFeature>
+			<@paginationAdmin paginator=paginator combo=1 />
+		<#else>
+			<@empty title='#i18n{portal.util.labelNoItem}' iconName='tag-off' actionTitle='#i18n{suggest.manageSuggestSubmitType.buttonCreate}' actionUrl='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?view=createSuggestSubmitType' />
+		</#if>
+	</@pageColumn>
+</@pageContainer>

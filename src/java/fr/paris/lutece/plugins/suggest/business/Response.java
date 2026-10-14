@@ -38,7 +38,7 @@ import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -54,6 +54,7 @@ public class Response
     private IEntry _entry;
     private SuggestSubmit _suggestSubmit;
     private ImageResource _image;
+    private VideoType _video;
     private Integer _nIdImageResource;
 
     /**
@@ -155,6 +156,27 @@ public class Response
     public void setImage( ImageResource image )
     {
         this._image = image;
+    }
+
+    /**
+     * Returns the video uploaded with the response, saved once the proposal exists.
+     *
+     * @return the video, or null
+     */
+    public VideoType getVideo( )
+    {
+        return _video;
+    }
+
+    /**
+     * Sets the video uploaded with the response.
+     *
+     * @param video
+     *            the video
+     */
+    public void setVideo( VideoType video )
+    {
+        this._video = video;
     }
 
     /**

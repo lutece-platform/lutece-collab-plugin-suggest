@@ -33,7 +33,18 @@
  */
 package fr.paris.lutece.plugins.suggest.web;
 
+import fr.paris.lutece.portal.web.cdi.mvc.Models;
+import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
+import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
+import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
+import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Named;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
+import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,10 +55,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.FileItem;
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -82,9 +93,7 @@ import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
 import fr.paris.lutece.plugins.suggest.business.VoteType;
 import fr.paris.lutece.plugins.suggest.business.VoteTypeHome;
 import fr.paris.lutece.plugins.suggest.service.CategoryResourceIdService;
-import fr.paris.lutece.plugins.suggest.service.CommentSubmitService;
 import fr.paris.lutece.plugins.suggest.service.DefaultMessageResourceIdService;
-import fr.paris.lutece.plugins.suggest.service.SuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.SuggestResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.SuggestService;
 import fr.paris.lutece.plugins.suggest.service.ExportFormatResourceIdService;
@@ -95,9 +104,10 @@ import fr.paris.lutece.plugins.suggest.service.search.SuggestIndexer;
 import fr.paris.lutece.plugins.suggest.utils.SuggestIndexerUtils;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.plugins.suggest.web.action.SuggestAdminSearchFields;
+import fr.paris.lutece.plugins.suggest.web.action.ExportSuggestSubmitAction;
 import fr.paris.lutece.plugins.suggest.web.action.ISuggestAction;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
-import fr.paris.lutece.plugins.workflowcore.service.state.StateService;
+import fr.paris.lutece.plugins.workflowcore.service.state.IStateService;
 import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.role.RoleHome;
@@ -120,21 +130,18 @@ import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.captcha.ICaptchaService;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.BeanUtils;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
-import fr.paris.lutece.portal.web.admin.PluginAdminPageJspBean;
-import fr.paris.lutece.portal.web.pluginaction.DefaultPluginActionResult;
 import fr.paris.lutece.portal.web.pluginaction.IPluginActionResult;
 import fr.paris.lutece.portal.web.pluginaction.PluginActionManager;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.date.DateUtil;
-import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
@@ -142,8 +149,65 @@ import fr.paris.lutece.util.url.UrlItem;
 /**
  * This class provides the user interface to manage form features ( manage, create, modify, remove)
  */
-public class SuggestJspBean extends PluginAdminPageJspBean
+@SessionScoped
+@Named( "suggestJspBean" )
+@Controller( controllerJsp = "ManageSuggest.jsp", controllerPath = "jsp/admin/plugins/suggest/", right = ManageSuggestJspBean.RIGHT_MANAGE_SUGGEST_LIKE, securityTokenEnabled = true )
+public class SuggestJspBean extends MVCAdminJspBean
 {
+
+    // views and actions
+    private static final String VIEW_MANAGE_SUGGEST = "manageSuggest";
+    private static final String VIEW_MANAGE_ADVANCED_PARAMETERS = "manageAdvancedParameters";
+    private static final String VIEW_MANAGE_SUGGEST_SUBMIT_ORDER = "manageSuggestSubmitOrder";
+    private static final String VIEW_CREATE_SUGGEST_SUBMIT = "createSuggestSubmit";
+    private static final String VIEW_MANAGE_COMMENT_SUBMIT = "manageCommentSubmit";
+    private static final String VIEW_CREATE_SUGGEST = "createSuggest";
+    private static final String VIEW_MODIFY_SUGGEST = "modifySuggest";
+    private static final String VIEW_CREATE_ENTRY = "createEntry";
+    private static final String VIEW_MODIFY_ENTRY = "modifyEntry";
+    private static final String VIEW_STATISTICS = "statistics";
+    private static final String VIEW_WORKFLOW_TASK_FORM = "workflowTaskForm";
+    private static final String VIEW_CONFIRM_REMOVE_SUGGEST_SUBMIT = "confirmRemoveSuggestSubmit";
+    private static final String VIEW_CONFIRM_MASS_CHANGE_SUGGEST_SUBMIT_CATEGORY = "confirmMassChangeSuggestSubmitCategory";
+    private static final String VIEW_CONFIRM_REMOVE_SUGGEST = "confirmRemoveSuggest";
+    private static final String VIEW_CONFIRM_REMOVE_ENTRY = "confirmRemoveEntry";
+    private static final String VIEW_CONFIRM_DISABLE_SUGGEST = "confirmDisableSuggest";
+    private static final String VIEW_CONFIRM_UPDATE_ALL_DISPLAY_OF_SUGGEST_SUBMIT = "confirmUpdateAllDisplayOfSuggestSubmit";
+    private static final String ACTION_CREATE_SUGGEST_SUBMIT = "createSuggestSubmit";
+    private static final String ACTION_REMOVE_SUGGEST_SUBMIT = "removeSuggestSubmit";
+    private static final String ACTION_CHANGE_SUGGEST_SUBMIT_STATE = "changeSuggestSubmitState";
+    private static final String ACTION_MASS_CHANGE_SUGGEST_SUBMIT_CATEGORY = "massChangeSuggestSubmitCategory";
+    private static final String ACTION_CHANGE_SUGGEST_SUBMIT_CATEGORY = "changeSuggestSubmitCategory";
+    private static final String ACTION_CHANGE_COMMENT_SUBMIT = "changeCommentSubmit";
+    private static final String ACTION_SUBMIT_OFFICIAL_ANSWER = "submitOfficialAnswer";
+    private static final String ACTION_REMOVE_COMMENT_SUBMIT = "removeCommentSubmit";
+    private static final String ACTION_CREATE_SUGGEST = "createSuggest";
+    private static final String ACTION_MODIFY_SUGGEST = "modifySuggest";
+    private static final String ACTION_INSERT_SUGGEST_SUBMIT_TYPE = "insertSuggestSubmitType";
+    private static final String ACTION_REMOVE_SUGGEST_SUBMIT_TYPE = "removeSuggestSubmitType";
+    private static final String ACTION_INSERT_CATEGORY = "insertCategory";
+    private static final String ACTION_REMOVE_CATEGORY = "removeCategory";
+    private static final String ACTION_REMOVE_SUGGEST = "removeSuggest";
+    private static final String ACTION_COPY_SUGGEST = "copySuggest";
+    private static final String ACTION_CREATE_ENTRY = "createEntry";
+    private static final String ACTION_MODIFY_ENTRY = "modifyEntry";
+    private static final String ACTION_REMOVE_ENTRY = "removeEntry";
+    private static final String ACTION_COPY_ENTRY = "copyEntry";
+    private static final String ACTION_MOVE_UP_ENTRY = "moveUpEntry";
+    private static final String ACTION_MOVE_DOWN_ENTRY = "moveDownEntry";
+    private static final String ACTION_DISABLE_SUGGEST = "disableSuggest";
+    private static final String ACTION_ENABLE_SUGGEST = "enableSuggest";
+    private static final String ACTION_REMOVE_REGULAR_EXPRESSION = "removeRegularExpression";
+    private static final String ACTION_INSERT_REGULAR_EXPRESSION = "insertRegularExpression";
+    private static final String ACTION_MODIFY_SUGGEST_SUBMIT_ORDER = "modifySuggestSubmitOrder";
+    private static final String ACTION_UPDATE_ALL_DISPLAY_OF_SUGGEST_SUBMIT = "updateAllDisplayOfSuggestSubmit";
+    private static final String ACTION_MODIFY_ADVANCED_PARAMETERS = "modifyAdvancedParameters";
+    private static final String ACTION_PROCESS_WORKFLOW_ACTION = "processWorkflowAction";
+    private static final String ACTION_SAVE_WORKFLOW_TASK_FORM = "saveWorkflowTaskForm";
+    private static final String TOKEN_SUGGEST = "suggest";
+    private static final String VIEW_MANAGE_SUGGEST_SUBMIT = "manageSuggestSubmit";
+    private static final String VIEW_EXPORT_SUGGEST_SUBMIT = "exportSuggestSubmit";
+    private static final String ACTION_SUGGEST_SUBMIT_MASS_ACTION = "suggestSubmitMassAction";
     public static final String MARK_DISABLE_SUGGEST_SUBMIT_STATE_NUMBER = "disable_state_number";
     public static final String MARK_WAITING_FOR_PUBLISH_SUGGEST_SUBMIT_STATE_NUMBER = "waiting_for_publish_state_number";
     public static final String MARK_PUBLISH_SUGGEST_SUBMIT_STATE_NUMBER = "publish_state_number";
@@ -215,7 +279,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
     private static final String PROPERTY_COPY_SUGGEST_TITLE = "suggest.copySuggest.title";
     private static final String PROPERTY_COPY_ENTRY_TITLE = "suggest.copyEntry.title";
     private static final String PROPERTY_CREATE_SUGGEST_TITLE = "suggest.createSuggest.title";
-    private static final String PROPERTY_CREATE_QUESTION_TITLE = ".createEntry.titleQuestion";
+    private static final String PROPERTY_CREATE_QUESTION_TITLE = "suggest.createEntry.titleQuestion";
     private static final String PROPERTY_MODIFY_QUESTION_TITLE = "suggest.modifyEntry.titleQuestion";
     private static final String PROPERTY_NUMBER_SUGGEST_SUBMIT_VALUE_SHOWN_CHARACTERS = "suggest.suggestSubmitValue.NumberShownCharacters";
     private static final String PROPERTY_SUGGESTSUBMIT_HIGHSCORES = "suggest.highscores.suggestSubmit.number";
@@ -226,6 +290,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
     private static final String PROPERTY_CREATE_SUGGEST_SUBMIT_PAGE_TITLE = "suggest.createSuggestSubmit.pageTitle";
     private static final String PROPERTY_MANAGE_COMMENT_SUBMIT_PAGE_TITLE = "suggest.manageCommentSubmit.pageTitle";
     private static final String PROPERTY_DEFAULT_ROLE_CODE = "defaultRole.code";
+    private static final String PROPERTY_STATISTICS_TITLE = "suggest.statistics.title";
     private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "suggest.taskFormWorkflow.pageTitle";
 
     // Markers
@@ -314,22 +379,22 @@ public class SuggestJspBean extends PluginAdminPageJspBean
     private static final String MARK_TASK_FORM = "task_form";
 
     // Jsp Definition
-    private static final String JSP_DO_DISABLE_SUGGEST = "jsp/admin/plugins/suggest/DoDisableSuggest.jsp";
-    private static final String JSP_DO_REMOVE_SUGGEST = "jsp/admin/plugins/suggest/DoRemoveSuggest.jsp";
-    private static final String JSP_DO_REMOVE_SUGGEST_SUBMIT = "jsp/admin/plugins/suggest/DoRemoveSuggestSubmit.jsp";
-    private static final String JSP_DO_REMOVE_ENTRY = "jsp/admin/plugins/suggest/DoRemoveEntry.jsp";
+    private static final String JSP_DO_DISABLE_SUGGEST = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_DISABLE_SUGGEST;
+    private static final String JSP_DO_REMOVE_SUGGEST = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_REMOVE_SUGGEST;
+    private static final String JSP_DO_REMOVE_SUGGEST_SUBMIT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_REMOVE_SUGGEST_SUBMIT;
+    private static final String JSP_DO_REMOVE_ENTRY = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_REMOVE_ENTRY;
     private static final String JSP_MANAGE_SUGGEST = "jsp/admin/plugins/suggest/ManageSuggest.jsp";
-    private static final String JSP_DO_REMOVE_COMMENT_SUBMIT = "jsp/admin/plugins/suggest/DoRemoveCommentSubmit.jsp";
+    private static final String JSP_DO_REMOVE_COMMENT_SUBMIT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_REMOVE_COMMENT_SUBMIT;
     // private static final String JSP_MANAGE_SUGGEST_SUBMIT_TYPE = "jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp";
-    private static final String JSP_MODIFY_SUGGEST = "jsp/admin/plugins/suggest/ModifySuggest.jsp";
-    private static final String JSP_MODIFY_ENTRY = "jsp/admin/plugins/suggest/ModifyEntry.jsp";
-    private static final String JSP_MANAGE_SUGGEST_SUBMIT = "jsp/admin/plugins/suggest/ManageSuggestSubmit.jsp";
-    private static final String JSP_MANAGE_SUGGEST_SUBMIT_ORDER = "jsp/admin/plugins/suggest/ManageSuggestSubmitOrder.jsp";
-    private static final String JSP_MANAGE_COMMENT_SUBMIT = "jsp/admin/plugins/suggest/ManageCommentSubmit.jsp";
-    private static final String JSP_MANAGE_ADVANCED_PARAMETERS = "jsp/admin/plugins/suggest/ManageAdvancedParameters.jsp";
-    private static final String JSP_DO_UPDATE_ALL_SUGGEST_SUBMIT = "jsp/admin/plugins/suggest/DoUpdateAllSuggestSubmit.jsp";
-    private static final String JSP_DO_CHANGE_SUGGEST_SUBMIT_CATEGORY = "jsp/admin/plugins/suggest/DoMassChangeSuggestSubmitCategory.jsp";
-    private static final String JSP_WORKFLOW_TASK_FORM = "jsp/admin/plugins/suggest/DoGetWorkflowActionForm.jsp";
+    private static final String JSP_MODIFY_SUGGEST = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MODIFY_SUGGEST;
+    private static final String JSP_MODIFY_ENTRY = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MODIFY_ENTRY;
+    private static final String JSP_MANAGE_SUGGEST_SUBMIT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MANAGE_SUGGEST_SUBMIT;
+    private static final String JSP_MANAGE_SUGGEST_SUBMIT_ORDER = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MANAGE_SUGGEST_SUBMIT_ORDER;
+    private static final String JSP_MANAGE_COMMENT_SUBMIT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MANAGE_COMMENT_SUBMIT;
+    private static final String JSP_MANAGE_ADVANCED_PARAMETERS = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MANAGE_ADVANCED_PARAMETERS;
+    private static final String JSP_DO_UPDATE_ALL_SUGGEST_SUBMIT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_UPDATE_ALL_DISPLAY_OF_SUGGEST_SUBMIT;
+    private static final String JSP_DO_CHANGE_SUGGEST_SUBMIT_CATEGORY = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_MASS_CHANGE_SUGGEST_SUBMIT_CATEGORY;
+    private static final String JSP_WORKFLOW_TASK_FORM = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_WORKFLOW_TASK_FORM;
 
     // parameters form
     private static final String PARAMETER_ID_SUGGEST = "id_suggest";
@@ -429,10 +494,10 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
     // other constants
     private static final String EMPTY_STRING = "";
-    private static final String JCAPTCHA_PLUGIN = "jcaptcha";
 
     // session fields
     private SuggestAdminSearchFields _searchFields = new SuggestAdminSearchFields( );
+    private transient HttpServletResponse _httpResponse;
     private int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_ITEM_PER_PAGE, 50 );
     private String _strCurrentPageIndexSuggest;
     private int _nItemsPerPageSuggest;
@@ -453,8 +518,21 @@ public class SuggestJspBean extends PluginAdminPageJspBean
     private int _nIdCommentState = SuggestUtils.CONSTANT_ID_NULL;
     private int _nIdContainsSubCommentDisable = SuggestUtils.CONSTANT_ID_NULL;
     private String _strWorkGroup = AdminWorkgroupService.ALL_GROUPS;
-    private ISuggestSubmitService _suggestSubmitService = SuggestSubmitService.getService( );
-    private ICommentSubmitService _commentSubmitService = CommentSubmitService.getService( );
+    @Inject
+    private ISuggestSubmitService _suggestSubmitService;
+    @Inject
+    private ICommentSubmitService _commentSubmitService;
+    @Inject
+    private SuggestSearchService _suggestSearchService;
+    @Inject
+    private SuggestService _suggestService;
+    @Inject
+    private WorkflowService _workflowService;
+    @Inject
+    private Instance<IStateService> _stateServiceInstance;
+    @Inject
+    @Named( BeanUtils.BEAN_CAPTCHA_SERVICE )
+    private Instance<ICaptchaService> _captchaService;
 
     /*-------------------------------MANAGEMENT  SUGGEST-----------------------------*/
 
@@ -463,9 +541,12 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *
      * @param request
      *            The Http request
+     * @param model
+     *            the model
      * @return Html suggest
      */
-    public String getManageSuggest( HttpServletRequest request )
+    @View( value = VIEW_MANAGE_SUGGEST, defaultView = true, securityTokenAction = TOKEN_SUGGEST )
+    public String getManageSuggest( HttpServletRequest request, Models model )
     {
         AdminUser adminUser = getUser( );
         Plugin plugin = getPlugin( );
@@ -497,12 +578,10 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         filter.setWorkGroup( _strWorkGroup );
 
         List<Suggest> listSuggest = SuggestHome.getSuggestList( filter, getPlugin( ) );
-        listSuggest = (List<Suggest>) AdminWorkgroupService.getAuthorizedCollection( listSuggest, adminUser );
+        listSuggest = (List<Suggest>) AdminWorkgroupService.getAuthorizedCollection( listSuggest, (User) adminUser );
 
         refListWorkGroups = AdminWorkgroupService.getUserWorkgroups( adminUser, locale );
         refListSuggestState = getRefListSuggestState( locale );
-
-        Map<String, Object> model = new HashMap<>( );
         Paginator<Suggest> paginator = new Paginator<Suggest>( listSuggest, _nItemsPerPageSuggest, getJspManageSuggest( request ), PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndexSuggest );
 
@@ -520,7 +599,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
                 listActions = listActionsForSuggestDisable;
             }
 
-            listActions = (List<SuggestAction>) RBACService.getAuthorizedActionsCollection( listActions, suggest, getUser( ) );
+            listActions = (List<SuggestAction>) RBACService.getAuthorizedActionsCollection( listActions, suggest, (User) getUser( ) );
             suggest.setActions( listActions );
         }
 
@@ -534,20 +613,18 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         model.put( MARK_SUGGEST_LIST, paginator.getPageItems( ) );
 
         boolean bPermissionAdvancedParameter = RBACService.isAuthorized( Suggest.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                SuggestResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser( ) );
+                SuggestResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, (User) getUser( ) );
         boolean bPermissionCreateSuggest = RBACService.isAuthorized( Suggest.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                SuggestResourceIdService.PERMISSION_CREATE, getUser( ) );
+                SuggestResourceIdService.PERMISSION_CREATE, (User) getUser( ) );
 
         model.put( MARK_PERMISSION_MANAGE_ADVANCED_PARAMETERS, bPermissionAdvancedParameter );
         model.put( MARK_PERMISSION_CREATE_SUGGEST, bPermissionCreateSuggest );
 
-        setPageTitleProperty( PROPERTY_MANAGE_SUGGEST_PAGE_TITLE );
-
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_SUGGEST, locale, model );
+        
 
         // ReferenceList refMailingList;
         // refMailingList=AdminMailingListService.getMailingLists(adminUser);
-        return getAdminPage( templateList.getHtml( ) );
+        return getPage( PROPERTY_MANAGE_SUGGEST_PAGE_TITLE, TEMPLATE_MANAGE_SUGGEST );
     }
 
     /**
@@ -555,17 +632,18 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *
      * @param request
      *            The Http request
+     * @param model
+     *            the model
      * @return Html form
      */
-    public String getManageAdvancedParameters( HttpServletRequest request )
+    @View( value = VIEW_MANAGE_ADVANCED_PARAMETERS, securityTokenAction = TOKEN_SUGGEST )
+    public String getManageAdvancedParameters( HttpServletRequest request, Models model )
     {
         if ( !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, SuggestResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS,
-                getUser( ) ) )
+                (User) getUser( ) ) )
         {
-            return getManageSuggest( request );
+            return getManageSuggest( request, model );
         }
-
-        Map<String, Object> model = new HashMap<>( );
         List<Suggest> listSuggest = SuggestHome.getSuggestList( new SuggestFilter( ), getPlugin( ) );
         int nIdDefaultSuggest = -1;
 
@@ -582,17 +660,13 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         model.put( MARK_SUGGEST_LIST, SuggestUtils.getRefListSuggest( listSuggest, true ) );
         model.put( MARK_ID_DEFAULT_SUGGEST, nIdDefaultSuggest );
         model.put( MARK_PERMISSION_MANAGE_EXPORT_FORMAT,
-                RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, ExportFormatResourceIdService.PERMISSION_MANAGE, getUser( ) ) );
+                RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, ExportFormatResourceIdService.PERMISSION_MANAGE, (User) getUser( ) ) );
         model.put( MARK_PERMISSION_MANAGE_CATEGORY,
-                RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, CategoryResourceIdService.PERMISSION_MANAGE, getUser( ) ) );
+                RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, CategoryResourceIdService.PERMISSION_MANAGE, (User) getUser( ) ) );
         model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE, RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                DefaultMessageResourceIdService.PERMISSION_MANAGE, getUser( ) ) );
+                DefaultMessageResourceIdService.PERMISSION_MANAGE, (User) getUser( ) ) );
 
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_ADVANCED_PARAMETERS, getLocale( ), model );
-
-        setPageTitleProperty( PROPERTY_MANAGE_ADVANCED_PARAMETERS_PAGE_TITLE );
-
-        return getAdminPage( templateList.getHtml( ) );
+        return getPage( PROPERTY_MANAGE_ADVANCED_PARAMETERS_PAGE_TITLE, TEMPLATE_MANAGE_ADVANCED_PARAMETERS );
     }
 
     /**
@@ -600,13 +674,14 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *
      * @param request
      *            The Http request
-     * @param response
-     *            The Http response
+     * @param model
+     *            the model
      * @return Html suggest
      * @throws AccessDeniedException
      *             If the user is not authorized to access this feature
      */
-    public IPluginActionResult getManageSuggestSubmit( HttpServletRequest request, HttpServletResponse response ) throws AccessDeniedException
+    @View( value = VIEW_MANAGE_SUGGEST_SUBMIT, securityTokenAction = TOKEN_SUGGEST )
+    public String getManageSuggestSubmit( HttpServletRequest request, Models model ) throws AccessDeniedException
     {
         ReferenceList refListSuggestSumitState = initRefListSuggestSubmitState( getPlugin( ), getLocale( ) );
         ReferenceList refListAllYesNo;
@@ -629,46 +704,10 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, getPlugin( ) );
 
         if ( ( suggest == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggest.getIdSuggest( ),
-                        SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser( ) ) )
+                || !SuggestService.isAuthorized( suggest.getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
             throw new AccessDeniedException( "Access denied" );
         }
-
-        // fill the selected records
-        String [ ] selectedSuggestSubmit = request.getParameterValues( PARAMETER_SELECTED_SUGGEST_SUBMIT );
-        List<String> listSelectedSuggestSubmit;
-
-        if ( selectedSuggestSubmit != null )
-        {
-            listSelectedSuggestSubmit = Arrays.asList( selectedSuggestSubmit );
-
-            if ( AppLogService.isDebugEnabled( ) )
-            {
-                AppLogService.debug( "List selected suggestSubmit : " + listSelectedSuggestSubmit );
-            }
-        }
-        else
-        {
-            listSelectedSuggestSubmit = new ArrayList<>( );
-        }
-
-        _searchFields.setSelectedSuggestSubmit( listSelectedSuggestSubmit );
-
-        // first - see if there is an invoked action
-        ISuggestAction action = PluginActionManager.getPluginAction( request, ISuggestAction.class );
-
-        if ( action != null )
-        {
-            if ( AppLogService.isDebugEnabled( ) )
-            {
-                AppLogService.debug( "Processing directory action " + action.getName( ) );
-            }
-
-            return action.process( request, response, getUser( ), _searchFields );
-        }
-
-        DefaultPluginActionResult result = new DefaultPluginActionResult( );
 
         // build Filter
         SubmitFilter filter = SuggestUtils.getSuggestSubmitFilter( getSearchFields( ), suggest.getIdDefaultSort( ) );
@@ -688,7 +727,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             catch( NumberFormatException e )
             {
                 // the query is not the id of the suggest submit
-                listIdSuggestSubmitResult = SuggestSearchService.getInstance( ).getSearchResults( getSearchFields( ).getQuery( ), filter, getPlugin( ) );
+                listIdSuggestSubmitResult = _suggestSearchService.getSearchResults( getSearchFields( ).getQuery( ), filter, getPlugin( ) );
             }
         }
         else
@@ -699,7 +738,6 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         ReferenceList refListSuggestSort = SuggestUtils.getRefListSuggestSort( getLocale( ) );
         refListAllYesNo = getRefListAllYesNo( getLocale( ) );
 
-        Map<String, Object> model = new HashMap<>( );
         Paginator<Integer> paginator = new Paginator<Integer>( listIdSuggestSubmitResult, _nItemsPerPageSuggestSubmit, getJspManageSuggestSubmit( request ),
                 PARAMETER_PAGE_INDEX, _strCurrentPageIndexSuggestSubmit );
         SuggestSubmit suggestSubmit;
@@ -727,9 +765,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         }
 
         // Get the workflow state of the suggest items
-        if ( ( suggest.getIdWorkflow( ) > 0 ) && WorkflowService.getInstance( ).isAvailable( ) )
+        if ( ( suggest.getIdWorkflow( ) > 0 ) && _workflowService.isAvailable( ) && _stateServiceInstance.isResolvable( ) )
         {
-            StateService stateService = SpringContextService.getBean( StateService.BEAN_SERVICE );
+            IStateService stateService = _stateServiceInstance.get( );
             int nIdWorkflow = suggest.getIdWorkflow( );
             // Retrieve the workflow data for each suggestion submitted
             for ( SuggestSubmit submit : listSuggestSubmitDisplay )
@@ -744,11 +782,11 @@ public class SuggestJspBean extends PluginAdminPageJspBean
                 else
                 {
                     // Set the State for this SuggestSubmit
-                    submit.setState( WorkflowService.getInstance( ).getState( submit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, nIdWorkflow,
+                    submit.setState( _workflowService.getState( submit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, nIdWorkflow,
                             suggest.getIdSuggest( ) ) );
                 }
                 // Set the list of available workflow actions for this SuggestSubmit
-                submit.setListWorkflowActions( WorkflowService.getInstance( ).getActions( submit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE,
+                submit.setListWorkflowActions( _workflowService.getActions( submit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE,
                         suggest.getIdWorkflow( ), (User) getUser( ) ) );
             }
         }
@@ -771,29 +809,129 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         model.put( MARK_CONTAINS_COMMENT_DISABLE_SELECTED, getSearchFields( ).getIdSuggestSubmitContainsCommentDisable( ) );
         model.put( MARK_QUERY, getSearchFields( ).getQuery( ) );
 
-        PluginActionManager.fillModel( request, getUser( ), model, ISuggestAction.class, MARK_SUGGEST_ACTIONS );
+        for ( ISuggestAction suggestAction : PluginActionManager.getListPluginAction( ISuggestAction.class ) )
+        {
+            Map<String, Object> mapActionModel = new HashMap<>( );
+            suggestAction.fillModel( request, getUser( ), mapActionModel );
+            mapActionModel.forEach( model::put );
+        }
 
-        setPageTitleProperty( PROPERTY_MANAGE_SUGGEST_SUBMIT_PAGE_TITLE );
+        model.put( MARK_SUGGEST_ACTIONS, PluginActionManager.getListPluginAction( ISuggestAction.class ) );
 
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_SUGGEST_SUBMIT, getLocale( ), model );
-
-        // ReferenceList refMailingList;
-        // refMailingList=AdminMailingListService.getMailingLists(adminUser);
-        result.setHtmlContent( getAdminPage( templateList.getHtml( ) ) );
-
-        return result;
+        return getPage( PROPERTY_MANAGE_SUGGEST_SUBMIT_PAGE_TITLE, TEMPLATE_MANAGE_SUGGEST_SUBMIT );
     }
+
+    /**
+     * Processes the suggest submit action selected in the list form.
+     *
+     * @param request
+     *            The Http request
+     * @return the redirection, or null when the action wrote the response
+     * @throws AccessDeniedException
+     *             If the user is not authorized to access this feature
+     */
+    @Action( value = ACTION_SUGGEST_SUBMIT_MASS_ACTION, securityTokenAction = TOKEN_SUGGEST )
+    public String doSuggestSubmitMassAction( HttpServletRequest request ) throws AccessDeniedException
+    {
+        return processSuggestSubmitAction( request, false );
+    }
+
+    /**
+     * Exports the suggest submits matching the current search.
+     *
+     * @param request
+     *            The Http request
+     * @return the redirection, or null when the export is written to the response
+     * @throws AccessDeniedException
+     *             If the user is not authorized to access this feature
+     */
+    @View( value = VIEW_EXPORT_SUGGEST_SUBMIT, securityTokenAction = TOKEN_SUGGEST )
+    public String getExportSuggestSubmit( HttpServletRequest request ) throws AccessDeniedException
+    {
+        return processSuggestSubmitAction( request, true );
+    }
+
+    /**
+     * Runs the invoked suggest submit plugin action on the selected suggest submits.
+     *
+     * @param request
+     *            The Http request
+     * @param bExportOnly
+     *            true to run the export action only
+     * @return the redirection, the html content of the action, or null when the action wrote the response
+     * @throws AccessDeniedException
+     *             If the user is not authorized to access this feature
+     */
+    private String processSuggestSubmitAction( HttpServletRequest request, boolean bExportOnly ) throws AccessDeniedException
+    {
+        String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
+
+        if ( ( strIdSuggest != null ) && !strIdSuggest.equals( EMPTY_STRING ) )
+        {
+            _nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
+        }
+
+        Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, getPlugin( ) );
+
+        if ( ( suggest == null )
+                || !SuggestService.isAuthorized( suggest.getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+        {
+            throw new AccessDeniedException( "Access denied" );
+        }
+
+        String [ ] selectedSuggestSubmit = request.getParameterValues( PARAMETER_SELECTED_SUGGEST_SUBMIT );
+        _searchFields.setSelectedSuggestSubmit( ( selectedSuggestSubmit != null ) ? Arrays.asList( selectedSuggestSubmit ) : new ArrayList<>( ) );
+
+        ISuggestAction action = PluginActionManager.getPluginAction( request, ISuggestAction.class );
+
+        if ( ( action == null ) || ( bExportOnly != ( action instanceof ExportSuggestSubmitAction ) ) )
+        {
+            return redirect( request, getJspManageSuggestSubmit( request ) );
+        }
+
+        IPluginActionResult result = action.process( request, _httpResponse, getUser( ), _searchFields );
+
+        if ( result.getRedirect( ) != null )
+        {
+            return redirect( request, result.getRedirect( ) );
+        }
+
+        return result.getHtmlContent( );
+    }
+
+    /**
+     * Keeps the response for the plugin actions that write it, then dispatches the request.
+     *
+     * @param request
+     *            The Http request
+     * @param response
+     *            The Http response
+     * @return the page content
+     * @throws AccessDeniedException
+     *             If the user is not authorized to access this feature
+     */
+    @Override
+    public String processController( HttpServletRequest request, HttpServletResponse response ) throws AccessDeniedException
+    {
+        _httpResponse = response;
+
+        return super.processController( request, response );
+    }
+
 
     /**
      * Returns advanced parameters form
      *
      * @param request
      *            The Http request
+     * @param model
+     *            the model
      * @return Html form
      * @throws AccessDeniedException
      *             If the user is not authorized to access this feature
      */
-    public String getManageSuggestSubmitOrder( HttpServletRequest request ) throws AccessDeniedException
+    @View( value = VIEW_MANAGE_SUGGEST_SUBMIT_ORDER, securityTokenAction = TOKEN_SUGGEST )
+    public String getManageSuggestSubmitOrder( HttpServletRequest request, Models model ) throws AccessDeniedException
     {
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
         int nNumberShownCharacters = AppPropertiesService.getPropertyInt( PROPERTY_NUMBER_SUGGEST_SUBMIT_VALUE_SHOWN_CHARACTERS, 100 );
@@ -812,22 +950,20 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, getPlugin( ) );
 
         if ( ( suggest == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggest.getIdSuggest( ),
-                        SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser( ) ) )
+                || !SuggestService.isAuthorized( suggest.getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
             throw new AccessDeniedException( "Access denied" );
         }
 
         // build Filter
         SubmitFilter filter = SuggestUtils.getSuggestSubmitFilter( getSearchFields( ) );
+        filter.setIdSuggest( _nIdSuggest );
         // reinit order
         filter.setSortBy( new ArrayList<>( ) );
         SuggestUtils.initSubmitFilterBySort( filter, SubmitFilter.SORT_MANUALLY );
         SuggestUtils.initSubmitFilterBySort( filter, SubmitFilter.SORT_BY_PINNED_FIRST );
 
         List<Integer> listIdSuggestSubmitResult = _suggestSubmitService.getSuggestSubmitListId( filter, getPlugin( ) );
-
-        Map<String, Object> model = new HashMap<>( );
         Paginator<Integer> paginator = new Paginator<Integer>( listIdSuggestSubmitResult, _nItemsPerPageSuggestSubmitOrder,
                 getJspManageSuggestSubmitOrder( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexSuggestSubmitOrder );
         SuggestSubmit suggestSubmit;
@@ -851,11 +987,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         model.put( MARK_SUGGEST, suggest );
         model.put( MARK_NUMBER_SHOWN_CHARACTERS, nNumberShownCharacters );
 
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_SUGGEST_SUBMIT_ORDER, getLocale( ), model );
-
-        setPageTitleProperty( PROPERTY_MANAGE_SUGGEST_SUBMIT_ORDER_PAGE_TITLE );
-
-        return getAdminPage( templateList.getHtml( ) );
+        return getPage( PROPERTY_MANAGE_SUGGEST_SUBMIT_ORDER_PAGE_TITLE, TEMPLATE_MANAGE_SUGGEST_SUBMIT_ORDER );
     }
 
     /**
@@ -863,11 +995,14 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *
      * @param request
      *            The Http request
+     * @param model
+     *            the model
      * @return Html comment submit
      * @throws AccessDeniedException
      *             If the user is not authorized to access this feature
      */
-    public String getCreateSuggestSubmit( HttpServletRequest request ) throws AccessDeniedException
+    @View( value = VIEW_CREATE_SUGGEST_SUBMIT, securityTokenAction = TOKEN_SUGGEST )
+    public String getCreateSuggestSubmit( HttpServletRequest request, Models model ) throws AccessDeniedException
     {
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
 
@@ -879,19 +1014,14 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, getPlugin( ) );
 
         if ( ( suggest == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggest.getIdSuggest( ),
-                        SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser( ) ) )
+                || !SuggestService.isAuthorized( suggest.getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
             throw new AccessDeniedException( "Access denied" );
         }
 
-        Map<String, Object> model = SuggestUtils.getModelHtmlForm( suggest, getPlugin( ), getLocale( ), SuggestUtils.CONSTANT_ID_NULL, true );
+        SuggestUtils.getModelHtmlForm( suggest, getPlugin( ), getLocale( ), SuggestUtils.CONSTANT_ID_NULL, true ).forEach( model::put );
 
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_CREATE_SUGGEST_SUBMIT, getLocale( ), model );
-
-        setPageTitleProperty( PROPERTY_CREATE_SUGGEST_SUBMIT_PAGE_TITLE );
-
-        return getAdminPage( templateList.getHtml( ) );
+        return getPage( PROPERTY_CREATE_SUGGEST_SUBMIT_PAGE_TITLE, TEMPLATE_CREATE_SUGGEST_SUBMIT );
     }
 
     /**
@@ -901,6 +1031,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_CREATE_SUGGEST_SUBMIT, securityTokenAction = TOKEN_SUGGEST )
     public String doCreateSuggestSubmit( HttpServletRequest request )
     {
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
@@ -913,8 +1044,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, getPlugin( ) );
 
         if ( ( request.getParameter( PARAMETER_CANCEL ) == null )
-                && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggest.getIdSuggest( ),
-                        SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser( ) ) )
+                && SuggestService.isAuthorized( suggest.getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
             List<Response> listResponse = new ArrayList<Response>( );
             String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
@@ -930,7 +1060,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             {
                 if ( ( strIdCategory == null ) || strIdCategory.equals( Integer.toString( SuggestUtils.CONSTANT_ID_NULL ) ) )
                 {
-                    return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_NO_CATEGORY, AdminMessage.TYPE_STOP );
+                    return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_NO_CATEGORY, AdminMessage.TYPE_STOP ) );
                 }
             }
 
@@ -939,7 +1069,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             {
                 if ( ( strIdType == null ) || strIdType.equals( Integer.toString( SuggestUtils.CONSTANT_ID_NULL ) ) )
                 {
-                    return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_NO_SUGGEST_SUBMIT_TYPE_SELECTED, AdminMessage.TYPE_STOP );
+                    return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_NO_SUGGEST_SUBMIT_TYPE_SELECTED, AdminMessage.TYPE_STOP ) );
                 }
             }
 
@@ -957,14 +1087,14 @@ public class SuggestJspBean extends PluginAdminPageJspBean
                         formError.getTitleQuestion( )
                     };
 
-                    return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_QUESTION, tabRequiredFields, AdminMessage.TYPE_STOP );
+                    return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_QUESTION, tabRequiredFields, AdminMessage.TYPE_STOP ) );
                 }
 
                 Object [ ] tabFormError = {
                         formError.getTitleQuestion( ), formError.getErrorMessage( )
                 };
 
-                return AdminMessageService.getMessageUrl( request, MESSAGE_FORM_ERROR, tabFormError, AdminMessage.TYPE_STOP );
+                return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_FORM_ERROR, tabFormError, AdminMessage.TYPE_STOP ) );
             }
 
             // perform suggest submit
@@ -986,7 +1116,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             _suggestSubmitService.create( suggestSubmit, getPlugin( ), getLocale( ), getUser( ) );
         }
 
-        return getJspManageSuggestSubmit( request );
+        return redirect( request, getJspManageSuggestSubmit( request ) );
     }
 
     /**
@@ -994,11 +1124,14 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *
      * @param request
      *            The Http request
+     * @param model
+     *            the model
      * @return Html comment submit
      * @throws AccessDeniedException
      *             If the user is not authorized to access this feature
      */
-    public String getManageCommentSubmit( HttpServletRequest request ) throws AccessDeniedException
+    @View( value = VIEW_MANAGE_COMMENT_SUBMIT, securityTokenAction = TOKEN_SUGGEST )
+    public String getManageCommentSubmit( HttpServletRequest request, Models model ) throws AccessDeniedException
     {
         Plugin plugin = getPlugin( );
         Locale locale = getLocale( );
@@ -1036,10 +1169,15 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         }
 
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( _nIdSuggestSubmit, false, plugin );
+
+        if ( suggestSubmit == null )
+        {
+            return redirect( request, getJspManageSuggestSubmit( request ) );
+        }
+
         Suggest suggest = SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), plugin );
 
-        if ( !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggestSubmit.getSuggest( ).getIdSuggest( ),
-                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser( ) ) )
+        if ( !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
             throw new AccessDeniedException( "Access denied" );
         }
@@ -1067,8 +1205,6 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         ReferenceList refCategoryList = SuggestUtils.getRefListCategory( suggest.getCategories( ) );
         SuggestUtils.addEmptyItem( refCategoryList );
-
-        Map<String, Object> model = new HashMap<>( );
         Paginator<CommentSubmit> paginator = new Paginator<CommentSubmit>( listCommentSubmit, _nItemsPerPageCommentSubmit,
                 getJspManageCommentSubmit( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexCommentSubmit );
         ReferenceList refListAllYesNo = getRefListAllYesNo( getLocale( ) );
@@ -1094,13 +1230,11 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         model.put( MARK_SUGGEST, suggest );
         model.put( MARK_ID_PARENT, strCommentIdParent );
 
-        setPageTitleProperty( PROPERTY_MANAGE_COMMENT_SUBMIT_PAGE_TITLE );
-
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_COMMENT_SUBMIT, locale, model );
+        
 
         // ReferenceList refMailingList;
         // refMailingList=AdminMailingListService.getMailingLists(adminUser);
-        return getAdminPage( templateList.getHtml( ) );
+        return getPage( PROPERTY_MANAGE_COMMENT_SUBMIT_PAGE_TITLE, TEMPLATE_MANAGE_COMMENT_SUBMIT );
     }
 
     /**
@@ -1110,6 +1244,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return the confirmation page of delete suggest submit
      */
+    @View( value = VIEW_CONFIRM_REMOVE_SUGGEST_SUBMIT, securityTokenAction = TOKEN_SUGGEST )
     public String getConfirmRemoveSuggestSubmit( HttpServletRequest request )
     {
         String strIdSuggestSubmit = request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT );
@@ -1120,16 +1255,15 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         if ( nIdSuggestSubmit == -1 )
         {
-            return getHomeUrl( request );
+            return redirect( request, getHomeUrl( request ) );
         }
 
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
 
         if ( ( suggestSubmit == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggestSubmit.getSuggest( ).getIdSuggest( ),
-                        SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser( ) ) )
+                || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
-            return getJspManageSuggest( request );
+            return redirect( request, getJspManageSuggest( request ) );
         }
 
         strMessage = MESSAGE_CONFIRM_REMOVE_SUGGEST_SUBMIT;
@@ -1143,7 +1277,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         url.addParameter( PARAMETER_ID_SUGGEST_SUBMIT, nIdSuggestSubmit );
 
-        return AdminMessageService.getMessageUrl( request, strMessage, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
+        return redirect( request, AdminMessageService.getMessageUrl( request, strMessage, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
     }
 
     /**
@@ -1153,6 +1287,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_REMOVE_SUGGEST_SUBMIT, securityTokenAction = TOKEN_SUGGEST )
     public String doRemoveSuggestSubmit( HttpServletRequest request )
     {
         String strIdSuggestSubmit = request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT );
@@ -1162,16 +1297,15 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         if ( nIdSuggestSubmit == -1 )
         {
-            return getHomeUrl( request );
+            return redirect( request, getHomeUrl( request ) );
         }
 
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
 
         if ( ( suggestSubmit == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggestSubmit.getSuggest( ).getIdSuggest( ),
-                        SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser( ) ) )
+                || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
-            return getJspManageSuggest( request );
+            return redirect( request, getJspManageSuggest( request ) );
         }
 
         String strUrlBack;
@@ -1188,7 +1322,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         _suggestSubmitService.remove( nIdSuggestSubmit, plugin, getUser( ) );
 
-        return strUrlBack;
+        return redirect( request, strUrlBack );
     }
 
     /**
@@ -1198,6 +1332,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_CHANGE_SUGGEST_SUBMIT_STATE, securityTokenAction = TOKEN_SUGGEST )
     public String doChangeSuggestSubmitState( HttpServletRequest request )
     {
         String strIdSuggestSubmit = request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT );
@@ -1213,10 +1348,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         if ( ( suggestSubmit == null )
                 || ( suggestSubmitState == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggestSubmit.getSuggest( ).getIdSuggest( ),
-                        SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser( ) ) )
+                || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
-            return getJspManageSuggest( request );
+            return redirect( request, getJspManageSuggest( request ) );
         }
 
         suggestSubmit.setSuggestSubmitState( suggestSubmitState );
@@ -1224,10 +1358,10 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         if ( strComment != null )
         {
-            return getJspManageCommentSubmit( request );
+            return redirect( request, getJspManageCommentSubmit( request ) );
         }
 
-        return getJspManageSuggestSubmit( request );
+        return redirect( request, getJspManageSuggestSubmit( request ) );
     }
 
     /**
@@ -1239,6 +1373,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *             the {@link AccessDeniedException}
      * @return the confirmation page of delete directory record
      */
+    @View( value = VIEW_CONFIRM_MASS_CHANGE_SUGGEST_SUBMIT_CATEGORY, securityTokenAction = TOKEN_SUGGEST )
     public String getConfirmMassChangeSuggestSubmitCategory( HttpServletRequest request ) throws AccessDeniedException
     {
         // fill the selected records
@@ -1256,11 +1391,10 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             {
                 nIdSuggestSubmit = SuggestUtils.getIntegerParameter( strIdSuggestSubmit );
 
-                SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
+                SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
 
                 if ( ( suggestSubmit == null )
-                        || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, SuggestUtils.EMPTY_STRING + suggestSubmit.getSuggest( ).getIdSuggest( ),
-                                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser( ) ) )
+                        || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
                 {
                     throw new AccessDeniedException( "Access denied" );
                 }
@@ -1276,11 +1410,11 @@ public class SuggestJspBean extends PluginAdminPageJspBean
                 ( ( category == null ) || ( category.getTitle( ) == null ) ) ? "" : category.getTitle( )
             };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_CHANGE_SUGGEST_SUBMIT_CATEGORY, args, url.getUrl( ),
-                    AdminMessage.TYPE_CONFIRMATION );
+            return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_CHANGE_SUGGEST_SUBMIT_CATEGORY, args, url.getUrl( ),
+                    AdminMessage.TYPE_CONFIRMATION ) );
         }
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_SUGGEST_SUBMIT_CATEGORY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
+        return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_SUGGEST_SUBMIT_CATEGORY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
     }
 
     /**
@@ -1292,6 +1426,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      * @throws AccessDeniedException
      *             If the user is not authorized to acces this feature
      */
+    @Action( value = ACTION_MASS_CHANGE_SUGGEST_SUBMIT_CATEGORY, securityTokenAction = TOKEN_SUGGEST )
     public String doMassChangeSuggestSubmitCategory( HttpServletRequest request ) throws AccessDeniedException
     {
         // fill the selected records
@@ -1308,11 +1443,10 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             {
                 nIdSuggestSubmit = SuggestUtils.getIntegerParameter( strIdSuggestSubmit );
 
-                SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
+                SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
 
                 if ( ( suggestSubmit == null )
-                        || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, SuggestUtils.EMPTY_STRING + suggestSubmit.getSuggest( ).getIdSuggest( ),
-                                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser( ) ) )
+                        || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
                 {
                     throw new AccessDeniedException( "Access denied" );
                 }
@@ -1331,13 +1465,13 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             {
                 nIdSuggestSubmit = SuggestUtils.getIntegerParameter( strIdSuggestSubmittoUpdate );
 
-                SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
+                SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
                 suggestSubmit.setCategory( categorySelected );
-                SuggestSubmitService.getService( ).update( suggestSubmit, getPlugin( ) );
+                _suggestSubmitService.update( suggestSubmit, getPlugin( ) );
             }
         }
 
-        return getJspManageSuggestSubmit( request );
+        return redirect( request, getJspManageSuggestSubmit( request ) );
     }
 
     /**
@@ -1347,6 +1481,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_CHANGE_SUGGEST_SUBMIT_CATEGORY, securityTokenAction = TOKEN_SUGGEST )
     public String doChangeSuggestSubmitCategory( HttpServletRequest request )
     {
         String strIdSuggestSubmit = request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT );
@@ -1361,10 +1496,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         Category category = CategoryHome.findByPrimaryKey( nIdCategory, plugin );
 
         if ( ( suggestSubmit == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggestSubmit.getSuggest( ).getIdSuggest( ),
-                        SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser( ) ) )
+                || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
-            return getJspManageSuggest( request );
+            return redirect( request, getJspManageSuggest( request ) );
         }
 
         suggestSubmit.setCategory( category );
@@ -1373,10 +1507,10 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         if ( strComment != null )
         {
-            return getJspManageCommentSubmit( request );
+            return redirect( request, getJspManageCommentSubmit( request ) );
         }
 
-        return getJspManageSuggestSubmit( request );
+        return redirect( request, getJspManageSuggestSubmit( request ) );
     }
 
     /**
@@ -1386,6 +1520,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_CHANGE_COMMENT_SUBMIT, securityTokenAction = TOKEN_SUGGEST )
     public String doChangeCommentSubmit( HttpServletRequest request )
     {
         String strIdParentCommentSubmit = request.getParameter( PARAMETER_ID_PARENT );
@@ -1399,7 +1534,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
             if ( nIdCommentSubmit == -1 )
             {
-                return getHomeUrl( request );
+                return redirect( request, getHomeUrl( request ) );
             }
 
             strMessage = MESSAGE_CONFIRM_REMOVE_COMMENT_SUBMIT;
@@ -1408,7 +1543,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             url.addParameter( PARAMETER_ID_COMMENT_SUBMIT, nIdCommentSubmit );
             url.addParameter( PARAMETER_ID_PARENT, strIdParentCommentSubmit );
 
-            return AdminMessageService.getMessageUrl( request, strMessage, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
+            return redirect( request, AdminMessageService.getMessageUrl( request, strMessage, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
         }
         else
             if ( request.getParameter( PARAMETER_ENABLE ) != null )
@@ -1421,7 +1556,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
                     doDisableCommentSubmit( request );
                 }
 
-        return getJspManageCommentSubmit( request, strIdParentCommentSubmit );
+        return redirect( request, getJspManageCommentSubmit( request, strIdParentCommentSubmit ) );
     }
 
     /**
@@ -1431,6 +1566,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_SUBMIT_OFFICIAL_ANSWER, securityTokenAction = TOKEN_SUGGEST )
     public String doSubmitOfficialAnswer( HttpServletRequest request )
     {
         String strCommentValueSuggest = request.getParameter( PARAMETER_COMMENT_VALUE );
@@ -1443,7 +1579,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         // Check XSS characters
         if ( StringUtil.containsXssCharacters( strCommentValueSuggest ) )
         {
-            return AdminMessageService.getMessageUrl( request, MESSAGE_NEW_COMMENT_SUBMIT_INVALID, SiteMessage.TYPE_STOP );
+            return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_NEW_COMMENT_SUBMIT_INVALID, SiteMessage.TYPE_STOP ) );
         }
 
         commentSubmit.setActive( true );
@@ -1474,7 +1610,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         _commentSubmitService.create( commentSubmit, plugin );
 
-        return getJspManageCommentSubmit( request );
+        return redirect( request, getJspManageCommentSubmit( request ) );
     }
 
     /**
@@ -1484,6 +1620,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_REMOVE_COMMENT_SUBMIT, securityTokenAction = TOKEN_SUGGEST )
     public String doRemoveCommentSubmit( HttpServletRequest request )
     {
         String strIdCommentSubmit = request.getParameter( PARAMETER_ID_COMMENT_SUBMIT );
@@ -1493,15 +1630,14 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         if ( commentSubmit == null )
         {
-            return getJspManageSuggest( request );
+            return redirect( request, getJspManageSuggest( request ) );
         }
 
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( commentSubmit.getSuggestSubmit( ).getIdSuggestSubmit( ), false, plugin );
 
-        if ( !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggestSubmit.getSuggest( ).getIdSuggest( ),
-                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser( ) ) )
+        if ( !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
-            return getJspManageSuggest( request );
+            return redirect( request, getJspManageSuggest( request ) );
         }
 
         _commentSubmitService.remove( nIdCommentSubmit, plugin );
@@ -1514,7 +1650,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         suggestSubmit.setNumberComment( suggestSubmit.getNumberComment( ) - 1 );
         _suggestSubmitService.update( suggestSubmit, plugin );
 
-        return getJspManageCommentSubmit( request );
+        return redirect( request, getJspManageCommentSubmit( request ) );
     }
 
     /**
@@ -1535,8 +1671,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         {
             SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( commentSubmit.getSuggestSubmit( ).getIdSuggestSubmit( ), false, plugin );
 
-            if ( !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggestSubmit.getSuggest( ).getIdSuggest( ),
-                    SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser( ) ) )
+            if ( !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
             {
                 return getJspManageSuggest( request );
             }
@@ -1568,8 +1703,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         {
             SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( commentSubmit.getSuggestSubmit( ).getIdSuggestSubmit( ), false, plugin );
 
-            if ( !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + suggestSubmit.getSuggest( ).getIdSuggest( ),
-                    SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, getUser( ) ) )
+            if ( !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
             {
                 return getJspManageSuggest( request );
             }
@@ -1930,7 +2064,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         if ( ( suggest.getIdSuggest( ) == SuggestUtils.CONSTANT_ID_NULL ) || ( strUpdateFile != null ) )
         {
-            FileItem imageSource = request.getFile( PARAMETER_IMAGE_SOURCE );
+            MultipartItem imageSource = request.getFile( PARAMETER_IMAGE_SOURCE );
             String strImageName = FileUploadService.getFileNameOnly( imageSource );
 
             ImageResource image = new ImageResource( );
@@ -1953,13 +2087,16 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *
      * @param request
      *            The HTTP request
+     * @param model
+     *            the model
      * @return The suggest creation page
      */
-    public String getCreateSuggest( HttpServletRequest request )
+    @View( value = VIEW_CREATE_SUGGEST, securityTokenAction = TOKEN_SUGGEST )
+    public String getCreateSuggest( HttpServletRequest request, Models model )
     {
-        if ( !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, SuggestResourceIdService.PERMISSION_CREATE, getUser( ) ) )
+        if ( !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, SuggestResourceIdService.PERMISSION_CREATE, (User) getUser( ) ) )
         {
-            return getManageSuggest( request );
+            return getManageSuggest( request, model );
         }
 
         Plugin plugin = getPlugin( );
@@ -1987,12 +2124,11 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         ReferenceList refListSuggestSort = SuggestUtils.getRefListSuggestSort( locale );
         ReferenceList refVoteTypeList = initRefListVoteType( plugin, locale );
         DefaultMessage defaultMessage = DefaultMessageHome.find( plugin );
-        Map<String, Object> model = new HashMap<>( );
 
         // Get the list of available Workflows
-        if ( WorkflowService.getInstance( ).isAvailable( ) )
+        if ( _workflowService.isAvailable( ) )
         {
-            ReferenceList referenceList = WorkflowService.getInstance( ).getWorkflowsEnabled( (User) adminUser, getLocale( ) );
+            ReferenceList referenceList = _workflowService.getWorkflowsEnabled( (User) adminUser, getLocale( ) );
             model.put( MARK_WORKFLOW_REF_LIST, referenceList );
         }
         model.put( MARK_USER_WORKGROUP_REF_LIST, refListWorkGroups );
@@ -2000,7 +2136,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         model.put( MARK_DEFAULT_MESSAGE, defaultMessage );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage( ) );
-        model.put( MARK_IS_ACTIVE_CAPTCHA, PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) );
+        model.put( MARK_IS_ACTIVE_CAPTCHA, _captchaService.isResolvable( ) );
         model.put( MARK_YES_VALUE, CONSTANTE_YES_VALUE );
         model.put( MARK_NO_VALUE, CONSTANTE_NO_VALUE );
         model.put( MARK_VOTE_TYPE_LIST, refVoteTypeList );
@@ -2011,11 +2147,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         model.put( MARK_DEFAULT_THEME, defaultTheme );
         model.put( MARK_LIST_SUGGEST_SUBMIT_SORT, refListSuggestSort );
 
-        setPageTitleProperty( PROPERTY_CREATE_SUGGEST_TITLE );
-
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_SUGGEST, locale, model );
-
-        return getAdminPage( template.getHtml( ) );
+        return getPage( PROPERTY_CREATE_SUGGEST_TITLE, TEMPLATE_CREATE_SUGGEST );
     }
 
     /**
@@ -2025,12 +2157,13 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_CREATE_SUGGEST, securityTokenAction = TOKEN_SUGGEST )
     public String doCreateSuggest( HttpServletRequest request )
     {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 
         if ( ( multipartRequest.getParameter( PARAMETER_CANCEL ) == null )
-                && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, SuggestResourceIdService.PERMISSION_CREATE, getUser( ) ) )
+                && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, SuggestResourceIdService.PERMISSION_CREATE, (User) getUser( ) ) )
         {
             Plugin plugin = getPlugin( );
             Suggest suggest = new Suggest( );
@@ -2038,19 +2171,19 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
             if ( strError != null )
             {
-                return strError;
+                return redirect( request, strError );
             }
 
             suggest.setIdSuggest( SuggestHome.create( suggest, plugin ) );
 
             if ( request.getParameter( PARAMETER_APPLY ) != null )
             {
-                return getJspModifySuggest( request, suggest.getIdSuggest( ) );
+                return redirect( request, getJspModifySuggest( request, suggest.getIdSuggest( ) ) );
             }
 
         }
 
-        return getJspManageSuggest( request );
+        return redirect( request, getJspManageSuggest( request ) );
     }
 
     /**
@@ -2058,9 +2191,12 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *
      * @param request
      *            The HTTP request
+     * @param model
+     *            the model
      * @return The suggest modification page
      */
-    public String getModifySuggest( HttpServletRequest request )
+    @View( value = VIEW_MODIFY_SUGGEST, securityTokenAction = TOKEN_SUGGEST )
+    public String getModifySuggest( HttpServletRequest request, Models model )
     {
         Plugin plugin = getPlugin( );
         List<IEntry> listEntry;
@@ -2080,9 +2216,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         }
 
         if ( ( suggest == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+                || !SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
         {
-            return getManageSuggest( request );
+            return getManageSuggest( request, model );
         }
 
         // initialisation de la variable de session
@@ -2103,7 +2239,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         _nItemsPerPageEntry = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPageEntry, _nDefaultItemsPerPage );
 
         Paginator<IEntry> paginator = new Paginator<IEntry>( listEntry, _nItemsPerPageEntry, AppPathService.getBaseUrl( request ) + JSP_MODIFY_SUGGEST
-                + "?id_suggest=" + suggest.getIdSuggest( ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexEntry );
+                + "&id_suggest=" + suggest.getIdSuggest( ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexEntry );
 
         AdminUser adminUser = getUser( );
 
@@ -2148,12 +2284,10 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             suggest.setCodeTheme( ThemesService.getGlobalTheme( ) );
         }
 
-        Map<String, Object> model = new HashMap<>( );
-
         // Retrieve the list of available workflows
-        if ( WorkflowService.getInstance( ).isAvailable( ) )
+        if ( _workflowService.isAvailable( ) )
         {
-            ReferenceList referenceList = WorkflowService.getInstance( ).getWorkflowsEnabled( (User) adminUser, getLocale( ) );
+            ReferenceList referenceList = _workflowService.getWorkflowsEnabled( (User) adminUser, getLocale( ) );
             model.put( MARK_WORKFLOW_REF_LIST, referenceList );
         }
         model.put( MARK_PAGINATOR, paginator );
@@ -2167,7 +2301,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         model.put( MARK_NUMBER_QUESTION, nNumberQuestion );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage( ) );
-        model.put( MARK_IS_ACTIVE_CAPTCHA, PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) );
+        model.put( MARK_IS_ACTIVE_CAPTCHA, _captchaService.isResolvable( ) );
         model.put( MARK_YES_VALUE, CONSTANTE_YES_VALUE );
         model.put( MARK_NO_VALUE, CONSTANTE_NO_VALUE );
         model.put( MARK_CATEGORY_LIST, refCategoryList );
@@ -2181,11 +2315,8 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         model.put( MARK_THEME_REF_LIST, themesRefList );
         model.put( MARK_LIST_SUGGEST_SUBMIT_SORT, refListSuggestSort );
         model.put( MARK_PANEL, strPanel );
-        setPageTitleProperty( PROPERTY_MODIFY_SUGGEST_TITLE );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_SUGGEST, locale, model );
-
-        return getAdminPage( template.getHtml( ) );
+        return getPage( PROPERTY_MODIFY_SUGGEST_TITLE, TEMPLATE_MODIFY_SUGGEST );
     }
 
     /**
@@ -2195,6 +2326,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_MODIFY_SUGGEST, securityTokenAction = TOKEN_SUGGEST )
     public String doModifySuggest( HttpServletRequest request )
     {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -2202,7 +2334,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
 
         if ( ( multipartRequest.getParameter( PARAMETER_CANCEL ) == null ) && ( nIdSuggest != -1 )
-                && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+                && SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
         {
             Plugin plugin = getPlugin( );
             Suggest suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
@@ -2210,7 +2342,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
             if ( strError != null )
             {
-                return strError;
+                return redirect( request, strError );
             }
 
             SuggestHome.update( suggest, plugin );
@@ -2219,11 +2351,11 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             {
                 String strPanel = request.getParameter( PARAMETER_PANEL );
 
-                return getJspModifySuggest( request, suggest.getIdSuggest( ), strPanel );
+                return redirect( request, getJspModifySuggest( request, suggest.getIdSuggest( ), strPanel ) );
             }
         }
 
-        return getJspManageSuggest( request );
+        return redirect( request, getJspManageSuggest( request ) );
     }
 
     /**
@@ -2233,6 +2365,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_INSERT_SUGGEST_SUBMIT_TYPE, securityTokenAction = TOKEN_SUGGEST )
     public String doInsertSuggestSubmitType( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
@@ -2245,17 +2378,17 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         if ( ( suggestSubmitType != null ) && ( suggest != null ) && ( suggest.getSuggestSubmitTypes( ) != null )
                 && !suggest.getSuggestSubmitTypes( ).contains( suggestSubmitType )
-                && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+                && SuggestService.isAuthorized( _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
         {
             SuggestSubmitTypeHome.createSuggestAssociation( _nIdSuggest, nISuggestSubmitType, plugin );
         }
 
         if ( _nIdSuggest != -1 )
         {
-            return getJspModifySuggest( request, _nIdSuggest );
+            return redirect( request, getJspModifySuggest( request, _nIdSuggest ) );
         }
 
-        return getJspManageSuggest( request );
+        return redirect( request, getJspManageSuggest( request ) );
     }
 
     /**
@@ -2265,6 +2398,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_REMOVE_SUGGEST_SUBMIT_TYPE, securityTokenAction = TOKEN_SUGGEST )
     public String doRemoveSuggestSubmitType( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
@@ -2276,17 +2410,17 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
 
         if ( ( suggestSubmitType != null ) && ( suggest != null )
-                && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+                && SuggestService.isAuthorized( _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
         {
             SuggestSubmitTypeHome.removeSuggestAssociation( _nIdSuggest, nISuggestSubmitType, plugin );
         }
 
         if ( _nIdSuggest != -1 )
         {
-            return getJspModifySuggest( request, _nIdSuggest );
+            return redirect( request, getJspModifySuggest( request, _nIdSuggest ) );
         }
 
-        return getJspManageSuggest( request );
+        return redirect( request, getJspManageSuggest( request ) );
     }
 
     /**
@@ -2296,6 +2430,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_INSERT_CATEGORY, securityTokenAction = TOKEN_SUGGEST )
     public String doInsertCategory( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
@@ -2308,17 +2443,17 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
 
         if ( ( category != null ) && ( suggest != null ) && ( suggest.getCategories( ) != null ) && !suggest.getCategories( ).contains( category )
-                && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+                && SuggestService.isAuthorized( _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
         {
             CategoryHome.createSuggestAssociation( _nIdSuggest, nIdCategory, plugin );
         }
 
         if ( _nIdSuggest != -1 )
         {
-            return getJspModifySuggest( request, _nIdSuggest );
+            return redirect( request, getJspModifySuggest( request, _nIdSuggest ) );
         }
 
-        return getJspManageSuggest( request );
+        return redirect( request, getJspManageSuggest( request ) );
     }
 
     /**
@@ -2328,6 +2463,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_REMOVE_CATEGORY, securityTokenAction = TOKEN_SUGGEST )
     public String doRemoveCategory( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
@@ -2339,17 +2475,17 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
 
         if ( ( category != null ) && ( suggest != null ) && ( suggest.getCategories( ) != null )
-                && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+                && SuggestService.isAuthorized( _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
         {
             CategoryHome.removeSuggestAssociation( _nIdSuggest, nIdCategory, plugin );
         }
 
         if ( _nIdSuggest != -1 )
         {
-            return getJspModifySuggest( request, _nIdSuggest );
+            return redirect( request, getJspModifySuggest( request, _nIdSuggest ) );
         }
 
-        return getJspManageSuggest( request );
+        return redirect( request, getJspManageSuggest( request ) );
     }
 
     /**
@@ -2359,6 +2495,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return the confirmation page of delete suggest
      */
+    @View( value = VIEW_CONFIRM_REMOVE_SUGGEST, securityTokenAction = TOKEN_SUGGEST )
     public String getConfirmRemoveSuggest( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
@@ -2367,9 +2504,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
 
         if ( ( nIdSuggest == -1 )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + nIdSuggest, SuggestResourceIdService.PERMISSION_DELETE, getUser( ) ) )
+                || !SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_DELETE, (User) getUser( ) ) )
         {
-            return getJspManageSuggest( request );
+            return redirect( request, getJspManageSuggest( request ) );
         }
 
         SubmitFilter responseFilter = new SubmitFilter( );
@@ -2389,7 +2526,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         UrlItem url = new UrlItem( JSP_DO_REMOVE_SUGGEST );
         url.addParameter( PARAMETER_ID_SUGGEST, strIdSuggest );
 
-        return AdminMessageService.getMessageUrl( request, strMessage, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
+        return redirect( request, AdminMessageService.getMessageUrl( request, strMessage, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
     }
 
     /**
@@ -2399,6 +2536,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_REMOVE_SUGGEST, securityTokenAction = TOKEN_SUGGEST )
     public String doRemoveSuggest( HttpServletRequest request )
     {
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
@@ -2406,13 +2544,13 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
 
         if ( ( nIdSuggest != -1 )
-                && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + nIdSuggest, SuggestResourceIdService.PERMISSION_DELETE, getUser( ) ) )
+                && SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_DELETE, (User) getUser( ) ) )
         {
             // Remove the specified Suggest
-            SuggestService.removeSuggest( nIdSuggest, getUser( ) );
+            _suggestService.removeSuggest( nIdSuggest, getUser( ) );
         }
 
-        return getJspManageSuggest( request );
+        return redirect( request, getJspManageSuggest( request ) );
     }
 
     /**
@@ -2422,6 +2560,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_COPY_SUGGEST, securityTokenAction = TOKEN_SUGGEST )
     public String doCopySuggest( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
@@ -2430,9 +2569,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
 
         if ( ( nIdSuggest == -1 )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + nIdSuggest, SuggestResourceIdService.PERMISSION_COPY, getUser( ) ) )
+                || !SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_COPY, (User) getUser( ) ) )
         {
-            return getJspManageSuggest( request );
+            return redirect( request, getJspManageSuggest( request ) );
         }
 
         suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
@@ -2449,7 +2588,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         SuggestHome.copy( suggest, plugin );
 
-        return getJspManageSuggest( request );
+        return redirect( request, getJspManageSuggest( request ) );
     }
 
     /**
@@ -2457,9 +2596,12 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *
      * @param request
      *            The HTTP request
+     * @param model
+     *            the model
      * @return The entry creation page
      */
-    public String getCreateEntry( HttpServletRequest request )
+    @View( value = VIEW_CREATE_ENTRY, securityTokenAction = TOKEN_SUGGEST )
+    public String getCreateEntry( HttpServletRequest request, Models model )
     {
         Plugin plugin = getPlugin( );
         IEntry entry;
@@ -2469,22 +2611,17 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
 
         if ( ( entry == null ) || ( suggest == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+                || !SuggestService.isAuthorized( _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
         {
-            return getManageSuggest( request );
+            return getManageSuggest( request, model );
         }
 
         entry.setSuggest( suggest );
-
-        Map<String, Object> model = new HashMap<>( );
         model.put( MARK_ENTRY, entry );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage( ) );
-        setPageTitleProperty( PROPERTY_CREATE_QUESTION_TITLE );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( entry.getTemplateCreate( ), getLocale( ), model );
-
-        return getAdminPage( template.getHtml( ) );
+        return getPage( PROPERTY_CREATE_QUESTION_TITLE, entry.getTemplateCreate( ) );
     }
 
     /**
@@ -2494,6 +2631,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_CREATE_ENTRY, securityTokenAction = TOKEN_SUGGEST )
     public String doCreateEntry( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
@@ -2506,16 +2644,16 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
 
             if ( ( entry == null ) || ( suggest == null )
-                    || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+                    || !SuggestService.isAuthorized( _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
             {
-                return getJspManageSuggest( request );
+                return redirect( request, getJspManageSuggest( request ) );
             }
 
             String strError = entry.getRequestData( request, getLocale( ) );
 
             if ( strError != null )
             {
-                return strError;
+                return redirect( request, strError );
             }
 
             entry.setSuggest( suggest );
@@ -2523,11 +2661,11 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
             if ( request.getParameter( PARAMETER_APPLY ) != null )
             {
-                return getJspModifyEntry( request, entry.getIdEntry( ) );
+                return redirect( request, getJspModifyEntry( request, entry.getIdEntry( ) ) );
             }
         }
 
-        return getJspModifySuggest( request, _nIdSuggest );
+        return redirect( request, getJspModifySuggest( request, _nIdSuggest ) );
     }
 
     /**
@@ -2535,9 +2673,12 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *
      * @param request
      *            The HTTP request
+     * @param model
+     *            the model
      * @return The entry modification page
      */
-    public String getModifyEntry( HttpServletRequest request )
+    @View( value = VIEW_MODIFY_ENTRY, securityTokenAction = TOKEN_SUGGEST )
+    public String getModifyEntry( HttpServletRequest request, Models model )
     {
         Plugin plugin = getPlugin( );
         IEntry entry;
@@ -2549,12 +2690,10 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         List<EntryAdditionalAttribute> entryAdditionalAttributeList = EntryAdditionalAttributeHome.getList( nIdEntry, plugin );
 
         if ( ( entry == null ) || ( suggest == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+                || !SuggestService.isAuthorized( _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
         {
-            return getManageSuggest( request );
+            return getManageSuggest( request, model );
         }
-
-        Map<String, Object> model = new HashMap<>( );
 
         for ( EntryAdditionalAttribute entryAdditionalAttribute : entryAdditionalAttributeList )
         {
@@ -2565,7 +2704,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage, _nDefaultItemsPerPage );
 
-        Paginator paginator = entry.getPaginator( _nItemsPerPage, AppPathService.getBaseUrl( request ) + JSP_MODIFY_ENTRY + "?id_entry=" + nIdEntry,
+        Paginator paginator = entry.getPaginator( _nItemsPerPage, AppPathService.getBaseUrl( request ) + JSP_MODIFY_ENTRY + "&id_entry=" + nIdEntry,
                 PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
 
         if ( paginator != null )
@@ -2585,11 +2724,8 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage( ) );
-        setPageTitleProperty( PROPERTY_MODIFY_QUESTION_TITLE );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( entry.getTemplateModify( ), getLocale( ), model );
-
-        return getAdminPage( template.getHtml( ) );
+        return getPage( PROPERTY_MODIFY_QUESTION_TITLE, entry.getTemplateModify( ) );
     }
 
     /**
@@ -2599,6 +2735,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_MODIFY_ENTRY, securityTokenAction = TOKEN_SUGGEST )
     public String doModifyEntry( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
@@ -2611,9 +2748,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
 
         if ( ( entry == null ) || ( suggest == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+                || !SuggestService.isAuthorized( _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
         {
-            return getJspManageSuggest( request );
+            return redirect( request, getJspManageSuggest( request ) );
         }
 
         if ( request.getParameter( PARAMETER_CANCEL ) == null )
@@ -2622,7 +2759,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
             if ( strError != null )
             {
-                return strError;
+                return redirect( request, strError );
             }
 
             EntryHome.update( entry, plugin );
@@ -2630,10 +2767,10 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         if ( request.getParameter( PARAMETER_APPLY ) != null )
         {
-            return getJspModifyEntry( request, nIdEntry );
+            return redirect( request, getJspModifyEntry( request, nIdEntry ) );
         }
 
-        return getJspModifySuggest( request, suggest.getIdSuggest( ) );
+        return redirect( request, getJspModifySuggest( request, suggest.getIdSuggest( ) ) );
     }
 
     /**
@@ -2643,6 +2780,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return the confirmation page of delete entry
      */
+    @View( value = VIEW_CONFIRM_REMOVE_ENTRY, securityTokenAction = TOKEN_SUGGEST )
     public String getConfirmRemoveEntry( HttpServletRequest request )
     {
         String strMessage;
@@ -2651,7 +2789,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         if ( nIdEntry == -1 )
         {
-            return getHomeUrl( request );
+            return redirect( request, getHomeUrl( request ) );
         }
 
         strMessage = MESSAGE_CONFIRM_REMOVE_ENTRY;
@@ -2659,7 +2797,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         UrlItem url = new UrlItem( JSP_DO_REMOVE_ENTRY );
         url.addParameter( PARAMETER_ID_ENTRY, strIdEntry + "#list" );
 
-        return AdminMessageService.getMessageUrl( request, strMessage, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
+        return redirect( request, AdminMessageService.getMessageUrl( request, strMessage, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
     }
 
     /**
@@ -2669,6 +2807,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_REMOVE_ENTRY, securityTokenAction = TOKEN_SUGGEST )
     public String doRemoveEntry( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
@@ -2677,14 +2816,14 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
 
         if ( ( nIdEntry == -1 ) || ( suggest == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+                || !SuggestService.isAuthorized( _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
         {
-            return getJspManageSuggest( request );
+            return redirect( request, getJspManageSuggest( request ) );
         }
 
         EntryHome.remove( nIdEntry, plugin );
 
-        return getJspModifySuggest( request, suggest.getIdSuggest( ) );
+        return redirect( request, getJspModifySuggest( request, suggest.getIdSuggest( ) ) );
     }
 
     /**
@@ -2694,6 +2833,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_COPY_ENTRY, securityTokenAction = TOKEN_SUGGEST )
     public String doCopyEntry( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
@@ -2705,9 +2845,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
 
         if ( ( entry == null ) || ( suggest == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+                || !SuggestService.isAuthorized( _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
         {
-            return getJspManageSuggest( request );
+            return redirect( request, getJspManageSuggest( request ) );
         }
 
         Object [ ] tabEntryTileCopy = {
@@ -2722,7 +2862,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         EntryHome.copy( entry, plugin );
 
-        return getJspModifySuggest( request, suggest.getIdSuggest( ) );
+        return redirect( request, getJspModifySuggest( request, suggest.getIdSuggest( ) ) );
     }
 
     /**
@@ -2732,6 +2872,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_MOVE_UP_ENTRY, securityTokenAction = TOKEN_SUGGEST )
     public String doMoveUpEntry( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
@@ -2744,9 +2885,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
 
         if ( ( entry == null ) || ( suggest == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+                || !SuggestService.isAuthorized( _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
         {
-            return getJspManageSuggest( request );
+            return redirect( request, getJspManageSuggest( request ) );
         }
 
         List<IEntry> listEntry;
@@ -2769,7 +2910,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             EntryHome.update( entryToInversePosition, plugin );
         }
 
-        return getJspModifySuggest( request, suggest.getIdSuggest( ) );
+        return redirect( request, getJspModifySuggest( request, suggest.getIdSuggest( ) ) );
     }
 
     /**
@@ -2779,6 +2920,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_MOVE_DOWN_ENTRY, securityTokenAction = TOKEN_SUGGEST )
     public String doMoveDownEntry( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
@@ -2792,9 +2934,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
 
         if ( ( entry == null ) || ( suggest == null )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, getUser( ) ) )
+                || !SuggestService.isAuthorized( _nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
         {
-            return getJspManageSuggest( request );
+            return redirect( request, getJspManageSuggest( request ) );
         }
 
         List<IEntry> listEntry;
@@ -2817,7 +2959,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             EntryHome.update( entryToInversePosition, plugin );
         }
 
-        return getJspModifySuggest( request, suggest.getIdSuggest( ) );
+        return redirect( request, getJspModifySuggest( request, suggest.getIdSuggest( ) ) );
     }
 
     /**
@@ -2827,6 +2969,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return the confirmation page of disable suggest
      */
+    @View( value = VIEW_CONFIRM_DISABLE_SUGGEST, securityTokenAction = TOKEN_SUGGEST )
     public String getConfirmDisableSuggest( HttpServletRequest request )
     {
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
@@ -2834,7 +2977,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         if ( nIdSuggest == -1 )
         {
-            return getHomeUrl( request );
+            return redirect( request, getHomeUrl( request ) );
         }
 
         String strMessage;
@@ -2843,7 +2986,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         UrlItem url = new UrlItem( JSP_DO_DISABLE_SUGGEST );
         url.addParameter( PARAMETER_ID_SUGGEST, strIdSuggest );
 
-        return AdminMessageService.getMessageUrl( request, strMessage, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
+        return redirect( request, AdminMessageService.getMessageUrl( request, strMessage, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
     }
 
     /**
@@ -2853,6 +2996,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_DISABLE_SUGGEST, securityTokenAction = TOKEN_SUGGEST )
     public String doDisableSuggest( HttpServletRequest request )
     {
         Suggest suggest;
@@ -2862,7 +3006,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
 
         if ( ( suggest != null )
-                && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + nIdSuggest, SuggestResourceIdService.PERMISSION_CHANGE_STATE, getUser( ) ) )
+                && SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_CHANGE_STATE, (User) getUser( ) ) )
         {
             suggest.setActive( false );
             SuggestHome.update( suggest, getPlugin( ) );
@@ -2880,7 +3024,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             }
         }
 
-        return getJspManageSuggest( request );
+        return redirect( request, getJspManageSuggest( request ) );
     }
 
     /**
@@ -2890,6 +3034,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_ENABLE_SUGGEST, securityTokenAction = TOKEN_SUGGEST )
     public String doEnableSuggest( HttpServletRequest request )
     {
         Suggest suggest;
@@ -2899,7 +3044,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
 
         if ( ( suggest != null )
-                && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + nIdSuggest, SuggestResourceIdService.PERMISSION_CHANGE_STATE, getUser( ) ) )
+                && SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_CHANGE_STATE, (User) getUser( ) ) )
         {
             suggest.setActive( true );
             SuggestHome.update( suggest, getPlugin( ) );
@@ -2917,7 +3062,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             }
         }
 
-        return getJspManageSuggest( request );
+        return redirect( request, getJspManageSuggest( request ) );
     }
 
     /**
@@ -2980,7 +3125,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
     private String getJspManageCommentSubmit( HttpServletRequest request, String strIdParentCommentSubmit )
     {
         String strUrlReturn = ( strIdParentCommentSubmit == null ) ? JSP_MANAGE_COMMENT_SUBMIT
-                : ( JSP_MANAGE_COMMENT_SUBMIT + "?" + PARAMETER_ID_PARENT + "=" + strIdParentCommentSubmit );
+                : ( JSP_MANAGE_COMMENT_SUBMIT + "&" + PARAMETER_ID_PARENT + "=" + strIdParentCommentSubmit );
 
         return AppPathService.getBaseUrl( request ) + strUrlReturn;
     }
@@ -3010,7 +3155,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      */
     private String getJspModifySuggest( HttpServletRequest request, int nIdSuggest )
     {
-        return AppPathService.getBaseUrl( request ) + JSP_MODIFY_SUGGEST + "?id_suggest=" + nIdSuggest;
+        return AppPathService.getBaseUrl( request ) + JSP_MODIFY_SUGGEST + "&id_suggest=" + nIdSuggest;
     }
 
     /**
@@ -3041,7 +3186,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      */
     private String getJspModifyEntry( HttpServletRequest request, int nIdEntry )
     {
-        return AppPathService.getBaseUrl( request ) + JSP_MODIFY_ENTRY + "?id_entry=" + nIdEntry;
+        return AppPathService.getBaseUrl( request ) + JSP_MODIFY_ENTRY + "&id_entry=" + nIdEntry;
     }
 
     /**
@@ -3131,6 +3276,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            the Http Request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_REMOVE_REGULAR_EXPRESSION, securityTokenAction = TOKEN_SUGGEST )
     public String doRemoveRegularExpression( HttpServletRequest request )
     {
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
@@ -3146,10 +3292,10 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         if ( nIdEntry != -1 )
         {
-            return getJspModifyEntry( request, nIdEntry );
+            return redirect( request, getJspModifyEntry( request, nIdEntry ) );
         }
 
-        return getHomeUrl( request );
+        return redirect( request, getHomeUrl( request ) );
     }
 
     /**
@@ -3159,6 +3305,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            the Http Request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_INSERT_REGULAR_EXPRESSION, securityTokenAction = TOKEN_SUGGEST )
     public String doInsertRegularExpression( HttpServletRequest request )
     {
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
@@ -3174,10 +3321,10 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         if ( nIdEntry != -1 )
         {
-            return getJspModifyEntry( request, nIdEntry );
+            return redirect( request, getJspModifyEntry( request, nIdEntry ) );
         }
 
-        return getHomeUrl( request );
+        return redirect( request, getHomeUrl( request ) );
     }
 
     /**
@@ -3228,12 +3375,15 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      * @param request
      *            The Http request
      * @return The Jsp URL of the process result
+     * @throws AccessDeniedException
+     *             if the suggest is out of the user's rights or workgroups
      */
-    public String doModifySuggestSubmitOrder( HttpServletRequest request )
+    @Action( value = ACTION_MODIFY_SUGGEST_SUBMIT_ORDER, securityTokenAction = TOKEN_SUGGEST )
+    public String doModifySuggestSubmitOrder( HttpServletRequest request ) throws AccessDeniedException
     {
         int nIdSuggestSubmit = Integer.parseInt( request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT ) );
 
-        SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
+        SuggestSubmit suggestSubmit = getAuthorizedSuggestSubmit( nIdSuggestSubmit );
         int nIdSuggest = Integer.parseInt( request.getParameter( PARAMETER_ID_SUGGEST ) );
 
         if ( suggestSubmit != null )
@@ -3244,7 +3394,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
                     suggestSubmit.isPinned( ), getPlugin( ) );
         }
 
-        return getJspManageSuggestSubmitOrder( request ) + "?" + PARAMETER_ID_SUGGEST + "=" + nIdSuggest;
+        return redirect( request, getJspManageSuggestSubmitOrder( request ) + "&" + PARAMETER_ID_SUGGEST + "=" + nIdSuggest );
     }
 
     /**
@@ -3272,9 +3422,14 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *
      * @param request
      *            the http request
+     * @param model
+     *            the model
      * @return the form test page
+     * @throws AccessDeniedException
+     *             if the suggest is out of the user's rights or workgroups
      */
-    public String getStatistics( HttpServletRequest request )
+    @View( value = VIEW_STATISTICS, securityTokenAction = TOKEN_SUGGEST )
+    public String getStatistics( HttpServletRequest request, Models model ) throws AccessDeniedException
     {
         Plugin plugin = getPlugin( );
         Locale locale = getLocale( );
@@ -3284,6 +3439,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         suggestFilter.setIdState( Suggest.STATE_ENABLE );
 
         List<Suggest> listSuggest = SuggestHome.getSuggestList( suggestFilter, plugin );
+        listSuggest = (List<Suggest>) AdminWorkgroupService.getAuthorizedCollection( listSuggest, (User) getUser( ) );
 
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
         String strFirstDateFilter = request.getParameter( PARAMETER_FIRST_DATE_FILTER );
@@ -3305,6 +3461,11 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             }
 
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
+
+        if ( ( suggest == null ) || !AdminWorkgroupService.isAuthorized( suggest, (User) getUser( ) ) )
+        {
+            throw new AccessDeniedException( "Access denied" );
+        }
 
         if ( ( strFirstDateFilter != null ) && !strFirstDateFilter.equals( "" ) )
         {
@@ -3380,8 +3541,6 @@ public class SuggestJspBean extends PluginAdminPageJspBean
 
         ReferenceList refSuggestList = SuggestUtils.getRefListSuggest( listSuggest, false );
 
-        Map<String, Object> model = new HashMap<>( );
-
         model.put( MARK_FIRST_DATE_FILTER, ( tFirstDateFilter == null ) ? null : new Date( tFirstDateFilter.getTime( ) ) );
         model.put( MARK_LAST_DATE_FILTER, ( tLastDateFilter == null ) ? null : new Date( tLastDateFilter.getTime( ) ) );
         model.put( MARK_SUGGEST, suggest );
@@ -3392,10 +3551,10 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             float fC = (float) nNbComments / nNbSuggestSubmitPublished;
 
             BigDecimal bd = new BigDecimal( fV );
-            bd = bd.setScale( 2, BigDecimal.ROUND_HALF_UP );
+            bd = bd.setScale( 2, RoundingMode.HALF_UP );
 
             BigDecimal bd2 = new BigDecimal( fC );
-            bd2 = bd2.setScale( 2, BigDecimal.ROUND_HALF_UP );
+            bd2 = bd2.setScale( 2, RoundingMode.HALF_UP );
 
             model.put( MARK_NUMBER_VOTES, bd.toString( ) );
             model.put( MARK_NUMBER_COMMENTS, bd2.toString( ) );
@@ -3433,11 +3592,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         model.put( MARK_NUMBER_USERS, listUsersKey.size( ) );
         model.put( MARK_HIGH_SCORES, listSuggestSubmit );
         model.put( MARK_SUGGEST_LIST, refSuggestList );
-        model.put( MARK_URL, AppPathService.getBaseUrl( request ) + JSP_MANAGE_COMMENT_SUBMIT + "?id_suggest_submit=" );
+        model.put( MARK_URL, AppPathService.getBaseUrl( request ) + JSP_MANAGE_COMMENT_SUBMIT + "&id_suggest_submit=" );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_STATISTICS_SUGGEST, locale, model );
-
-        return getAdminPage( template.getHtml( ) );
+        return getPage( PROPERTY_STATISTICS_TITLE, TEMPLATE_STATISTICS_SUGGEST );
     }
 
     /**
@@ -3447,22 +3604,22 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return the confirmation page of update all suggest submit
      */
+    @View( value = VIEW_CONFIRM_UPDATE_ALL_DISPLAY_OF_SUGGEST_SUBMIT, securityTokenAction = TOKEN_SUGGEST )
     public String getConfirmUpdateAllDisplayOfSuggestSubmit( HttpServletRequest request )
     {
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
 
         if ( ( nIdSuggest == -1 )
-                || !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + nIdSuggest, SuggestResourceIdService.PERMISSION_UPDATE_ALL_SUGGEST_SUBMIT,
-                        getUser( ) ) )
+                || !SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_UPDATE_ALL_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
-            return getJspManageSuggest( request );
+            return redirect( request, getJspManageSuggest( request ) );
         }
 
         UrlItem url = new UrlItem( JSP_DO_UPDATE_ALL_SUGGEST_SUBMIT );
         url.addParameter( PARAMETER_ID_SUGGEST, strIdSuggest );
 
-        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_UPDATE_ALL_SUGGEST_SUBMIT, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
+        return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_UPDATE_ALL_SUGGEST_SUBMIT, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
     }
 
     /**
@@ -3472,19 +3629,19 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            The HTTP request
      * @return The URL to go after performing the action
      */
+    @Action( value = ACTION_UPDATE_ALL_DISPLAY_OF_SUGGEST_SUBMIT, securityTokenAction = TOKEN_SUGGEST )
     public String doUpdateAllDisplayOfSuggestSubmit( HttpServletRequest request )
     {
         Plugin plugin = getPlugin( );
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
 
-        if ( RBACService.isAuthorized( Suggest.RESOURCE_TYPE, EMPTY_STRING + nIdSuggest, SuggestResourceIdService.PERMISSION_UPDATE_ALL_SUGGEST_SUBMIT,
-                getUser( ) ) )
+        if ( SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_UPDATE_ALL_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
             _suggestSubmitService.updateAllDisplayOfSuggestSubmit( nIdSuggest, plugin, getLocale( ) );
         }
 
-        return getJspManageSuggest( request );
+        return redirect( request, getJspManageSuggest( request ) );
     }
 
     /**
@@ -3494,6 +3651,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      *            the request
      * @return url
      */
+    @Action( value = ACTION_MODIFY_ADVANCED_PARAMETERS, securityTokenAction = TOKEN_SUGGEST )
     public String doModifyAdvancedParameters( HttpServletRequest request )
     {
         Suggest suggest;
@@ -3502,9 +3660,9 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         int nIdDefaultSuggest = SuggestUtils.getIntegerParameter( strIdDefaultSuggest );
 
         if ( !RBACService.isAuthorized( Suggest.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, SuggestResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS,
-                getUser( ) ) )
+                (User) getUser( ) ) )
         {
-            return getManageSuggest( request );
+            return redirect( request, getJspManageSuggest( request ) );
         }
 
         // find default Suggest
@@ -3532,7 +3690,7 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             }
         }
 
-        return getJspManageAdvancedParameters( request );
+        return redirect( request, getJspManageAdvancedParameters( request ) );
     }
 
     private void updateSearchFieldsData( HttpServletRequest request )
@@ -3599,8 +3757,11 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      * @param request
      *            The request
      * @return the SuggestSubmit's management page if it is a simple task, or the form associated to the task (if it has any)
+     * @throws AccessDeniedException
+     *             if the suggest is out of the user's rights or workgroups
      */
-    public String doProcessAction( HttpServletRequest request )
+    @Action( value = ACTION_PROCESS_WORKFLOW_ACTION, securityTokenAction = TOKEN_SUGGEST )
+    public String doProcessAction( HttpServletRequest request ) throws AccessDeniedException
     {
         String strIdAction = request.getParameter( PARAMETER_ID_ACTION );
         String strIdSuggestSubmit = request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT );
@@ -3610,19 +3771,19 @@ public class SuggestJspBean extends PluginAdminPageJspBean
             int nIdAction = Integer.parseInt( strIdAction );
             int nIdSuggestSubmit = Integer.parseInt( strIdSuggestSubmit );
 
-            SuggestSubmit submit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
+            SuggestSubmit submit = getAuthorizedSuggestSubmit( nIdSuggestSubmit );
 
             // Check if the workflow's task has to display a form to the user
-            if ( WorkflowService.getInstance( ).isDisplayTasksForm( nIdAction, getLocale( ) ) )
+            if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( ) ) )
             {
                 // Display the task's form
-                return getTaskFormJsp( request, nIdAction, nIdSuggestSubmit );
+                return redirect( request, getTaskFormJsp( request, nIdAction, nIdSuggestSubmit ) );
             }
             // Otherwise, just execute the task
-            WorkflowService.getInstance( ).doProcessAction( nIdSuggestSubmit, SuggestSubmit.RESOURCE_TYPE, nIdAction, submit.getSuggest( ).getIdSuggest( ),
+            _workflowService.doProcessAction( nIdSuggestSubmit, SuggestSubmit.RESOURCE_TYPE, nIdAction, submit.getSuggest( ).getIdSuggest( ),
                     request, getLocale( ), false, getUser( ) );
         }
-        return getJspManageSuggestSubmit( request );
+        return redirect( request, getJspManageSuggestSubmit( request ) );
     }
 
     /**
@@ -3650,9 +3811,14 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      * 
      * @param request
      *            The request
+     * @param model
+     *            the model
      * @return the workflow's task's form if there's any, otherwise it returns to the SuggestSubmit's management page
+     * @throws AccessDeniedException
+     *             if the suggest is out of the user's rights or workgroups
      */
-    public String getWorkflowTaskForm( HttpServletRequest request )
+    @View( value = VIEW_WORKFLOW_TASK_FORM, securityTokenAction = TOKEN_SUGGEST )
+    public String getWorkflowTaskForm( HttpServletRequest request, Models model ) throws AccessDeniedException
     {
         // Get the Parameters from the the request
         int nIdSuggestSubmit = NumberUtils.toInt( request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT ), NumberUtils.INTEGER_MINUS_ONE );
@@ -3662,23 +3828,19 @@ public class SuggestJspBean extends PluginAdminPageJspBean
         {
             // If an error occurs, return to the main management page
             AppLogService.error( "Can't get workflow task's form: action ID is {} & SuggestSubmit ID is {}", nIdAction, nIdSuggestSubmit );
-            return AdminMessageService.getMessageUrl( request, MESSAGE_ACTION_ERROR, getJspManageSuggestSubmit( request ), AdminMessage.TYPE_ERROR );
+            return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_ACTION_ERROR, getJspManageSuggestSubmit( request ), AdminMessage.TYPE_ERROR ) );
         }
 
-        // Retrieve the form associated with this workflow's task
-        String strHtmlTaskForm = WorkflowService.getInstance( ).getDisplayTasksForm( nIdSuggestSubmit, SuggestSubmit.RESOURCE_TYPE, nIdAction, request,
-                getLocale( ), getUser( ) );
+        getAuthorizedSuggestSubmit( nIdSuggestSubmit );
 
-        Map<String, Object> model = new HashMap<>( );
+        // Retrieve the form associated with this workflow's task
+        String strHtmlTaskForm = _workflowService.getDisplayTasksForm( nIdSuggestSubmit, SuggestSubmit.RESOURCE_TYPE, nIdAction, request,
+                getLocale( ), getUser( ) );
         model.put( MARK_ID_SUGGEST_SUBMIT, nIdSuggestSubmit );
         model.put( MARK_ID_ACTION, nIdAction );
         model.put( MARK_TASK_FORM, strHtmlTaskForm );
 
-        setPageTitleProperty( PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW );
-
-        // Display the task's form
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_FORM, getLocale( ), model );
-        return getAdminPage( template.getHtml( ) );
+        return getPage( PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW, TEMPLATE_TASK_FORM );
     }
 
     /**
@@ -3687,21 +3849,24 @@ public class SuggestJspBean extends PluginAdminPageJspBean
      * @param request
      *            The request
      * @return the SuggestSubmit's management page
+     * @throws AccessDeniedException
+     *             if the suggest is out of the user's rights or workgroups
      */
-    public String doSaveTaskForm( HttpServletRequest request )
+    @Action( value = ACTION_SAVE_WORKFLOW_TASK_FORM, securityTokenAction = TOKEN_SUGGEST )
+    public String doSaveTaskForm( HttpServletRequest request ) throws AccessDeniedException
     {
         int nIdSuggestSubmit = NumberUtils.toInt( request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT ), NumberUtils.INTEGER_MINUS_ONE );
         int nIdAction = NumberUtils.toInt( request.getParameter( PARAMETER_ID_ACTION ), NumberUtils.INTEGER_MINUS_ONE );
 
-        SuggestSubmit submit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
+        SuggestSubmit submit = getAuthorizedSuggestSubmit( nIdSuggestSubmit );
 
         if ( request.getParameter( PARAMETER_BACK ) == null )
         {
             // Save the content of the form
-            if ( WorkflowService.getInstance( ).isDisplayTasksForm( nIdAction, getLocale( ) ) && request.getParameter( PARAMETER_SAVE ) != null )
+            if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( ) ) && request.getParameter( PARAMETER_SAVE ) != null )
             {
                 // With doSaveTasksForm(...), the content of the task's form is saved and then the task's action is executed
-                String strError = WorkflowService.getInstance( ).doSaveTasksForm( nIdSuggestSubmit, SuggestSubmit.RESOURCE_TYPE, nIdAction,
+                String strError = _workflowService.doSaveTasksForm( nIdSuggestSubmit, SuggestSubmit.RESOURCE_TYPE, nIdAction,
                         submit.getSuggest( ).getIdSuggest( ), request, getLocale( ), getUser( ) );
 
                 // Check if the execution returned any error
@@ -3709,12 +3874,45 @@ public class SuggestJspBean extends PluginAdminPageJspBean
                 {
                     // Redirect with an error message
                     AppLogService.error( "Can't process Suggest workflow action: {}", strError );
-                    return AdminMessageService.getMessageUrl( request, MESSAGE_ACTION_ERROR, getJspManageSuggestSubmit( request ), AdminMessage.TYPE_ERROR );
+                    return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_ACTION_ERROR, getJspManageSuggestSubmit( request ), AdminMessage.TYPE_ERROR ) );
                 }
             }
-            return getJspManageSuggestSubmit( request );
+            return redirect( request, getJspManageSuggestSubmit( request ) );
         }
         // If the user cancels the task within the form
-        return getJspManageSuggestSubmit( request );
+        return redirect( request, getJspManageSuggestSubmit( request ) );
+    }
+
+    /**
+     * Loads a suggest submit whose suggest the user may manage
+     *
+     * @param nIdSuggestSubmit
+     *            the suggest submit id
+     * @return the suggest submit
+     * @throws AccessDeniedException
+     *             if the suggest submit is unknown or its suggest is out of the user's rights or workgroups
+     */
+    private SuggestSubmit getAuthorizedSuggestSubmit( int nIdSuggestSubmit ) throws AccessDeniedException
+    {
+        SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
+
+        if ( ( suggestSubmit == null ) || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ),
+                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+        {
+            throw new AccessDeniedException( "Access denied" );
+        }
+
+        return suggestSubmit;
+    }
+
+    /**
+     * Returns the suggest plugin.
+     *
+     * @return the plugin
+     */
+    @Override
+    public Plugin getPlugin( )
+    {
+        return PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
     }
 }

@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -44,6 +46,7 @@ import java.util.List;
  * class GraphTypeDAO
  *
  */
+@ApplicationScoped
 public class VoteTypeDAO implements IVoteTypeDAO
 {
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_vote_type,title,template_file_name FROM suggest_vote_type WHERE id_vote_type=?";
@@ -120,32 +123,6 @@ public class VoteTypeDAO implements IVoteTypeDAO
         return listVoteType;
     }
 
-    // /**
-    // * Load the data of all vote button associated to the vote type returns them in a list
-    // * @param nIdVoteType the vote type id
-    // * @param plugin the plugin
-    // * @return the list of vote button associated to the vote type returns them in a list
-    // */
-    // private List<VoteButton> selectListVoteButton( int nIdVoteType, Plugin plugin )
-    // {
-    // DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_VOTE_BUTTON_BY_ID_VOTE_TYPE, plugin );
-    // daoUtil.setInt( 1, nIdVoteType );
-    // daoUtil.executeQuery( );
-    //
-    // VoteButton voteButton = null;
-    // List<VoteButton> listVoteButton = new ArrayList<VoteButton>( );
-    //
-    // while ( daoUtil.next( ) )
-    // {
-    // voteButton = new VoteButton( );
-    // voteButton.setIdVoteButton( daoUtil.getInt( 1 ) );
-    // voteButton.setTitle( daoUtil.getString( 2 ) );
-    // voteButton.setValue( daoUtil.getString( 3 ) );
-    // voteButton.setIconContent( daoUtil.getBytes( 4 ) );
-    // voteButton.setIconMimeType( daoUtil.getString( 5 ) );
-    //
-    // listVoteButton.add( voteButton );
-    // }
     //
     // daoUtil.free( );
     //

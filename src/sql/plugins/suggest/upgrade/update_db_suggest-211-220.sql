@@ -1,3 +1,7 @@
+-- liquibase formatted sql
+-- changeset suggest:update_db_suggest-211-220.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_comment_submit' AND column_name = 'official_answer'
 ALTER TABLE suggest_suggest ADD COLUMN enable_new_suggest_submit_mail smallint default 0;
 ALTER TABLE suggest_suggest ADD COLUMN id_mailing_list_new_suggest_submit int default NULL;
 -- used to have a header under the suggest title--

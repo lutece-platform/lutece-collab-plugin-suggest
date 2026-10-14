@@ -33,6 +33,13 @@
  */
 package fr.paris.lutece.plugins.suggest.service;
 
+import java.sql.SQLException;
+import fr.paris.lutece.portal.service.util.AppException;
+import fr.paris.lutece.plugins.suggest.business.VideoTypeHome;
+import fr.paris.lutece.plugins.suggest.business.VideoType;
+import fr.paris.lutece.plugins.suggest.business.EntryTypeVideo;
+import jakarta.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
 import fr.paris.lutece.plugins.suggest.business.Suggest;
@@ -54,7 +61,6 @@ import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.search.IndexationService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
@@ -65,92 +71,106 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.springframework.transaction.annotation.Transactional;
+import fr.paris.lutece.util.sql.TransactionManager;
+import java.util.function.Supplier;
 
+@ApplicationScoped
 public class SuggestSubmitService implements ISuggestSubmitService
 {
-    public static final String BEAN_SERVICE = "suggest.suggestSubmitService";
-    private static ISuggestSubmitService _singleton;
+    @Inject
+    private ICommentSubmitService _commentSubmitService;
+
+    @Inject
+    private WorkflowService _workflowService;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @Transactional( "suggest.transactionManager" )
     public int create( SuggestSubmit suggestSubmit, Plugin plugin, Locale locale, User user )
     {
-        // update creation date
-        suggestSubmit.setDateResponse( SuggestUtils.getCurrentDate( ) );
-
-        // update suggest submit state
-        if ( suggestSubmit.getSuggest( ).isDisableNewSuggestSubmit( ) )
-        {
-            suggestSubmit.setSuggestSubmitState( SuggestSubmitStateHome.findByNumero( SuggestSubmit.STATE_WAITING_FOR_PUBLISH, plugin ) );
-        }
-        else
-        {
-            suggestSubmit.setSuggestSubmitState( SuggestSubmitStateHome.findByNumero( SuggestSubmit.STATE_PUBLISH, plugin ) );
-        }
-
-        int nIdSuggestSubmit = SuggestSubmitHome.create( suggestSubmit, plugin );
-        suggestSubmit.setIdSuggestSubmit( nIdSuggestSubmit );
-
-        if ( suggestSubmit.getSuggestSubmitState( ).getIdSuggestSubmitState( ) == SuggestSubmit.STATE_PUBLISH )
-        {
-            String strIdSuggestSubmit = Integer.toString( nIdSuggestSubmit );
-            IndexationService.addIndexerAction( strIdSuggestSubmit, AppPropertiesService.getProperty( SuggestIndexer.PROPERTY_INDEXER_NAME ),
-                    IndexerAction.TASK_CREATE );
-
-            SuggestIndexerUtils.addIndexerAction( strIdSuggestSubmit, IndexerAction.TASK_CREATE );
-        }
-
-        // store response
-        if ( suggestSubmit.getResponses( ) != null )
-        {
-            for ( Response response : suggestSubmit.getResponses( ) )
+        return inTransaction( plugin, ( ) -> {
+            // update creation date
+            suggestSubmit.setDateResponse( SuggestUtils.getCurrentDate( ) );
+    
+            // update suggest submit state
+            if ( suggestSubmit.getSuggest( ).isDisableNewSuggestSubmit( ) )
             {
-                if ( response.getImage( ) != null )
-                {
-                    response.setIdImageResource( ImageResourceHome.create( response.getImage( ), plugin ) );
-                    // update Id Image ressource associate to the suggest
-                    suggestSubmit.setIdImageResource( response.getIdImageResource( ) );
-                }
-
-                response.setSuggestSubmit( suggestSubmit );
-                ResponseHome.create( response, plugin );
+                suggestSubmit.setSuggestSubmitState( SuggestSubmitStateHome.findByNumero( SuggestSubmit.STATE_WAITING_FOR_PUBLISH, plugin ) );
             }
-        }
+            else
+            {
+                suggestSubmit.setSuggestSubmitState( SuggestSubmitStateHome.findByNumero( SuggestSubmit.STATE_PUBLISH, plugin ) );
+            }
+    
+            int nIdSuggestSubmit = SuggestSubmitHome.create( suggestSubmit, plugin );
+            suggestSubmit.setIdSuggestSubmit( nIdSuggestSubmit );
+    
+            if ( suggestSubmit.getSuggestSubmitState( ).getIdSuggestSubmitState( ) == SuggestSubmit.STATE_PUBLISH )
+            {
+                String strIdSuggestSubmit = Integer.toString( nIdSuggestSubmit );
+                IndexationService.addIndexerAction( strIdSuggestSubmit, AppPropertiesService.getProperty( SuggestIndexer.PROPERTY_INDEXER_NAME ),
+                        IndexerAction.TASK_CREATE );
+    
+                SuggestIndexerUtils.addIndexerAction( strIdSuggestSubmit, IndexerAction.TASK_CREATE );
+            }
+    
+            // store response
+            if ( suggestSubmit.getResponses( ) != null )
+            {
+                for ( Response response : suggestSubmit.getResponses( ) )
+                {
+                    if ( response.getImage( ) != null )
+                    {
+                        response.setIdImageResource( ImageResourceHome.create( response.getImage( ), plugin ) );
+                        // update Id Image ressource associate to the suggest
+                        suggestSubmit.setIdImageResource( response.getIdImageResource( ) );
+                    }
+    
+                    if ( ( response.getVideo( ) != null ) && ( response.getEntry( ) instanceof EntryTypeVideo entryTypeVideo ) )
+                    {
+                        createVideo( response.getVideo( ), nIdSuggestSubmit, plugin );
+                        response.setValueResponse( entryTypeVideo.getVideoHtml( nIdSuggestSubmit, response.getVideo( ).getCredits( ), locale ) );
+                    }
 
-        // update SuggestSubmit
-        suggestSubmit.setSuggestSubmitValue( SuggestUtils.getHtmlSuggestSubmitValue( suggestSubmit, locale ) );
-        suggestSubmit.setSuggestSubmitValueShowInTheList( SuggestUtils.getHtmlSuggestSubmitValueShowInTheList( suggestSubmit, locale ) );
-        suggestSubmit.setSuggestSubmitTitle( SuggestUtils.getSuggestSubmitTitle( suggestSubmit, locale ) );
-        SuggestSubmitHome.update( suggestSubmit, plugin );
-
-        // Execute potential workflow tasks on a SuggestSubmit's creation
-        executeSuggestSubmitWorkflowAction( suggestSubmit, user );
-
-        return nIdSuggestSubmit;
+                    response.setSuggestSubmit( suggestSubmit );
+                    ResponseHome.create( response, plugin );
+                }
+            }
+    
+            // update SuggestSubmit
+            suggestSubmit.setSuggestSubmitValue( SuggestUtils.getHtmlSuggestSubmitValue( suggestSubmit, locale ) );
+            suggestSubmit.setSuggestSubmitValueShowInTheList( SuggestUtils.getHtmlSuggestSubmitValueShowInTheList( suggestSubmit, locale ) );
+            suggestSubmit.setSuggestSubmitTitle( SuggestUtils.getSuggestSubmitTitle( suggestSubmit, locale ) );
+            SuggestSubmitHome.update( suggestSubmit, plugin );
+    
+            // Execute potential workflow tasks on a SuggestSubmit's creation
+            executeSuggestSubmitWorkflowAction( suggestSubmit, user );
+    
+            return nIdSuggestSubmit;
+        } );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @Transactional( "suggest.transactionManager" )
     public void update( SuggestSubmit suggestSubmit, Plugin plugin )
     {
-        SuggestSubmitHome.update( suggestSubmit, plugin );
+        inTransaction( plugin, ( ) -> {
+            SuggestSubmitHome.update( suggestSubmit, plugin );
+        } );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @Transactional( "suggest.transactionManager" )
     public void update( SuggestSubmit suggestSubmit, boolean bUpdateIndex, Plugin plugin )
     {
-        SuggestSubmitHome.update( suggestSubmit, bUpdateIndex, plugin );
+        inTransaction( plugin, ( ) -> {
+            SuggestSubmitHome.update( suggestSubmit, bUpdateIndex, plugin );
+        } );
     }
 
     /**
@@ -159,79 +179,82 @@ public class SuggestSubmitService implements ISuggestSubmitService
      */
     @Deprecated
     @Override
-    @Transactional( "suggest.transactionManager" )
     public void remove( int nIdSuggestSubmit, Plugin plugin )
     {
-        SuggestSubmit suggestSubmit = SuggestSubmitHome.findByPrimaryKey( nIdSuggestSubmit, plugin );
-
-        if ( suggestSubmit != null )
-        {
-            int nIdSuggest = suggestSubmit.getSuggest( ).getIdSuggest( );
-            // remove
-            SuggestSubmitHome.remove( nIdSuggestSubmit, plugin );
-            // update suggest submit order
-            updateSuggestSubmitOrder( null, null, nIdSuggest, suggestSubmit.isPinned( ), plugin );
-        }
+        inTransaction( plugin, ( ) -> {
+            SuggestSubmit suggestSubmit = SuggestSubmitHome.findByPrimaryKey( nIdSuggestSubmit, plugin );
+    
+            if ( suggestSubmit != null )
+            {
+                int nIdSuggest = suggestSubmit.getSuggest( ).getIdSuggest( );
+                // remove
+                SuggestSubmitHome.remove( nIdSuggestSubmit, plugin );
+                // update suggest submit order
+                updateSuggestSubmitOrder( null, null, nIdSuggest, suggestSubmit.isPinned( ), plugin );
+            }
+        } );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @Transactional( "suggest.transactionManager" )
     public void remove( int nIdSuggestSubmit, Plugin plugin, User user )
     {
-        SuggestSubmit suggestSubmit = SuggestSubmitHome.findByPrimaryKey( nIdSuggestSubmit, plugin );
-
-        if ( suggestSubmit != null )
-        {
-            int nIdSuggest = suggestSubmit.getSuggest( ).getIdSuggest( );
-            // Remove the specified SuggestSubmit element
-            SuggestSubmitHome.remove( nIdSuggestSubmit, plugin );
-            // Update the order of the remaining SuggestSubmit elements
-            updateSuggestSubmitOrder( null, null, nIdSuggest, suggestSubmit.isPinned( ), plugin );
-            // Remove related workflow resources
-            removeWorkflowResources( nIdSuggestSubmit );
-        }
+        inTransaction( plugin, ( ) -> {
+            SuggestSubmit suggestSubmit = SuggestSubmitHome.findByPrimaryKey( nIdSuggestSubmit, plugin );
+    
+            if ( suggestSubmit != null )
+            {
+                int nIdSuggest = suggestSubmit.getSuggest( ).getIdSuggest( );
+                // Remove the specified SuggestSubmit element
+                SuggestSubmitHome.remove( nIdSuggestSubmit, plugin );
+                // Update the order of the remaining SuggestSubmit elements
+                updateSuggestSubmitOrder( null, null, nIdSuggest, suggestSubmit.isPinned( ), plugin );
+                // Remove related workflow resources
+                removeWorkflowResources( nIdSuggestSubmit );
+            }
+        } );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @Transactional( "suggest.transactionManager" )
     public void updateSuggestSubmitOrder( Integer nPositionElement, Integer nNewPositionElement, int nIdSuggest, boolean bListPinned, Plugin plugin )
     {
-        SubmitFilter filter = new SubmitFilter( );
-        filter.setIdSuggest( nIdSuggest );
-
-        List<Integer> listSortByManually = new ArrayList<>( );
-        listSortByManually.add( SubmitFilter.SORT_MANUALLY );
-        filter.setSortBy( listSortByManually );
-        //
-        filter.setIdPinned( bListPinned ? SubmitFilter.ID_TRUE : SubmitFilter.ID_FALSE );
-
-        List<Integer> listIdSuggestDubmit = getSuggestSubmitListId( filter, plugin );
-
-        if ( ( listIdSuggestDubmit != null ) && ( !listIdSuggestDubmit.isEmpty( ) ) )
-        {
-            if ( ( nPositionElement != null ) && ( nNewPositionElement != null ) && ( !nPositionElement.equals( nNewPositionElement ) ) )
+        inTransaction( plugin, ( ) -> {
+            SubmitFilter filter = new SubmitFilter( );
+            filter.setIdSuggest( nIdSuggest );
+    
+            List<Integer> listSortByManually = new ArrayList<>( );
+            listSortByManually.add( SubmitFilter.SORT_MANUALLY );
+            filter.setSortBy( listSortByManually );
+            //
+            filter.setIdPinned( bListPinned ? SubmitFilter.ID_TRUE : SubmitFilter.ID_FALSE );
+    
+            List<Integer> listIdSuggestDubmit = getSuggestSubmitListId( filter, plugin );
+    
+            if ( ( listIdSuggestDubmit != null ) && ( !listIdSuggestDubmit.isEmpty( ) ) )
             {
-                if ( ( ( nPositionElement > 0 ) && ( nPositionElement <= ( listIdSuggestDubmit.size( ) + 1 ) ) )
-                        && ( ( nNewPositionElement > 0 ) && ( nNewPositionElement <= ( listIdSuggestDubmit.size( ) + 1 ) ) ) )
+                if ( ( nPositionElement != null ) && ( nNewPositionElement != null ) && ( !nPositionElement.equals( nNewPositionElement ) ) )
                 {
-                    SuggestUtils.moveElement( nPositionElement, nNewPositionElement, (ArrayList<Integer>) listIdSuggestDubmit );
+                    if ( ( ( nPositionElement > 0 ) && ( nPositionElement <= ( listIdSuggestDubmit.size( ) + 1 ) ) )
+                            && ( ( nNewPositionElement > 0 ) && ( nNewPositionElement <= ( listIdSuggestDubmit.size( ) + 1 ) ) ) )
+                    {
+                        SuggestUtils.moveElement( nPositionElement, nNewPositionElement, (ArrayList<Integer>) listIdSuggestDubmit );
+                    }
+                }
+    
+                int nNewOrder = 1;
+    
+                // update all Suggest submit
+                for ( Integer nIdSuggestSubmit : listIdSuggestDubmit )
+                {
+                    SuggestSubmitHome.updateSuggestSubmitOrder( nNewOrder++, nIdSuggestSubmit, plugin );
                 }
             }
-
-            int nNewOrder = 1;
-
-            // update all Suggest submit
-            for ( Integer nIdSuggestSubmit : listIdSuggestDubmit )
-            {
-                SuggestSubmitHome.updateSuggestSubmitOrder( nNewOrder++, nIdSuggestSubmit, plugin );
-            }
-        }
+        } );
     }
 
     /**
@@ -256,7 +279,7 @@ public class SuggestSubmitService implements ISuggestSubmitService
             SubmitFilter submmitFilterComment = new SubmitFilter( );
             submmitFilterComment.setIdSuggestSubmit( suggestSubmit.getIdSuggestSubmit( ) );
             submmitFilterComment.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
-            suggestSubmit.setComments( CommentSubmitService.getService( ).getCommentSubmitList( submmitFilterComment, numberMaxCommentLoad, plugin ) );
+            suggestSubmit.setComments( _commentSubmitService.getCommentSubmitList( submmitFilterComment, numberMaxCommentLoad, plugin ) );
         }
 
         return suggestSubmit;
@@ -432,21 +455,6 @@ public class SuggestSubmitService implements ISuggestSubmitService
     }
 
     /**
-     * Returns the instance of the singleton
-     *
-     * @return The instance of the singleton
-     */
-    public static ISuggestSubmitService getService( )
-    {
-        if ( _singleton == null )
-        {
-            _singleton = SpringContextService.getBean( BEAN_SERVICE );
-        }
-
-        return _singleton;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -495,10 +503,10 @@ public class SuggestSubmitService implements ISuggestSubmitService
 
         suggestSubmit.setResponses( listResponses );
         // update Number of comment
-        suggestSubmit.setNumberComment( CommentSubmitService.getService( ).getCountCommentSubmit( filter, plugin ) );
+        suggestSubmit.setNumberComment( _commentSubmitService.getCountCommentSubmit( filter, plugin ) );
         // update Number of Comment Enable
         filter.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
-        suggestSubmit.setNumberCommentEnable( CommentSubmitService.getService( ).getCountCommentSubmit( filter, plugin ) );
+        suggestSubmit.setNumberCommentEnable( _commentSubmitService.getCountCommentSubmit( filter, plugin ) );
         // update SuggestSubmitValue
         suggestSubmit.setSuggestSubmitValue( SuggestUtils.getHtmlSuggestSubmitValue( suggestSubmit, locale ) );
         // update SuggestSubmitValue show in the list
@@ -532,7 +540,7 @@ public class SuggestSubmitService implements ISuggestSubmitService
     public void executeSuggestSubmitWorkflowAction( SuggestSubmit suggestSubmit, User user )
     {
         Suggest suggest = suggestSubmit.getSuggest( );
-        if ( WorkflowService.getInstance( ).isAvailable( ) && suggest.getIdWorkflow( ) != SuggestUtils.CONSTANT_ID_NULL )
+        if ( _workflowService.isAvailable( ) && suggest.getIdWorkflow( ) != SuggestUtils.CONSTANT_ID_NULL )
         {
             SuggestWorkflowService.processActionOnSuggestSubmitCreation( suggest, suggestSubmit, user );
         }
@@ -546,16 +554,85 @@ public class SuggestSubmitService implements ISuggestSubmitService
      */
     private void removeWorkflowResources( int nIdSuggestSubmit )
     {
-        if ( WorkflowService.getInstance( ).isAvailable( ) )
+        if ( _workflowService.isAvailable( ) )
         {
             try
             {
-                WorkflowService.getInstance( ).doRemoveWorkFlowResource( nIdSuggestSubmit, SuggestSubmit.RESOURCE_TYPE );
+                _workflowService.doRemoveWorkFlowResource( nIdSuggestSubmit, SuggestSubmit.RESOURCE_TYPE );
             }
             catch( Exception e )
             {
                 AppLogService.error( "Error when removing Workflow resources for SuggestSubmit element", e );
             }
+        }
+    }
+    /**
+     * Saves the video uploaded with a proposal, under the id of that proposal.
+     *
+     * @param video
+     *            the video
+     * @param nIdSuggestSubmit
+     *            the id of the proposal
+     * @param plugin
+     *            the plugin
+     */
+    private static void createVideo( VideoType video, int nIdSuggestSubmit, Plugin plugin )
+    {
+        video.setIdSuggestSubmit( nIdSuggestSubmit );
+
+        try
+        {
+            VideoTypeHome.create( video, plugin );
+        }
+        catch( SQLException e )
+        {
+            throw new AppException( e.getMessage( ), e );
+        }
+    }
+
+    /**
+     * Runs the work in a transaction of the plugin pool, committed when it returns and rolled back when it throws.
+     *
+     * @param plugin
+     *            the plugin
+     * @param work
+     *            the work
+     */
+    static void inTransaction( Plugin plugin, Runnable work )
+    {
+        inTransaction( plugin, ( ) -> {
+            work.run( );
+
+            return null;
+        } );
+    }
+
+    /**
+     * Runs the work in a transaction of the plugin pool, committed when it returns and rolled back when it throws.
+     *
+     * @param <T>
+     *            the result type
+     * @param plugin
+     *            the plugin
+     * @param work
+     *            the work
+     * @return the result of the work
+     */
+    private static <T> T inTransaction( Plugin plugin, Supplier<T> work )
+    {
+        TransactionManager.beginTransaction( plugin );
+
+        try
+        {
+            T result = work.get( );
+            TransactionManager.commitTransaction( plugin );
+
+            return result;
+        }
+        catch( RuntimeException e )
+        {
+            TransactionManager.rollBack( plugin );
+            throw e;
         }
     }
 }

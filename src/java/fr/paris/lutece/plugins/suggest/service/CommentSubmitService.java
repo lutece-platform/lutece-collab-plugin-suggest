@@ -33,20 +33,18 @@
  */
 package fr.paris.lutece.plugins.suggest.service;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmitHome;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
+@ApplicationScoped
 public class CommentSubmitService implements ICommentSubmitService
 {
-    public static final String BEAN_SERVICE = "suggest.commentSubmitService";
-    private static ICommentSubmitService _singleton;
-
     /**
      * {@inheritDoc}
      */
@@ -164,20 +162,5 @@ public class CommentSubmitService implements ICommentSubmitService
     public int getCountCommentSubmit( SubmitFilter filter, Plugin plugin )
     {
         return CommentSubmitHome.getCountCommentSubmit( filter, plugin );
-    }
-
-    /**
-     * Returns the instance of the singleton
-     *
-     * @return The instance of the singleton
-     */
-    public static ICommentSubmitService getService( )
-    {
-        if ( _singleton == null )
-        {
-            _singleton = SpringContextService.getBean( BEAN_SERVICE );
-        }
-
-        return _singleton;
     }
 }

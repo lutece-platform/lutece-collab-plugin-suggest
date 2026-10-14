@@ -41,7 +41,7 @@ import fr.paris.lutece.util.html.Paginator;
 import java.util.List;
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *

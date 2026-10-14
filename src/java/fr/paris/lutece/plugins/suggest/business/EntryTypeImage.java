@@ -42,12 +42,12 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 
-import org.apache.commons.fileupload.FileItem;
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 
 import java.util.List;
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -203,7 +203,7 @@ public class EntryTypeImage extends Entry
     public FormError getResponseData( int nIdSuggestSubmit, HttpServletRequest request, List<Response> listResponse, Locale locale, Plugin plugin )
     {
         MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
-        FileItem item = mRequest.getFile( SuggestUtils.EMPTY_STRING + this.getIdEntry( ) );
+        MultipartItem item = mRequest.getFile( SuggestUtils.EMPTY_STRING + this.getIdEntry( ) );
 
         byte [ ] bytes = item.get( );
 

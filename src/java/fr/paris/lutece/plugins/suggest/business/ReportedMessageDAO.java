@@ -33,12 +33,15 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ApplicationScoped
 public class ReportedMessageDAO implements IReportedMessageDAO
 {
     // Constants

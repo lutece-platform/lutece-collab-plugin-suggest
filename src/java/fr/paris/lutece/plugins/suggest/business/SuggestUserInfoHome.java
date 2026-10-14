@@ -34,7 +34,7 @@
 package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 /**
  * class SuggestUserInfoHome
@@ -42,7 +42,7 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public final class SuggestUserInfoHome
 {
     // Static variable pointed at the DAO instance
-    private static ISuggestUserInfoDAO _dao = SpringContextService.getBean( "suggest.suggestUserInfoDAO" );
+    private static ISuggestUserInfoDAO _dao = CDI.current( ).select( ISuggestUserInfoDAO.class ).get( );
 
     /**
      * Private constructor - this class need not be instantiated

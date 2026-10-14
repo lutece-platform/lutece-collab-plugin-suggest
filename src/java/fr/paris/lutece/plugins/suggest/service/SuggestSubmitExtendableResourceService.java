@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.service;
 
+import jakarta.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
 import fr.paris.lutece.plugins.suggest.web.SuggestApp;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -51,8 +53,12 @@ import java.util.Locale;
  * DocumentExtendableResourceService
  *
  */
+@ApplicationScoped
 public class SuggestSubmitExtendableResourceService implements IExtendableResourceService
 {
+    @Inject
+    private ISuggestSubmitService _suggestSubmitService;
+
     private static final String MESSAGE_SUGGEST_SUBMIT_RESOURCE_TYPE_DESCRIPTION = "suggest.resource.suggestSubmitResourceTypeDescription";
     private static final String MARK_PAGE = "page";
     private static final String MARK_ID_SUGGEST = "id_suggest";
@@ -79,7 +85,7 @@ public class SuggestSubmitExtendableResourceService implements IExtendableResour
         {
             int nIdSuggestSubmit = Integer.parseInt( strIdResource );
 
-            return SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, false, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+            return _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
         }
 
         return null;
@@ -112,7 +118,7 @@ public class SuggestSubmitExtendableResourceService implements IExtendableResour
         if ( StringUtils.isNotBlank( strIdResource ) && StringUtils.isNumeric( strIdResource ) )
         {
             int nIdSuggestSubmit = Integer.parseInt( strIdResource );
-            SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, false,
+            SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false,
                     PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
 
             if ( suggestSubmit != null )

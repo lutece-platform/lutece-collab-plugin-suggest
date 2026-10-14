@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +50,7 @@ import fr.paris.lutece.util.sql.DAOUtil;
 /**
  * class SuggestDAO
  */
+@ApplicationScoped
 public final class SuggestDAO implements ISuggestDAO
 {
     // Constants

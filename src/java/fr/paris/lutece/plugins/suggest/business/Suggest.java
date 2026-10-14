@@ -33,23 +33,21 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import jakarta.enterprise.inject.spi.CDI;
 import fr.paris.lutece.plugins.suggest.business.attribute.SuggestAttribute;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
-import fr.paris.lutece.portal.service.editor.EditorBbcodeService;
+import fr.paris.lutece.portal.service.editor.IEditorBbcodeService;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
-import fr.paris.lutece.portal.service.regularexpression.RegularExpressionRemovalListenerService;
 import fr.paris.lutece.portal.service.resource.IExtendableResource;
-import fr.paris.lutece.portal.service.role.RoleRemovalListenerService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupResource;
-import fr.paris.lutece.portal.service.workgroup.WorkgroupRemovalListenerService;
 import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -68,9 +66,6 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     private static final String TAG_SUGGEST_TITLE = "suggest-title";
     private static final String TAG_SUGGEST_SUBMITS = "suggest-submits";
 
-    private static SuggestWorkgroupRemovalListener _listenerWorkgroup;
-    private static SuggestRegularExpressionRemovalListener _listenerRegularExpression;
-    private static SuggestRoleRemovalListener _listenerRole;
     private int _nIdSuggest;
     private String _strTitle;
     private String _strUnavailabilityMessage;
@@ -150,31 +145,6 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     private String _strNotificationNewSuggestSubmitTitle;
     @SuggestAttribute( "notificationNewSuggestSubmitBody" )
     private String _strNotificationNewSuggestSubmitBody;
-
-    /**
-     * Initialize the Suggest
-     */
-    public static void init( )
-    {
-        // Create removal listeners and register them
-        if ( _listenerWorkgroup == null )
-        {
-            _listenerWorkgroup = new SuggestWorkgroupRemovalListener( );
-            WorkgroupRemovalListenerService.getService( ).registerListener( _listenerWorkgroup );
-        }
-
-        if ( _listenerRegularExpression == null )
-        {
-            _listenerRegularExpression = new SuggestRegularExpressionRemovalListener( );
-            RegularExpressionRemovalListenerService.getService( ).registerListener( _listenerRegularExpression );
-        }
-
-        if ( _listenerRole == null )
-        {
-            _listenerRole = new SuggestRoleRemovalListener( );
-            RoleRemovalListenerService.getService( ).registerListener( _listenerRole );
-        }
-    }
 
     /**
      *
@@ -1066,7 +1036,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     {
         if ( isActiveEditorBbcode( ) )
         {
-            return EditorBbcodeService.getInstance( ).parse( strValue );
+            return CDI.current( ).select( IEditorBbcodeService.class ).get( ).parse( strValue );
         }
 
         return strValue;

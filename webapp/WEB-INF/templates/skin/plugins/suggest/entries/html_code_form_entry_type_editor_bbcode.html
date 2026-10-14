@@ -1,0 +1,5 @@
+<#include "/util/editor/editor.html" />
+<@cField label=entry.title for='${entry.idEntry}' required=entry.mandatory>
+	<@cTextArea name='${entry.idEntry}' id='${entry.idEntry}' class='form-control richtext' rows=entry.height required=entry.mandatory helpMsg=entry.helpMessage!''>${entry.defaultValue!}</@cTextArea>
+</@cField>
+<@initEditor />

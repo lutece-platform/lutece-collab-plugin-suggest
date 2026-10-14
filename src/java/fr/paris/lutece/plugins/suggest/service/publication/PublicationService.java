@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.suggest.service.publication;
 
+import jakarta.enterprise.inject.spi.CDI;
 import fr.paris.lutece.plugins.suggest.business.Suggest;
 import fr.paris.lutece.plugins.suggest.business.SuggestFilter;
 import fr.paris.lutece.plugins.suggest.business.SuggestHome;
@@ -40,7 +41,7 @@ import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitState;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitStateHome;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
-import fr.paris.lutece.plugins.suggest.service.SuggestSubmitService;
+import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -96,13 +97,13 @@ public final class PublicationService
                 dateCreationMin = SuggestUtils.getDateAfterNDay( currentDate, -suggest.getNumberDayRequired( ) );
                 submitFilter.setIdSuggest( suggest.getIdSuggest( ) );
                 submitFilter.setDateLast( dateCreationMin );
-                listSuggestSubmit = SuggestSubmitService.getService( ).getSuggestSubmitList( submitFilter, plugin );
+                listSuggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter, plugin );
 
                 for ( SuggestSubmit suggestSubmit : listSuggestSubmit )
                 {
-                    suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( suggestSubmit.getIdSuggestSubmit( ), false, plugin );
+                    suggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).findByPrimaryKey( suggestSubmit.getIdSuggestSubmit( ), false, plugin );
                     suggestSubmit.setSuggestSubmitState( suggestSubmitStateDisable );
-                    SuggestSubmitService.getService( ).update( suggestSubmit, plugin );
+                    CDI.current( ).select( ISuggestSubmitService.class ).get( ).update( suggestSubmit, plugin );
                     SuggestUtils.sendNotificationNewSuggestSubmitDisable( suggest, suggestSubmit, I18nService.getDefaultLocale( ) );
                 }
             }

@@ -33,11 +33,14 @@
  */
 package fr.paris.lutece.plugins.suggest.web;
 
+import java.io.Serializable;
+
 /**
  * Resource Value Object
  */
-public class ResourceValueObject
+public class ResourceValueObject implements Serializable
 {
+    private static final long serialVersionUID = 1L;
     // Variables declarations
     private int _nIdObject;
     private byte [ ] _content;

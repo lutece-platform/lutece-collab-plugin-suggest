@@ -36,7 +36,7 @@ package fr.paris.lutece.plugins.suggest.business.attribute;
 import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -48,9 +48,8 @@ import java.util.Map.Entry;
  */
 public final class SuggestAttributeHome
 {
-    private static final String BEAN_SUGGEST_ATTRIBUTE_DAO = "suggest.suggestAttributeDAO";
     private static Plugin _plugin = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
-    private static ISuggestAttributeDAO _dao = SpringContextService.getBean( BEAN_SUGGEST_ATTRIBUTE_DAO );
+    private static ISuggestAttributeDAO _dao = CDI.current( ).select( ISuggestAttributeDAO.class ).get( );
 
     /**
      * Private constructor - this class does not need to to be instantiated

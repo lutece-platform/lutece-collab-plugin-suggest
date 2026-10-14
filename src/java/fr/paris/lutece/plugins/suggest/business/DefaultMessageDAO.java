@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -41,6 +43,7 @@ import fr.paris.lutece.util.sql.DAOUtil;
  * class DefaultMessageDAO
  *
  */
+@ApplicationScoped
 public class DefaultMessageDAO implements IDefaultMessageDAO
 {
     private static final String SQL_QUERY_SELECT = "SELECT "

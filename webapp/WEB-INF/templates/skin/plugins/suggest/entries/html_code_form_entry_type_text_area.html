@@ -1,0 +1,4 @@
+<@cField label=entry.title for='${entry.idEntry}' required=entry.mandatory>
+	<@cTextArea name='${entry.idEntry}' id='${entry.idEntry}' rows=entry.height required=entry.mandatory helpMsg=entry.helpMessage!'' params='data-limit="${entry.maxSizeEnter}"'>${entry.defaultValue!}</@cTextArea>
+	<span class="form-text"></span>
+</@cField>

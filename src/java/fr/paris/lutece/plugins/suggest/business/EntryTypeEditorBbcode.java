@@ -33,7 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-import fr.paris.lutece.portal.service.editor.EditorBbcodeService;
+import jakarta.enterprise.inject.spi.CDI;
+import fr.paris.lutece.portal.service.editor.IEditorBbcodeService;
 
 /**
  *
@@ -70,6 +71,6 @@ public class EntryTypeEditorBbcode extends EntryTypeTextArea
 
     public String parseBbcodeValue( String strValue )
     {
-        return EditorBbcodeService.getInstance( ).parse( strValue );
+        return CDI.current( ).select( IEditorBbcodeService.class ).get( ).parse( strValue );
     }
 }

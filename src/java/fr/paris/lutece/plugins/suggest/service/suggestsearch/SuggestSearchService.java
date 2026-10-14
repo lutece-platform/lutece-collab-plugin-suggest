@@ -33,13 +33,14 @@
  */
 package fr.paris.lutece.plugins.suggest.service.suggestsearch;
 
+import jakarta.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
-import fr.paris.lutece.plugins.suggest.service.SuggestSubmitService;
+import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.search.SuggestIndexer;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -49,26 +50,17 @@ import java.util.List;
 /**
  * DocumentSearchService
  */
+@ApplicationScoped
 public class SuggestSearchService
 {
-    private static final String BEAN_SEARCH_ENGINE = "suggest.suggestSearchEngine";
+    @Inject
+    private SuggestSearchEngine _engine;
+
+    @Inject
+    private ISuggestSubmitService _suggestSubmitService;
+
     private static final String REGEX_ID = "^[\\d]+$";
 
-    // Constants corresponding to the variables defined in the lutece.properties file
-    private static SuggestSearchService _singleton;
-
-    /**
-     * @return the instance of the service
-     */
-    public static SuggestSearchService getInstance( )
-    {
-        if ( _singleton == null )
-        {
-            _singleton = new SuggestSearchService( );
-        }
-
-        return _singleton;
-    }
 
     /**
      * Return search results
@@ -84,9 +76,8 @@ public class SuggestSearchService
     public List<Integer> getSearchResults( String strQuery, SubmitFilter filter, Plugin plugin )
     {
         List<Integer> listSuggestSubmitResult = new ArrayList<>( );
-        SuggestSearchEngine engine = SpringContextService.getBean( BEAN_SEARCH_ENGINE );
-        List<Integer> suggestSubmitListId = SuggestSubmitService.getService( ).getSuggestSubmitListId( filter, plugin );
-        List<SuggestSearchItem> listSearchesults = StringUtils.isEmpty( strQuery ) ? null : engine.getSearchResults( strQuery, filter );
+        List<Integer> suggestSubmitListId = _suggestSubmitService.getSuggestSubmitListId( filter, plugin );
+        List<SuggestSearchItem> listSearchesults = StringUtils.isEmpty( strQuery ) ? null : _engine.getSearchResults( strQuery, filter );
 
         if ( StringUtils.isEmpty( strQuery ) )
         {

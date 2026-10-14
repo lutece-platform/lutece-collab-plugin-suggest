@@ -33,12 +33,14 @@
  */
 package fr.paris.lutece.plugins.suggest.service.subscription;
 
+import jakarta.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.plugins.suggest.business.Category;
 import fr.paris.lutece.plugins.suggest.business.CategoryHome;
 import fr.paris.lutece.plugins.suggest.business.Suggest;
 import fr.paris.lutece.plugins.suggest.business.SuggestHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
-import fr.paris.lutece.plugins.suggest.service.SuggestSubmitService;
+import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
 import fr.paris.lutece.plugins.subscribe.business.Subscription;
 import fr.paris.lutece.plugins.subscribe.business.SubscriptionFilter;
@@ -47,9 +49,9 @@ import fr.paris.lutece.plugins.subscribe.service.SubscriptionService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.List;
 import java.util.Locale;
@@ -57,12 +59,15 @@ import java.util.Locale;
 /**
  * Subscription provider for suggest and suggest submit
  */
+@ApplicationScoped
 public class SuggestSubscriptionProviderService implements ISubscriptionProviderService
 {
-    /**
-     * Name of the bean of the SuggestSubscriptionProviderService
-     */
-    public static final String BEAN_NAME = "suggest.suggestSubscriptionProviderService";
+    @Inject
+    private ISuggestSubmitService _suggestSubmitService;
+
+    @Inject
+    private SubscriptionService _subscriptionService;
+
     public static final String SUBSCRIPTION_SUGGEST = "suggest";
     public static final String SUBSCRIPTION_SUGGEST_CATEGORY = "suggest_category";
     public static final String SUBSCRIPTION_SUGGEST_SUBMIT = "suggest_submit";
@@ -70,25 +75,6 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
     private static final String MESSAGE_SUBSCRIBED_SUGGEST = "suggest.message.subscriptions.subscribedSuggest";
     private static final String MESSAGE_SUBSCRIBED_SUGGEST_SUBMIT = "suggest.message.subscriptions.subscribedSuggestSubmit";
     private static final String MESSAGE_SUBSCRIBED_SUGGEST_CATEGORY = "suggest.message.subscriptions.subscribedCategory";
-    private static SuggestSubscriptionProviderService _instance;
-
-    /**
-     * Returns the instance of the singleton
-     *
-     * @return The instance of the singleton
-     */
-    public static SuggestSubscriptionProviderService getService( )
-    {
-        if ( _instance == null )
-        {
-            synchronized( SuggestSubscriptionProviderService.class )
-            {
-                _instance = SpringContextService.getBean( BEAN_NAME );
-            }
-        }
-
-        return _instance;
-    }
 
     /**
      * {@inheritDoc}
@@ -109,7 +95,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
         if ( nId > 0 )
         {
-            if ( StringUtils.equals( SUBSCRIPTION_SUGGEST, strSubscriptionKey ) )
+            if ( Strings.CS.equals( SUBSCRIPTION_SUGGEST, strSubscriptionKey ) )
             {
                 Suggest suggest = SuggestHome.findByPrimaryKey( nId, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
 
@@ -123,9 +109,9 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
                 }
             }
             else
-                if ( StringUtils.equals( SUBSCRIPTION_SUGGEST_SUBMIT, strSubscriptionKey ) )
+                if ( Strings.CS.equals( SUBSCRIPTION_SUGGEST_SUBMIT, strSubscriptionKey ) )
                 {
-                    SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nId, false,
+                    SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nId, false,
                             PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
 
                     if ( suggestSubmit != null )
@@ -138,7 +124,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
                     }
                 }
                 else
-                    if ( StringUtils.equals( SUBSCRIPTION_SUGGEST_CATEGORY, strSubscriptionKey ) )
+                    if ( Strings.CS.equals( SUBSCRIPTION_SUGGEST_CATEGORY, strSubscriptionKey ) )
                     {
                         Category category = CategoryHome.findByPrimaryKey( nId, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
 
@@ -238,13 +224,13 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
     {
         SubscriptionFilter filter = new SubscriptionFilter( user.getName( ), getProviderName( ), strSubscriptionKey, Integer.toString( nId ) );
 
-        List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( filter );
+        List<Subscription> listSubscription = _subscriptionService.findByFilter( filter );
 
         if ( ( listSubscription != null ) && ( !listSubscription.isEmpty( ) ) )
         {
             for ( Subscription subscription : listSubscription )
             {
-                SubscriptionService.getInstance( ).removeSubscription( subscription, false );
+                _subscriptionService.removeSubscription( subscription, false );
             }
         }
     }
@@ -304,7 +290,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
         subscription.setUserId( user.getName( ) );
         subscription.setSubscriptionKey( strSubscriptionKey );
         subscription.setSubscriptionProvider( getProviderName( ) );
-        SubscriptionService.getInstance( ).createSubscription( subscription );
+        _subscriptionService.createSubscription( subscription );
     }
 
     /**
@@ -363,7 +349,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
     private boolean hasUserSubscribedToResource( LuteceUser user, int nId, String strSubscriptionKey )
     {
         SubscriptionFilter filter = new SubscriptionFilter( user.getName( ), getProviderName( ), strSubscriptionKey, Integer.toString( nId ) );
-        List<Subscription> listSubscription = SubscriptionService.getInstance( ).findByFilter( filter );
+        List<Subscription> listSubscription = _subscriptionService.findByFilter( filter );
 
         return listSubscription != null  && !listSubscription.isEmpty( );
     }

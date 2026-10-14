@@ -15,14 +15,31 @@
 		</@formGroup>
 	<#else>
 		<@formGroup>
-			<@alert color='danger'>#i18n{suggest.resource_rss.empty_suggest}</alert>
+			<@alert color='danger'>#i18n{suggest.resource_rss.empty_suggest}</@alert>
 			<@input type='hidden' value='empty_suggest' name='id_suggest_submit${submit}' />
 		</@formGroup>
 	</#if>
 </#list>
 
 <script>
-$(document).ready( function(){$("div.suggestSubmit").toggle();});
-$("#choice_suggest").click( function(){$("div.suggestSubmit").toggle();});
-$("#choice_submit").click( function(){$("div.suggestSubmit").toggle();});
+function select_submit( ) {
+	var suggest = document.querySelector( 'select[name="id_suggest"]' );
+	var choiceSubmit = document.getElementById( 'choice_submit' );
+	document.querySelectorAll( '.suggestSubmit' ).forEach( function( block ){
+		block.style.display = ( choiceSubmit && choiceSubmit.checked && suggest && block.id === 'suggest_submit' + suggest.value ) ? '' : 'none';
+	});
+}
+document.addEventListener( 'DOMContentLoaded', function( ){
+	[ 'choice_suggest', 'choice_submit' ].forEach( function( id ){
+		var radio = document.getElementById( id );
+		if ( radio ) {
+			radio.addEventListener( 'change', select_submit );
+		}
+	});
+	var suggest = document.querySelector( 'select[name="id_suggest"]' );
+	if ( suggest ) {
+		suggest.addEventListener( 'change', select_submit );
+	}
+	select_submit( );
+});
 </script>

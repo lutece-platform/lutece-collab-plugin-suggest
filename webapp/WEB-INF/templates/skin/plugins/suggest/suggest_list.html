@@ -1,18 +1,18 @@
 <div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<div class="col-12 col-sm-12 col-md-12 col-lg-12">
             <div class="container">
-            <div class="panel panel-default">
+            <div class="card">
 	<#if unavailability_message?exists>
 		<div class="alert alert-error">${unavailability_message}</div>    
 	<#else>
 		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="col-12 col-sm-12 col-md-12 col-lg-12">
 				<fieldset>
 				<legend>#i18n{suggest.suggestList.title}:</legend> 
 						<#if paginator?exists>
 							#i18n{suggest.suggestListSubmit.paginator.labelResultsCount} : <strong>${paginator.itemsCount}</strong> <br />
 							#i18n{suggest.suggestListSubmit.paginator.labelResultsRange} : <strong>${paginator.rangeMin} - ${paginator.rangeMax}</strong> <br />
-							<@pagination paginator=paginator />
+							<@cPagination paginator=paginator />
 				 		</#if>
 					<ul>
 						<#if list_suggest?exists>

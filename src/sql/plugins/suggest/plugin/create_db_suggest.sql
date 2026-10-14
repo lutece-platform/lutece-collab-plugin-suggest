@@ -1,3 +1,7 @@
+-- liquibase formatted sql
+-- changeset suggest:create_db_suggest.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:1 SELECT COUNT(*) FROM suggest_suggest WHERE 1 = 0
 DROP TABLE IF EXISTS suggest_vote_type_vote_button;
 DROP TABLE IF EXISTS suggest_tag_submit;
 DROP TABLE IF EXISTS suggest_response;

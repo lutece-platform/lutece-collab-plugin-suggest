@@ -1,4 +1,4 @@
-<@tform method='post' type='inline' action='jsp/admin/plugins/suggest/DoModifySuggestSubmitOrder.jsp'>
+<@tform method='post' type='inline' action='jsp/admin/plugins/suggest/ManageSuggest.jsp'><@input type='hidden' name='action' value='modifySuggestSubmitOrder' />
 	<@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' />
 	<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
 	<#if suggest_submit.pinned>

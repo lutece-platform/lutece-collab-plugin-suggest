@@ -36,7 +36,7 @@ package fr.paris.lutece.plugins.suggest.business;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +47,8 @@ import java.util.List;
 public final class EntryHome
 {
     // Static variable pointed at the DAO instance
-    private static IEntryDAO _dao = SpringContextService.getBean( "suggest.entryDAO" );
-    private static IEntryAdditionalAttributeDAO _daoAA = SpringContextService.getBean( "suggest.entryAdditionalAttributeDAO" );
+    private static IEntryDAO _dao = CDI.current( ).select( IEntryDAO.class ).get( );
+    private static IEntryAdditionalAttributeDAO _daoAA = CDI.current( ).select( IEntryAdditionalAttributeDAO.class ).get( );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -157,7 +157,7 @@ public final class EntryHome
         IEntry entry = _dao.load( nKey, plugin );
         List<RegularExpression> listRegularExpression = new ArrayList<>( );
 
-        if ( RegularExpressionService.getInstance( ).isAvailable( ) )
+        if ( CDI.current( ).select( RegularExpressionService.class ).get( ).isAvailable( ) )
         {
             List<Integer> listRegularExpressionKeyEntry = getListRegularExpressionKeyByIdEntry( nKey, plugin );
 
@@ -167,7 +167,7 @@ public final class EntryHome
 
                 for ( Integer regularExpressionKey : listRegularExpressionKeyEntry )
                 {
-                    regularExpression = RegularExpressionService.getInstance( ).getRegularExpressionByKey( regularExpressionKey );
+                    regularExpression = CDI.current( ).select( RegularExpressionService.class ).get( ).getRegularExpressionByKey( regularExpressionKey );
 
                     if ( regularExpression != null )
                     {

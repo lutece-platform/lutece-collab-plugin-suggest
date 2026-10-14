@@ -1,3 +1,7 @@
+-- liquibase formatted sql
+-- changeset suggest:update_db_suggest-220-221.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:1 SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = database() AND table_name = 'digglike_digg' AND NOT EXISTS ( SELECT 1 FROM information_schema.tables WHERE table_schema = database() AND table_name = 'digglike_digg_submit_type' )
 ALTER TABLE digglike_comment_submit ADD COLUMN id_parent_comment int default 0;
 
 ALTER TABLE digglike_digg_submit ADD COLUMN digg_submit_list_order int default 0;

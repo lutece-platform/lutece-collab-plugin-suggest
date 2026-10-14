@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.utils;
 
+import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
+import jakarta.enterprise.inject.spi.CDI;
 import fr.paris.lutece.plugins.avatar.service.AvatarService;
 import fr.paris.lutece.plugins.suggest.business.Category;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
@@ -52,10 +54,12 @@ import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
 import fr.paris.lutece.plugins.suggest.business.Vote;
 import fr.paris.lutece.plugins.suggest.business.VoteHome;
 import fr.paris.lutece.plugins.suggest.business.attribute.SuggestAttribute;
-import fr.paris.lutece.plugins.suggest.service.SuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.web.action.SuggestAdminSearchFields;
 import fr.paris.lutece.portal.business.mailinglist.Recipient;
-import fr.paris.lutece.portal.service.captcha.CaptchaSecurityService;
+import fr.paris.lutece.portal.service.captcha.ICaptchaService;
+import fr.paris.lutece.portal.service.util.BeanUtils;
+import jakarta.enterprise.inject.Instance;
+import jakarta.enterprise.inject.literal.NamedLiteral;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.mail.MailService;
 import fr.paris.lutece.portal.service.mailinglist.AdminMailingListService;
@@ -72,7 +76,7 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.string.StringUtil;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.ReflectionUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.sql.Timestamp;
 
@@ -91,8 +95,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeSet;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -123,11 +127,12 @@ public final class SuggestUtils
     private static final String MARK_COMMENT_SUBMIT = "comment_submit";
     private static final String MARK_REPORTED_MESSAGE = "reported_message";
     private static final String MARK_BASE_URL = "base_url";
-    private static final String MARK_JCAPTCHA = "jcaptcha";
+    private static final String MARK_CAPTCHA = "captcha";
+    private static final String PATH_TEMPLATE_ADMIN = "admin/plugins/suggest/";
+    private static final String PATH_TEMPLATE_SKIN_ENTRIES = "skin/plugins/suggest/entries/";
     private static final String MARK_STR_ENTRY = "str_entry";
     private static final String MARK_IS_TITLE = "is_title";
     private static final String PARAMETER_ID_ENTRY_TYPE = "id_type";
-    private static final String JCAPTCHA_PLUGIN = "jcaptcha";
     private static final String CONSTANT_WHERE = " WHERE ";
     private static final String CONSTANT_AND = " AND ";
     private static final String MARK_ID_DEFAULT_CATEGORY = "id_default_category";
@@ -202,7 +207,7 @@ public final class SuggestUtils
             if ( suggestSubmit.getSuggestSubmitValue( ).contains( "src='image?" ) )
             {
                 suggestSubmit.setSuggestSubmitValue( suggestSubmit.getSuggestSubmitValue( )
-                        .replace( "src='image?", "src='" + AppPropertiesService.getProperty( PROPERTY_PROD_URL ) + "/image?" ) );
+                        .replace( "src='image?", "src='" + AppPropertiesService.getProperty( PROPERTY_PROD_URL, EMPTY_STRING ) + "/image?" ) );
             }
 
             Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( suggest.getIdMailingListSuggestSubmit( ) );
@@ -248,7 +253,7 @@ public final class SuggestUtils
             if ( suggestSubmit.getSuggestSubmitValue( ).toString( ).contains( "src='image?" ) )
             {
                 suggestSubmit.setSuggestSubmitValue( suggestSubmit.getSuggestSubmitValue( )
-                        .replace( "src='image?", "src='" + AppPropertiesService.getProperty( PROPERTY_PROD_URL ) + "/image?" ) );
+                        .replace( "src='image?", "src='" + AppPropertiesService.getProperty( PROPERTY_PROD_URL, EMPTY_STRING ) + "/image?" ) );
             }
 
             Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( suggest.getIdMailingListSuggestSubmit( ) );
@@ -267,7 +272,7 @@ public final class SuggestUtils
         }
         catch( Exception e )
         {
-            AppLogService.error( "Error during Notify new suggest submit disable  : " + e.getMessage( ), e );
+            AppLogService.error( "Error during Notify new suggest submit disable  : {}", e.getMessage( ), e );
         }
     }
 
@@ -308,7 +313,7 @@ public final class SuggestUtils
         }
         catch( Exception e )
         {
-            AppLogService.error( "Error during Notify new comment : " + e.getMessage( ), e );
+            AppLogService.error( "Error during Notify new comment : {}", e.getMessage( ), e );
         }
     }
 
@@ -349,7 +354,7 @@ public final class SuggestUtils
         }
         catch( Exception e )
         {
-            AppLogService.error( "Error during Notify new repported message  : " + e.getMessage( ), e );
+            AppLogService.error( "Error during Notify new repported message  : {}", e.getMessage( ), e );
         }
     }
 
@@ -620,10 +625,10 @@ public final class SuggestUtils
 
         try
         {
-            entry = (IEntry) Class.forName( entryType.getClassName( ) ).newInstance( );
+            entry = (IEntry) Class.forName( entryType.getClassName( ) ).getDeclaredConstructor( ).newInstance( );
             entry.setEntryType( entryType );
         }
-        catch( ClassNotFoundException | InstantiationException | IllegalAccessException e )
+        catch( ReflectiveOperationException e )
         {
             // class doesn't exist or class is abstract or is an interface or haven't accessible builder or can't access to rhe class
             AppLogService.error( e.getMessage( ), e );
@@ -716,14 +721,14 @@ public final class SuggestUtils
 
         for ( IEntry entry : listEntryFirstLevel )
         {
-            SuggestUtils.getHtmlFormEntry( entry.getIdEntry( ), plugin, strBuffer, locale );
+            SuggestUtils.getHtmlFormEntry( entry.getIdEntry( ), plugin, strBuffer, locale, bBackOffice );
         }
 
-        CaptchaSecurityService captchaSecurityService = new CaptchaSecurityService( );
+        Instance<ICaptchaService> captchaService = CDI.current( ).select( ICaptchaService.class, NamedLiteral.of( BeanUtils.BEAN_CAPTCHA_SERVICE ) );
 
-        if ( suggest.isActiveCaptcha( ) && PluginService.isPluginEnable( JCAPTCHA_PLUGIN ) )
+        if ( suggest.isActiveCaptcha( ) && captchaService.isResolvable( ) )
         {
-            model.put( MARK_JCAPTCHA, captchaSecurityService.getHtmlCode( ) );
+            model.put( MARK_CAPTCHA, captchaService.get( ).getHtmlCode( ) );
         }
 
         model.put( MARK_CATEGORY_LIST, refCategoryList );
@@ -747,15 +752,19 @@ public final class SuggestUtils
      *            the buffer which contains the html code
      * @param locale
      *            the locale
+     * @param bBackOffice
+     *            true to render the back office form, false for the front office one
      */
-    public static void getHtmlFormEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale )
+    public static void getHtmlFormEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale, boolean bBackOffice )
     {
         Map<String, Object> model = new HashMap<>( );
         HtmlTemplate template;
         IEntry entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
         model.put( MARK_ENTRY, entry );
 
-        template = AppTemplateService.getTemplate( entry.getTemplateHtmlCodeForm( ), locale, model );
+        String strTemplate = bBackOffice ? entry.getTemplateHtmlCodeForm( )
+                : entry.getTemplateHtmlCodeForm( ).replace( PATH_TEMPLATE_ADMIN, PATH_TEMPLATE_SKIN_ENTRIES );
+        template = AppTemplateService.getTemplate( strTemplate, locale, model );
         stringBuffer.append( template.getHtml( ) );
     }
 
@@ -1199,13 +1208,13 @@ public final class SuggestUtils
      */
     public static void doVoteSuggestSubmit( int nIdSuggestSubmit, int nScore, String strLuteceUserKey, Plugin plugin )
     {
-        SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, false, plugin );
+        SuggestSubmit suggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).findByPrimaryKey( nIdSuggestSubmit, false, plugin );
 
         if ( suggestSubmit != null )
         {
             suggestSubmit.setNumberVote( suggestSubmit.getNumberVote( ) + 1 );
             suggestSubmit.setNumberScore( suggestSubmit.getNumberScore( ) + nScore );
-            SuggestSubmitService.getService( ).update( suggestSubmit, plugin );
+            CDI.current( ).select( ISuggestSubmitService.class ).get( ).update( suggestSubmit, plugin );
 
             if ( strLuteceUserKey != null )
             {
@@ -1230,7 +1239,7 @@ public final class SuggestUtils
         if ( suggestSubmit != null )
         {
             suggestSubmit.setReported( true );
-            SuggestSubmitService.getService( ).update( suggestSubmit, plugin );
+            CDI.current( ).select( ISuggestSubmitService.class ).get( ).update( suggestSubmit, plugin );
         }
     }
 
@@ -1569,10 +1578,10 @@ public final class SuggestUtils
                 {
                     field.setAccessible( true );
 
-                    Object attributeValue = ReflectionUtils.getField( field, suggest );
+                    Object attributeValue = FieldUtils.readField( field, suggest, true );
                     mapAttributes.put( strAttributeKey, attributeValue );
                 }
-                catch( SecurityException e )
+                catch( SecurityException | IllegalAccessException e )
                 {
                     AppLogService.error( e.getMessage( ), e );
                 }

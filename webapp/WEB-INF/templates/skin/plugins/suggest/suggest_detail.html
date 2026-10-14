@@ -1,12 +1,12 @@
 <div class="row suggest-detail" id="suggest${suggest_submit.idSuggestSubmit}">
-	<div class="col-xs-12 col-sm-9">
+	<div class="col-12 col-sm-9">
 		<h2>${suggest_submit.suggestSubmitTitle}</h2>
 		<p class="suggest-meta">
 			<#if lutece_user?exists>
 				<#if avatar?has_content>
 					<img class="avatar avatar-suggest img-circle" src="${avatar}" alt="avatar provided by gravatar.com" />
 				<#else>
-					<i class="fa fa-user"></i>
+					<@cIcon name='user' />
 				</#if>
 				<#if lutece_user?exists>
 					${lutece_user!""}
@@ -14,7 +14,7 @@
 					${lutece_user.getUserInfo("user.name.given")} ${lutece_user.getUserInfo("user.name.family")}
 				</#if> |
 			</#if>
-			<i class="fa fa-calendar"></i> ${suggest_submit.dateResponse}
+			<@cIcon name='calendar' /> ${suggest_submit.dateResponse}
 		</p>
 		<#if suggest_submit.suggestSubmitValue?exists>
 			<div class="suggest-list-content">
@@ -22,7 +22,7 @@
 			</div>
 		</#if>
 	</div>
-	<div class="col-xs-12 col-sm-3 suggest-list-aside">
+	<div class="col-12 col-sm-3 suggest-list-aside">
 		<section>
 		<#if  authorized_vote && !suggest_submit.disableVote && suggest_submit.numberScore?exists>
 			<h4>#i18n{suggest.suggestDetail.labelVote}
@@ -43,20 +43,26 @@
 	<#if lutece_user_connected??>
 		<section>
 		<#if user_subscribed?? && user_subscribed>
-			<a class="btn btn-block btn-danger" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit.idSuggestSubmit}&amp;action=unsubscribe_suggest#suggest${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.unsubscribe}">
-				<i class="fa fa-bell-slash-o"></i> #i18n{suggest.manageSuggestSubmit.unsubscribe}
-			</a>
+			<@cForm action='jsp/site/Portal.jsp?page=suggest#suggest${suggest_submit.idSuggestSubmit}' class='d-inline'>
+				<@cInput type='hidden' name='id_suggest' id='subscribe_id_suggest_detail1' value='${id_suggest}' />
+				<@cInput type='hidden' name='id_suggest_submit' id='subscribe_id_suggest_submit_detail1' value='${suggest_submit.idSuggestSubmit}' />
+				<@cInput type='hidden' name='action' id='subscribe_action_detail1' value='unsubscribe_suggest' />
+				<@cBtn label='' class='secondary w-100' type='submit' params='title="#i18n{suggest.manageSuggestSubmit.unsubscribe}"'><@cIcon name='bell-off' /> #i18n{suggest.manageSuggestSubmit.unsubscribe}</@cBtn>
+			</@cForm>
 		<#else>
-			<a class="btn btn-block btn-primary" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit.idSuggestSubmit}&amp;action=subscribe_suggest#suggest${suggest_submit.idSuggestSubmit}" title="#i18n{suggest.manageSuggestSubmit.subscribe}">
-				<i class="fa fa-bell-o"></i> #i18n{suggest.manageSuggestSubmit.subscribe}
-			</a>
+			<@cForm action='jsp/site/Portal.jsp?page=suggest#suggest${suggest_submit.idSuggestSubmit}' class='d-inline'>
+				<@cInput type='hidden' name='id_suggest' id='subscribe_id_suggest_detail2' value='${id_suggest}' />
+				<@cInput type='hidden' name='id_suggest_submit' id='subscribe_id_suggest_submit_detail2' value='${suggest_submit.idSuggestSubmit}' />
+				<@cInput type='hidden' name='action' id='subscribe_action_detail2' value='subscribe_suggest' />
+				<@cBtn label='' class='primary w-100' type='submit' params='title="#i18n{suggest.manageSuggestSubmit.subscribe}"'><@cIcon name='bell' /> #i18n{suggest.manageSuggestSubmit.subscribe}</@cBtn>
+			</@cForm>
 		</#if>
 		</section>
 	</#if>
 	<#if enable_suggest_reports>
 			<section>
-				<a class="btn btn-primary btn-block" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit.idSuggestSubmit}&amp;action=create_report#suggest${suggest_submit.idSuggestSubmit}">
-					<i class="fa fa-flag"></i> #i18n{suggest.suggestListSubmit.labelReport}
+				<a class="btn btn-primary w-100" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit.idSuggestSubmit}&amp;action=create_report#suggest${suggest_submit.idSuggestSubmit}">
+					<@cIcon name='flag' /> #i18n{suggest.suggestListSubmit.labelReport}
 				</a>
 			</section>
 	</#if>
@@ -64,28 +70,26 @@
 </div>
 <#if authorized_comment && !suggest_submit.disableComment>
 <div class="row mt-5">
-	<div class="col-xs-12 col-sm-12">
+	<div class="col-12 col-sm-12">
 		<hr>
 		<h2><#if suggest_submit.numberCommentEnable==0>Pas de commentaires<#elseif suggest_submit.numberCommentEnable==1>Commentaire<#else>Commentaires <small>(${suggest_submit.numberCommentEnable} )</small></#if></h2>
-		<form class="form" action="jsp/site/Portal.jsp?page=suggest" method="post" name="form-comment" id="form-comment">
-			<input name="action" value="do_create_comment" type="hidden">
-			<input name="id_suggest" value="${id_suggest}" type="hidden">
-			<input name="id_suggest_submit" value="${suggest_submit.idSuggestSubmit}" type="hidden">
-			<div class="form-group">
+		<@cForm action='jsp/site/Portal.jsp?page=suggest' name='form-comment' id='form-comment'>
+			<@cInput type='hidden' name='action' id='comment_action' value='do_create_comment' />
+			<@cInput type='hidden' name='id_suggest' id='comment_id_suggest' value='${id_suggest}' />
+			<@cInput type='hidden' name='id_suggest_submit' id='comment_id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' />
+			<div class="mb-3">
 				<label>Laisser un commentaire</label>
 				<textarea name="comment_value" id="comment_value" class="markitup form-control" rows="2" placeholder="#i18n{suggest.suggestComment.labelAddNewComment}"></textarea>
 			</div>
-			<#if jcaptcha?exists>
-				<div class="form-group">
-					${jcaptcha}
+			<#if captcha??>
+				<div class="mb-3">
+					${captcha}
 				</div>
 			</#if>
-			<div class="form-group">
-				<button class="btn btn-primary btn-lg" type="submit" name="submit_comment">
-					<i class="glyphicon glyphicon-comment"></i> #i18n{suggest.suggestComment.labelAddNewComment}
-				</button>
+			<div class="mb-3">
+				<@cBtn label='#i18n{suggest.suggestComment.labelAddNewComment}' class='primary btn-lg' type='submit' params='name="submit_comment"'><@cIcon name='message' /></@cBtn>
 			</div>
-		</form>
+		</@cForm>
 	</div>
 </div>
 <#if list_comment?has_content>

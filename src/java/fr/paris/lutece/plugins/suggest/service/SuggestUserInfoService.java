@@ -33,37 +33,20 @@
  */
 package fr.paris.lutece.plugins.suggest.service;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.plugins.suggest.business.SuggestUserInfo;
 import fr.paris.lutece.plugins.suggest.business.SuggestUserInfoHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.security.LuteceUser;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 /**
  *
  * service SuggestUserInfoService
  *
  */
+@ApplicationScoped
 public class SuggestUserInfoService implements ISuggestUserInfoService
 {
-    public static final String BEAN_SERVICE = "suggest.suggestUserInfoService";
-    private static ISuggestUserInfoService _singleton;
-
-    /**
-     * Returns the instance of the singleton
-     *
-     * @return The instance of the singleton
-     */
-    public static ISuggestUserInfoService getService( )
-    {
-        if ( _singleton == null )
-        {
-            _singleton = SpringContextService.getBean( BEAN_SERVICE );
-        }
-
-        return _singleton;
-    }
-
     /**
      * {@inheritDoc}
      */

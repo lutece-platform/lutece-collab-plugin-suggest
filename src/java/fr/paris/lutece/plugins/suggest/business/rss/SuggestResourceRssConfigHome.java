@@ -34,7 +34,7 @@
 package fr.paris.lutece.plugins.suggest.business.rss;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ import java.util.List;
 public final class SuggestResourceRssConfigHome
 {
     // Static variable pointed at the DAO instance
-    private static ISuggestResourceRssConfigDAO _dao = SpringContextService.getBean( "resourceRssSuggestConfigDAO" );
+    private static ISuggestResourceRssConfigDAO _dao = CDI.current( ).select( ISuggestResourceRssConfigDAO.class ).get( );
 
     /**
      * Private constructor - this class need not be instantiated

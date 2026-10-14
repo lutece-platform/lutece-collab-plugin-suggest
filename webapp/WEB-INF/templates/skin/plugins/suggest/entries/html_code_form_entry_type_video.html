@@ -1,0 +1,6 @@
+<@cField label=entry.title for='${entry.idEntry}' required=entry.mandatory>
+	<@cInput type='file' name='${entry.idEntry}' id='${entry.idEntry}' accept='video/*' required=entry.mandatory />
+</@cField>
+<@cField label='#i18n{suggest.createEntry.labelCredits}' for='credits${entry.idEntry}' required=entry.mandatory>
+	<@cInput type='text' name='credits${entry.idEntry}' id='credits${entry.idEntry}' required=entry.mandatory helpMsg=entry.helpMessage!'' />
+</@cField>

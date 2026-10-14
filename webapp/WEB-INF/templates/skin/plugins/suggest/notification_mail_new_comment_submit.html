@@ -2,6 +2,6 @@
 <br>
 ${comment_submit.value}
 
-<a href="${base_url}/jsp/admin/plugins/suggest/ManageCommentSubmit.jsp?id_suggest_submit=${comment_submit.suggestSubmit.idSuggestSubmit}<#if comment_submit.idParent !=-1>&id_parent=${comment_submit.idParent}</#if>#comment${comment_submit.idCommentSubmit}">
+<a href="${base_url}/jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageCommentSubmit&id_suggest_submit=${comment_submit.suggestSubmit.idSuggestSubmit}<#if comment_submit.idParent !=-1>&id_parent=${comment_submit.idParent}</#if>#comment${comment_submit.idCommentSubmit}">
 	#i18n{suggest.notificationMailNewCommentSubmit.contentAccesCommentSubmitList}
 </a>

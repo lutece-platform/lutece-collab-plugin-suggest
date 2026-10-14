@@ -33,6 +33,9 @@
  */
 package fr.paris.lutece.plugins.suggest.business.rss;
 
+import fr.paris.lutece.plugins.suggest.service.ICommentSubmitService;
+import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
+import jakarta.enterprise.inject.spi.CDI;
 import fr.paris.lutece.plugins.suggest.business.Category;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
 import fr.paris.lutece.plugins.suggest.business.Suggest;
@@ -41,8 +44,6 @@ import fr.paris.lutece.plugins.suggest.business.SuggestHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitState;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
-import fr.paris.lutece.plugins.suggest.service.CommentSubmitService;
-import fr.paris.lutece.plugins.suggest.service.SuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
 import fr.paris.lutece.portal.business.rss.FeedResource;
 import fr.paris.lutece.portal.business.rss.FeedResourceImage;
@@ -73,7 +74,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -342,7 +343,7 @@ public class SuggestResourceRss extends ResourceRss
 
         if ( bisSubmitRss )
         {
-            SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( Integer.parseInt( stridSuggestSubmit ), false, pluginSuggest );
+            SuggestSubmit suggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).findByPrimaryKey( Integer.parseInt( stridSuggestSubmit ), false, pluginSuggest );
             this.setName( suggestSubmit.getSuggestSubmitTitle( ) );
             this.setDescription( suggestSubmit.getSuggestSubmitValue( ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
         }
@@ -378,7 +379,7 @@ public class SuggestResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter( );
             submitFilter.setIdSuggest( suggest.getIdSuggest( ) );
 
-            List<SuggestSubmit> suggestSubmitList = SuggestSubmitService.getService( ).getSuggestSubmitList( submitFilter, pluginSuggest );
+            List<SuggestSubmit> suggestSubmitList = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter, pluginSuggest );
             ReferenceList referenceSuggestSubmit = new ReferenceList( );
 
             for ( SuggestSubmit suggestSubmit : suggestSubmitList )
@@ -433,7 +434,7 @@ public class SuggestResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter( );
             submitFilter.setIdSuggest( suggest.getIdSuggest( ) );
 
-            List<SuggestSubmit> suggestSubmitList = SuggestSubmitService.getService( ).getSuggestSubmitList( submitFilter, pluginSuggest );
+            List<SuggestSubmit> suggestSubmitList = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter, pluginSuggest );
             ReferenceList referenceSuggestSubmit = new ReferenceList( );
 
             for ( SuggestSubmit suggestSubmit : suggestSubmitList )
@@ -478,13 +479,13 @@ public class SuggestResourceRss extends ResourceRss
         String strRssFileLanguage = AppPropertiesService.getProperty( PROPERTY_SITE_LANGUAGE );
         Locale locale = new Locale( strRssFileLanguage );
 
-        String strWebAppUrl = AppPropertiesService.getProperty( PROPERTY_WEBAPP_PROD_URL );
+        String strWebAppUrl = AppPropertiesService.getProperty( PROPERTY_WEBAPP_PROD_URL, "" );
         String strSiteUrl = strWebAppUrl;
 
         if ( config.isSubmitRss( ) )
         {
             // Submit Rss
-            SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( config.getIdSuggestSubmit( ), false, pluginSuggestglike );
+            SuggestSubmit suggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).findByPrimaryKey( config.getIdSuggestSubmit( ), false, pluginSuggestglike );
             SuggestSubmitState suggestsubmitStage = suggestSubmit.getSuggestSubmitState( );
             Category category = suggestSubmit.getCategory( );
             model.put( MARK_RSS_SITE_NAME, suggestSubmit.getSuggestSubmitTitle( ) );
@@ -508,7 +509,7 @@ public class SuggestResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter( );
             submitFilter.setIdSuggestSubmit( config.getIdSuggestSubmit( ) );
 
-            List<CommentSubmit> listResultCommentSubmit = CommentSubmitService.getService( ).getCommentSubmitList( submitFilter, pluginSuggestglike );
+            List<CommentSubmit> listResultCommentSubmit = CDI.current( ).select( ICommentSubmitService.class ).get( ).getCommentSubmitList( submitFilter, pluginSuggestglike );
             List<Map<String, Object>> listItem = new ArrayList<>( );
 
             // Descriptino of the comments
@@ -568,7 +569,7 @@ public class SuggestResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter( );
             submitFilter.setIdSuggest( config.getIdSuggest( ) );
 
-            List<SuggestSubmit> listResultSuggestSubmit = SuggestSubmitService.getService( ).getSuggestSubmitList( submitFilter, pluginSuggestglike );
+            List<SuggestSubmit> listResultSuggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter, pluginSuggestglike );
             List<Map<String, Object>> listItem = new ArrayList<>( );
 
             // Description of the submits
@@ -613,7 +614,7 @@ public class SuggestResourceRss extends ResourceRss
         String strRssFileLanguage = AppPropertiesService.getProperty( PROPERTY_SITE_LANGUAGE );
         Locale locale = new Locale( strRssFileLanguage );
 
-        String strWebAppUrl = AppPropertiesService.getProperty( PROPERTY_WEBAPP_PROD_URL );
+        String strWebAppUrl = AppPropertiesService.getProperty( PROPERTY_WEBAPP_PROD_URL, "" );
         String strSiteUrl = strWebAppUrl;
 
         Plugin pluginSuggestglike = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
@@ -622,7 +623,7 @@ public class SuggestResourceRss extends ResourceRss
         if ( config.isSubmitRss( ) )
         {
             // Submit Rss
-            SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( config.getIdSuggestSubmit( ), false, pluginSuggestglike );
+            SuggestSubmit suggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).findByPrimaryKey( config.getIdSuggestSubmit( ), false, pluginSuggestglike );
             SuggestSubmitState suggestsubmitStage = suggestSubmit.getSuggestSubmitState( );
             Category category = suggestSubmit.getCategory( );
 
@@ -669,7 +670,7 @@ public class SuggestResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter( );
             submitFilter.setIdSuggestSubmit( config.getIdSuggestSubmit( ) );
 
-            List<CommentSubmit> listResultCommentSubmit = CommentSubmitService.getService( ).getCommentSubmitList( submitFilter, pluginSuggestglike );
+            List<CommentSubmit> listResultCommentSubmit = CDI.current( ).select( ICommentSubmitService.class ).get( ).getCommentSubmitList( submitFilter, pluginSuggestglike );
             List<IFeedResourceItem> listItems = new ArrayList<>( );
 
             // Description of the comments
@@ -755,7 +756,7 @@ public class SuggestResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter( );
             submitFilter.setIdSuggest( config.getIdSuggest( ) );
 
-            List<SuggestSubmit> listResultSuggestSubmit = SuggestSubmitService.getService( ).getSuggestSubmitList( submitFilter, pluginSuggestglike );
+            List<SuggestSubmit> listResultSuggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter, pluginSuggestglike );
             List<IFeedResourceItem> listItems = new ArrayList<>( );
 
             // Description of the submits

@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -42,6 +44,7 @@ import java.util.List;
 /**
  * SuggestActionDAO
  */
+@ApplicationScoped
 public class SuggestActionDAO implements ISuggestActionDAO
 {
     private static final String SQL_QUERY_SELECT_ACTIONS = "SELECT a.name_key, a.description_key, a.action_url, a.icon_url, a.action_permission ,a.suggest_state"

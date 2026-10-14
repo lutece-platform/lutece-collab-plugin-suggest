@@ -1,6 +1,9 @@
 <%@ page errorPage="../../ErrorPage.jsp" %>
+
+${ pageContext.setAttribute( 'strContent', suggestSubmitTypeJspBean.processController( pageContext.request , pageContext.response ) ) }
+
 <jsp:include page="../../AdminHeader.jsp" />
-<jsp:useBean id="suggestSubmitType" scope="session" class="fr.paris.lutece.plugins.suggest.web.SuggestSubmitTypeJspBean" />
-<% suggestSubmitType.init( request, fr.paris.lutece.plugins.suggest.web.ManageSuggestJspBean.RIGHT_MANAGE_SUGGEST_LIKE ); %>
-<%= suggestSubmitType.getManageSuggestSubmitType( request ) %>
+
+${ pageContext.getAttribute( 'strContent' ) }
+
 <%@ include file="../../AdminFooter.jsp" %>

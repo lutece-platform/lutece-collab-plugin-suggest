@@ -1,70 +1,61 @@
 <div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<form class="form-horizontal" action="jsp/site/Portal.jsp" method="post" name="formsuggest" id="formsuggest"  enctype="multipart/form-data" >
-		<input name="page" value="suggest" type="hidden">
-		<input name="id_suggest" value="${suggest.idSuggest}" type="hidden">
-		<input name="action" value="do_create_suggest_submit" type="hidden">
+	<div class="col-12 col-sm-12 col-md-12 col-lg-12">
+		<@cForm action='jsp/site/Portal.jsp' name='formsuggest' id='formsuggest' enctype='multipart/form-data'>
+		<@cInput type='hidden' name='page' value='suggest' />
+		<@cInput type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
+		<@cInput type='hidden' name='action' value='do_create_suggest_submit' />
 		<h2 class="mb-5">#i18n{suggest.suggestForm.title} <#if disable_new_suggest_submit>(#i18n{suggest.suggestForm.titleDisableNewSuggestSubmit})</#if></h2>
 		${str_entry}
 		<#if category_list?has_content>
-			<div class="form-group">
-				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_category">
-					#i18n{suggest.suggestForm.labelCategoryTitle} *
-				</label>
-				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-					<@comboWithParams name="id_category" default_value="${id_default_category}" additionalParameters=' class="form-control"' items=category_list />
-				</div>
-			</div>
+			<@cField label='#i18n{suggest.suggestForm.labelCategoryTitle}' for='id_category' required=true>
+				<@cSelect name='id_category' id='id_category' required=true>
+					<#list category_list as item>
+						<@cOption value=item.code label=item.name selected=(item.code == '${id_default_category}') />
+					</#list>
+				</@cSelect>
+			</@cField>
 		</#if>
 		<#if types_list?has_content>
-			<div class="form-group">
-				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="id_type">
-					#i18n{suggest.suggestForm.labelTypeTitle} *
-				</label>
-				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-					<@comboWithParams name="id_type" default_value="-1"  additionalParameters=' class="form-control"' items=types_list />
-				</div>
-			</div>
+			<@cField label='#i18n{suggest.suggestForm.labelTypeTitle}' for='id_type' required=true>
+				<@cSelect name='id_type' id='id_type' required=true>
+					<#list types_list as item>
+						<@cOption value=item.code label=item.name selected=(item.code == '-1') />
+					</#list>
+				</@cSelect>
+			</@cField>
 		</#if>
 		<#if suggest.enableTermsOfUse && suggest.termsOfUse?has_content>
-			<div class="form-group">
-				<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="terms_of_use"></label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<div class="checkbox">
-							<label for="terms_of_use">
-								<input name="terms_of_use" id="terms_of_use" value="terms_of_use" type="checkbox">
-								#i18n{suggest.suggestForm.labelSelectTermsOfUse} *
-							</label>
-							&nbsp;
+			<div class="mb-3">
+				<label class="form-label col-12 col-sm-12 col-md-3 col-lg-3" for="terms_of_use"></label>
+					<div class="col-12 col-sm-12 col-md-9 col-lg-9">
+						<@cCheckbox name='terms_of_use' id='terms_of_use' value='terms_of_use' label='#i18n{suggest.suggestForm.labelSelectTermsOfUse} *' inline=true />
 							<a href="#" id="btn-tou"  title="#i18n{portal.util.labelMore}">
 								#i18n{portal.util.labelMore}
 							</a>
 						</div>
 					</div>
 				</div>
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-offset-3 col-sm-9">
+				<div class="mb-3">
+					<div class="d-flex gap-2">
 
-						<div id="text-tou" class="panel panel-default">
-  						<div class="panel-body">
+						<div id="text-tou" class="card">
+  						<div class="card-body">
 								${suggest.termsOfUse}
 							</div>
 						</div>
 					</div>
 				</div>
 			</#if>
-			<#if jcaptcha?exists>
-				<div class="form-group">
-					${jcaptcha}
+			<#if captcha??>
+				<div class="mb-3">
+					${captcha}
 				</div>
 			</#if>
-			<div class="form-group">
-				<div class="col-xs-12 col-sm-offset-3 col-sm-9">
-					<button class="btn btn-primary btn-lg" type="submit" name="submit">
-						${suggest.libelleValidateButton}
-					</button>
+			<div class="mb-3">
+				<div class="d-flex gap-2">
+					<@cBtn label='${suggest.libelleValidateButton}' class='primary btn-lg' type='submit' params='name="submit"' />
 				</div>
 			</div>
-		</form>
+		</@cForm>
 	</div>
 </div>

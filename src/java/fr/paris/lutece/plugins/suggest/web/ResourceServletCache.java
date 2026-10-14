@@ -34,26 +34,30 @@
 package fr.paris.lutece.plugins.suggest.web;
 
 import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 /**
  * ResourceServletCache
  */
-public class ResourceServletCache extends AbstractCacheableService
+@ApplicationScoped
+public class ResourceServletCache extends AbstractCacheableService<String, ResourceValueObject>
 {
     private static final String NAME = "Suggest ResourceServlet Cache";
     private static final String PROPERTY_CACHE = "suggest.resourceServlet.cache.enabled";
 
     /**
-     * Constructor
+     * Initializes the cache when it is enabled by the plugin properties.
      */
-    public ResourceServletCache( )
+    @PostConstruct
+    public void init( )
     {
         String strCache = AppPropertiesService.getProperty( PROPERTY_CACHE, "true" );
 
         if ( strCache.equalsIgnoreCase( "true" ) )
         {
-            initCache( NAME );
+            initCache( NAME, String.class, ResourceValueObject.class );
         }
     }
 
@@ -66,30 +70,5 @@ public class ResourceServletCache extends AbstractCacheableService
     public String getName( )
     {
         return NAME;
-    }
-
-    /**
-     * Get from the cache
-     * 
-     * @param strKey
-     *            The key
-     * @return The object or null if not found
-     */
-    public ResourceValueObject get( String strKey )
-    {
-        return (ResourceValueObject) getFromCache( strKey );
-    }
-
-    /**
-     * Put an object into the cache
-     * 
-     * @param strKey
-     *            The key
-     * @param resource
-     *            The value
-     */
-    public void put( String strKey, ResourceValueObject resource )
-    {
-        putInCache( strKey, resource );
     }
 }

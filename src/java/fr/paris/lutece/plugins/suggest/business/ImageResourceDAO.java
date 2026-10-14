@@ -34,12 +34,14 @@
 package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.portal.service.image.ImageResource;
+import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 /**
  * This class provides Data Access methods for Field objects
  */
+@ApplicationScoped
 public final class ImageResourceDAO implements IImageResourceDAO
 {
     // Constants

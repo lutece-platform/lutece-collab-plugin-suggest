@@ -3,33 +3,30 @@
     <!-- Plugin Informations -->
     <name>suggest</name>
     <class>fr.paris.lutece.plugins.suggest.service.SuggestPlugin</class>
-    <version>3.0.2-SNAPSHOT</version>
+    <version>5.0.0-SNAPSHOT</version>
     <description>suggest.plugin.description</description>
     <documentation/>
     <installation/>
     <changes/>
     <user-guide/>
-    <description>suggest.plugin.description</description>
     <provider>suggest.plugin.provider</provider>
     <provider-url>http://lutece.paris.fr</provider-url>
     <icon-url>images/admin/skin/plugins/suggest/suggest.png</icon-url>
     <copyright>Copyright 2001-2011 Mairie de Paris</copyright>
     <core-version-dependency>
-        <min-core-version>2.4.0</min-core-version>
+        <min-core-version>8.0.0</min-core-version>
         <max-core-version/>
     </core-version-dependency>
     <db-pool-required>1</db-pool-required>
     <!-- Specific plugin CSS stylesheet -->
     <css-stylesheets>
         <css-stylesheets-scope>xpage</css-stylesheets-scope>
-        <css-stylesheet>../../js/jquery/plugins/star-rating/jquery.rating.css</css-stylesheet>
        	<css-stylesheet>suggest/suggest.css</css-stylesheet>
     </css-stylesheets>
     <!-- Specific plugin JAVASCRIPT -->
     <javascript-files>
         <javascript-files-scope>xpage</javascript-files-scope>
         <javascript-file>suggest/suggest.js</javascript-file>
-        <javascript-file>../jquery/plugins/star-rating/jquery.rating.js</javascript-file>
     </javascript-files>
 
     <!--Administration interface parameters -->
@@ -40,7 +37,8 @@
             <feature-description>suggest.adminFeature.suggest_management.description</feature-description>
             <feature-level>2</feature-level>
             <feature-url>jsp/admin/plugins/suggest/ManageSuggest.jsp</feature-url>
-            <feature-icon-url>images/admin/skin/plugins/suggest/suggest.png</feature-icon-url>
+            <icon-url>ti ti-bulb</icon-url>
+            <feature-group>APPLICATIONS</feature-group>
         </admin-feature>
     </admin-features>
     <!-- RBAC Resources -->
@@ -63,7 +61,6 @@
     <applications>
         <application>
             <application-id>suggest</application-id>
-            <application-class>fr.paris.lutece.plugins.suggest.web.SuggestApp</application-class>
         </application>
     </applications>
     <!-- Search Indexer Service -->

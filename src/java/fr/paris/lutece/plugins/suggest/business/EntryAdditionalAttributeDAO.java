@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -42,6 +44,7 @@ import java.util.List;
 /**
  * This class provides Data Access methods for DocumentAttributeType objects
  */
+@ApplicationScoped
 public final class EntryAdditionalAttributeDAO implements IEntryAdditionalAttributeDAO
 {
     // Constants

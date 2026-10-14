@@ -1,52 +1,103 @@
-<@row>	<@columns>		<@box>			<@boxHeader title='#i18n{suggest.createEntry.titleQuestion}: "${entry.suggest.title}" &gt; #i18n{suggest.createEntry.labelType} : ${entry.entryType.title}'>				<@button type='button' style='card-control collapse' size='sm' buttonTargetId='#createForm' buttonIcon='plus' />			</@boxHeader>			<@boxBody>
-				<@tform action='jsp/admin/plugins/suggest/DoModifyEntry.jsp' id='createForm'>
-					<@input type='hidden' name='id_entry' value='${entry.idEntry}' />
-					<@formGroup labelFor='title' labelKey='#i18n{suggest.createEntry.labelTitle}' helpKey='#i18n{suggest.createEntry.labelTitleComment}' mandatory=true>						<@input type='text' name='title' id='title' value='${entry.title!}' maxlength=255 />					</@formGroup>					<@formGroup labelFor='value' labelKey='#i18n{suggest.createEntry.labelValueDefault}'>						<@input type='text' name='value' id='value' value='${entry.defaultValue!}' />					</@formGroup>
-					<@formGroup labelFor='help_message' labelKey='#i18n{suggest.createEntry.labelHelpMessage}' helpKey='#i18n{suggest.createEntry.labelHelpMessageComment}'>						<@input type='textarea' name='help_message' id='help_message' rows=2 richtext=true>${entry.helpMessage!}</@input>
-					</@formGroup>
-					<@formGroup labelFor='comment' labelKey='#i18n{suggest.createEntry.labelComment}'>						<@input type='textarea' name='comment' richtext=true>${entry.comment!}</@input>					</@formGroup>
-					<@formGroup>						<@checkBox labelFor='mandatory' labelKey='#i18n{suggest.createEntry.labelMandatory}' id='mandatory' name='mandatory' value='1' checked=entry.mandatory />					</@formGroup>
-					<@formGroup labelFor='max_size_enter' labelKey='#i18n{suggest.createEntry.labelMaxSizeEnter}'>						<@inputGroup>							<#if entry.maxSizeEnter!=-1>								<#assign value = entry.maxSizeEnter />							<#else>								<#assign value = '' />							</#if>
-							<@input type='text' name='max_size_enter' id='max_size_enter' value=value />							<@inputGroupItem type='text'>								caract&egraveres							</@inputGroupItem>						</@inputGroup>					</@formGroup>
-					<@formGroup labelFor='width' labelKey='#i18n{suggest.createEntry.labelWidth}' mandatory=true>						<#if entry.width!=-1>							<#assign value = entry.width />						<#else>							<#assign value = '' />						</#if>						<@input type='text' name='width' id='width' value=value />					</@formGroup>
-					<@formGroup helpKey='#i18n{suggest.createSuggest.labelShowInSuggestSubmitListComment}'>						<@checkBox labelFor='show_in_suggest_submit_list' labelKey='#i18n{suggest.createEntry.labelShowInSuggestSubmitList}' id='show_in_suggest_submit_list' name='show_in_suggest_submit_list' value='1' checked=entry.showInSuggestSubmitList />					</@formGroup>
-					<@formGroup>
-						<@button type='submit' name='save' title='#i18n{suggest.createEntry.buttonSave}' buttonIcon='save' />
-						<@aButton href='jsp/admin/plugins/suggest/ModifySuggest.jsp?plugin_name=suggest&amp;id_suggest=${entry.suggest.idSuggest}' title='#i18n{suggest.createEntry.buttonCancel}' buttonIcon='times' color='default' />					</@formGroup>
-				</@tform>			</@boxBody>		</@box>	</@columns>	<@columns>		<@box>			<@boxHeader title='#i18n{suggest.createEntry.manageRegularExpression.title} (${number_items})'>				<@tform method='post' action='jsp/admin/plugins/suggest/DoInsertVerification.jsp#list'>
-					<@input type='hidden' name='id_entry' value='${entry.idEntry}' />
-					<@formGroup>
-						<@inputGroup>
-							<@select name='id_expression' items=regular_expression_list default_value='-1' />
-							<@inputGroupItem>
-								<@button type='submit' title='#i18n{suggest.createEntry.manageRegularExpression.buttonInsert}' buttonIcon='plus-square' size='sm' hideTitle=['all'] />							</@inputGroupItem>						</@inputGroup>						
-					</@formGroup>
-				</@tform>			</@boxHeader>			<@boxBody>
-				<@paginationAdmin paginator=paginator combo=1 />
-				<a name="list" id="list"></a>
-				<@table>
-					<thead>
-						<@tr>
-							<@th>#i18n{suggest.createEntry.manageRegularExpression.rowTitle}</@th>
-							<@th>#i18n{suggest.createEntry.manageRegularExpression.rowInformationMessage}</@th>
-							<@th>#i18n{suggest.createEntry.manageRegularExpression.rowValidExemple}</@th>
-							<@th>#i18n{suggest.createEntry.manageField.rowActions}</@th>
-						</@tr>
-					</thead>
-					<tbody>
+<@pageContainer>
+	<@pageColumn>
+		<@pageHeader title='#i18n{suggest.modifyEntry.titleQuestion}: "${entry.suggest.title}" &gt; #i18n{suggest.createEntry.labelType} : ${entry.entryType.title}' />
+		<@row>
+			<@columns>
+				<@box>
+					<@boxBody>
+						<@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp' id='createForm'><@input type='hidden' name='action' value='modifyEntry' />
+							<@input type='hidden' name='id_entry' value='${entry.idEntry}' />
+							<@formGroup labelFor='title' labelKey='#i18n{suggest.createEntry.labelTitle}' helpKey='#i18n{suggest.createEntry.labelTitleComment}' mandatory=true>
+								<@input type='text' name='title' id='title' value='${entry.title!}' maxlength=255 />
+							</@formGroup>
+							<@formGroup labelFor='value' labelKey='#i18n{suggest.createEntry.labelValueDefault}'>
+								<@input type='text' name='value' id='value' value='${entry.defaultValue!}' />
+							</@formGroup>
+							<@formGroup labelFor='help_message' labelKey='#i18n{suggest.createEntry.labelHelpMessage}' helpKey='#i18n{suggest.createEntry.labelHelpMessageComment}'>
+								<@input type='textarea' name='help_message' id='help_message' rows=2 richtext=true>${entry.helpMessage!}</@input>
+							</@formGroup>
+							<@formGroup labelFor='comment' labelKey='#i18n{suggest.createEntry.labelComment}'>
+								<@input type='textarea' name='comment' richtext=true>${entry.comment!}</@input>
+							</@formGroup>
+							<@formGroup>
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createEntry.labelMandatory}' id='mandatory' name='mandatory' value='1' checked=entry.mandatory />
+							</@formGroup>
+							<@formGroup labelFor='max_size_enter' labelKey='#i18n{suggest.createEntry.labelMaxSizeEnter}'>
+								<@inputGroup>
+									<#if entry.maxSizeEnter!=-1>
+										<#assign value = entry.maxSizeEnter />
+									<#else>
+										<#assign value = '' />
+									</#if>
+									<@input type='text' name='max_size_enter' id='max_size_enter' value=value />
+									<@inputGroupItem type='text'>
+										caract&egraveres
+									</@inputGroupItem>
+								</@inputGroup>
+							</@formGroup>
+							<@formGroup labelFor='width' labelKey='#i18n{suggest.createEntry.labelWidth}' mandatory=true>
+								<#if entry.width!=-1>
+									<#assign value = entry.width />
+								<#else>
+									<#assign value = '' />
+								</#if>
+								<@input type='text' name='width' id='width' value=value />
+							</@formGroup>
+							<@formGroup helpKey='#i18n{suggest.createSuggest.labelShowInSuggestSubmitListComment}'>
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createEntry.labelShowInSuggestSubmitList}' id='show_in_suggest_submit_list' name='show_in_suggest_submit_list' value='1' checked=entry.showInSuggestSubmitList />
+							</@formGroup>
+							<@formGroup>
+								<@button type='submit' name='save' title='#i18n{suggest.createEntry.buttonSave}' buttonIcon='device-floppy' />
+								<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=modifySuggest&plugin_name=suggest&amp;id_suggest=${entry.suggest.idSuggest}' title='#i18n{suggest.createEntry.buttonCancel}' buttonIcon='x' color='light' />
+							</@formGroup>
+						</@tform>
+					</@boxBody>
+				</@box>
+			</@columns>
+			<@columns>
+				<@box>
+					<@boxHeader title='#i18n{suggest.createEntry.manageRegularExpression.title} (${number_items})'>
+						<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#list'><@input type='hidden' name='action' value='insertRegularExpression' />
+							<@input type='hidden' name='id_entry' value='${entry.idEntry}' />
+							<@formGroup>
+								<@inputGroup>
+									<@select name='id_expression' items=regular_expression_list default_value='-1' />
+									<@inputGroupItem>
+										<@button type='submit' title='#i18n{suggest.createEntry.manageRegularExpression.buttonInsert}' buttonIcon='square-plus' size='sm' hideTitle=['all'] />
+									</@inputGroupItem>
+								</@inputGroup>						
+							</@formGroup>
+						</@tform>
+					</@boxHeader>
+					<@boxBody>
+						<@paginationAdmin paginator=paginator combo=1 />
+						<a name="list" id="list"></a>
 						<#if list?has_content>
-							<#list list as expression>
-							<@tr>
-							  <@td>${expression.title}</@td>
-							  <@td>${expression.informationMessage}</@td>
-							  <@td>${expression.validExemple}</@td>
-							  <@td>
-								<@aButton href='jsp/admin/plugins/suggest/DoRemoveVerification.jsp?id_expression=${expression.idExpression}&id_entry=${entry.idEntry}#list' title='#i18n{suggest.createEntry.manageField.titleDelete}' buttonIcon='trash' size='sm' color='danger' hideTitle=['all'] />
-							  </@td>
-							</@tr>
-							</#list>
-					  </#if>
-					</tbody>
-				</@table>			</@boxBody>		</@box>	</@columns></@row>
-<#include "/admin/util/editor/editor.html" />
-<@initEditor />
+							<@manageFeature>
+								<#list list as expression>
+								<@manageFeatureItem>
+									<@manageFeatureItemColumn flex=false>
+										<strong>${expression.title!}</strong>
+										<@p class='text-secondary mb-0'>${expression.informationMessage!}</@p>
+									</@manageFeatureItemColumn>
+									<@manageFeatureItemColumn auto=true flex=false valign='top'>
+										<@p class='fw-bold fs-3'>#i18n{suggest.createEntry.manageRegularExpression.rowValidExemple}</@p>
+										${expression.validExemple!}
+									</@manageFeatureItemColumn>
+									<@manageFeatureItemColumn auto=true align='end'>
+										<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#list' class='d-inline'><@input type='hidden' name='action' value='removeRegularExpression' /><@input type='hidden' name='id_expression' value='${expression.idExpression}' /><@input type='hidden' name='id_entry' value='${entry.idEntry}' /><@button type='submit' title='#i18n{suggest.createEntry.manageField.titleDelete}' buttonIcon='trash' color='danger' hideTitle=['all'] /></@tform>
+									</@manageFeatureItemColumn>
+								</@manageFeatureItem>
+								</#list>
+							</@manageFeature>
+						<#else>
+							<@empty title='#i18n{portal.util.labelNoItem}' iconName='regex-off' />
+						</#if>
+					</@boxBody>
+				</@box>
+			</@columns>
+		</@row>
+		<#include "/admin/util/editor/editor.html" />
+		<@initEditor />
+	</@pageColumn>
+</@pageContainer>

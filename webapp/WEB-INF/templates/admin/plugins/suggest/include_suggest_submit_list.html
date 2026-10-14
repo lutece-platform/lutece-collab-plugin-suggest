@@ -13,20 +13,20 @@
 	</thead>
 	<#list suggest_submit_list as suggest_submit>
 	<@tr>
-		<@td id='suggest${suggest_submit.idSuggestSubmit}' name='suggest${suggest_submit.idSuggestSubmit}'>
+		<@td id='suggest${suggest_submit.idSuggestSubmit}'>
 			<#if display_check_actions>
-				<@checkBox class='selected-id' name='selected_suggest_submit' id='selected_suggest_submit' value='${suggest_submit.idSuggestSubmit}' />
+				<@checkBox orientation='switch' class='selected-id' name='selected_suggest_submit' id='selected_suggest_submit${suggest_submit.idSuggestSubmit}' value='${suggest_submit.idSuggestSubmit}' />
 			</#if>
 		</@td>
 		<#if suggest_submit.suggestSubmitTitle?exists>
 			<@td>
 			<#if category_list?has_content  && suggest_submit.category?exists>
-				<@tag params='style="background-color:${suggest_submit.category.color!\'\'};"'>${suggest_submit.category.title}</@tag>
+				<@tag color='light'><span class="d-inline-block rounded-circle me-1 align-middle" style="width:.6rem;height:.6rem;background-color:${suggest_submit.category.color!''}"></span>${suggest_submit.category.title}</@tag>
 			</#if>
 			</@td>
 			<@td>
 				<#if suggest_submit_type_list?has_content  &&  suggest_submit.suggestSubmitType?exists>
-					<@tag color='info' params='style="background-color:${suggest_submit.suggestSubmitType.color!\'\'};"'>
+					<@tag color='light'><span class="d-inline-block rounded-circle me-1 align-middle" style="width:.6rem;height:.6rem;background-color:${suggest_submit.suggestSubmitType.color!''}"></span>
 						<#if suggest_submit.suggestSubmitType.idImageResource?has_content>
 							<img class="thumb-list img-responsive"  src="image?resource_type=image_suggest&id=${suggest_submit.suggestSubmitType.idImageResource}" title="${suggest_submit.suggestSubmitType.name} " alt="${suggest_submit.suggestSubmitType.name} ">
 						</#if>
@@ -39,22 +39,22 @@
 					</@tag>
 				<#elseif suggest_submit.suggestSubmitState.number=waiting_for_publish_state_number>
 					<@tag color='warning' title='#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState} &nbsp;#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}'>
-						<@icon style='pause' />&nbsp;#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}
+						<@icon style='player-pause' />&nbsp;#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}
 					</@tag>
 				<#else>
 					<@tag color='danger' title='#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState} #i18n{suggest.manageSuggestSubmit.altDisable}'>
-						<@icon style='times' />&nbsp;#i18n{suggest.manageSuggestSubmit.altDisable}
+						<@icon style='x' />&nbsp;#i18n{suggest.manageSuggestSubmit.altDisable}
 					</@tag>
 				</#if>
 				<#if suggest_submit.pinned>
 					<@tag color='warning'>
-						<@icon style='thumbtack' title='#i18n{suggest.manageSuggestSubmit.altPinned}' />
+						<@icon style='pin' title='#i18n{suggest.manageSuggestSubmit.altPinned}' />
 					</@tag>
 				</#if>
 			</@td>
 			<@td params='style="width:60%;"'>
 				<#if suggest_submit.reported>
-					<@tag color='danger' title='#i18n{suggest.manageSuggestSubmit.altWarning}'><@icon style='exclamation-triangle' /></@tag>
+					<@tag color='danger' title='#i18n{suggest.manageSuggestSubmit.altWarning}'><@icon style='alert-triangle' /></@tag>
 				</#if>
 				<#if suggest_submit.reported><span class="text-danger" title="#i18n{suggest.manageSuggestSubmit.altWarning}"></#if>
 				<#if suggest_submit.suggestSubmitTitle?length &gt; 100>
@@ -63,14 +63,14 @@
 					${suggest_submit.suggestSubmitTitle}
 				</#if>
 				<#if suggest_submit.reported></span></#if>
-				<@span align='right'><@icon style='plus-square' /></@span>
+				<@span align='right'><@icon style='square-plus' /></@span>
 				<#if suggest_submit.suggestSubmitValue?exists>
 					<@div class='preview'>${suggest_submit.suggestSubmitValue}</@div>
 				</#if>
 				<@p class='text-info'>
 					<#if !suggest_submit.disableVote>
 						<@icon style='star' />&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberVote}&nbsp;${suggest_submit.numberVote} /
-						<@icon style='thumbs-up' />&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberScore}&nbsp;${suggest_submit.numberScore} /
+						<@icon style='thumb-up' />&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberScore}&nbsp;${suggest_submit.numberScore} /
 					</#if>
 					<#if !suggest_submit.disableComment>
 						<#assign nbWaiting=suggest_submit.numberComment - suggest_submit.numberCommentEnable />

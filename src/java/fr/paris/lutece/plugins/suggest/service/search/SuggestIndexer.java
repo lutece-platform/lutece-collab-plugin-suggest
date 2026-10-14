@@ -33,13 +33,14 @@
  */
 package fr.paris.lutece.plugins.suggest.service.search;
 
+import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
+import jakarta.enterprise.inject.spi.CDI;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
 import fr.paris.lutece.plugins.suggest.business.Suggest;
 import fr.paris.lutece.plugins.suggest.business.SuggestFilter;
 import fr.paris.lutece.plugins.suggest.business.SuggestHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
-import fr.paris.lutece.plugins.suggest.service.SuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
 import fr.paris.lutece.plugins.suggest.service.suggestsearch.SuggestSearchItem;
 import fr.paris.lutece.plugins.suggest.web.SuggestApp;
@@ -50,12 +51,10 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.search.SearchIndexer;
 import fr.paris.lutece.portal.service.search.SearchItem;
-import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.url.UrlItem;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -67,13 +66,7 @@ import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexOptions;
-import org.apache.tika.exception.TikaException;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.html.HtmlParser;
-import org.apache.tika.sax.BodyContentHandler;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
+import org.jsoup.Jsoup;
 
 /**
  * SuggestIndexer
@@ -135,7 +128,7 @@ public class SuggestIndexer implements SearchIndexer
         for ( Suggest suggest : suggestActivatedList )
         {
             submitFilter.setIdSuggest( suggest.getIdSuggest( ) );
-            suggestSubmitActivatedList = SuggestSubmitService.getService( ).getSuggestSubmitListId( submitFilter, plugin );
+            suggestSubmitActivatedList = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitListId( submitFilter, plugin );
 
             for ( Integer idSuggestSubmit : suggestSubmitActivatedList )
             {
@@ -181,7 +174,7 @@ public class SuggestIndexer implements SearchIndexer
         String strPortalUrl = AppPathService.getPortalUrl( );
         Integer nIdSuggestSubmit = Integer.parseInt( strIdSuggestSubmit );
         Plugin plugin = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
-        SuggestSubmit suggestSubmit = SuggestSubmitService.getService( ).findByPrimaryKey( nIdSuggestSubmit, true, plugin );
+        SuggestSubmit suggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).findByPrimaryKey( nIdSuggestSubmit, true, plugin );
 
         if ( suggestSubmit != null )
         {
@@ -253,20 +246,7 @@ public class SuggestIndexer implements SearchIndexer
             }
         }
 
-        ContentHandler handler = new BodyContentHandler( );
-        Metadata metadata = new Metadata( );
-        try
-        {
-            new HtmlParser( ).parse( new ByteArrayInputStream( writerFieldContent.toString( ).getBytes( ) ), handler, metadata, new ParseContext( ) );
-        }
-        catch( SAXException | TikaException e )
-        {
-            throw new AppException( "Error during page parsing : " + e.getMessage( ), e );
-        }
-
-        // the content of the article is recovered in the parser because this one
-        // had replaced the encoded caracters (as &eacute;) by the corresponding special caracter (as ?)
-        StringBuilder sb = new StringBuilder( handler.toString( ) );
+        StringBuilder sb = new StringBuilder( Jsoup.parse( writerFieldContent.toString( ) ).text( ) );
         // Add the tag-stripped contents as a Reader-valued Text field so it will
         // get tokenized and indexed.
         doc.add( new Field( SearchItem.FIELD_CONTENTS, sb.toString( ), TextField.TYPE_NOT_STORED ) );

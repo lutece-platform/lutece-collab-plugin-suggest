@@ -41,7 +41,6 @@ import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Locale;
@@ -60,7 +59,6 @@ public interface ISuggestSubmitService
      *            The user performing the remove action
      * @return the id of {@link Theme} suggestsubmit
      */
-    @Transactional( "suggest.transactionManager" )
     int create( SuggestSubmit suggestSubmit, Plugin plugin, Locale locale, User user );
 
     /**
@@ -71,7 +69,6 @@ public interface ISuggestSubmitService
      * @param plugin
      *            the Plugin
      */
-    @Transactional( "suggest.transactionManager" )
     void remove( int nIdSuggestSubmit, Plugin plugin );
 
     /**
@@ -84,7 +81,6 @@ public interface ISuggestSubmitService
      * @param user
      *            The user performing the remove action
      */
-    @Transactional( "suggest.transactionManager" )
     void remove( int nIdSuggestSubmit, Plugin plugin, User user );
 
     /**
@@ -96,7 +92,6 @@ public interface ISuggestSubmitService
      *            the Plugin
      *
      */
-    @Transactional( "suggest.transactionManager" )
     void update( SuggestSubmit suggestSubmit, Plugin plugin );
 
     /**
@@ -106,7 +101,6 @@ public interface ISuggestSubmitService
      * @param bUpdateIndex
      * @param plugin
      */
-    @Transactional( "suggest.transactionManager" )
     void update( SuggestSubmit suggestSubmit, boolean bUpdateIndex, Plugin plugin );
 
     /**
@@ -249,7 +243,6 @@ public interface ISuggestSubmitService
      * @param plugin
      *            the plugin
      */
-    @Transactional( "suggest.transactionManager" )
     void updateSuggestSubmitOrder( Integer nPositionElement, Integer nNewPositionElement, int nIdSuggest, boolean bListPinned, Plugin plugin );
 
     /**
@@ -275,7 +268,6 @@ public interface ISuggestSubmitService
      *
      * @locale locale the locale
      */
-    @Transactional( "suggest.transactionManager" )
     void updateAllDisplayOfSuggestSubmit( Integer nIdSuggest, Plugin plugin, Locale locale );
 
     /**
@@ -292,6 +284,5 @@ public interface ISuggestSubmitService
      * @param mapEntry
      *            a map of entry assocaited to the suggest
      */
-    @Transactional( "suggest.transactionManager" )
     void updateDisplaySuggestSubmit( Integer nIdSuggestSubmit, Plugin plugin, Locale locale, Suggest suggest, Map<Integer, IEntry> mapEntry );
 }
