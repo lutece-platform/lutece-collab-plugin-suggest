@@ -42,6 +42,7 @@ public class Vote
 {
     private int _nIdSuggestSubmit;
     private String _strLuteceUserKey;
+    private Integer _nVoteValue;
 
     /**
      *
@@ -82,5 +83,26 @@ public class Vote
     public void setLuteceUserKey( String luteceUserKey )
     {
         _strLuteceUserKey = luteceUserKey;
+    }
+
+    /**
+     * Returns the score the user gave.
+     *
+     * @return the score, or null for a vote stored without its score
+     */
+    public Integer getVoteValue( )
+    {
+        return _nVoteValue;
+    }
+
+    /**
+     * Sets the score the user gave.
+     *
+     * @param nVoteValue
+     *            the score
+     */
+    public void setVoteValue( Integer nVoteValue )
+    {
+        _nVoteValue = nVoteValue;
     }
 }

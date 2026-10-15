@@ -117,6 +117,9 @@
 								<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelRequiredAuthentificationVote}' name='active_vote_authentification' id='active_vote_authentification' value='${yes_value}' />
 								<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelRequiredAuthentificationCommentSubmit}' name='active_comment_authentification' id='active_comment_authentification' value='active_comment_authentification' />
 							</@formGroup>
+							<@formGroup helpKey='#i18n{suggest.createSuggest.labelEnableVoteWithdrawalComment}'>
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelEnableVoteWithdrawal}' name='enable_vote_withdrawal' id='enable_vote_withdrawal' value='${yes_value}' />
+							</@formGroup>
 						</#if>
 					</@tabPanel>
 					<@tabPanel id='panel4' active=false>

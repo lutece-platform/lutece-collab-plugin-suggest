@@ -87,4 +87,29 @@ public interface IVoteDAO
      * @return the number of vote for a lutece user on suggestSubmit
      */
     int selectCountVoteByIdSuggestSubmit( int nIdSuggestSubmit, Plugin plugin );
+
+    /**
+     * Loads the vote of a lutece user on a suggest submit.
+     *
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param strLuteceUserKey
+     *            the lutece user key
+     * @param plugin
+     *            the plugin
+     * @return the vote, or null if the user has not voted
+     */
+    Vote selectVoteByIdSuggestSubmitAndLuteceUserKey( int nIdSuggestSubmit, String strLuteceUserKey, Plugin plugin );
+
+    /**
+     * Deletes the vote of a lutece user on a suggest submit.
+     *
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param strLuteceUserKey
+     *            the lutece user key
+     * @param plugin
+     *            the plugin
+     */
+    void deleteByIdSuggestSubmitAndLuteceUserKey( int nIdSuggestSubmit, String strLuteceUserKey, Plugin plugin );
 }

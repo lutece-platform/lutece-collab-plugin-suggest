@@ -273,6 +273,9 @@
 										<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelRequiredAuthentificationVote}' id='active_vote_authentification' name='active_vote_authentification' value='${yes_value}' checked=suggest.activeVoteAuthentification />
 										<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelRequiredAuthentificationCommentSubmit}' id='active_comment_authentification' name='active_comment_authentification' value='active_comment_authentification' checked=suggest.activeCommentAuthentification />
 									</@formGroup>
+									<@formGroup labelKey='#i18n{suggest.createSuggest.labelEnableVoteWithdrawal}'>
+										<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelEnableVoteWithdrawalComment}' id='enable_vote_withdrawal' name='enable_vote_withdrawal' value='${yes_value}' checked=suggest.enableVoteWithdrawal />
+									</@formGroup>
 								</#if>
 							</@fieldSet>
 							<@fieldSet legend='#i18n{suggest.createSuggest.labelDisableNewSuggestSubmit}' legendIcon='gavel'>

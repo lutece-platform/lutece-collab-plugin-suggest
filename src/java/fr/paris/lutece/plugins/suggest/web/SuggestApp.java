@@ -183,6 +183,7 @@ public class SuggestApp extends MVCApplication
     private static final String MARK_LUTECE_USER_NAME_FILTER = "lutece_user_name_filter";
     private static final String MARK_LUTECE_USER_NAME_FILTER_INFO = "lutece_user_name_filter_info";
     private static final String MARK_USER_VOTED = "user_voted";
+    private static final String MARK_ENABLE_VOTE_WITHDRAWAL = "enable_vote_withdrawal";
 
     // templates
     private static final String TEMPLATE_XPAGE_FRAME_SUGGEST = "skin/plugins/suggest/suggest_frame.html";
@@ -1375,6 +1376,11 @@ public class SuggestApp extends MVCApplication
                 {
                     doVote( strVote, nIdSubmitSuggest, _plugin, luteceUserConnected.getName( ) );
                 }
+                else
+                    if ( suggest.isEnableVoteWithdrawal( ) )
+                    {
+                        doWithdrawVote( strVote, nIdSubmitSuggest, _plugin, luteceUserConnected.getName( ) );
+                    }
             }
             else
                 if ( request.getSession( ).getAttribute( EMPTY_STRING + nIdSubmitSuggest ) == null )
@@ -1412,6 +1418,26 @@ public class SuggestApp extends MVCApplication
             SuggestUtils.doVoteSuggestSubmit( nIdSubmitSuggest, nScore, strUserKey, plugin );
         }
             
+    }
+
+    /**
+     * Withdraws the vote of a user
+     *
+     * @param strVote
+     *            the score sent, withdrawn when the vote was stored without its score
+     * @param nIdSubmitSuggest
+     *            the id of the suggest submit
+     * @param plugin
+     *            the plugin
+     * @param strUserKey
+     *            the user key
+     */
+    private void doWithdrawVote( String strVote, int nIdSubmitSuggest, Plugin plugin, String strUserKey )
+    {
+        if ( ( strVote != null ) && DO_VOTE_CASES.matcher( strVote ).find( ) )
+        {
+            SuggestUtils.doWithdrawVoteSuggestSubmit( nIdSubmitSuggest, Integer.parseInt( strVote ), strUserKey, plugin );
+        }
     }
 
     /**
@@ -1736,6 +1762,7 @@ public class SuggestApp extends MVCApplication
             model.put( MARK_VIEW, strView );
             model.put( MARK_USER_VOTED, ( luteceUserConnected != null )
                     && ( VoteHome.getUserNumberVoteOnSuggestSubmit( suggestSubmit.getIdSuggestSubmit( ), luteceUserConnected.getName( ), _plugin ) > 0 ) );
+            model.put( MARK_ENABLE_VOTE_WITHDRAWAL, suggest.isEnableVoteWithdrawal( ) );
 
             HtmlTemplate template = AppTemplateService.getTemplate( strFilePath, locale, model );
 

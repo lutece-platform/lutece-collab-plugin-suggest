@@ -128,6 +128,8 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     private boolean _bNotifyParticipants;
     @SuggestAttribute( "notifySubscribers" )
     private boolean _bNotifySubscribers;
+    @SuggestAttribute( "enableVoteWithdrawal" )
+    private boolean _bEnableVoteWithdrawal;
     @SuggestAttribute( "enableTermsOfUse" )
     private boolean _bEnableTermsOfUse;
     @SuggestAttribute( "termsOfUse" )
@@ -1226,6 +1228,27 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     public void setNotifyParticipants( boolean bNotifyParticipants )
     {
         _bNotifyParticipants = bNotifyParticipants;
+    }
+
+    /**
+     * Tells whether an authenticated user who votes again on a suggest submit withdraws their vote.
+     *
+     * @return true if the vote can be withdrawn
+     */
+    public boolean isEnableVoteWithdrawal( )
+    {
+        return _bEnableVoteWithdrawal;
+    }
+
+    /**
+     * Sets whether an authenticated user who votes again on a suggest submit withdraws their vote.
+     *
+     * @param bEnableVoteWithdrawal
+     *            true if the vote can be withdrawn
+     */
+    public void setEnableVoteWithdrawal( boolean bEnableVoteWithdrawal )
+    {
+        _bEnableVoteWithdrawal = bEnableVoteWithdrawal;
     }
 
     /**
