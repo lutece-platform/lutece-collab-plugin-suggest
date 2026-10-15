@@ -40,7 +40,6 @@ import fr.paris.lutece.plugins.suggest.business.VideoType;
 import fr.paris.lutece.plugins.suggest.business.EntryTypeVideo;
 import jakarta.inject.Inject;
 import jakarta.enterprise.event.Event;
-import jakarta.enterprise.event.NotificationOptions;
 import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
@@ -56,6 +55,7 @@ import fr.paris.lutece.plugins.suggest.business.ImageResourceHome;
 import fr.paris.lutece.plugins.suggest.business.Response;
 import fr.paris.lutece.plugins.suggest.business.ResponseHome;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
+import fr.paris.lutece.plugins.suggest.service.event.SuggestEvents;
 import fr.paris.lutece.plugins.suggest.service.event.SuggestSubmitEvent;
 import fr.paris.lutece.plugins.suggest.service.search.SuggestIndexer;
 import fr.paris.lutece.plugins.suggest.service.workflow.SuggestWorkflowService;
@@ -63,7 +63,6 @@ import fr.paris.lutece.plugins.suggest.utils.SuggestIndexerUtils;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
 import fr.paris.lutece.portal.service.event.EventAction;
-import fr.paris.lutece.portal.service.event.Type.TypeQualifier;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -75,7 +74,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.RejectedExecutionException;
 
 import fr.paris.lutece.util.sql.TransactionManager;
 import java.util.function.Supplier;
@@ -607,8 +605,7 @@ public class SuggestSubmitService implements ISuggestSubmitService
     }
 
     /**
-     * Fires a suggest submit event to the asynchronous observers. While the server stops, its executor refuses new tasks: the observers are then
-     * notified in the current thread.
+     * Fires a suggest submit event to the asynchronous observers of its action.
      *
      * @param action
      *            the event action
@@ -618,18 +615,7 @@ public class SuggestSubmitService implements ISuggestSubmitService
     private void fireEvent( EventAction action, SuggestSubmit suggestSubmit )
     {
         int nIdSuggest = ( suggestSubmit.getSuggest( ) != null ) ? suggestSubmit.getSuggest( ).getIdSuggest( ) : SuggestUtils.CONSTANT_ID_NULL;
-        SuggestSubmitEvent event = new SuggestSubmitEvent( suggestSubmit.getIdSuggestSubmit( ), nIdSuggest );
-        Event<SuggestSubmitEvent> qualifiedEvent = _suggestSubmitEvent.select( new TypeQualifier( action ) );
-
-        try
-        {
-            qualifiedEvent.fireAsync( event );
-        }
-        catch( RejectedExecutionException e )
-        {
-            AppLogService.info( "Executor unavailable (server stopping): suggest submit event {} notified in the current thread", event.getIdSuggestSubmit( ) );
-            qualifiedEvent.fireAsync( event, NotificationOptions.ofExecutor( Runnable::run ) );
-        }
+        SuggestEvents.fireAsync( _suggestSubmitEvent, action, new SuggestSubmitEvent( suggestSubmit.getIdSuggestSubmit( ), nIdSuggest ) );
     }
 
     /**
