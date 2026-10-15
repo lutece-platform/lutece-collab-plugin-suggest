@@ -34,10 +34,15 @@
 package fr.paris.lutece.plugins.suggest.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Event;
+import jakarta.inject.Inject;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmitHome;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
+import fr.paris.lutece.plugins.suggest.service.event.CommentSubmitEvent;
+import fr.paris.lutece.plugins.suggest.service.event.SuggestEvents;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
+import fr.paris.lutece.portal.service.event.EventAction;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
@@ -45,6 +50,9 @@ import java.util.List;
 @ApplicationScoped
 public class CommentSubmitService implements ICommentSubmitService
 {
+    @Inject
+    private Event<CommentSubmitEvent> _commentSubmitEvent;
+
     /**
      * {@inheritDoc}
      */
@@ -59,6 +67,8 @@ public class CommentSubmitService implements ICommentSubmitService
             // update parent modification date
             CommentSubmitHome.updateDateModify( commentSubmit.getDateComment( ), commentSubmit.getIdParent( ), plugin );
         }
+
+        fireEvent( EventAction.CREATE, commentSubmit );
     }
 
     /**
@@ -68,6 +78,7 @@ public class CommentSubmitService implements ICommentSubmitService
     public void update( CommentSubmit commentSubmit, Plugin plugin )
     {
         CommentSubmitHome.update( commentSubmit, plugin );
+        fireEvent( EventAction.UPDATE, commentSubmit );
     }
 
     /**
@@ -76,10 +87,32 @@ public class CommentSubmitService implements ICommentSubmitService
     @Override
     public void remove( int nIdCommentSubmit, Plugin plugin )
     {
+        CommentSubmit commentSubmit = CommentSubmitHome.findByPrimaryKey( nIdCommentSubmit, plugin );
+
         // remove children
         CommentSubmitHome.removeByIdParent( nIdCommentSubmit, plugin );
 
         CommentSubmitHome.remove( nIdCommentSubmit, plugin );
+
+        if ( commentSubmit != null )
+        {
+            fireEvent( EventAction.REMOVE, commentSubmit );
+        }
+    }
+
+    /**
+     * Fires a comment event to the asynchronous observers of its action.
+     *
+     * @param action
+     *            the event action
+     * @param commentSubmit
+     *            the comment
+     */
+    private void fireEvent( EventAction action, CommentSubmit commentSubmit )
+    {
+        int nIdSuggestSubmit = ( commentSubmit.getSuggestSubmit( ) != null ) ? commentSubmit.getSuggestSubmit( ).getIdSuggestSubmit( )
+                : SuggestUtils.CONSTANT_ID_NULL;
+        SuggestEvents.fireAsync( _commentSubmitEvent, action, new CommentSubmitEvent( commentSubmit.getIdCommentSubmit( ), nIdSuggestSubmit ) );
     }
 
     // /////////////////////////////////////////////////////////////////////////
