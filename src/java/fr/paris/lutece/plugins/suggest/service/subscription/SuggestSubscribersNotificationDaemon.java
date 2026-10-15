@@ -40,11 +40,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmitHome;
@@ -55,20 +55,16 @@ import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitHome;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
 import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
+import fr.paris.lutece.plugins.suggest.service.notification.SuggestNotificationService;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.plugins.subscribe.business.Subscription;
 import fr.paris.lutece.plugins.subscribe.business.SubscriptionFilter;
 import fr.paris.lutece.plugins.subscribe.service.SubscriptionService;
 import fr.paris.lutece.portal.service.daemon.Daemon;
 import fr.paris.lutece.portal.service.datastore.DatastoreService;
-import fr.paris.lutece.portal.service.mail.MailService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.security.LuteceUser;
-import fr.paris.lutece.portal.service.security.LuteceUserService;
-import fr.paris.lutece.portal.service.template.AppTemplateService;
-import fr.paris.lutece.portal.service.util.AppPathService;
-import fr.paris.lutece.util.html.HtmlTemplate;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 /**
  * Daemon to send notifications to users that subscribed to suggests suggest categories or suggest submits
@@ -78,7 +74,6 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
     private static final String DATASTORE_DAEMON_LAST_RUN_KEY = "suggest.suggestSubscribersNotificationDaemon.lastRunDate";
     private static final String MARK_COMMENTS = "comments";
     private static final String MARK_SUGGEST_SUBMIT = "suggestSubmits";
-    private static final String MARK_BASE_URL = "base_url";
     private Map<String, List<CommentSubmit>> _mapCommentNotif;
     private Map<String, List<SuggestSubmit>> _mapSuggestSubmitNotif;
 
@@ -95,122 +90,171 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
             if ( StringUtils.isNotEmpty( strLastRunDate ) && StringUtils.isNumeric( strLastRunDate ) )
             {
-                resetNotifSend( );
-
-                Plugin plugin = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
-                Date dateLastRun = new Date( Long.parseLong( strLastRunDate ) );
-
-                // We get the list of comments posted after the last run of this daemon
-                List<CommentSubmit> listComment = CommentSubmitHome.findSuggestCommentByDate( dateLastRun, plugin );
-                if ( ( listComment != null ) && ( !listComment.isEmpty( ) ) )
+                try
                 {
-                    // We order the list of comments by suggest submit
-                    Map<Integer, List<CommentSubmit>> mapCommentsBySuggestSubmitId = new HashMap<>( listComment.size( ) );
-
-                    for ( CommentSubmit comment : listComment )
-                    {
-                        comment.setSuggestSubmit( SuggestSubmitHome.findByPrimaryKey( comment.getSuggestSubmit( ).getIdSuggestSubmit( ), plugin ) );
-                        addCommentToMap( comment, mapCommentsBySuggestSubmitId );
-                    }
-
-                    // Now that the map contain every comment ordered by suggest submit, we just have to generate notifications
-
-                    // We get the list of subscriptions to suggest submits
-                    SubscriptionFilter subscriptionFilter = new SubscriptionFilter( );
-                    subscriptionFilter.setSubscriptionKey( SuggestSubscriptionProviderService.SUBSCRIPTION_SUGGEST_SUBMIT );
-                    subscriptionFilter.setSubscriptionProvider( CDI.current( ).select( SuggestSubscriptionProviderService.class ).get( ).getProviderName( ) );
-
-                    List<Subscription> listSubscription = CDI.current( ).select( SubscriptionService.class ).get( ).findByFilter( subscriptionFilter );
-
-                    if ( ( listSubscription != null ) && ( !listSubscription.isEmpty( ) ) )
-                    {
-                        for ( Subscription subscription : listSubscription )
-                        {
-                            if ( StringUtils.isNotEmpty( subscription.getIdSubscribedResource( ) )
-                                    && StringUtils.isNumeric( subscription.getIdSubscribedResource( ) ) )
-                            {
-                                int nIdSuggestSubmit = Integer.parseInt( subscription.getIdSubscribedResource( ) );
-                                List<CommentSubmit> listComments = mapCommentsBySuggestSubmitId.get( nIdSuggestSubmit );
-
-                                if ( ( listComments != null ) && ( !listComments.isEmpty( ) ) )
-                                {
-                                    registerCommentNotificationToSend( listComments, subscription.getUserId( ) );
-                                }
-                            }
-                        }
-
-                        sendRegisteredCommentNotifications( plugin );
-                        // We clear registered notifications
-                        _mapCommentNotif = null;
-                    }
+                    notifySubscribers( new Date( Long.parseLong( strLastRunDate ) ) );
                 }
-
-                SubmitFilter submitFilter = new SubmitFilter( );
-                submitFilter.setDateFirst( new Timestamp( dateLastRun.getTime( ) ) );
-
-                List<SuggestSubmit> listCreatedSuggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter, plugin );
-
-                if ( ( listCreatedSuggestSubmit != null ) && ( !listCreatedSuggestSubmit.isEmpty( ) ) )
+                catch( RuntimeException e )
                 {
-                    // We get the list of subscriptions to suggest categories
-                    SubscriptionFilter subscriptionFilter = new SubscriptionFilter( );
-                    subscriptionFilter.setSubscriptionKey( SuggestSubscriptionProviderService.SUBSCRIPTION_SUGGEST_CATEGORY );
-                    subscriptionFilter.setSubscriptionProvider( CDI.current( ).select( SuggestSubscriptionProviderService.class ).get( ).getProviderName( ) );
-
-                    List<Subscription> listSubscription = CDI.current( ).select( SubscriptionService.class ).get( ).findByFilter( subscriptionFilter );
-
-                    if ( ( listSubscription != null ) && ( !listSubscription.isEmpty( ) ) )
-                    {
-                        for ( Subscription subscription : listSubscription )
-                        {
-                            if ( StringUtils.isNotEmpty( subscription.getIdSubscribedResource( ) )
-                                    && StringUtils.isNumeric( subscription.getIdSubscribedResource( ) ) )
-                            {
-                                int nIdCategory = SuggestUtils.getIntegerParameter( subscription.getIdSubscribedResource( ) );
-
-                                for ( SuggestSubmit suggestSubmit : listCreatedSuggestSubmit )
-                                {
-                                    if ( nIdCategory != SuggestUtils.CONSTANT_ID_NULL && suggestSubmit.getCategory( ) != null
-                                            && nIdCategory == suggestSubmit.getCategory( ).getIdCategory( ) )
-                                    {
-                                        registerSuggestSubmitNotificationToSend( suggestSubmit, subscription.getUserId( ) );
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    subscriptionFilter = new SubscriptionFilter( );
-                    subscriptionFilter.setSubscriptionKey( SuggestSubscriptionProviderService.SUBSCRIPTION_SUGGEST );
-                    subscriptionFilter.setSubscriptionProvider( CDI.current( ).select( SuggestSubscriptionProviderService.class ).get( ).getProviderName( ) );
-                    listSubscription = CDI.current( ).select( SubscriptionService.class ).get( ).findByFilter( subscriptionFilter );
-
-                    if ( ( listSubscription != null ) && ( !listSubscription.isEmpty( ) ) )
-                    {
-                        for ( Subscription subscription : listSubscription )
-                        {
-                            if ( StringUtils.isNotEmpty( subscription.getIdSubscribedResource( ) )
-                                    && StringUtils.isNumeric( subscription.getIdSubscribedResource( ) ) )
-                            {
-                                int nIdSuggest = Integer.parseInt( subscription.getIdSubscribedResource( ) );
-
-                                for ( SuggestSubmit suggestSubmit : listCreatedSuggestSubmit )
-                                {
-                                    if ( nIdSuggest == suggestSubmit.getSuggest( ).getIdSuggest( ) )
-                                    {
-                                        registerSuggestSubmitNotificationToSend( suggestSubmit, subscription.getUserId( ) );
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    sendRegisteredSuggestSubmitNotifications( plugin );
+                    AppLogService.error( "Suggest subscribers not notified: {}", e.getMessage( ), e );
                 }
             }
 
             DatastoreService.setInstanceDataValue( DATASTORE_DAEMON_LAST_RUN_KEY, Long.toString( date.getTime( ) ) );
         }
+    }
+
+    /**
+     * Notifies the subscribers of the comments and the suggest submits published since the last run.
+     *
+     * @param dateLastRun
+     *            the date of the last run
+     */
+    private void notifySubscribers( Date dateLastRun )
+    {
+        resetNotifSend( );
+
+        Plugin plugin = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
+
+        // We get the list of comments posted after the last run of this daemon
+        List<CommentSubmit> listComment = CommentSubmitHome.findSuggestCommentByDate( dateLastRun, plugin );
+        if ( ( listComment != null ) && ( !listComment.isEmpty( ) ) )
+        {
+            // We order the list of comments by suggest submit
+            Map<Integer, List<CommentSubmit>> mapCommentsBySuggestSubmitId = new HashMap<>( listComment.size( ) );
+
+            for ( CommentSubmit comment : listComment )
+            {
+                comment.setSuggestSubmit( SuggestSubmitHome.findByPrimaryKey( comment.getSuggestSubmit( ).getIdSuggestSubmit( ), plugin ) );
+
+                if ( comment.isActive( ) && isPublished( comment.getSuggestSubmit( ) ) )
+                {
+                    addCommentToMap( comment, mapCommentsBySuggestSubmitId );
+                }
+            }
+
+            // Now that the map contain every comment ordered by suggest submit, we just have to generate notifications
+
+            // We get the list of subscriptions to suggest submits
+            SubscriptionFilter subscriptionFilter = new SubscriptionFilter( );
+            subscriptionFilter.setSubscriptionKey( SuggestSubscriptionProviderService.SUBSCRIPTION_SUGGEST_SUBMIT );
+            subscriptionFilter.setSubscriptionProvider( CDI.current( ).select( SuggestSubscriptionProviderService.class ).get( ).getProviderName( ) );
+
+            List<Subscription> listSubscription = CDI.current( ).select( SubscriptionService.class ).get( ).findByFilter( subscriptionFilter );
+
+            if ( ( listSubscription != null ) && ( !listSubscription.isEmpty( ) ) )
+            {
+                for ( Subscription subscription : listSubscription )
+                {
+                    if ( StringUtils.isNotEmpty( subscription.getIdSubscribedResource( ) )
+                            && StringUtils.isNumeric( subscription.getIdSubscribedResource( ) ) )
+                    {
+                        int nIdSuggestSubmit = Integer.parseInt( subscription.getIdSubscribedResource( ) );
+                        List<CommentSubmit> listComments = mapCommentsBySuggestSubmitId.get( nIdSuggestSubmit );
+
+                        if ( ( listComments != null ) && ( !listComments.isEmpty( ) ) )
+                        {
+                            registerCommentNotificationToSend( listComments, subscription.getUserId( ) );
+                        }
+                    }
+                }
+
+                sendRegisteredCommentNotifications( plugin );
+                // We clear registered notifications
+                _mapCommentNotif = null;
+            }
+        }
+
+        SubmitFilter submitFilter = new SubmitFilter( );
+        submitFilter.setDateFirst( new Timestamp( dateLastRun.getTime( ) ) );
+        submitFilter.setIdSuggestSubmitState( SuggestSubmit.STATE_PUBLISH );
+
+        List<SuggestSubmit> listCreatedSuggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter, plugin );
+
+        if ( ( listCreatedSuggestSubmit != null ) && ( !listCreatedSuggestSubmit.isEmpty( ) ) )
+        {
+            // We get the list of subscriptions to suggest categories
+            SubscriptionFilter subscriptionFilter = new SubscriptionFilter( );
+            subscriptionFilter.setSubscriptionKey( SuggestSubscriptionProviderService.SUBSCRIPTION_SUGGEST_CATEGORY );
+            subscriptionFilter.setSubscriptionProvider( CDI.current( ).select( SuggestSubscriptionProviderService.class ).get( ).getProviderName( ) );
+
+            List<Subscription> listSubscription = CDI.current( ).select( SubscriptionService.class ).get( ).findByFilter( subscriptionFilter );
+
+            if ( ( listSubscription != null ) && ( !listSubscription.isEmpty( ) ) )
+            {
+                for ( Subscription subscription : listSubscription )
+                {
+                    if ( StringUtils.isNotEmpty( subscription.getIdSubscribedResource( ) )
+                            && StringUtils.isNumeric( subscription.getIdSubscribedResource( ) ) )
+                    {
+                        int nIdCategory = SuggestUtils.getIntegerParameter( subscription.getIdSubscribedResource( ) );
+
+                        for ( SuggestSubmit suggestSubmit : listCreatedSuggestSubmit )
+                        {
+                            if ( nIdCategory != SuggestUtils.CONSTANT_ID_NULL && suggestSubmit.getCategory( ) != null
+                                    && nIdCategory == suggestSubmit.getCategory( ).getIdCategory( ) )
+                            {
+                                registerSuggestSubmitNotificationToSend( suggestSubmit, subscription.getUserId( ) );
+                            }
+                        }
+                    }
+                }
+            }
+
+            subscriptionFilter = new SubscriptionFilter( );
+            subscriptionFilter.setSubscriptionKey( SuggestSubscriptionProviderService.SUBSCRIPTION_SUGGEST );
+            subscriptionFilter.setSubscriptionProvider( CDI.current( ).select( SuggestSubscriptionProviderService.class ).get( ).getProviderName( ) );
+            listSubscription = CDI.current( ).select( SubscriptionService.class ).get( ).findByFilter( subscriptionFilter );
+
+            if ( ( listSubscription != null ) && ( !listSubscription.isEmpty( ) ) )
+            {
+                for ( Subscription subscription : listSubscription )
+                {
+                    if ( StringUtils.isNotEmpty( subscription.getIdSubscribedResource( ) )
+                            && StringUtils.isNumeric( subscription.getIdSubscribedResource( ) ) )
+                    {
+                        int nIdSuggest = Integer.parseInt( subscription.getIdSubscribedResource( ) );
+
+                        for ( SuggestSubmit suggestSubmit : listCreatedSuggestSubmit )
+                        {
+                            if ( nIdSuggest == suggestSubmit.getSuggest( ).getIdSuggest( ) )
+                            {
+                                registerSuggestSubmitNotificationToSend( suggestSubmit, subscription.getUserId( ) );
+                            }
+                        }
+                    }
+                }
+            }
+
+            sendRegisteredSuggestSubmitNotifications( plugin );
+        }
+    }
+
+    /**
+     * Tells whether a suggest submit is published.
+     *
+     * @param suggestSubmit
+     *            the suggest submit
+     * @return true if the suggest submit is published
+     */
+    private static boolean isPublished( SuggestSubmit suggestSubmit )
+    {
+        return ( suggestSubmit != null ) && ( suggestSubmit.getSuggestSubmitState( ) != null )
+                && ( suggestSubmit.getSuggestSubmitState( ).getNumber( ) == SuggestSubmit.STATE_PUBLISH );
+    }
+
+    /**
+     * Tells whether a comment goes in the digest of a subscriber: never the subscriber's own comments.
+     *
+     * @param comment
+     *            the comment
+     * @param strUserId
+     *            the subscriber
+     * @return true if the comment goes in the digest
+     */
+    private static boolean isForDigest( CommentSubmit comment, String strUserId )
+    {
+        return !Strings.CS.equals( comment.getLuteceUserKey( ), strUserId );
     }
 
     /**
@@ -251,8 +295,15 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
      * @param strUserId
      *            The user to send the notification to
      */
-    private void registerCommentNotificationToSend( List<CommentSubmit> listComments, String strUserId )
+    private void registerCommentNotificationToSend( List<CommentSubmit> listAllComments, String strUserId )
     {
+        List<CommentSubmit> listComments = listAllComments.stream( ).filter( comment -> isForDigest( comment, strUserId ) ).toList( );
+
+        if ( listComments.isEmpty( ) )
+        {
+            return;
+        }
+
         List<CommentSubmit> listRegisteredCopmments = _mapCommentNotif.get( strUserId );
 
         if ( listRegisteredCopmments == null )
@@ -339,24 +390,11 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
      */
     private void sendCommentNotification( Suggest suggest, List<CommentSubmit> listComments, String strUserName )
     {
-        LuteceUser user = LuteceUserService.getLuteceUserFromName( strUserName );
-        String strEmail = getEmailFromLuteceUser( user );
-
-        if ( StringUtils.isNotEmpty( strEmail ) )
-        {
-            Locale locale = Locale.getDefault( );
-
-            Map<String, Object> model = new HashMap<>( );
-            model.put( MARK_COMMENTS, listComments );
-            model.put( MARK_BASE_URL, AppPathService.getProdUrl( (String) null ) );
-
-            HtmlTemplate templateBody = AppTemplateService.getTemplateFromStringFtl( suggest.getNotificationNewCommentBody( ), locale, model );
-            HtmlTemplate templateTitle = AppTemplateService.getTemplateFromStringFtl( suggest.getNotificationNewCommentTitle( ), locale, model );
-            MailService.sendMailHtml(
-                    strEmail,
-                    !StringUtils.isBlank( suggest.getNotificationNewCommentSenderName( ) ) ? suggest.getNotificationNewCommentSenderName( ) : suggest
-                            .getTitle( ), MailService.getNoReplyEmail( ), templateTitle.getHtml( ), templateBody.getHtml( ) );
-        }
+        SuggestNotificationService notificationService = CDI.current( ).select( SuggestNotificationService.class ).get( );
+        Map<String, Object> model = notificationService.newModel( strUserName );
+        model.put( MARK_COMMENTS, listComments );
+        notificationService.sendFromStrings( strUserName, StringUtils.defaultIfBlank( suggest.getNotificationNewCommentSenderName( ), suggest.getTitle( ) ),
+                suggest.getNotificationNewCommentTitle( ), suggest.getNotificationNewCommentBody( ), model );
     }
 
     /**
@@ -369,6 +407,11 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
      */
     private void registerSuggestSubmitNotificationToSend( SuggestSubmit suggestSubmit, String strUserName )
     {
+        if ( Strings.CS.equals( suggestSubmit.getLuteceUserKey( ), strUserName ) )
+        {
+            return;
+        }
+
         List<SuggestSubmit> listRegisteredSuggestSubmit = _mapSuggestSubmitNotif.get( strUserName );
 
         if ( listRegisteredSuggestSubmit == null )
@@ -449,41 +492,11 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
      */
     private void sendSuggestSubmitNotification( Suggest suggest, List<SuggestSubmit> listSuggestSubmit, String strUserName )
     {
-        LuteceUser user = LuteceUserService.getLuteceUserFromName( strUserName );
-        String strEmail = getEmailFromLuteceUser( user );
-
-        if ( StringUtils.isNotEmpty( strEmail ) )
-        {
-            Locale locale = Locale.getDefault( );
-
-            Map<String, Object> model = new HashMap<>( );
-            model.put( MARK_SUGGEST_SUBMIT, listSuggestSubmit );
-            model.put( MARK_BASE_URL, AppPathService.getProdUrl( (String) null ) );
-
-            HtmlTemplate templateBody = AppTemplateService.getTemplateFromStringFtl( suggest.getNotificationNewSuggestSubmitBody( ), locale, model );
-            HtmlTemplate templateTitle = AppTemplateService.getTemplateFromStringFtl( suggest.getNotificationNewSuggestSubmitTitle( ), locale, model );
-            MailService.sendMailHtml( strEmail,
-                    !StringUtils.isBlank( suggest.getNotificationNewSuggestSubmitSenderName( ) ) ? suggest.getNotificationNewSuggestSubmitSenderName( )
-                            : suggest.getTitle( ), MailService.getNoReplyEmail( ), templateTitle.getHtml( ), templateBody.getHtml( ) );
-        }
-    }
-
-    /**
-     * Get the email from the lutece user
-     * 
-     * @param user
-     *            The user to get the email of
-     * @return The email of the user, or null if he has none
-     */
-    private String getEmailFromLuteceUser( LuteceUser user )
-    {
-        String strEmail = user.getUserInfo( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL );
-
-        if ( strEmail == null )
-        {
-            strEmail = user.getUserInfo( LuteceUser.HOME_INFO_ONLINE_EMAIL );
-        }
-
-        return strEmail;
+        SuggestNotificationService notificationService = CDI.current( ).select( SuggestNotificationService.class ).get( );
+        Map<String, Object> model = notificationService.newModel( strUserName );
+        model.put( MARK_SUGGEST_SUBMIT, listSuggestSubmit );
+        notificationService.sendFromStrings( strUserName,
+                StringUtils.defaultIfBlank( suggest.getNotificationNewSuggestSubmitSenderName( ), suggest.getTitle( ) ),
+                suggest.getNotificationNewSuggestSubmitTitle( ), suggest.getNotificationNewSuggestSubmitBody( ), model );
     }
 }
