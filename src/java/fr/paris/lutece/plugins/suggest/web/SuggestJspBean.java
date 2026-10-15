@@ -125,7 +125,6 @@ import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.mailinglist.AdminMailingListService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
-import fr.paris.lutece.portal.service.message.SiteMessage;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.portal.ThemesService;
@@ -147,7 +146,6 @@ import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.html.Paginator;
-import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
 /**
@@ -231,7 +229,6 @@ public class SuggestJspBean extends MVCAdminJspBean
 
     // message
     private static final String MESSAGE_ACTION_ERROR = "suggest.message.workflow.action.error";
-    private static final String MESSAGE_NEW_COMMENT_SUBMIT_INVALID = "suggest.message.newCommentSubmitInvalid";
     private static final String MESSAGE_CONFIRM_REMOVE_SUGGEST = "suggest.message.confirmRemoveSuggest";
     private static final String MESSAGE_CONFIRM_REMOVE_SUGGEST_SUBMIT = "suggest.message.confirmRemoveSuggestSubmit";
     private static final String MESSAGE_CONFIRM_REMOVE_COMMENT_SUBMIT = "suggest.message.confirmRemoveCommentSubmit";
@@ -1645,12 +1642,6 @@ public class SuggestJspBean extends MVCAdminJspBean
 
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSubmitSuggest, false, plugin );
 
-        // Check XSS characters
-        if ( StringUtil.containsXssCharacters( strCommentValueSuggest ) )
-        {
-            return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_NEW_COMMENT_SUBMIT_INVALID, SiteMessage.TYPE_STOP ) );
-        }
-
         commentSubmit.setActive( true );
         suggestSubmit.setNumberCommentEnable( suggestSubmit.getNumberCommentEnable( ) + 1 );
         suggestSubmit.setNumberComment( suggestSubmit.getNumberComment( ) + 1 );
@@ -1663,13 +1654,16 @@ public class SuggestJspBean extends MVCAdminJspBean
 
         LuteceUser user = null;
 
-        try
+        if ( SecurityService.isAuthenticationEnable( ) )
         {
-            user = SecurityService.getInstance( ).getRemoteUser( request );
-        }
-        catch( UserNotSignedException e )
-        {
-            AppLogService.error( "User not identified", e );
+            try
+            {
+                user = SecurityService.getInstance( ).getRemoteUser( request );
+            }
+            catch( UserNotSignedException e )
+            {
+                AppLogService.error( "User not identified", e );
+            }
         }
 
         if ( user != null )
