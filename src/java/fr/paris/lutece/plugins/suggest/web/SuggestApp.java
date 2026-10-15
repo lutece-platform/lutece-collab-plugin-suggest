@@ -181,6 +181,7 @@ public class SuggestApp extends MVCApplication
     private static final String MARK_WORKFLOW_STATES = "workflow_states";
     private static final String MARK_LIST_SUGGEST_SUBMIT_TYPES = "list_suggest_submit_types";
     private static final String MARK_LUTECE_USER_NAME_FILTER = "lutece_user_name_filter";
+    private static final String MARK_LUTECE_USER_NAME_FILTER_INFO = "lutece_user_name_filter_info";
     private static final String MARK_USER_VOTED = "user_voted";
 
     // templates
@@ -2167,6 +2168,11 @@ public class SuggestApp extends MVCApplication
             model.put( MARK_ID_FILTER_TYPE, searchFields.getIdFilterSuggestSubmitType( ) );
             model.put( MARK_LIST_SUGGEST_SUBMIT_TYPES, SuggestSubmitTypeHome.getListByIdSuggest( suggest.getIdSuggest( ), _plugin ) );
             model.put( MARK_LUTECE_USER_NAME_FILTER, searchFields.getLuteceUserName( ) );
+
+            if ( StringUtils.isNotBlank( searchFields.getLuteceUserName( ) ) )
+            {
+                model.put( MARK_LUTECE_USER_NAME_FILTER_INFO, _suggestUserInfoService.findSuggestUserInfoByKey( searchFields.getLuteceUserName( ), _plugin ) );
+            }
 
             if ( searchFields.getIdFilterSuggestSubmitType( ) != SuggestUtils.CONSTANT_ID_NULL )
             {
