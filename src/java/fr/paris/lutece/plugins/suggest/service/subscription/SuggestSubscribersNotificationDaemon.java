@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
@@ -53,8 +54,10 @@ import fr.paris.lutece.plugins.suggest.business.SuggestFilter;
 import fr.paris.lutece.plugins.suggest.business.SuggestHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitHome;
+import fr.paris.lutece.plugins.suggest.business.SuggestUserInfo;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
 import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
+import fr.paris.lutece.plugins.suggest.service.notification.SuggestNotificationListener;
 import fr.paris.lutece.plugins.suggest.service.notification.SuggestNotificationService;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.plugins.subscribe.business.Subscription;
@@ -74,6 +77,8 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
     private static final String DATASTORE_DAEMON_LAST_RUN_KEY = "suggest.suggestSubscribersNotificationDaemon.lastRunDate";
     private static final String MARK_COMMENTS = "comments";
     private static final String MARK_SUGGEST_SUBMIT = "suggestSubmits";
+    private static final String MARK_SUGGEST = "suggest";
+    private static final String MARK_USERS = "users";
     private Map<String, List<CommentSubmit>> _mapCommentNotif;
     private Map<String, List<SuggestSubmit>> _mapSuggestSubmitNotif;
 
@@ -244,17 +249,25 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
     }
 
     /**
-     * Tells whether a comment goes in the digest of a subscriber: never the subscriber's own comments.
+     * Tells whether a comment goes in the digest of a subscriber: neither the subscriber's own comments nor those the subscriber received at once.
      *
      * @param comment
-     *            the comment
+     *            the comment, with its suggest submit
      * @param strUserId
      *            the subscriber
      * @return true if the comment goes in the digest
      */
     private static boolean isForDigest( CommentSubmit comment, String strUserId )
     {
-        return !Strings.CS.equals( comment.getLuteceUserKey( ), strUserId );
+        if ( Strings.CS.equals( comment.getLuteceUserKey( ), strUserId ) )
+        {
+            return false;
+        }
+
+        Suggest suggest = SuggestHome.findByPrimaryKey( comment.getSuggestSubmit( ).getSuggest( ).getIdSuggest( ),
+                PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+
+        return ( suggest == null ) || !CDI.current( ).select( SuggestNotificationListener.class ).get( ).isNotifiedAtOnce( suggest, comment, strUserId );
     }
 
     /**
@@ -393,6 +406,8 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
         SuggestNotificationService notificationService = CDI.current( ).select( SuggestNotificationService.class ).get( );
         Map<String, Object> model = notificationService.newModel( strUserName );
         model.put( MARK_COMMENTS, listComments );
+        model.put( MARK_SUGGEST, suggest );
+        model.put( MARK_USERS, getUsers( notificationService, listComments.stream( ).map( CommentSubmit::getLuteceUserKey ) ) );
         notificationService.sendFromStrings( strUserName, StringUtils.defaultIfBlank( suggest.getNotificationNewCommentSenderName( ), suggest.getTitle( ) ),
                 suggest.getNotificationNewCommentTitle( ), suggest.getNotificationNewCommentBody( ), model );
     }
@@ -495,8 +510,34 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
         SuggestNotificationService notificationService = CDI.current( ).select( SuggestNotificationService.class ).get( );
         Map<String, Object> model = notificationService.newModel( strUserName );
         model.put( MARK_SUGGEST_SUBMIT, listSuggestSubmit );
+        model.put( MARK_SUGGEST, suggest );
+        model.put( MARK_USERS, getUsers( notificationService, listSuggestSubmit.stream( ).map( SuggestSubmit::getLuteceUserKey ) ) );
         notificationService.sendFromStrings( strUserName,
                 StringUtils.defaultIfBlank( suggest.getNotificationNewSuggestSubmitSenderName( ), suggest.getTitle( ) ),
                 suggest.getNotificationNewSuggestSubmitTitle( ), suggest.getNotificationNewSuggestSubmitBody( ), model );
+    }
+
+    /**
+     * Returns the user info the plugin stored for the given users, by Lutece user key.
+     *
+     * @param notificationService
+     *            the notification service
+     * @param userKeys
+     *            the Lutece user keys
+     * @return the user info of each user who has some
+     */
+    private static Map<String, SuggestUserInfo> getUsers( SuggestNotificationService notificationService, Stream<String> userKeys )
+    {
+        Map<String, SuggestUserInfo> mapUsers = new HashMap<>( );
+        userKeys.filter( StringUtils::isNotBlank ).distinct( ).forEach( strKey -> {
+            SuggestUserInfo userInfo = notificationService.getUserInfo( strKey );
+
+            if ( userInfo != null )
+            {
+                mapUsers.put( strKey, userInfo );
+            }
+        } );
+
+        return mapUsers;
     }
 }

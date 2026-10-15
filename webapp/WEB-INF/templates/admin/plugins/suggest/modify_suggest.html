@@ -321,6 +321,13 @@
 									</@inputGroup>
 								</@formGroup>
 							</@fieldSet>
+							<@fieldSet legend='#i18n{suggest.createSuggest.labelParticipantNotifications}' legendIcon='bell'>
+								<@formGroup helpKey='#i18n{suggest.createSuggest.labelParticipantNotificationsHelp}'>
+									<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelAutoSubscribe}' name='auto_subscribe' id='auto_subscribe' value='${yes_value}' checked=suggest.autoSubscribe />
+									<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelNotifyParticipants}' name='notify_participants' id='notify_participants' value='${yes_value}' checked=suggest.notifyParticipants />
+									<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelNotifySubscribers}' name='notify_subscribers' id='notify_subscribers' value='${yes_value}' checked=suggest.notifySubscribers />
+								</@formGroup>
+							</@fieldSet>
 						</@tabPanel>
 						<@tabPanel id='panel8'>
 							<@formGroup labelFor='description' labelKey='#i18n{suggest.createSuggest.labelDescription}'>

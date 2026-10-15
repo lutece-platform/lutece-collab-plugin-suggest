@@ -992,6 +992,11 @@ public class SuggestApp extends MVCApplication
         urlItem.addParameter( PARAMETER_PAGE, CONSTANT_SUGGEST );
         urlItem.addParameter( PARAMETER_ID_SUGGEST, request.getParameter( PARAMETER_ID_SUGGEST ) );
 
+        if ( luteceUserConnected != null )
+        {
+            _suggestUserInfoService.updateSuggestUserInfoByLuteceUser( luteceUserConnected, _plugin );
+        }
+
         if ( StringUtils.isNotEmpty( strIdSubmitSuggest ) )
         {
             int nIdSubmitSuggest = SuggestUtils.getIntegerParameter( strIdSubmitSuggest );

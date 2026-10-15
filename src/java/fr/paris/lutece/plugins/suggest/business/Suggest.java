@@ -122,6 +122,12 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     private boolean _bEnableMailNewCommentSubmit;
     @SuggestAttribute( "enableMailNewReportedSubmit" )
     private boolean _bEnableMailNewReportedSubmit;
+    @SuggestAttribute( "autoSubscribe" )
+    private boolean _bAutoSubscribe;
+    @SuggestAttribute( "notifyParticipants" )
+    private boolean _bNotifyParticipants;
+    @SuggestAttribute( "notifySubscribers" )
+    private boolean _bNotifySubscribers;
     @SuggestAttribute( "enableTermsOfUse" )
     private boolean _bEnableTermsOfUse;
     @SuggestAttribute( "termsOfUse" )
@@ -1177,6 +1183,70 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     public void setEnableMailNewCommentSubmit( boolean bEnableMailNewCommentSubmit )
     {
         _bEnableMailNewCommentSubmit = bEnableMailNewCommentSubmit;
+    }
+
+    /**
+     * Tells whether the author of a suggest submit and its commenters subscribe to it.
+     *
+     * @return true if they subscribe to it
+     */
+    public boolean isAutoSubscribe( )
+    {
+        return _bAutoSubscribe;
+    }
+
+    /**
+     * Sets whether the author of a suggest submit and its commenters subscribe to it.
+     *
+     * @param bAutoSubscribe
+     *            true if they subscribe to it
+     */
+    public void setAutoSubscribe( boolean bAutoSubscribe )
+    {
+        _bAutoSubscribe = bAutoSubscribe;
+    }
+
+    /**
+     * Tells whether the participants are notified at once: the author when the suggest submit is received and commented, the author of a comment when
+     * someone answers it.
+     *
+     * @return true if the participants are notified
+     */
+    public boolean isNotifyParticipants( )
+    {
+        return _bNotifyParticipants;
+    }
+
+    /**
+     * Sets whether the participants are notified at once.
+     *
+     * @param bNotifyParticipants
+     *            true if the participants are notified
+     */
+    public void setNotifyParticipants( boolean bNotifyParticipants )
+    {
+        _bNotifyParticipants = bNotifyParticipants;
+    }
+
+    /**
+     * Tells whether the subscribers of a suggest submit are notified at once of its official answers.
+     *
+     * @return true if the subscribers are notified
+     */
+    public boolean isNotifySubscribers( )
+    {
+        return _bNotifySubscribers;
+    }
+
+    /**
+     * Sets whether the subscribers of a suggest submit are notified at once of its official answers.
+     *
+     * @param bNotifySubscribers
+     *            true if the subscribers are notified
+     */
+    public void setNotifySubscribers( boolean bNotifySubscribers )
+    {
+        _bNotifySubscribers = bNotifySubscribers;
     }
 
     /**
