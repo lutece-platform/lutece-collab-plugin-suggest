@@ -464,3 +464,8 @@ ALTER TABLE suggest_reported_message ADD CONSTRAINT fk_suggest_reported_message 
 -- preconditions onFail:MARK_RAN onError:WARN
 -- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_suggest_user_info' AND column_name = 'department'
 ALTER TABLE suggest_suggest_user_info ADD COLUMN department varchar(255) DEFAULT NULL;
+
+-- changeset suggest:create_db_suggest-rev2.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_vote' AND column_name = 'vote_value'
+ALTER TABLE suggest_vote ADD COLUMN vote_value int DEFAULT NULL;

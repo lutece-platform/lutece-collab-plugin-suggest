@@ -1221,8 +1221,37 @@ public final class SuggestUtils
                 Vote vote = new Vote( );
                 vote.setLuteceUserKey( strLuteceUserKey );
                 vote.setIdSuggestSubmit( nIdSuggestSubmit );
+                vote.setVoteValue( nScore );
                 VoteHome.create( vote, plugin );
             }
+        }
+    }
+
+    /**
+     * Withdraws the vote of a lutece user on a suggest submit: removes the vote and its score from the suggest submit.
+     *
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param nScore
+     *            the score withdrawn when the vote was stored without its score
+     * @param strLuteceUserKey
+     *            the lutece user key
+     * @param plugin
+     *            the plugin
+     */
+    public static void doWithdrawVoteSuggestSubmit( int nIdSuggestSubmit, int nScore, String strLuteceUserKey, Plugin plugin )
+    {
+        Vote vote = VoteHome.findByIdSuggestSubmitAndLuteceUserKey( nIdSuggestSubmit, strLuteceUserKey, plugin );
+        ISuggestSubmitService suggestSubmitService = CDI.current( ).select( ISuggestSubmitService.class ).get( );
+        SuggestSubmit suggestSubmit = suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, plugin );
+
+        if ( ( vote != null ) && ( suggestSubmit != null ) )
+        {
+            int nWithdrawnScore = ( vote.getVoteValue( ) != null ) ? vote.getVoteValue( ) : nScore;
+            VoteHome.remove( nIdSuggestSubmit, strLuteceUserKey, plugin );
+            suggestSubmit.setNumberVote( Math.max( 0, suggestSubmit.getNumberVote( ) - 1 ) );
+            suggestSubmit.setNumberScore( suggestSubmit.getNumberScore( ) - nWithdrawnScore );
+            suggestSubmitService.update( suggestSubmit, plugin );
         }
     }
 

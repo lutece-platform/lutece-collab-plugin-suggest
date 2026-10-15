@@ -49,9 +49,12 @@ import java.util.List;
 @ApplicationScoped
 public class VoteDAO implements IVoteDAO
 {
-    private static final String SQL_QUERY_SELECT_VOTE_BY_ID_SUGGEST_SUBMIT = "SELECT id_suggest_submit,lutece_user_key "
+    private static final String SQL_QUERY_SELECT_VOTE_BY_ID_SUGGEST_SUBMIT = "SELECT id_suggest_submit,lutece_user_key,vote_value "
             + "FROM suggest_vote WHERE id_suggest_submit=? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO " + "suggest_vote(id_suggest_submit,lutece_user_key) VALUES(?,?) ";
+    private static final String SQL_QUERY_SELECT_VOTE_BY_ID_SUGGEST_SUBMIT_AND_LUTECE_USER_KEY = "SELECT id_suggest_submit,lutece_user_key,vote_value "
+            + "FROM suggest_vote WHERE id_suggest_submit= ? and lutece_user_key= ? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO " + "suggest_vote(id_suggest_submit,lutece_user_key,vote_value) VALUES(?,?,?) ";
+    private static final String SQL_QUERY_DELETE_BY_ID_SUGGEST_SUBMIT_AND_LUTECE_USER_KEY = "DELETE FROM suggest_vote WHERE id_suggest_submit= ? and lutece_user_key= ? ";
     private static final String SQL_QUERY_COUNT_VOTE_BY_ID_SUGGEST_SUBMIT_AND_LUTECE_USER_KEY = "SELECT COUNT(id_suggest_submit) "
             + "FROM suggest_vote WHERE id_suggest_submit= ? and lutece_user_key= ? ";
     private static final String SQL_QUERY_COUNT_VOTE_BY_ID_SUGGEST_SUBMIT = "SELECT COUNT(id_suggest_submit) "
@@ -71,6 +74,16 @@ public class VoteDAO implements IVoteDAO
         {
             daoUtil.setInt( 1, vote.getIdSuggestSubmit( ) );
             daoUtil.setString( 2, vote.getLuteceUserKey( ) );
+
+            if ( vote.getVoteValue( ) != null )
+            {
+                daoUtil.setInt( 3, vote.getVoteValue( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( 3 );
+            }
+
             daoUtil.executeUpdate( );
         }
     }
@@ -97,9 +110,7 @@ public class VoteDAO implements IVoteDAO
     
             while ( daoUtil.next( ) )
             {
-                vote = new Vote( );
-                vote.setIdSuggestSubmit( daoUtil.getInt( 1 ) );
-                vote.setLuteceUserKey( daoUtil.getString( 2 ) );
+                vote = load( daoUtil );
                 listVote.add( vote );
             }
 
@@ -136,6 +147,60 @@ public class VoteDAO implements IVoteDAO
         }
 
         return nIdCount;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Vote selectVoteByIdSuggestSubmitAndLuteceUserKey( int nIdSuggestSubmit, String strLuteceUserKey, Plugin plugin )
+    {
+        Vote vote = null;
+
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_VOTE_BY_ID_SUGGEST_SUBMIT_AND_LUTECE_USER_KEY, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdSuggestSubmit );
+            daoUtil.setString( 2, strLuteceUserKey );
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) )
+            {
+                vote = load( daoUtil );
+            }
+        }
+
+        return vote;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteByIdSuggestSubmitAndLuteceUserKey( int nIdSuggestSubmit, String strLuteceUserKey, Plugin plugin )
+    {
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_SUGGEST_SUBMIT_AND_LUTECE_USER_KEY, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdSuggestSubmit );
+            daoUtil.setString( 2, strLuteceUserKey );
+            daoUtil.executeUpdate( );
+        }
+    }
+
+    /**
+     * Builds a vote from the current row.
+     *
+     * @param daoUtil
+     *            the DAOUtil positioned on a row
+     * @return the vote
+     */
+    private static Vote load( DAOUtil daoUtil )
+    {
+        Vote vote = new Vote( );
+        vote.setIdSuggestSubmit( daoUtil.getInt( 1 ) );
+        vote.setLuteceUserKey( daoUtil.getString( 2 ) );
+        vote.setVoteValue( daoUtil.getObject( 3, Integer.class ) );
+
+        return vote;
     }
 
     /**

@@ -424,6 +424,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String PARAMETER_ENABLE_MAIL_NEW_REPORTED_SUBMIT = "enable_mail_new_reported_submit";
     private static final String PARAMETER_AUTO_SUBSCRIBE = "auto_subscribe";
     private static final String PARAMETER_NOTIFY_PARTICIPANTS = "notify_participants";
+    private static final String PARAMETER_ENABLE_VOTE_WITHDRAWAL = "enable_vote_withdrawal";
     private static final String PARAMETER_NOTIFY_SUBSCRIBERS = "notify_subscribers";
     private static final String PARAMETER_ID_MAILING_LIST_SUGGEST_SUBMIT = "id_mailing_list_suggest_submit";
     private static final String PARAMETER_AUTHORIZED_COMMENT = "authorized_comment";
@@ -1872,6 +1873,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         String strEnableMailNewReportedSubmit = request.getParameter( PARAMETER_ENABLE_MAIL_NEW_REPORTED_SUBMIT );
         String strAutoSubscribe = request.getParameter( PARAMETER_AUTO_SUBSCRIBE );
         String strNotifyParticipants = request.getParameter( PARAMETER_NOTIFY_PARTICIPANTS );
+        String strEnableVoteWithdrawal = request.getParameter( PARAMETER_ENABLE_VOTE_WITHDRAWAL );
         String strNotifySubscribers = request.getParameter( PARAMETER_NOTIFY_SUBSCRIBERS );
         String strEnableTermsOfUse = request.getParameter( PARAMETER_ENABLE_TERMS_OF_USE );
         String strTermsOfUse = request.getParameter( PARAMETER_TERMS_OF_USE );
@@ -2087,6 +2089,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         suggest.setDisableNewComment( strDisableNewComment != null );
         suggest.setActiveEditorBbcode( strActiveEditorBbcode != null );
         suggest.setLimitNumberVote( strLimitNumberVote != null );
+        suggest.setEnableVoteWithdrawal( strEnableVoteWithdrawal != null );
         suggest.setShowCategoryBlock( strShowCategoryBlock != null );
         suggest.setShowTopScoreBlock( strShowTopScoreBlock != null );
         suggest.setShowTopCommentBlock( strShowTopCommentBlock != null );

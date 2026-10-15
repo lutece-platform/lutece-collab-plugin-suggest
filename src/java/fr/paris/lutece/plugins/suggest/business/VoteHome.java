@@ -112,4 +112,35 @@ public final class VoteHome
     {
         return _dao.selectCountVoteByIdSuggestSubmit( nIdSuggestSubmit, plugin );
     }
+
+    /**
+     * Returns the vote of a lutece user on a suggest submit.
+     *
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param strLuteceUserKey
+     *            the lutece user key
+     * @param plugin
+     *            the plugin
+     * @return the vote, or null if the user has not voted
+     */
+    public static Vote findByIdSuggestSubmitAndLuteceUserKey( int nIdSuggestSubmit, String strLuteceUserKey, Plugin plugin )
+    {
+        return _dao.selectVoteByIdSuggestSubmitAndLuteceUserKey( nIdSuggestSubmit, strLuteceUserKey, plugin );
+    }
+
+    /**
+     * Removes the vote of a lutece user on a suggest submit.
+     *
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param strLuteceUserKey
+     *            the lutece user key
+     * @param plugin
+     *            the plugin
+     */
+    public static void remove( int nIdSuggestSubmit, String strLuteceUserKey, Plugin plugin )
+    {
+        _dao.deleteByIdSuggestSubmitAndLuteceUserKey( nIdSuggestSubmit, strLuteceUserKey, plugin );
+    }
 }
