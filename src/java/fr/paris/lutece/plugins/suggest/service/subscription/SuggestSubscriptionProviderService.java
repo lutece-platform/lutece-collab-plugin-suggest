@@ -283,11 +283,69 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
         }
     }
 
+    /**
+     * Subscribes a user to a suggest submit, unless the user already follows it.
+     *
+     * @param strUserKey
+     *            the Lutece user key
+     * @param nIdSuggestSubmit
+     *            The id of the suggest submit to subscribe to
+     */
+    public void createSuggestSubmitSubscription( String strUserKey, int nIdSuggestSubmit )
+    {
+        if ( !hasUserSubscribedToResource( strUserKey, nIdSuggestSubmit, SUBSCRIPTION_SUGGEST_SUBMIT ) )
+        {
+            createSubscription( strUserKey, nIdSuggestSubmit, SUBSCRIPTION_SUGGEST_SUBMIT );
+        }
+    }
+
+    /**
+     * Returns the keys of the users who follow a suggest submit.
+     *
+     * @param nIdSuggestSubmit
+     *            the suggest submit id
+     * @return the Lutece user keys
+     */
+    public List<String> getSuggestSubmitSubscribers( int nIdSuggestSubmit )
+    {
+        SubscriptionFilter filter = new SubscriptionFilter( );
+        filter.setSubscriptionProvider( getProviderName( ) );
+        filter.setSubscriptionKey( SUBSCRIPTION_SUGGEST_SUBMIT );
+        filter.setIdSubscribedResource( Integer.toString( nIdSuggestSubmit ) );
+
+        return _subscriptionService.findByFilter( filter ).stream( ).map( Subscription::getUserId ).distinct( ).toList( );
+    }
+
+    /**
+     * Creates a subscription.
+     *
+     * @param user
+     *            The user
+     * @param nId
+     *            The id of the subscribed resource
+     * @param strSubscriptionKey
+     *            The subscription key
+     */
     private void createSubscription( LuteceUser user, int nId, String strSubscriptionKey )
+    {
+        createSubscription( user.getName( ), nId, strSubscriptionKey );
+    }
+
+    /**
+     * Creates a subscription.
+     *
+     * @param strUserKey
+     *            the Lutece user key
+     * @param nId
+     *            The id of the subscribed resource
+     * @param strSubscriptionKey
+     *            The subscription key
+     */
+    private void createSubscription( String strUserKey, int nId, String strSubscriptionKey )
     {
         Subscription subscription = new Subscription( );
         subscription.setIdSubscribedResource( Integer.toString( nId ) );
-        subscription.setUserId( user.getName( ) );
+        subscription.setUserId( strUserKey );
         subscription.setSubscriptionKey( strSubscriptionKey );
         subscription.setSubscriptionProvider( getProviderName( ) );
         _subscriptionService.createSubscription( subscription );
@@ -348,7 +406,23 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
      */
     private boolean hasUserSubscribedToResource( LuteceUser user, int nId, String strSubscriptionKey )
     {
-        SubscriptionFilter filter = new SubscriptionFilter( user.getName( ), getProviderName( ), strSubscriptionKey, Integer.toString( nId ) );
+        return hasUserSubscribedToResource( user.getName( ), nId, strSubscriptionKey );
+    }
+
+    /**
+     * Check if a user has subscribed to a resource
+     *
+     * @param strUserKey
+     *            The Lutece user key
+     * @param nId
+     *            The id of the subscribed resource
+     * @param strSubscriptionKey
+     *            The subscription key
+     * @return True if the user has subscribed to the resource, false otherwise
+     */
+    private boolean hasUserSubscribedToResource( String strUserKey, int nId, String strSubscriptionKey )
+    {
+        SubscriptionFilter filter = new SubscriptionFilter( strUserKey, getProviderName( ), strSubscriptionKey, Integer.toString( nId ) );
         List<Subscription> listSubscription = _subscriptionService.findByFilter( filter );
 
         return listSubscription != null  && !listSubscription.isEmpty( );

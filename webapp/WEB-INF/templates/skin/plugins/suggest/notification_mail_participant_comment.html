@@ -1,0 +1,5 @@
+<p><#if comment.isOfficialAnswer()>#i18n{suggest.notificationMailParticipant.comment.official}<#elseif reason == 'reply'>#i18n{suggest.notificationMailParticipant.comment.reply}<#else>#i18n{suggest.notificationMailParticipant.comment.author}</#if> &laquo;&nbsp;${suggest_submit.suggestSubmitTitle!}&nbsp;&raquo;</p>
+<#if comment_author??><p>${comment_author.firstName!} ${comment_author.lastName!}</p></#if>
+<blockquote>${comment.value!}</blockquote>
+<p><a href="${suggest_submit_url}">#i18n{suggest.notificationMailParticipant.link}</a></p>
+<p><#if reason == 'subscriber'>#i18n{suggest.notificationMailParticipant.footerSubscriber}<#else>#i18n{suggest.notificationMailParticipant.footerAuthor}</#if> <a href="${subscriptions_url}">#i18n{suggest.notificationMailParticipant.subscriptions}</a></p>

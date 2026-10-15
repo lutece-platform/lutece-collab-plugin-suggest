@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.suggest.service.notification;
 import fr.paris.lutece.plugins.suggest.business.SuggestUserInfo;
 import fr.paris.lutece.plugins.suggest.service.ISuggestUserInfoService;
 import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
+import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.mail.MailService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
@@ -156,7 +157,7 @@ public class SuggestNotificationService
 
         try
         {
-            Locale locale = Locale.getDefault( );
+            Locale locale = I18nService.getDefaultLocale( );
             String strSubject = AppTemplateService.getTemplateFromStringFtl( strSubjectTemplate, locale, model ).getHtml( );
             String strBody = AppTemplateService.getTemplateFromStringFtl( strBodyTemplate, locale, model ).getHtml( );
             MailService.sendMailHtml( strEmail, strSenderName, MailService.getNoReplyEmail( ), Jsoup.parse( strSubject ).text( ), strBody );
@@ -198,7 +199,7 @@ public class SuggestNotificationService
 
         try
         {
-            String strBody = AppTemplateService.getTemplate( strTemplate, Locale.getDefault( ), model ).getHtml( );
+            String strBody = AppTemplateService.getTemplate( strTemplate, I18nService.getDefaultLocale( ), model ).getHtml( );
             MailService.sendMailHtml( strEmail, strSenderName, MailService.getNoReplyEmail( ), strSubject, strBody );
 
             return true;

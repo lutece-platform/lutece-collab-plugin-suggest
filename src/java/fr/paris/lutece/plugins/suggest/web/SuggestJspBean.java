@@ -425,6 +425,9 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String PARAMETER_ENABLE_MAIL_NEW_SUGGEST_SUBMIT = "enable_mail_new_suggest_submit";
     private static final String PARAMETER_ENABLE_MAIL_NEW_COMMENT_SUBMIT = "enable_mail_new_comment_submit";
     private static final String PARAMETER_ENABLE_MAIL_NEW_REPORTED_SUBMIT = "enable_mail_new_reported_submit";
+    private static final String PARAMETER_AUTO_SUBSCRIBE = "auto_subscribe";
+    private static final String PARAMETER_NOTIFY_PARTICIPANTS = "notify_participants";
+    private static final String PARAMETER_NOTIFY_SUBSCRIBERS = "notify_subscribers";
     private static final String PARAMETER_ID_MAILING_LIST_SUGGEST_SUBMIT = "id_mailing_list_suggest_submit";
     private static final String PARAMETER_AUTHORIZED_COMMENT = "authorized_comment";
     private static final String PARAMETER_DISABLE_NEW_COMMENT = "disable_new_comment";
@@ -1873,6 +1876,9 @@ public class SuggestJspBean extends MVCAdminJspBean
         String strNumberCharCommentDisplayInSuggestSubmitList = request.getParameter( PARAMETER_NUMBER_CHAR_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST );
         String strEnableMailNewCommentSubmit = request.getParameter( PARAMETER_ENABLE_MAIL_NEW_COMMENT_SUBMIT );
         String strEnableMailNewReportedSubmit = request.getParameter( PARAMETER_ENABLE_MAIL_NEW_REPORTED_SUBMIT );
+        String strAutoSubscribe = request.getParameter( PARAMETER_AUTO_SUBSCRIBE );
+        String strNotifyParticipants = request.getParameter( PARAMETER_NOTIFY_PARTICIPANTS );
+        String strNotifySubscribers = request.getParameter( PARAMETER_NOTIFY_SUBSCRIBERS );
         String strEnableTermsOfUse = request.getParameter( PARAMETER_ENABLE_TERMS_OF_USE );
         String strTermsOfUse = request.getParameter( PARAMETER_TERMS_OF_USE );
         String strEnableReports = request.getParameter( PARAMETER_ENABLE_REPORTS );
@@ -2079,6 +2085,9 @@ public class SuggestJspBean extends MVCAdminJspBean
         suggest.setEnableMailNewSuggestSubmit( strEnableMailNewSuggestSubmit != null );
         suggest.setEnableMailNewCommentSubmit( strEnableMailNewCommentSubmit != null );
         suggest.setEnableMailNewReportedSubmit( strEnableMailNewReportedSubmit != null );
+        suggest.setAutoSubscribe( strAutoSubscribe != null );
+        suggest.setNotifyParticipants( strNotifyParticipants != null );
+        suggest.setNotifySubscribers( strNotifySubscribers != null );
         suggest.setIdMailingListSuggestSubmit( nIdMailingListSuggestSubmit );
         suggest.setAuthorizedComment( strAuthorizedComment != null );
         suggest.setDisableNewComment( strDisableNewComment != null );
