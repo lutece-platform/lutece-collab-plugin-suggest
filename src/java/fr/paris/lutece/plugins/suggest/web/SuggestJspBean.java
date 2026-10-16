@@ -393,6 +393,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String JSP_MODIFY_ENTRY = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MODIFY_ENTRY;
     private static final String JSP_MANAGE_SUGGEST_SUBMIT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MANAGE_SUGGEST_SUBMIT;
     private static final String JSP_MANAGE_SUGGEST_SUBMIT_ORDER = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MANAGE_SUGGEST_SUBMIT_ORDER;
+    private static final String ANCHOR_COMMENT = "#comment";
     private static final String JSP_MANAGE_COMMENT_SUBMIT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MANAGE_COMMENT_SUBMIT;
     private static final String JSP_MANAGE_ADVANCED_PARAMETERS = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MANAGE_ADVANCED_PARAMETERS;
     private static final String JSP_DO_UPDATE_ALL_SUGGEST_SUBMIT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_UPDATE_ALL_DISPLAY_OF_SUGGEST_SUBMIT;
@@ -1627,7 +1628,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     }
 
     /**
-     * Submit an official answer to a suggestSubmit
+     * Submit an official answer to a suggestSubmit, or to one of its comments when the request names it
      *
      * @param request
      *            The HTTP request
@@ -1638,8 +1639,15 @@ public class SuggestJspBean extends MVCAdminJspBean
     {
         String strCommentValueSuggest = request.getParameter( PARAMETER_COMMENT_VALUE );
         int nIdSubmitSuggest = Integer.valueOf( request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT ) );
+        String strIdParent = request.getParameter( PARAMETER_ID_PARENT );
+        int nIdParent = SuggestUtils.getIntegerParameter( strIdParent );
         CommentSubmit commentSubmit = new CommentSubmit( );
         Plugin plugin = getPlugin( );
+
+        if ( StringUtils.isNotBlank( strIdParent ) && !isAnswerableComment( nIdParent, nIdSubmitSuggest, plugin ) )
+        {
+            return redirect( request, getJspManageCommentSubmit( request ) );
+        }
 
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSubmitSuggest, false, plugin );
 
@@ -1652,6 +1660,11 @@ public class SuggestJspBean extends MVCAdminJspBean
         commentSubmit.setSuggestSubmit( suggestSubmit );
         commentSubmit.setValue( strCommentValueSuggest );
         commentSubmit.setOfficialAnswer( true );
+
+        if ( StringUtils.isNotBlank( strIdParent ) )
+        {
+            commentSubmit.setIdParent( nIdParent );
+        }
 
         LuteceUser user = null;
 
@@ -1674,7 +1687,31 @@ public class SuggestJspBean extends MVCAdminJspBean
 
         _commentSubmitService.create( commentSubmit, plugin );
 
+        if ( StringUtils.isNotBlank( strIdParent ) )
+        {
+            return redirect( request, getJspManageCommentSubmit( request, Integer.toString( nIdParent ) ) + ANCHOR_COMMENT + nIdParent );
+        }
+
         return redirect( request, getJspManageCommentSubmit( request ) );
+    }
+
+    /**
+     * Tells whether a comment of a suggest submit can receive an official answer: it exists, belongs to the suggest submit and answers no other comment
+     *
+     * @param nIdComment
+     *            the id of the comment
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param plugin
+     *            the plugin
+     * @return true if the comment can receive an official answer
+     */
+    private boolean isAnswerableComment( int nIdComment, int nIdSuggestSubmit, Plugin plugin )
+    {
+        CommentSubmit comment = _commentSubmitService.findByPrimaryKey( nIdComment, plugin );
+
+        return ( comment != null ) && ( comment.getIdParent( ) <= SubmitFilter.ID_PARENT_NULL ) && ( comment.getSuggestSubmit( ) != null )
+                && ( comment.getSuggestSubmit( ).getIdSuggestSubmit( ) == nIdSuggestSubmit );
     }
 
     /**

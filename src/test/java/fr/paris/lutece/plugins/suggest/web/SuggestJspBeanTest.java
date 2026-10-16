@@ -46,6 +46,7 @@ import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitStateHome;
 import fr.paris.lutece.plugins.suggest.business.VoteTypeHome;
+import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.security.ISecurityTokenService;
@@ -77,6 +78,90 @@ public class SuggestJspBeanTest extends LuteceTestCase
     @Test
     public void testDoSubmitOfficialAnswerWithApostrophes( ) throws AccessDeniedException
     {
+        int nIdSuggestSubmit = createSuggestSubmit( );
+
+        submitOfficialAnswer( nIdSuggestSubmit, null );
+
+        List<CommentSubmit> listComments = getComments( nIdSuggestSubmit );
+        assertEquals( 1, listComments.size( ) );
+        assertTrue( listComments.get( 0 ).isOfficialAnswer( ) );
+        assertEquals( ANSWER, listComments.get( 0 ).getValue( ) );
+    }
+
+    /**
+     * Checks that an official answer naming a comment of the suggest submit is published under that comment.
+     *
+     * @throws AccessDeniedException
+     *             if the controller refuses the request
+     */
+    @Test
+    public void testDoSubmitOfficialAnswerToComment( ) throws AccessDeniedException
+    {
+        int nIdSuggestSubmit = createSuggestSubmit( );
+        int nIdComment = createComment( nIdSuggestSubmit );
+
+        submitOfficialAnswer( nIdSuggestSubmit, nIdComment );
+
+        SubmitFilter filter = new SubmitFilter( );
+        filter.setIdParent( nIdComment );
+        List<CommentSubmit> listAnswers = CommentSubmitHome.getCommentSubmitList( filter, null, null );
+        assertEquals( 1, listAnswers.size( ) );
+        assertTrue( listAnswers.get( 0 ).isOfficialAnswer( ) );
+        assertEquals( ANSWER, listAnswers.get( 0 ).getValue( ) );
+        assertEquals( nIdSuggestSubmit, listAnswers.get( 0 ).getSuggestSubmit( ).getIdSuggestSubmit( ) );
+    }
+
+    /**
+     * Checks that an official answer naming a comment of another suggest submit is not published.
+     *
+     * @throws AccessDeniedException
+     *             if the controller refuses the request
+     */
+    @Test
+    public void testDoSubmitOfficialAnswerToCommentOfAnotherSuggestSubmit( ) throws AccessDeniedException
+    {
+        int nIdSuggestSubmit = createSuggestSubmit( );
+        int nIdOtherComment = createComment( createSuggestSubmit( ) );
+
+        submitOfficialAnswer( nIdSuggestSubmit, nIdOtherComment );
+
+        assertTrue( getComments( nIdSuggestSubmit ).isEmpty( ) );
+    }
+
+    /**
+     * Posts an official answer through the controller, as the back office form does.
+     *
+     * @param nIdSuggestSubmit
+     *            the suggest submit
+     * @param nIdParent
+     *            the answered comment, or null for an answer to the suggest submit
+     * @throws AccessDeniedException
+     *             if the controller refuses the request
+     */
+    private void submitOfficialAnswer( int nIdSuggestSubmit, Integer nIdParent ) throws AccessDeniedException
+    {
+        MockHttpServletRequest request = new MockHttpServletRequest( );
+        request.addParameter( "action", "submitOfficialAnswer" );
+        request.addParameter( "comment_value", ANSWER );
+        request.addParameter( "id_suggest_submit", Integer.toString( nIdSuggestSubmit ) );
+
+        if ( nIdParent != null )
+        {
+            request.addParameter( "id_parent", Integer.toString( nIdParent ) );
+        }
+
+        request.addParameter( SecurityTokenService.PARAMETER_TOKEN, _securityTokenService.getToken( request, "suggest" ) );
+        AdminUserUtils.registerAdminUserWithRight( request, new AdminUser( ), ManageSuggestJspBean.RIGHT_MANAGE_SUGGEST_LIKE );
+        _bean.processController( request, new MockHttpServletResponse( ) );
+    }
+
+    /**
+     * Creates a published suggest submit in a new suggest.
+     *
+     * @return the id of the suggest submit
+     */
+    private static int createSuggestSubmit( )
+    {
         Suggest suggest = new Suggest( );
         suggest.setTitle( "Suggest" );
         suggest.setLibelleContribution( "Idea" );
@@ -87,22 +172,43 @@ public class SuggestJspBeanTest extends LuteceTestCase
         suggestSubmit.setSuggest( suggest );
         suggestSubmit.setSuggestSubmitState( SuggestSubmitStateHome.findByNumero( SuggestSubmit.STATE_PUBLISH, null ) );
         suggestSubmit.setSuggestSubmitTitle( "Idea" );
-        int nIdSuggestSubmit = SuggestSubmitHome.create( suggestSubmit, null );
 
-        MockHttpServletRequest request = new MockHttpServletRequest( );
-        request.addParameter( "action", "submitOfficialAnswer" );
-        request.addParameter( "comment_value", ANSWER );
-        request.addParameter( "id_suggest_submit", Integer.toString( nIdSuggestSubmit ) );
-        request.addParameter( SecurityTokenService.PARAMETER_TOKEN, _securityTokenService.getToken( request, "suggest" ) );
-        AdminUserUtils.registerAdminUserWithRight( request, new AdminUser( ), ManageSuggestJspBean.RIGHT_MANAGE_SUGGEST_LIKE );
-        _bean.processController( request, new MockHttpServletResponse( ) );
+        return SuggestSubmitHome.create( suggestSubmit, null );
+    }
 
+    /**
+     * Creates a published comment of a user on a suggest submit.
+     *
+     * @param nIdSuggestSubmit
+     *            the suggest submit
+     * @return the id of the comment
+     */
+    private static int createComment( int nIdSuggestSubmit )
+    {
+        CommentSubmit comment = new CommentSubmit( );
+        comment.setSuggestSubmit( SuggestSubmitHome.findByPrimaryKey( nIdSuggestSubmit, null ) );
+        comment.setDateComment( SuggestUtils.getCurrentDate( ) );
+        comment.setDateModify( comment.getDateComment( ) );
+        comment.setValue( "Comment" );
+        comment.setActive( true );
+        comment.setLuteceUserKey( "user" );
+        CommentSubmitHome.create( comment, null );
+
+        return comment.getIdCommentSubmit( );
+    }
+
+    /**
+     * Returns the comments of a suggest submit.
+     *
+     * @param nIdSuggestSubmit
+     *            the suggest submit
+     * @return the comments
+     */
+    private static List<CommentSubmit> getComments( int nIdSuggestSubmit )
+    {
         SubmitFilter filter = new SubmitFilter( );
         filter.setIdSuggestSubmit( nIdSuggestSubmit );
-        List<CommentSubmit> listComments = CommentSubmitHome.getCommentSubmitList( filter, null, null );
 
-        assertEquals( 1, listComments.size( ) );
-        assertTrue( listComments.get( 0 ).isOfficialAnswer( ) );
-        assertEquals( ANSWER, listComments.get( 0 ).getValue( ) );
+        return CommentSubmitHome.getCommentSubmitList( filter, null, null );
     }
 }

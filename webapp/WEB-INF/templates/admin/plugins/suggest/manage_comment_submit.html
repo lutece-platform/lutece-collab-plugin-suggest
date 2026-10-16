@@ -148,6 +148,7 @@
 								<@button type='submit' name='enable' title='#i18n{suggest.manageCommentSubmit.buttonEnable}' buttonIcon='check' color='primary' />
 							</#if>
 								<@button type='submit' name='delete' title='#i18n{suggest.manageCommentSubmit.buttonDelete}' buttonIcon='trash' color='danger' />
+								<@button type='button' title='#i18n{suggest.manageCommentSubmit.buttonReplyOfficialAnswer}' buttonIcon='message-reply' color='info' params='data-bs-toggle="modal" data-bs-target="#replyOfficialAnswer" data-id-parent="${comment_submit.idCommentSubmit}"' />
 						</@tform>
 
 						<p>
@@ -203,6 +204,23 @@
 	</@pageColumn>
 </@pageContainer>
 
+<@modal id='replyOfficialAnswer' params='tabindex="-1"'>
+	<@modalHeader modalTitle='#i18n{suggest.manageCommentSubmit.labelReplyOfficialAnswer}' />
+	<@modalBody>
+		<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp'>
+			<@input type='hidden' name='action' value='submitOfficialAnswer' />
+			<@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' />
+			<@input type='hidden' name='id_parent' id='reply_id_parent' value='' />
+			<@formGroup labelFor='reply_comment_value' labelKey='#i18n{suggest.manageCommentSubmit.officialAnswer}' mandatory=true>
+				<@input type='textarea' name='comment_value' id='reply_comment_value' rows=6 class=suggest.activeEditorBbcode?then('markitup', '') mandatory=true></@input>
+			</@formGroup>
+			<@formGroup>
+				<@button type='submit' buttonIcon='check' title='#i18n{suggest.manageCommentSubmit.buttonSendOfficialAnswer}' color='primary' />
+				<@button type='button' buttonIcon='x' title='#i18n{portal.util.labelCancel}' color='light' params='data-bs-dismiss="modal"' />
+			</@formGroup>
+		</@tform>
+	</@modalBody>
+</@modal>
 
 <script>
 document.addEventListener( 'DOMContentLoaded', function( ){
@@ -230,6 +248,12 @@ document.addEventListener( 'DOMContentLoaded', function( ){
 				advert.style.display = ( advert.style.display === 'none' ) ? '' : 'none';
 			});
 		}
+	}
+	var replyModal = document.getElementById( 'replyOfficialAnswer' );
+	if ( replyModal ) {
+		replyModal.addEventListener( 'show.bs.modal', function( event ){
+			document.getElementById( 'reply_id_parent' ).value = event.relatedTarget.dataset.idParent;
+		});
 	}
 	<#if id_parent?has_content>
 	var parentToggle = document.getElementById( 'comment_toggle${id_parent}' );
