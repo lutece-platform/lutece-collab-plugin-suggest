@@ -119,4 +119,45 @@ public interface ICommentSubmitService
      * @return the number of all the commentSubmit who verify the filter
      */
     int getCountCommentSubmit( SubmitFilter filter, Plugin plugin );
+
+    /**
+     * Returns the answers to a comment, at every depth, each one before its own answers.
+     *
+     * @param nIdCommentSubmit
+     *            the id of the comment
+     * @param plugin
+     *            the plugin
+     * @return the answers
+     */
+    List<CommentSubmit> getAnswers( int nIdCommentSubmit, Plugin plugin );
+
+    /**
+     * Returns the first comment of the discussion a comment belongs to.
+     *
+     * @param commentSubmit
+     *            the comment
+     * @param plugin
+     *            the plugin
+     * @return the first comment of the discussion, the comment itself when it answers no other comment
+     */
+    CommentSubmit getDiscussionRoot( CommentSubmit commentSubmit, Plugin plugin );
+
+    /**
+     * Returns the comment an answer to a comment is stored under: the comment itself, or its parent when the comment is at the deepest level of the
+     * discussions.
+     *
+     * @param commentSubmit
+     *            the answered comment
+     * @param plugin
+     *            the plugin
+     * @return the id of the parent of the answer
+     */
+    int getAnswerParent( CommentSubmit commentSubmit, Plugin plugin );
+
+    /**
+     * Returns the number of levels of a discussion, its first comment included.
+     *
+     * @return the maximum depth of the discussions
+     */
+    int getMaxDepth( );
 }

@@ -36,6 +36,9 @@ package fr.paris.lutece.plugins.suggest.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmitHome;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
@@ -45,13 +48,22 @@ import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.service.event.EventAction;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @ApplicationScoped
 public class CommentSubmitService implements ICommentSubmitService
 {
+    private static final int MAX_ANCESTORS = 32;
+
     @Inject
     private Event<CommentSubmitEvent> _commentSubmitEvent;
+
+    @Inject
+    @ConfigProperty( name = "suggest.comments.maxDepth", defaultValue = "2" )
+    private int _nMaxDepth;
 
     /**
      * {@inheritDoc}
@@ -88,9 +100,12 @@ public class CommentSubmitService implements ICommentSubmitService
     public void remove( int nIdCommentSubmit, Plugin plugin )
     {
         CommentSubmit commentSubmit = CommentSubmitHome.findByPrimaryKey( nIdCommentSubmit, plugin );
+        List<CommentSubmit> listAnswers = getAnswers( nIdCommentSubmit, plugin );
 
-        // remove children
-        CommentSubmitHome.removeByIdParent( nIdCommentSubmit, plugin );
+        for ( int i = listAnswers.size( ) - 1; i >= 0; i-- )
+        {
+            CommentSubmitHome.remove( listAnswers.get( i ).getIdCommentSubmit( ), plugin );
+        }
 
         CommentSubmitHome.remove( nIdCommentSubmit, plugin );
 
@@ -146,16 +161,9 @@ public class CommentSubmitService implements ICommentSubmitService
 
         if ( commentSubmitList != null )
         {
-            SubmitFilter subCommentFilter;
-
             for ( CommentSubmit c : commentSubmitList )
             {
-                subCommentFilter = new SubmitFilter( );
-                // in this we gonna get themethod list of children of a comment
-                subCommentFilter.setIdParent( c.getIdCommentSubmit( ) );
-                subCommentFilter.setIdCommentSubmitState( filter.getIdCommentSubmitState( ) );
-                subCommentFilter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
-                c.setComments( CommentSubmitHome.getCommentSubmitList( subCommentFilter, null, plugin ) );
+                loadAnswers( c, filter.getIdCommentSubmitState( ), 2, plugin );
             }
         }
 
@@ -195,5 +203,165 @@ public class CommentSubmitService implements ICommentSubmitService
     public int getCountCommentSubmit( SubmitFilter filter, Plugin plugin )
     {
         return CommentSubmitHome.getCountCommentSubmit( filter, plugin );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<CommentSubmit> getAnswers( int nIdCommentSubmit, Plugin plugin )
+    {
+        List<CommentSubmit> listAnswers = new ArrayList<>( );
+        Set<Integer> setVisited = new HashSet<>( );
+        setVisited.add( nIdCommentSubmit );
+        addAnswers( nIdCommentSubmit, listAnswers, setVisited, plugin );
+
+        return listAnswers;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CommentSubmit getDiscussionRoot( CommentSubmit commentSubmit, Plugin plugin )
+    {
+        CommentSubmit root = commentSubmit;
+
+        for ( int i = 0; ( i < MAX_ANCESTORS ) && ( root.getIdParent( ) > SubmitFilter.ID_PARENT_NULL ); i++ )
+        {
+            CommentSubmit parent = CommentSubmitHome.findByPrimaryKey( root.getIdParent( ), plugin );
+
+            if ( parent == null )
+            {
+                break;
+            }
+
+            root = parent;
+        }
+
+        return root;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getAnswerParent( CommentSubmit commentSubmit, Plugin plugin )
+    {
+        return getAnswerParent( commentSubmit, _nMaxDepth, plugin );
+    }
+
+    /**
+     * Returns the comment an answer to a comment is stored under, for discussions of a given depth.
+     *
+     * @param commentSubmit
+     *            the answered comment
+     * @param nMaxDepth
+     *            the number of levels of a discussion, its first comment included
+     * @param plugin
+     *            the plugin
+     * @return the id of the parent of the answer
+     */
+    int getAnswerParent( CommentSubmit commentSubmit, int nMaxDepth, Plugin plugin )
+    {
+        return ( getDepth( commentSubmit, plugin ) < nMaxDepth ) ? commentSubmit.getIdCommentSubmit( ) : commentSubmit.getIdParent( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getMaxDepth( )
+    {
+        return _nMaxDepth;
+    }
+
+    /**
+     * Returns the level of a comment in its discussion, 1 for a comment that answers no other comment.
+     *
+     * @param commentSubmit
+     *            the comment
+     * @param plugin
+     *            the plugin
+     * @return the level of the comment
+     */
+    private static int getDepth( CommentSubmit commentSubmit, Plugin plugin )
+    {
+        int nDepth = 1;
+        int nIdParent = commentSubmit.getIdParent( );
+
+        while ( ( nIdParent > SubmitFilter.ID_PARENT_NULL ) && ( nDepth <= MAX_ANCESTORS ) )
+        {
+            CommentSubmit parent = CommentSubmitHome.findByPrimaryKey( nIdParent, plugin );
+
+            if ( parent == null )
+            {
+                break;
+            }
+
+            nDepth++;
+            nIdParent = parent.getIdParent( );
+        }
+
+        return nDepth;
+    }
+
+    /**
+     * Loads the answers to a comment, then their own answers down to the deepest level of the discussions.
+     *
+     * @param commentSubmit
+     *            the comment
+     * @param nIdCommentSubmitState
+     *            the state of the answers to load
+     * @param nDepth
+     *            the level of the answers
+     * @param plugin
+     *            the plugin
+     */
+    private void loadAnswers( CommentSubmit commentSubmit, int nIdCommentSubmitState, int nDepth, Plugin plugin )
+    {
+        SubmitFilter filter = new SubmitFilter( );
+        filter.setIdParent( commentSubmit.getIdCommentSubmit( ) );
+        filter.setIdCommentSubmitState( nIdCommentSubmitState );
+        filter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC );
+
+        List<CommentSubmit> listAnswers = CommentSubmitHome.getCommentSubmitList( filter, null, plugin );
+        commentSubmit.setComments( listAnswers );
+
+        if ( ( listAnswers != null ) && ( nDepth < _nMaxDepth ) )
+        {
+            for ( CommentSubmit answer : listAnswers )
+            {
+                loadAnswers( answer, nIdCommentSubmitState, nDepth + 1, plugin );
+            }
+        }
+    }
+
+    /**
+     * Adds the answers to a comment, then their own answers, to a list.
+     *
+     * @param nIdCommentSubmit
+     *            the id of the comment
+     * @param listAnswers
+     *            the list of the answers
+     * @param setVisited
+     *            the ids of the comments already listed
+     * @param plugin
+     *            the plugin
+     */
+    private static void addAnswers( int nIdCommentSubmit, List<CommentSubmit> listAnswers, Set<Integer> setVisited, Plugin plugin )
+    {
+        SubmitFilter filter = new SubmitFilter( );
+        filter.setIdParent( nIdCommentSubmit );
+        filter.getSortBy( ).add( SubmitFilter.SORT_BY_DATE_RESPONSE_ASC );
+
+        for ( CommentSubmit answer : CommentSubmitHome.getCommentSubmitList( filter, null, plugin ) )
+        {
+            if ( setVisited.add( answer.getIdCommentSubmit( ) ) )
+            {
+                listAnswers.add( answer );
+                addAnswers( answer.getIdCommentSubmit( ), listAnswers, setVisited, plugin );
+            }
+        }
     }
 }

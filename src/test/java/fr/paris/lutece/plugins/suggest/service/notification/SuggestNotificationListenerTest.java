@@ -60,19 +60,8 @@ public class SuggestNotificationListenerTest extends LuteceTestCase
     @Test
     public void testAnswerNotifiesTheDiscussion( )
     {
-        Suggest suggest = new Suggest( );
-        suggest.setTitle( "Suggest" );
-        suggest.setLibelleContribution( "Idea" );
-        suggest.setVoteType( VoteTypeHome.findByPrimaryKey( 1, null ) );
-        suggest.setNotifyParticipants( true );
-        SuggestHome.create( suggest, null );
-
-        SuggestSubmit suggestSubmit = new SuggestSubmit( );
-        suggestSubmit.setSuggest( suggest );
-        suggestSubmit.setSuggestSubmitState( SuggestSubmitStateHome.findByNumero( SuggestSubmit.STATE_PUBLISH, null ) );
-        suggestSubmit.setSuggestSubmitTitle( "Idea" );
-        suggestSubmit.setLuteceUserKey( "author" );
-        suggestSubmit.setIdSuggestSubmit( SuggestSubmitHome.create( suggestSubmit, null ) );
+        Suggest suggest = createSuggest( );
+        SuggestSubmit suggestSubmit = createSuggestSubmit( suggest );
 
         CommentSubmit comment = createComment( suggestSubmit, "alice", 0 );
         createComment( suggestSubmit, "bob", comment.getIdCommentSubmit( ) );
@@ -82,6 +71,63 @@ public class SuggestNotificationListenerTest extends LuteceTestCase
         assertTrue( _listener.isNotifiedAtOnce( suggest, answer, "bob" ) );
         assertTrue( _listener.isNotifiedAtOnce( suggest, answer, "author" ) );
         assertFalse( _listener.isNotifiedAtOnce( suggest, answer, "claire" ) );
+    }
+
+    /**
+     * Checks that an answer to an answer reaches at once the author of the answer, of the first comment and of the other answers of the discussion.
+     */
+    @Test
+    public void testNestedAnswerNotifiesTheWholeDiscussion( )
+    {
+        Suggest suggest = createSuggest( );
+        SuggestSubmit suggestSubmit = createSuggestSubmit( suggest );
+
+        CommentSubmit comment = createComment( suggestSubmit, "alice", 0 );
+        CommentSubmit answer = createComment( suggestSubmit, "bob", comment.getIdCommentSubmit( ) );
+        createComment( suggestSubmit, "claire", answer.getIdCommentSubmit( ) );
+        CommentSubmit nested = createComment( suggestSubmit, "dave", answer.getIdCommentSubmit( ) );
+
+        assertTrue( _listener.isNotifiedAtOnce( suggest, nested, "bob" ) );
+        assertTrue( _listener.isNotifiedAtOnce( suggest, nested, "alice" ) );
+        assertTrue( _listener.isNotifiedAtOnce( suggest, nested, "claire" ) );
+        assertTrue( _listener.isNotifiedAtOnce( suggest, nested, "author" ) );
+        assertFalse( _listener.isNotifiedAtOnce( suggest, nested, "dave" ) );
+    }
+
+    /**
+     * Creates a suggest that notifies the participants of its discussions.
+     *
+     * @return the suggest
+     */
+    private static Suggest createSuggest( )
+    {
+        Suggest suggest = new Suggest( );
+        suggest.setTitle( "Suggest" );
+        suggest.setLibelleContribution( "Idea" );
+        suggest.setVoteType( VoteTypeHome.findByPrimaryKey( 1, null ) );
+        suggest.setNotifyParticipants( true );
+        SuggestHome.create( suggest, null );
+
+        return suggest;
+    }
+
+    /**
+     * Creates a published suggest submit of the user "author".
+     *
+     * @param suggest
+     *            the suggest
+     * @return the suggest submit
+     */
+    private static SuggestSubmit createSuggestSubmit( Suggest suggest )
+    {
+        SuggestSubmit suggestSubmit = new SuggestSubmit( );
+        suggestSubmit.setSuggest( suggest );
+        suggestSubmit.setSuggestSubmitState( SuggestSubmitStateHome.findByNumero( SuggestSubmit.STATE_PUBLISH, null ) );
+        suggestSubmit.setSuggestSubmitTitle( "Idea" );
+        suggestSubmit.setLuteceUserKey( "author" );
+        suggestSubmit.setIdSuggestSubmit( SuggestSubmitHome.create( suggestSubmit, null ) );
+
+        return suggestSubmit;
     }
 
     /**
