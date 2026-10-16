@@ -1,3 +1,33 @@
+<#macro commentAnswers comment root>
+	<#list comment.comments as comment_comment>
+	<blockquote id="comment${comment_comment.idCommentSubmit}">
+		<#if comment_comment.isOfficialAnswer()><@span align='right'><@tag color='info'>#i18n{suggest.manageCommentSubmit.officialAnswer}</@tag></@span></#if>
+		<p>
+		<strong>#i18n{suggest.manageCommentSubmit.rowValueCommentSubmit} 
+		<#if comment_comment.active>
+			<@tag color='success'>#i18n{suggest.manageCommentSubmit.stateEnable}</@tag>
+		<#else>
+			<@tag color='danger'>#i18n{suggest.manageCommentSubmit.stateDisable}</@tag>
+		</#if>
+		</strong>
+		</p>
+		<div class="text-break">${suggest.parseBbcodeValue(comment_comment.value)}</div>
+		<p>#i18n{suggest.manageCommentSubmit.rowDateCommentSubmit}: ${comment_comment.dateComment!}</p>
+		<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#comment${comment_comment.idCommentSubmit}'><@input type='hidden' name='action' value='changeCommentSubmit' />
+			<@input type='hidden' name='id_comment_submit' value='${comment_comment.idCommentSubmit}' />
+			<@input type='hidden' name='id_parent' value='${root}' />
+			<#if comment_comment.active>
+				<@button type='submit' name='disable' title='#i18n{suggest.manageCommentSubmit.buttonDisable}' buttonIcon='x' color='primary' />
+			<#else>
+				<@button type='submit' name='enable' title='#i18n{suggest.manageCommentSubmit.buttonEnable}' buttonIcon='check' color='primary' />
+			</#if>
+			<@button type='submit' name='delete' title='#i18n{suggest.manageCommentSubmit.buttonDelete}' buttonIcon='trash' color='danger' />
+			<@button type='button' title='#i18n{suggest.manageCommentSubmit.buttonReplyOfficialAnswer}' buttonIcon='message-reply' color='info' params='data-bs-toggle="modal" data-bs-target="#replyOfficialAnswer" data-id-parent="${comment_comment.idCommentSubmit}"' />
+		</@tform>
+		<#if comment_comment.comments?has_content><@commentAnswers comment=comment_comment root=root /></#if>
+	</blockquote>
+	</#list>
+</#macro>
 <@pageContainer>
 	<@pageColumn>
 		<@pageHeader title='${suggest.title!}'>
@@ -166,33 +196,7 @@
 						</p>
 						
 						<@div class='commentComments'>
-							<#list comment_submit.comments as comment_comment>
-							<blockquote id="comment${comment_comment.idCommentSubmit}">
-								<#if comment_comment.isOfficialAnswer()><@span align='right'><@tag color='info'>#i18n{suggest.manageCommentSubmit.officialAnswer}</@tag></@span></#if>
-								<p>
-								<strong>#i18n{suggest.manageCommentSubmit.rowValueCommentSubmit} 
-								<#if comment_comment.active>
-									<@tag color='success'>#i18n{suggest.manageCommentSubmit.stateEnable}</@tag>
-								<#else>
-									<@tag color='danger'>#i18n{suggest.manageCommentSubmit.stateDisable}</@tag>
-								</#if>
-								</strong>
-								</p>
-								<div class="text-break">${suggest.parseBbcodeValue(comment_comment.value)}</div>
-								<p>#i18n{suggest.manageCommentSubmit.rowDateCommentSubmit}: ${comment_comment.dateComment!}</p>
-								
-								<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#comment${comment_comment.idCommentSubmit}'><@input type='hidden' name='action' value='changeCommentSubmit' />
-									<@input type='hidden' name='id_comment_submit' value='${comment_comment.idCommentSubmit}' />
-									<@input type='hidden' name='id_parent' value='${comment_submit.idCommentSubmit}' />
-									<#if comment_comment.active>
-										<@button type='submit' name='disable' title='#i18n{suggest.manageCommentSubmit.buttonDisable}' buttonIcon='x' color='primary' />
-									<#else>
-										<@button type='submit' name='enable' title='#i18n{suggest.manageCommentSubmit.buttonEnable}' buttonIcon='check' color='primary' />
-									</#if>
-									<@button type='submit' name='delete' title='#i18n{suggest.manageCommentSubmit.buttonDelete}' buttonIcon='trash' color='danger' />
-								</@tform>
-							</blockquote>
-							</#list>
+							<@commentAnswers comment=comment_submit root=comment_submit.idCommentSubmit />
 						</@div>
 						</#if>
 					</@alert>

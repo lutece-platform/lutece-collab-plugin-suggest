@@ -142,6 +142,7 @@ public class SuggestApp extends MVCApplication
     private static final String MARK_ID_SUGGEST_SUBMIT = "id_suggest_submit";
     private static final String MARK_LIST_COMMENT_SUBMIT_SUGGEST = "list_comment";
     private static final String MARK_LIST_SUB_COMMENT_SUBMIT_SUGGEST = "list_sub_comment";
+    private static final String MARK_COMMENT_MAX_DEPTH = "comment_max_depth";
     private static final String MARK_SUGGEST_COMMENT = "suggest_comment";
     private static final String MARK_AUTHORIZED_COMMENT = "authorized_comment";
     private static final String MARK_AUTHORIZED_VOTE = "authorized_vote";
@@ -1209,7 +1210,7 @@ public class SuggestApp extends MVCApplication
 
         if ( ( strIdParentComment != null ) && ( !strIdParentComment.trim( ).equals( EMPTY_STRING ) ) )
         {
-            nIdParentComment = SuggestUtils.getIntegerParameter( strIdParentComment );
+            nIdParentComment = getAnswerParent( request, SuggestUtils.getIntegerParameter( strIdParentComment ), nIdSubmitSuggest );
         }
 
         if ( ( strCommentValueSuggest == null ) || strCommentValueSuggest.trim( ).equals( EMPTY_STRING ) )
@@ -1247,6 +1248,32 @@ public class SuggestApp extends MVCApplication
             };
             SiteMessageService.setMessage( request, strMessage, args, null, getNewUrlItemPage( ).getUrl( ), null, SiteMessage.TYPE_INFO, parameters );
         }
+    }
+
+    /**
+     * Returns the comment an answer is stored under, from the comment the user answers, which must belong to the suggest submit.
+     *
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @param nIdAnsweredComment
+     *            the id of the answered comment
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @return the id of the parent of the answer
+     * @throws SiteMessageException
+     *             if the answered comment does not belong to the suggest submit
+     */
+    private int getAnswerParent( HttpServletRequest request, int nIdAnsweredComment, int nIdSuggestSubmit ) throws SiteMessageException
+    {
+        CommentSubmit answeredComment = _commentSubmitService.findByPrimaryKey( nIdAnsweredComment, _plugin );
+
+        if ( ( answeredComment == null ) || ( answeredComment.getSuggestSubmit( ) == null )
+                || ( answeredComment.getSuggestSubmit( ).getIdSuggestSubmit( ) != nIdSuggestSubmit ) )
+        {
+            SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
+        }
+
+        return _commentSubmitService.getAnswerParent( answeredComment, _plugin );
     }
 
     /**
@@ -1834,6 +1861,7 @@ public class SuggestApp extends MVCApplication
         model.put( MARK_ID_SUGGEST_SUBMIT, nIdSubmitSuggest );
         model.put( MARK_SUGGEST_COMMENT, CONSTANTE_PARAMETER_TRUE_VALUE );
         model.put( MARK_LIST_COMMENT_SUBMIT_SUGGEST, getCommentSubmitDisplayList( listCommentSubmit, plugin ) );
+        model.put( MARK_COMMENT_MAX_DEPTH, _commentSubmitService.getMaxDepth( ) );
         model.put( MARK_DISABLE_NEW_COMMENT_SUBMIT, suggest.isDisableNewComment( ) );
         model.put( MARK_ACTIVE_EDITOR_BBCODE, suggest.isActiveEditorBbcode( ) );
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );

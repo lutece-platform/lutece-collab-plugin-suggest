@@ -98,7 +98,7 @@ public class SuggestJspBeanTest extends LuteceTestCase
     public void testDoSubmitOfficialAnswerToComment( ) throws AccessDeniedException
     {
         int nIdSuggestSubmit = createSuggestSubmit( );
-        int nIdComment = createComment( nIdSuggestSubmit );
+        int nIdComment = createComment( nIdSuggestSubmit, 0 );
 
         submitOfficialAnswer( nIdSuggestSubmit, nIdComment );
 
@@ -121,11 +121,33 @@ public class SuggestJspBeanTest extends LuteceTestCase
     public void testDoSubmitOfficialAnswerToCommentOfAnotherSuggestSubmit( ) throws AccessDeniedException
     {
         int nIdSuggestSubmit = createSuggestSubmit( );
-        int nIdOtherComment = createComment( createSuggestSubmit( ) );
+        int nIdOtherComment = createComment( createSuggestSubmit( ), 0 );
 
         submitOfficialAnswer( nIdSuggestSubmit, nIdOtherComment );
 
         assertTrue( getComments( nIdSuggestSubmit ).isEmpty( ) );
+    }
+
+    /**
+     * Checks that an official answer to an answer at the deepest level of the discussions is published beside it, under the comment it answers.
+     *
+     * @throws AccessDeniedException
+     *             if the controller refuses the request
+     */
+    @Test
+    public void testDoSubmitOfficialAnswerToAnswerAtTheDeepestLevel( ) throws AccessDeniedException
+    {
+        int nIdSuggestSubmit = createSuggestSubmit( );
+        int nIdComment = createComment( nIdSuggestSubmit, 0 );
+        int nIdAnswer = createComment( nIdSuggestSubmit, nIdComment );
+
+        submitOfficialAnswer( nIdSuggestSubmit, nIdAnswer );
+
+        SubmitFilter filter = new SubmitFilter( );
+        filter.setIdParent( nIdComment );
+        List<CommentSubmit> listAnswers = CommentSubmitHome.getCommentSubmitList( filter, null, null );
+        assertEquals( 2, listAnswers.size( ) );
+        assertTrue( listAnswers.stream( ).anyMatch( CommentSubmit::isOfficialAnswer ) );
     }
 
     /**
@@ -181,9 +203,11 @@ public class SuggestJspBeanTest extends LuteceTestCase
      *
      * @param nIdSuggestSubmit
      *            the suggest submit
+     * @param nIdParent
+     *            the answered comment, 0 for a comment
      * @return the id of the comment
      */
-    private static int createComment( int nIdSuggestSubmit )
+    private static int createComment( int nIdSuggestSubmit, int nIdParent )
     {
         CommentSubmit comment = new CommentSubmit( );
         comment.setSuggestSubmit( SuggestSubmitHome.findByPrimaryKey( nIdSuggestSubmit, null ) );
@@ -192,6 +216,7 @@ public class SuggestJspBeanTest extends LuteceTestCase
         comment.setValue( "Comment" );
         comment.setActive( true );
         comment.setLuteceUserKey( "user" );
+        comment.setIdParent( nIdParent );
         CommentSubmitHome.create( comment, null );
 
         return comment.getIdCommentSubmit( );

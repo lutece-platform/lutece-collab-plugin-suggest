@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.suggest.service.notification;
 
 import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
-import fr.paris.lutece.plugins.suggest.business.CommentSubmitHome;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
 import fr.paris.lutece.plugins.suggest.business.Suggest;
 import fr.paris.lutece.plugins.suggest.business.SuggestHome;
@@ -198,7 +197,7 @@ public class SuggestNotificationListener
     }
 
     /**
-     * Returns the users notified at once of a comment, with the reason of each: the author of the answered comment, the authors of its other answers, the
+     * Returns the users notified at once of a comment, with the reason of each: the author of the answered comment, the other authors of its discussion, the
      * author of the suggest submit, then for an official answer the subscribers. Nobody is notified of their own comment.
      *
      * @param suggest
@@ -221,7 +220,8 @@ public class SuggestNotificationListener
             if ( parentComment != null )
             {
                 addRecipient( mapReasons, parentComment.getLuteceUserKey( ), REASON_REPLY, strCommenter );
-                addThreadRecipients( mapReasons, parentComment, strCommenter );
+                addThreadRecipients( mapReasons, _commentSubmitService.getDiscussionRoot( parentComment, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) ),
+                        strCommenter );
             }
 
             addRecipient( mapReasons, suggestSubmit.getLuteceUserKey( ), REASON_AUTHOR, strCommenter );
@@ -283,24 +283,25 @@ public class SuggestNotificationListener
     }
 
     /**
-     * Adds the authors of the published answers to a comment, who take part in its discussion.
+     * Adds the author of the first comment of a discussion and the authors of its published answers, at every depth, who take part in the discussion.
      *
      * @param mapReasons
      *            the reason of each recipient, by Lutece user key
-     * @param parentComment
-     *            the answered comment
+     * @param rootComment
+     *            the first comment of the discussion
      * @param strCommenter
      *            the author of the new answer, never notified
      */
-    private static void addThreadRecipients( Map<String, String> mapReasons, CommentSubmit parentComment, String strCommenter )
+    private void addThreadRecipients( Map<String, String> mapReasons, CommentSubmit rootComment, String strCommenter )
     {
-        SubmitFilter filter = new SubmitFilter( );
-        filter.setIdParent( parentComment.getIdCommentSubmit( ) );
-        filter.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
+        addRecipient( mapReasons, rootComment.getLuteceUserKey( ), REASON_THREAD, strCommenter );
 
-        for ( CommentSubmit answer : CommentSubmitHome.getCommentSubmitList( filter, null, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) ) )
+        for ( CommentSubmit answer : _commentSubmitService.getAnswers( rootComment.getIdCommentSubmit( ), PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) ) )
         {
-            addRecipient( mapReasons, answer.getLuteceUserKey( ), REASON_THREAD, strCommenter );
+            if ( answer.isActive( ) )
+            {
+                addRecipient( mapReasons, answer.getLuteceUserKey( ), REASON_THREAD, strCommenter );
+            }
         }
     }
 

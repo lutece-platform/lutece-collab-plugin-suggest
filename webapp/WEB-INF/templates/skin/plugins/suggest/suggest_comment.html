@@ -1,3 +1,37 @@
+<#macro suggestAnswers answers depth>
+	<#list answers as comment_comment>
+		<div class="card mt-3">
+			<p>
+				<#if comment_comment.comment_submit.isOfficialAnswer()>
+					<@cIcon name='star' />
+					<span class="badge bg-info">#i18n{suggest.manageCommentSubmit.officialAnswer}</span> |
+				</#if>
+				<#if comment_comment.lutece_user?exists>
+					<#if comment_comment.avatar?has_content>
+						<img class="avatar avatar-suggest img-circle" src="${comment_comment.avatar}" alt="avatar provided by gravatar.com">
+					<#else>
+						<@cIcon name='user' />
+					</#if>
+					${comment_comment.lutece_user}
+				</#if>
+				<@cIcon name='calendar' /> ${comment_comment.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}
+			</p>
+			<div class="card-body">
+				${suggest.parseBbcodeValue(comment_comment.comment_submit.value)}
+				<#if comment_comment.list_sub_comment?has_content>
+					<@suggestAnswers answers=comment_comment.list_sub_comment depth=depth+1 />
+				</#if>
+			</div>
+			<#if depth lt (comment_max_depth!2)>
+			<div class="card-footer">
+				<a class="btn btn-primary btn-sm" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_comment=${comment_comment.comment_submit.idCommentSubmit}&action=create_sub_comment">
+					<@cIcon name='message' /> #i18n{suggest.suggestComment.labelCommentAComment}
+				</a>
+			</div>
+			</#if>
+		</div>
+	</#list>
+</#macro>
 <#if list_comment?has_content>
 <#assign rootId = 0>
 <div class="row suggest-comments">
@@ -41,36 +75,8 @@
 			</div>
 			<div class="card-body suggest-list-comments">
 				${suggest.parseBbcodeValue(comment_submit_lutece_user.comment_submit.value)}
-				<!-- Sub Comments -->
 				<#if comment_submit_lutece_user.list_sub_comment?has_content>
-					<#list comment_submit_lutece_user.list_sub_comment as comment_comment>
-						<div class="card mt-3">
-							<p>
-								<#if comment_comment.comment_submit.isOfficialAnswer()>
-									<@cIcon name='star' />
-									<span class="badge bg-info">#i18n{suggest.manageCommentSubmit.officialAnswer}</span> |
-								</#if>
-								<#if comment_comment.lutece_user?exists>
-									<!-- #i18n{suggest.suggestListSubmit.postByUser} : -->
-									<#if comment_comment.avatar?has_content>
-										<img class="avatar avatar-suggest img-circle" src="${comment_comment.avatar}" alt="avatar provided by gravatar.com">
-									<#else>
-										<@cIcon name='user' />
-									</#if>
-									<#if comment_comment.lutece_user?exists>
-										${comment_comment.lutece_user}
-									<#else>
-										${comment_comment.lutece_user.getUserInfo("user.name.given")}
-										${comment_comment.lutece_user.getUserInfo("user.name.family")}
-									</#if>
-								</#if>
-								<@cIcon name='calendar' /> ${comment_comment.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}
-							</p>
-							<div class="card-body">
-								${suggest.parseBbcodeValue(comment_comment.comment_submit.value)}
-							</div>
-						</div>
-					</#list>
+					<@suggestAnswers answers=comment_submit_lutece_user.list_sub_comment depth=2 />
 				</#if>
 			</div>
 			<div class="card-footer">

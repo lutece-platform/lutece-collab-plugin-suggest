@@ -375,6 +375,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String MARK_QUERY = "query";
     private static final String MARK_SUGGEST_ACTIONS = "suggest_actions";
     private static final String MARK_ID_PARENT = "id_parent";
+    private static final String MARK_COMMENT_MAX_DEPTH = "comment_max_depth";
     private static final String MARK_PANEL = "panel";
     private static final String MARK_WORKFLOW_REF_LIST = "workflow_list";
     private static final String MARK_ID_SUGGEST_SUBMIT = "id_suggest_submit";
@@ -1155,16 +1156,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     {
         Set<String> setKeys = new HashSet<>( );
         setKeys.add( suggestSubmit.getLuteceUserKey( ) );
-
-        for ( CommentSubmit comment : listCommentSubmit )
-        {
-            setKeys.add( comment.getLuteceUserKey( ) );
-
-            if ( comment.getComments( ) != null )
-            {
-                comment.getComments( ).forEach( c -> setKeys.add( c.getLuteceUserKey( ) ) );
-            }
-        }
+        addAuthorKeys( listCommentSubmit, setKeys );
 
         Map<String, SuggestUserInfo> mapUsersInfo = new HashMap<>( );
 
@@ -1179,6 +1171,26 @@ public class SuggestJspBean extends MVCAdminJspBean
         }
 
         return mapUsersInfo;
+    }
+
+    /**
+     * Adds the keys of the authors of comments and of their answers, at every depth, to a set
+     *
+     * @param listCommentSubmit
+     *            the comments, or null
+     * @param setKeys
+     *            the keys of the authors
+     */
+    private static void addAuthorKeys( List<CommentSubmit> listCommentSubmit, Set<String> setKeys )
+    {
+        if ( listCommentSubmit != null )
+        {
+            for ( CommentSubmit comment : listCommentSubmit )
+            {
+                setKeys.add( comment.getLuteceUserKey( ) );
+                addAuthorKeys( comment.getComments( ), setKeys );
+            }
+        }
     }
 
     /**
@@ -1297,6 +1309,7 @@ public class SuggestJspBean extends MVCAdminJspBean
 
         model.put( MARK_SUGGEST, suggest );
         model.put( MARK_ID_PARENT, strCommentIdParent );
+        model.put( MARK_COMMENT_MAX_DEPTH, _commentSubmitService.getMaxDepth( ) );
 
         
 
@@ -1644,9 +1657,16 @@ public class SuggestJspBean extends MVCAdminJspBean
         CommentSubmit commentSubmit = new CommentSubmit( );
         Plugin plugin = getPlugin( );
 
-        if ( StringUtils.isNotBlank( strIdParent ) && !isAnswerableComment( nIdParent, nIdSubmitSuggest, plugin ) )
+        CommentSubmit answeredComment = StringUtils.isNotBlank( strIdParent ) ? _commentSubmitService.findByPrimaryKey( nIdParent, plugin ) : null;
+
+        if ( StringUtils.isNotBlank( strIdParent ) && !isCommentOfSuggestSubmit( answeredComment, nIdSubmitSuggest ) )
         {
             return redirect( request, getJspManageCommentSubmit( request ) );
+        }
+
+        if ( answeredComment != null )
+        {
+            nIdParent = _commentSubmitService.getAnswerParent( answeredComment, plugin );
         }
 
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSubmitSuggest, false, plugin );
@@ -1661,7 +1681,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         commentSubmit.setValue( strCommentValueSuggest );
         commentSubmit.setOfficialAnswer( true );
 
-        if ( StringUtils.isNotBlank( strIdParent ) )
+        if ( answeredComment != null )
         {
             commentSubmit.setIdParent( nIdParent );
         }
@@ -1687,31 +1707,28 @@ public class SuggestJspBean extends MVCAdminJspBean
 
         _commentSubmitService.create( commentSubmit, plugin );
 
-        if ( StringUtils.isNotBlank( strIdParent ) )
+        if ( answeredComment != null )
         {
-            return redirect( request, getJspManageCommentSubmit( request, Integer.toString( nIdParent ) ) + ANCHOR_COMMENT + nIdParent );
+            String strIdRoot = Integer.toString( _commentSubmitService.getDiscussionRoot( answeredComment, plugin ).getIdCommentSubmit( ) );
+
+            return redirect( request, getJspManageCommentSubmit( request, strIdRoot ) + ANCHOR_COMMENT + nIdParent );
         }
 
         return redirect( request, getJspManageCommentSubmit( request ) );
     }
 
     /**
-     * Tells whether a comment of a suggest submit can receive an official answer: it exists, belongs to the suggest submit and answers no other comment
+     * Tells whether a comment exists and belongs to a suggest submit
      *
-     * @param nIdComment
-     *            the id of the comment
+     * @param comment
+     *            the comment, or null
      * @param nIdSuggestSubmit
      *            the id of the suggest submit
-     * @param plugin
-     *            the plugin
-     * @return true if the comment can receive an official answer
+     * @return true if the comment belongs to the suggest submit
      */
-    private boolean isAnswerableComment( int nIdComment, int nIdSuggestSubmit, Plugin plugin )
+    private static boolean isCommentOfSuggestSubmit( CommentSubmit comment, int nIdSuggestSubmit )
     {
-        CommentSubmit comment = _commentSubmitService.findByPrimaryKey( nIdComment, plugin );
-
-        return ( comment != null ) && ( comment.getIdParent( ) <= SubmitFilter.ID_PARENT_NULL ) && ( comment.getSuggestSubmit( ) != null )
-                && ( comment.getSuggestSubmit( ).getIdSuggestSubmit( ) == nIdSuggestSubmit );
+        return ( comment != null ) && ( comment.getSuggestSubmit( ) != null ) && ( comment.getSuggestSubmit( ).getIdSuggestSubmit( ) == nIdSuggestSubmit );
     }
 
     /**
@@ -1741,14 +1758,12 @@ public class SuggestJspBean extends MVCAdminJspBean
             return redirect( request, getJspManageSuggest( request ) );
         }
 
+        List<CommentSubmit> listRemoved = new ArrayList<>( _commentSubmitService.getAnswers( nIdCommentSubmit, plugin ) );
+        listRemoved.add( commentSubmit );
         _commentSubmitService.remove( nIdCommentSubmit, plugin );
 
-        if ( commentSubmit.isActive( ) )
-        {
-            suggestSubmit.setNumberCommentEnable( suggestSubmit.getNumberCommentEnable( ) - 1 );
-        }
-
-        suggestSubmit.setNumberComment( suggestSubmit.getNumberComment( ) - 1 );
+        suggestSubmit.setNumberCommentEnable( suggestSubmit.getNumberCommentEnable( ) - (int) listRemoved.stream( ).filter( CommentSubmit::isActive ).count( ) );
+        suggestSubmit.setNumberComment( suggestSubmit.getNumberComment( ) - listRemoved.size( ) );
         _suggestSubmitService.update( suggestSubmit, plugin );
 
         return redirect( request, getJspManageCommentSubmit( request ) );
