@@ -48,6 +48,7 @@ import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.HashMap;
@@ -86,6 +87,7 @@ import fr.paris.lutece.plugins.suggest.business.EntryFilter;
 import fr.paris.lutece.plugins.suggest.business.EntryHome;
 import fr.paris.lutece.plugins.suggest.business.EntryType;
 import fr.paris.lutece.plugins.suggest.business.EntryTypeHome;
+import fr.paris.lutece.plugins.suggest.business.ExportFormat;
 import fr.paris.lutece.plugins.suggest.business.FormError;
 import fr.paris.lutece.plugins.suggest.business.IEntry;
 import fr.paris.lutece.plugins.suggest.business.ReportedMessageHome;
@@ -97,6 +99,7 @@ import fr.paris.lutece.plugins.suggest.service.CategoryResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.DefaultMessageResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.SuggestResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.SuggestService;
+import fr.paris.lutece.plugins.suggest.service.ExportFormatResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.ICommentSubmitService;
 import fr.paris.lutece.plugins.suggest.service.ISuggestUserInfoService;
 import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
@@ -112,6 +115,7 @@ import fr.paris.lutece.plugins.workflowcore.service.state.IStateService;
 import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.role.RoleHome;
+import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
@@ -123,6 +127,7 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.portal.ThemesService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
@@ -361,8 +366,11 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String MARK_HIGH_SCORES = "high_scores";
     private static final String MARK_NUMBER_USERS = "number_users";
     private static final String MARK_URL = "url";
+    private static final String MARK_DEFAULT_THEME = "default_theme";
+    private static final String MARK_THEME_REF_LIST = "theme_list";
     private static final String MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE = "permission_manage_default_message";
     private static final String MARK_PERMISSION_MANAGE_CATEGORY = "permission_manage_category";
+    private static final String MARK_PERMISSION_MANAGE_EXPORT_FORMAT = "permission_manage_export_format";
     private static final String MARK_ID_DEFAULT_SUGGEST = "id_default_suggest";
     private static final String MARK_QUERY = "query";
     private static final String MARK_SUGGEST_ACTIONS = "suggest_actions";
@@ -463,6 +471,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String PARAMETER_SUGGEST_SUBMIT_ORDER = "suggest_submit_order";
     private static final String PARAMETER_FIRST_DATE_FILTER = "first_date_filter";
     private static final String PARAMETER_LAST_DATE_FILTER = "last_date_filter";
+    private static final String PARAMETER_THEME_XPAGE = "id_theme_list";
     private static final String PARAMETER_CONFIRMATION_MESSAGE = "confirmation_message";
     private static final String PARAMETER_ACTIVE_EDITOR_BBCODE_ON_COMMENT = "active_editor_bbcode_on_comment";
     private static final String PARAMETER_ID_DEFAULT_SORT = "id_default_sort";
@@ -661,6 +670,8 @@ public class SuggestJspBean extends MVCAdminJspBean
 
         model.put( MARK_SUGGEST_LIST, SuggestUtils.getRefListSuggest( listSuggest, true ) );
         model.put( MARK_ID_DEFAULT_SUGGEST, nIdDefaultSuggest );
+        model.put( MARK_PERMISSION_MANAGE_EXPORT_FORMAT,
+                RBACService.isAuthorized( ExportFormat.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, ExportFormatResourceIdService.PERMISSION_MANAGE, (User) getUser( ) ) );
         model.put( MARK_PERMISSION_MANAGE_CATEGORY,
                 RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, CategoryResourceIdService.PERMISSION_MANAGE, (User) getUser( ) ) );
         model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE, RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
@@ -1035,7 +1046,7 @@ public class SuggestJspBean extends MVCAdminJspBean
             {
                 if ( ( strIdCategory == null ) || strIdCategory.equals( Integer.toString( SuggestUtils.CONSTANT_ID_NULL ) ) )
                 {
-                    return redirectWithError( request, VIEW_CREATE_SUGGEST_SUBMIT, suggest.getIdSuggest( ), I18nService.getLocalizedString( MESSAGE_ERROR_NO_CATEGORY, getLocale( ) ) );
+                    return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_NO_CATEGORY, AdminMessage.TYPE_STOP ) );
                 }
             }
 
@@ -1044,8 +1055,7 @@ public class SuggestJspBean extends MVCAdminJspBean
             {
                 if ( ( strIdType == null ) || strIdType.equals( Integer.toString( SuggestUtils.CONSTANT_ID_NULL ) ) )
                 {
-                    return redirectWithError( request, VIEW_CREATE_SUGGEST_SUBMIT, suggest.getIdSuggest( ),
-                            I18nService.getLocalizedString( MESSAGE_ERROR_NO_SUGGEST_SUBMIT_TYPE_SELECTED, getLocale( ) ) );
+                    return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_NO_SUGGEST_SUBMIT_TYPE_SELECTED, AdminMessage.TYPE_STOP ) );
                 }
             }
 
@@ -1063,16 +1073,14 @@ public class SuggestJspBean extends MVCAdminJspBean
                         formError.getTitleQuestion( )
                     };
 
-                    return redirectWithError( request, VIEW_CREATE_SUGGEST_SUBMIT, suggest.getIdSuggest( ),
-                            I18nService.getLocalizedString( MESSAGE_MANDATORY_QUESTION, tabRequiredFields, getLocale( ) ) );
+                    return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_QUESTION, tabRequiredFields, AdminMessage.TYPE_STOP ) );
                 }
 
                 Object [ ] tabFormError = {
                         formError.getTitleQuestion( ), formError.getErrorMessage( )
                 };
 
-                return redirectWithError( request, VIEW_CREATE_SUGGEST_SUBMIT, suggest.getIdSuggest( ),
-                        I18nService.getLocalizedString( MESSAGE_FORM_ERROR, tabFormError, getLocale( ) ) );
+                return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_FORM_ERROR, tabFormError, AdminMessage.TYPE_STOP ) );
             }
 
             // perform suggest submit
@@ -1859,14 +1867,14 @@ public class SuggestJspBean extends MVCAdminJspBean
 
     /**
      * Get the request data and if there is no error insert the data in the suggest specified in parameter. return null if there is no error or else return the
-     * localized error message
+     * error page url
      *
      * @param request
      *            the request
      * @param suggest
      *            suggest
      *
-     * @return null if there is no error or else return the localized error message
+     * @return null if there is no error or else return the error page url
      */
     private String getSuggestData( MultipartHttpServletRequest request, Suggest suggest )
     {
@@ -1884,6 +1892,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         String strNumberSuggestSubmitInTopScore = request.getParameter( PARAMETER_NUMBER_SUGGEST_SUBMIT_IN_TOP_SCORE );
         String strNumberSuggestSubmitCaractersShown = request.getParameter( PARAMETER_NUMBER_SUGGEST_SUBMIT_CARACTERS_SHOWN );
         String strNumberSuggestSubmitInTopComment = request.getParameter( PARAMETER_NUMBER_SUGGEST_SUBMIT_IN_TOP_COMMENT );
+        String strThemeXpage = request.getParameter( PARAMETER_THEME_XPAGE );
 
         String strActiveSuggestSubmitAuthentification = request.getParameter( PARAMETER_ACTIVE_SUGGEST_SUBMIT_AUTHENTIFICATION );
         String strActiveVoteAuthentification = request.getParameter( PARAMETER_ACTIVE_VOTE_AUTHENTIFICATION );
@@ -2044,52 +2053,52 @@ public class SuggestJspBean extends MVCAdminJspBean
                 I18nService.getLocalizedString( strFieldError, getLocale( ) )
             };
 
-            return I18nService.getLocalizedString( MESSAGE_MANDATORY_FIELD, tabRequiredFields, getLocale( ) );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         if ( nNumberSuggestSubmitCaractersShown < 0 )
         {
-            return I18nService.getLocalizedString( MESSAGE_ILLOGICAL_NUMBER_SUGGEST_SUBMIT_CARACTERS_SHOWN, getLocale( ) );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_NUMBER_SUGGEST_SUBMIT_CARACTERS_SHOWN, AdminMessage.TYPE_STOP );
         }
 
         if ( ( strNumberSuggestSubmitInTopScore != null ) && !strNumberSuggestSubmitInTopScore.trim( ).equals( EMPTY_STRING )
                 && ( nNumberSuggestSubmitInTopScore < 0 ) )
         {
-            return I18nService.getLocalizedString( MESSAGE_ILLOGICAL_NUMBER_SUGGEST_SUBMIT_IN_TOP_SCORE, getLocale( ) );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_NUMBER_SUGGEST_SUBMIT_IN_TOP_SCORE, AdminMessage.TYPE_STOP );
         }
 
         if ( ( strActivePropositionState != null ) && strActivePropositionState.trim( ).equals( CONSTANTE_YES_VALUE ) && ( strNumberVoteRequired != null )
                 && !strNumberVoteRequired.trim( ).equals( EMPTY_STRING ) && ( nNumberVoteRequired < 0 ) )
         {
-            return I18nService.getLocalizedString( MESSAGE_ILLOGICAL_NUMBER_VOTE_REQUIRED, getLocale( ) );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_NUMBER_VOTE_REQUIRED, AdminMessage.TYPE_STOP );
         }
 
         if ( ( strNumberDayRequired != null ) && !strNumberDayRequired.trim( ).equals( EMPTY_STRING ) && ( nNumberDayRequired < 0 ) )
         {
-            return I18nService.getLocalizedString( MESSAGE_ILLOGICAL_NUMBER_DAY_REQUIRED, getLocale( ) );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_NUMBER_DAY_REQUIRED, AdminMessage.TYPE_STOP );
         }
 
         if ( ( strNumberSuggestSubmitInTopComment != null ) && !strNumberSuggestSubmitInTopComment.trim( ).equals( EMPTY_STRING )
                 && ( nNumberSuggestSubmitInTopComment < 0 ) )
         {
-            return I18nService.getLocalizedString( MESSAGE_ILLOGICAL_NUMBER_SUGGEST_SUBMIT_IN_TOP_COMMENT, getLocale( ) );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_NUMBER_SUGGEST_SUBMIT_IN_TOP_COMMENT, AdminMessage.TYPE_STOP );
         }
 
         if ( ( strNumberSuggestSubmitPerPage != null ) && !strNumberSuggestSubmitPerPage.trim( ).equals( EMPTY_STRING ) && ( nNumberSuggestSubmitPerPage < 0 ) )
         {
-            return I18nService.getLocalizedString( MESSAGE_ILLOGICAL_NUMBER_SUGGEST_SUBMIT_PER_PAGE, getLocale( ) );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_NUMBER_SUGGEST_SUBMIT_PER_PAGE, AdminMessage.TYPE_STOP );
         }
 
         if ( ( strDisplayCommentInSuggestSubmitList != null ) && ( strNumberCommentDisplayInSuggestSubmitList != null )
                 && !strNumberCommentDisplayInSuggestSubmitList.trim( ).equals( EMPTY_STRING ) && ( nNumberCommentDisplayInSuggestSubmitList < 0 ) )
         {
-            return I18nService.getLocalizedString( MESSAGE_ILLOGICAL_NUMBER_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST, getLocale( ) );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_NUMBER_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST, AdminMessage.TYPE_STOP );
         }
 
         if ( ( strDisplayCommentInSuggestSubmitList != null ) && ( strNumberCharCommentDisplayInSuggestSubmitList != null )
                 && !strNumberCharCommentDisplayInSuggestSubmitList.trim( ).equals( EMPTY_STRING ) && ( nNumberCommentDisplayInSuggestSubmitList < 0 ) )
         {
-            return I18nService.getLocalizedString( MESSAGE_ILLOGICAL_NUMBER_CHAR_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST, getLocale( ) );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_NUMBER_CHAR_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST, AdminMessage.TYPE_STOP );
         }
 
         suggest.setTitle( strTitle );
@@ -2137,6 +2146,11 @@ public class SuggestJspBean extends MVCAdminJspBean
         suggest.setShowTopScoreBlock( strShowTopScoreBlock != null );
         suggest.setShowTopCommentBlock( strShowTopCommentBlock != null );
         suggest.setActiveSuggestSubmitPaginator( strActiveSuggestSubmitPaginator != null );
+
+        if ( strThemeXpage != null )
+        {
+            suggest.setCodeTheme( strThemeXpage );
+        }
 
         suggest.setLibelleValidateButton( strLibelleValidateButton );
         suggest.setNumberSuggestSubmitInTopScore( nNumberSuggestSubmitInTopScore );
@@ -2221,6 +2235,16 @@ public class SuggestJspBean extends MVCAdminJspBean
         refMailingList.addItem( -1, strNothing );
         refMailingList.addAll( AdminMailingListService.getMailingLists( adminUser ) );
 
+        // Style management
+        String defaultTheme = ThemesService.getGlobalTheme( );
+        Collection<Theme> themes = ThemesService.getThemesList( );
+        ReferenceList themesRefList = new ReferenceList( );
+
+        for ( Theme theme : themes )
+        {
+            themesRefList.addItem( theme.getCodeTheme( ), theme.getThemeDescription( ) );
+        }
+
         ReferenceList refListSuggestSort = SuggestUtils.getRefListSuggestSort( locale );
         ReferenceList refVoteTypeList = initRefListVoteType( plugin, locale );
         DefaultMessage defaultMessage = DefaultMessageHome.find( plugin );
@@ -2243,6 +2267,8 @@ public class SuggestJspBean extends MVCAdminJspBean
         model.put( MARK_AUTHENTIFICATION_ENABLE, SecurityService.isAuthenticationEnable( ) );
         model.put( MARK_ROLE_LIST, RoleHome.getRolesList( ) );
         model.put( MARK_DEFAULT_VALUE_ROLE, Suggest.ROLE_NONE );
+        model.put( MARK_THEME_REF_LIST, themesRefList );
+        model.put( MARK_DEFAULT_THEME, defaultTheme );
         model.put( MARK_LIST_SUGGEST_SUBMIT_SORT, refListSuggestSort );
 
         return getPage( PROPERTY_CREATE_SUGGEST_TITLE, TEMPLATE_CREATE_SUGGEST );
@@ -2269,8 +2295,7 @@ public class SuggestJspBean extends MVCAdminJspBean
 
             if ( strError != null )
             {
-                addError( strError );
-                return redirectView( request, VIEW_CREATE_SUGGEST );
+                return redirect( request, strError );
             }
 
             suggest.setIdSuggest( SuggestHome.create( suggest, plugin ) );
@@ -2369,6 +2394,20 @@ public class SuggestJspBean extends MVCAdminJspBean
         EntryType entryTypeGroup = new EntryType( );
         refEntryType = initRefListEntryType( plugin, locale );
 
+        // Style management
+        Collection<Theme> themes = ThemesService.getThemesList( );
+        ReferenceList themesRefList = new ReferenceList( );
+
+        for ( Theme theme : themes )
+        {
+            themesRefList.addItem( theme.getCodeTheme( ), theme.getThemeDescription( ) );
+        }
+
+        if ( suggest.getCodeTheme( ) == null )
+        {
+            suggest.setCodeTheme( ThemesService.getGlobalTheme( ) );
+        }
+
         // Retrieve the list of available workflows
         if ( _workflowService.isAvailable( ) )
         {
@@ -2397,6 +2436,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         model.put( MARK_AUTHENTIFICATION_ENABLE, SecurityService.isAuthenticationEnable( ) );
         model.put( MARK_ROLE_LIST, RoleHome.getRolesList( ) );
         model.put( MARK_DEFAULT_VALUE_ROLE, Suggest.ROLE_NONE );
+        model.put( MARK_THEME_REF_LIST, themesRefList );
         model.put( MARK_LIST_SUGGEST_SUBMIT_SORT, refListSuggestSort );
         model.put( MARK_PANEL, strPanel );
 
@@ -2426,8 +2466,7 @@ public class SuggestJspBean extends MVCAdminJspBean
 
             if ( strError != null )
             {
-                addError( strError );
-                return redirect( request, getJspModifySuggest( request, nIdSuggest ) );
+                return redirect( request, strError );
             }
 
             SuggestHome.update( suggest, plugin );
@@ -3227,26 +3266,6 @@ public class SuggestJspBean extends MVCAdminJspBean
     private String getJspManageCommentSubmit( HttpServletRequest request )
     {
         return getJspManageCommentSubmit( request, null );
-    }
-
-    /**
-     * Adds an error message and redirects to a form view of a suggest: the form is rendered again with a fresh security token, since the token of the refused
-     * submission was consumed
-     *
-     * @param request
-     *            The HTTP request
-     * @param strView
-     *            the form view to display again
-     * @param nIdSuggest
-     *            the suggest id
-     * @param strError
-     *            the localized error message
-     * @return the redirect URL
-     */
-    private String redirectWithError( HttpServletRequest request, String strView, int nIdSuggest, String strError )
-    {
-        addError( strError );
-        return redirect( request, strView, PARAMETER_ID_SUGGEST, nIdSuggest );
     }
 
     /**

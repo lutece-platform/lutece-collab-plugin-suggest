@@ -37,11 +37,16 @@ import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.service.resource.IExtendableResource;
+import fr.paris.lutece.util.date.DateUtil;
+import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * 
@@ -54,6 +59,16 @@ public class SuggestSubmit implements IExtendableResource
     public static final int STATE_DISABLE = 1;
     public static final int STATE_WAITING_FOR_PUBLISH = 2;
     public static final int STATE_PUBLISH = 3;
+    private static final String TAG_SUGGEST_SUBMIT = "suggest-submit";
+    private static final String TAG_SUGGEST_SUBMIT_TITLE = "suggest-submit-title";
+    private static final String TAG_SUGGEST_SUBMIT_CATEGORY = "suggest-submit-category";
+    private static final String TAG_SUGGEST_SUBMIT_TYPE = "suggest-submit-type";
+    private static final String TAG_SUGGEST_SUBMIT_DATE_RESPONSE = "suggest-submit-date-response";
+    private static final String TAG_SUGGEST_SUBMIT_NUMBER_VOTE = "suggest-submit-number-vote";
+    private static final String TAG_SUGGEST_SUBMIT_NUMBER_COMMENT = "suggest-submit-number-comment";
+    private static final String TAG_SUGGEST_SUBMIT_SCORE = "suggest-submit-score";
+    private static final String TAG_SUGGESTS_SUBMIT_COMMENTS = "suggest-submit-comments";
+    private static final String TAG_SUGGESTS_SUBMIT_RESPONSES = "suggest-submit-responses";
     private int _nIdSuggestSubmit;
     private Timestamp _tDateResponse;
     private Suggest _suggest;
@@ -413,6 +428,76 @@ public class SuggestSubmit implements IExtendableResource
     public void setLuteceUserKey( String strLuteceUserKey )
     {
         _strLuteceUserKey = strLuteceUserKey;
+    }
+
+    /**
+     * Returns the xml of this suggest submit
+     * 
+     * @param request
+     *            The HTTP Servlet request
+     * @param locale
+     *            the Locale
+     * @return the xml of this suggest submit
+     */
+    public String getXml( HttpServletRequest request, Locale locale )
+    {
+        StringBuffer strXml = new StringBuffer( );
+        XmlUtil.beginElement( strXml, TAG_SUGGEST_SUBMIT );
+        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_DATE_RESPONSE, DateUtil.getDateString( this.getDateResponse( ), locale ) );
+        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_SCORE, Integer.toString( this.getNumberScore( ) ) );
+        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_NUMBER_VOTE, Integer.toString( this.getNumberVote( ) ) );
+        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_NUMBER_COMMENT, Integer.toString( this.getNumberComment( ) ) );
+        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_CATEGORY, ( this.getCategory( ) != null ) ? this.getCategory( ).getTitle( )
+                : SuggestUtils.EMPTY_STRING );
+        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_TYPE, ( this.getSuggestSubmitType( ) != null ) ? this.getSuggestSubmitType( ).getName( )
+                : SuggestUtils.EMPTY_STRING );
+        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_TITLE, this.getSuggestSubmitTitle( ) );
+
+        XmlUtil.beginElement( strXml, TAG_SUGGESTS_SUBMIT_RESPONSES );
+
+        if ( ( getResponses( ) != null ) && ( !getResponses( ).isEmpty( ) ) )
+        {
+            HashMap<Integer, Response> hashResponsesEntry = new HashMap<>( );
+
+            for ( Response response : getResponses( ) )
+            {
+                hashResponsesEntry.put( response.getEntry( ).getIdEntry( ), response );
+            }
+
+            for ( IEntry entry : this.getSuggest( ).getEntries( ) )
+            {
+                if ( hashResponsesEntry.containsKey( entry.getIdEntry( ) ) )
+                {
+                    strXml.append( hashResponsesEntry.get( entry.getIdEntry( ) ).getXml( request, locale ) );
+                }
+                else
+                {
+                    // add xml empty response for this suggest submit
+                    Response responseEmpty = new Response( );
+                    responseEmpty.setEntry( entry );
+                    responseEmpty.setValueResponse( SuggestUtils.EMPTY_STRING );
+                    strXml.append( responseEmpty.getXml( request, locale ) );
+                }
+            }
+        }
+
+        XmlUtil.endElement( strXml, TAG_SUGGESTS_SUBMIT_RESPONSES );
+
+        XmlUtil.beginElement( strXml, TAG_SUGGESTS_SUBMIT_COMMENTS );
+
+        if ( ( getComments( ) != null ) && ( !getComments( ).isEmpty( ) ) )
+        {
+            for ( CommentSubmit commentSubmit : getComments( ) )
+            {
+                strXml.append( commentSubmit.getXml( request, locale ) );
+            }
+        }
+
+        XmlUtil.endElement( strXml, TAG_SUGGESTS_SUBMIT_COMMENTS );
+
+        XmlUtil.endElement( strXml, TAG_SUGGEST_SUBMIT );
+
+        return strXml.toString( );
     }
 
     /**

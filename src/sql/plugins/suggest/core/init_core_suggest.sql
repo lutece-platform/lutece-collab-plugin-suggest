@@ -52,6 +52,3 @@ INSERT INTO core_admin_role_resource (rbac_id,role_key,resource_type,resource_id
 INSERT INTO core_user_role (role_key,id_user) VALUES ('suggest_manager',1);
 INSERT INTO core_user_role (role_key,id_user) VALUES ('suggest_manager',2);
 
--- changeset suggest:init_core_suggest-rev5.sql
--- preconditions onFail:MARK_RAN onError:WARN
-DELETE FROM core_admin_role_resource WHERE resource_type = 'SUGGEST_EXPORT_FORMAT_TYPE';

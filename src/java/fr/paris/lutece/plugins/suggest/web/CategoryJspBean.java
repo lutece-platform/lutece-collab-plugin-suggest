@@ -183,8 +183,7 @@ public class CategoryJspBean extends MVCAdminJspBean
 
         if ( strError != null )
         {
-            addError( strError );
-            return redirectView( request, VIEW_CREATE_CATEGORY );
+            return redirect( request, strError );
         }
 
         CategoryHome.create( category, getPlugin( ) );
@@ -282,8 +281,7 @@ public class CategoryJspBean extends MVCAdminJspBean
 
         if ( strError != null )
         {
-            addError( strError );
-            return redirect( request, VIEW_MODIFY_CATEGORY, PARAMETER_ID_CATEGORY, nIdCategory );
+            return redirect( request, strError );
         }
 
         CategoryHome.update( category, plugin );
@@ -345,8 +343,7 @@ public class CategoryJspBean extends MVCAdminJspBean
         {
             if ( CategoryHome.isAssociateToSuggest( nIdCategory, plugin ) )
             {
-                addError( MESSAGE_CATEGORY_ASSOCIATE_TO_SUGGEST, getLocale( ) );
-                return redirectView( request, VIEW_MANAGE_CATEGORY );
+                return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CATEGORY_ASSOCIATE_TO_SUGGEST, AdminMessage.TYPE_STOP ) );
             }
 
             CategoryHome.remove( nIdCategory, plugin );
@@ -356,14 +353,14 @@ public class CategoryJspBean extends MVCAdminJspBean
     }
 
     /**
-     * Get the request data and if there is no error insert the data in the category object specified in parameter. return null if there is no error or else
-     * return the localized error message
+     * Get the request data and if there is no error insert the data in the regularExpression object specified in parameter. return null if there is no error or
+     * else return the error page url
      * 
      * @param request
      *            the request
      * @param category
      *            the category Object
-     * @return null if there is no error or else return the localized error message
+     * @return null if there is no error or else return the error page url
      */
     private String getCategoryData( HttpServletRequest request, Category category )
     {
@@ -388,7 +385,7 @@ public class CategoryJspBean extends MVCAdminJspBean
                 I18nService.getLocalizedString( strFieldError, getLocale( ) )
             };
 
-            return I18nService.getLocalizedString( MESSAGE_MANDATORY_FIELD, tabRequiredFields, getLocale( ) );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         category.setTitle( strTitle );

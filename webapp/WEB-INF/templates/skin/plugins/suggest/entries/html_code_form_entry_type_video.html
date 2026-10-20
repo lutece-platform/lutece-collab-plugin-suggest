@@ -1,9 +1,6 @@
-<@cTpl>
-<#assign entryId = entry.idEntry?c>
-<@cField label=entry.title for=entryId required=entry.mandatory class='mb-3'>
-	<@cInput type='file' name=entryId id=entryId accept='video/*' required=entry.mandatory />
+<@cField label=entry.title for='${entry.idEntry}' required=entry.mandatory>
+	<@cInput type='file' name='${entry.idEntry}' id='${entry.idEntry}' accept='video/*' required=entry.mandatory />
 </@cField>
-<@cField label='#i18n{suggest.createEntry.labelCredits}' for='credits${entryId}' required=entry.mandatory class='mb-3'>
-	<@cInput type='text' name='credits${entryId}' id='credits${entryId}' required=entry.mandatory helpMsg=entry.helpMessage!'' />
+<@cField label='#i18n{suggest.createEntry.labelCredits}' for='credits${entry.idEntry}' required=entry.mandatory>
+	<@cInput type='text' name='credits${entry.idEntry}' id='credits${entry.idEntry}' required=entry.mandatory helpMsg=entry.helpMessage!'' />
 </@cField>
-</@cTpl>

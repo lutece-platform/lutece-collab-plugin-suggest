@@ -1,51 +1,61 @@
-<@cTpl>
-<@cBlock class='card'>
-	<@cBlock class='card-body'>
-		<@cTitle level=1 class='h2 card-title'>#i18n{suggest.suggestForm.title}</@cTitle>
-		<#if disable_new_suggest_submit>
-			<@cAlert type='info' title='#i18n{suggest.suggestForm.titleDisableNewSuggestSubmit}' />
-		</#if>
+<div class="row">
+	<div class="col-12 col-sm-12 col-md-12 col-lg-12">
 		<@cForm action='jsp/site/Portal.jsp' name='formsuggest' id='formsuggest' enctype='multipart/form-data'>
-			<@cInput type='hidden' name='page' value='suggest' class='' />
-			<@cInput type='hidden' name='id_suggest' value=suggest.idSuggest?c class='' />
-			<@cInput type='hidden' name='action' value='do_create_suggest_submit' class='' />
-			${str_entry}
-			<#if category_list?has_content>
-				<@cField label='#i18n{suggest.suggestForm.labelCategoryTitle}' for='id_category' required=true class='mb-3'>
-					<@cSelect name='id_category' id='id_category' required=true>
-						<#list category_list as item>
-							<@cOption value=item.code label=item.name selected=(item.code == id_default_category?c) />
-						</#list>
-					</@cSelect>
-				</@cField>
-			</#if>
-			<#if types_list?has_content>
-				<@cField label='#i18n{suggest.suggestForm.labelTypeTitle}' for='id_type' required=true class='mb-3'>
-					<@cSelect name='id_type' id='id_type' required=true>
-						<#list types_list as item>
-							<@cOption value=item.code label=item.name selected=(item.code == '-1') />
-						</#list>
-					</@cSelect>
-				</@cField>
-			</#if>
-			<#if suggest.enableTermsOfUse && suggest.termsOfUse?has_content>
-				<@cBlock class='mb-3'>
-					<@cFormCheck type='checkbox' name='terms_of_use' id='terms_of_use' value='terms_of_use' label='#i18n{suggest.suggestForm.labelSelectTermsOfUse}' required=true inline=true />
-					<@cLink href='#text-tou' class='small' label='#i18n{portal.util.labelMore}' params='data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="text-tou"' />
-					<@cBlock id='text-tou' class='collapse'>
-						<@cBlock class='card card-body bg-body-tertiary mt-2'>
-							${suggest.termsOfUse}
-						</@cBlock>
-					</@cBlock>
-				</@cBlock>
+		<@cInput type='hidden' name='page' value='suggest' />
+		<@cInput type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
+		<@cInput type='hidden' name='action' value='do_create_suggest_submit' />
+		<h2 class="mb-5">#i18n{suggest.suggestForm.title} <#if disable_new_suggest_submit>(#i18n{suggest.suggestForm.titleDisableNewSuggestSubmit})</#if></h2>
+		${str_entry}
+		<#if category_list?has_content>
+			<@cField label='#i18n{suggest.suggestForm.labelCategoryTitle}' for='id_category' required=true>
+				<@cSelect name='id_category' id='id_category' required=true>
+					<#list category_list as item>
+						<@cOption value=item.code label=item.name selected=(item.code == '${id_default_category}') />
+					</#list>
+				</@cSelect>
+			</@cField>
+		</#if>
+		<#if types_list?has_content>
+			<@cField label='#i18n{suggest.suggestForm.labelTypeTitle}' for='id_type' required=true>
+				<@cSelect name='id_type' id='id_type' required=true>
+					<#list types_list as item>
+						<@cOption value=item.code label=item.name selected=(item.code == '-1') />
+					</#list>
+				</@cSelect>
+			</@cField>
+		</#if>
+		<#if suggest.enableTermsOfUse && suggest.termsOfUse?has_content>
+			<div class="mb-3">
+				<label class="form-label col-12 col-sm-12 col-md-3 col-lg-3" for="terms_of_use"></label>
+					<div class="col-12 col-sm-12 col-md-9 col-lg-9">
+						<@cCheckbox name='terms_of_use' id='terms_of_use' value='terms_of_use' label='#i18n{suggest.suggestForm.labelSelectTermsOfUse} *' inline=true />
+							<a href="#" id="btn-tou"  title="#i18n{portal.util.labelMore}">
+								#i18n{portal.util.labelMore}
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="mb-3">
+					<div class="d-flex gap-2">
+
+						<div id="text-tou" class="card">
+  						<div class="card-body">
+								${suggest.termsOfUse}
+							</div>
+						</div>
+					</div>
+				</div>
 			</#if>
 			<#if captcha??>
-				<@cBlock class='mb-3'>
+				<div class="mb-3">
 					${captcha}
-				</@cBlock>
+				</div>
 			</#if>
-			<@cBtn label=suggest.libelleValidateButton class='primary' type='submit' params='name="submit"' />
+			<div class="mb-3">
+				<div class="d-flex gap-2">
+					<@cBtn label='${suggest.libelleValidateButton}' class='primary btn-lg' type='submit' params='name="submit"' />
+				</div>
+			</div>
 		</@cForm>
-	</@cBlock>
-</@cBlock>
-</@cTpl>
+	</div>
+</div>
