@@ -1,6 +1,7 @@
 <@pageContainer>
 	<@pageColumn>
 		<@pageHeader title='#i18n{suggest.modifySuggestSubmitType.title}' />
+		<@messages errors=errors![] />
 		<@row>
 			<@columns>
 				<@box>
@@ -26,8 +27,8 @@
 								</#if>
 							</@formGroup>
 							<@formGroup>
-								<@button type='submit' name='save' title='#i18n{suggest.createExportFormat.buttonSave}' buttonIcon='device-floppy' />
-								<@aButton href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' name='cancel' title='#i18n{suggest.createExportFormat.buttonCancel}' buttonIcon='x' color='light' />
+								<@button type='submit' name='save' title='#i18n{suggest.createCategory.buttonSave}' buttonIcon='device-floppy' />
+								<@aButton href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' name='cancel' title='#i18n{suggest.createCategory.buttonCancel}' buttonIcon='x' color='light' />
 							</@formGroup>
 		                </@tform>
 					</@boxBody>

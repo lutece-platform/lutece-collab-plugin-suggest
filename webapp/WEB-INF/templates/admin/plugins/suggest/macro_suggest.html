@@ -1,0 +1,2 @@
+<#-- Prints a stored number, or nothing when it is unset (-1 or absent) -->
+<#macro numberValue value=''><#if value?is_number && value != -1>${value?c}</#if></#macro>

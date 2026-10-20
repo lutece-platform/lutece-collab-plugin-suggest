@@ -50,13 +50,13 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
     // Constants
     private static final String SQL_ORDER_BY_NAME = "ORDER BY t.name";
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_type ) FROM suggest_suggest_submit_type";
-    private static final String SQL_SELECT_SUGGEST_SUBMIT_TYPE = "SELECT t.id_type, t.name, t.color, t.parameterizable, t.id_xsl,t.id_resource_image FROM suggest_suggest_submit_type t ";
+    private static final String SQL_SELECT_SUGGEST_SUBMIT_TYPE = "SELECT t.id_type, t.name, t.color, t.parameterizable, t.id_resource_image FROM suggest_suggest_submit_type t ";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_SELECT_SUGGEST_SUBMIT_TYPE + "WHERE t.id_type=? ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_suggest_submit_type ( id_type,name,color, "
-            + "parameterizable, id_xsl,id_resource_image ) VALUES(?,?,?,?,?,?)";
+            + "parameterizable, id_resource_image ) VALUES(?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM suggest_suggest_submit_type WHERE id_type = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE suggest_suggest_submit_type SET "
-            + "name=?,color=?,parameterizable=?, id_xsl=?,id_resource_image=? WHERE id_type=? ";
+            + "name=?,color=?,parameterizable=?, id_resource_image=? WHERE id_type=? ";
     private static final String SQL_QUERY_FIND_ALL = SQL_SELECT_SUGGEST_SUBMIT_TYPE + SQL_ORDER_BY_NAME;
     private static final String SQL_QUERY_FIND_BY_ID_SUGGEST = SQL_SELECT_SUGGEST_SUBMIT_TYPE
             + ",suggest_suggest_suggest_submit_type dt WHERE t.id_type=dt.id_type AND dt.id_suggest= ? " + SQL_ORDER_BY_NAME;
@@ -110,15 +110,14 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
             daoUtil.setString( 2, suggestSubmitType.getName( ) );
             daoUtil.setString( 3, suggestSubmitType.getColor( ) );
             daoUtil.setBoolean( 4, suggestSubmitType.getParameterizableInFO( ) );
-            daoUtil.setInt( 5, suggestSubmitType.getIdXSLStyleSheet( ) );
     
             if ( suggestSubmitType.getIdImageResource( ) != null )
             {
-                daoUtil.setInt( 6, suggestSubmitType.getIdImageResource( ) );
+                daoUtil.setInt( 5, suggestSubmitType.getIdImageResource( ) );
             }
             else
             {
-                daoUtil.setIntNull( 6 );
+                daoUtil.setIntNull( 5 );
             }
     
             daoUtil.executeUpdate( );
@@ -210,18 +209,17 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
             daoUtil.setString( 1, suggestSubmitType.getName( ) );
             daoUtil.setString( 2, suggestSubmitType.getColor( ) );
             daoUtil.setBoolean( 3, suggestSubmitType.getParameterizableInFO( ) );
-            daoUtil.setInt( 4, suggestSubmitType.getIdXSLStyleSheet( ) );
     
             if ( suggestSubmitType.getIdImageResource( ) != null )
             {
-                daoUtil.setInt( 5, suggestSubmitType.getIdImageResource( ) );
+                daoUtil.setInt( 4, suggestSubmitType.getIdImageResource( ) );
             }
             else
             {
-                daoUtil.setIntNull( 5 );
+                daoUtil.setIntNull( 4 );
             }
     
-            daoUtil.setInt( 6, suggestSubmitType.getIdType( ) );
+            daoUtil.setInt( 5, suggestSubmitType.getIdType( ) );
     
             daoUtil.executeUpdate( );
         }
@@ -242,11 +240,10 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
         suggestSubmitType.setName( daoUtil.getString( 2 ) );
         suggestSubmitType.setColor( daoUtil.getString( 3 ) );
         suggestSubmitType.setParameterizableInFO( daoUtil.getBoolean( 4 ) );
-        suggestSubmitType.setIdXSLStyleSheet( daoUtil.getInt( 5 ) );
 
-        if ( daoUtil.getObject( 6 ) != null )
+        if ( daoUtil.getObject( 5 ) != null )
         {
-            suggestSubmitType.setIdImageResource( daoUtil.getInt( 6 ) );
+            suggestSubmitType.setIdImageResource( daoUtil.getInt( 5 ) );
         }
 
         return suggestSubmitType;

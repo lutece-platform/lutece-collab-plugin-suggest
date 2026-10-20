@@ -8,9 +8,6 @@
 		<#if permission_manage_default_message!true>
 		<@tabLink active=(advanced_tab == 'message') href='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp' title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}' />
 		</#if>
-		<#if permission_manage_export_format!true>
-		<@tabLink active=(advanced_tab == 'export') href='jsp/admin/plugins/suggest/ManageExportFormat.jsp' title='#i18n{suggest.manageAdvancedParameters.labelExportFormat}' />
-		</#if>
 		<@tabLink active=(advanced_tab == 'statistics') href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=statistics' title='#i18n{suggest.manageAdvancedParameters.labelStatistics}' />
 	</@tabList>
 </@tabs>
