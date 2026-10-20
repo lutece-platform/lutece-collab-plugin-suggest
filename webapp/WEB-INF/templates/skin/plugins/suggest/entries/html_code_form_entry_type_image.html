@@ -1,3 +1,6 @@
-<@cField label=entry.title for='${entry.idEntry}' required=entry.mandatory>
-	<@cInput type='file' name='${entry.idEntry}' id='${entry.idEntry}' accept='image/*' required=entry.mandatory helpMsg=entry.helpMessage!'' />
+<@cTpl>
+<#assign entryId = entry.idEntry?c>
+<@cField label=entry.title for=entryId required=entry.mandatory class='mb-3'>
+	<@cInput type='file' name=entryId id=entryId accept='image/*' required=entry.mandatory helpMsg=entry.helpMessage!'' />
 </@cField>
+</@cTpl>

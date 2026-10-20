@@ -37,14 +37,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
-import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.portal.ThemesService;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 /**
@@ -67,7 +63,7 @@ public final class SuggestDAO implements ISuggestDAO
             + "active_captcha,active, date_creation, libelle_validate_button,active_suggest_proposition_state,libelle_contribution, "
             + "number_suggest_submit_in_top_score,number_suggest_submit_in_top_comment,limit_number_vote,number_suggest_submit_caracters_shown, "
             + "show_category_block,show_top_score_block,show_top_comment_block,active_suggest_submit_paginator,number_suggest_submit_per_page,role, "
-            + "enable_new_suggest_submit_mail,header,sort_field,code_theme,confirmation_message,active_editor_bbcode, "
+            + "enable_new_suggest_submit_mail,header,sort_field,confirmation_message,active_editor_bbcode, "
             + "default_suggest,id_default_sort,notification_new_comment_sender,notification_new_comment_title,notification_new_comment_body,notification_new_suggest_submit_sender,notification_new_suggest_submit_title,notification_new_suggest_submit_body "
             + "FROM suggest_suggest WHERE id_suggest = ?";
     private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_suggest ( id_suggest,title,"
@@ -78,8 +74,8 @@ public final class SuggestDAO implements ISuggestDAO
             + "active_captcha,active, date_creation, libelle_validate_button,active_suggest_proposition_state, "
             + "libelle_contribution,number_suggest_submit_in_top_score,number_suggest_submit_in_top_comment,limit_number_vote, "
             + "number_suggest_submit_caracters_shown,show_category_block,show_top_score_block,show_top_comment_block ,active_suggest_submit_paginator,number_suggest_submit_per_page,role,"
-            + "enable_new_suggest_submit_mail,header,sort_field,code_theme,confirmation_message,active_editor_bbcode,default_suggest,id_default_sort,notification_new_comment_sender,notification_new_comment_title,notification_new_comment_body,notification_new_suggest_submit_sender,notification_new_suggest_submit_title,notification_new_suggest_submit_body)"
-            + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            + "enable_new_suggest_submit_mail,header,sort_field,confirmation_message,active_editor_bbcode,default_suggest,id_default_sort,notification_new_comment_sender,notification_new_comment_title,notification_new_comment_body,notification_new_suggest_submit_sender,notification_new_suggest_submit_title,notification_new_suggest_submit_body)"
+            + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM suggest_suggest WHERE id_suggest = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE suggest_suggest SET  id_suggest=?,title=?," + "unavailability_message=?,workgroup=?,id_workflow=?,"
             + "id_vote_type=?,number_vote_required=?,number_day_required=?,active_suggest_submit_authentification=?, "
@@ -89,7 +85,7 @@ public final class SuggestDAO implements ISuggestDAO
             + "libelle_contribution=? ,number_suggest_submit_in_top_score=?,number_suggest_submit_in_top_comment=?,"
             + "limit_number_vote=?,number_suggest_submit_caracters_shown=?,  " + "show_category_block=?,show_top_score_block=?,show_top_comment_block=?  ,"
             + "active_suggest_submit_paginator=?,number_suggest_submit_per_page=? ,role=? ,"
-            + "enable_new_suggest_submit_mail=?,header=? ,sort_field=? ,code_theme=?, confirmation_message=?,active_editor_bbcode=? ,"
+            + "enable_new_suggest_submit_mail=?,header=? ,sort_field=? , confirmation_message=?,active_editor_bbcode=? ,"
             + "default_suggest=?,id_default_sort=?,notification_new_comment_sender=?,notification_new_comment_title=?,"
             + "notification_new_comment_body=?,notification_new_suggest_submit_sender=?,notification_new_suggest_submit_title=?"
             + ",notification_new_suggest_submit_body=? " + "WHERE id_suggest=?";
@@ -101,10 +97,9 @@ public final class SuggestDAO implements ISuggestDAO
             + "active_captcha,active, date_creation, libelle_validate_button,active_suggest_proposition_state,libelle_contribution, "
             + "number_suggest_submit_in_top_score,number_suggest_submit_in_top_comment,limit_number_vote,number_suggest_submit_caracters_shown, "
             + "show_category_block,show_top_score_block,show_top_comment_block, active_suggest_submit_paginator,number_suggest_submit_per_page,role,  "
-            + "enable_new_suggest_submit_mail,header, sort_field, code_theme, confirmation_message,active_editor_bbcode, "
+            + "enable_new_suggest_submit_mail,header, sort_field, confirmation_message,active_editor_bbcode, "
             + "default_suggest,id_default_sort,notification_new_comment_sender,notification_new_comment_title,notification_new_comment_body,notification_new_suggest_submit_sender,notification_new_suggest_submit_title,notification_new_suggest_submit_body "
             + " FROM suggest_suggest ";
-    private static final String SQL_QUERY_SELECT_ALL_THEMES = "SELECT id_suggest, code_theme FROM suggest_suggest";
     private static final String SQL_FILTER_WORKGROUP = " workgroup = ? ";
     private static final String SQL_FILTER_ROLE = " role = ? ";
     private static final String SQL_FILTER_STATE = " active = ? ";
@@ -183,7 +178,6 @@ public final class SuggestDAO implements ISuggestDAO
             daoUtil.setBoolean( ncpt++, suggest.isEnableMailNewSuggestSubmit( ) );
             daoUtil.setString( ncpt++, suggest.getHeader( ) );
             daoUtil.setInt( ncpt++, suggest.getSortField( ) );
-            daoUtil.setString( ncpt++, suggest.getCodeTheme( ) );
             daoUtil.setString( ncpt++, suggest.getConfirmationMessage( ) );
             daoUtil.setBoolean( ncpt++, suggest.isActiveEditorBbcode( ) );
             daoUtil.setBoolean( ncpt++, suggest.isDefaultSuggest( ) );
@@ -262,7 +256,6 @@ public final class SuggestDAO implements ISuggestDAO
                 suggest.setEnableMailNewSuggestSubmit( daoUtil.getBoolean( nIndex++ ) );
                 suggest.setHeader( daoUtil.getString( nIndex++ ) );
                 suggest.setSortField( daoUtil.getInt( nIndex++ ) );
-                suggest.setCodeTheme( daoUtil.getString( nIndex++ ) );
                 suggest.setConfirmationMessage( daoUtil.getString( nIndex++ ) );
                 suggest.setActiveEditorBbcode( daoUtil.getBoolean( nIndex++ ) );
                 suggest.setDefaultSuggest( daoUtil.getBoolean( nIndex++ ) );
@@ -346,7 +339,6 @@ public final class SuggestDAO implements ISuggestDAO
             daoUtil.setBoolean( nIndex++, suggest.isEnableMailNewSuggestSubmit( ) );
             daoUtil.setString( nIndex++, suggest.getHeader( ) );
             daoUtil.setInt( nIndex++, suggest.getSortField( ) );
-            daoUtil.setString( nIndex++, suggest.getCodeTheme( ) );
             daoUtil.setString( nIndex++, suggest.getConfirmationMessage( ) );
             daoUtil.setBoolean( nIndex++, suggest.isActiveEditorBbcode( ) );
             daoUtil.setBoolean( nIndex++, suggest.isDefaultSuggest( ) );
@@ -475,7 +467,6 @@ public final class SuggestDAO implements ISuggestDAO
                 suggest.setEnableMailNewSuggestSubmit( daoUtil.getBoolean( ncpt++ ) );
                 suggest.setHeader( daoUtil.getString( ncpt++ ) );
                 suggest.setSortField( daoUtil.getInt( ncpt++ ) );
-                suggest.setCodeTheme( daoUtil.getString( ncpt++ ) );
                 suggest.setConfirmationMessage( daoUtil.getString( ncpt++ ) );
                 suggest.setActiveEditorBbcode( daoUtil.getBoolean( ncpt++ ) );
                 suggest.setDefaultSuggest( daoUtil.getBoolean( ncpt++ ) );
@@ -515,32 +506,4 @@ public final class SuggestDAO implements ISuggestDAO
         }
     }
 
-    /**
-     * Load all the themes for form xpages
-     * 
-     * @param plugin
-     *            the plugin
-     * @return a map containing the themes by form id
-     */
-    @Override
-    public Map<Integer, Theme> getXPageThemesMap( Plugin plugin )
-    {
-        Map<Integer, Theme> xPageThemesMap = new HashMap<>( );
-
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL_THEMES, plugin ) )
-        {
-            daoUtil.executeQuery( );
-
-            while ( daoUtil.next( ) )
-            {
-                int nIndex = 1;
-                int nIdForm = daoUtil.getInt( nIndex++ );
-                String strCodeTheme = daoUtil.getString( nIndex++ );
-                Theme theme = ThemesService.getGlobalTheme( strCodeTheme );
-                xPageThemesMap.put( nIdForm, theme );
-            }
-
-            return xPageThemesMap;
-        }
-    }
 }

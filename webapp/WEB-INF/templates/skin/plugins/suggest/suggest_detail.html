@@ -1,98 +1,104 @@
-<div class="row suggest-detail" id="suggest${suggest_submit.idSuggestSubmit}">
-	<div class="col-12 col-sm-9">
-		<h2>${suggest_submit.suggestSubmitTitle}</h2>
-		<p class="suggest-meta">
-			<#if lutece_user?exists>
-				<#if avatar?has_content>
-					<img class="avatar avatar-suggest img-circle" src="${avatar}" alt="avatar provided by gravatar.com" />
-				<#else>
-					<@cIcon name='user' />
+<@cTpl>
+<#assign anchorId = 'suggest' + suggest_submit.idSuggestSubmit?c>
+<#assign urlSuggest = 'jsp/site/Portal.jsp?page=suggest&id_suggest=' + id_suggest?c>
+<#assign actionUrl = 'jsp/site/Portal.jsp?page=suggest'>
+<#assign hasVote = authorized_vote && !suggest_submit.disableVote && suggest_submit.numberScore??>
+<@cRow class='g-4' id=anchorId>
+	<@cCol cols='12 col-lg-8'>
+		<@cBlock class='card'>
+			<@cBlock class='card-body'>
+				<@cTitle level=1 class='h2 card-title'>${suggest_submit.suggestSubmitTitle}</@cTitle>
+				<@cBlock class='d-flex flex-wrap align-items-center gap-2 small text-body-secondary mb-4'>
+					<#if lutece_user??>
+						<#if avatar?has_content>
+							<@cImg src=avatar class='rounded-circle' params='width="24" height="24"' />
+						</#if>
+						<@cInline>${lutece_user}</@cInline>
+						<@cInline params='aria-hidden="true"'>·</@cInline>
+					</#if>
+					<@cInline>${suggest_submit.dateResponse}</@cInline>
+					<#if workflow_state??>
+						<@cInline class='badge text-bg-secondary'>${workflow_state.name}</@cInline>
+					</#if>
+					<#if suggest_submit.category??>
+						<@cInline class='badge text-bg-light border'>${suggest_submit.category.title}</@cInline>
+					</#if>
+					<#if suggest_submit.suggestSubmitType??>
+						<@cInline class='badge text-bg-light border'>${suggest_submit.suggestSubmitType.name}</@cInline>
+					</#if>
+				</@cBlock>
+				<@cBlock class='card-text'>
+					${suggest_submit.suggestSubmitValue!}
+				</@cBlock>
+			</@cBlock>
+		</@cBlock>
+	</@cCol>
+	<@cCol cols='12 col-lg-4'>
+		<@cBlock class='card'>
+			<@cBlock class='card-body d-grid gap-3'>
+				<#if hasVote>
+					<@cBlock>
+						<@cTitle level=2 class='h6 text-body-secondary mb-2'>#i18n{suggest.suggestDetail.labelVote}</@cTitle>
+						<@cText class='display-6 mb-2'>${suggest_submit.numberScore} <@cInline class='fs-6 text-body-secondary'>#i18n{suggest.manageSuggestSubmit.rowNumberScore}</@cInline></@cText>
+						${suggest_submit_vote_type!}
+					</@cBlock>
 				</#if>
-				<#if lutece_user?exists>
-					${lutece_user!""}
-				<#else>
-					${lutece_user.getUserInfo("user.name.given")} ${lutece_user.getUserInfo("user.name.family")}
-				</#if> |
-			</#if>
-			<@cIcon name='calendar' /> ${suggest_submit.dateResponse}
-		</p>
-		<#if suggest_submit.suggestSubmitValue?exists>
-			<div class="suggest-list-content">
-				${suggest_submit.suggestSubmitValue}
-			</div>
-		</#if>
-	</div>
-	<div class="col-12 col-sm-3 suggest-list-aside">
-		<section>
-		<#if  authorized_vote && !suggest_submit.disableVote && suggest_submit.numberScore?exists>
-			<h4>#i18n{suggest.suggestDetail.labelVote}
-			<#if suggest_submit_vote_type?exists>
-				${suggest_submit_vote_type}
-			</#if>
-			<span class="suggest-score">#i18n{suggest.manageSuggestSubmit.rowNumberScore}&nbsp;${suggest_submit.numberScore}</span>
-		</#if>
-	</section>
-	<#if isExtendInstalled?? && isExtendInstalled >
-	<section>
-		<h4 class="suggest-socials">#i18n{suggest.suggestDetail.labelShare}
-			@Extender[${suggest_submit.idSuggestSubmit},SUGGEST_SUGGEST_SUBMIT_TYPE,opengraph,{header:false,footer:false}]@
-			@ExtenderParameter[${suggest_submit.idSuggestSubmit},SUGGEST_SUGGEST_SUBMIT_TYPE,opengraph]@
-		</h4>
-	</section>
-	</#if>
-	<#if lutece_user_connected??>
-		<section>
-		<#if user_subscribed?? && user_subscribed>
-			<@cForm action='jsp/site/Portal.jsp?page=suggest#suggest${suggest_submit.idSuggestSubmit}' class='d-inline'>
-				<@cInput type='hidden' name='id_suggest' id='subscribe_id_suggest_detail1' value='${id_suggest}' />
-				<@cInput type='hidden' name='id_suggest_submit' id='subscribe_id_suggest_submit_detail1' value='${suggest_submit.idSuggestSubmit}' />
-				<@cInput type='hidden' name='action' id='subscribe_action_detail1' value='unsubscribe_suggest' />
-				<@cBtn label='' class='secondary w-100' type='submit' params='title="#i18n{suggest.manageSuggestSubmit.unsubscribe}"'><@cIcon name='bell-off' /> #i18n{suggest.manageSuggestSubmit.unsubscribe}</@cBtn>
-			</@cForm>
-		<#else>
-			<@cForm action='jsp/site/Portal.jsp?page=suggest#suggest${suggest_submit.idSuggestSubmit}' class='d-inline'>
-				<@cInput type='hidden' name='id_suggest' id='subscribe_id_suggest_detail2' value='${id_suggest}' />
-				<@cInput type='hidden' name='id_suggest_submit' id='subscribe_id_suggest_submit_detail2' value='${suggest_submit.idSuggestSubmit}' />
-				<@cInput type='hidden' name='action' id='subscribe_action_detail2' value='subscribe_suggest' />
-				<@cBtn label='' class='primary w-100' type='submit' params='title="#i18n{suggest.manageSuggestSubmit.subscribe}"'><@cIcon name='bell' /> #i18n{suggest.manageSuggestSubmit.subscribe}</@cBtn>
-			</@cForm>
-		</#if>
-		</section>
-	</#if>
-	<#if enable_suggest_reports>
-			<section>
-				<a class="btn btn-primary w-100" href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${id_suggest}&amp;id_suggest_submit=${suggest_submit.idSuggestSubmit}&amp;action=create_report#suggest${suggest_submit.idSuggestSubmit}">
-					<@cIcon name='flag' /> #i18n{suggest.suggestListSubmit.labelReport}
-				</a>
-			</section>
-	</#if>
-	</div>
-</div>
+				<#if lutece_user_connected??>
+					<@cForm action=actionUrl class='d-grid'>
+						<@cInput type='hidden' name='id_suggest' id='subscribe_id_suggest_detail' value=id_suggest?c class='' />
+						<@cInput type='hidden' name='id_suggest_submit' id='subscribe_id_suggest_submit_detail' value=suggest_submit.idSuggestSubmit?c class='' />
+						<#if user_subscribed?? && user_subscribed>
+							<@cInput type='hidden' name='action' id='subscribe_action_detail' value='unsubscribe_suggest' class='' />
+							<@cBtn label='#i18n{suggest.manageSuggestSubmit.unsubscribe}' class='secondary' type='submit' />
+						<#else>
+							<@cInput type='hidden' name='action' id='subscribe_action_detail' value='subscribe_suggest' class='' />
+							<@cBtn label='#i18n{suggest.manageSuggestSubmit.subscribe}' class='secondary' type='submit' />
+						</#if>
+					</@cForm>
+				</#if>
+				<#if enable_suggest_reports>
+					<#assign urlReport = urlSuggest + '&id_suggest_submit=' + suggest_submit.idSuggestSubmit?c + '&action=create_report'>
+					<@cLink href=urlReport class='link-danger' label='#i18n{suggest.suggestListSubmit.labelReport}' />
+				</#if>
+				<#if isExtendInstalled?? && isExtendInstalled>
+					<@cBlock>
+						<@cTitle level=2 class='h6 text-body-secondary mb-2'>#i18n{suggest.suggestDetail.labelShare}</@cTitle>
+						@Extender[${suggest_submit.idSuggestSubmit?c},SUGGEST_SUGGEST_SUBMIT_TYPE,opengraph,{header:false,footer:false}]@
+						@ExtenderParameter[${suggest_submit.idSuggestSubmit?c},SUGGEST_SUGGEST_SUBMIT_TYPE,opengraph]@
+					</@cBlock>
+				</#if>
+			</@cBlock>
+		</@cBlock>
+	</@cCol>
+</@cRow>
 <#if authorized_comment && !suggest_submit.disableComment>
-<div class="row mt-5">
-	<div class="col-12 col-sm-12">
-		<hr>
-		<h2><#if suggest_submit.numberCommentEnable==0>Pas de commentaires<#elseif suggest_submit.numberCommentEnable==1>Commentaire<#else>Commentaires <small>(${suggest_submit.numberCommentEnable} )</small></#if></h2>
-		<@cForm action='jsp/site/Portal.jsp?page=suggest' name='form-comment' id='form-comment'>
-			<@cInput type='hidden' name='action' id='comment_action' value='do_create_comment' />
-			<@cInput type='hidden' name='id_suggest' id='comment_id_suggest' value='${id_suggest}' />
-			<@cInput type='hidden' name='id_suggest_submit' id='comment_id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' />
-			<div class="mb-3">
-				<label>Laisser un commentaire</label>
-				<textarea name="comment_value" id="comment_value" class="markitup form-control" rows="2" placeholder="#i18n{suggest.suggestComment.labelAddNewComment}"></textarea>
-			</div>
-			<#if captcha??>
-				<div class="mb-3">
-					${captcha}
-				</div>
-			</#if>
-			<div class="mb-3">
-				<@cBtn label='#i18n{suggest.suggestComment.labelAddNewComment}' class='primary btn-lg' type='submit' params='name="submit_comment"'><@cIcon name='message' /></@cBtn>
-			</div>
-		</@cForm>
-	</div>
-</div>
-<#if list_comment?has_content>
-	${list_comment}
+<@cSection class='mt-5' id='comments'>
+	<@cTitle level=2 class='h4 mb-3'>
+		<#if suggest_submit.numberCommentEnable == 0>
+			#i18n{suggest.suggestListSubmit.labelNoComments}
+		<#else>
+			#i18n{suggest.suggestListSubmit.labelComments} <@cInline class='badge text-bg-secondary align-middle'>${suggest_submit.numberCommentEnable}</@cInline>
+		</#if>
+	</@cTitle>
+	<@cBlock class='card mb-4'>
+		<@cBlock class='card-body'>
+			<@cForm action=actionUrl name='form-comment' id='form-comment'>
+				<@cInput type='hidden' name='action' id='comment_action' value='do_create_comment' class='' />
+				<@cInput type='hidden' name='id_suggest' id='comment_id_suggest' value=id_suggest?c class='' />
+				<@cInput type='hidden' name='id_suggest_submit' id='comment_id_suggest_submit' value=suggest_submit.idSuggestSubmit?c class='' />
+				<@cField label='#i18n{suggest.suggestComment.labelAddNewComment}' for='comment_value' class='mb-3'>
+					<@cTextArea name='comment_value' id='comment_value' rows=3></@cTextArea>
+				</@cField>
+				<#if captcha??>
+					<@cBlock class='mb-3'>
+						${captcha}
+					</@cBlock>
+				</#if>
+				<@cBtn label='#i18n{suggest.suggestComment.labelAddNewComment}' class='primary' type='submit' params='name="submit_comment"' />
+			</@cForm>
+		</@cBlock>
+	</@cBlock>
+	${list_comment!}
+</@cSection>
 </#if>
-</#if>
+</@cTpl>

@@ -87,4 +87,12 @@ INSERT INTO suggest_image (id_resource_image,image_content,image_mime_type) VALU
  
  
 
+-- changeset suggest:init_db_suggest-rev1.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:1 SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = database() AND table_name = 'suggest_export_format'
+DROP TABLE suggest_export_format;
 
+-- changeset suggest:init_db_suggest-rev2.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:1 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_suggest_submit_type' AND column_name = 'id_xsl'
+ALTER TABLE suggest_suggest_submit_type DROP COLUMN id_xsl;
