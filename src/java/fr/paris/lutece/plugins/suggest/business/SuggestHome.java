@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.plugins.suggest.business.attribute.SuggestAttributeHome;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
+import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import jakarta.enterprise.inject.spi.CDI;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -303,4 +304,16 @@ public final class SuggestHome
         _dao.storeSuggestOrderField( nIdSuggest, nNewField, plugin );
     }
 
+    /**
+     * Load the xpage themes for all suggests
+     * 
+     * @param plugin
+     *            the plugin
+     * @return the map containing the theme
+     *
+     */
+    public static Map<Integer, Theme> getXPageThemes( Plugin plugin )
+    {
+        return _dao.getXPageThemesMap( plugin );
+    }
 }

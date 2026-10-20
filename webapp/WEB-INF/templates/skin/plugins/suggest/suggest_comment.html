@@ -33,42 +33,37 @@
 	</#list>
 </#macro>
 <#if list_comment?has_content>
-<@cBlock class='d-grid gap-3'>
-<#list list_comment?reverse as comment_submit_lutece_user>
-	<#assign commentSubmit = comment_submit_lutece_user.comment_submit>
-	<#assign commentClass = 'card' + commentSubmit.isOfficialAnswer()?then(' border-warning', '')>
-	<@cBlock class=commentClass>
-		<@cBlock class='card-body'>
-			<@cBlock class='d-flex flex-wrap align-items-center gap-2 small text-body-secondary mb-2'>
-				<#if comment_submit_lutece_user.lutece_user??>
-					<#if comment_submit_lutece_user.avatar?has_content>
-						<@cImg src=comment_submit_lutece_user.avatar class='rounded-circle' params='width="24" height="24"' />
-					</#if>
-					<@cInline class='fw-semibold text-body'>${comment_submit_lutece_user.lutece_user}</@cInline>
-					<@cInline params='aria-hidden="true"'>·</@cInline>
-				</#if>
-				<@cInline>${commentSubmit.dateComment?string("dd/MM/yyyy HH:mm")}</@cInline>
-				<#if commentSubmit.isOfficialAnswer()>
-					<@cInline class='badge text-bg-warning'>#i18n{suggest.manageCommentSubmit.officialAnswer}</@cInline>
-				</#if>
-			</@cBlock>
-			<@cBlock class='card-text'>
-				${suggest.parseBbcodeValue(commentSubmit.value)}
-			</@cBlock>
-			<#list comment_submit_lutece_user.list_sub_comment![] as comment_comment>
-				<#assign subCommentSubmit = comment_comment.comment_submit>
-				<@cBlock class='border-start border-3 ps-3 mt-3'>
-					<@cBlock class='d-flex flex-wrap align-items-center gap-2 small text-body-secondary mb-1'>
-						<#if comment_comment.lutece_user??>
-							<#if comment_comment.avatar?has_content>
-								<@cImg src=comment_comment.avatar class='rounded-circle' params='width="20" height="20"' />
+<#assign rootId = 0>
+<div class="row suggest-comments">
+	<div class="col-12">
+	<#list list_comment?reverse as comment_submit_lutece_user>
+		<#assign rootId = rootId + 1>
+		<!-- suggest.parseBbcodeValue -->
+		<div class="card mt-3">
+			<div class="card-header">
+				<div class="d-flex align-items-center">
+					<div class="flex-grow-1">
+						<h6 class="mb-0">
+							<#if comment_submit_lutece_user.comment_submit.isOfficialAnswer()>
+								<span class="badge bg-warning me-2">
+									<@cIcon name='star' />
+									#i18n{suggest.manageCommentSubmit.officialAnswer}
+								</span>
 							</#if>
-							<@cInline class='fw-semibold text-body'>${comment_comment.lutece_user}</@cInline>
-							<@cInline params='aria-hidden="true"'>·</@cInline>
+						</h6>
+					</div>
+					<#if comment_submit_lutece_user.lutece_user?exists>
+						#i18n{suggest.suggestListSubmit.postByUser} :
+						<#if comment_submit_lutece_user.avatar?has_content>
+							<img class="avatar avatar-suggest img-circle" src="${comment_submit_lutece_user.avatar}" alt="">
+						<#else>
+							<@cIcon name='user' />
 						</#if>
-						<@cInline>${subCommentSubmit.dateComment?string("dd/MM/yyyy HH:mm")}</@cInline>
-						<#if subCommentSubmit.isOfficialAnswer()>
-							<@cInline class='badge text-bg-warning'>#i18n{suggest.manageCommentSubmit.officialAnswer}</@cInline>
+						<#if comment_submit_lutece_user.lutece_user?exists>
+							${comment_submit_lutece_user.lutece_user}
+						<#else>
+							${comment_submit_lutece_user.lutece_user.getUserInfo("user.name.given")}
+							${comment_submit_lutece_user.lutece_user.getUserInfo("user.name.family")}
 						</#if>
 					</#if>
 					<div class="flex-shrink-0">
@@ -100,4 +95,3 @@
 </div>
 
 </#if>
-</@cTpl>

@@ -1,6 +1,2 @@
-<@cTpl>
-<video class="mw-100" controls preload="metadata"<#if width gt 0> width="${width?c}"</#if><#if height gt 0> height="${height?c}"</#if><#if autoplay> autoplay muted</#if><#if loop> loop</#if> src="jsp/site/plugins/suggest/getVideo.jsp?video_id=${id_suggest_submit?c}"></video>
-<#if credits?has_content>
-	<@cText class='small mb-0'><@cInline type='strong'>#i18n{suggest.createEntry.labelCredits}</@cInline> : ${credits}</@cText>
-</#if>
-</@cTpl>
+<video class="suggest-video mw-100" controls preload="metadata"<#if width gt 0> width="${width}"</#if><#if height gt 0> height="${height}"</#if><#if autoplay> autoplay muted</#if><#if loop> loop</#if> src="jsp/site/plugins/suggest/getVideo.jsp?video_id=${id_suggest_submit}"></video>
+<#if credits?has_content><p class="small mb-0"><strong>#i18n{suggest.createEntry.labelCredits}</strong> : ${credits}</p></#if>

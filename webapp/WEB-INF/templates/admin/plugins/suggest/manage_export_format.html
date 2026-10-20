@@ -1,0 +1,33 @@
+<#assign advanced_tab = 'export' />
+<@pageContainer>
+	<@pageColumn>
+		<@pageHeader title='#i18n{suggest.manageAdvancedParameters.title}'>
+			<@aButton href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?view=createExportFormat' buttonIcon='plus' title='#i18n{suggest.manageExportFormat.buttonCreate}' color='primary' />
+		</@pageHeader>
+		<#include "include_advanced_parameters_tabs.html" />
+		<@messages infos=infos![] errors=errors![] warnings=warnings![] />
+		<#if export_list?has_content>
+			<@manageFeature>
+				<#list export_list as export>
+				<@manageFeatureItem>
+					<@manageFeatureItemColumn flex=false>
+						<strong>${export.title!}</strong>
+						<@p class='text-secondary mb-0'>${export.description!}</@p>
+					</@manageFeatureItemColumn>
+					<@manageFeatureItemColumn auto=true flex=false valign='top'>
+						<@p class='fw-bold fs-3'>#i18n{suggest.manageExportFormat.rowExtension}</@p>
+						${export.extension!}
+					</@manageFeatureItemColumn>
+					<@manageFeatureItemColumn auto=true align='end'>
+						<@aButton href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?view=modifyExportFormat&id_export=${export.idExport}' title='#i18n{portal.util.labelModify}' buttonIcon='edit' class='me-1' hideTitle=['all'] />
+						<@aButton href='jsp/admin/plugins/suggest/ManageExportFormat.jsp?view=confirmRemoveExportFormat&id_export=${export.idExport}' title='#i18n{suggest.manageExportFormat.altDelete}' buttonIcon='trash' color='danger' hideTitle=['all'] />
+					</@manageFeatureItemColumn>
+				</@manageFeatureItem>
+				</#list>
+			</@manageFeature>
+			<@paginationAdmin paginator=paginator combo=1 />
+		<#else>
+			<@empty title='#i18n{portal.util.labelNoItem}' iconName='file-export' actionTitle='#i18n{suggest.manageExportFormat.buttonCreate}' actionUrl='jsp/admin/plugins/suggest/ManageExportFormat.jsp?view=createExportFormat' />
+		</#if>
+	</@pageColumn>
+</@pageContainer>

@@ -17,7 +17,6 @@ UPDATE core_admin_right SET icon_url = 'ti ti-bulb' WHERE id_right = 'SUGGEST_MA
 
 -- changeset suggest:update_db_suggest-4.9.9-5.0.0-rev2.sql dbms:mariadb,mysql
 -- preconditions onFail:MARK_RAN onError:WARN
--- precondition-sql-check expectedResult:1 SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = database() AND table_name = 'suggest_export_format'
 UPDATE suggest_export_format SET xsl_file = UNHEX( SUBSTRING( xsl_file, 3 ) ) WHERE xsl_file LIKE '0x%';
 UPDATE suggest_image SET image_content = UNHEX( SUBSTRING( image_content, 3 ) ) WHERE image_content LIKE '0x%';
 
@@ -37,26 +36,3 @@ UPDATE suggest_suggest_submit SET suggest_submit_value_show_in_the_list = REGEXP
 -- preconditions onFail:MARK_RAN onError:WARN
 -- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_suggest_user_info' AND column_name = 'department'
 ALTER TABLE suggest_suggest_user_info ADD COLUMN department varchar(255) DEFAULT NULL;
-
--- changeset suggest:update_db_suggest-4.9.9-5.0.0-rev6.sql
--- preconditions onFail:MARK_RAN onError:WARN
--- precondition-sql-check expectedResult:1 SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = database() AND table_name = 'suggest_export_format'
-DROP TABLE suggest_export_format;
-
--- changeset suggest:update_db_suggest-4.9.9-5.0.0-rev7.sql
--- preconditions onFail:MARK_RAN onError:WARN
--- precondition-sql-check expectedResult:1 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_suggest_submit_type' AND column_name = 'id_xsl'
-ALTER TABLE suggest_suggest_submit_type DROP COLUMN id_xsl;
-
--- changeset suggest:update_db_suggest-4.9.9-5.0.0-rev8.sql
--- preconditions onFail:MARK_RAN onError:WARN
-DELETE FROM core_admin_role_resource WHERE resource_type = 'SUGGEST_EXPORT_FORMAT_TYPE';
-
--- changeset suggest:update_db_suggest-4.9.9-5.0.0-rev9.sql
--- preconditions onFail:MARK_RAN onError:WARN
--- precondition-sql-check expectedResult:1 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_suggest' AND column_name = 'code_theme'
-ALTER TABLE suggest_suggest DROP COLUMN code_theme;
-
--- changeset suggest:update_db_suggest-4.9.9-5.0.0-rev10.sql dbms:mariadb,mysql
--- preconditions onFail:MARK_RAN onError:WARN
-UPDATE suggest_image SET image_content = UNHEX( SUBSTRING( image_content, 3 ) ) WHERE image_content LIKE '0x%';

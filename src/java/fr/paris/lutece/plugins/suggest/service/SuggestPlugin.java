@@ -33,9 +33,12 @@
  */
 package fr.paris.lutece.plugins.suggest.service;
 
+import jakarta.enterprise.inject.spi.CDI;
 import java.io.Serializable;
 
+import jakarta.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -47,6 +50,19 @@ public class SuggestPlugin extends PluginDefaultImplementation implements Serial
 {
     public static final String PLUGIN_NAME = "suggest";
     private static final long serialVersionUID = 6341523117444246634L;
+
+    /**
+     * Returns the theme the plugin use for rendering a Xpage
+     * 
+     * @param request
+     *            the request
+     * @return The theme
+     */
+    public Theme getXPageTheme( HttpServletRequest request )
+    {
+        return CDI.current( ).select( SuggestService.class ).get( ).getXPageTheme( request );
+
+    }
 
     /**
      * Get the Plugin object associated with plugin-suggest

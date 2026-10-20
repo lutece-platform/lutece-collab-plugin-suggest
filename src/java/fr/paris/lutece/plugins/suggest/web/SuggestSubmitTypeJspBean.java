@@ -135,7 +135,7 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
      *            The Http request
      * @param model
      *            the model
-     * @return the html of the suggest submit types management page
+     * @return Html ExportFormat
      */
     @View( value = VIEW_MANAGE_SUGGEST_SUBMIT_TYPE, defaultView = true )
     public String getManageSuggestSubmitType( HttpServletRequest request, Models model )
@@ -178,8 +178,7 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
 
         if ( strError != null )
         {
-            addError( strError );
-            return redirectView( request, VIEW_CREATE_SUGGEST_SUBMIT_TYPE );
+            return redirect( request, strError );
         }
 
         SuggestSubmitTypeHome.create( suggestSubmitType, getPlugin( ) );
@@ -274,8 +273,7 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
 
         if ( strError != null )
         {
-            addError( strError );
-            return redirect( request, VIEW_MODIFY_SUGGEST_SUBMIT_TYPE, PARAMETER_ID_SUGGEST_SUBMIT_TYPE, nIdSuggestSubmitType );
+            return redirect( request, strError );
         }
 
         SuggestSubmitTypeHome.update( suggestSubmitType, getPlugin( ) );
@@ -322,8 +320,7 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
 
         if ( SuggestSubmitTypeHome.isAssociateToSuggest( nIdSuggestSubmitType, plugin ) )
         {
-            addError( MESSAGE_SUGGEST_SUBMIT_TYPE_ASSOCIATE_TO_SUGGEST, getLocale( ) );
-            return redirectView( request, VIEW_MANAGE_SUGGEST_SUBMIT_TYPE );
+            return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_SUGGEST_SUBMIT_TYPE_ASSOCIATE_TO_SUGGEST, AdminMessage.TYPE_STOP ) );
         }
 
         if ( nIdSuggestSubmitType != -1 )
@@ -336,13 +333,13 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
 
     /**
      * Get the request data and if there is no error insert the data in the suggestSubmitType object specified in parameter. return null if there is no error or
-     * else return the localized error message
+     * else return the error page url
      * 
      * @param multipartRequest
      *            the request
      * @param suggestSubmitType
      *            the suggestSubmitType Object
-     * @return null if there is no error or else return the localized error message
+     * @return null if there is no error or else return the error page url
      */
     private String getSuggestSubmitTypeData( MultipartHttpServletRequest multipartRequest, SuggestSubmitType suggestSubmitType )
     {
@@ -373,7 +370,7 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
                 I18nService.getLocalizedString( strFieldError, getLocale( ) )
             };
 
-            return I18nService.getLocalizedString( MESSAGE_MANDATORY_FIELD, tabRequiredFields, getLocale( ) );
+            return AdminMessageService.getMessageUrl( multipartRequest, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         if ( ( suggestSubmitType.getIdType( ) == SuggestUtils.CONSTANT_ID_NULL ) || ( strUpdateFile != null ) )
@@ -398,11 +395,11 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
     }
 
     /**
-     * return the url of manage suggest submit type
+     * return the url of manage export format
      * 
      * @param request
      *            the request
-     * @return the url of manage suggest submit type
+     * @return the url of manage export format
      */
     private String getJspManageSuggestSubmitType( HttpServletRequest request )
     {

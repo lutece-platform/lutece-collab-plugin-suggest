@@ -1,24 +1,27 @@
-<@cTpl>
-<@cBlock class='card'>
-	<@cBlock class='card-body'>
-		<@cTitle level=1 class='h4 card-title'>#i18n{suggest.suggestReported.labelReported}</@cTitle>
-		<#if suggest_submit.suggestSubmitValue??>
-			<@cBlock class='border-start border-3 ps-3 my-3 text-body-secondary'>
-				${suggest_submit.suggestSubmitValue}
-			</@cBlock>
+<div class="row">
+	<div class="col-12 col-sm-12">
+		<#if suggest_submit.suggestSubmitValue?exists>
+			<h3 class="suggest-report">#i18n{suggest.suggestReported.labelReported} ${suggest_submit.suggestSubmitValue} <#if suggest_submit.numberScore?exists>
+				<span class="badge bg-secondary suggest-score" title="Score">${suggest_submit.numberScore}</span></#if>
+			</h3>
+
 		</#if>
-		<@cForm action='jsp/site/Portal.jsp?page=suggest'>
-			<@cInput type='hidden' name='id_suggest' value=id_suggest?c class='' />
-			<@cInput type='hidden' name='id_suggest_submit' value=suggest_submit.idSuggestSubmit?c class='' />
-			<@cInput type='hidden' name='action' value='do_create_report' class='' />
-			<@cField label='#i18n{suggest.suggestReported.labelAddNewReported}' for='reported_value' class='mb-3'>
-				<@cTextArea name='reported_value' id='reported_value' rows=5></@cTextArea>
-			</@cField>
-			<@cBlock class='d-flex flex-wrap gap-2'>
-				<@cBtn label='#i18n{suggest.suggestReported.buttonAdd}' class='primary' type='submit' params='name="save"' />
-				<@cBtn label='#i18n{suggest.suggestReported.buttonCancel}' class='secondary' type='button' params='name="cancel" onclick="window.history.back();"' />
-			</@cBlock>
+   	<@cForm action='jsp/site/Portal.jsp?page=suggest#suggest${suggest_submit.idSuggestSubmit}'>
+			<@cInput type='hidden' name='id_suggest' value='${id_suggest}' />
+			<@cInput type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' />
+			<@cInput type='hidden' name='action' value='do_create_report' />
+			<div class="mb-3">
+				<label class="form-label" for="reported_value">#i18n{suggest.suggestReported.labelAddNewReported}:</label>
+				<div>
+					<textarea name="reported_value" id="reported_value" class="form-control richtext" rows="5"></textarea>
+				</div>
+			</div>
+			<div class="mb-3">
+				<div class="d-flex gap-2">
+					<@cBtn label='#i18n{suggest.suggestReported.buttonAdd}' class='primary btn-lg' type='submit' params='name="save"' />
+					<@cBtn label='#i18n{suggest.suggestReported.buttonCancel}' class='secondary btn-lg' type='button' params='name="cancel" onclick="javascript:window.history.back();"' />
+				</div>
+			</div>
 		</@cForm>
-	</@cBlock>
-</@cBlock>
-</@cTpl>
+	</div>
+</div>

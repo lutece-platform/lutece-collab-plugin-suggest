@@ -48,7 +48,7 @@ import java.util.Locale;
 
 /**
  *
- * class CategoryResourceIdService
+ * class ExportFormatResourceIdService
  *
  */
 public class CategoryResourceIdService extends ResourceIdService

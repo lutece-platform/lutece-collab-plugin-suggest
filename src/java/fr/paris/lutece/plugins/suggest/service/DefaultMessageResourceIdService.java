@@ -44,7 +44,7 @@ import java.util.Locale;
 
 /**
  *
- * class DefaultMessageResourceIdService
+ * class ExportFormatResourceIdService
  *
  */
 public class DefaultMessageResourceIdService extends ResourceIdService

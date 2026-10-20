@@ -33,9 +33,11 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * ISuggestDAO Interface
@@ -107,4 +109,12 @@ public interface ISuggestDAO
      */
     void storeSuggestOrderField( int nId, int nSortField, Plugin plugin );
 
+    /**
+     * Load all the themes for form xpages
+     * 
+     * @param plugin
+     *            the plugin
+     * @return a map containing the themes by form id
+     */
+    Map<Integer, Theme> getXPageThemesMap( Plugin plugin );
 }

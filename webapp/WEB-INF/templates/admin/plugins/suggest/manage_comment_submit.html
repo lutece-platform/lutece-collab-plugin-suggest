@@ -33,7 +33,6 @@
 		<@pageHeader title='${suggest.title!}'>
 			<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmit&id_suggest=${suggest.idSuggest}' buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' hideTitle=['xs','sm','md'] />
 		</@pageHeader>
-		<@messages errors=errors![] />
 	<@row>
 		<@columns>
 			<@box>
@@ -85,6 +84,9 @@
 
 					<#if suggest_submit.reported>
 						<@tag color='danger'>#i18n{suggest.manageSuggestSubmit.altWarning}</@tag>
+						<@div align='right'>
+							<@icon style='chevron-down' id='display_advert' title='Afficher les signalements' />
+						</@div>
 						<#if suggest_submit.reportedMessages?has_content>
 							<#list suggest_submit.reportedMessages  as  reported_messages>
 							${reported_messages.value}

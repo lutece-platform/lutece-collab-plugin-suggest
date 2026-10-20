@@ -24,16 +24,16 @@
 				<@input type='text' name='number_suggest_submit_caracters_shown' id='number_suggest_submit_caracters_shown' value='${default_message.numberSuggestSubmitCaractersShown}' maxlength=10 />
 			</@formGroup>
 			<@formGroup labelFor='notification_new_comment_title' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewCommentTitle}' mandatory=true>
-				<@input type='textarea' name='notification_new_comment_title' id='notification_new_comment_title' rows=5>${default_message.notificationNewCommentTitle!}</@input>
+				<@input type='textarea' name='notification_new_comment_title' id='notification_new_comment_title' richtext=true rows=5>${default_message.notificationNewCommentTitle!}</@input>
 			</@formGroup>
 			<@formGroup labelFor='notification_new_comment_body' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewCommentBody}' mandatory=true>
-				<@input type='textarea' name='notification_new_comment_body' id='notification_new_comment_body' rows=5>${default_message.notificationNewCommentBody!}</@input>
+				<@input type='textarea' name='notification_new_comment_body' id='notification_new_comment_body' richtext=true rows=5>${default_message.notificationNewCommentBody!}</@input>
 			</@formGroup>
 			<@formGroup labelFor='notification_new_suggest_submit_title' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewSuggestSubmitTitle}' mandatory=true>
-				<@input type='textarea' name='notification_new_suggest_submit_title' id='notification_new_suggest_submit_title' rows=5>${default_message.notificationNewSuggestSubmitTitle!}</@input>
+				<@input type='textarea' name='notification_new_suggest_submit_title' id='notification_new_suggest_submit_title' richtext=true rows=5>${default_message.notificationNewSuggestSubmitTitle!}</@input>
 			</@formGroup>
 			<@formGroup labelFor='notification_new_suggest_submit_body' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewSuggestSubmitBody}' mandatory=true>
-				<@input type='textarea' name='notification_new_suggest_submit_body' id='notification_new_suggest_submit_body' rows=5>${default_message.notificationNewSuggestSubmitBody!}</@input>
+				<@input type='textarea' name='notification_new_suggest_submit_body' id='notification_new_suggest_submit_body' richtext=true rows=5>${default_message.notificationNewSuggestSubmitBody!}</@input>
 			</@formGroup>
 			<@formGroup>
 				<@button type='submit' name='save' title='#i18n{suggest.createSuggest.buttonSave}' buttonIcon='device-floppy' />

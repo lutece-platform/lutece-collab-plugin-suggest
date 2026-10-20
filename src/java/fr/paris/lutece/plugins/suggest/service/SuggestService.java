@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.suggest.service;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletRequest;
 
 
 import fr.paris.lutece.api.user.User;
@@ -46,7 +47,9 @@ import fr.paris.lutece.plugins.suggest.business.SuggestRoleRemovalListener;
 import fr.paris.lutece.plugins.suggest.business.SuggestWorkgroupRemovalListener;
 import fr.paris.lutece.plugins.suggest.service.workflow.SuggestWorkflowService;
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
+import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.portal.ThemesService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.util.BeanUtils;
 import fr.paris.lutece.portal.service.util.RemovalListenerService;
@@ -91,6 +94,38 @@ public class SuggestService
         _workgroupRemovalService.registerListener( new SuggestWorkgroupRemovalListener( ) );
         _regularExpressionRemovalService.registerListener( new SuggestRegularExpressionRemovalListener( ) );
         _roleRemovalService.registerListener( new SuggestRoleRemovalListener( ) );
+    }
+
+    /**
+     * get the XpageTheme associate
+     * 
+     * @param request
+     *            HttpServletRequest
+     * @return Theme
+     */
+    public Theme getXPageTheme( HttpServletRequest request )
+    {
+
+        String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
+        Suggest suggest = null;
+
+        int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
+        if ( nIdSuggest == SuggestUtils.CONSTANT_ID_NULL )
+        {
+            nIdSuggest = getIdDefaultSuggest( );
+        }
+        if ( nIdSuggest != SuggestUtils.CONSTANT_ID_NULL )
+        {
+            suggest = SuggestHome.findByPrimaryKey( nIdSuggest, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+
+        }
+
+        if ( suggest != null )
+        {
+            return ThemesService.getGlobalTheme( suggest.getCodeTheme( ) );
+        }
+
+        return ThemesService.getGlobalThemeObject( );
     }
 
     /**

@@ -1,7 +1,4 @@
-<@cTpl>
-<#assign entryId = entry.idEntry?c>
-<#assign maxlength = (entry.maxSizeEnter gt 0)?then(entry.maxSizeEnter, 0)>
-<@cField label=entry.title for=entryId required=entry.mandatory class='mb-3'>
-	<@cTextArea name=entryId id=entryId rows=entry.height maxlength=maxlength required=entry.mandatory helpMsg=entry.helpMessage!''>${entry.defaultValue!}</@cTextArea>
+<@cField label=entry.title for='${entry.idEntry}' required=entry.mandatory>
+	<@cTextArea name='${entry.idEntry}' id='${entry.idEntry}' rows=entry.height required=entry.mandatory helpMsg=entry.helpMessage!'' params='data-limit="${entry.maxSizeEnter}"'>${entry.defaultValue!}</@cTextArea>
+	<span class="form-text"></span>
 </@cField>
-</@cTpl>

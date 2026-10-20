@@ -1,22 +1,26 @@
-<@cTpl>
-<#assign idSubmit = id_suggest_submit?c>
-<#assign hasVoted = user_voted!false>
-<#assign starVotes = [
-	{ 'value': '-2', 'class': 'secondary', 'title': '#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainstMore}' },
-	{ 'value': '-1', 'class': 'secondary', 'title': '#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainst}' },
-	{ 'value': '1', 'class': 'primary', 'title': '#i18n{suggest.suggestVoteTypeStarRating.titleVoteFor}' },
-	{ 'value': '2', 'class': 'primary', 'title': '#i18n{suggest.suggestVoteTypeStarRating.titleVoteForMore}' }
-]>
-<@cForm action='jsp/site/Portal.jsp?page=suggest' id='form_vote_star${idSubmit}' class='d-inline-flex'>
-	<@cInput type='hidden' name='action' id='action_vote_star${idSubmit}' value='do_vote' class='' />
-	<@cInput type='hidden' name='id_suggest' id='id_suggest_vote_star${idSubmit}' value=id_suggest?c class='' />
-	<@cInput type='hidden' name='id_suggest_submit' id='id_suggest_submit_vote_star${idSubmit}' value=idSubmit class='' />
-	<@cInput type='hidden' name='view' id='view_vote_star${idSubmit}' value=view class='' />
-	<@cBlock class='btn-group btn-group-sm flex-wrap' params='role="group" aria-label="#i18n{suggest.suggestDetail.labelVote}"'>
-		<#list starVotes as starVote>
-			<#assign starParams>name="vote" value="${starVote.value}"</#assign>
-			<@cBtn label=starVote.title class=starVote.class type='submit' disabled=hasVoted params=starParams />
-		</#list>
-	</@cBlock>
-</@cForm>
-</@cTpl>
+<div class="btn btn-primary disabled suggest-vote-star-rating" style="display:none;">
+	<@cForm action='jsp/site/Portal.jsp?page=suggest#suggest${id_suggest_submit}' id='form${id_suggest_submit}'>
+		<@cInput type='hidden' name='vote' id='vote${id_suggest_submit}' value='0' />
+		<@cInput type='hidden' name='id_suggest' id='id_suggest${id_suggest_submit}' value='${id_suggest}' />
+		<@cInput type='hidden' name='page' id='page${id_suggest_submit}' value='suggest' />
+		<@cInput type='hidden' name='id_suggest_submit' id='id_suggest_submit${id_suggest_submit}' value='${id_suggest_submit}' />
+		<@cInput type='hidden' name='action' id='action${id_suggest_submit}' value='do_vote' />
+		<@cInput type='hidden' name='view' id='view${id_suggest_submit}' value='${view}' />
+		<@cInput type='radio' class='star-rating' name='vote${id_suggest_submit}' id='vote${id_suggest_submit}_m2' value='-2' title='#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainstMore}' />
+		<@cInput type='radio' class='star-rating' name='vote${id_suggest_submit}' id='vote${id_suggest_submit}_m1' value='-1' title='#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainst}' />
+		<@cInput type='radio' class='star-rating' name='vote${id_suggest_submit}' id='vote${id_suggest_submit}_1' value='1' title='#i18n{suggest.suggestVoteTypeStarRating.titleVoteFor}' />
+		<@cInput type='radio' class='star-rating' name='vote${id_suggest_submit}' id='vote${id_suggest_submit}_2' value='2' title='#i18n{suggest.suggestVoteTypeStarRating.titleVoteForMore}' />
+	</@cForm>
+</div>
+<div class="suggest-vote-star-rating-javascript-disable">
+	<@cForm action='jsp/site/Portal.jsp?page=suggest#suggest${id_suggest_submit}' id='form_vote_nojs${id_suggest_submit}'>
+		<@cInput type='hidden' name='action' id='action_vote_nojs${id_suggest_submit}' value='do_vote' />
+		<@cInput type='hidden' name='id_suggest' id='id_suggest_vote_nojs${id_suggest_submit}' value='${id_suggest}' />
+		<@cInput type='hidden' name='id_suggest_submit' id='id_suggest_submit_vote_nojs${id_suggest_submit}' value='${id_suggest_submit}' />
+		<@cInput type='hidden' name='view' id='view_vote_nojs${id_suggest_submit}' value='${view}' />
+		<@cBtn label='' class='link star' type='submit' params='name="vote" value="-2" title="#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainstMore}" aria-label="#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainstMore}"' />
+		<@cBtn label='' class='link star' type='submit' params='name="vote" value="-1" title="#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainst}" aria-label="#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainst}"' />
+		<@cBtn label='' class='link star' type='submit' params='name="vote" value="1" title="#i18n{suggest.suggestVoteTypeStarRating.titleVoteFor}" aria-label="#i18n{suggest.suggestVoteTypeStarRating.titleVoteFor}"' />
+		<@cBtn label='' class='link star' type='submit' params='name="vote" value="2" title="#i18n{suggest.suggestVoteTypeStarRating.titleVoteForMore}" aria-label="#i18n{suggest.suggestVoteTypeStarRating.titleVoteForMore}"' />
+	</@cForm>
+</div>

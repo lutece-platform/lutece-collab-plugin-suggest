@@ -1,7 +1,4 @@
-<@cTpl>
-<#assign entryId = entry.idEntry?c>
-<#assign maxlength = (entry.maxSizeEnter != -1)?then(entry.maxSizeEnter, 0)>
-<@cField label=entry.title for=entryId required=entry.mandatory class='mb-3'>
-	<@cInput type='text' name=entryId id=entryId value=entry.defaultValue!'' maxlength=maxlength required=entry.mandatory helpMsg=entry.helpMessage!'' />
+<@cField label=entry.title for='${entry.idEntry}' required=entry.mandatory>
+	<#if entry.maxSizeEnter!=-1><#assign maxlength = entry.maxSizeEnter /><#else><#assign maxlength = 0 /></#if>
+	<@cInput type='text' name='${entry.idEntry}' id='${entry.idEntry}' value=entry.defaultValue!'' maxlength=maxlength required=entry.mandatory helpMsg=entry.helpMessage!'' />
 </@cField>
-</@cTpl>
