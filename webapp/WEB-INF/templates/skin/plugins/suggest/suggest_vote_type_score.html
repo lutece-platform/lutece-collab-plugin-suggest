@@ -1,8 +1,14 @@
-<@cForm action='jsp/site/Portal.jsp?page=suggest#suggest${id_suggest_submit}' id='form_vote_score${id_suggest_submit}' class='d-inline'>
-	<@cInput type='hidden' name='action' id='action_vote_score${id_suggest_submit}' value='do_vote' />
-	<@cInput type='hidden' name='id_suggest' id='id_suggest_vote_score${id_suggest_submit}' value='${id_suggest}' />
-	<@cInput type='hidden' name='id_suggest_submit' id='id_suggest_submit_vote_score${id_suggest_submit}' value='${id_suggest_submit}' />
-	<@cInput type='hidden' name='view' id='view_vote_score${id_suggest_submit}' value='${view}' />
-	<@cBtn label='' class='secondary btn-sm' type='submit' params='name="vote" value="-1" title="#i18n{suggest.suggestVoteTypeScore.titleVoteAgainst}" aria-label="#i18n{suggest.suggestVoteTypeScore.titleVoteAgainst}"'><@cIcon name='x' params='aria-hidden="true"' /></@cBtn>
-	<@cBtn label='' class='primary btn-sm' type='submit' params='name="vote" value="1" title="#i18n{suggest.suggestVoteTypeScore.titleVoteFor}" aria-label="#i18n{suggest.suggestVoteTypeScore.titleVoteFor}"'><@cIcon name='check' params='aria-hidden="true"' /></@cBtn>
+<@cTpl>
+<#assign idSubmit = id_suggest_submit?c>
+<#assign hasVoted = user_voted!false>
+<@cForm action='jsp/site/Portal.jsp?page=suggest' id='form_vote_score${idSubmit}' class='d-inline-flex'>
+	<@cInput type='hidden' name='action' id='action_vote_score${idSubmit}' value='do_vote' class='' />
+	<@cInput type='hidden' name='id_suggest' id='id_suggest_vote_score${idSubmit}' value=id_suggest?c class='' />
+	<@cInput type='hidden' name='id_suggest_submit' id='id_suggest_submit_vote_score${idSubmit}' value=idSubmit class='' />
+	<@cInput type='hidden' name='view' id='view_vote_score${idSubmit}' value=view class='' />
+	<@cBlock class='btn-group btn-group-sm' params='role="group" aria-label="#i18n{suggest.suggestDetail.labelVote}"'>
+		<@cBtn label='#i18n{suggest.suggestVoteTypeScore.titleVoteAgainst}' class='secondary' type='submit' disabled=hasVoted params='name="vote" value="-1"' />
+		<@cBtn label='#i18n{suggest.suggestVoteTypeScore.titleVoteFor}' class='primary' type='submit' disabled=hasVoted params='name="vote" value="1"' />
+	</@cBlock>
 </@cForm>
+</@cTpl>

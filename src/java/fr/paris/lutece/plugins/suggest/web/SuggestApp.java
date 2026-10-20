@@ -176,6 +176,8 @@ public class SuggestApp extends MVCApplication
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
     private static final String MARK_ACTIVE_EDITOR_BBCODE = "active_editor_bbcode";
     private static final String MARK_VIEW = "view";
+    private static final String MARK_FORM_ERROR = "form_error";
+    private static final String ATTRIBUTE_FORM_ERROR = "suggest.formError";
     private static final String MARK_USER_SUBSCRIBED = "user_subscribed";
     private static final String MARK_IS_EXTEND_INSTALLED = "isExtendInstalled";
     private static final String MARK_WORKFLOW_STATE = "workflow_state";
@@ -469,7 +471,15 @@ public class SuggestApp extends MVCApplication
     public XPage actionDoCreateSuggestSubmit( HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
         XPage page = new XPage( );
-        doCreateSuggestSubmit( page, _nMode, request );
+        try
+        {
+            doCreateSuggestSubmit( page, _nMode, request );
+        }
+        catch( SuggestFormValidationException e )
+        {
+            request.setAttribute( ATTRIBUTE_FORM_ERROR, e.getMessage( ) );
+            return getViewCreateSuggestSubmit( page, _nMode, request );
+        }
 
         return getViewSuggestSubmitList( page, _nMode, request );
     }
@@ -489,7 +499,19 @@ public class SuggestApp extends MVCApplication
     public XPage actionDoCreateComment( HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
         XPage page = new XPage( );
-        doCreateComment( page, _nMode, request );
+        try
+        {
+            doCreateComment( page, _nMode, request );
+        }
+        catch( SuggestFormValidationException e )
+        {
+            request.setAttribute( ATTRIBUTE_FORM_ERROR, e.getMessage( ) );
+            if ( StringUtils.isNotBlank( request.getParameter( PARAMETER_COMMENT_ID_PARENT ) ) )
+            {
+                return getViewCreateSubComment( page, _nMode, request );
+            }
+            return getViewSuggestSubmit( page, _nMode, request );
+        }
 
         return getViewSuggestSubmit( page, _nMode, request );
     }
@@ -509,7 +531,15 @@ public class SuggestApp extends MVCApplication
     public XPage actionDoCreateReport( HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
     {
         XPage page = new XPage( );
-        doReport( page, _nMode, request );
+        try
+        {
+            doReport( page, _nMode, request );
+        }
+        catch( SuggestFormValidationException e )
+        {
+            request.setAttribute( ATTRIBUTE_FORM_ERROR, e.getMessage( ) );
+            return getViewCreateReport( page, _nMode, request );
+        }
 
         return getViewSuggestSubmit( page, _nMode, request );
     }
@@ -832,6 +862,7 @@ public class SuggestApp extends MVCApplication
         model.put( MARK_COMMENT_SUBMIT, commentSubmit );
         model.put( MARK_DISABLE_NEW_COMMENT_SUBMIT, suggest.isDisableNewComment( ) );
         model.put( SecurityTokenHandler.MARK_CSRF_TOKEN, _securityTokenHandler.resolveTokenValue( request ) );
+        model.put( MARK_FORM_ERROR, request.getAttribute( ATTRIBUTE_FORM_ERROR ) );
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_SUGGEST_SUB_COMMENT, getLocale( request ), model );
         page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, getLocale( request ) ) );
         page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, getLocale( request ) ) );
@@ -891,8 +922,10 @@ public class SuggestApp extends MVCApplication
      *             {@link UserNotSignedException}
      * @throws SiteMessageException
      *             {@link SiteMessageException}
+     * @throws SuggestFormValidationException
+     *             if the form is refused
      */
-    public void doCreateSuggestSubmit( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
+    public void doCreateSuggestSubmit( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException, SuggestFormValidationException
     {
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
 
@@ -924,7 +957,7 @@ public class SuggestApp extends MVCApplication
         // Check if terms of used is selected
         if ( suggest.isEnableTermsOfUse( ) && ( strTermsOfUse == null ) )
         {
-            SiteMessageService.setMessage( request, MESSAGE_ERROR_MUST_SELECTED_TERMS_OF_USE, SiteMessage.TYPE_STOP );
+            throw new SuggestFormValidationException( I18nService.getLocalizedString( MESSAGE_ERROR_MUST_SELECTED_TERMS_OF_USE, getLocale( request ) ) );
         }
 
         // Check if a category is selected (in the case or the suggest has some categories)
@@ -932,7 +965,7 @@ public class SuggestApp extends MVCApplication
         {
             if ( ( strIdCategory == null ) || strIdCategory.equals( Integer.toString( SuggestUtils.CONSTANT_ID_NULL ) ) )
             {
-                SiteMessageService.setMessage( request, MESSAGE_ERROR_NO_CATEGORY, SiteMessage.TYPE_STOP );
+                throw new SuggestFormValidationException( I18nService.getLocalizedString( MESSAGE_ERROR_NO_CATEGORY, getLocale( request ) ) );
             }
         }
 
@@ -941,7 +974,7 @@ public class SuggestApp extends MVCApplication
         {
             if ( ( strIdType == null ) || strIdType.equals( Integer.toString( SuggestUtils.CONSTANT_ID_NULL ) ) )
             {
-                SiteMessageService.setMessage( request, MESSAGE_ERROR_NO_SUGGEST_SUBMIT_TYPE_SELECTED, SiteMessage.TYPE_STOP );
+                throw new SuggestFormValidationException( I18nService.getLocalizedString( MESSAGE_ERROR_NO_SUGGEST_SUBMIT_TYPE_SELECTED, getLocale( request ) ) );
             }
         }
 
@@ -1167,8 +1200,10 @@ public class SuggestApp extends MVCApplication
      *             {@link UserNotSignedException}
      * @throws SiteMessageException
      *             {@link SiteMessageException}
+     * @throws SuggestFormValidationException
+     *             if the form is refused
      */
-    public void doCreateComment( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
+    public void doCreateComment( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException, SuggestFormValidationException
     {
         String strIdSubmitSuggest = request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST );
         int nIdSubmitSuggest = SuggestUtils.getIntegerParameter( strIdSubmitSuggest );
@@ -1215,14 +1250,14 @@ public class SuggestApp extends MVCApplication
 
         if ( ( strCommentValueSuggest == null ) || strCommentValueSuggest.trim( ).equals( EMPTY_STRING ) )
         {
-            SiteMessageService.setMessage( request, MESSAGE_MANDATORY_COMMENT, SiteMessage.TYPE_STOP );
+            throw new SuggestFormValidationException( I18nService.getLocalizedString( MESSAGE_MANDATORY_COMMENT, getLocale( request ) ) );
         }
 
         if ( suggest.isActiveCaptcha( ) && _captchaService.isResolvable( ) )
         {
             if ( !_captchaService.get( ).validate( request ) )
             {
-                SiteMessageService.setMessage( request, MESSAGE_CAPTCHA_ERROR, SiteMessage.TYPE_STOP );
+                throw new SuggestFormValidationException( I18nService.getLocalizedString( MESSAGE_CAPTCHA_ERROR, getLocale( request ) ) );
             }
         }
 
@@ -1290,8 +1325,10 @@ public class SuggestApp extends MVCApplication
      *             {@link UserNotSignedException}
      * @throws SiteMessageException
      *             {@link SiteMessageException}
+     * @throws SuggestFormValidationException
+     *             if the form is refused
      */
-    public void doReport( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
+    public void doReport( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException, SuggestFormValidationException
     {
         String strIdSubmitSuggest = request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST );
         int nIdSubmitSuggest = SuggestUtils.getIntegerParameter( strIdSubmitSuggest );
@@ -1309,7 +1346,7 @@ public class SuggestApp extends MVCApplication
 
         if ( ( strReportedValue == null ) || strReportedValue.trim( ).equals( EMPTY_STRING ) )
         {
-            SiteMessageService.setMessage( request, MESSAGE_MANDATORY_REPORTED, SiteMessage.TYPE_STOP );
+            throw new SuggestFormValidationException( I18nService.getLocalizedString( MESSAGE_MANDATORY_REPORTED, getLocale( request ) ) );
         }
 
         if ( ( suggestSubmit == null ) || ( suggest == null ) || !suggest.isEnableReports( ) )
@@ -1925,9 +1962,11 @@ public class SuggestApp extends MVCApplication
      * @return the new suggest submit object
      * @throws SiteMessageException
      *             SiteMessageException
+     * @throws SuggestFormValidationException
+     *             if the form is refused
      */
     private SuggestSubmit doInsertSuggestSubmit( HttpServletRequest request, int nMode, Plugin plugin, Suggest suggest, int nIdCategory, int nIdType,
-            LuteceUser user ) throws SiteMessageException
+            LuteceUser user ) throws SiteMessageException, SuggestFormValidationException
     {
         Locale locale = getLocale( request );
         List<Response> listResponse = new ArrayList<>( );
@@ -1936,7 +1975,7 @@ public class SuggestApp extends MVCApplication
         {
             if ( !_captchaService.get( ).validate( request ) )
             {
-                SiteMessageService.setMessage( request, MESSAGE_CAPTCHA_ERROR, SiteMessage.TYPE_STOP );
+                throw new SuggestFormValidationException( I18nService.getLocalizedString( MESSAGE_CAPTCHA_ERROR, getLocale( request ) ) );
             }
         }
 
@@ -1953,14 +1992,14 @@ public class SuggestApp extends MVCApplication
                 Object [ ] tabRequiredFields = {
                     formError.getTitleQuestion( )
                 };
-                SiteMessageService.setMessage( request, MESSAGE_MANDATORY_QUESTION, tabRequiredFields, SiteMessage.TYPE_STOP );
+                throw new SuggestFormValidationException( I18nService.getLocalizedString( MESSAGE_MANDATORY_QUESTION, tabRequiredFields, locale ) );
             }
             else
             {
                 Object [ ] tabFormError = {
                         formError.getTitleQuestion( ), formError.getErrorMessage( )
                 };
-                SiteMessageService.setMessage( request, MESSAGE_FORM_ERROR, tabFormError, SiteMessage.TYPE_STOP );
+                throw new SuggestFormValidationException( I18nService.getLocalizedString( MESSAGE_FORM_ERROR, tabFormError, locale ) );
             }
         }
 
@@ -2263,6 +2302,7 @@ public class SuggestApp extends MVCApplication
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
 
         model.put( SecurityTokenHandler.MARK_CSRF_TOKEN, _securityTokenHandler.resolveTokenValue( request ) );
+        model.put( MARK_FORM_ERROR, request.getAttribute( ATTRIBUTE_FORM_ERROR ) );
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_FRAME_SUGGEST, getLocale( request ), model );
         page.setContent( template.getHtml( ) );
     }

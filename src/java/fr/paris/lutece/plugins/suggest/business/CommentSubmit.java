@@ -33,15 +33,11 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-import fr.paris.lutece.util.date.DateUtil;
-import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.sql.Timestamp;
 
 import java.util.List;
-import java.util.Locale;
 
-import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -52,10 +48,6 @@ public class CommentSubmit
 {
     public static final int STATE_DISABLE = 0;
     public static final int STATE_ENABLE = 1;
-    private static final String TAG_SUGGEST_SUBMIT_COMMENT = "suggest-submit-comment";
-    private static final String TAG_SUGGEST_SUBMIT_COMMENT_DATE = "suggest-submit-comment-date";
-    private static final String TAG_SUGGEST_SUBMIT_COMMENT_VALUE = "suggest-submit-comment-value";
-    private static final String TAG_SUGGESTS_SUBMIT_COMMENTS = "suggest-submit-comments";
     private int _nIdCommentSubmit;
     private SuggestSubmit _suggestSubmit;
     private Timestamp _tDateComment;
@@ -262,37 +254,4 @@ public class CommentSubmit
         _tDateModify = lastCommentDate;
     }
 
-    /**
-     * Returns the xml of this suggest submit
-     *
-     * @param request
-     *            The HTTP Servlet request
-     * @param locale
-     *            the Locale
-     * @return the xml of this suggest submit
-     */
-    public String getXml( HttpServletRequest request, Locale locale )
-    {
-        StringBuffer strXml = new StringBuffer( );
-        XmlUtil.beginElement( strXml, TAG_SUGGEST_SUBMIT_COMMENT );
-
-        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_COMMENT_DATE, DateUtil.getDateString( getDateComment( ), locale ) );
-        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_SUBMIT_COMMENT_VALUE, getValue( ) );
-
-        XmlUtil.beginElement( strXml, TAG_SUGGESTS_SUBMIT_COMMENTS );
-
-        if ( ( getComments( ) != null ) && ( !getComments( ).isEmpty( ) ) )
-        {
-            for ( CommentSubmit commentSubmit : getComments( ) )
-            {
-                strXml.append( commentSubmit.getXml( request, locale ) );
-            }
-        }
-
-        XmlUtil.endElement( strXml, TAG_SUGGESTS_SUBMIT_COMMENTS );
-
-        XmlUtil.endElement( strXml, TAG_SUGGEST_SUBMIT_COMMENT );
-
-        return strXml.toString( );
-    }
 }

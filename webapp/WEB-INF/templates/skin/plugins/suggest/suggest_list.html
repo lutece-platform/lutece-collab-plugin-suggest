@@ -1,33 +1,27 @@
-<div class="row">
-	<div class="col-12 col-sm-12 col-md-12 col-lg-12">
-            <div class="container">
-            <div class="card">
-	<#if unavailability_message?exists>
-		<div class="alert alert-error">${unavailability_message}</div>    
+<@cTpl>
+<@cContainer class='py-4'>
+<#if unavailability_message??>
+	<@cAlert type='warning'>${unavailability_message}</@cAlert>
+<#else>
+	<@cTitle level=1 class='mb-4'>#i18n{suggest.suggestList.title}</@cTitle>
+	<#if list_suggest?has_content>
+		<@cBlock class='list-group mb-4'>
+			<#list list_suggest as suggest>
+				<#assign suggestUrl = 'jsp/site/Portal.jsp?page=suggest&id_suggest=' + suggest.idSuggest?c + '&action=view_suggest_submit_list'>
+				<@cLink href=suggestUrl class='list-group-item list-group-item-action py-3' label=suggest.title />
+			</#list>
+		</@cBlock>
 	<#else>
-		<div class="row">
-			<div class="col-12 col-sm-12 col-md-12 col-lg-12">
-				<fieldset>
-				<legend>#i18n{suggest.suggestList.title}:</legend> 
-						<#if paginator?exists>
-							#i18n{suggest.suggestListSubmit.paginator.labelResultsCount} : <strong>${paginator.itemsCount}</strong> <br />
-							#i18n{suggest.suggestListSubmit.paginator.labelResultsRange} : <strong>${paginator.rangeMin} - ${paginator.rangeMax}</strong> <br />
-							<@cPagination paginator=paginator />
-				 		</#if>
-					<ul>
-						<#if list_suggest?exists>
-						<#list list_suggest as suggest>	
-						<li>
-							<a href="jsp/site/Portal.jsp?page=suggest&amp;id_suggest=${suggest.idSuggest}&amp;action=view_suggest_submit_list">${suggest.title}</a>
-						</li>
-						</#list>
-					</#if>
-					</ul>
-				</fieldset>	
-			</div>
-		</div>
+		<@cAlert type='info' title='#i18n{portal.util.labelNoItem}' />
 	</#if>
-        </div>
-        </div>
-	</div>
-</div>
+	<#if paginator??>
+		<@cBlock class='d-flex flex-wrap justify-content-between align-items-center gap-3'>
+			<@cText class='small text-body-secondary mb-0'>
+				#i18n{suggest.suggestListSubmit.paginator.labelResultsRange} : ${paginator.rangeMin} - ${paginator.rangeMax} / ${paginator.itemsCount}
+			</@cText>
+			<@cPagination paginator=paginator />
+		</@cBlock>
+	</#if>
+</#if>
+</@cContainer>
+</@cTpl>

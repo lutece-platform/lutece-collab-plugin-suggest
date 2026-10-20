@@ -5,18 +5,14 @@
 		<@formGroup formStyle='inline'>
 			<@inputGroup>
 				<@select name='suggest_submit_order' default_value='${suggest_submit.suggestSubmitOrder}' items=order_list_pinned />
-				<@inputGroupItem>
-					<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}' buttonIcon='arrows' hideTitle=['all'] />
-				</@inputGroupItem>
+				<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}' buttonIcon='arrows' hideTitle=['all'] />
 			</@inputGroup>
 		</@formGroup>
 	<#else>
 		<@formGroup formStyle='inline'>
 			<@inputGroup>
 				<@select name='suggest_submit_order' default_value='${suggest_submit.suggestSubmitOrder}' items=order_list />
-				<@inputGroupItem>
-					<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}' buttonIcon='check' hideTitle=['all'] />
-				</@inputGroupItem>
+				<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}' buttonIcon='check' hideTitle=['all'] />
 			</@inputGroup>
 		</@formGroup>
 	</#if>

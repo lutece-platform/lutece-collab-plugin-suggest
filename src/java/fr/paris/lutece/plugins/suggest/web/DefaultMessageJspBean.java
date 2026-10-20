@@ -56,8 +56,6 @@ import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 
@@ -162,7 +160,8 @@ public class DefaultMessageJspBean extends MVCAdminJspBean
 
             if ( strError != null )
             {
-                return redirect( request, strError );
+                addError( strError );
+                return redirectView( request, VIEW_MANAGE_DEFAULT_MESSAGE );
             }
 
             DefaultMessageHome.update( defaultMessage, getPlugin( ) );
@@ -173,13 +172,13 @@ public class DefaultMessageJspBean extends MVCAdminJspBean
 
     /**
      * Get the request data and if there is no error insert the data in the default Message object specified in parameter. return null if there is no error or
-     * else return the error page url
+     * else return the localized error message
      * 
      * @param request
      *            the request
      * @param defaultMessage
      *            the default message
-     * @return null if there is no error or else return the error page url
+     * @return null if there is no error or else return the localized error message
      */
     private String getDefaultMessageData( HttpServletRequest request, DefaultMessage defaultMessage )
     {
@@ -264,22 +263,22 @@ public class DefaultMessageJspBean extends MVCAdminJspBean
                 I18nService.getLocalizedString( strFieldError, getLocale( ) )
             };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
+            return I18nService.getLocalizedString( MESSAGE_MANDATORY_FIELD, tabRequiredFields, getLocale( ) );
         }
 
         if ( nNumberSuggestSubmitInTopScore < 0 )
         {
-            return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_NUMBER_SUGGEST_SUBMIT_IN_TOP_SCORE, AdminMessage.TYPE_STOP );
+            return I18nService.getLocalizedString( MESSAGE_ILLOGICAL_NUMBER_SUGGEST_SUBMIT_IN_TOP_SCORE, getLocale( ) );
         }
 
         if ( nNumberSuggestSubmitInTopComment < 0 )
         {
-            return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_NUMBER_SUGGEST_SUBMIT_IN_TOP_COMMENT, AdminMessage.TYPE_STOP );
+            return I18nService.getLocalizedString( MESSAGE_ILLOGICAL_NUMBER_SUGGEST_SUBMIT_IN_TOP_COMMENT, getLocale( ) );
         }
 
         if ( nNumberSuggestSubmitCaractersShown < 0 )
         {
-            return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_NUMBER_SUGGEST_SUBMIT_CARACTERS_SHOWN, AdminMessage.TYPE_STOP );
+            return I18nService.getLocalizedString( MESSAGE_ILLOGICAL_NUMBER_SUGGEST_SUBMIT_CARACTERS_SHOWN, getLocale( ) );
         }
 
         defaultMessage.setLibelleContribution( strLibelleContribution );

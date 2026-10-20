@@ -52,7 +52,6 @@ public class SuggestSubmitType implements RBACResource, Serializable
     private String _strColor;
     private ImageResource _imgPictogram;
     private Boolean _bParameterizableInFO;
-    private int _nIdXSLStyleSheet;
     private Integer _nIdImageResource;
 
     /**
@@ -158,23 +157,6 @@ public class SuggestSubmitType implements RBACResource, Serializable
     public String getResourceId( )
     {
         return "" + _nIdType;
-    }
-
-    /**
-     * @param idXSLStyleSheet
-     *            the idXSLStyleSheet to set
-     */
-    public void setIdXSLStyleSheet( int idXSLStyleSheet )
-    {
-        this._nIdXSLStyleSheet = idXSLStyleSheet;
-    }
-
-    /**
-     * @return the idXSLStyleSheet
-     */
-    public int getIdXSLStyleSheet( )
-    {
-        return _nIdXSLStyleSheet;
     }
 
     /**
