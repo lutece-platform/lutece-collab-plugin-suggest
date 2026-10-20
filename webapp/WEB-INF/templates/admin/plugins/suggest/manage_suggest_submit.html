@@ -11,7 +11,6 @@
 				<@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp' id='filter'>
 					<@input type='hidden' name='view' value='manageSuggestSubmit' />
 					<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
-					<@input type='hidden' name='session' id='session' value='session' />
 				<@formGroup labelFor='query' labelKey='#i18n{suggest.manageSuggestSubmit.buttonSearch}'>
 					<#if query?exists><#assign value = query /><#else><#assign value='' /></#if>
 					<@input type='text' name='query' id='query' placeHolder='#i18n{suggest.manageSuggestSubmit.labelSearch}' value=value />
@@ -41,7 +40,7 @@
 				</@tform>
 			</@modalBody>
 			<@modalFooter>
-				<@button type='button' id='reinit' buttonIcon='refresh' title='#i18n{suggest.manageSuggestSubmit.buttonReinitSearch}' color='light' />
+				<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmit&id_suggest=${suggest.idSuggest}&query=&id_category_filter=-1&id_type=-1&id_suggest_submit_state=-1&id_suggest_submit_report=-1&id_contains_comment_disable=-1&id_suggest_submit_sort=-1' buttonIcon='refresh' title='#i18n{suggest.manageSuggestSubmit.buttonReinitSearch}' color='light' />
 				<@button type='submit' formId='filter' buttonIcon='search' title='#i18n{suggest.manageSuggestSubmit.buttonSearch}' color='primary' />
 			</@modalFooter>
 		</@modal>
@@ -69,34 +68,3 @@
 		<@tform id='suggest_row_action_form' action='jsp/admin/plugins/suggest/ManageSuggest.jsp'></@tform>
 	</@pageColumn>
 </@pageContainer>
-<script src="js/admin/plugins/suggest/suggest.js"></script>
-<script>
-document.addEventListener( 'DOMContentLoaded', function( ){
-	document.querySelectorAll( '.preview' ).forEach( function( element ){
-		element.style.display = 'none';
-	});
-	var filter = document.getElementById( 'filter' );
-	var reinit = document.getElementById( 'reinit' );
-	if ( filter && reinit ) {
-		reinit.addEventListener( 'click', function( ){
-			filter.querySelectorAll( 'select' ).forEach( function( select ){
-				select.value = '-1';
-			});
-			var query = document.getElementById( 'query' );
-			if ( query ) {
-				query.value = '';
-			}
-			var session = document.getElementById( 'session' );
-			if ( session ) {
-				session.value = '';
-			}
-			filter.submit( );
-		});
-	}
-	var target = location.hash ? document.getElementById( location.hash.substring( 1 ) ) : null;
-	if ( target ) {
-		window.scrollTo( 0, target.getBoundingClientRect( ).top + window.scrollY - 120 );
-	}
-	suggestToggleAll( 'selectAll', 'input.selected-id, .selected-id input[type=checkbox]' );
-});
-</script>

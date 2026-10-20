@@ -34,11 +34,8 @@
 package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.portal.service.image.ImageResource;
-import fr.paris.lutece.util.xml.XmlUtil;
 
-import java.util.Locale;
 
-import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -47,8 +44,6 @@ import jakarta.servlet.http.HttpServletRequest;
  */
 public class Response
 {
-    private static final String TAG_RESPONSE = "response";
-    private static final String TAG_RESPONSE_VALUE = "response-value";
     private int _nIdResponse;
     private String _strValueResponse;
     private IEntry _entry;
@@ -177,31 +172,6 @@ public class Response
     public void setVideo( VideoType video )
     {
         this._video = video;
-    }
-
-    /**
-     * Returns the xml of this suggest submit
-     *
-     * @param request
-     *            The HTTP Servlet request
-     * @param locale
-     *            the Locale
-     * @return the xml of this suggest submit
-     */
-    public String getXml( HttpServletRequest request, Locale locale )
-    {
-        StringBuffer strXml = new StringBuffer( );
-        XmlUtil.beginElement( strXml, TAG_RESPONSE );
-        XmlUtil.addElementHtml( strXml, TAG_RESPONSE_VALUE, this.getValueResponse( ) );
-
-        if ( this.getEntry( ) != null )
-        {
-            this.getEntry( ).getXml( locale, strXml );
-        }
-
-        XmlUtil.endElement( strXml, TAG_RESPONSE );
-
-        return strXml.toString( );
     }
 
     /**

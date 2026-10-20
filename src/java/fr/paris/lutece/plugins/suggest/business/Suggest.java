@@ -41,13 +41,10 @@ import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 import fr.paris.lutece.portal.service.resource.IExtendableResource;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupResource;
-import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Locale;
 
-import jakarta.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -58,13 +55,9 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 {
     public static final String RESOURCE_TYPE = "SUGGEST_SUGGEST_TYPE";
     public static final String ROLE_NONE = "none";
-    public static final String TAG_LIST_ENTRY = "suggest-entries";
     public static final int STATE_ENABLE = 1;
     public static final int STATE_DISABLE = 0;
 
-    private static final String TAG_SUGGEST = "suggest";
-    private static final String TAG_SUGGEST_TITLE = "suggest-title";
-    private static final String TAG_SUGGEST_SUBMITS = "suggest-submits";
 
     private int _nIdSuggest;
     private String _strTitle;
@@ -105,7 +98,6 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     private String _strRole;
     private String _strHeader;
     private int _nSortField;
-    private String _strCodeTheme;
     private String _strConfirmationMessage;
     private boolean _bActiveEditorBbcode;
     private int _nIdDefaultSort = SuggestUtils.CONSTANT_ID_NULL;
@@ -843,41 +835,6 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * Returns the xml of this suggest
-     * 
-     * @param request
-     *            The HTTP Servlet request
-     * @param sbListSuggestSubmit
-     *            The string buffer
-     * @param locale
-     *            la locale
-     * @return the xml of this suggest
-     */
-    public String getXml( HttpServletRequest request, StringBuffer sbListSuggestSubmit, Locale locale )
-    {
-        StringBuffer strXml = new StringBuffer( );
-        XmlUtil.beginElement( strXml, TAG_SUGGEST );
-        XmlUtil.addElementHtml( strXml, TAG_SUGGEST_TITLE, getTitle( ) );
-        XmlUtil.beginElement( strXml, TAG_LIST_ENTRY );
-
-        if ( ( this.getEntries( ) != null ) && !this.getEntries( ).isEmpty( ) )
-        {
-            for ( IEntry entry : this.getEntries( ) )
-            {
-                entry.getXml( locale, strXml );
-            }
-        }
-
-        XmlUtil.endElement( strXml, TAG_LIST_ENTRY );
-        XmlUtil.beginElement( strXml, TAG_SUGGEST_SUBMITS );
-        strXml.append( sbListSuggestSubmit );
-        XmlUtil.endElement( strXml, TAG_SUGGEST_SUBMITS );
-        XmlUtil.endElement( strXml, TAG_SUGGEST );
-
-        return strXml.toString( );
-    }
-
-    /**
      *
      * @return the number of suggest submit per page
      */
@@ -974,26 +931,6 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     public int getSortField( )
     {
         return _nSortField;
-    }
-
-    /**
-     *
-     * @return the theme code
-     */
-    public String getCodeTheme( )
-    {
-        return _strCodeTheme;
-    }
-
-    /**
-     * set the theme code
-     * 
-     * @param strCodeTheme
-     *            the theme code
-     */
-    public void setCodeTheme( String strCodeTheme )
-    {
-        _strCodeTheme = strCodeTheme;
     }
 
     /**
