@@ -1,103 +1,63 @@
+<#macro suggestCommentHeader entry avatarSize>
+	<#assign headerSubmit = entry.comment_submit>
+	<@cBlock class='d-flex flex-wrap align-items-center gap-2 small text-body-secondary mb-2'>
+		<#if entry.lutece_user??>
+			<#if entry.avatar?has_content>
+				<@cImg src=entry.avatar class='rounded-circle' params='width="${avatarSize}" height="${avatarSize}"' />
+			</#if>
+			<@cInline class='visually-hidden'>#i18n{suggest.suggestListSubmit.postByUser}</@cInline>
+			<@cInline class='fw-semibold text-body'>${entry.lutece_user}</@cInline>
+			<@cInline params='aria-hidden="true"'>·</@cInline>
+		</#if>
+		<@cInline>${headerSubmit.dateComment?string("dd/MM/yyyy HH:mm")}</@cInline>
+		<#if headerSubmit.isOfficialAnswer()>
+			<@cInline class='badge text-bg-warning'>#i18n{suggest.manageCommentSubmit.officialAnswer}</@cInline>
+		</#if>
+	</@cBlock>
+</#macro>
+<#macro suggestAnswerLink commentSubmit>
+	<@cBlock class='mt-2'>
+		<@cLink href='jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_comment=${commentSubmit.idCommentSubmit}&action=create_sub_comment' class='btn btn-outline-primary btn-sm' label='#i18n{suggest.suggestComment.labelCommentAComment}' />
+	</@cBlock>
+</#macro>
 <#macro suggestAnswers answers depth>
 	<#list answers as comment_comment>
-		<div class="card mt-3">
-			<p>
-				<#if comment_comment.comment_submit.isOfficialAnswer()>
-					<@cIcon name='star' />
-					<span class="badge bg-info">#i18n{suggest.manageCommentSubmit.officialAnswer}</span> |
-				</#if>
-				<#if comment_comment.lutece_user?exists>
-					<#if comment_comment.avatar?has_content>
-						<img class="avatar avatar-suggest img-circle" src="${comment_comment.avatar}" alt="avatar provided by gravatar.com">
-					<#else>
-						<@cIcon name='user' />
-					</#if>
-					${comment_comment.lutece_user}
-				</#if>
-				<@cIcon name='calendar' /> ${comment_comment.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}
-			</p>
-			<div class="card-body">
+		<@cBlock class='border-start border-3 ps-3 mt-3'>
+			<@suggestCommentHeader entry=comment_comment avatarSize=20 />
+			<@cBlock class='card-text'>
 				${suggest.parseBbcodeValue(comment_comment.comment_submit.value)}
-				<#if comment_comment.list_sub_comment?has_content>
-					<@suggestAnswers answers=comment_comment.list_sub_comment depth=depth+1 />
-				</#if>
-			</div>
+			</@cBlock>
 			<#if depth lt (comment_max_depth!2)>
-			<div class="card-footer">
-				<a class="btn btn-primary btn-sm" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_comment=${comment_comment.comment_submit.idCommentSubmit}&action=create_sub_comment">
-					<@cIcon name='message' /> #i18n{suggest.suggestComment.labelCommentAComment}
-				</a>
-			</div>
+				<@suggestAnswerLink commentSubmit=comment_comment.comment_submit />
 			</#if>
-		</div>
+			<#if comment_comment.list_sub_comment?has_content>
+				<@suggestAnswers answers=comment_comment.list_sub_comment depth=depth+1 />
+			</#if>
+		</@cBlock>
 	</#list>
 </#macro>
+<@cTpl>
 <#if list_comment?has_content>
 <@cBlock class='d-grid gap-3'>
-<#list list_comment?reverse as comment_submit_lutece_user>
-	<#assign commentSubmit = comment_submit_lutece_user.comment_submit>
-	<#assign commentClass = 'card' + commentSubmit.isOfficialAnswer()?then(' border-warning', '')>
-	<@cBlock class=commentClass>
-		<@cBlock class='card-body'>
-			<@cBlock class='d-flex flex-wrap align-items-center gap-2 small text-body-secondary mb-2'>
-				<#if comment_submit_lutece_user.lutece_user??>
-					<#if comment_submit_lutece_user.avatar?has_content>
-						<@cImg src=comment_submit_lutece_user.avatar class='rounded-circle' params='width="24" height="24"' />
-					</#if>
-					<@cInline class='fw-semibold text-body'>${comment_submit_lutece_user.lutece_user}</@cInline>
-					<@cInline params='aria-hidden="true"'>·</@cInline>
-				</#if>
-				<@cInline>${commentSubmit.dateComment?string("dd/MM/yyyy HH:mm")}</@cInline>
-				<#if commentSubmit.isOfficialAnswer()>
-					<@cInline class='badge text-bg-warning'>#i18n{suggest.manageCommentSubmit.officialAnswer}</@cInline>
-				</#if>
-			</@cBlock>
-			<@cBlock class='card-text'>
-				${suggest.parseBbcodeValue(commentSubmit.value)}
-			</@cBlock>
-			<#list comment_submit_lutece_user.list_sub_comment![] as comment_comment>
-				<#assign subCommentSubmit = comment_comment.comment_submit>
-				<@cBlock class='border-start border-3 ps-3 mt-3'>
-					<@cBlock class='d-flex flex-wrap align-items-center gap-2 small text-body-secondary mb-1'>
-						<#if comment_comment.lutece_user??>
-							<#if comment_comment.avatar?has_content>
-								<@cImg src=comment_comment.avatar class='rounded-circle' params='width="20" height="20"' />
-							</#if>
-							<@cInline class='fw-semibold text-body'>${comment_comment.lutece_user}</@cInline>
-							<@cInline params='aria-hidden="true"'>·</@cInline>
-						</#if>
-						<@cInline>${subCommentSubmit.dateComment?string("dd/MM/yyyy HH:mm")}</@cInline>
-						<#if subCommentSubmit.isOfficialAnswer()>
-							<@cInline class='badge text-bg-warning'>#i18n{suggest.manageCommentSubmit.officialAnswer}</@cInline>
-						</#if>
-					</#if>
-					<div class="flex-shrink-0">
-						<small class="text-muted">
-							<@cIcon name='calendar' class='me-1' /> ${comment_submit_lutece_user.comment_submit.dateComment?string("dd/MM/yyyy HH:mm:ss")}
-						</small>
-					</div>
-				</div>
-			</div>
-			<div class="card-body suggest-list-comments">
-				${suggest.parseBbcodeValue(comment_submit_lutece_user.comment_submit.value)}
+	<#list list_comment?reverse as comment_submit_lutece_user>
+		<#assign commentSubmit = comment_submit_lutece_user.comment_submit>
+		<#assign commentClass = 'card' + commentSubmit.isOfficialAnswer()?then(' border-warning', '')>
+		<@cBlock class=commentClass>
+			<@cBlock class='card-body'>
+				<@suggestCommentHeader entry=comment_submit_lutece_user avatarSize=24 />
+				<@cBlock class='card-text'>
+					${suggest.parseBbcodeValue(commentSubmit.value)}
+				</@cBlock>
+				<@suggestAnswerLink commentSubmit=commentSubmit />
 				<#if comment_submit_lutece_user.list_sub_comment?has_content>
 					<@suggestAnswers answers=comment_submit_lutece_user.list_sub_comment depth=2 />
 				</#if>
-			</div>
-			<div class="card-footer">
-				<a class="btn btn-primary btn-sm" href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_comment=${comment_submit_lutece_user.comment_submit.idCommentSubmit}&action=create_sub_comment">
-					<@cIcon name='message' /> #i18n{suggest.suggestComment.labelCommentAComment}
-				</a>
-			</div>
-		</div>
+			</@cBlock>
+		</@cBlock>
 	</#list>
-		<p>
-			<a href="jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_submit=${id_suggest_submit}&action=view_suggest_submit" class="link-top badge bg-secondary">
-				<@cIcon name='chevron-up' />&nbsp;#i18n{suggest.suggestListSubmit.labelPageTop}
-			</a>
-		</p>
-	</div>
-</div>
-
+	<@cBlock class='text-end'>
+		<@cLink href='jsp/site/Portal.jsp?page=suggest&id_suggest=${id_suggest}&id_suggest_submit=${id_suggest_submit}&action=view_suggest_submit' class='small' label='#i18n{suggest.suggestListSubmit.labelPageTop}' />
+	</@cBlock>
+</@cBlock>
 </#if>
 </@cTpl>

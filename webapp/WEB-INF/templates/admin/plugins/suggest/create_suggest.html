@@ -183,6 +183,9 @@
 										<@formGroup labelKey='#i18n{suggest.createSuggest.labelLimitNumberVote}' rows=2>
 											<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelLimitNumberVoteComment}' name='limit_number_vote' id='limit_number_vote' value='${yes_value}' />
 										</@formGroup>
+										<@formGroup labelKey='#i18n{suggest.createSuggest.labelEnableVoteWithdrawal}' rows=2>
+											<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelEnableVoteWithdrawalComment}' name='enable_vote_withdrawal' id='enable_vote_withdrawal' value='${yes_value}' />
+										</@formGroup>
 									</@boxBody>
 								</@box>
 							</@columns>
@@ -197,6 +200,11 @@
 										</@formGroup>
 										<@formGroup labelFor='id_mailing_list_suggest_submit' labelKey='#i18n{suggest.createSuggest.labelMailingList}' helpKey='#i18n{suggest.createSuggest.labelMailingListComment}' rows=2>
 											<@select name='id_mailing_list_suggest_submit' items=mailing_list default_value='-1' />
+										</@formGroup>
+										<@formGroup labelKey='#i18n{suggest.createSuggest.labelParticipantNotifications}' helpKey='#i18n{suggest.createSuggest.labelParticipantNotificationsHelp}' rows=2>
+											<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelAutoSubscribe}' name='auto_subscribe' id='auto_subscribe' value='${yes_value}' />
+											<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelNotifyParticipants}' name='notify_participants' id='notify_participants' value='${yes_value}' />
+											<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelNotifySubscribers}' name='notify_subscribers' id='notify_subscribers' value='${yes_value}' />
 										</@formGroup>
 									</@boxBody>
 								</@box>

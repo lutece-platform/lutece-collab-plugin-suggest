@@ -138,7 +138,7 @@
 					</@tag>
 				</#if>
 				<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp' id='addOfficialComment'><@input type='hidden' name='action' value='submitOfficialAnswer' />
-					<h3>#i18n{suggest.manageCommentSubmit.officialAnswer} <small>#i18n{suggest.manageCommentSubmit.labelAddOfficialAnswer}</h3>
+					<h3>#i18n{suggest.manageCommentSubmit.officialAnswer} <small>#i18n{suggest.manageCommentSubmit.labelAddOfficialAnswer}</small></h3>
 					<@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' />
 					<@formGroup>
 						<#if suggest.activeEditorBbcode>
