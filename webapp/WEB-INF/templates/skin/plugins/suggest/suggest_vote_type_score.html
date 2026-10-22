@@ -1,14 +1,14 @@
 <@cTpl>
 <#assign idSubmit = id_suggest_submit?c>
-<#assign hasVoted = user_voted!false>
+<#assign voteLocked = (user_voted!false) && !(enable_vote_withdrawal!false)>
 <@cForm action='jsp/site/Portal.jsp?page=suggest' id='form_vote_score${idSubmit}' class='d-inline-flex'>
 	<@cInput type='hidden' name='action' id='action_vote_score${idSubmit}' value='do_vote' class='' />
 	<@cInput type='hidden' name='id_suggest' id='id_suggest_vote_score${idSubmit}' value=id_suggest?c class='' />
 	<@cInput type='hidden' name='id_suggest_submit' id='id_suggest_submit_vote_score${idSubmit}' value=idSubmit class='' />
 	<@cInput type='hidden' name='view' id='view_vote_score${idSubmit}' value=view class='' />
 	<@cBlock class='btn-group btn-group-sm' params='role="group" aria-label="#i18n{suggest.suggestDetail.labelVote}"'>
-		<@cBtn label='#i18n{suggest.suggestVoteTypeScore.titleVoteAgainst}' class='secondary' type='submit' disabled=hasVoted params='name="vote" value="-1"' />
-		<@cBtn label='#i18n{suggest.suggestVoteTypeScore.titleVoteFor}' class='primary' type='submit' disabled=hasVoted params='name="vote" value="1"' />
+		<@cBtn label='#i18n{suggest.suggestVoteTypeScore.titleVoteAgainst}' class='secondary' type='submit' disabled=voteLocked params='name="vote" value="-1"' />
+		<@cBtn label='#i18n{suggest.suggestVoteTypeScore.titleVoteFor}' class='primary' type='submit' disabled=voteLocked params='name="vote" value="1"' />
 	</@cBlock>
 </@cForm>
 </@cTpl>

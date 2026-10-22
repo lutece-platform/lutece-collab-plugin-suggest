@@ -1,6 +1,6 @@
 <@cTpl>
 <#assign idSubmit = id_suggest_submit?c>
-<#assign hasVoted = user_voted!false>
+<#assign voteLocked = (user_voted!false) && !(enable_vote_withdrawal!false)>
 <#assign starVotes = [
 	{ 'value': '-2', 'class': 'secondary', 'title': '#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainstMore}' },
 	{ 'value': '-1', 'class': 'secondary', 'title': '#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainst}' },
@@ -15,7 +15,7 @@
 	<@cBlock class='btn-group btn-group-sm flex-wrap' params='role="group" aria-label="#i18n{suggest.suggestDetail.labelVote}"'>
 		<#list starVotes as starVote>
 			<#assign starParams>name="vote" value="${starVote.value}"</#assign>
-			<@cBtn label=starVote.title class=starVote.class type='submit' disabled=hasVoted params=starParams />
+			<@cBtn label=starVote.title class=starVote.class type='submit' disabled=voteLocked params=starParams />
 		</#list>
 	</@cBlock>
 </@cForm>
