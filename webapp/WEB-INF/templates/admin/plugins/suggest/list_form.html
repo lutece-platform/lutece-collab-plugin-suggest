@@ -1,6 +1,0 @@
-<@formGroup labelFor='id_form' labelKey='#i18n{form.listForm.labelForm}' mandatory=true>	<#if idForm?exists>
-		<@select name='id_form' default_value=idForm items=form_list />
-	<#else>
-		<@select name='id_form' default_value='-1' items=form_list />
-	 </#if>
-</@formGroup>

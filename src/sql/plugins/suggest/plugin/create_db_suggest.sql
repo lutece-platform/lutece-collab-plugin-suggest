@@ -469,3 +469,8 @@ ALTER TABLE suggest_suggest_user_info ADD COLUMN department varchar(255) DEFAULT
 -- preconditions onFail:MARK_RAN onError:WARN
 -- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_vote' AND column_name = 'vote_value'
 ALTER TABLE suggest_vote ADD COLUMN vote_value int DEFAULT NULL;
+
+-- changeset suggest:create_db_suggest-rev3.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:1 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_suggest' AND column_name = 'code_theme'
+ALTER TABLE suggest_suggest DROP COLUMN code_theme;
