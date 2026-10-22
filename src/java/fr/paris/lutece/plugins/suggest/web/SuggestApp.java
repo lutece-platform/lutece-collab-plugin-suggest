@@ -246,6 +246,7 @@ public class SuggestApp extends MVCApplication
     private static final String MESSAGE_ERROR_NO_SUGGEST_SUBMIT_TYPE_SELECTED = "suggest.message.errorNoSuggestSubmitTypeSelected";
     private static final String MESSAGE_ERROR_MUST_SELECTED_TERMS_OF_USE = "suggest.message.youMustSelectTermsOfUse";
     private static final String MESSAGE_ACCESS_DENIED = "suggest.message.accessDenied";
+    private static final String MESSAGE_SUGGEST_NOT_FOUND = "suggest.message.suggestNotFound";
 
     // XPAGE URL
 
@@ -1431,7 +1432,8 @@ public class SuggestApp extends MVCApplication
                     throw new UserNotSignedException( );
                 }
                 else
-                    if ( ( suggest.getRole( ) != null ) && !SecurityService.getInstance( ).isUserInRole( request, suggest.getRole( ) ) )
+                    if ( ( suggest.getRole( ) != null ) && !Suggest.ROLE_NONE.equals( suggest.getRole( ) )
+                            && !SecurityService.getInstance( ).isUserInRole( request, suggest.getRole( ) ) )
                     {
                         SiteMessageService.setMessage( request, MESSAGE_ACCESS_DENIED, SiteMessage.TYPE_STOP );
                     }
@@ -2318,10 +2320,10 @@ public class SuggestApp extends MVCApplication
     }
 
     /**
-     * Test if a user can process action to a suggest
-     * 
+     * Test if a user can process action to a suggest, and stop with a site message when the suggest does not exist
+     *
      * @param suggest
-     *            the suggest
+     *            the suggest, null when the requested one does not exist
      * @param request
      *            the {@link HttpServletRequest}
      * @param user
@@ -2334,6 +2336,11 @@ public class SuggestApp extends MVCApplication
     private void testUserAuthorizationAccess( Suggest suggest, HttpServletRequest request, LuteceUser user ) throws UserNotSignedException,
             SiteMessageException
     {
+        if ( suggest == null )
+        {
+            SiteMessageService.setMessage( request, MESSAGE_SUGGEST_NOT_FOUND, SiteMessage.TYPE_STOP );
+        }
+
         if ( ( suggest.getRole( ) != null ) && !Suggest.ROLE_NONE.equals( suggest.getRole( ) ) )
         {
             if ( user == null )

@@ -174,6 +174,7 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
     {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         SuggestSubmitType suggestSubmitType = new SuggestSubmitType( );
+        suggestSubmitType.setIdType( SuggestUtils.CONSTANT_ID_NULL );
         String strError = getSuggestSubmitTypeData( multipartRequest, suggestSubmitType );
 
         if ( strError != null )

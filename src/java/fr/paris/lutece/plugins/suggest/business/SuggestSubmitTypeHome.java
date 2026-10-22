@@ -68,7 +68,7 @@ public final class SuggestSubmitTypeHome
      */
     public static int create( SuggestSubmitType suggestSubmitType, Plugin plugin )
     {
-        if ( suggestSubmitType.getPictogram( ) != null )
+        if ( ( suggestSubmitType.getPictogram( ) != null ) && ( suggestSubmitType.getPictogram( ).getImage( ) != null ) )
         {
             suggestSubmitType.setIdImageResource( ImageResourceHome.create( suggestSubmitType.getPictogram( ), plugin ) );
         }
