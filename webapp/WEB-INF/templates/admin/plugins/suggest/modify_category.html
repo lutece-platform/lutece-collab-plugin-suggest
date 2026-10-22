@@ -11,7 +11,7 @@
 							<@formGroup labelFor='title' labelKey='#i18n{suggest.createCategory.labelTitle}' mandatory=true>
 								<@input type='text' id='title' name='title' maxlength=50 value='${category.title}' />
 							</@formGroup>
-							<@formGroup labelFor='color' labelKey='#i18n{suggest.createCategory.labelColor} :' mandatory=true>
+							<@formGroup labelFor='color' labelKey='#i18n{suggest.createCategory.labelColor}' mandatory=true>
 								<@input type='color' class='form-control-color' value='${category.color!"#000000"}' id='color' name='color' />
 							</@formGroup>
 							<@formGroup>
