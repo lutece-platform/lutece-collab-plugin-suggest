@@ -271,6 +271,7 @@ public class SuggestApp extends MVCApplication
     private static final String CONSTANT_VIEW_SUGGEST_SUBMIT = "view_suggest_submit";
     private static final String CONSTANT_VIEW_REPORT = "view_report";
     private static final String CONSTANT_VIEW_CREATE_SUGGEST_SUBMIT = "view_create_suggest_submit";
+    private static final String CONSTANT_VIEW_CREATE_SUB_COMMENT = "view_create_sub_comment";
     private static final String CONSTANT_SUGGEST = "suggest";
     private static final Pattern DO_VOTE_CASES = Pattern.compile( "-2|-1|1|2" );
 
@@ -865,9 +866,10 @@ public class SuggestApp extends MVCApplication
         model.put( SecurityTokenHandler.MARK_CSRF_TOKEN, _securityTokenHandler.resolveTokenValue( request ) );
         model.put( MARK_FORM_ERROR, request.getAttribute( ATTRIBUTE_FORM_ERROR ) );
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_XPAGE_SUGGEST_SUB_COMMENT, getLocale( request ), model );
-        page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, getLocale( request ) ) );
-        page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, getLocale( request ) ) );
-        page.setContent( template.getHtml( ) );
+
+        Map<String, Object> modelFrame = new HashMap<>( );
+        modelFrame.put( MARK_VIEW, CONSTANT_VIEW_CREATE_SUB_COMMENT );
+        addSuggestPageFrameset( template.getHtml( ), request, page, suggest, modelFrame, getSearchFields( request ), luteceUserConnected );
 
         return page;
     }

@@ -93,8 +93,8 @@
 						</#if>
 					</#if>
 					
-					#i18n{suggest.manageCommentSubmit.rowDateSuggestSubmit}: <strong>${(suggest_submit.dateResponse?date?string.short)!}</strong>
-					#i18n{suggest.manageCommentSubmit.rowStateSuggestSubmit}:
+					#i18n{suggest.manageCommentSubmit.rowDateSuggestSubmit} : <strong>${(suggest_submit.dateResponse?date?string.short)!}</strong>
+					#i18n{suggest.manageCommentSubmit.rowStateSuggestSubmit} :
 					<#if suggest_submit.suggestSubmitState.number=publish_state_number>
 						<@tag color='success' title='#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState}'> <@icon style='check' /> #i18n{suggest.manageSuggestSubmit.altPublish}</@tag>
 					<#elseif suggest_submit.suggestSubmitState.number=waiting_for_publish_state_number>
@@ -105,25 +105,27 @@
 					
 					<#if suggest.suggestSubmitTypes?has_content && suggest.suggestSubmitTypes?size &gt; 0 >
 					<p>
-						#i18n{suggest.manageCommentSubmit.rowSuggestSubmitType}:
+						#i18n{suggest.manageCommentSubmit.rowSuggestSubmitType} :
 						<#if suggest_submit.suggestSubmitType?has_content>
 							<strong>${suggest_submit.suggestSubmitType.name}</strong>
 						</#if>
 					</p>
 					</#if>
 					
-					<p>#i18n{suggest.manageCommentSubmit.rowCategory}:</p>
-					
 					<#if category_list?has_content>
-					<@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp'><@input type='hidden' name='action' value='changeSuggestSubmitCategory' />
+					<@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp' class='my-3'><@input type='hidden' name='action' value='changeSuggestSubmitCategory' />
 						<@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' />
 						<@input type='hidden' name='comment' value='comment' />
-						<#if suggest_submit.category?exists>
-							<@select name='id_category' items=category_list default_value='${suggest_submit.category.idCategory}' />
-						<#else>
-							<@select name='id_category' items=category_list default_value='-1' />
-						</#if>
-						<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonModify}' buttonIcon='device-floppy' />
+						<@formGroup labelFor='id_category' labelKey='#i18n{suggest.manageCommentSubmit.rowCategory}'>
+							<@inputGroup>
+								<#if suggest_submit.category?exists>
+									<@select name='id_category' items=category_list default_value='${suggest_submit.category.idCategory}' />
+								<#else>
+									<@select name='id_category' items=category_list default_value='-1' />
+								</#if>
+								<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonModify}' buttonIcon='device-floppy' />
+							</@inputGroup>
+						</@formGroup>
 					</@tform>
 					</#if>
 				<#if !suggest_submit.disableVote>
