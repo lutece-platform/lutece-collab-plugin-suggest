@@ -1,3 +1,4 @@
+<#include "include_active_filters.html" />
 <@pageContainer>
 	<@pageColumn>
 		<@pageHeader title='#i18n{suggest.manageSuggest.title}'>
@@ -27,6 +28,14 @@
 			</@modalFooter>
 		</@modal>
 		<@messages infos=infos![] errors=errors![] warnings=warnings![] />
+		<@activeFiltersBar removeAllUrl='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggest&id_suggest_state=-1&workgroup=all'>
+			<#if (suggest_state_selected!-1) != -1>
+				<@activeFilter label='#i18n{suggest.manageSuggest.labelActive}' value=filterValueLabel( suggest_state_list, suggest_state_selected ) removeUrl='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggest&id_suggest_state=-1' />
+			</#if>
+			<#if (user_workgroup_selected!'all') != 'all'>
+				<@activeFilter label='#i18n{suggest.manageSuggest.labelWorkGroup}' value=filterValueLabel( user_workgroup_list, user_workgroup_selected ) removeUrl='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggest&workgroup=all' />
+			</#if>
+		</@activeFiltersBar>
 		<#if suggest_list?has_content>
 			<@manageFeature>
 				<#list suggest_list as suggest>

@@ -359,6 +359,10 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String MARK_NUMBER_SUGGESTSUBMIT_WAITING = "number_suggestsubmit_waiting";
     private static final String MARK_NUMBER_SUGGESTSUBMIT_PUBLISHED = "number_suggestsubmit_published";
     private static final String MARK_HIGH_SCORES = "high_scores";
+    private static final String MARK_CATEGORY_STATISTICS = "category_statistics";
+    private static final String MARK_CATEGORY_STATISTICS_TITLE = "title";
+    private static final String MARK_CATEGORY_STATISTICS_COLOR = "color";
+    private static final String MARK_CATEGORY_STATISTICS_COUNT = "count";
     private static final String MARK_NUMBER_USERS = "number_users";
     private static final String MARK_URL = "url";
     private static final String MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE = "permission_manage_default_message";
@@ -3696,10 +3700,63 @@ public class SuggestJspBean extends MVCAdminJspBean
         model.put( MARK_NUMBER_SUGGESTSUBMIT_PUBLISHED, nNbSuggestSubmitPublished );
         model.put( MARK_NUMBER_USERS, listUsersKey.size( ) );
         model.put( MARK_HIGH_SCORES, listSuggestSubmit );
+        model.put( MARK_CATEGORY_STATISTICS, getPublishedCountByCategory( suggest, tFirstDateFilter, tLastDateFilter, nIdCategory, nIdType, plugin ) );
         model.put( MARK_SUGGEST_LIST, refSuggestList );
         model.put( MARK_URL, AppPathService.getBaseUrl( request ) + JSP_MANAGE_COMMENT_SUBMIT + "&id_suggest_submit=" );
 
         return getPage( PROPERTY_STATISTICS_TITLE, TEMPLATE_STATISTICS_SUGGEST );
+    }
+
+    /**
+     * Count the published suggest submits of each category of the suggest, with the filters of the statistics page
+     *
+     * @param suggest
+     *            the suggest
+     * @param tFirstDateFilter
+     *            the first date of the period, or null
+     * @param tLastDateFilter
+     *            the last date of the period, or null
+     * @param nIdCategory
+     *            the category selected in the filters, or SuggestUtils.CONSTANT_ID_NULL for every category
+     * @param nIdType
+     *            the type selected in the filters, or SuggestUtils.CONSTANT_ID_NULL for every type
+     * @param plugin
+     *            the plugin
+     * @return one entry per category, holding its title, its color and its number of published suggest submits
+     */
+    private List<Map<String, Object>> getPublishedCountByCategory( Suggest suggest, Timestamp tFirstDateFilter, Timestamp tLastDateFilter, int nIdCategory,
+            int nIdType, Plugin plugin )
+    {
+        List<Map<String, Object>> listCategoryStatistics = new ArrayList<>( );
+
+        if ( suggest.getCategories( ) == null )
+        {
+            return listCategoryStatistics;
+        }
+
+        for ( Category category : suggest.getCategories( ) )
+        {
+            if ( ( nIdCategory != SuggestUtils.CONSTANT_ID_NULL ) && ( nIdCategory != category.getIdCategory( ) ) )
+            {
+                continue;
+            }
+
+            SubmitFilter filter = new SubmitFilter( );
+            filter.setIdSuggest( suggest.getIdSuggest( ) );
+            filter.setDateFirst( tFirstDateFilter );
+            filter.setDateLast( tLastDateFilter );
+            filter.setIdType( nIdType );
+            filter.setIdCategory( category.getIdCategory( ) );
+            filter.setIdSuggestSubmitState( SuggestSubmit.STATE_PUBLISH );
+
+            Map<String, Object> categoryStatistics = new HashMap<>( );
+            categoryStatistics.put( MARK_CATEGORY_STATISTICS_TITLE, category.getTitle( ) );
+            categoryStatistics.put( MARK_CATEGORY_STATISTICS_COLOR, category.getColor( ) );
+            categoryStatistics.put( MARK_CATEGORY_STATISTICS_COUNT, _suggestSubmitService.getCountSuggestSubmit( filter, plugin ) );
+            listCategoryStatistics.add( categoryStatistics );
+        }
+
+        return listCategoryStatistics;
     }
 
     /**

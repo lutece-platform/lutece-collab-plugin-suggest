@@ -1,13 +1,27 @@
-<@tabs>
+<#--
+Macro: advancedParametersTabs
+Description: tab card of the advanced parameters screens. Each tab is its own page: the nested content is rendered in
+the panel of the active tab, named by the variable advanced_tab of the page (parameters, category, type, message,
+statistics).
+-->
+<#macro advancedParametersTabs>
+<@tabs keepState=false>
 	<@tabList>
-		<@tabLink active=(advanced_tab == 'parameters') href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageAdvancedParameters' title='#i18n{suggest.manageAdvancedParameters.title}' />
+		<@tabLink active=(advanced_tab == 'parameters') href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageAdvancedParameters' title='#i18n{suggest.manageAdvancedParameters.title}' tabIcon='settings' />
 		<#if permission_manage_category!true>
-		<@tabLink active=(advanced_tab == 'category') href='jsp/admin/plugins/suggest/ManageCategory.jsp' title='#i18n{suggest.manageAdvancedParameters.labelCategory}' />
-		<@tabLink active=(advanced_tab == 'type') href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp' title='#i18n{suggest.manageAdvancedParameters.labelType}' />
+		<@tabLink active=(advanced_tab == 'category') href='jsp/admin/plugins/suggest/ManageCategory.jsp' title='#i18n{suggest.manageAdvancedParameters.labelCategory}' tabIcon='category' />
+		<@tabLink active=(advanced_tab == 'type') href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp' title='#i18n{suggest.manageAdvancedParameters.labelType}' tabIcon='tags' />
 		</#if>
 		<#if permission_manage_default_message!true>
-		<@tabLink active=(advanced_tab == 'message') href='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp' title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}' />
+		<@tabLink active=(advanced_tab == 'message') href='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp' title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}' tabIcon='message-2' />
 		</#if>
-		<@tabLink active=(advanced_tab == 'statistics') href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=statistics' title='#i18n{suggest.manageAdvancedParameters.labelStatistics}' />
+		<@tabLink active=(advanced_tab == 'statistics') href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=statistics' title='#i18n{suggest.manageAdvancedParameters.labelStatistics}' tabIcon='chart-bar' />
 	</@tabList>
+	<@tabContent>
+		<@tabPanel id='advanced-${advanced_tab}' active=true>
+			<@messages infos=infos![] errors=errors![] warnings=warnings![] />
+			<#nested>
+		</@tabPanel>
+	</@tabContent>
 </@tabs>
+</#macro>

@@ -1,78 +1,158 @@
 <#assign advanced_tab = 'statistics' />
+<#macro statTile value label iconName color>
+	<@columns sm=6 xl=4>
+		<@div class='card card-sm h-100'>
+			<@div class='card-body'>
+				<@row class='align-items-center'>
+					<@columns class='col-auto'>
+						<@span class='bg-${color} text-white avatar' params='aria-hidden="true"'><@icon style=iconName /></@span>
+					</@columns>
+					<@columns>
+						<@div class='fs-2 fw-bold lh-1'>${value}</@div>
+						<@div class='text-secondary'>${label}</@div>
+					</@columns>
+				</@row>
+			</@div>
+		</@div>
+	</@columns>
+</#macro>
+<#macro statBar label value max color title=''>
+	<#if max gt 0><#assign barWidth = (value?abs * 100 / max)?round /><#else><#assign barWidth = 0 /></#if>
+	<#assign attrLabel = label?replace('"', '&quot;') />
+	<@div class='mb-3' params='title="${title?has_content?then(title, attrLabel)} : ${value}"'>
+		<@div class='d-flex justify-content-between mb-1 small'>
+			<@span class='text-truncate me-2'><#nested>${label}</@span>
+			<@span class='fw-bold'>${value}</@span>
+		</@div>
+		<@div class='progress progress-sm' params='role="progressbar" aria-label="${attrLabel}" aria-valuenow="${value?c}" aria-valuemin="0" aria-valuemax="${max?c}"'>
+			<@div class='progress-bar bg-${color}' params='style="width: ${barWidth?c}%"' />
+		</@div>
+	</@div>
+</#macro>
+<#include "include_advanced_parameters_tabs.html" />
 <@pageContainer>
 	<@pageColumn>
 		<@pageHeader title='#i18n{suggest.manageAdvancedParameters.title}' />
-		<#include "include_advanced_parameters_tabs.html" />
-		<@messages infos=infos![] errors=errors![] warnings=warnings![] />
-			<h3>#i18n{suggest.statistics.title}</h3>
-			<@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp' method='post'><@input type='hidden' name='view' value='statistics' />
-				<@formGroup labelFor='fist_response_date_filter' labelKey='#i18n{suggest.statistics.labelSuggest}'>
+		<@advancedParametersTabs>
+			<@row class='g-3'>
+				<@columns lg=4 xl=3>
+					<@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp' method='post' boxed=true><@input type='hidden' name='view' value='statistics' />
+						<@p class='h3 mb-3'><@icon style='filter' class='me-1' />#i18n{suggest.statistics.labelFilters}</@p>
+						<@formGroup labelFor='id_suggest' labelKey='#i18n{suggest.statistics.labelSuggest}' rows=2>
+							<#if suggest?exists>
+								<@select name='id_suggest' id='id_suggest' default_value='${suggest.idSuggest}' items=suggest_list />
+							<#else>
+								<@select name='id_suggest' id='id_suggest' default_value='-1' items=suggest_list />
+							</#if>
+						</@formGroup>
+						<@formGroup labelFor='first_date_filter' labelKey='#i18n{suggest.statistics.labelValidationDate}' rows=2>
+							<#if first_date_filter?has_content><#assign value = first_date_filter?date /><#else><#assign value = '' /></#if>
+							<@input type='daterange' dateRangeEndId='last_date_filter' name='first_date_filter' id='first_date_filter' value=value />
+							<@p class='small text-secondary my-1'>#i18n{suggest.statistics.labelAnd}</@p>
+							<#if last_date_filter?has_content><#assign value = last_date_filter?date /><#else><#assign value = '' /></#if>
+							<@input type='text' name='last_date_filter' id='last_date_filter' value=value />
+						</@formGroup>
+						<#if category_list?has_content>
+							<@formGroup labelFor='id_category_filter' labelKey='#i18n{suggest.statistics.labelSuggestSubmitCategory}' rows=2>
+								<@select name='id_category_filter' id='id_category_filter' default_value='${suggest_submit_category_selected}' items=category_list />
+							</@formGroup>
+						</#if>
+						<#if suggest_submit_type_list?has_content>
+							<@formGroup labelFor='id_type' labelKey='#i18n{suggest.statistics.labelSuggestSubmitType}' rows=2>
+								<@select name='id_type' id='id_type' default_value='${suggest_submit_type_selected}' items=suggest_submit_type_list />
+							</@formGroup>
+						</#if>
+						<@formGroup rows=2>
+							<@button type='submit' title='#i18n{suggest.statistics.buttonSearch}' buttonIcon='search' color='primary' />
+						</@formGroup>
+					</@tform>
+				</@columns>
+				<@columns lg=8 xl=9>
 					<#if suggest?exists>
-						<@select name='id_suggest' default_value='${suggest.idSuggest}' items=suggest_list />
-					<#else>
-						<@select name='id_suggest' default_value='-1' items=suggest_list  />
+						<#assign total = number_suggestsubmit_published + number_suggestsubmit_waiting + number_suggestsubmit_disabled />
+						<@div class='d-flex flex-wrap align-items-center gap-2 mb-3'>
+							<@p class='h2 mb-0 me-2'>${suggest.title}</@p>
+							<#if category_filter?has_content>
+								<@tag color='azure-lt' tagIcon='category'>${category_filter.title}</@tag>
+							</#if>
+							<#if type_filter?has_content>
+								<@tag color='purple-lt' tagIcon='tags'>${type_filter.name}</@tag>
+							</#if>
+						</@div>
+						<@row class='g-3 mb-3'>
+							<@statTile value=number_suggestsubmit_published label='#i18n{suggest.manageSuggestSubmit.altPublish}' iconName='check' color='success' />
+							<@statTile value=number_suggestsubmit_waiting label='#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}' iconName='player-pause' color='warning' />
+							<@statTile value=number_suggestsubmit_disabled label='#i18n{suggest.manageSuggestSubmit.altDisable}' iconName='x' color='danger' />
+							<@statTile value=number_users!0 label='#i18n{suggest.statistics.labelContributors}' iconName='users' color='primary' />
+							<@statTile value=number_votes!0 label='#i18n{suggest.statistics.labelNbVotesPerSuggestsubmit}' iconName='thumb-up' color='azure' />
+							<@statTile value=number_comments!0 label='#i18n{suggest.statistics.labelNbCommentsPerSuggestsubmit}' iconName='message' color='azure' />
+						</@row>
+						<#if total gt 0>
+							<@row class='g-3'>
+								<@columns xl=6>
+									<@box>
+										<@boxHeader title='#i18n{suggest.statistics.labelStatusChart}' />
+										<@boxBody>
+											<@div class='d-flex align-items-baseline mb-2'>
+												<@span class='fs-1 fw-bold me-2'>${total}</@span>
+												<@span class='text-secondary'>#i18n{suggest.statistics.labelTotal}</@span>
+											</@div>
+											<@div class='progress progress-separated mb-3' params='style="height: 1rem"'>
+												<#list [ {'value': number_suggestsubmit_published, 'color': 'success', 'label': '#i18n{suggest.manageSuggestSubmit.altPublish}'}, {'value': number_suggestsubmit_waiting, 'color': 'warning', 'label': '#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}'}, {'value': number_suggestsubmit_disabled, 'color': 'danger', 'label': '#i18n{suggest.manageSuggestSubmit.altDisable}'} ] as state>
+													<#if state.value gt 0>
+														<@div class='progress-bar bg-${state.color}' params='role="progressbar" style="width: ${(state.value * 100 / total)?c}%" aria-label="${state.label}" aria-valuenow="${state.value?c}" aria-valuemin="0" aria-valuemax="${total?c}" title="${state.label} : ${state.value} / ${total}"' />
+													</#if>
+												</#list>
+											</@div>
+											<@div class='d-flex flex-wrap gap-3 small'>
+												<@span><@span class='d-inline-block rounded-circle bg-success me-1 align-middle' params='style="width: .625rem; height: .625rem" aria-hidden="true"' />#i18n{suggest.manageSuggestSubmit.altPublish} <strong>${number_suggestsubmit_published}</strong> (${(number_suggestsubmit_published * 100 / total)?round}&nbsp;%)</@span>
+												<@span><@span class='d-inline-block rounded-circle bg-warning me-1 align-middle' params='style="width: .625rem; height: .625rem" aria-hidden="true"' />#i18n{suggest.manageSuggestSubmit.altWaitingForPublish} <strong>${number_suggestsubmit_waiting}</strong> (${(number_suggestsubmit_waiting * 100 / total)?round}&nbsp;%)</@span>
+												<@span><@span class='d-inline-block rounded-circle bg-danger me-1 align-middle' params='style="width: .625rem; height: .625rem" aria-hidden="true"' />#i18n{suggest.manageSuggestSubmit.altDisable} <strong>${number_suggestsubmit_disabled}</strong> (${(number_suggestsubmit_disabled * 100 / total)?round}&nbsp;%)</@span>
+											</@div>
+										</@boxBody>
+									</@box>
+								</@columns>
+								<#if category_statistics?has_content>
+									<@columns xl=6>
+										<@box>
+											<@boxHeader title='#i18n{suggest.statistics.labelCategoryChart}' />
+											<@boxBody>
+												<#assign maxCategory = 0 />
+												<#list category_statistics as categoryStatistics><#if categoryStatistics.count gt maxCategory><#assign maxCategory = categoryStatistics.count /></#if></#list>
+												<#list category_statistics?sort_by('count')?reverse as categoryStatistics>
+													<@statBar label=categoryStatistics.title value=categoryStatistics.count max=maxCategory color='primary'>
+														<@span class='d-inline-block rounded-circle border me-1 align-middle' params='style="width: .625rem; height: .625rem; background-color: ${categoryStatistics.color!\'transparent\'}" aria-hidden="true"' />
+													</@statBar>
+												</#list>
+											</@boxBody>
+										</@box>
+									</@columns>
+								</#if>
+								<@columns xl=category_statistics?has_content?then(12, 6)>
+									<@box>
+										<@boxHeader title='#i18n{suggest.statistics.labelTopScores}' />
+										<@boxBody>
+											<#if high_scores?has_content>
+												<#assign maxScore = 0 />
+												<#list high_scores as suggestsubmit><#if suggestsubmit.numberScore?abs gt maxScore><#assign maxScore = suggestsubmit.numberScore?abs /></#if></#list>
+												<#list high_scores as suggestsubmit>
+													<@statBar label=suggestsubmit.suggestSubmitTitle! value=suggestsubmit.numberScore max=maxScore color=(suggestsubmit.numberScore lt 0)?then('danger', 'primary') title='#i18n{suggest.statistics.labelScore}' />
+												</#list>
+											<#else>
+												<@empty title='#i18n{portal.util.labelNoItem}' subtitle='#i18n{suggest.statistics.labelNoSuggestSubmit}' iconName='chart-bar-off' class='h-auto' />
+											</#if>
+										</@boxBody>
+									</@box>
+								</@columns>
+							</@row>
+						<#else>
+							<@card>
+								<@empty title='#i18n{portal.util.labelNoItem}' subtitle='#i18n{suggest.statistics.labelNoSuggestSubmit}' iconName='chart-bar-off' class='h-auto' />
+							</@card>
+						</#if>
 					</#if>
-				</@formGroup>
-				<@formGroup labelFor='fist_response_date_filter' labelKey='#i18n{suggest.statistics.labelValidationDate}'>
-					<@inputGroup>
-						<#if first_date_filter?has_content><#assign value = first_date_filter?date /><#else><#assign value = '' /></#if>
-						<@input type='daterange' dateRangeEndId='last_date_filter' name='first_date_filter' id='first_date_filter' value=value />
-						<#if last_date_filter?has_content><#assign value = last_date_filter?if_exists?date /><#else><#assign value = '' /></#if>
-						<@inputGroupItem type='text'>#i18n{suggest.statistics.labelAnd}</@inputGroupItem>
-						<@input type='text' name='last_date_filter' id='last_date_filter' value=value />
-					</@inputGroup>
-				</@formGroup>
-				<#if category_list?has_content>
-					<@formGroup labelFor='id_category' labelKey='#i18n{suggest.statistics.labelSuggestSubmitCategory}'>
-						<@select name='id_category_filter' default_value='${suggest_submit_category_selected}' items=category_list />
-					</@formGroup>
-				</#if>
-				<#if suggest_submit_type_list?has_content>
-					<@formGroup labelFor='id_type' labelKey='#i18n{suggest.statistics.labelSuggestSubmitType}'>
-						<@select name='id_type' default_value='${suggest_submit_type_selected}' items=suggest_submit_type_list />
-					</@formGroup>
-				</#if>
-				<@formGroup>
-					<@button type='submit' title='#i18n{suggest.statistics.buttonSearch}' buttonIcon='search' />
-				</@formGroup>
-			</@tform>
-			
-			<#if suggest?exists>
-			
-			<h3>${suggest.title}</h3>
-			
-				<@alert color='info'>
-					<#if category_filter?has_content>
-						<p><strong>#i18n{suggest.statistics.SuggestSubmitCategory}</strong>: ${category_filter.title}</p>
-					</#if>
-					<#if type_filter?has_content>
-						<p><strong>#i18n{suggest.statistics.SuggestSubmitType}</strong>: ${type_filter.name}</p>
-					</#if>
-
-					<p>#i18n{suggest.statistics.SuggestSubmitNumber} : <strong>${number_suggestsubmit_published} / ${number_suggestsubmit_waiting} / ${number_suggestsubmit_disabled}</strong></p>
-					<p>#i18n{suggest.statistics.labelNbCommentsPerSuggestsubmit} : <strong>${number_comments!0}</strong></p>
-					<p>#i18n{suggest.statistics.labelNbVotesPerSuggestsubmit} : <strong>${number_votes!0}</strong></p>
-					<p>#i18n{suggest.statistics.labelNbUsers}: <strong>${number_users!0}</strong></p>
-				</@alert>
-				
-				<#if high_scores?has_content>
-				<@table>
-					<@tr>
-						<@th>#i18n{suggest.statistics.labelTitle}</@th>
-						<@th>#i18n{suggest.statistics.labelScore}</@th>
-					</@tr>
-					<#list high_scores as suggestsubmit>
-					<@tr>
-						<@td>${suggestsubmit.suggestSubmitTitle!}</@td>
-						<@td align='center'><strong>${suggestsubmit.numberScore}</strong></@td>
-					</@tr>
-					</#list>
-				</@table>
-				<#else>
-				<@empty title='#i18n{portal.util.labelNoItem}' subtitle='#i18n{suggest.statistics.labelNoSuggestSubmit}' iconName='chart-bar-off' class='h-auto' />
-				</#if>
-			</#if>
-		
-	
+				</@columns>
+			</@row>
+		</@advancedParametersTabs>
 	</@pageColumn>
 </@pageContainer>

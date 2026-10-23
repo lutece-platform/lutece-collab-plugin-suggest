@@ -1,24 +1,19 @@
+<#include "include_suggest_submit_tabs.html" />
 <@pageContainer>
 	<@pageColumn>
 		<@pageHeader title='${suggest.title!}'>
 			<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp' buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' hideTitle=['xs','sm','md'] />
 		</@pageHeader>
-		<@tabs>
-				<@tabList>
-					<@tabLink href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmit&id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmit.title}' />
-					<@tabLink active=true href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmitOrder&id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmitOrder.title}' />
-				</@tabList>
-				<@tabContent>
-					<#if suggest_submit_list?has_content>
-					<@paginationAdmin paginator=paginator combo=1 form=0 showcount=0 />
-					<#assign include_suggest_submit_actions="include_suggest_submit_actions_change_order.html">
-					<#assign display_check_actions = false>
-					<#include "include_suggest_submit_list.html">
-					<#else>
-					<@empty title='#i18n{portal.util.labelNoItem}' iconName='message-off' />
-					</#if>
-				</@tabContent>
-			</@tabs>
+		<@suggestSubmitTabs active='order'>
+			<#if suggest_submit_list?has_content>
+				<#assign include_suggest_submit_actions="include_suggest_submit_actions_change_order.html">
+				<#assign display_check_actions = false>
+				<#include "include_suggest_submit_list.html">
+				<@paginationAdmin paginator=paginator combo=1 />
+			<#else>
+				<@empty title='#i18n{portal.util.labelNoItem}' iconName='message-off' />
+			</#if>
+		</@suggestSubmitTabs>
 	</@pageColumn>
 </@pageContainer>
 
