@@ -1,5 +1,24 @@
 <@cTpl>
 <@cContainer class='py-4' id='suggestFrame'>
+<#if suggest_title?? && id_suggest??>
+	<#assign breadcrumbItems = [ { 'title': '#i18n{suggest.suggestFrame.breadcrumbSuggestList}', 'url': 'jsp/site/Portal.jsp?page=suggest&action=view_suggest_list' } ]>
+	<#assign currentView = view!''>
+	<#if currentView == 'view_suggest_submit_list'>
+		<#assign breadcrumbItems += [ { 'title': suggest_title, 'url': '' } ]>
+	<#else>
+		<#assign breadcrumbItems += [ { 'title': suggest_title, 'url': 'jsp/site/Portal.jsp?page=suggest&id_suggest=' + id_suggest?c + '&action=view_suggest_submit_list' } ]>
+		<#if currentView == 'view_suggest_submit' && suggest_submit_title??>
+			<#assign breadcrumbItems += [ { 'title': suggest_submit_title, 'url': '' } ]>
+		<#elseif currentView == 'view_create_suggest_submit'>
+			<#assign breadcrumbItems += [ { 'title': '#i18n{suggest.suggestFrame.labelProposal}', 'url': '' } ]>
+		<#elseif currentView == 'view_report'>
+			<#assign breadcrumbItems += [ { 'title': '#i18n{suggest.suggestListSubmit.labelReport}', 'url': '' } ]>
+		<#elseif currentView == 'view_create_sub_comment'>
+			<#assign breadcrumbItems += [ { 'title': '#i18n{suggest.suggestComment.labelCommentAComment}', 'url': '' } ]>
+		</#if>
+	</#if>
+	<@cBreadCrumb items=breadcrumbItems class='mb-3' containerClass='px-0' />
+</#if>
 <#if unavailability_message??>
 	<@cAlert type='warning'>${unavailability_message}</@cAlert>
 <#else>
@@ -18,8 +37,6 @@
 		<@cCol cols='12 col-md'>
 			<#if isListView>
 				<@cTitle level=1 class='mb-0'>${label_suggest!}</@cTitle>
-			<#elseif view?has_content>
-				<@cLink href=urlSuggestList label='#i18n{suggest.suggestFrame.backToList}' />
 			</#if>
 		</@cCol>
 		<@cCol cols='12 col-md-auto' class='d-flex flex-wrap gap-2'>

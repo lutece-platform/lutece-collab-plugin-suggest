@@ -1,0 +1,21 @@
+<#--
+Macro: suggestSubmitTabs
+Description: tab card of the contribution screens of a suggest. Each tab is its own page: the nested content is
+rendered in the panel of the active tab.
+Parameters:
+- active (string, required): the active tab, 'list' or 'order'.
+-->
+<#macro suggestSubmitTabs active>
+<@tabs keepState=false>
+	<@tabList>
+		<@tabLink active=(active == 'list') href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmit&id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmit.title}' tabIcon='list-details' />
+		<@tabLink active=(active == 'order') href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmitOrder&id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmitOrder.title}' tabIcon='arrows-sort' />
+	</@tabList>
+	<@tabContent>
+		<@tabPanel id='suggest-submit-${active}' active=true>
+			<@messages infos=infos![] errors=errors![] warnings=warnings![] />
+			<#nested>
+		</@tabPanel>
+	</@tabContent>
+</@tabs>
+</#macro>

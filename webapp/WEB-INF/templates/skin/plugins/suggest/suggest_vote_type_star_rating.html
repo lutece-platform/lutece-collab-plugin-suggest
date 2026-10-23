@@ -1,21 +1,22 @@
 <@cTpl>
 <#assign idSubmit = id_suggest_submit?c>
 <#assign voteLocked = (user_voted!false) && !(enable_vote_withdrawal!false)>
+<#-- From the highest vote to the lowest: suggest.css displays them in reverse order (see the comment of the stylesheet). -->
 <#assign starVotes = [
-	{ 'value': '-2', 'class': 'secondary', 'title': '#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainstMore}' },
-	{ 'value': '-1', 'class': 'secondary', 'title': '#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainst}' },
-	{ 'value': '1', 'class': 'primary', 'title': '#i18n{suggest.suggestVoteTypeStarRating.titleVoteFor}' },
-	{ 'value': '2', 'class': 'primary', 'title': '#i18n{suggest.suggestVoteTypeStarRating.titleVoteForMore}' }
+	{ 'value': '2', 'stars': 4, 'title': '#i18n{suggest.suggestVoteTypeStarRating.titleVoteForMore}' },
+	{ 'value': '1', 'stars': 3, 'title': '#i18n{suggest.suggestVoteTypeStarRating.titleVoteFor}' },
+	{ 'value': '-1', 'stars': 2, 'title': '#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainst}' },
+	{ 'value': '-2', 'stars': 1, 'title': '#i18n{suggest.suggestVoteTypeStarRating.titleVoteAgainstMore}' }
 ]>
 <@cForm action='jsp/site/Portal.jsp?page=suggest' id='form_vote_star${idSubmit}' class='d-inline-flex'>
 	<@cInput type='hidden' name='action' id='action_vote_star${idSubmit}' value='do_vote' class='' />
 	<@cInput type='hidden' name='id_suggest' id='id_suggest_vote_star${idSubmit}' value=id_suggest?c class='' />
 	<@cInput type='hidden' name='id_suggest_submit' id='id_suggest_submit_vote_star${idSubmit}' value=idSubmit class='' />
 	<@cInput type='hidden' name='view' id='view_vote_star${idSubmit}' value=view class='' />
-	<@cBlock class='btn-group btn-group-sm flex-wrap' params='role="group" aria-label="#i18n{suggest.suggestDetail.labelVote}"'>
+	<@cBlock class='suggest-star-rating' params='role="group" aria-label="#i18n{suggest.suggestDetail.labelVote}"'>
 		<#list starVotes as starVote>
-			<#assign starParams>name="vote" value="${starVote.value}"</#assign>
-			<@cBtn label=starVote.title class=starVote.class type='submit' disabled=voteLocked params=starParams />
+			<#assign starParams>name="vote" value="${starVote.value}" title="${starVote.title}" aria-label="${starVote.stars} / 4 : ${starVote.title}"</#assign>
+			<@cBtn label='' class='suggest-star' noclass=true type='submit' disabled=voteLocked params=starParams />
 		</#list>
 	</@cBlock>
 </@cForm>

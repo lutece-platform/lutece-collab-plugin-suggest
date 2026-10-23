@@ -1,31 +1,32 @@
 <#assign advanced_tab = 'category' />
+<#include "include_advanced_parameters_tabs.html" />
 <@pageContainer>
 	<@pageColumn>
 		<@pageHeader title='#i18n{suggest.manageAdvancedParameters.title}'>
 			<@aButton href='jsp/admin/plugins/suggest/ManageCategory.jsp?view=createCategory' buttonIcon='plus' title='#i18n{suggest.manageCategory.buttonCreate}' color='primary' />
 		</@pageHeader>
-		<#include "include_advanced_parameters_tabs.html" />
-		<@messages infos=infos![] errors=errors![] warnings=warnings![] />
-		<#if category_list?has_content>
-			<@manageFeature>
-				<#list category_list as category>
-				<@manageFeatureItem>
-					<@manageFeatureItemColumn auto=true>
-						<@tag color='' class='text-white' params=' style="background-color:${category.color!}"'>&nbsp;</@tag>
-					</@manageFeatureItemColumn>
-					<@manageFeatureItemColumn>
-						<strong>${category.title!}</strong>
-					</@manageFeatureItemColumn>
-					<@manageFeatureItemColumn auto=true align='end'>
-						<@aButton href='jsp/admin/plugins/suggest/ManageCategory.jsp?view=modifyCategory&id_category=${category.idCategory}' title='#i18n{portal.util.labelModify}' buttonIcon='edit' class='me-1' hideTitle=['all'] />
-						<@aButton href='jsp/admin/plugins/suggest/ManageCategory.jsp?view=confirmRemoveCategory&id_category=${category.idCategory}' title='#i18n{suggest.manageCategory.altDelete}' buttonIcon='trash' color='danger' hideTitle=['all'] />
-					</@manageFeatureItemColumn>
-				</@manageFeatureItem>
-				</#list>
-			</@manageFeature>
-			<@paginationAdmin paginator=paginator combo=1 />
-		<#else>
-			<@empty title='#i18n{portal.util.labelNoItem}' iconName='category' actionTitle='#i18n{suggest.manageCategory.buttonCreate}' actionUrl='jsp/admin/plugins/suggest/ManageCategory.jsp?view=createCategory' />
-		</#if>
+		<@advancedParametersTabs>
+			<#if category_list?has_content>
+				<@manageFeature>
+					<#list category_list as category>
+					<@manageFeatureItem>
+						<@manageFeatureItemColumn auto=true>
+							<@tag color='' class='text-white' params=' style="background-color:${category.color!}"'>&nbsp;</@tag>
+						</@manageFeatureItemColumn>
+						<@manageFeatureItemColumn>
+							<strong>${category.title!}</strong>
+						</@manageFeatureItemColumn>
+						<@manageFeatureItemColumn auto=true align='end'>
+							<@aButton href='jsp/admin/plugins/suggest/ManageCategory.jsp?view=modifyCategory&id_category=${category.idCategory}' title='#i18n{portal.util.labelModify}' buttonIcon='edit' class='me-1' hideTitle=['all'] />
+							<@aButton href='jsp/admin/plugins/suggest/ManageCategory.jsp?view=confirmRemoveCategory&id_category=${category.idCategory}' title='#i18n{suggest.manageCategory.altDelete}' buttonIcon='trash' color='danger' hideTitle=['all'] />
+						</@manageFeatureItemColumn>
+					</@manageFeatureItem>
+					</#list>
+				</@manageFeature>
+				<@paginationAdmin paginator=paginator combo=1 />
+			<#else>
+				<@empty title='#i18n{portal.util.labelNoItem}' iconName='category' actionTitle='#i18n{suggest.manageCategory.buttonCreate}' actionUrl='jsp/admin/plugins/suggest/ManageCategory.jsp?view=createCategory' />
+			</#if>
+		</@advancedParametersTabs>
 	</@pageColumn>
 </@pageContainer>

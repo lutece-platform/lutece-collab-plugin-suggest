@@ -133,6 +133,8 @@ public class SuggestApp extends MVCApplication
     private static final String MARK_CONTENT_SUGGEST = "content_suggest";
     private static final String MARK_LIST_SUGGEST_SUBMIT = "list_suggest_submit";
     private static final String MARK_LABEL_SUGGEST = "label_suggest";
+    private static final String MARK_SUGGEST_TITLE = "suggest_title";
+    private static final String MARK_SUGGEST_SUBMIT_TITLE = "suggest_submit_title";
     private static final String MARK_HEADER_SUGGEST = "header_suggest";
     private static final String MARK_LIST_CATEGORIES_SUGGEST = "list_categories_suggest";
     private static final String MARK_ID_SUGGEST = "id_suggest";
@@ -758,6 +760,7 @@ public class SuggestApp extends MVCApplication
         testUserAuthorizationAccess( suggestSubmit.getSuggest( ), request, luteceUserConnected );
 
         model.put( MARK_VIEW, CONSTANT_VIEW_SUGGEST_SUBMIT );
+        model.put( MARK_SUGGEST_SUBMIT_TITLE, suggestSubmit.getSuggestSubmitTitle( ) );
 
         SearchFields searchFields = getSearchFields( request );
         addSuggestPageFrameset( getHtmlSuggestSubmitDetail( request, nMode, _plugin, suggestSubmit, luteceUserConnected ), request, page,
@@ -904,6 +907,7 @@ public class SuggestApp extends MVCApplication
 
         suggestSubmit.setSuggest( SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), _plugin ) );
         model.put( MARK_VIEW, CONSTANT_VIEW_REPORT );
+        model.put( MARK_SUGGEST_SUBMIT_TITLE, suggestSubmit.getSuggestSubmitTitle( ) );
 
         SearchFields searchFields = getSearchFields( request );
         addSuggestPageFrameset( getHtmlReported( request, nMode, _plugin, suggestSubmit ), request, page, suggestSubmit.getSuggest( ), model, searchFields,
@@ -2219,6 +2223,7 @@ public class SuggestApp extends MVCApplication
     {
         page.setTitle( I18nService.getLocalizedString( PROPERTY_XPAGE_PAGETITLE, getLocale( request ) ) );
         page.setPathLabel( I18nService.getLocalizedString( PROPERTY_XPAGE_PATHLABEL, getLocale( request ) ) );
+        model.put( MARK_SUGGEST_TITLE, suggest.getTitle( ) );
 
         if ( suggest.isActive( ) )
         {

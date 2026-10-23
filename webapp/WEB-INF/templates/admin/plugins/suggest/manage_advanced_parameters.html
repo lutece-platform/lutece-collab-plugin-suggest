@@ -1,17 +1,17 @@
 <#assign advanced_tab = 'parameters' />
+<#include "include_advanced_parameters_tabs.html" />
 <@pageContainer>
 	<@pageColumn>
 		<@pageHeader title='#i18n{suggest.manageAdvancedParameters.title}' />
-		<#include "include_advanced_parameters_tabs.html" />
-		<@messages infos=infos![] errors=errors![] warnings=warnings![] />
-		<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp'><@input type='hidden' name='action' value='modifyAdvancedParameters' />
-			<@formGroup labelFor='id_default_suggest' labelKey='#i18n{suggest.manageAdvancedParameters.labelDefaultSuggest}' helpKey='#i18n{suggest.manageAdvancedParameters.labelDefaultSuggestComment}'>
-				<@select name='id_default_suggest' default_value='${id_default_suggest}' items=suggest_list  />
-			</@formGroup>
-			<@formGroup>
-				<@button type='submit' title='#i18n{suggest.manageAdvancedParameters.buttonModify}' buttonIcon='device-floppy' />
-			</@formGroup>
-		</@tform>
-	
+		<@advancedParametersTabs>
+			<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp'><@input type='hidden' name='action' value='modifyAdvancedParameters' />
+				<@formGroup labelFor='id_default_suggest' labelKey='#i18n{suggest.manageAdvancedParameters.labelDefaultSuggest}' helpKey='#i18n{suggest.manageAdvancedParameters.labelDefaultSuggestComment}'>
+					<@select name='id_default_suggest' default_value='${id_default_suggest}' items=suggest_list  />
+				</@formGroup>
+				<@formGroup>
+					<@button type='submit' title='#i18n{suggest.manageAdvancedParameters.buttonModify}' buttonIcon='device-floppy' color='primary' />
+				</@formGroup>
+			</@tform>
+		</@advancedParametersTabs>
 	</@pageColumn>
 </@pageContainer>

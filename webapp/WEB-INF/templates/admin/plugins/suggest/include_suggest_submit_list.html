@@ -1,95 +1,72 @@
-<@table>
-	<thead>
-		<@tr>
-			<@th></@th>
-			<@th>#i18n{suggest.manageSuggestSubmit.rowCategory}</@th>
-			<@th>Publication</@th>
-			<@th>Titre</@th>
-			<#if suggest.idWorkflow gt 0>
-				<@th>#i18n{suggest.manageSuggestSubmit.rowState}</@th>
-			</#if>
-			<@th>#i18n{suggest.manageSuggestSubmit.rowActions}</@th>
-		</@tr>
-	</thead>
+<#--
+List of the contributions of a suggest, shared by the list tab (display_check_actions = true: selection switches for
+the mass actions) and the order tab. The actions of each card come from the template named by
+include_suggest_submit_actions.
+-->
+<@manageFeature>
 	<#list suggest_submit_list as suggest_submit>
-	<@tr>
-		<@td id='suggest${suggest_submit.idSuggestSubmit}'>
-			<#if display_check_actions>
-				<@checkBox orientation='switch' class='selected-id' name='selected_suggest_submit' id='selected_suggest_submit${suggest_submit.idSuggestSubmit}' value='${suggest_submit.idSuggestSubmit}' />
-			</#if>
-		</@td>
-		<#if suggest_submit.suggestSubmitTitle?exists>
-			<@td>
-			<#if category_list?has_content  && suggest_submit.category?exists>
-				<@tag color='light'><span class="d-inline-block rounded-circle me-1 align-middle" style="width:.6rem;height:.6rem;background-color:${suggest_submit.category.color!''}"></span>${suggest_submit.category.title}</@tag>
-			</#if>
-			</@td>
-			<@td>
-				<#if suggest_submit_type_list?has_content  &&  suggest_submit.suggestSubmitType?exists>
-					<@tag color='light'><span class="d-inline-block rounded-circle me-1 align-middle" style="width:.6rem;height:.6rem;background-color:${suggest_submit.suggestSubmitType.color!''}"></span>
+	<@manageFeatureItem id='suggest${suggest_submit.idSuggestSubmit}' valign='top' class=suggest_submit.reported?then('border-danger', '')>
+		<#if display_check_actions>
+			<#assign selectLabel = (suggest_submit.suggestSubmitTitle!)?replace('"', '&quot;') />
+			<@manageFeatureItemColumn auto=true>
+				<@checkBox orientation='switch' class='selected-id' name='selected_suggest_submit' id='selected_suggest_submit${suggest_submit.idSuggestSubmit}' value='${suggest_submit.idSuggestSubmit}' params='aria-label="${selectLabel}"' />
+			</@manageFeatureItemColumn>
+		</#if>
+		<@manageFeatureItemColumn flex=false>
+			<@div class='d-flex flex-wrap align-items-center gap-1 mb-2'>
+				<#if suggest_submit.suggestSubmitState.number=publish_state_number>
+					<@tag color='success' tagIcon='check'>#i18n{suggest.manageSuggestSubmit.altPublish}</@tag>
+				<#elseif suggest_submit.suggestSubmitState.number=waiting_for_publish_state_number>
+					<@tag color='warning' tagIcon='player-pause'>#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}</@tag>
+				<#else>
+					<@tag color='danger' tagIcon='x'>#i18n{suggest.manageSuggestSubmit.altDisable}</@tag>
+				</#if>
+				<#if suggest_submit.pinned>
+					<@tag color='azure' tagIcon='pin'>#i18n{suggest.manageSuggestSubmit.altPinned}</@tag>
+				</#if>
+				<#if suggest_submit.reported>
+					<@tag color='danger' tagIcon='alert-triangle'>#i18n{suggest.manageSuggestSubmit.altWarning}</@tag>
+				</#if>
+				<#if category_list?has_content && suggest_submit.category?exists>
+					<@tag color='light'><@span class='d-inline-block rounded-circle me-1 align-middle' params='style="width:.6rem;height:.6rem;background-color:${suggest_submit.category.color!\'transparent\'}" aria-hidden="true"' />${suggest_submit.category.title}</@tag>
+				</#if>
+				<#if suggest_submit_type_list?has_content && suggest_submit.suggestSubmitType?exists>
+					<@tag color='light'>
 						<#if suggest_submit.suggestSubmitType.idImageResource?has_content>
-							<img class="thumb-list img-responsive"  src="image?resource_type=image_suggest&id=${suggest_submit.suggestSubmitType.idImageResource}" title="${suggest_submit.suggestSubmitType.name} " alt="${suggest_submit.suggestSubmitType.name} ">
+							<@img url='image?resource_type=image_suggest&id=${suggest_submit.suggestSubmitType.idImageResource?c}' alt='' class='me-1 align-middle' params='width="16" height="16"' />
 						</#if>
 						${suggest_submit.suggestSubmitType.name}
 					</@tag>
 				</#if>
-				<#if suggest_submit.suggestSubmitState.number=publish_state_number>
-					<@tag color='success' title='#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState} #i18n{suggest.manageSuggestSubmit.altPublish}'>
-						<@icon style='check' />&nbsp;#i18n{suggest.manageSuggestSubmit.altPublish}
-					</@tag>
-				<#elseif suggest_submit.suggestSubmitState.number=waiting_for_publish_state_number>
-					<@tag color='warning' title='#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState} &nbsp;#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}'>
-						<@icon style='player-pause' />&nbsp;#i18n{suggest.manageSuggestSubmit.altWaitingForPublish}
-					</@tag>
-				<#else>
-					<@tag color='danger' title='#i18n{suggest.manageSuggestSubmit.rowSuggestSubmitState} #i18n{suggest.manageSuggestSubmit.altDisable}'>
-						<@icon style='x' />&nbsp;#i18n{suggest.manageSuggestSubmit.altDisable}
-					</@tag>
+			</@div>
+			<@p class='fw-bold mb-1${suggest_submit.reported?then(" text-danger", "")}'>
+				<#if (suggest_submit.suggestSubmitTitle!)?length &gt; 100>${suggest_submit.suggestSubmitTitle?substring( 0, 100 )}…<#else>${suggest_submit.suggestSubmitTitle!}</#if>
+			</@p>
+			<#if suggest_submit.suggestSubmitValue?exists>
+				<@div class='text-secondary small mb-2'>${suggest_submit.suggestSubmitValue}</@div>
+			</#if>
+			<@div class='d-flex flex-wrap gap-1'>
+				<#if !suggest_submit.disableVote>
+					<@tag color='blue-lt' tagIcon='star'>#i18n{suggest.manageSuggestSubmit.rowNumberVote} <strong>${suggest_submit.numberVote}</strong></@tag>
+					<@tag color=(suggest_submit.numberScore lt 0)?then('red-lt', 'indigo-lt') tagIcon='thumb-up'>#i18n{suggest.manageSuggestSubmit.rowNumberScore} <strong>${suggest_submit.numberScore}</strong></@tag>
 				</#if>
-				<#if suggest_submit.pinned>
-					<@tag color='warning'>
-						<@icon style='pin' title='#i18n{suggest.manageSuggestSubmit.altPinned}' />
-					</@tag>
+				<#if !suggest_submit.disableComment>
+					<#assign nbWaiting = suggest_submit.numberComment - suggest_submit.numberCommentEnable />
+					<@tag color='purple-lt' tagIcon='message'>#i18n{suggest.manageSuggestSubmit.rowNumberComment} <strong>${suggest_submit.numberComment}</strong></@tag>
+					<@tag color='teal-lt' tagIcon='message-check'>#i18n{suggest.manageSuggestSubmit.rowNumberCommentEnable} <strong>${suggest_submit.numberCommentEnable}</strong></@tag>
+					<@tag color=(nbWaiting gt 0)?then('warning', 'yellow-lt') tagIcon='hourglass'>#i18n{suggest.manageSuggestSubmit.rowNumberCommentIdle} <strong>${nbWaiting}</strong></@tag>
 				</#if>
-			</@td>
-			<@td params='style="width:60%;"'>
-				<#if suggest_submit.reported>
-					<@tag color='danger' title='#i18n{suggest.manageSuggestSubmit.altWarning}'><@icon style='alert-triangle' /></@tag>
-				</#if>
-				<#if suggest_submit.reported><span class="text-danger" title="#i18n{suggest.manageSuggestSubmit.altWarning}"></#if>
-				<#if suggest_submit.suggestSubmitTitle?length &gt; 100>
-					${suggest_submit.suggestSubmitTitle?substring(0, 100 )}...
-				<#else>
-					${suggest_submit.suggestSubmitTitle}
-				</#if>
-				<#if suggest_submit.reported></span></#if>
-				<@span align='right'><@icon style='square-plus' /></@span>
-				<#if suggest_submit.suggestSubmitValue?exists>
-					<@div class='preview'>${suggest_submit.suggestSubmitValue}</@div>
-				</#if>
-				<@p class='text-info'>
-					<#if !suggest_submit.disableVote>
-						<@icon style='star' />&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberVote}&nbsp;${suggest_submit.numberVote} /
-						<@icon style='thumb-up' />&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberScore}&nbsp;${suggest_submit.numberScore} /
-					</#if>
-					<#if !suggest_submit.disableComment>
-						<#assign nbWaiting=suggest_submit.numberComment - suggest_submit.numberCommentEnable />
-						<@icon style='comments' />&nbsp;#i18n{suggest.manageSuggestSubmit.rowNumberComment} ${suggest_submit.numberComment}
-							/ #i18n{suggest.manageSuggestSubmit.rowNumberCommentEnable} ${suggest_submit.numberCommentEnable}
-						 / #i18n{suggest.manageSuggestSubmit.rowNumberCommentIdle}
-						 <#if nbWaiting &gt; 0>
-							<@tag color='warning'>${nbWaiting}</@tag><#else>0
-						</#if>
-					</#if>
-				</@p>
-			</@td>
-		</#if>
+			</@div>
+		</@manageFeatureItemColumn>
 		<#if suggest_submit.state??>
-			<@td>
+			<@manageFeatureItemColumn auto=true flex=false>
+				<@p class='fw-bold fs-3 mb-1'>#i18n{suggest.manageSuggestSubmit.rowState}</@p>
 				${suggest_submit.state.name!}
-			</@td>
+			</@manageFeatureItemColumn>
 		</#if>
-		<@td><#include "${include_suggest_submit_actions}"></@td>
-	</@tr>
-</#list>
-</@table>
+		<@manageFeatureItemColumn auto=true align='end'>
+			<#include "${include_suggest_submit_actions}">
+		</@manageFeatureItemColumn>
+	</@manageFeatureItem>
+	</#list>
+</@manageFeature>

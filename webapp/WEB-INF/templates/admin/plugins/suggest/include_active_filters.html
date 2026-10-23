@@ -1,0 +1,33 @@
+<#--
+Active filter chips of the suggest lists (consultations, contributions).
+- filterValueLabel( items, selected ): the label of the selected code in a ReferenceList, '' when absent.
+- activeFilter label value removeUrl: one chip "label : value" with a link that removes this filter only.
+-->
+<#function filterValueLabel items selected>
+	<#local code = selected?is_number?then( selected?c, selected?string )>
+	<#list items![] as item>
+		<#if item.code == code><#return item.name!''></#if>
+	</#list>
+	<#return ''>
+</#function>
+<#macro activeFilter label value removeUrl>
+	<#local removeLabel><#outputformat "HTML">#i18n{suggest.manageSuggestSubmit.labelRemoveFilter} ${label} : ${value}</#outputformat></#local>
+	<@tag color='blue-lt' class='d-inline-flex align-items-center gap-1 py-1'>
+		<@span class='text-secondary'>${label} :</@span><strong>${value}</strong>
+		<@link href=removeUrl class='ms-1 text-reset lh-1' title=removeLabel params='aria-label="${removeLabel}"'><@icon style='x' /></@link>
+	</@tag>
+</#macro>
+<#--
+activeFiltersBar removeAllUrl: the bar holding the nested chips and the "remove all filters" button, rendered only
+when at least one chip is nested.
+-->
+<#macro activeFiltersBar removeAllUrl>
+	<#local chips><#nested></#local>
+	<#if chips?trim?has_content>
+		<@div class='d-flex flex-wrap align-items-center gap-2 mb-3' id='active-filters' params='role="region" aria-label="#i18n{suggest.manageSuggestSubmit.labelActiveFilters}"'>
+			<@span class='text-secondary small me-1'><@icon style='filter' class='me-1' />#i18n{suggest.manageSuggestSubmit.labelActiveFilters}</@span>
+			${chips}
+			<@aButton href=removeAllUrl buttonIcon='filter-off' title='#i18n{suggest.manageSuggestSubmit.buttonRemoveAllFilters}' color='light' size='sm' class='ms-auto' />
+		</@div>
+	</#if>
+</#macro>

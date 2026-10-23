@@ -1,5 +1,5 @@
 <@div class='fixed-actionbar d-flex flex-wrap gap-2 mb-3'>
-	<@button type='button' id='selectAll' name='selectAll' params='data-is="checked"' color='light' buttonIcon='checkbox' title='#i18n{suggest.manageSuggestSubmit.buttonSelectAll}' hideTitle=['all'] />
+	<@checkBox orientation='switch' id='selectAll' name='select_all' value='1' labelKey='#i18n{suggest.manageSuggestSubmit.buttonSelectAll}' wrapperClass='mb-0 me-2 align-self-center' />
 	<#if !suggest.disableVote>
 		<@btnGroup>
 			<@button type='submit' name='mass_enable_vote_action' title='#i18n{suggest.manageSuggestSubmit.buttonEnableVote}' buttonIcon='star' hideTitle=['all'] />

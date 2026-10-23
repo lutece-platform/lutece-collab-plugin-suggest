@@ -49,6 +49,11 @@
             <application-id>suggest</application-id>
         </application>
     </applications>
+    <!-- Front office stylesheet: star rating vote -->
+    <css-stylesheets>
+        <css-stylesheets-scope>portal</css-stylesheets-scope>
+        <css-stylesheet>../../themes/shared/plugins/suggest/css/suggest.css</css-stylesheet>
+    </css-stylesheets>
     <!-- Search Indexer Service -->
     <search-indexers>
         <search-indexer>

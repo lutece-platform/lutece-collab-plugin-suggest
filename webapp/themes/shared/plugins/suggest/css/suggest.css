@@ -1,0 +1,58 @@
+/*
+ * Suggest - star rating vote (suggest_vote_type_star_rating.html).
+ * The stars are submit buttons written from the highest vote to the lowest and displayed in reverse order, so a
+ * hovered or focused star and the stars before it are its following siblings: lit with "~", without script.
+ */
+.suggest-star-rating {
+	display: inline-flex;
+	flex-direction: row-reverse;
+	justify-content: flex-end;
+	gap: .125rem;
+}
+
+.suggest-star-rating .suggest-star {
+	padding: 0 .125rem;
+	border: 0;
+	background: none;
+	font-size: 1.75em;
+	line-height: 1;
+	color: #8d959d;
+	cursor: pointer;
+	transition: color .15s ease-in-out, transform .15s ease-in-out;
+}
+
+.suggest-star-rating .suggest-star::before {
+	content: "\2605";
+}
+
+.suggest-star-rating .suggest-star:not(:disabled):hover,
+.suggest-star-rating .suggest-star:not(:disabled):hover ~ .suggest-star,
+.suggest-star-rating .suggest-star:not(:disabled):focus-visible,
+.suggest-star-rating .suggest-star:not(:disabled):focus-visible ~ .suggest-star {
+	color: #f5b301;
+}
+
+.suggest-star-rating .suggest-star:not(:disabled):hover {
+	transform: scale(1.15);
+}
+
+.suggest-star-rating .suggest-star:focus-visible {
+	outline: 2px solid var(--bs-primary, #0d6efd);
+	outline-offset: 2px;
+	border-radius: .25rem;
+}
+
+.suggest-star-rating .suggest-star:disabled {
+	cursor: default;
+	opacity: .65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.suggest-star-rating .suggest-star {
+		transition: none;
+	}
+
+	.suggest-star-rating .suggest-star:not(:disabled):hover {
+		transform: none;
+	}
+}
