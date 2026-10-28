@@ -11,12 +11,12 @@
 							<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
 							${str_entry}
 							<#if category_list?has_content>
-							<@formGroup labelFor='id_category' labelKey='#i18n{suggest.createSuggestSubmit.labelCategoryTitle} *'>
+							<@formGroup labelFor='id_category' labelKey='#i18n{suggest.createSuggestSubmit.labelCategoryTitle}' mandatory=true>
 								<@select name='id_category' default_value='${id_default_category}' items=category_list />
 							</@formGroup>
 							</#if>
 							<#if types_list?has_content>
-							<@formGroup labelFor='id_type' labelKey='#i18n{suggest.createSuggestSubmit.labelTypeTitle} *'>
+							<@formGroup labelFor='id_type' labelKey='#i18n{suggest.createSuggestSubmit.labelTypeTitle}' mandatory=true>
 								<@select name='id_type' default_value='-1' items=types_list />
 							</@formGroup>
 							</#if>
