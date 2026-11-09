@@ -164,6 +164,7 @@ public class EntryTypeTextArea extends Entry
 
         this.setMandatory( strMandatory != null );
         this.setShowInSuggestSubmitList( strShowInSuggestSubmitList != null );
+        setPlaceholder( request );
 
         return null;
     }

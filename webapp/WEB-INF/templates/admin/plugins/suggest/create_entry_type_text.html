@@ -16,6 +16,9 @@
 							<@formGroup labelFor='help_message' labelKey='#i18n{suggest.createEntry.labelHelpMessage}' helpKey='#i18n{suggest.createEntry.labelHelpMessageComment}'>
 								<@input type='textarea' name='help_message' id='help_message' rows=2 richtext=true />
 							</@formGroup>
+							<@formGroup labelFor='placeholder' labelKey='#i18n{suggest.createEntry.labelPlaceholder}' helpKey='#i18n{suggest.createEntry.labelPlaceholderComment}'>
+								<@input type='textarea' name='placeholder' id='placeholder' rows=3 maxlength=1000 />
+							</@formGroup>
 							<@formGroup labelFor='comment' labelKey='#i18n{suggest.createEntry.labelComment}'>
 								<@input type='textarea' name='comment' id='comment' richtext=true rows=2 />
 							</@formGroup>

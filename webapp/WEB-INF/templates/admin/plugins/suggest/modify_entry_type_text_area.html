@@ -14,6 +14,9 @@
 							<@formGroup labelFor='help_message' labelKey='#i18n{suggest.createEntry.labelHelpMessage}' helpKey='#i18n{suggest.createEntry.labelHelpMessageComment}'>
 								<@input type='textarea' name='help_message' id='help_message' rows=4>${entry.helpMessage}</@input>
 							</@formGroup>
+							<@formGroup labelFor='placeholder' labelKey='#i18n{suggest.createEntry.labelPlaceholder}' helpKey='#i18n{suggest.createEntry.labelPlaceholderComment}'>
+								<@input type='textarea' name='placeholder' id='placeholder' rows=3 maxlength=1000>${entry.placeholder}</@input>
+							</@formGroup>
 							<@formGroup labelFor='comment' labelKey='#i18n{suggest.createEntry.labelComment}'>
 								<@input type='textarea' name='comment' rows=2>${entry.comment}</@input>
 							</@formGroup>
@@ -48,7 +51,7 @@
 								<@input type='text' name='max_size_enter' id='max_size_enter' value=value />
 							</@formGroup>
 							<@formGroup helpKey='#i18n{suggest.createSuggest.labelShowInSuggestSubmitListComment}'>
-								<@checkBox orientation='switch' labelKey='#i18n{suggest.createEntry.labelShowInSuggestSubmitList}' name='show_in_suggest_submit_list' id='show_in_suggest_submit_list' value='1' mandatory=entry.showInSuggestSubmitList />
+								<@checkBox orientation='switch' labelKey='#i18n{suggest.createEntry.labelShowInSuggestSubmitList}' name='show_in_suggest_submit_list' id='show_in_suggest_submit_list' value='1' checked=entry.showInSuggestSubmitList />
 							</@formGroup>
 							<@formGroup>
 								<@button type='submit' name='save' title='#i18n{suggest.modifyEntry.buttonSave}' buttonIcon='device-floppy' />

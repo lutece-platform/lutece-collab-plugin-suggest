@@ -73,11 +73,7 @@ public final class EntryHome
 
         if ( entry.getEntryAdditionalAttributeList( ) != null )
         {
-            for ( EntryAdditionalAttribute entryAdditionalAttribute : entry.getEntryAdditionalAttributeList( ) )
-            {
-                entryAdditionalAttribute.setIdEntry( nPK );
-                _daoAA.insert( entryAdditionalAttribute, plugin );
-            }
+            insertAdditionalAttributes( entry, plugin );
         }
 
         return nPK;
@@ -118,11 +114,25 @@ public final class EntryHome
 
         if ( entry.getEntryAdditionalAttributeList( ) != null )
         {
-            for ( EntryAdditionalAttribute entryAdditionalAttribute : entry.getEntryAdditionalAttributeList( ) )
-            {
-                entryAdditionalAttribute.setIdEntry( entry.getIdEntry( ) );
-                _daoAA.store( entryAdditionalAttribute, plugin );
-            }
+            _daoAA.delete( entry.getIdEntry( ), plugin );
+            insertAdditionalAttributes( entry, plugin );
+        }
+    }
+
+    /**
+     * Inserts the options of an entry.
+     *
+     * @param entry
+     *            the entry, already stored
+     * @param plugin
+     *            the Plugin
+     */
+    private static void insertAdditionalAttributes( IEntry entry, Plugin plugin )
+    {
+        for ( EntryAdditionalAttribute entryAdditionalAttribute : entry.getEntryAdditionalAttributeList( ) )
+        {
+            entryAdditionalAttribute.setIdEntry( entry.getIdEntry( ) );
+            _daoAA.insert( entryAdditionalAttribute, plugin );
         }
     }
 

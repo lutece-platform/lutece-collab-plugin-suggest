@@ -43,6 +43,8 @@ import java.util.Locale;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  *
  * class Entry
@@ -60,6 +62,7 @@ public class Entry implements IEntry
     protected static final String PARAMETER_VALUE = "value";
     protected static final String PARAMETER_MAX_SIZE_ENTER = "max_size_enter";
     protected static final String PARAMETER_SHOW_IN_SUGGEST_SUBMIT_LIST = "show_in_suggest_submit_list";
+    private static final String PARAMETER_PLACEHOLDER = "placeholder";
 
     // message
     protected static final String MESSAGE_MANDATORY_FIELD = "suggest.message.mandatory.field";
@@ -512,5 +515,59 @@ public class Entry implements IEntry
     public void setEntryAdditionalAttributeList( List<EntryAdditionalAttribute> entryAdditionalAttributeList )
     {
         _listEntryAdditionalAttribute = entryAdditionalAttributeList;
+    }
+
+    /**
+     * Returns the value of an option of the field.
+     *
+     * @param strName
+     *            the option name
+     * @return the value, or null when the field has no such option
+     */
+    public String getAdditionalAttribute( String strName )
+    {
+        return ( _listEntryAdditionalAttribute == null ) ? null
+                : _listEntryAdditionalAttribute.stream( ).filter( a -> strName.equals( a.getName( ) ) ).map( EntryAdditionalAttribute::getValue ).findFirst( )
+                        .orElse( null );
+    }
+
+    /**
+     * Builds an option of the field.
+     *
+     * @param strName
+     *            the option name
+     * @param strValue
+     *            the value
+     * @return the option
+     */
+    protected static EntryAdditionalAttribute newAdditionalAttribute( String strName, String strValue )
+    {
+        EntryAdditionalAttribute attribute = new EntryAdditionalAttribute( );
+        attribute.setName( strName );
+        attribute.setValue( strValue );
+
+        return attribute;
+    }
+
+    /**
+     * Returns the example text shown in the empty field.
+     *
+     * @return the example text, or an empty string
+     */
+    public String getPlaceholder( )
+    {
+        return StringUtils.defaultString( getAdditionalAttribute( PARAMETER_PLACEHOLDER ) );
+    }
+
+    /**
+     * Replaces the options of the field with the example text the back office form gives.
+     *
+     * @param request
+     *            the back office request
+     */
+    protected void setPlaceholder( HttpServletRequest request )
+    {
+        setEntryAdditionalAttributeList(
+                List.of( newAdditionalAttribute( PARAMETER_PLACEHOLDER, StringUtils.trimToEmpty( request.getParameter( PARAMETER_PLACEHOLDER ) ) ) ) );
     }
 }

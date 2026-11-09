@@ -2,6 +2,6 @@
 <#assign entryId = entry.idEntry?c>
 <#assign maxlength = (entry.maxSizeEnter gt 0)?then(entry.maxSizeEnter, 0)>
 <@cField label=entry.title for=entryId required=entry.mandatory class='mb-3'>
-	<@cTextArea name=entryId id=entryId rows=entry.height maxlength=maxlength required=entry.mandatory helpMsg=entry.helpMessage!''>${entry.defaultValue!}</@cTextArea>
+	<@cTextArea name=entryId id=entryId rows=entry.height maxlength=maxlength required=entry.mandatory helpMsg=entry.helpMessage!'' placeholder=entry.placeholder>${entry.defaultValue!}</@cTextArea>
 </@cField>
 </@cTpl>
