@@ -42,6 +42,7 @@ import fr.paris.lutece.plugins.suggest.business.SuggestHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
 import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
+import fr.paris.lutece.plugins.suggest.web.SuggestApp;
 import fr.paris.lutece.plugins.subscribe.business.Subscription;
 import fr.paris.lutece.plugins.subscribe.business.SubscriptionFilter;
 import fr.paris.lutece.plugins.subscribe.service.ISubscriptionProviderService;
@@ -49,6 +50,8 @@ import fr.paris.lutece.plugins.subscribe.service.SubscriptionService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
+import fr.paris.lutece.portal.service.util.AppPathService;
+import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
@@ -72,6 +75,11 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
     public static final String SUBSCRIPTION_SUGGEST_CATEGORY = "suggest_category";
     public static final String SUBSCRIPTION_SUGGEST_SUBMIT = "suggest_submit";
     private static final String SUBSCRIPTION_PROVIDER_NAME = "suggest.suggestSubscriptionProviderService";
+    private static final String PARAMETER_PAGE = "page";
+    private static final String PARAMETER_ID_SUGGEST = "id_suggest";
+    private static final String PARAMETER_ID_SUGGEST_SUBMIT = "id_suggest_submit";
+    private static final String PARAMETER_ACTION = "action";
+    private static final String XPAGE_SUGGEST = "suggest";
     private static final String MESSAGE_SUBSCRIBED_SUGGEST = "suggest.message.subscriptions.subscribedSuggest";
     private static final String MESSAGE_SUBSCRIBED_SUGGEST_SUBMIT = "suggest.message.subscriptions.subscribedSuggestSubmit";
     private static final String MESSAGE_SUBSCRIBED_SUGGEST_CATEGORY = "suggest.message.subscriptions.subscribedCategory";
@@ -116,8 +124,14 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
                     if ( suggestSubmit != null )
                     {
+                        UrlItem url = new UrlItem( AppPathService.getPortalUrl( ) );
+                        url.addParameter( PARAMETER_PAGE, XPAGE_SUGGEST );
+                        url.addParameter( PARAMETER_ID_SUGGEST, suggestSubmit.getSuggest( ).getIdSuggest( ) );
+                        url.addParameter( PARAMETER_ID_SUGGEST_SUBMIT, nId );
+                        url.addParameter( PARAMETER_ACTION, SuggestApp.ACTION_VIEW_SUGGEST_SUBMIT );
+
                         Object [ ] params = {
-                            suggestSubmit.getSuggestSubmitTitle( )
+                            "<a href=\"" + url.getUrlWithEntity( ) + "\">" + suggestSubmit.getSuggestSubmitTitle( ) + "</a>"
                         };
 
                         return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_SUGGEST_SUBMIT, params, locale );
