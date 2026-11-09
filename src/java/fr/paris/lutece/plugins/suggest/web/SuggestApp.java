@@ -1654,6 +1654,7 @@ public class SuggestApp extends MVCApplication
 
         model.put( MARK_SUGGEST, suggest );
         model.put( MARK_LIST_SUGGEST_SUBMIT, getSuggestSubmitDisplayList( listIdSuggestSubmit, suggest, locale, plugin, luteceUserConnected ) );
+        model.put( MARK_WORKFLOW_STATES, SuggestWorkflowService.getStates( suggest ) );
 
         model.put( MARK_AUTHORIZED_COMMENT, suggest.isAuthorizedComment( ) );
         model.put( MARK_AUTHORIZED_VOTE, SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) );
@@ -2028,6 +2029,7 @@ public class SuggestApp extends MVCApplication
 
         // get form Recap
         model.put( MARK_DISABLE_NEW_SUGGEST_SUBMIT, suggest.isDisableNewSuggestSubmit( ) );
+        model.put( MARK_WORKFLOW_STATES, SuggestWorkflowService.getStates( suggest ) );
 
         if ( SecurityService.isAuthenticationEnable( ) )
         {
