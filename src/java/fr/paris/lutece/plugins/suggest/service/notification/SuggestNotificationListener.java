@@ -47,6 +47,7 @@ import fr.paris.lutece.plugins.suggest.service.event.CommentSubmitEvent;
 import fr.paris.lutece.plugins.suggest.service.event.SuggestSubmitComplementEvent;
 import fr.paris.lutece.plugins.suggest.service.event.SuggestSubmitEvent;
 import fr.paris.lutece.plugins.suggest.service.subscription.SuggestSubscriptionProviderService;
+import fr.paris.lutece.plugins.suggest.service.workflow.SuggestWorkflowService;
 import fr.paris.lutece.portal.service.event.EventAction;
 import fr.paris.lutece.portal.service.event.Type;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -91,6 +92,8 @@ public class SuggestNotificationListener
     private static final String MARK_COMMENT_AUTHOR = "comment_author";
     private static final String MARK_PARENT_COMMENT = "parent_comment";
     private static final String MARK_REASON = "reason";
+    private static final String MARK_WORKFLOW_STATE = "workflow_state";
+    private static final String MARK_WORKFLOW_STATES = "workflow_states";
     private static final String URL_SUGGEST_SUBMIT = "jsp/site/Portal.jsp?page=suggest&id_suggest={0}&id_suggest_submit={1}&action=view_suggest_submit";
 
     @Inject
@@ -366,6 +369,8 @@ public class SuggestNotificationListener
         model.put( MARK_SUGGEST, suggest );
         model.put( MARK_SUGGEST_SUBMIT, suggestSubmit );
         model.put( MARK_AUTHOR, _notificationService.getUserInfo( suggestSubmit.getLuteceUserKey( ) ) );
+        model.put( MARK_WORKFLOW_STATE, SuggestWorkflowService.getState( suggest, suggestSubmit ) );
+        model.put( MARK_WORKFLOW_STATES, SuggestWorkflowService.getStates( suggest ) );
         model.put( MARK_SUGGEST_SUBMIT_URL, model.get( SuggestNotificationService.MARK_BASE_URL ) + MessageFormat.format( URL_SUGGEST_SUBMIT,
                 Integer.toString( suggest.getIdSuggest( ) ), Integer.toString( suggestSubmit.getIdSuggestSubmit( ) ) ) );
 
