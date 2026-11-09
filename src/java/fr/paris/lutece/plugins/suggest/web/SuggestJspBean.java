@@ -51,6 +51,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.HashMap;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -240,6 +241,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String MESSAGE_ILLOGICAL_NUMBER_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST = "suggest.message.illogicalNumberCommentDisplayInSuggestSubmitList";
     private static final String MESSAGE_ILLOGICAL_NUMBER_CHAR_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST = "suggest.message.illogicalNumberCharCommentDisplayInSuggestSubmitList";
     private static final String MESSAGE_ILLOGICAL_NUMBER_DAY_REQUIRED = "suggest.message.illogicalNumberDayRequired";
+    private static final String MESSAGE_ILLOGICAL_VOTE_DATES = "suggest.message.illogicalVoteDates";
     private static final String MESSAGE_CONFIRM_CHANGE_SUGGEST_SUBMIT_CATEGORY = "suggest.message.confirmChangeSuggestSubmitCategory";
     private static final String MESSAGE_CONFIRM_REMOVE_SUGGEST_SUBMIT_CATEGORY = "suggest.message.confirmRemoveSuggestSubmitCategory";
     private static final String MESSAGE_ERROR_NO_CATEGORY = "suggest.message.errorNoCategorySelected";
@@ -478,6 +480,8 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String PARAMETER_ENABLE_REPORTS = "enable_reports";
     private static final String PARAMETER_ENABLE_TERMS_OF_USE = "enable_terms_of_use";
     private static final String PARAMETER_TERMS_OF_USE = "terms_of_use";
+    private static final String PARAMETER_DATE_BEGIN_VOTE = "date_begin_vote";
+    private static final String PARAMETER_DATE_END_VOTE = "date_end_vote";
     private static final String PARAMETER_DISPLAY_COMMENT_IN_SUGGEST_SUBMIT_LIST = "display_comment_in_suggest_submit_list";
     private static final String PARAMETER_NUMBER_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST = "number_comment_display_in_suggest_submit_list";
     private static final String PARAMETER_NUMBER_CHAR_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST = "number_char_comment_display_in_suggest_submit_list";
@@ -1924,6 +1928,8 @@ public class SuggestJspBean extends MVCAdminJspBean
         String strNotifySubscribers = request.getParameter( PARAMETER_NOTIFY_SUBSCRIBERS );
         String strEnableTermsOfUse = request.getParameter( PARAMETER_ENABLE_TERMS_OF_USE );
         String strTermsOfUse = request.getParameter( PARAMETER_TERMS_OF_USE );
+        String strDateBeginVote = StringUtils.trimToNull( request.getParameter( PARAMETER_DATE_BEGIN_VOTE ) );
+        String strDateEndVote = StringUtils.trimToNull( request.getParameter( PARAMETER_DATE_END_VOTE ) );
         String strEnableReports = request.getParameter( PARAMETER_ENABLE_REPORTS );
         String strDescription = request.getParameter( PARAMETER_DESCRIPTION );
         String strNotificationNewCommentSenderName = request.getParameter( PARAMETER_NOTIFICATION_NEW_COMMENT_SENDER_NAME );
@@ -2073,6 +2079,15 @@ public class SuggestJspBean extends MVCAdminJspBean
             return I18nService.getLocalizedString( MESSAGE_ILLOGICAL_NUMBER_DAY_REQUIRED, getLocale( ) );
         }
 
+        LocalDate dateBeginVote = SuggestService.parseDate( strDateBeginVote );
+        LocalDate dateEndVote = SuggestService.parseDate( strDateEndVote );
+
+        if ( ( strDateBeginVote != null && dateBeginVote == null ) || ( strDateEndVote != null && dateEndVote == null )
+                || ( dateBeginVote != null && dateEndVote != null && dateEndVote.isBefore( dateBeginVote ) ) )
+        {
+            return I18nService.getLocalizedString( MESSAGE_ILLOGICAL_VOTE_DATES, getLocale( ) );
+        }
+
         if ( ( strNumberSuggestSubmitInTopComment != null ) && !strNumberSuggestSubmitInTopComment.trim( ).equals( EMPTY_STRING )
                 && ( nNumberSuggestSubmitInTopComment < 0 ) )
         {
@@ -2165,6 +2180,8 @@ public class SuggestJspBean extends MVCAdminJspBean
         suggest.setEnableReports( strEnableReports != null );
         suggest.setEnableTermsOfUse( strEnableTermsOfUse != null );
         suggest.setTermsOfUse( strTermsOfUse );
+        suggest.setDateBeginVote( strDateBeginVote );
+        suggest.setDateEndVote( strDateEndVote );
         suggest.setDescription( strDescription );
         suggest.setNotificationNewCommentSenderName( strNotificationNewCommentSenderName );
         suggest.setNotificationNewCommentTitle( strNotificationNewCommentTitle );

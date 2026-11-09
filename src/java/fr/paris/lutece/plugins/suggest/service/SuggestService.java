@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 
@@ -127,6 +129,53 @@ public class SuggestService
 
         return ( suggest != null ) && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, Integer.toString( nIdSuggest ), strPermission, user )
                 && AdminWorkgroupService.isAuthorized( suggest, user );
+    }
+
+    /**
+     * Tells whether the users may vote on a suggest on a given day: the vote is not disabled and the day falls within the vote period, each bound being
+     * optional and inclusive.
+     *
+     * @param suggest
+     *            the suggest
+     * @param today
+     *            the day to check
+     * @return true if the vote is open
+     */
+    public static boolean isVoteOpen( Suggest suggest, LocalDate today )
+    {
+        if ( suggest.isDisableVote( ) )
+        {
+            return false;
+        }
+
+        LocalDate dateBegin = parseDate( suggest.getDateBeginVote( ) );
+        LocalDate dateEnd = parseDate( suggest.getDateEndVote( ) );
+
+        return ( dateBegin == null || !today.isBefore( dateBegin ) ) && ( dateEnd == null || !today.isAfter( dateEnd ) );
+    }
+
+    /**
+     * Parses a date written as yyyy-MM-dd.
+     *
+     * @param strDate
+     *            the date, may be null or blank
+     * @return the date, or null when the value is blank or not a date
+     */
+    public static LocalDate parseDate( String strDate )
+    {
+        if ( strDate == null || strDate.isBlank( ) )
+        {
+            return null;
+        }
+
+        try
+        {
+            return LocalDate.parse( strDate.trim( ) );
+        }
+        catch( DateTimeParseException e )
+        {
+            return null;
+        }
     }
 
     /**
