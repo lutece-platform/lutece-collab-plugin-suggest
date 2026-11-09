@@ -71,7 +71,7 @@
 		</@cBlock>
 	</@cCol>
 </@cRow>
-<#if attachments?? && attachments?has_content>
+<#if attachments?has_content>
 <@cSection class='mt-5' id='attachments'>
 	<@cTitle level=2 class='h4 mb-3'>#i18n{suggest.suggestDetail.labelAttachments}</@cTitle>
 	<ul class='list-unstyled'>
@@ -81,8 +81,7 @@
 	</ul>
 </@cSection>
 </#if>
-<#assign isAuthor = lutece_user_connected?? && suggest_submit.luteceUserKey?? && lutece_user_connected.name == suggest_submit.luteceUserKey>
-<#if (complements?? && complements?has_content) || (enable_complements!false) && isAuthor>
+<#if complements?has_content || (can_add_complement!false)>
 <@cSection class='mt-5' id='complements'>
 	<@cTitle level=2 class='h4 mb-3'>#i18n{suggest.suggestDetail.labelComplements}</@cTitle>
 	<#list complements![] as complement>
@@ -93,7 +92,7 @@
 			</@cBlock>
 		</@cBlock>
 	</#list>
-	<#if (enable_complements!false) && isAuthor>
+	<#if can_add_complement!false>
 		<@cBlock class='card'>
 			<@cBlock class='card-body'>
 				<@cForm action=actionUrl name='form-complement' id='form-complement'>

@@ -51,7 +51,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.HashMap;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -1083,7 +1082,7 @@ public class SuggestJspBean extends MVCAdminJspBean
             suggestSubmit.setSuggest( suggest );
             suggestSubmit.setResponses( listResponse );
 
-            FormError formError = SuggestUtils.getAllResponsesData( request, suggestSubmit, getPlugin( ), getLocale( ) );
+            FormError formError = SuggestUtils.getAllResponsesData( request, suggestSubmit, getPlugin( ), getLocale( ), true );
 
             if ( formError != null )
             {
@@ -1806,10 +1805,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     @Action( value = ACTION_CONFIRM_REMOVE_COMPLEMENT, securityTokenAction = TOKEN_SUGGEST )
     public String getConfirmRemoveComplement( HttpServletRequest request )
     {
-        UrlItem url = new UrlItem( JSP_DO_REMOVE_COMPLEMENT );
-        url.addParameter( PARAMETER_ID_COMPLEMENT, SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_ID_COMPLEMENT ) ) );
-
-        return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_COMPLEMENT, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
+        return getConfirmRemove( request, JSP_DO_REMOVE_COMPLEMENT, PARAMETER_ID_COMPLEMENT, MESSAGE_CONFIRM_REMOVE_COMPLEMENT );
     }
 
     /**
@@ -1823,10 +1819,8 @@ public class SuggestJspBean extends MVCAdminJspBean
     public String doRemoveComplement( HttpServletRequest request )
     {
         SuggestSubmitComplement complement = _complementService.findByPrimaryKey( SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_ID_COMPLEMENT ) ) );
-        SuggestSubmit suggestSubmit = ( complement != null ) ? _suggestSubmitService.findByPrimaryKey( complement.getIdSuggestSubmit( ), false, getPlugin( ) ) : null;
 
-        if ( ( suggestSubmit == null ) || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ),
-                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+        if ( ( complement == null ) || !canManageSuggestSubmit( complement.getIdSuggestSubmit( ) ) )
         {
             return redirect( request, getJspManageSuggest( request ) );
         }
@@ -1846,10 +1840,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     @Action( value = ACTION_CONFIRM_REMOVE_ATTACHMENT, securityTokenAction = TOKEN_SUGGEST )
     public String getConfirmRemoveAttachment( HttpServletRequest request )
     {
-        UrlItem url = new UrlItem( JSP_DO_REMOVE_ATTACHMENT );
-        url.addParameter( PARAMETER_ID_ATTACHMENT, SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_ID_ATTACHMENT ) ) );
-
-        return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ATTACHMENT, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
+        return getConfirmRemove( request, JSP_DO_REMOVE_ATTACHMENT, PARAMETER_ID_ATTACHMENT, MESSAGE_CONFIRM_REMOVE_ATTACHMENT );
     }
 
     /**
@@ -1863,10 +1854,8 @@ public class SuggestJspBean extends MVCAdminJspBean
     public String doRemoveAttachment( HttpServletRequest request )
     {
         SuggestSubmitAttachment attachment = _attachmentService.findByPrimaryKey( SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_ID_ATTACHMENT ) ) );
-        SuggestSubmit suggestSubmit = ( attachment != null ) ? _suggestSubmitService.findByPrimaryKey( attachment.getIdSuggestSubmit( ), false, getPlugin( ) ) : null;
 
-        if ( ( suggestSubmit == null ) || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ),
-                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+        if ( ( attachment == null ) || !canManageSuggestSubmit( attachment.getIdSuggestSubmit( ) ) )
         {
             return redirect( request, getJspManageSuggest( request ) );
         }
@@ -1874,6 +1863,42 @@ public class SuggestJspBean extends MVCAdminJspBean
         _attachmentService.remove( attachment );
 
         return redirect( request, getJspManageCommentSubmit( request ) );
+    }
+
+    /**
+     * Asks the confirmation of a removal, the confirmed URL carrying the id read from the request.
+     *
+     * @param request
+     *            The HTTP request
+     * @param strJspRemove
+     *            the URL of the removal action
+     * @param strParameterId
+     *            the name of the id parameter
+     * @param strMessageKey
+     *            the i18n key of the confirmation message
+     * @return The URL of the confirmation message
+     */
+    private String getConfirmRemove( HttpServletRequest request, String strJspRemove, String strParameterId, String strMessageKey )
+    {
+        UrlItem url = new UrlItem( strJspRemove );
+        url.addParameter( strParameterId, SuggestUtils.getIntegerParameter( request.getParameter( strParameterId ) ) );
+
+        return redirect( request, AdminMessageService.getMessageUrl( request, strMessageKey, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
+    }
+
+    /**
+     * Tells whether the user may manage a suggest submit.
+     *
+     * @param nIdSuggestSubmit
+     *            the suggest submit id
+     * @return true if the suggest submit exists and the user may manage the suggest submits of its suggest
+     */
+    private boolean canManageSuggestSubmit( int nIdSuggestSubmit )
+    {
+        SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
+
+        return ( suggestSubmit != null ) && SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ),
+                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) );
     }
 
     /**
@@ -2186,11 +2211,7 @@ public class SuggestJspBean extends MVCAdminJspBean
             return I18nService.getLocalizedString( MESSAGE_ILLOGICAL_NUMBER_DAY_REQUIRED, getLocale( ) );
         }
 
-        LocalDate dateBeginVote = SuggestService.parseDate( strDateBeginVote );
-        LocalDate dateEndVote = SuggestService.parseDate( strDateEndVote );
-
-        if ( ( strDateBeginVote != null && dateBeginVote == null ) || ( strDateEndVote != null && dateEndVote == null )
-                || ( dateBeginVote != null && dateEndVote != null && dateEndVote.isBefore( dateBeginVote ) ) )
+        if ( !SuggestService.isValidVotePeriod( strDateBeginVote, strDateEndVote ) )
         {
             return I18nService.getLocalizedString( MESSAGE_ILLOGICAL_VOTE_DATES, getLocale( ) );
         }

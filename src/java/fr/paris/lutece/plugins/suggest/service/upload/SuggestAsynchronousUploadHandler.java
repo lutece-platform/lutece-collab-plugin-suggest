@@ -163,12 +163,16 @@ public class SuggestAsynchronousUploadHandler extends AbstractAsynchronousUpload
     {
         String strFileName = UploadUtil.cleanFileName( fileItem.getName( ).trim( ) );
         List<MultipartItem> listUploadedFiles = getListUploadedFiles( strFieldName, request.getSession( ) );
-        boolean bAlreadyUploaded = listUploadedFiles.stream( )
-                .anyMatch( f -> UploadUtil.cleanFileName( f.getName( ).trim( ) ).equals( strFileName ) && f.getSize( ) == fileItem.getSize( ) );
 
-        if ( !bAlreadyUploaded )
+        synchronized( listUploadedFiles )
         {
-            listUploadedFiles.add( fileItem );
+            boolean bAlreadyUploaded = listUploadedFiles.stream( )
+                    .anyMatch( f -> UploadUtil.cleanFileName( f.getName( ).trim( ) ).equals( strFileName ) && f.getSize( ) == fileItem.getSize( ) );
+
+            if ( !bAlreadyUploaded )
+            {
+                listUploadedFiles.add( fileItem );
+            }
         }
     }
 
@@ -201,8 +205,26 @@ public class SuggestAsynchronousUploadHandler extends AbstractAsynchronousUpload
     @Override
     public void removeSessionFiles( HttpSession session )
     {
-        getSessionFiles( session ).values( ).forEach( list -> list.forEach( SuggestAsynchronousUploadHandler::delete ) );
-        session.removeAttribute( SESSION_ATTRIBUTE_UPLOADED_FILES );
+        Map<String, List<MultipartItem>> mapFiles = findSessionFiles( session );
+
+        if ( mapFiles != null )
+        {
+            mapFiles.values( ).forEach( list -> list.forEach( SuggestAsynchronousUploadHandler::delete ) );
+            session.removeAttribute( SESSION_ATTRIBUTE_UPLOADED_FILES );
+        }
+    }
+
+    /**
+     * Returns the files of the session, by field name, if any file was uploaded.
+     *
+     * @param session
+     *            the session
+     * @return the files by field name, or null
+     */
+    @SuppressWarnings( "unchecked" )
+    private static Map<String, List<MultipartItem>> findSessionFiles( HttpSession session )
+    {
+        return (Map<String, List<MultipartItem>>) session.getAttribute( SESSION_ATTRIBUTE_UPLOADED_FILES );
     }
 
     /**
@@ -212,10 +234,9 @@ public class SuggestAsynchronousUploadHandler extends AbstractAsynchronousUpload
      *            the session
      * @return the files by field name
      */
-    @SuppressWarnings( "unchecked" )
     private static synchronized Map<String, List<MultipartItem>> getSessionFiles( HttpSession session )
     {
-        Map<String, List<MultipartItem>> mapFiles = (Map<String, List<MultipartItem>>) session.getAttribute( SESSION_ATTRIBUTE_UPLOADED_FILES );
+        Map<String, List<MultipartItem>> mapFiles = findSessionFiles( session );
 
         if ( mapFiles == null )
         {

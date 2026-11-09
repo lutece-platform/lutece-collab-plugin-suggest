@@ -44,6 +44,7 @@ import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.filesystem.UploadUtil;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -55,6 +56,9 @@ import java.util.Map;
 @ApplicationScoped
 public class SuggestSubmitAttachmentService
 {
+    @Inject
+    private FileService _fileService;
+
     /**
      * Stores files and attaches them to a suggest submit.
      *
@@ -69,12 +73,14 @@ public class SuggestSubmitAttachmentService
      */
     public void attach( int nIdSuggestSubmit, int nIdEntry, List<MultipartItem> listFiles ) throws FileServiceException
     {
+        IFileStoreServiceProvider provider = getProvider( );
+
         for ( MultipartItem fileItem : listFiles )
         {
             SuggestSubmitAttachment attachment = new SuggestSubmitAttachment( );
             attachment.setIdSuggestSubmit( nIdSuggestSubmit );
             attachment.setIdEntry( nIdEntry );
-            attachment.setFileKey( getProvider( ).storeFileItem( fileItem ) );
+            attachment.setFileKey( provider.storeFileItem( fileItem ) );
             attachment.setFileName( UploadUtil.cleanFileName( fileItem.getName( ).trim( ) ) );
             attachment.setMimeType( fileItem.getContentType( ) );
             attachment.setSize( fileItem.getSize( ) );
@@ -165,9 +171,9 @@ public class SuggestSubmitAttachmentService
      *
      * @return the file store provider
      */
-    private static IFileStoreServiceProvider getProvider( )
+    private IFileStoreServiceProvider getProvider( )
     {
-        return FileService.getInstance( ).getFileStoreServiceProvider( );
+        return _fileService.getFileStoreServiceProvider( );
     }
 
     /**

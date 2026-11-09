@@ -134,7 +134,6 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     private String _strDateEndVote;
     @SuggestAttribute( "enableComplements" )
     private boolean _bEnableComplements;
-
     @SuggestAttribute( "idImageResource" )
     private Integer _nIdImageResource = SuggestUtils.CONSTANT_ID_NULL;
     private ImageResource _image;
@@ -1257,7 +1256,6 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     {
         _bEnableComplements = bEnableComplements;
     }
-
 
     /**
      * Tells whether the subscribers of a suggest submit are notified at once of its official answers.

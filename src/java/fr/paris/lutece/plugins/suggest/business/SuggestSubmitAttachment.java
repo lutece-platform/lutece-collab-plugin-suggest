@@ -34,6 +34,10 @@
 package fr.paris.lutece.plugins.suggest.business;
 
 import java.io.Serializable;
+import java.util.Locale;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * A file the author attached to a suggest submit, stored by the core file service.
@@ -204,8 +208,6 @@ public class SuggestSubmitAttachment implements Serializable
      */
     public String getExtension( )
     {
-        int nDot = ( _strFileName != null ) ? _strFileName.lastIndexOf( '.' ) : -1;
-
-        return ( nDot >= 0 ) ? _strFileName.substring( nDot + 1 ).toUpperCase( ) : "";
+        return StringUtils.upperCase( StringUtils.defaultString( FilenameUtils.getExtension( _strFileName ) ), Locale.ROOT );
     }
 }

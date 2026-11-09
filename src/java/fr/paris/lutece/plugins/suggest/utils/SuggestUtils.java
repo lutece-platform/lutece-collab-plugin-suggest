@@ -722,7 +722,10 @@ public final class SuggestUtils
 
         for ( IEntry entry : listEntryFirstLevel )
         {
-            SuggestUtils.getHtmlFormEntry( entry.getIdEntry( ), plugin, strBuffer, locale, bBackOffice, request );
+            if ( !( bBackOffice && entry.isFrontOfficeOnly( ) ) )
+            {
+                SuggestUtils.getHtmlFormEntry( entry.getIdEntry( ), plugin, strBuffer, locale, bBackOffice, request );
+            }
         }
 
         Instance<ICaptchaService> captchaService = CDI.current( ).select( ICaptchaService.class, NamedLiteral.of( BeanUtils.BEAN_CAPTCHA_SERVICE ) );
@@ -912,10 +915,12 @@ public final class SuggestUtils
      * @param suggestSubmit
      * @param plugin
      * @param locale
+     * @param bBackOffice
+     *            true in the back office, where the front office only fields are left out
      * @return
      * @throws SiteMessageException
      */
-    public static FormError getAllResponsesData( HttpServletRequest request, SuggestSubmit suggestSubmit, Plugin plugin, Locale locale )
+    public static FormError getAllResponsesData( HttpServletRequest request, SuggestSubmit suggestSubmit, Plugin plugin, Locale locale, boolean bBackOffice )
     {
         List<IEntry> listEntry;
         EntryFilter filter;
@@ -930,6 +935,11 @@ public final class SuggestUtils
 
         for ( IEntry entry : listEntry )
         {
+            if ( bBackOffice && entry.isFrontOfficeOnly( ) )
+            {
+                continue;
+            }
+
             formError = getResponseEntry( request, entry.getIdEntry( ), plugin, suggestSubmit, false, locale );
 
             if ( formError != null )
