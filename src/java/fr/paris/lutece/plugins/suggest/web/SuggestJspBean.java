@@ -77,6 +77,7 @@ import fr.paris.lutece.plugins.suggest.business.SuggestActionHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestFilter;
 import fr.paris.lutece.plugins.suggest.business.SuggestHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
+import fr.paris.lutece.plugins.suggest.business.SuggestSubmitAttachment;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitComplement;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitState;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitStateHome;
@@ -99,6 +100,7 @@ import fr.paris.lutece.plugins.suggest.service.CategoryResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.DefaultMessageResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.SuggestResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.SuggestService;
+import fr.paris.lutece.plugins.suggest.service.SuggestSubmitAttachmentService;
 import fr.paris.lutece.plugins.suggest.service.SuggestSubmitComplementService;
 import fr.paris.lutece.plugins.suggest.service.ICommentSubmitService;
 import fr.paris.lutece.plugins.suggest.service.ISuggestUserInfoService;
@@ -183,6 +185,8 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String ACTION_REMOVE_COMMENT_SUBMIT = "removeCommentSubmit";
     private static final String ACTION_CONFIRM_REMOVE_COMPLEMENT = "confirmRemoveComplement";
     private static final String ACTION_REMOVE_COMPLEMENT = "removeComplement";
+    private static final String ACTION_CONFIRM_REMOVE_ATTACHMENT = "confirmRemoveAttachment";
+    private static final String ACTION_REMOVE_ATTACHMENT = "removeAttachment";
     private static final String ACTION_CREATE_SUGGEST = "createSuggest";
     private static final String ACTION_MODIFY_SUGGEST = "modifySuggest";
     private static final String ACTION_INSERT_SUGGEST_SUBMIT_TYPE = "insertSuggestSubmitType";
@@ -233,6 +237,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String MESSAGE_CONFIRM_REMOVE_SUGGEST_SUBMIT = "suggest.message.confirmRemoveSuggestSubmit";
     private static final String MESSAGE_CONFIRM_REMOVE_COMMENT_SUBMIT = "suggest.message.confirmRemoveCommentSubmit";
     private static final String MESSAGE_CONFIRM_REMOVE_COMPLEMENT = "suggest.message.confirmRemoveComplement";
+    private static final String MESSAGE_CONFIRM_REMOVE_ATTACHMENT = "suggest.message.confirmRemoveAttachment";
     private static final String MESSAGE_CONFIRM_REMOVE_SUGGEST_WITH_SUGGEST_SUBMIT = "suggest.message.confirmRemoveSuggestWithSuggestSubmit";
     private static final String MESSAGE_CONFIRM_DISABLE_SUGGEST = "suggest.message.confirmDisableSuggest";
     private static final String MESSAGE_CONFIRM_REMOVE_ENTRY = "suggest.message.confirmRemoveEntry";
@@ -317,6 +322,8 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String MARK_SUGGEST_SUBMIT_LIST = "suggest_submit_list";
     private static final String MARK_COMMENT_SUBMIT_LIST = "comment_submit_list";
     private static final String MARK_COMPLEMENTS = "complements";
+    private static final String MARK_ATTACHMENTS = "attachments";
+    private static final String MARK_ATTACHMENT_URLS = "attachment_urls";
     private static final String MARK_USERS_INFO = "users_info";
     private static final String MARK_WORKFLOW_STATES = "workflow_states";
     private static final String MARK_VOTE_TYPE_LIST = "vote_type_list";
@@ -394,6 +401,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String JSP_MANAGE_SUGGEST = "jsp/admin/plugins/suggest/ManageSuggest.jsp";
     private static final String JSP_DO_REMOVE_COMMENT_SUBMIT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_REMOVE_COMMENT_SUBMIT;
     private static final String JSP_DO_REMOVE_COMPLEMENT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_REMOVE_COMPLEMENT;
+    private static final String JSP_DO_REMOVE_ATTACHMENT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_REMOVE_ATTACHMENT;
     // private static final String JSP_MANAGE_SUGGEST_SUBMIT_TYPE = "jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp";
     private static final String JSP_MODIFY_SUGGEST = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MODIFY_SUGGEST;
     private static final String JSP_MODIFY_ENTRY = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MODIFY_ENTRY;
@@ -413,6 +421,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String PARAMETER_ID_SUGGEST_SUBMIT = "id_suggest_submit";
     private static final String PARAMETER_ID_COMMENT_SUBMIT = "id_comment_submit";
     private static final String PARAMETER_ID_COMPLEMENT = "id_complement";
+    private static final String PARAMETER_ID_ATTACHMENT = "id_attachment";
     private static final String PARAMETER_ID_PARENT = "id_parent";
     private static final String PARAMETER_STATE_NUMBER = "state_number";
     private static final String PARAMETER_TITLE = "title";
@@ -547,6 +556,8 @@ public class SuggestJspBean extends MVCAdminJspBean
     private SuggestService _suggestService;
     @Inject
     private SuggestSubmitComplementService _complementService;
+    @Inject
+    private SuggestSubmitAttachmentService _attachmentService;
     @Inject
     private WorkflowService _workflowService;
     @Inject
@@ -1013,7 +1024,7 @@ public class SuggestJspBean extends MVCAdminJspBean
             throw new AccessDeniedException( "Access denied" );
         }
 
-        SuggestUtils.getModelHtmlForm( suggest, getPlugin( ), getLocale( ), SuggestUtils.CONSTANT_ID_NULL, true ).forEach( model::put );
+        SuggestUtils.getModelHtmlForm( suggest, getPlugin( ), getLocale( ), SuggestUtils.CONSTANT_ID_NULL, true, null ).forEach( model::put );
 
         return getPage( PROPERTY_CREATE_SUGGEST_SUBMIT_PAGE_TITLE, TEMPLATE_CREATE_SUGGEST_SUBMIT );
     }
@@ -1309,6 +1320,10 @@ public class SuggestJspBean extends MVCAdminJspBean
         }
         model.put( MARK_COMMENT_SUBMIT_LIST, paginator.getPageItems( ) );
         model.put( MARK_COMPLEMENTS, _complementService.getComplements( suggestSubmit.getIdSuggestSubmit( ) ) );
+
+        List<SuggestSubmitAttachment> listAttachments = _attachmentService.getAttachments( suggestSubmit.getIdSuggestSubmit( ) );
+        model.put( MARK_ATTACHMENTS, listAttachments );
+        model.put( MARK_ATTACHMENT_URLS, _attachmentService.getDownloadUrls( listAttachments, true ) );
         model.put( MARK_USERS_INFO, getUsersInfo( suggestSubmit, paginator.getPageItems( ), plugin ) );
         model.put( MARK_SUGGEST_SUBMIT, suggestSubmit );
         model.put( MARK_ID_SUGGEST_SUBMIT_PREV, _suggestSubmitService.findPrevIdSuggestSubmitInTheList( _nIdSuggestSubmit, filter, plugin ) );
@@ -1817,6 +1832,46 @@ public class SuggestJspBean extends MVCAdminJspBean
         }
 
         _complementService.removeComplement( complement );
+
+        return redirect( request, getJspManageCommentSubmit( request ) );
+    }
+
+    /**
+     * Asks the confirmation of the removal of an attachment.
+     *
+     * @param request
+     *            The HTTP request
+     * @return The URL of the confirmation message
+     */
+    @Action( value = ACTION_CONFIRM_REMOVE_ATTACHMENT, securityTokenAction = TOKEN_SUGGEST )
+    public String getConfirmRemoveAttachment( HttpServletRequest request )
+    {
+        UrlItem url = new UrlItem( JSP_DO_REMOVE_ATTACHMENT );
+        url.addParameter( PARAMETER_ID_ATTACHMENT, SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_ID_ATTACHMENT ) ) );
+
+        return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ATTACHMENT, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
+    }
+
+    /**
+     * Removes an attachment of a suggest submit the user may manage, and its file.
+     *
+     * @param request
+     *            The HTTP request
+     * @return The URL to go after performing the action
+     */
+    @Action( value = ACTION_REMOVE_ATTACHMENT, securityTokenAction = TOKEN_SUGGEST )
+    public String doRemoveAttachment( HttpServletRequest request )
+    {
+        SuggestSubmitAttachment attachment = _attachmentService.findByPrimaryKey( SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_ID_ATTACHMENT ) ) );
+        SuggestSubmit suggestSubmit = ( attachment != null ) ? _suggestSubmitService.findByPrimaryKey( attachment.getIdSuggestSubmit( ), false, getPlugin( ) ) : null;
+
+        if ( ( suggestSubmit == null ) || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ),
+                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+        {
+            return redirect( request, getJspManageSuggest( request ) );
+        }
+
+        _attachmentService.remove( attachment );
 
         return redirect( request, getJspManageCommentSubmit( request ) );
     }

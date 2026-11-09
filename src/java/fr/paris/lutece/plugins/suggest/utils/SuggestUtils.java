@@ -672,7 +672,8 @@ public final class SuggestUtils
      * @param bBackOffice
      * @return
      */
-    public static Map<String, Object> getModelHtmlForm( Suggest suggest, Plugin plugin, Locale locale, int nIdDefaultCategory, boolean bBackOffice )
+    public static Map<String, Object> getModelHtmlForm( Suggest suggest, Plugin plugin, Locale locale, int nIdDefaultCategory, boolean bBackOffice,
+            HttpServletRequest request )
     {
         List<IEntry> listEntryFirstLevel;
         Map<String, Object> model = new HashMap<>( );
@@ -721,7 +722,7 @@ public final class SuggestUtils
 
         for ( IEntry entry : listEntryFirstLevel )
         {
-            SuggestUtils.getHtmlFormEntry( entry.getIdEntry( ), plugin, strBuffer, locale, bBackOffice );
+            SuggestUtils.getHtmlFormEntry( entry.getIdEntry( ), plugin, strBuffer, locale, bBackOffice, request );
         }
 
         Instance<ICaptchaService> captchaService = CDI.current( ).select( ICaptchaService.class, NamedLiteral.of( BeanUtils.BEAN_CAPTCHA_SERVICE ) );
@@ -755,12 +756,13 @@ public final class SuggestUtils
      * @param bBackOffice
      *            true to render the back office form, false for the front office one
      */
-    public static void getHtmlFormEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale, boolean bBackOffice )
+    public static void getHtmlFormEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale, boolean bBackOffice, HttpServletRequest request )
     {
         Map<String, Object> model = new HashMap<>( );
         HtmlTemplate template;
         IEntry entry = EntryHome.findByPrimaryKey( nIdEntry, plugin );
         model.put( MARK_ENTRY, entry );
+        entry.addHtmlFormModel( model, request );
 
         String strTemplate = bBackOffice ? entry.getTemplateHtmlCodeForm( )
                 : entry.getTemplateHtmlCodeForm( ).replace( PATH_TEMPLATE_ADMIN, PATH_TEMPLATE_SKIN_ENTRIES );

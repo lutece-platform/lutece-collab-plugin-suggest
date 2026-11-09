@@ -347,4 +347,16 @@ public interface IEntry
      */
     void setEntryAdditionalAttributeList( List<EntryAdditionalAttribute> entryAdditionalAttributeList );
 
+
+    /**
+     * Adds to the model of the form field what its template needs beyond the field itself.
+     *
+     * @param model
+     *            the model of the form field
+     * @param request
+     *            the request, or null outside a front office request
+     */
+    default void addHtmlFormModel( java.util.Map<String, Object> model, HttpServletRequest request )
+    {
+    }
 }

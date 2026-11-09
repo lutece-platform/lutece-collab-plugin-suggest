@@ -488,3 +488,20 @@ CREATE TABLE suggest_suggest_submit_complement (
 CREATE INDEX index_suggest_submit_complement ON suggest_suggest_submit_complement (id_suggest_submit);
 ALTER TABLE suggest_suggest_submit_complement ADD CONSTRAINT fk_suggest_submit_complement FOREIGN KEY (id_suggest_submit)
 	REFERENCES suggest_suggest_submit (id_suggest_submit);
+
+-- changeset suggest:create_db_suggest-rev5.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = database() AND table_name = 'suggest_suggest_submit_attachment'
+CREATE TABLE suggest_suggest_submit_attachment (
+	id_attachment int AUTO_INCREMENT NOT NULL,
+	id_suggest_submit int NOT NULL,
+	id_entry int NOT NULL,
+	file_key varchar(255) NOT NULL,
+	file_name varchar(255) NOT NULL,
+	mime_type varchar(255) DEFAULT NULL,
+	file_size bigint DEFAULT 0 NOT NULL,
+	PRIMARY KEY (id_attachment)
+	);
+CREATE INDEX index_suggest_submit_attachment ON suggest_suggest_submit_attachment (id_suggest_submit);
+ALTER TABLE suggest_suggest_submit_attachment ADD CONSTRAINT fk_suggest_submit_attachment FOREIGN KEY (id_suggest_submit)
+	REFERENCES suggest_suggest_submit (id_suggest_submit);

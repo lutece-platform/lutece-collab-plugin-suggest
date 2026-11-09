@@ -71,6 +71,16 @@
 		</@cBlock>
 	</@cCol>
 </@cRow>
+<#if attachments?? && attachments?has_content>
+<@cSection class='mt-5' id='attachments'>
+	<@cTitle level=2 class='h4 mb-3'>#i18n{suggest.suggestDetail.labelAttachments}</@cTitle>
+	<ul class='list-unstyled'>
+		<#list attachments as attachment>
+			<li class='mb-2'><@cLink href=attachment_urls[attachment.idAttachment?c] label=attachment.fileName /> <@cInline class='small text-body-secondary'>${attachment.extension} · ${(attachment.size / 1024)?round} Ko</@cInline></li>
+		</#list>
+	</ul>
+</@cSection>
+</#if>
 <#assign isAuthor = lutece_user_connected?? && suggest_submit.luteceUserKey?? && lutece_user_connected.name == suggest_submit.luteceUserKey>
 <#if (complements?? && complements?has_content) || (enable_complements!false) && isAuthor>
 <@cSection class='mt-5' id='complements'>

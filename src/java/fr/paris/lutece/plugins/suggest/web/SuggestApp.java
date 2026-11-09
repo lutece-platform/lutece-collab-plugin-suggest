@@ -55,6 +55,8 @@ import fr.paris.lutece.plugins.suggest.business.Suggest;
 import fr.paris.lutece.plugins.suggest.business.SuggestFilter;
 import fr.paris.lutece.plugins.suggest.business.SuggestHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
+import fr.paris.lutece.plugins.suggest.business.SuggestSubmitAttachment;
+import fr.paris.lutece.plugins.suggest.business.EntryTypeFile;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitState;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitStateHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitType;
@@ -71,7 +73,9 @@ import fr.paris.lutece.plugins.suggest.business.VoteType;
 import fr.paris.lutece.plugins.suggest.business.VoteTypeHome;
 import fr.paris.lutece.plugins.suggest.service.ISuggestUserInfoService;
 import fr.paris.lutece.plugins.suggest.service.SuggestService;
+import fr.paris.lutece.plugins.suggest.service.SuggestSubmitAttachmentService;
 import fr.paris.lutece.plugins.suggest.service.SuggestSubmitComplementService;
+import fr.paris.lutece.plugins.suggest.service.upload.SuggestAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.suggest.service.ICommentSubmitService;
 import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.suggestsearch.SuggestSearchService;
@@ -86,6 +90,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import fr.paris.lutece.portal.service.content.XPageAppService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.file.FileServiceException;
 import fr.paris.lutece.portal.service.message.SiteMessage;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.message.SiteMessageService;
@@ -153,6 +158,8 @@ public class SuggestApp extends MVCApplication
     private static final String MARK_VOTE_STARTED = "vote_started";
     private static final String MARK_ENABLE_COMPLEMENTS = "enable_complements";
     private static final String MARK_COMPLEMENTS = "complements";
+    private static final String MARK_ATTACHMENTS = "attachments";
+    private static final String MARK_ATTACHMENT_URLS = "attachment_urls";
     private static final String MARK_DISPLAY_COMMENT_IN_LIST = "display_comment_in_list";
     private static final String MARK_ENABLE_SUGGEST_REPORTS = "enable_suggest_reports";
     private static final String MARK_SUGGEST_SUBMIT = "suggest_submit";
@@ -315,6 +322,10 @@ public class SuggestApp extends MVCApplication
     private SecurityTokenHandler _securityTokenHandler;
     @Inject
     private SuggestSubmitComplementService _complementService;
+    @Inject
+    private SuggestSubmitAttachmentService _attachmentService;
+    @Inject
+    private SuggestAsynchronousUploadHandler _uploadHandler;
     private int _nMode;
 
     /**
@@ -581,6 +592,38 @@ public class SuggestApp extends MVCApplication
         }
 
         return getViewSuggestSubmitList( page, _nMode, request );
+    }
+
+    /**
+     * Attaches to a new proposal the files its author uploaded in each file field of the form, then empties the uploaded files of the session.
+     *
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @param suggestSubmit
+     *            the new proposal
+     */
+    private void doAttachUploadedFiles( HttpServletRequest request, SuggestSubmit suggestSubmit )
+    {
+        try
+        {
+            for ( Response response : suggestSubmit.getResponses( ) )
+            {
+                if ( response.getEntry( ) instanceof EntryTypeFile )
+                {
+                    int nIdEntry = response.getEntry( ).getIdEntry( );
+                    _attachmentService.attach( suggestSubmit.getIdSuggestSubmit( ), nIdEntry,
+                            _uploadHandler.getListUploadedFiles( SuggestAsynchronousUploadHandler.getFieldName( nIdEntry ), request.getSession( ) ) );
+                }
+            }
+        }
+        catch( FileServiceException e )
+        {
+            AppLogService.error( "Unable to attach the files of the proposal {}", suggestSubmit.getIdSuggestSubmit( ), e );
+        }
+        finally
+        {
+            _uploadHandler.removeSessionFiles( request.getSession( ) );
+        }
     }
 
     /**
@@ -1068,6 +1111,8 @@ public class SuggestApp extends MVCApplication
         }
 
         SuggestSubmit suggestSubmit = doInsertSuggestSubmit( request, nMode, _plugin, suggest, nIdCategory, nIdType, luteceUserConnected );
+
+        doAttachUploadedFiles( request, suggestSubmit );
 
         // Check if the suggest (consultation) has a workflow to execute upon the creation of a new SuggestSubmit element
         if ( _workflowService.isAvailable( ) && suggest.getIdWorkflow( ) > 0 )
@@ -1877,6 +1922,10 @@ public class SuggestApp extends MVCApplication
         model.put( MARK_VOTE_STARTED, SuggestService.isVoteStarted( suggestSubmit.getSuggest( ), LocalDate.now( ) ) );
         model.put( MARK_ENABLE_COMPLEMENTS, suggestSubmit.getSuggest( ).isEnableComplements( ) );
         model.put( MARK_COMPLEMENTS, _complementService.getComplements( suggestSubmit.getIdSuggestSubmit( ) ) );
+
+        List<SuggestSubmitAttachment> listAttachments = _attachmentService.getAttachments( suggestSubmit.getIdSuggestSubmit( ) );
+        model.put( MARK_ATTACHMENTS, listAttachments );
+        model.put( MARK_ATTACHMENT_URLS, _attachmentService.getDownloadUrls( listAttachments, false ) );
         model.put( MARK_ENABLE_SUGGEST_REPORTS, suggestSubmit.getSuggest( ).isEnableReports( ) );
         model.put( MARK_IS_EXTEND_INSTALLED, PortalService.isExtendActivated( ) );
 
@@ -2028,7 +2077,7 @@ public class SuggestApp extends MVCApplication
      */
     private String getHtmlForm( HttpServletRequest request, int nMode, Plugin plugin, Suggest suggest, int nIdDefaultCategory ) throws SiteMessageException
     {
-        Map<String, Object> model = SuggestUtils.getModelHtmlForm( suggest, plugin, getLocale( request ), nIdDefaultCategory, false );
+        Map<String, Object> model = SuggestUtils.getModelHtmlForm( suggest, plugin, getLocale( request ), nIdDefaultCategory, false, request );
 
         // get form Recap
         model.put( MARK_DISABLE_NEW_SUGGEST_SUBMIT, suggest.isDisableNewSuggestSubmit( ) );
