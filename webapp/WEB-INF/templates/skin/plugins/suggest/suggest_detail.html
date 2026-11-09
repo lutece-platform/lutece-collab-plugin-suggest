@@ -71,6 +71,35 @@
 		</@cBlock>
 	</@cCol>
 </@cRow>
+<#assign isAuthor = lutece_user_connected?? && suggest_submit.luteceUserKey?? && lutece_user_connected.name == suggest_submit.luteceUserKey>
+<#if (complements?? && complements?has_content) || (enable_complements!false) && isAuthor>
+<@cSection class='mt-5' id='complements'>
+	<@cTitle level=2 class='h4 mb-3'>#i18n{suggest.suggestDetail.labelComplements}</@cTitle>
+	<#list complements![] as complement>
+		<@cBlock class='card mb-3'>
+			<@cBlock class='card-body'>
+				<@cText class='small text-body-secondary mb-2'>#i18n{suggest.suggestDetail.labelComplement} · ${complement.dateComplement?date}</@cText>
+				<@cText class='mb-0' params='style="white-space:pre-line"'>${complement.value!}</@cText>
+			</@cBlock>
+		</@cBlock>
+	</#list>
+	<#if (enable_complements!false) && isAuthor>
+		<@cBlock class='card'>
+			<@cBlock class='card-body'>
+				<@cForm action=actionUrl name='form-complement' id='form-complement'>
+					<@cInput type='hidden' name='action' id='complement_action' value='do_add_complement' class='' />
+					<@cInput type='hidden' name='id_suggest' id='complement_id_suggest' value=id_suggest?c class='' />
+					<@cInput type='hidden' name='id_suggest_submit' id='complement_id_suggest_submit' value=suggest_submit.idSuggestSubmit?c class='' />
+					<@cField label='#i18n{suggest.suggestDetail.labelAddComplement}' for='complement_value' class='mb-3'>
+						<@cTextArea name='complement_value' id='complement_value' rows=4 required=true helpMsg='#i18n{suggest.suggestDetail.labelAddComplementHelp}'></@cTextArea>
+					</@cField>
+					<@cBtn label='#i18n{suggest.suggestDetail.buttonPublishComplement}' class='primary' type='submit' />
+				</@cForm>
+			</@cBlock>
+		</@cBlock>
+	</#if>
+</@cSection>
+</#if>
 <#if authorized_comment && !suggest_submit.disableComment>
 <@cSection class='mt-5' id='comments'>
 	<@cTitle level=2 class='h4 mb-3'>

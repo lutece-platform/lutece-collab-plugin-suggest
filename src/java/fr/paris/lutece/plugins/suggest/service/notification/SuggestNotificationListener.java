@@ -38,10 +38,13 @@ import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
 import fr.paris.lutece.plugins.suggest.business.Suggest;
 import fr.paris.lutece.plugins.suggest.business.SuggestHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
+import fr.paris.lutece.plugins.suggest.business.SuggestSubmitComplement;
 import fr.paris.lutece.plugins.suggest.service.ICommentSubmitService;
 import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
+import fr.paris.lutece.plugins.suggest.service.SuggestSubmitComplementService;
 import fr.paris.lutece.plugins.suggest.service.event.CommentSubmitEvent;
+import fr.paris.lutece.plugins.suggest.service.event.SuggestSubmitComplementEvent;
 import fr.paris.lutece.plugins.suggest.service.event.SuggestSubmitEvent;
 import fr.paris.lutece.plugins.suggest.service.subscription.SuggestSubscriptionProviderService;
 import fr.paris.lutece.portal.service.event.EventAction;
@@ -72,6 +75,9 @@ public class SuggestNotificationListener
     public static final String REASON_SUBSCRIBER = "subscriber";
     private static final String TEMPLATE_SUGGEST_SUBMIT = "skin/plugins/suggest/notification_mail_participant_suggest_submit.html";
     private static final String TEMPLATE_COMMENT = "skin/plugins/suggest/notification_mail_participant_comment.html";
+    private static final String TEMPLATE_COMPLEMENT = "skin/plugins/suggest/notification_mail_participant_complement.html";
+    private static final String MESSAGE_COMPLEMENT_SUBJECT = "suggest.notificationMailParticipant.complement.subject";
+    private static final String MARK_COMPLEMENT = "complement";
     private static final String MESSAGE_SUGGEST_SUBMIT_SUBJECT = "suggest.notificationMailParticipant.submit.subject";
     private static final String MESSAGE_COMMENT_SUBJECT = "suggest.notificationMailParticipant.comment.subject";
     private static final String MESSAGE_REPLY_SUBJECT = "suggest.notificationMailParticipant.reply.subject";
@@ -98,6 +104,9 @@ public class SuggestNotificationListener
 
     @Inject
     private SuggestNotificationService _notificationService;
+
+    @Inject
+    private SuggestSubmitComplementService _complementService;
 
     /**
      * Subscribes the author to a new suggest submit and tells the author it was received.
@@ -173,6 +182,41 @@ public class SuggestNotificationListener
             model.put( MARK_PARENT_COMMENT, parentComment );
             model.put( MARK_REASON, recipient.getValue( ) );
             send( suggest, recipient.getKey( ), getCommentSubject( comment, recipient.getValue( ) ), suggestSubmit, TEMPLATE_COMMENT, model );
+        }
+    }
+
+    /**
+     * Notifies the subscribers of a suggest submit, its author aside, that the author completed it, when the suggest notifies its subscribers.
+     *
+     * @param event
+     *            the creation event
+     */
+    public void onComplementCreated( @ObservesAsync @Type( EventAction.CREATE ) SuggestSubmitComplementEvent event )
+    {
+        Plugin plugin = PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME );
+        SuggestSubmitComplement complement = _complementService.findByPrimaryKey( event.getIdComplement( ) );
+        SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( event.getIdSuggestSubmit( ), false, plugin );
+        Suggest suggest = ( suggestSubmit != null ) ? SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), plugin ) : null;
+
+        if ( ( complement == null ) || ( suggest == null ) || !suggest.isNotifySubscribers( ) )
+        {
+            return;
+        }
+
+        String strAuthor = suggestSubmit.getLuteceUserKey( );
+        Map<String, String> mapReasons = new LinkedHashMap<>( );
+
+        for ( String strSubscriber : _subscriptionProvider.getSuggestSubmitSubscribers( suggestSubmit.getIdSuggestSubmit( ) ) )
+        {
+            addRecipient( mapReasons, strSubscriber, REASON_SUBSCRIBER, strAuthor );
+        }
+
+        for ( Map.Entry<String, String> recipient : mapReasons.entrySet( ) )
+        {
+            Map<String, Object> model = newModel( recipient.getKey( ), suggest, suggestSubmit );
+            model.put( MARK_COMPLEMENT, complement );
+            model.put( MARK_REASON, recipient.getValue( ) );
+            send( suggest, recipient.getKey( ), MESSAGE_COMPLEMENT_SUBJECT, suggestSubmit, TEMPLATE_COMPLEMENT, model );
         }
     }
 

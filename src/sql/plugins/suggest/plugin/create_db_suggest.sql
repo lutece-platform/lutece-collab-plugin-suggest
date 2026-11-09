@@ -474,3 +474,17 @@ ALTER TABLE suggest_vote ADD COLUMN vote_value int DEFAULT NULL;
 -- preconditions onFail:MARK_RAN onError:WARN
 -- precondition-sql-check expectedResult:1 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_suggest' AND column_name = 'code_theme'
 ALTER TABLE suggest_suggest DROP COLUMN code_theme;
+
+-- changeset suggest:create_db_suggest-rev4.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = database() AND table_name = 'suggest_suggest_submit_complement'
+CREATE TABLE suggest_suggest_submit_complement (
+	id_complement int AUTO_INCREMENT NOT NULL,
+	id_suggest_submit int NOT NULL,
+	date_complement timestamp NULL,
+	complement_value long varchar,
+	PRIMARY KEY (id_complement)
+	);
+CREATE INDEX index_suggest_submit_complement ON suggest_suggest_submit_complement (id_suggest_submit);
+ALTER TABLE suggest_suggest_submit_complement ADD CONSTRAINT fk_suggest_submit_complement FOREIGN KEY (id_suggest_submit)
+	REFERENCES suggest_suggest_submit (id_suggest_submit);

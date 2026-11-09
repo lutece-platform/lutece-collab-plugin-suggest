@@ -132,6 +132,8 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     private String _strDateBeginVote;
     @SuggestAttribute( "dateEndVote" )
     private String _strDateEndVote;
+    @SuggestAttribute( "enableComplements" )
+    private boolean _bEnableComplements;
     @SuggestAttribute( "idImageResource" )
     private Integer _nIdImageResource = SuggestUtils.CONSTANT_ID_NULL;
     private ImageResource _image;
@@ -1232,6 +1234,27 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     public void setDateEndVote( String strDateEndVote )
     {
         _strDateEndVote = strDateEndVote;
+    }
+
+    /**
+     * Tells whether the authors may add complements below their published suggest submits.
+     *
+     * @return true if the complements are enabled
+     */
+    public boolean isEnableComplements( )
+    {
+        return _bEnableComplements;
+    }
+
+    /**
+     * Enables or disables the complements of the authors.
+     *
+     * @param bEnableComplements
+     *            true to enable the complements
+     */
+    public void setEnableComplements( boolean bEnableComplements )
+    {
+        _bEnableComplements = bEnableComplements;
     }
 
     /**

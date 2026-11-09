@@ -161,6 +161,7 @@ public final class SuggestSubmitHome
 
         // remove all reported associated to the suggest submit
         ReportedMessageHome.removeBySuggestSubmit( nIdSuggestSubmit, plugin );
+        SuggestSubmitComplementHome.removeBySuggestSubmit( nIdSuggestSubmit, plugin );
 
         SuggestSubmit suggestSubmit = SuggestSubmitHome.findByPrimaryKey( nIdSuggestSubmit, plugin );
 
