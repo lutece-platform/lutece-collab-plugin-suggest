@@ -128,6 +128,10 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     private String _strTermsOfUse;
     @SuggestAttribute( "enableReports" )
     private boolean _bEnableReports;
+    @SuggestAttribute( "dateBeginVote" )
+    private String _strDateBeginVote;
+    @SuggestAttribute( "dateEndVote" )
+    private String _strDateEndVote;
     @SuggestAttribute( "idImageResource" )
     private Integer _nIdImageResource = SuggestUtils.CONSTANT_ID_NULL;
     private ImageResource _image;
@@ -1186,6 +1190,48 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     public void setEnableVoteWithdrawal( boolean bEnableVoteWithdrawal )
     {
         _bEnableVoteWithdrawal = bEnableVoteWithdrawal;
+    }
+
+    /**
+     * Returns the first day of the vote period.
+     *
+     * @return the date as yyyy-MM-dd, or null when the vote has no start date
+     */
+    public String getDateBeginVote( )
+    {
+        return _strDateBeginVote;
+    }
+
+    /**
+     * Sets the first day of the vote period.
+     *
+     * @param strDateBeginVote
+     *            the date as yyyy-MM-dd, or null for no start date
+     */
+    public void setDateBeginVote( String strDateBeginVote )
+    {
+        _strDateBeginVote = strDateBeginVote;
+    }
+
+    /**
+     * Returns the last day of the vote period.
+     *
+     * @return the date as yyyy-MM-dd, or null when the vote has no end date
+     */
+    public String getDateEndVote( )
+    {
+        return _strDateEndVote;
+    }
+
+    /**
+     * Sets the last day of the vote period.
+     *
+     * @param strDateEndVote
+     *            the date as yyyy-MM-dd, or null for no end date
+     */
+    public void setDateEndVote( String strDateEndVote )
+    {
+        _strDateEndVote = strDateEndVote;
     }
 
     /**

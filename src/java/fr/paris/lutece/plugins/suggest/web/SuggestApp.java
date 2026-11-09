@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.suggest.web;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -1425,6 +1426,11 @@ public class SuggestApp extends MVCApplication
         Suggest suggest = SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), _plugin );
         suggestSubmit.setSuggest( suggest );
 
+        if ( !SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) || suggestSubmit.isDisableVote( ) )
+        {
+            return;
+        }
+
         LuteceUser luteceUserConnected = null;
 
         if ( suggest.isLimitNumberVote( ) )
@@ -1570,7 +1576,7 @@ public class SuggestApp extends MVCApplication
         model.put( MARK_LIST_SUGGEST_SUBMIT, getSuggestSubmitDisplayList( listIdSuggestSubmit, suggest, locale, plugin, luteceUserConnected ) );
 
         model.put( MARK_AUTHORIZED_COMMENT, suggest.isAuthorizedComment( ) );
-        model.put( MARK_AUTHORIZED_VOTE, !suggest.isDisableVote( ) );
+        model.put( MARK_AUTHORIZED_VOTE, SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) );
         model.put( MARK_DISPLAY_COMMENT_IN_LIST, suggest.isDisplayCommentInSuggestSubmitList( ) );
         model.put( MARK_ENABLE_SUGGEST_REPORTS, suggest.isEnableReports( ) );
         model.put( MARK_ID_SUGGEST, suggest.getIdSuggest( ) );
@@ -1671,7 +1677,7 @@ public class SuggestApp extends MVCApplication
             SuggestUtils.addAvatarToModel( modelSuggest, luteceUserInfo );
             modelSuggest.put( MARK_WORKFLOW_STATE, SuggestWorkflowService.getState( suggest, suggestSubmit ) );
 
-            if ( !suggest.isDisableVote( ) )
+            if ( SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) )
             {
                 modelSuggest.put( MARK_SUGGEST_SUBMIT_VOTE_TYPE,
                         getHtmlSuggestSubmitVoteType( suggest, suggestSubmit, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT, locale, luteceUserConnected ) );
@@ -1783,7 +1789,7 @@ public class SuggestApp extends MVCApplication
                         luteceUserConnected ) );
 
         model.put( MARK_AUTHORIZED_COMMENT, suggestSubmit.getSuggest( ).isAuthorizedComment( ) );
-        model.put( MARK_AUTHORIZED_VOTE, !suggestSubmit.getSuggest( ).isDisableVote( ) );
+        model.put( MARK_AUTHORIZED_VOTE, SuggestService.isVoteOpen( suggestSubmit.getSuggest( ), LocalDate.now( ) ) );
         model.put( MARK_ENABLE_SUGGEST_REPORTS, suggestSubmit.getSuggest( ).isEnableReports( ) );
         model.put( MARK_IS_EXTEND_INSTALLED, PortalService.isExtendActivated( ) );
 
@@ -1823,7 +1829,7 @@ public class SuggestApp extends MVCApplication
      */
     private String getHtmlSuggestSubmitVoteType( Suggest suggest, SuggestSubmit suggestSubmit, String strView, Locale locale, LuteceUser luteceUserConnected )
     {
-        if ( !suggest.isDisableVote( ) && !suggestSubmit.isDisableVote( ) )
+        if ( SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) && !suggestSubmit.isDisableVote( ) )
         {
             VoteType voteType = VoteTypeHome.findByPrimaryKey( suggest.getVoteType( ).getIdVoteType( ), _plugin );
 
@@ -2292,7 +2298,7 @@ public class SuggestApp extends MVCApplication
             model.put( MARK_HEADER_SUGGEST, suggest.getHeader( ) );
 
             model.put( MARK_AUTHORIZED_COMMENT, suggest.isAuthorizedComment( ) );
-            model.put( MARK_AUTHORIZED_VOTE, !suggest.isDisableVote( ) );
+            model.put( MARK_AUTHORIZED_VOTE, SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) );
             model.put( MARK_NUMBER_SHOWN_CHARACTERS, _nNumberShownCharacters );
 
             model.put( MARK_LIST_SUGGEST_SUBMIT_SORT, refListSuggestSort );

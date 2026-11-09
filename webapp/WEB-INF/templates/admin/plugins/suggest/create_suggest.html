@@ -54,6 +54,12 @@
 										<@formGroup helpKey='#i18n{suggest.createSuggest.labelDisableVoteComment}' rows=2>
 											<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelDisableVote}' name='disable_vote' id='disable_vote' value='disable_vote' />
 										</@formGroup>
+										<@formGroup labelFor='date_begin_vote' labelKey='#i18n{suggest.createSuggest.labelDateBeginVote}' helpKey='#i18n{suggest.createSuggest.labelDateBeginVoteComment}' rows=2>
+											<@input type='date' name='date_begin_vote' id='date_begin_vote' value='' language=.lang format='Y-m-d' />
+										</@formGroup>
+										<@formGroup labelFor='date_end_vote' labelKey='#i18n{suggest.createSuggest.labelDateEndVote}' helpKey='#i18n{suggest.createSuggest.labelDateEndVoteComment}' rows=2>
+											<@input type='date' name='date_end_vote' id='date_end_vote' value='' language=.lang format='Y-m-d' />
+										</@formGroup>
 										<@formGroup helpKey='#i18n{suggest.createSuggest.labelAuthorizedCommentSubmitComment}' rows=2>
 											<@checkBox orientation='switch' labelKey='#i18n{suggest.createSuggest.labelAuthorizedCommentSubmit}' name='authorized_comment' id='authorized_comment' value='1' />
 										</@formGroup>
