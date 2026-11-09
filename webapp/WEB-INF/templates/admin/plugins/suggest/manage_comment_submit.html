@@ -92,6 +92,16 @@
 						  </#list>
 						</#if>
 					</#if>
+					<#if attachments?has_content>
+						<h3 class="h4 mt-3">#i18n{suggest.manageCommentSubmit.attachments}</h3>
+						<#list attachments as attachment>
+							<div class="d-flex align-items-center gap-2 mb-2">
+								<a class="flex-grow-1" href="${attachment_urls[attachment.idAttachment?c]}">${attachment.fileName}</a>
+								<small class="text-secondary">${attachment.extension} · ${(attachment.size / 1024)?round} Ko</small>
+								<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp' class='d-inline'><@input type='hidden' name='action' value='confirmRemoveAttachment' /><@input type='hidden' name='id_attachment' value='${attachment.idAttachment}' /><@button type='submit' title='#i18n{suggest.manageCommentSubmit.removeAttachment}' buttonIcon='trash' color='danger' size='sm' hideTitle=['all'] /></@tform>
+							</div>
+						</#list>
+					</#if>
 					<#if complements?has_content>
 						<h3 class="h4 mt-3">#i18n{suggest.manageCommentSubmit.complements}</h3>
 						<#list complements as complement>

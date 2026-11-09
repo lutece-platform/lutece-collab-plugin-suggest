@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.plugins.suggest.service.ICommentSubmitService;
+import fr.paris.lutece.plugins.suggest.service.SuggestSubmitAttachmentService;
 import fr.paris.lutece.plugins.suggest.service.search.SuggestIndexer;
 import fr.paris.lutece.plugins.suggest.utils.SuggestIndexerUtils;
 import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
@@ -162,6 +163,7 @@ public final class SuggestSubmitHome
         // remove all reported associated to the suggest submit
         ReportedMessageHome.removeBySuggestSubmit( nIdSuggestSubmit, plugin );
         SuggestSubmitComplementHome.removeBySuggestSubmit( nIdSuggestSubmit, plugin );
+        CDI.current( ).select( SuggestSubmitAttachmentService.class ).get( ).removeBySuggestSubmit( nIdSuggestSubmit );
 
         SuggestSubmit suggestSubmit = SuggestSubmitHome.findByPrimaryKey( nIdSuggestSubmit, plugin );
 

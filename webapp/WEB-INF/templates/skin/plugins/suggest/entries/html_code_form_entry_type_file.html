@@ -1,0 +1,9 @@
+<@cTpl>
+<#include "/skin/plugins/asynchronousupload/upload_commons.html" />
+<@cField label=entry.title for=field_name required=entry.mandatory class='mb-3'>
+	<@cInputDropFiles name=field_name handler=upload_handler type='dropzone' multiple=true nbFiles=entry.maxFiles nbUplodadedFiles=uploaded_files?size maxFileSize=entry.maxFileSizeBytes accept=entry.accept formSubmitButtonName=upload_handler.uploadSubmitPrefix + field_name hasFiles=uploaded_files?has_content helpMsg=entry.helpMessage!''>
+		<@addUploadedFilesBox fieldName=field_name handler=upload_handler listFiles=uploaded_files />
+	</@cInputDropFiles>
+</@cField>
+<@addRequiredJsFiles handlerName=upload_handler.handlerName />
+</@cTpl>
