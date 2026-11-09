@@ -43,7 +43,6 @@ import fr.paris.lutece.portal.service.upload.MultipartItem;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.servlet.http.HttpServletRequest;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -142,11 +141,9 @@ public class EntryTypeFile extends Entry
         setMandatory( request.getParameter( PARAMETER_MANDATORY ) != null );
         setShowInSuggestSubmitList( request.getParameter( PARAMETER_SHOW_IN_SUGGEST_SUBMIT_LIST ) != null );
 
-        List<EntryAdditionalAttribute> listAttributes = new ArrayList<>( );
-        listAttributes.add( newAttribute( ATTRIBUTE_MAX_FILES, Integer.toString( nMaxFiles ) ) );
-        listAttributes.add( newAttribute( ATTRIBUTE_MAX_FILE_SIZE, Integer.toString( nMaxFileSize ) ) );
-        listAttributes.add( newAttribute( ATTRIBUTE_EXTENSIONS, String.join( SEPARATOR, parseExtensions( request.getParameter( PARAMETER_EXTENSIONS ) ) ) ) );
-        setEntryAdditionalAttributeList( listAttributes );
+        setEntryAdditionalAttributeList( List.of( newAdditionalAttribute( ATTRIBUTE_MAX_FILES, Integer.toString( nMaxFiles ) ),
+                newAdditionalAttribute( ATTRIBUTE_MAX_FILE_SIZE, Integer.toString( nMaxFileSize ) ),
+                newAdditionalAttribute( ATTRIBUTE_EXTENSIONS, String.join( SEPARATOR, parseExtensions( request.getParameter( PARAMETER_EXTENSIONS ) ) ) ) ) );
 
         return null;
     }
@@ -278,7 +275,7 @@ public class EntryTypeFile extends Entry
      */
     private List<String> getExtensionList( )
     {
-        List<String> listExtensions = parseExtensions( getAttribute( ATTRIBUTE_EXTENSIONS ) );
+        List<String> listExtensions = parseExtensions( getAdditionalAttribute( ATTRIBUTE_EXTENSIONS ) );
 
         return listExtensions.isEmpty( ) ? parseExtensions( DEFAULT_EXTENSIONS ) : listExtensions;
     }
@@ -297,21 +294,6 @@ public class EntryTypeFile extends Entry
     }
 
     /**
-     * Returns the value of an option.
-     *
-     * @param strName
-     *            the option name
-     * @return the value, or null
-     */
-    private String getAttribute( String strName )
-    {
-        List<EntryAdditionalAttribute> listAttributes = getEntryAdditionalAttributeList( );
-
-        return ( listAttributes == null ) ? null
-                : listAttributes.stream( ).filter( a -> strName.equals( a.getName( ) ) ).map( EntryAdditionalAttribute::getValue ).findFirst( ).orElse( null );
-    }
-
-    /**
      * Returns the value of a numeric option.
      *
      * @param strName
@@ -322,28 +304,9 @@ public class EntryTypeFile extends Entry
      */
     private int getIntAttribute( String strName, int nDefault )
     {
-        int nValue = SuggestUtils.getIntegerParameter( getAttribute( strName ) );
+        int nValue = SuggestUtils.getIntegerParameter( getAdditionalAttribute( strName ) );
 
         return ( nValue > 0 ) ? nValue : nDefault;
-    }
-
-    /**
-     * Builds an option.
-     *
-     * @param strName
-     *            the option name
-     * @param strValue
-     *            the value
-     * @return the option
-     */
-    private EntryAdditionalAttribute newAttribute( String strName, String strValue )
-    {
-        EntryAdditionalAttribute attribute = new EntryAdditionalAttribute( );
-        attribute.setIdEntry( getIdEntry( ) );
-        attribute.setName( strName );
-        attribute.setValue( strValue );
-
-        return attribute;
     }
 
     /**

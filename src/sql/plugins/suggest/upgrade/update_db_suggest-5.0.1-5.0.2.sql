@@ -34,3 +34,8 @@ ALTER TABLE suggest_suggest_submit_attachment ADD CONSTRAINT fk_suggest_submit_a
 -- preconditions onFail:MARK_RAN onError:WARN
 -- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM suggest_entry_type WHERE id_type = 7
 INSERT INTO suggest_entry_type ( id_type, title, class_name ) VALUES ( 7, 'File', 'fr.paris.lutece.plugins.suggest.business.EntryTypeFile' );
+
+-- changeset suggest:update_db_suggest-5.0.1-5.0.2-rev3.sql dbms:mariadb,mysql
+-- preconditions onFail:MARK_RAN onError:MARK_RAN
+-- precondition-sql-check expectedResult:1 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_entry_attr_additional' AND column_name = 'attr_value' AND character_maximum_length < 1000
+ALTER TABLE suggest_entry_attr_additional MODIFY attr_value varchar(1000) NOT NULL;

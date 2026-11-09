@@ -505,3 +505,8 @@ CREATE TABLE suggest_suggest_submit_attachment (
 CREATE INDEX index_suggest_submit_attachment ON suggest_suggest_submit_attachment (id_suggest_submit);
 ALTER TABLE suggest_suggest_submit_attachment ADD CONSTRAINT fk_suggest_submit_attachment FOREIGN KEY (id_suggest_submit)
 	REFERENCES suggest_suggest_submit (id_suggest_submit);
+
+-- changeset suggest:create_db_suggest-rev6.sql dbms:mariadb,mysql
+-- preconditions onFail:MARK_RAN onError:MARK_RAN
+-- precondition-sql-check expectedResult:1 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_entry_attr_additional' AND column_name = 'attr_value' AND character_maximum_length < 1000
+ALTER TABLE suggest_entry_attr_additional MODIFY attr_value varchar(1000) NOT NULL;
