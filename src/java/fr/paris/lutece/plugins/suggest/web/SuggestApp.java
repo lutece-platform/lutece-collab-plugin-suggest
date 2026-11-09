@@ -141,6 +141,7 @@ public class SuggestApp extends MVCApplication
     private static final String MARK_LIST_SUGGEST_SUBMIT = "list_suggest_submit";
     private static final String MARK_LABEL_SUGGEST = "label_suggest";
     private static final String MARK_SUGGEST_TITLE = "suggest_title";
+    private static final String MARK_NUMBER_PUBLISHED_SUGGEST_SUBMIT = "number_published_suggest_submit";
     private static final String MARK_SUGGEST_SUBMIT_TITLE = "suggest_submit_title";
     private static final String MARK_HEADER_SUGGEST = "header_suggest";
     private static final String MARK_LIST_CATEGORIES_SUGGEST = "list_categories_suggest";
@@ -628,6 +629,25 @@ public class SuggestApp extends MVCApplication
     }
 
     /**
+     * Counts the published proposals of a suggest, of one author when a user key is given.
+     *
+     * @param nIdSuggest
+     *            the suggest id
+     * @param strLuteceUserKey
+     *            the author, or empty for every author
+     * @return the number of published proposals
+     */
+    private int getNumberPublishedSuggestSubmit( int nIdSuggest, String strLuteceUserKey )
+    {
+        SubmitFilter filter = new SubmitFilter( );
+        filter.setIdSuggest( nIdSuggest );
+        filter.setLuteceUserKey( strLuteceUserKey );
+        filter.setIdSuggestSubmitState( _nIdSuggestSubmitStatePublish );
+
+        return _suggestSubmitService.getCountSuggestSubmit( filter, _plugin );
+    }
+
+    /**
      * Adds a complement of its author below a proposal, then displays the proposal.
      *
      * @param request
@@ -845,6 +865,7 @@ public class SuggestApp extends MVCApplication
         urlSuggestXpage.addParameter( PARAMETER_ID_SUGGEST, nIdSuggest );
 
         SearchFields searchFields = getSearchFields( request );
+        model.put( MARK_NUMBER_PUBLISHED_SUGGEST_SUBMIT, getNumberPublishedSuggestSubmit( suggest.getIdSuggest( ), searchFields.getLuteceUserName( ) ) );
         addSuggestPageFrameset( getHtmlListSuggestSubmit( getLocale( request ), _plugin, suggest, searchFields, urlSuggestXpage, luteceUserConnected ),
                 request, page, suggest, model, searchFields, luteceUserConnected );
 
@@ -1706,6 +1727,7 @@ public class SuggestApp extends MVCApplication
         model.put( MARK_AUTHORIZED_VOTE, SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) );
         model.put( MARK_VOTE_STARTED, SuggestService.isVoteStarted( suggest, LocalDate.now( ) ) );
         model.put( MARK_ENABLE_COMPLEMENTS, suggest.isEnableComplements( ) );
+        model.put( MARK_LUTECE_USER_NAME_FILTER, searchFields.getLuteceUserName( ) );
         model.put( MARK_DISPLAY_COMMENT_IN_LIST, suggest.isDisplayCommentInSuggestSubmitList( ) );
         model.put( MARK_ENABLE_SUGGEST_REPORTS, suggest.isEnableReports( ) );
         model.put( MARK_ID_SUGGEST, suggest.getIdSuggest( ) );
@@ -2436,6 +2458,7 @@ public class SuggestApp extends MVCApplication
             model.put( MARK_AUTHORIZED_COMMENT, suggest.isAuthorizedComment( ) );
             model.put( MARK_AUTHORIZED_VOTE, SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) );
             model.put( MARK_VOTE_STARTED, SuggestService.isVoteStarted( suggest, LocalDate.now( ) ) );
+            model.put( MARK_SUGGEST, suggest );
             model.put( MARK_NUMBER_SHOWN_CHARACTERS, _nNumberShownCharacters );
 
             model.put( MARK_LIST_SUGGEST_SUBMIT_SORT, refListSuggestSort );
