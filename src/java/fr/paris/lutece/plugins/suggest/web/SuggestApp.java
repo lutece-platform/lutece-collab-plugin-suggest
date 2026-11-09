@@ -150,6 +150,7 @@ public class SuggestApp extends MVCApplication
     private static final String MARK_SUGGEST_COMMENT = "suggest_comment";
     private static final String MARK_AUTHORIZED_COMMENT = "authorized_comment";
     private static final String MARK_AUTHORIZED_VOTE = "authorized_vote";
+    private static final String MARK_VOTE_STARTED = "vote_started";
     private static final String MARK_ENABLE_COMPLEMENTS = "enable_complements";
     private static final String MARK_COMPLEMENTS = "complements";
     private static final String MARK_DISPLAY_COMMENT_IN_LIST = "display_comment_in_list";
@@ -1658,6 +1659,7 @@ public class SuggestApp extends MVCApplication
 
         model.put( MARK_AUTHORIZED_COMMENT, suggest.isAuthorizedComment( ) );
         model.put( MARK_AUTHORIZED_VOTE, SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) );
+        model.put( MARK_VOTE_STARTED, SuggestService.isVoteStarted( suggest, LocalDate.now( ) ) );
         model.put( MARK_ENABLE_COMPLEMENTS, suggest.isEnableComplements( ) );
         model.put( MARK_DISPLAY_COMMENT_IN_LIST, suggest.isDisplayCommentInSuggestSubmitList( ) );
         model.put( MARK_ENABLE_SUGGEST_REPORTS, suggest.isEnableReports( ) );
@@ -1872,6 +1874,7 @@ public class SuggestApp extends MVCApplication
 
         model.put( MARK_AUTHORIZED_COMMENT, suggestSubmit.getSuggest( ).isAuthorizedComment( ) );
         model.put( MARK_AUTHORIZED_VOTE, SuggestService.isVoteOpen( suggestSubmit.getSuggest( ), LocalDate.now( ) ) );
+        model.put( MARK_VOTE_STARTED, SuggestService.isVoteStarted( suggestSubmit.getSuggest( ), LocalDate.now( ) ) );
         model.put( MARK_ENABLE_COMPLEMENTS, suggestSubmit.getSuggest( ).isEnableComplements( ) );
         model.put( MARK_COMPLEMENTS, _complementService.getComplements( suggestSubmit.getIdSuggestSubmit( ) ) );
         model.put( MARK_ENABLE_SUGGEST_REPORTS, suggestSubmit.getSuggest( ).isEnableReports( ) );
@@ -2384,6 +2387,7 @@ public class SuggestApp extends MVCApplication
 
             model.put( MARK_AUTHORIZED_COMMENT, suggest.isAuthorizedComment( ) );
             model.put( MARK_AUTHORIZED_VOTE, SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) );
+            model.put( MARK_VOTE_STARTED, SuggestService.isVoteStarted( suggest, LocalDate.now( ) ) );
             model.put( MARK_NUMBER_SHOWN_CHARACTERS, _nNumberShownCharacters );
 
             model.put( MARK_LIST_SUGGEST_SUBMIT_SORT, refListSuggestSort );

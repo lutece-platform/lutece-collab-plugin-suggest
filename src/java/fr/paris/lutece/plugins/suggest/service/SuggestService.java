@@ -155,6 +155,23 @@ public class SuggestService
     }
 
     /**
+     * Tells whether the vote of a suggest has started on a given day: the vote is not disabled and its period, when it has a start date, has begun. A
+     * vote that started stays started after its period ends, so that its results remain visible.
+     *
+     * @param suggest
+     *            the suggest
+     * @param today
+     *            the day to check
+     * @return true if the vote has started
+     */
+    public static boolean isVoteStarted( Suggest suggest, LocalDate today )
+    {
+        LocalDate dateBegin = parseDate( suggest.getDateBeginVote( ) );
+
+        return !suggest.isDisableVote( ) && ( dateBegin == null || !today.isBefore( dateBegin ) );
+    }
+
+    /**
      * Parses a date written as yyyy-MM-dd.
      *
      * @param strDate

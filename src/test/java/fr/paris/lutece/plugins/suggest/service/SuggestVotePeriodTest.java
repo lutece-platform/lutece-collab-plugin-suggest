@@ -116,6 +116,21 @@ public class SuggestVotePeriodTest
     }
 
     /**
+     * The vote has not started before its first day, and stays started after its last day.
+     */
+    @Test
+    public void testVoteStarted( )
+    {
+        Suggest suggest = suggest( false, "2026-12-16", "2027-01-30" );
+
+        assertFalse( SuggestService.isVoteStarted( suggest, DAY.minusDays( 1 ) ) );
+        assertTrue( SuggestService.isVoteStarted( suggest, DAY ) );
+        assertTrue( SuggestService.isVoteStarted( suggest, LocalDate.of( 2027, 2, 1 ) ) );
+        assertFalse( SuggestService.isVoteStarted( suggest( true, null, null ), DAY ) );
+        assertTrue( SuggestService.isVoteStarted( suggest( false, null, null ), DAY ) );
+    }
+
+    /**
      * A blank or malformed date reads as no date.
      */
     @Test
