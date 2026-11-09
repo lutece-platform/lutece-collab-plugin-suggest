@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.service;
 
+import fr.paris.lutece.plugins.suggest.business.Suggest;
+import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitComplement;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitComplementHome;
 import fr.paris.lutece.plugins.suggest.service.event.SuggestEvents;
@@ -73,6 +75,23 @@ public class SuggestSubmitComplementService
         SuggestEvents.fireAsync( _complementEvent, EventAction.CREATE, new SuggestSubmitComplementEvent( complement.getIdComplement( ), nIdSuggestSubmit ) );
 
         return complement;
+    }
+
+    /**
+     * Tells whether a user may add a complement below a suggest submit: its suggest enables the complements, it is published and the user wrote it.
+     *
+     * @param suggest
+     *            the suggest of the suggest submit
+     * @param suggestSubmit
+     *            the suggest submit
+     * @param strUserName
+     *            the name of the user, or null
+     * @return true if the user may add a complement
+     */
+    public boolean canAddComplement( Suggest suggest, SuggestSubmit suggestSubmit, String strUserName )
+    {
+        return suggest.isEnableComplements( ) && ( suggestSubmit.getSuggestSubmitState( ).getNumber( ) == SuggestSubmit.STATE_PUBLISH )
+                && ( strUserName != null ) && strUserName.equals( suggestSubmit.getLuteceUserKey( ) );
     }
 
     /**

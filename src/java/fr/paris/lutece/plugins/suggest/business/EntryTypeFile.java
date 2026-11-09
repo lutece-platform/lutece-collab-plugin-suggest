@@ -50,6 +50,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -99,6 +100,15 @@ public class EntryTypeFile extends Entry
         model.put( MARK_UPLOAD_HANDLER, handler );
         model.put( MARK_FIELD_NAME, strFieldName );
         model.put( MARK_UPLOADED_FILES, ( request != null ) ? handler.getListUploadedFiles( strFieldName, request.getSession( ) ) : List.of( ) );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isFrontOfficeOnly( )
+    {
+        return true;
     }
 
     /**
@@ -258,7 +268,7 @@ public class EntryTypeFile extends Entry
      */
     public boolean isAcceptedFileName( String strFileName )
     {
-        return getExtensionList( ).contains( StringUtils.substringAfterLast( StringUtils.defaultString( strFileName ), "." ).toLowerCase( Locale.ROOT ) );
+        return getExtensionList( ).contains( StringUtils.lowerCase( FilenameUtils.getExtension( strFileName ), Locale.ROOT ) );
     }
 
     /**

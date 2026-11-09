@@ -58,6 +58,7 @@ import jakarta.enterprise.event.ObservesAsync;
 import jakarta.inject.Inject;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -137,7 +138,7 @@ public class SuggestNotificationListener
 
         if ( suggest.isNotifyParticipants( ) )
         {
-            Map<String, Object> model = newModel( strAuthor, suggest, suggestSubmit );
+            Map<String, Object> model = newModel( strAuthor, suggest, suggestSubmit, getWorkflowModel( suggest, suggestSubmit ) );
             send( suggest, strAuthor, MESSAGE_SUGGEST_SUBMIT_SUBJECT, suggestSubmit, TEMPLATE_SUGGEST_SUBMIT, model );
         }
     }
@@ -177,9 +178,16 @@ public class SuggestNotificationListener
                 : null;
         Map<String, String> mapReasons = getRecipients( suggest, suggestSubmit, comment, parentComment );
 
+        if ( mapReasons.isEmpty( ) )
+        {
+            return;
+        }
+
+        Map<String, Object> modelWorkflow = getWorkflowModel( suggest, suggestSubmit );
+
         for ( Map.Entry<String, String> recipient : mapReasons.entrySet( ) )
         {
-            Map<String, Object> model = newModel( recipient.getKey( ), suggest, suggestSubmit );
+            Map<String, Object> model = newModel( recipient.getKey( ), suggest, suggestSubmit, modelWorkflow );
             model.put( MARK_COMMENT, comment );
             model.put( MARK_COMMENT_AUTHOR, _notificationService.getUserInfo( strCommenter ) );
             model.put( MARK_PARENT_COMMENT, parentComment );
@@ -206,17 +214,19 @@ public class SuggestNotificationListener
             return;
         }
 
-        String strAuthor = suggestSubmit.getLuteceUserKey( );
         Map<String, String> mapReasons = new LinkedHashMap<>( );
+        addSubscriberRecipients( mapReasons, suggestSubmit, suggestSubmit.getLuteceUserKey( ) );
 
-        for ( String strSubscriber : _subscriptionProvider.getSuggestSubmitSubscribers( suggestSubmit.getIdSuggestSubmit( ) ) )
+        if ( mapReasons.isEmpty( ) )
         {
-            addRecipient( mapReasons, strSubscriber, REASON_SUBSCRIBER, strAuthor );
+            return;
         }
+
+        Map<String, Object> modelWorkflow = getWorkflowModel( suggest, suggestSubmit );
 
         for ( Map.Entry<String, String> recipient : mapReasons.entrySet( ) )
         {
-            Map<String, Object> model = newModel( recipient.getKey( ), suggest, suggestSubmit );
+            Map<String, Object> model = newModel( recipient.getKey( ), suggest, suggestSubmit, modelWorkflow );
             model.put( MARK_COMPLEMENT, complement );
             model.put( MARK_REASON, recipient.getValue( ) );
             send( suggest, recipient.getKey( ), MESSAGE_COMPLEMENT_SUBJECT, suggestSubmit, TEMPLATE_COMPLEMENT, model );
@@ -276,13 +286,28 @@ public class SuggestNotificationListener
 
         if ( suggest.isNotifySubscribers( ) && comment.isOfficialAnswer( ) )
         {
-            for ( String strSubscriber : _subscriptionProvider.getSuggestSubmitSubscribers( suggestSubmit.getIdSuggestSubmit( ) ) )
-            {
-                addRecipient( mapReasons, strSubscriber, REASON_SUBSCRIBER, strCommenter );
-            }
+            addSubscriberRecipients( mapReasons, suggestSubmit, strCommenter );
         }
 
         return mapReasons;
+    }
+
+    /**
+     * Adds the subscribers of a suggest submit, the author of the action aside.
+     *
+     * @param mapReasons
+     *            the reason of each recipient, by Lutece user key
+     * @param suggestSubmit
+     *            the suggest submit
+     * @param strActor
+     *            the author of the action
+     */
+    private void addSubscriberRecipients( Map<String, String> mapReasons, SuggestSubmit suggestSubmit, String strActor )
+    {
+        for ( String strSubscriber : _subscriptionProvider.getSuggestSubmitSubscribers( suggestSubmit.getIdSuggestSubmit( ) ) )
+        {
+            addRecipient( mapReasons, strSubscriber, REASON_SUBSCRIBER, strActor );
+        }
     }
 
     /**
@@ -353,6 +378,24 @@ public class SuggestNotificationListener
     }
 
     /**
+     * Returns the workflow state of a suggest submit and the states of its workflow, shared by the notifications of one event.
+     *
+     * @param suggest
+     *            the suggest
+     * @param suggestSubmit
+     *            the suggest submit
+     * @return the workflow part of the model
+     */
+    private static Map<String, Object> getWorkflowModel( Suggest suggest, SuggestSubmit suggestSubmit )
+    {
+        Map<String, Object> model = new HashMap<>( );
+        model.put( MARK_WORKFLOW_STATE, SuggestWorkflowService.getState( suggest, suggestSubmit ) );
+        model.put( MARK_WORKFLOW_STATES, SuggestWorkflowService.getStates( suggest ) );
+
+        return model;
+    }
+
+    /**
      * Returns the model of a notification about a suggest submit.
      *
      * @param strUserKey
@@ -361,16 +404,17 @@ public class SuggestNotificationListener
      *            the suggest
      * @param suggestSubmit
      *            the suggest submit
+     * @param modelWorkflow
+     *            the workflow part of the model
      * @return the model
      */
-    private Map<String, Object> newModel( String strUserKey, Suggest suggest, SuggestSubmit suggestSubmit )
+    private Map<String, Object> newModel( String strUserKey, Suggest suggest, SuggestSubmit suggestSubmit, Map<String, Object> modelWorkflow )
     {
         Map<String, Object> model = _notificationService.newModel( strUserKey );
         model.put( MARK_SUGGEST, suggest );
         model.put( MARK_SUGGEST_SUBMIT, suggestSubmit );
         model.put( MARK_AUTHOR, _notificationService.getUserInfo( suggestSubmit.getLuteceUserKey( ) ) );
-        model.put( MARK_WORKFLOW_STATE, SuggestWorkflowService.getState( suggest, suggestSubmit ) );
-        model.put( MARK_WORKFLOW_STATES, SuggestWorkflowService.getStates( suggest ) );
+        model.putAll( modelWorkflow );
         model.put( MARK_SUGGEST_SUBMIT_URL, model.get( SuggestNotificationService.MARK_BASE_URL ) + MessageFormat.format( URL_SUGGEST_SUBMIT,
                 Integer.toString( suggest.getIdSuggest( ) ), Integer.toString( suggestSubmit.getIdSuggestSubmit( ) ) ) );
 

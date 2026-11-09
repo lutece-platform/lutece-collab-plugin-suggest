@@ -143,15 +143,9 @@ public class SuggestService
      */
     public static boolean isVoteOpen( Suggest suggest, LocalDate today )
     {
-        if ( suggest.isDisableVote( ) )
-        {
-            return false;
-        }
-
-        LocalDate dateBegin = parseDate( suggest.getDateBeginVote( ) );
         LocalDate dateEnd = parseDate( suggest.getDateEndVote( ) );
 
-        return ( dateBegin == null || !today.isBefore( dateBegin ) ) && ( dateEnd == null || !today.isAfter( dateEnd ) );
+        return isVoteStarted( suggest, today ) && ( dateEnd == null || !today.isAfter( dateEnd ) );
     }
 
     /**
@@ -169,6 +163,24 @@ public class SuggestService
         LocalDate dateBegin = parseDate( suggest.getDateBeginVote( ) );
 
         return !suggest.isDisableVote( ) && ( dateBegin == null || !today.isBefore( dateBegin ) );
+    }
+
+    /**
+     * Tells whether two vote dates make a valid period: each one is null or a yyyy-MM-dd date, and the end does not fall before the start.
+     *
+     * @param strDateBegin
+     *            the first vote day, or null
+     * @param strDateEnd
+     *            the last vote day, or null
+     * @return true if the period is valid
+     */
+    public static boolean isValidVotePeriod( String strDateBegin, String strDateEnd )
+    {
+        LocalDate dateBegin = parseDate( strDateBegin );
+        LocalDate dateEnd = parseDate( strDateEnd );
+
+        return ( strDateBegin == null || dateBegin != null ) && ( strDateEnd == null || dateEnd != null )
+                && ( dateBegin == null || dateEnd == null || !dateEnd.isBefore( dateBegin ) );
     }
 
     /**

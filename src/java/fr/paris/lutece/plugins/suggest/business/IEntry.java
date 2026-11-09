@@ -40,6 +40,7 @@ import fr.paris.lutece.util.html.Paginator;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -347,7 +348,6 @@ public interface IEntry
      */
     void setEntryAdditionalAttributeList( List<EntryAdditionalAttribute> entryAdditionalAttributeList );
 
-
     /**
      * Adds to the model of the form field what its template needs beyond the field itself.
      *
@@ -356,7 +356,17 @@ public interface IEntry
      * @param request
      *            the request, or null outside a front office request
      */
-    default void addHtmlFormModel( java.util.Map<String, Object> model, HttpServletRequest request )
+    default void addHtmlFormModel( Map<String, Object> model, HttpServletRequest request )
     {
+    }
+
+    /**
+     * Tells whether the field is filled in the front office only, and left out of the back office forms.
+     *
+     * @return true if the field is front office only
+     */
+    default boolean isFrontOfficeOnly( )
+    {
+        return false;
     }
 }

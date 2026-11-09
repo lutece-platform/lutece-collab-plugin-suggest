@@ -157,6 +157,7 @@ public class SuggestApp extends MVCApplication
     private static final String MARK_AUTHORIZED_VOTE = "authorized_vote";
     private static final String MARK_VOTE_STARTED = "vote_started";
     private static final String MARK_ENABLE_COMPLEMENTS = "enable_complements";
+    private static final String MARK_CAN_ADD_COMPLEMENT = "can_add_complement";
     private static final String MARK_COMPLEMENTS = "complements";
     private static final String MARK_ATTACHMENTS = "attachments";
     private static final String MARK_ATTACHMENT_URLS = "attachment_urls";
@@ -682,8 +683,7 @@ public class SuggestApp extends MVCApplication
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, _plugin );
         Suggest suggest = ( suggestSubmit != null ) ? SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), _plugin ) : null;
 
-        if ( ( suggest == null ) || !suggest.isEnableComplements( ) || ( suggestSubmit.getSuggestSubmitState( ).getNumber( ) != SuggestSubmit.STATE_PUBLISH )
-                || !user.getName( ).equals( suggestSubmit.getLuteceUserKey( ) ) )
+        if ( ( suggest == null ) || !_complementService.canAddComplement( suggest, suggestSubmit, user.getName( ) ) )
         {
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
         }
@@ -1806,11 +1806,8 @@ public class SuggestApp extends MVCApplication
             SuggestUtils.addAvatarToModel( modelSuggest, luteceUserInfo );
             modelSuggest.put( MARK_WORKFLOW_STATE, SuggestWorkflowService.getState( suggest, suggestSubmit ) );
 
-            if ( SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) )
-            {
-                modelSuggest.put( MARK_SUGGEST_SUBMIT_VOTE_TYPE,
-                        getHtmlSuggestSubmitVoteType( suggest, suggestSubmit, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT, locale, luteceUserConnected ) );
-            }
+            modelSuggest.put( MARK_SUGGEST_SUBMIT_VOTE_TYPE,
+                    getHtmlSuggestSubmitVoteType( suggest, suggestSubmit, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT, locale, luteceUserConnected ) );
 
             listHashSuggest.add( modelSuggest );
         }
@@ -1921,6 +1918,8 @@ public class SuggestApp extends MVCApplication
         model.put( MARK_AUTHORIZED_VOTE, SuggestService.isVoteOpen( suggestSubmit.getSuggest( ), LocalDate.now( ) ) );
         model.put( MARK_VOTE_STARTED, SuggestService.isVoteStarted( suggestSubmit.getSuggest( ), LocalDate.now( ) ) );
         model.put( MARK_ENABLE_COMPLEMENTS, suggestSubmit.getSuggest( ).isEnableComplements( ) );
+        model.put( MARK_CAN_ADD_COMPLEMENT, _complementService.canAddComplement( suggestSubmit.getSuggest( ), suggestSubmit,
+                ( luteceUserConnected != null ) ? luteceUserConnected.getName( ) : null ) );
         model.put( MARK_COMPLEMENTS, _complementService.getComplements( suggestSubmit.getIdSuggestSubmit( ) ) );
 
         List<SuggestSubmitAttachment> listAttachments = _attachmentService.getAttachments( suggestSubmit.getIdSuggestSubmit( ) );
@@ -2134,7 +2133,7 @@ public class SuggestApp extends MVCApplication
         suggestSubmit.setSuggest( suggest );
         suggestSubmit.setResponses( listResponse );
 
-        FormError formError = SuggestUtils.getAllResponsesData( request, suggestSubmit, plugin, locale );
+        FormError formError = SuggestUtils.getAllResponsesData( request, suggestSubmit, plugin, locale, false );
 
         if ( formError != null )
         {
