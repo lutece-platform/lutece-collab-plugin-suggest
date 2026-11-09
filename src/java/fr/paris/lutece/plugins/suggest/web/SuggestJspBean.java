@@ -77,6 +77,7 @@ import fr.paris.lutece.plugins.suggest.business.SuggestActionHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestFilter;
 import fr.paris.lutece.plugins.suggest.business.SuggestHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
+import fr.paris.lutece.plugins.suggest.business.SuggestSubmitComplement;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitState;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitStateHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmitType;
@@ -98,6 +99,7 @@ import fr.paris.lutece.plugins.suggest.service.CategoryResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.DefaultMessageResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.SuggestResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.SuggestService;
+import fr.paris.lutece.plugins.suggest.service.SuggestSubmitComplementService;
 import fr.paris.lutece.plugins.suggest.service.ICommentSubmitService;
 import fr.paris.lutece.plugins.suggest.service.ISuggestUserInfoService;
 import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
@@ -179,6 +181,8 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String ACTION_CHANGE_COMMENT_SUBMIT = "changeCommentSubmit";
     private static final String ACTION_SUBMIT_OFFICIAL_ANSWER = "submitOfficialAnswer";
     private static final String ACTION_REMOVE_COMMENT_SUBMIT = "removeCommentSubmit";
+    private static final String ACTION_CONFIRM_REMOVE_COMPLEMENT = "confirmRemoveComplement";
+    private static final String ACTION_REMOVE_COMPLEMENT = "removeComplement";
     private static final String ACTION_CREATE_SUGGEST = "createSuggest";
     private static final String ACTION_MODIFY_SUGGEST = "modifySuggest";
     private static final String ACTION_INSERT_SUGGEST_SUBMIT_TYPE = "insertSuggestSubmitType";
@@ -228,6 +232,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String MESSAGE_CONFIRM_REMOVE_SUGGEST = "suggest.message.confirmRemoveSuggest";
     private static final String MESSAGE_CONFIRM_REMOVE_SUGGEST_SUBMIT = "suggest.message.confirmRemoveSuggestSubmit";
     private static final String MESSAGE_CONFIRM_REMOVE_COMMENT_SUBMIT = "suggest.message.confirmRemoveCommentSubmit";
+    private static final String MESSAGE_CONFIRM_REMOVE_COMPLEMENT = "suggest.message.confirmRemoveComplement";
     private static final String MESSAGE_CONFIRM_REMOVE_SUGGEST_WITH_SUGGEST_SUBMIT = "suggest.message.confirmRemoveSuggestWithSuggestSubmit";
     private static final String MESSAGE_CONFIRM_DISABLE_SUGGEST = "suggest.message.confirmDisableSuggest";
     private static final String MESSAGE_CONFIRM_REMOVE_ENTRY = "suggest.message.confirmRemoveEntry";
@@ -311,6 +316,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String MARK_SUGGEST_LIST = "suggest_list";
     private static final String MARK_SUGGEST_SUBMIT_LIST = "suggest_submit_list";
     private static final String MARK_COMMENT_SUBMIT_LIST = "comment_submit_list";
+    private static final String MARK_COMPLEMENTS = "complements";
     private static final String MARK_USERS_INFO = "users_info";
     private static final String MARK_WORKFLOW_STATES = "workflow_states";
     private static final String MARK_VOTE_TYPE_LIST = "vote_type_list";
@@ -387,6 +393,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String JSP_DO_REMOVE_ENTRY = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_REMOVE_ENTRY;
     private static final String JSP_MANAGE_SUGGEST = "jsp/admin/plugins/suggest/ManageSuggest.jsp";
     private static final String JSP_DO_REMOVE_COMMENT_SUBMIT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_REMOVE_COMMENT_SUBMIT;
+    private static final String JSP_DO_REMOVE_COMPLEMENT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_REMOVE_COMPLEMENT;
     // private static final String JSP_MANAGE_SUGGEST_SUBMIT_TYPE = "jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp";
     private static final String JSP_MODIFY_SUGGEST = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MODIFY_SUGGEST;
     private static final String JSP_MODIFY_ENTRY = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MODIFY_ENTRY;
@@ -405,6 +412,7 @@ public class SuggestJspBean extends MVCAdminJspBean
 
     private static final String PARAMETER_ID_SUGGEST_SUBMIT = "id_suggest_submit";
     private static final String PARAMETER_ID_COMMENT_SUBMIT = "id_comment_submit";
+    private static final String PARAMETER_ID_COMPLEMENT = "id_complement";
     private static final String PARAMETER_ID_PARENT = "id_parent";
     private static final String PARAMETER_STATE_NUMBER = "state_number";
     private static final String PARAMETER_TITLE = "title";
@@ -481,6 +489,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String PARAMETER_ENABLE_TERMS_OF_USE = "enable_terms_of_use";
     private static final String PARAMETER_TERMS_OF_USE = "terms_of_use";
     private static final String PARAMETER_DATE_BEGIN_VOTE = "date_begin_vote";
+    private static final String PARAMETER_ENABLE_COMPLEMENTS = "enable_complements";
     private static final String PARAMETER_DATE_END_VOTE = "date_end_vote";
     private static final String PARAMETER_DISPLAY_COMMENT_IN_SUGGEST_SUBMIT_LIST = "display_comment_in_suggest_submit_list";
     private static final String PARAMETER_NUMBER_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST = "number_comment_display_in_suggest_submit_list";
@@ -536,6 +545,8 @@ public class SuggestJspBean extends MVCAdminJspBean
     private SuggestSearchService _suggestSearchService;
     @Inject
     private SuggestService _suggestService;
+    @Inject
+    private SuggestSubmitComplementService _complementService;
     @Inject
     private WorkflowService _workflowService;
     @Inject
@@ -1297,6 +1308,7 @@ public class SuggestJspBean extends MVCAdminJspBean
             model.put( MARK_WORKFLOW_STATES, _workflowService.getAllStateByWorkflow( suggest.getIdWorkflow( ), (User) getUser( ) ) );
         }
         model.put( MARK_COMMENT_SUBMIT_LIST, paginator.getPageItems( ) );
+        model.put( MARK_COMPLEMENTS, _complementService.getComplements( suggestSubmit.getIdSuggestSubmit( ) ) );
         model.put( MARK_USERS_INFO, getUsersInfo( suggestSubmit, paginator.getPageItems( ), plugin ) );
         model.put( MARK_SUGGEST_SUBMIT, suggestSubmit );
         model.put( MARK_ID_SUGGEST_SUBMIT_PREV, _suggestSubmitService.findPrevIdSuggestSubmitInTheList( _nIdSuggestSubmit, filter, plugin ) );
@@ -1770,6 +1782,46 @@ public class SuggestJspBean extends MVCAdminJspBean
     }
 
     /**
+     * Asks the confirmation of the removal of a complement.
+     *
+     * @param request
+     *            The HTTP request
+     * @return The URL of the confirmation message
+     */
+    @Action( value = ACTION_CONFIRM_REMOVE_COMPLEMENT, securityTokenAction = TOKEN_SUGGEST )
+    public String getConfirmRemoveComplement( HttpServletRequest request )
+    {
+        UrlItem url = new UrlItem( JSP_DO_REMOVE_COMPLEMENT );
+        url.addParameter( PARAMETER_ID_COMPLEMENT, SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_ID_COMPLEMENT ) ) );
+
+        return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_COMPLEMENT, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
+    }
+
+    /**
+     * Removes a complement of a suggest submit the user may manage.
+     *
+     * @param request
+     *            The HTTP request
+     * @return The URL to go after performing the action
+     */
+    @Action( value = ACTION_REMOVE_COMPLEMENT, securityTokenAction = TOKEN_SUGGEST )
+    public String doRemoveComplement( HttpServletRequest request )
+    {
+        SuggestSubmitComplement complement = _complementService.findByPrimaryKey( SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_ID_COMPLEMENT ) ) );
+        SuggestSubmit suggestSubmit = ( complement != null ) ? _suggestSubmitService.findByPrimaryKey( complement.getIdSuggestSubmit( ), false, getPlugin( ) ) : null;
+
+        if ( ( suggestSubmit == null ) || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ),
+                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+        {
+            return redirect( request, getJspManageSuggest( request ) );
+        }
+
+        _complementService.removeComplement( complement );
+
+        return redirect( request, getJspManageCommentSubmit( request ) );
+    }
+
+    /**
      * disable the comment submit
      *
      * @param request
@@ -2152,6 +2204,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         suggest.setActiveEditorBbcode( strActiveEditorBbcode != null );
         suggest.setLimitNumberVote( strLimitNumberVote != null );
         suggest.setEnableVoteWithdrawal( strEnableVoteWithdrawal != null );
+        suggest.setEnableComplements( request.getParameter( PARAMETER_ENABLE_COMPLEMENTS ) != null );
         suggest.setShowCategoryBlock( strShowCategoryBlock != null );
         suggest.setShowTopScoreBlock( strShowTopScoreBlock != null );
         suggest.setShowTopCommentBlock( strShowTopCommentBlock != null );

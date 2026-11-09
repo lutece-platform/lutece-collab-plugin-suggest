@@ -71,6 +71,7 @@ import fr.paris.lutece.plugins.suggest.business.VoteType;
 import fr.paris.lutece.plugins.suggest.business.VoteTypeHome;
 import fr.paris.lutece.plugins.suggest.service.ISuggestUserInfoService;
 import fr.paris.lutece.plugins.suggest.service.SuggestService;
+import fr.paris.lutece.plugins.suggest.service.SuggestSubmitComplementService;
 import fr.paris.lutece.plugins.suggest.service.ICommentSubmitService;
 import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.suggestsearch.SuggestSearchService;
@@ -149,6 +150,8 @@ public class SuggestApp extends MVCApplication
     private static final String MARK_SUGGEST_COMMENT = "suggest_comment";
     private static final String MARK_AUTHORIZED_COMMENT = "authorized_comment";
     private static final String MARK_AUTHORIZED_VOTE = "authorized_vote";
+    private static final String MARK_ENABLE_COMPLEMENTS = "enable_complements";
+    private static final String MARK_COMPLEMENTS = "complements";
     private static final String MARK_DISPLAY_COMMENT_IN_LIST = "display_comment_in_list";
     private static final String MARK_ENABLE_SUGGEST_REPORTS = "enable_suggest_reports";
     private static final String MARK_SUGGEST_SUBMIT = "suggest_submit";
@@ -213,6 +216,7 @@ public class SuggestApp extends MVCApplication
     private static final String PARAMETER_ID_SUBMIT_SUGGEST = "id_suggest_submit";
     private static final String PARAMETER_COMMENT_SUGGEST = "suggest_comment";
     private static final String PARAMETER_COMMENT_VALUE_SUGGEST = "comment_value";
+    private static final String PARAMETER_COMPLEMENT_VALUE = "complement_value";
     private static final String PARAMETER_REPORTED_VALUE = "reported_value";
     private static final String PARAMETER_ID_FILTER_PERIOD = "id_filter_period";
     private static final String PARAMETER_ID_SUGGEST_SUBMIT_SORT = "id_suggest_submit_sort";
@@ -237,6 +241,7 @@ public class SuggestApp extends MVCApplication
     private static final String MESSAGE_MANDATORY_QUESTION = "suggest.message.mandatory.question";
     private static final String MESSAGE_ERROR = "suggest.message.Error";
     private static final String MESSAGE_MANDATORY_COMMENT = "suggest.message.mandatoryComment";
+    private static final String MESSAGE_MANDATORY_COMPLEMENT = "suggest.message.mandatoryComplement";
     private static final String MESSAGE_MANDATORY_REPORTED = "suggest.message.mandatoryReported";
     private static final String MESSAGE_CAPTCHA_ERROR = "suggest.message.captchaError";
     private static final String MESSAGE_NEW_SUGGEST_SUBMIT = "suggest.message.newSuggestSubmit";
@@ -264,6 +269,7 @@ public class SuggestApp extends MVCApplication
     private static final String ACTION_DO_CREATE_COMMENT = "do_create_comment";
     private static final String ACTION_DO_CREATE_REPORT = "do_create_report";
     private static final String ACTION_DO_VOTE = "do_vote";
+    private static final String ACTION_DO_ADD_COMPLEMENT = "do_add_complement";
     private static final String ACTION_CREATE_REPORT = "create_report";
     private static final String ACTION_CREATE_SUB_COMMENT = "create_sub_comment";
     private static final String ACTION_SUBSCRIBE_SUGGEST = "subscribe_suggest";
@@ -306,6 +312,8 @@ public class SuggestApp extends MVCApplication
     private Instance<ICaptchaService> _captchaService;
     @Inject
     private SecurityTokenHandler _securityTokenHandler;
+    @Inject
+    private SuggestSubmitComplementService _complementService;
     private int _nMode;
 
     /**
@@ -572,6 +580,78 @@ public class SuggestApp extends MVCApplication
         }
 
         return getViewSuggestSubmitList( page, _nMode, request );
+    }
+
+    /**
+     * Adds a complement of its author below a proposal, then displays the proposal.
+     *
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @return {@link XPage}
+     * @throws UserNotSignedException
+     *             {@link UserNotSignedException}
+     * @throws SiteMessageException
+     *             {@link SiteMessageException}
+     */
+    @Action( value = ACTION_DO_ADD_COMPLEMENT, securityTokenAction = TOKEN_SUGGEST )
+    public XPage actionDoAddComplement( HttpServletRequest request ) throws UserNotSignedException, SiteMessageException
+    {
+        try
+        {
+            doAddComplement( request );
+        }
+        catch( SuggestFormValidationException e )
+        {
+            request.setAttribute( ATTRIBUTE_FORM_ERROR, e.getMessage( ) );
+        }
+
+        return getViewSuggestSubmit( new XPage( ), _nMode, request );
+    }
+
+    /**
+     * Adds a complement below a published proposal of the connected user, when its suggest enables the complements.
+     *
+     * @param request
+     *            the {@link HttpServletRequest}
+     * @throws UserNotSignedException
+     *             if no user is connected
+     * @throws SiteMessageException
+     *             if the proposal cannot be completed by the connected user
+     * @throws SuggestFormValidationException
+     *             if the complement is empty
+     */
+    private void doAddComplement( HttpServletRequest request ) throws UserNotSignedException, SiteMessageException, SuggestFormValidationException
+    {
+        if ( !SecurityService.isAuthenticationEnable( ) )
+        {
+            SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
+        }
+
+        LuteceUser user = SecurityService.getInstance( ).getRemoteUser( request );
+
+        if ( user == null )
+        {
+            throw new UserNotSignedException( );
+        }
+
+        int nIdSuggestSubmit = SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST ) );
+        SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, _plugin );
+        Suggest suggest = ( suggestSubmit != null ) ? SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), _plugin ) : null;
+
+        if ( ( suggest == null ) || !suggest.isEnableComplements( ) || ( suggestSubmit.getSuggestSubmitState( ).getNumber( ) != SuggestSubmit.STATE_PUBLISH )
+                || !user.getName( ).equals( suggestSubmit.getLuteceUserKey( ) ) )
+        {
+            SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
+        }
+
+        String strValue = request.getParameter( PARAMETER_COMPLEMENT_VALUE );
+
+        if ( StringUtils.isBlank( strValue ) )
+        {
+            throw new SuggestFormValidationException( I18nService.getLocalizedString( MESSAGE_MANDATORY_COMPLEMENT, getLocale( request ) ) );
+        }
+
+        _complementService.addComplement( nIdSuggestSubmit, strValue );
     }
 
     /**
@@ -1577,6 +1657,7 @@ public class SuggestApp extends MVCApplication
 
         model.put( MARK_AUTHORIZED_COMMENT, suggest.isAuthorizedComment( ) );
         model.put( MARK_AUTHORIZED_VOTE, SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) );
+        model.put( MARK_ENABLE_COMPLEMENTS, suggest.isEnableComplements( ) );
         model.put( MARK_DISPLAY_COMMENT_IN_LIST, suggest.isDisplayCommentInSuggestSubmitList( ) );
         model.put( MARK_ENABLE_SUGGEST_REPORTS, suggest.isEnableReports( ) );
         model.put( MARK_ID_SUGGEST, suggest.getIdSuggest( ) );
@@ -1790,6 +1871,8 @@ public class SuggestApp extends MVCApplication
 
         model.put( MARK_AUTHORIZED_COMMENT, suggestSubmit.getSuggest( ).isAuthorizedComment( ) );
         model.put( MARK_AUTHORIZED_VOTE, SuggestService.isVoteOpen( suggestSubmit.getSuggest( ), LocalDate.now( ) ) );
+        model.put( MARK_ENABLE_COMPLEMENTS, suggestSubmit.getSuggest( ).isEnableComplements( ) );
+        model.put( MARK_COMPLEMENTS, _complementService.getComplements( suggestSubmit.getIdSuggestSubmit( ) ) );
         model.put( MARK_ENABLE_SUGGEST_REPORTS, suggestSubmit.getSuggest( ).isEnableReports( ) );
         model.put( MARK_IS_EXTEND_INSTALLED, PortalService.isExtendActivated( ) );
 
