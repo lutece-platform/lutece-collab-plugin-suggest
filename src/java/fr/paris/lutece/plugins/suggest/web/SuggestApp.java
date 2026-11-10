@@ -285,7 +285,7 @@ public class SuggestApp extends MVCApplication
     private static final String ACTION_SUBSCRIBE_SUGGEST = "subscribe_suggest";
     private static final String ACTION_UNSUBSCRIBE_SUGGEST = "unsubscribe_suggest";
     private static final String VIEW_HOME = "suggest_home";
-    private static final String TOKEN_SUGGEST = "suggest";
+    static final String TOKEN_SUGGEST = "suggest";
     private static final String CONSTANT_VIEW_LIST_SUGGEST_SUBMIT = "view_suggest_submit_list";
     private static final String CONSTANT_VIEW_SUGGEST_SUBMIT = "view_suggest_submit";
     private static final String CONSTANT_VIEW_REPORT = "view_report";

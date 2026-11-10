@@ -61,6 +61,13 @@
         </search-indexer>
     </search-indexers>
 
+    <page-include-services>
+        <page-include-service>
+            <page-include-service-id>suggestSubscription</page-include-service-id>
+            <page-include-service-class>fr.paris.lutece.plugins.suggest.web.SuggestSubscriptionInclude</page-include-service-class>
+        </page-include-service>
+    </page-include-services>
+
     <daemons>
         <daemon>
             <daemon-id>suggestPublication</daemon-id>
