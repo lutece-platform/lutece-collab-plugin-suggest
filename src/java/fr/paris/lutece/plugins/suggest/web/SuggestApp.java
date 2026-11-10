@@ -204,6 +204,7 @@ public class SuggestApp extends MVCApplication
     private static final String MARK_LIST_SUGGEST_SUBMIT_TYPES = "list_suggest_submit_types";
     private static final String MARK_LUTECE_USER_NAME_FILTER = "lutece_user_name_filter";
     private static final String MARK_DEPARTMENT_FILTER = "department_filter";
+    private static final String MARK_AUTHOR_NUMBER_SUGGEST_SUBMIT = "author_number_suggest_submit";
     private static final String MARK_LIST_DEPARTMENTS = "list_departments";
     private static final String MARK_LUTECE_USER_NAME_FILTER_INFO = "lutece_user_name_filter_info";
     private static final String MARK_USER_VOTED = "user_voted";
@@ -1977,6 +1978,12 @@ public class SuggestApp extends MVCApplication
         model.put( MARK_AUTHORIZED_VOTE, SuggestService.isVoteOpen( suggestSubmit.getSuggest( ), LocalDate.now( ) ) );
         model.put( MARK_VOTE_STARTED, SuggestService.isVoteStarted( suggestSubmit.getSuggest( ), LocalDate.now( ) ) );
         model.put( MARK_ENABLE_COMPLEMENTS, suggestSubmit.getSuggest( ).isEnableComplements( ) );
+
+        if ( StringUtils.isNotEmpty( suggestSubmit.getLuteceUserKey( ) ) )
+        {
+            model.put( MARK_AUTHOR_NUMBER_SUGGEST_SUBMIT,
+                    getNumberPublishedSuggestSubmit( suggestSubmit.getSuggest( ).getIdSuggest( ), suggestSubmit.getLuteceUserKey( ), null ) );
+        }
         model.put( MARK_CAN_ADD_COMPLEMENT, _complementService.canAddComplement( suggestSubmit.getSuggest( ), suggestSubmit,
                 ( luteceUserConnected != null ) ? luteceUserConnected.getName( ) : null ) );
         model.put( MARK_COMPLEMENTS, _complementService.getComplements( suggestSubmit.getIdSuggestSubmit( ) ) );
