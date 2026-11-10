@@ -856,13 +856,13 @@ public class SuggestApp extends MVCApplication
             }
             else
             {
-                model.put( MARK_USER_SUBSCRIBED, _suggestSubscriptionProviderService.hasUserSubscribedToSuggest( luteceUserConnected, nIdSuggest ) );
+                model.put( MARK_USER_SUBSCRIBED, _suggestSubscriptionProviderService.hasUserSubscribedToSuggest( luteceUserConnected, suggest.getIdSuggest( ) ) );
             }
         }
 
         UrlItem urlSuggestXpage = getNewUrlItemPage( );
         urlSuggestXpage.addParameter( PARAMETER_ACTION, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT );
-        urlSuggestXpage.addParameter( PARAMETER_ID_SUGGEST, nIdSuggest );
+        urlSuggestXpage.addParameter( PARAMETER_ID_SUGGEST, suggest.getIdSuggest( ) );
 
         SearchFields searchFields = getSearchFields( request );
         model.put( MARK_NUMBER_PUBLISHED_SUGGEST_SUBMIT, getNumberPublishedSuggestSubmit( suggest.getIdSuggest( ), searchFields.getLuteceUserName( ) ) );
