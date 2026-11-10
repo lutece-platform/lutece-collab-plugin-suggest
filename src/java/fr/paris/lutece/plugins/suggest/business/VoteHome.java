@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.suggest.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import jakarta.enterprise.inject.spi.CDI;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -97,6 +98,22 @@ public final class VoteHome
     public static int getUserNumberVoteOnSuggestSubmit( int nIdSuggestSubmit, String strLuteceUserKey, Plugin plugin )
     {
         return _dao.selectCountVoteByIdSuggestSubmitAndLuteceUserKey( nIdSuggestSubmit, strLuteceUserKey, plugin );
+    }
+
+    /**
+     * Finds, among the given suggest submits, those a lutece user has voted for.
+     *
+     * @param listIdSuggestSubmit
+     *            the ids of the suggest submits
+     * @param strLuteceUserKey
+     *            the lutece user key
+     * @param plugin
+     *            the plugin
+     * @return the ids of the suggest submits the user has voted for
+     */
+    public static List<Integer> findIdSuggestSubmitVotedByLuteceUserKey( Collection<Integer> listIdSuggestSubmit, String strLuteceUserKey, Plugin plugin )
+    {
+        return _dao.selectIdSuggestSubmitVotedByLuteceUserKey( listIdSuggestSubmit, strLuteceUserKey, plugin );
     }
 
     /**

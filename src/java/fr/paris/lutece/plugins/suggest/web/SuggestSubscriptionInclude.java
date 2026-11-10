@@ -35,13 +35,8 @@ package fr.paris.lutece.plugins.suggest.web;
 
 import java.util.Map;
 
-import fr.paris.lutece.plugins.suggest.service.SuggestService;
-import fr.paris.lutece.plugins.suggest.service.subscription.SuggestSubscriptionProviderService;
-import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.service.includes.PageInclude;
 import fr.paris.lutece.portal.service.content.PageData;
-import fr.paris.lutece.portal.service.security.ISecurityTokenService;
-import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.servlet.http.HttpServletRequest;
@@ -64,22 +59,11 @@ public class SuggestSubscriptionInclude implements PageInclude
             return;
         }
 
-        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
+        Map<String, Object> subscription = CDI.current( ).select( SuggestHeaderSubscription.class ).get( ).getSubscription( request );
 
-        if ( user == null )
+        if ( !subscription.isEmpty( ) )
         {
-            return;
+            rootModel.put( MARK_SUBSCRIPTION, subscription );
         }
-
-        int nIdSuggest = CDI.current( ).select( SuggestService.class ).get( ).getIdDefaultSuggest( );
-
-        if ( nIdSuggest == SuggestUtils.CONSTANT_ID_NULL )
-        {
-            return;
-        }
-
-        boolean bSubscribed = CDI.current( ).select( SuggestSubscriptionProviderService.class ).get( ).hasUserSubscribedToSuggest( user, nIdSuggest );
-        String strToken = CDI.current( ).select( ISecurityTokenService.class ).get( ).getToken( request, SuggestApp.TOKEN_SUGGEST );
-        rootModel.put( MARK_SUBSCRIPTION, Map.of( "idSuggest", nIdSuggest, "subscribed", bSubscribed, "token", strToken ) );
     }
 }

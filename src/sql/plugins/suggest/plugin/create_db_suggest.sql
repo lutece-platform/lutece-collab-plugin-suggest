@@ -510,3 +510,18 @@ ALTER TABLE suggest_suggest_submit_attachment ADD CONSTRAINT fk_suggest_submit_a
 -- preconditions onFail:MARK_RAN onError:MARK_RAN
 -- precondition-sql-check expectedResult:1 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_entry_attr_additional' AND column_name = 'attr_value' AND character_maximum_length < 1000
 ALTER TABLE suggest_entry_attr_additional MODIFY attr_value varchar(1000) NOT NULL;
+
+-- changeset suggest:create_db_suggest-rev7.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'suggest_vote' AND index_name = 'index_suggest_vote_submit_user'
+CREATE INDEX index_suggest_vote_submit_user ON suggest_vote (id_suggest_submit, lutece_user_key);
+
+-- changeset suggest:create_db_suggest-rev8.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'suggest_suggest_submit' AND index_name = 'index_suggest_suggest_submit_user'
+CREATE INDEX index_suggest_suggest_submit_user ON suggest_suggest_submit (lutece_user_key, id_suggest, id_state);
+
+-- changeset suggest:create_db_suggest-rev9.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'suggest_suggest_user_info' AND index_name = 'index_suggest_user_info_department'
+CREATE INDEX index_suggest_user_info_department ON suggest_suggest_user_info (department, lutece_user_key);

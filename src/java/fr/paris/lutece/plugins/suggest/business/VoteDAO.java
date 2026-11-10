@@ -39,7 +39,9 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -57,6 +59,7 @@ public class VoteDAO implements IVoteDAO
     private static final String SQL_QUERY_DELETE_BY_ID_SUGGEST_SUBMIT_AND_LUTECE_USER_KEY = "DELETE FROM suggest_vote WHERE id_suggest_submit= ? and lutece_user_key= ? ";
     private static final String SQL_QUERY_COUNT_VOTE_BY_ID_SUGGEST_SUBMIT_AND_LUTECE_USER_KEY = "SELECT COUNT(id_suggest_submit) "
             + "FROM suggest_vote WHERE id_suggest_submit= ? and lutece_user_key= ? ";
+    private static final String SQL_QUERY_SELECT_VOTED_ID_SUGGEST_SUBMIT = "SELECT DISTINCT id_suggest_submit FROM suggest_vote WHERE lutece_user_key = ? AND id_suggest_submit IN ( ";
     private static final String SQL_QUERY_COUNT_VOTE_BY_ID_SUGGEST_SUBMIT = "SELECT COUNT(id_suggest_submit) "
             + "FROM suggest_vote WHERE id_suggest_submit= ? ";
 
@@ -147,6 +150,42 @@ public class VoteDAO implements IVoteDAO
         }
 
         return nIdCount;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Integer> selectIdSuggestSubmitVotedByLuteceUserKey( Collection<Integer> listIdSuggestSubmit, String strLuteceUserKey, Plugin plugin )
+    {
+        List<Integer> listVoted = new ArrayList<>( );
+
+        if ( listIdSuggestSubmit.isEmpty( ) )
+        {
+            return listVoted;
+        }
+
+        String strQuery = SQL_QUERY_SELECT_VOTED_ID_SUGGEST_SUBMIT + listIdSuggestSubmit.stream( ).map( id -> "?" ).collect( Collectors.joining( "," ) ) + " )";
+
+        try ( DAOUtil daoUtil = new DAOUtil( strQuery, plugin ) )
+        {
+            int nIndex = 1;
+            daoUtil.setString( nIndex++, strLuteceUserKey );
+
+            for ( Integer nIdSuggestSubmit : listIdSuggestSubmit )
+            {
+                daoUtil.setInt( nIndex++, nIdSuggestSubmit );
+            }
+
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                listVoted.add( daoUtil.getInt( 1 ) );
+            }
+        }
+
+        return listVoted;
     }
 
     /**

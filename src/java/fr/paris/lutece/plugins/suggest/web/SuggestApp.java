@@ -37,10 +37,13 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -1837,6 +1840,8 @@ public class SuggestApp extends MVCApplication
         SuggestUserInfo luteceUserInfo;
         SuggestSubmit suggestSubmit;
         Collection<HashMap> listHashSuggest = new ArrayList<>( );
+        Set<Integer> setVoted = getVotedSuggestSubmits( listSuggestSubmit, suggest, luteceUserConnected );
+        VoteType voteType = getOpenVoteType( suggest );
 
         for ( Integer idSuggestSubmit : listSuggestSubmit )
         {
@@ -1858,7 +1863,8 @@ public class SuggestApp extends MVCApplication
             modelSuggest.put( MARK_WORKFLOW_STATE, SuggestWorkflowService.getState( suggest, suggestSubmit ) );
 
             modelSuggest.put( MARK_SUGGEST_SUBMIT_VOTE_TYPE,
-                    getHtmlSuggestSubmitVoteType( suggest, suggestSubmit, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT, locale, luteceUserConnected ) );
+                    getHtmlSuggestSubmitVoteType( suggest, voteType, suggestSubmit, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT, locale,
+                            setVoted.contains( idSuggestSubmit ) ) );
 
             listHashSuggest.add( modelSuggest );
         }
@@ -1961,9 +1967,11 @@ public class SuggestApp extends MVCApplication
         model.put( MARK_WORKFLOW_STATES, SuggestWorkflowService.getStates( suggestSubmit.getSuggest( ) ) );
 
         model.put( MARK_LUTECE_USER_CONNECTED, luteceUserConnected );
-        model.put( MARK_SUGGEST_SUBMIT_VOTE_TYPE,
-                getHtmlSuggestSubmitVoteType( suggestSubmit.getSuggest( ), suggestSubmit, CONSTANT_VIEW_SUGGEST_SUBMIT, getLocale( request ),
-                        luteceUserConnected ) );
+
+        boolean bUserVoted = !getVotedSuggestSubmits( List.of( suggestSubmit.getIdSuggestSubmit( ) ), suggestSubmit.getSuggest( ), luteceUserConnected )
+                .isEmpty( );
+        model.put( MARK_SUGGEST_SUBMIT_VOTE_TYPE, getHtmlSuggestSubmitVoteType( suggestSubmit.getSuggest( ), getOpenVoteType( suggestSubmit.getSuggest( ) ),
+                suggestSubmit, CONSTANT_VIEW_SUGGEST_SUBMIT, getLocale( request ), bUserVoted ) );
 
         model.put( MARK_AUTHORIZED_COMMENT, suggestSubmit.getSuggest( ).isAuthorizedComment( ) );
         model.put( MARK_AUTHORIZED_VOTE, SuggestService.isVoteOpen( suggestSubmit.getSuggest( ), LocalDate.now( ) ) );
@@ -1997,35 +2005,66 @@ public class SuggestApp extends MVCApplication
     }
 
     /**
-     * return the Html type of vote
+     * Finds, among the given suggest submits, those the connected user has voted for, while the vote of the suggest is open.
      *
-     * @param strVoteTypeTemplateName
-     *            the template use
+     * @param listIdSuggestSubmit
+     *            the ids of the suggest submits
      * @param suggest
      *            the suggest
-     * @param nIdSuggestSubmit
-     *            the id of the suggestSubmit
+     * @param luteceUserConnected
+     *            the connected user, or null
+     * @return the ids of the suggest submits the user has voted for, empty when nobody is connected or the vote is not open
+     */
+    private Set<Integer> getVotedSuggestSubmits( Collection<Integer> listIdSuggestSubmit, Suggest suggest, LuteceUser luteceUserConnected )
+    {
+        if ( ( luteceUserConnected == null ) || !SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) )
+        {
+            return Collections.emptySet( );
+        }
+
+        return new HashSet<>( VoteHome.findIdSuggestSubmitVotedByLuteceUserKey( listIdSuggestSubmit, luteceUserConnected.getName( ), _plugin ) );
+    }
+
+    /**
+     * Returns the vote type of a suggest while its vote is open.
+     *
+     * @param suggest
+     *            the suggest
+     * @return the vote type, or null when the vote is not open
+     */
+    private VoteType getOpenVoteType( Suggest suggest )
+    {
+        return SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) ? VoteTypeHome.findByPrimaryKey( suggest.getVoteType( ).getIdVoteType( ), _plugin ) : null;
+    }
+
+    /**
+     * return the Html type of vote
+     *
+     * @param suggest
+     *            the suggest
+     * @param voteType
+     *            the vote type of the suggest, or null when the vote is not open
+     * @param suggestSubmit
+     *            the suggestSubmit
      * @param strView
      *            the view which is display the vote type
      * @param locale
      *            the locale
-     * @param luteceUserConnected
-     *            the connected user, or null
+     * @param bUserVoted
+     *            true if the connected user has voted for the suggestSubmit
      * @return the Html type of vote
      */
-    private String getHtmlSuggestSubmitVoteType( Suggest suggest, SuggestSubmit suggestSubmit, String strView, Locale locale, LuteceUser luteceUserConnected )
+    private String getHtmlSuggestSubmitVoteType( Suggest suggest, VoteType voteType, SuggestSubmit suggestSubmit, String strView, Locale locale,
+            boolean bUserVoted )
     {
-        if ( SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) && !suggestSubmit.isDisableVote( ) )
+        if ( ( voteType != null ) && !suggestSubmit.isDisableVote( ) )
         {
-            VoteType voteType = VoteTypeHome.findByPrimaryKey( suggest.getVoteType( ).getIdVoteType( ), _plugin );
-
             String strFilePath = PATH_TYPE_VOTE_FOLDER + voteType.getTemplateFileName( );
             HashMap<String, Object> model = new HashMap<>( );
             model.put( MARK_ID_SUGGEST, suggest.getIdSuggest( ) );
             model.put( MARK_ID_SUGGEST_SUBMIT, suggestSubmit.getIdSuggestSubmit( ) );
             model.put( MARK_VIEW, strView );
-            model.put( MARK_USER_VOTED, ( luteceUserConnected != null )
-                    && ( VoteHome.getUserNumberVoteOnSuggestSubmit( suggestSubmit.getIdSuggestSubmit( ), luteceUserConnected.getName( ), _plugin ) > 0 ) );
+            model.put( MARK_USER_VOTED, bUserVoted );
             model.put( MARK_ENABLE_VOTE_WITHDRAWAL, suggest.isEnableVoteWithdrawal( ) );
 
             HtmlTemplate template = AppTemplateService.getTemplate( strFilePath, locale, model );

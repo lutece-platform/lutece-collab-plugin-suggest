@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -76,6 +77,19 @@ public interface IVoteDAO
      * @return the number of vote for a lutece user on suggestSubmit
      */
     int selectCountVoteByIdSuggestSubmitAndLuteceUserKey( int nIdSuggestSubmit, String strLuteceUserKey, Plugin plugin );
+
+    /**
+     * Selects, among the given suggest submits, those a lutece user has voted for.
+     *
+     * @param listIdSuggestSubmit
+     *            the ids of the suggest submits
+     * @param strLuteceUserKey
+     *            the lutece user key
+     * @param plugin
+     *            the plugin
+     * @return the ids of the suggest submits the user has voted for
+     */
+    List<Integer> selectIdSuggestSubmitVotedByLuteceUserKey( Collection<Integer> listIdSuggestSubmit, String strLuteceUserKey, Plugin plugin );
 
     /**
      * return the number of vote for a lutece user on suggestSubmit
