@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.service;
 
+import java.util.List;
+
 import fr.paris.lutece.plugins.suggest.business.SuggestUserInfo;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.security.LuteceUser;
@@ -68,4 +70,17 @@ public interface ISuggestUserInfoService
      * @return return user information associate to the lutece user key
      */
     SuggestUserInfo findSuggestUserInfoByKey( String strLuteceUserKey, Plugin plugin );
+
+    /**
+     * Returns the departments of the authors of the suggest submits of a suggest in a state, sorted, without the empty ones.
+     *
+     * @param nIdSuggest
+     *            the id of the suggest
+     * @param nIdSuggestSubmitState
+     *            the id of the state of the suggest submits
+     * @param plugin
+     *            {@link Plugin}
+     * @return the departments
+     */
+    List<String> getDepartments( int nIdSuggest, int nIdSuggestSubmitState, Plugin plugin );
 }

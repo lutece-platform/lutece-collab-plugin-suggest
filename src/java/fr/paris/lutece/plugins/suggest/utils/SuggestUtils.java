@@ -1651,6 +1651,8 @@ public final class SuggestUtils
         pinnedFilter.setIdSuggestSubmitState( filter.getIdSuggestSubmitState( ) );
         pinnedFilter.setIdPinned( SubmitFilter.ID_TRUE );
         pinnedFilter.setIdContainsCommentDisable( filter.getIdContainsCommentDisable( ) );
+        pinnedFilter.setDepartment( filter.getDepartment( ) );
+        pinnedFilter.setLuteceUserKey( filter.getLuteceUserKey( ) );
         initSubmitFilterBySort( pinnedFilter, SubmitFilter.SORT_MANUALLY );
 
         return pinnedFilter;

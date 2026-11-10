@@ -134,6 +134,8 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     private String _strDateEndVote;
     @SuggestAttribute( "enableComplements" )
     private boolean _bEnableComplements;
+    @SuggestAttribute( "enableDepartmentFilter" )
+    private boolean _bEnableDepartmentFilter;
     @SuggestAttribute( "idImageResource" )
     private Integer _nIdImageResource = SuggestUtils.CONSTANT_ID_NULL;
     private ImageResource _image;
@@ -1255,6 +1257,27 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     public void setEnableComplements( boolean bEnableComplements )
     {
         _bEnableComplements = bEnableComplements;
+    }
+
+    /**
+     * Tells whether the list of the suggest submits can be filtered by the department of their authors.
+     *
+     * @return true if the department filter is enabled
+     */
+    public boolean isEnableDepartmentFilter( )
+    {
+        return _bEnableDepartmentFilter;
+    }
+
+    /**
+     * Enables or disables the filter of the list by the department of the authors.
+     *
+     * @param bEnableDepartmentFilter
+     *            true to enable the department filter
+     */
+    public void setEnableDepartmentFilter( boolean bEnableDepartmentFilter )
+    {
+        _bEnableDepartmentFilter = bEnableDepartmentFilter;
     }
 
     /**

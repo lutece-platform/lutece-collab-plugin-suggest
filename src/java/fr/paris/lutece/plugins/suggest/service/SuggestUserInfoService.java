@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.service;
 
+import java.util.List;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.plugins.suggest.business.SuggestUserInfo;
 import fr.paris.lutece.plugins.suggest.business.SuggestUserInfoHome;
@@ -85,5 +87,14 @@ public class SuggestUserInfoService implements ISuggestUserInfoService
     public SuggestUserInfo findSuggestUserInfoByKey( String strLuteceUserKey, Plugin plugin )
     {
         return SuggestUserInfoHome.findByKey( strLuteceUserKey, plugin );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> getDepartments( int nIdSuggest, int nIdSuggestSubmitState, Plugin plugin )
+    {
+        return SuggestUserInfoHome.findDepartments( nIdSuggest, nIdSuggestSubmitState, plugin );
     }
 }

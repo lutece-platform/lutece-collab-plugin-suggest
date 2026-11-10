@@ -200,6 +200,8 @@ public class SuggestApp extends MVCApplication
     private static final String MARK_WORKFLOW_STATES = "workflow_states";
     private static final String MARK_LIST_SUGGEST_SUBMIT_TYPES = "list_suggest_submit_types";
     private static final String MARK_LUTECE_USER_NAME_FILTER = "lutece_user_name_filter";
+    private static final String MARK_DEPARTMENT_FILTER = "department_filter";
+    private static final String MARK_LIST_DEPARTMENTS = "list_departments";
     private static final String MARK_LUTECE_USER_NAME_FILTER_INFO = "lutece_user_name_filter_info";
     private static final String MARK_USER_VOTED = "user_voted";
     private static final String MARK_ENABLE_VOTE_WITHDRAWAL = "enable_vote_withdrawal";
@@ -239,6 +241,7 @@ public class SuggestApp extends MVCApplication
     private static final String PARAMETER_VOTED = "voted";
     private static final String PARAMETER_QUERY = "query";
     private static final String PARAMETER_FILTER_PAGE_INDEX = "filter_page_index";
+    private static final String PARAMETER_FILTER_DEPARTMENT = "filter_department";
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String PARAMETER_COMMENT_ID_PARENT = "id_suggest_comment";
     private static final String PARAMETER_ACTION = "action";
@@ -629,22 +632,39 @@ public class SuggestApp extends MVCApplication
     }
 
     /**
-     * Counts the published proposals of a suggest, of one author when a user key is given.
+     * Counts the published proposals of a suggest, of one author when a user key is given, of the authors of one department when a department is given.
      *
      * @param nIdSuggest
      *            the suggest id
      * @param strLuteceUserKey
      *            the author, or empty for every author
+     * @param strDepartment
+     *            the department of the authors, or empty for every department
      * @return the number of published proposals
      */
-    private int getNumberPublishedSuggestSubmit( int nIdSuggest, String strLuteceUserKey )
+    private int getNumberPublishedSuggestSubmit( int nIdSuggest, String strLuteceUserKey, String strDepartment )
     {
         SubmitFilter filter = new SubmitFilter( );
         filter.setIdSuggest( nIdSuggest );
         filter.setLuteceUserKey( strLuteceUserKey );
+        filter.setDepartment( strDepartment );
         filter.setIdSuggestSubmitState( _nIdSuggestSubmitStatePublish );
 
         return _suggestSubmitService.getCountSuggestSubmit( filter, _plugin );
+    }
+
+    /**
+     * Returns the department the list is filtered by: the one of the search fields when the suggest enables the department filter.
+     *
+     * @param suggest
+     *            the suggest
+     * @param searchFields
+     *            the search fields
+     * @return the department, or null when the list is not filtered by department
+     */
+    private static String getDepartmentFilter( Suggest suggest, SearchFields searchFields )
+    {
+        return suggest.isEnableDepartmentFilter( ) ? StringUtils.trimToNull( searchFields.getDepartment( ) ) : null;
     }
 
     /**
@@ -865,7 +885,15 @@ public class SuggestApp extends MVCApplication
         urlSuggestXpage.addParameter( PARAMETER_ID_SUGGEST, suggest.getIdSuggest( ) );
 
         SearchFields searchFields = getSearchFields( request );
-        model.put( MARK_NUMBER_PUBLISHED_SUGGEST_SUBMIT, getNumberPublishedSuggestSubmit( suggest.getIdSuggest( ), searchFields.getLuteceUserName( ) ) );
+        String strDepartment = getDepartmentFilter( suggest, searchFields );
+        model.put( MARK_NUMBER_PUBLISHED_SUGGEST_SUBMIT, getNumberPublishedSuggestSubmit( suggest.getIdSuggest( ), searchFields.getLuteceUserName( ), strDepartment ) );
+        model.put( MARK_DEPARTMENT_FILTER, strDepartment );
+
+        if ( suggest.isActive( ) && suggest.isEnableDepartmentFilter( ) )
+        {
+            model.put( MARK_LIST_DEPARTMENTS, _suggestUserInfoService.getDepartments( suggest.getIdSuggest( ), _nIdSuggestSubmitStatePublish, _plugin ) );
+        }
+
         addSuggestPageFrameset( getHtmlListSuggestSubmit( getLocale( request ), _plugin, suggest, searchFields, urlSuggestXpage, luteceUserConnected ),
                 request, page, suggest, model, searchFields, luteceUserConnected );
 
@@ -1708,6 +1736,7 @@ public class SuggestApp extends MVCApplication
         submitFilter.setIdCategory( searchFields.getIdFilterCategory( ) );
         submitFilter.setIdType( searchFields.getIdFilterSuggestSubmitType( ) );
         submitFilter.setLuteceUserKey( searchFields.getLuteceUserName( ) );
+        submitFilter.setDepartment( getDepartmentFilter( suggest, searchFields ) );
 
         listIdSuggestSubmit = _suggestSearchService.getSearchResults( searchFields.getQuery( ), submitFilter, plugin );
 
@@ -2340,6 +2369,7 @@ public class SuggestApp extends MVCApplication
         String strFilterPageIndex = request.getParameter( PARAMETER_FILTER_PAGE_INDEX );
         String strIdFilterSuggestSubmitType = request.getParameter( PARAMETER_ID_FILTER_SUGGEST_SUBMIT_TYPE );
         String strLuteceUserName = request.getParameter( PARAMETER_LUTECE_USER_NAME_FILTER );
+        String strDepartment = request.getParameter( PARAMETER_FILTER_DEPARTMENT );
 
         int nIdFilterPeriod = SuggestUtils.getIntegerParameter( strIdFilterPeriod );
         int nIdSuggestSubmitSort = SuggestUtils.getIntegerParameter( strIdSuggestSubmitSort );
@@ -2358,6 +2388,7 @@ public class SuggestApp extends MVCApplication
         searchFields.setPageIndex( ( strFilterPageIndex != null ) ? strFilterPageIndex : searchFields.getPageIndex( ) );
 
         searchFields.setLuteceUserName( ( strLuteceUserName != null ) ? strLuteceUserName : searchFields.getLuteceUserName( ) );
+        searchFields.setDepartment( ( strDepartment != null ) ? strDepartment : searchFields.getDepartment( ) );
 
         // update search Fields in session
         session.setAttribute( SESSION_SEARCH_FIELDS, searchFields );

@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import jakarta.enterprise.inject.spi.CDI;
 
@@ -105,5 +107,21 @@ public final class SuggestUserInfoHome
     public static SuggestUserInfo findByKey( String strLuteceUserKey, Plugin plugin )
     {
         return _dao.load( strLuteceUserKey, plugin );
+    }
+
+    /**
+     * Returns the departments of the authors of the suggest submits of a suggest in a state, sorted, without the empty ones.
+     *
+     * @param nIdSuggest
+     *            the id of the suggest
+     * @param nIdSuggestSubmitState
+     *            the id of the state of the suggest submits
+     * @param plugin
+     *            the plugin
+     * @return the departments
+     */
+    public static List<String> findDepartments( int nIdSuggest, int nIdSuggestSubmitState, Plugin plugin )
+    {
+        return _dao.selectDepartments( nIdSuggest, nIdSuggestSubmitState, plugin );
     }
 }

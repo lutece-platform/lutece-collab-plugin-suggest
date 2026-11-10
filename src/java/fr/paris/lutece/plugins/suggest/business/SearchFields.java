@@ -45,6 +45,7 @@ public class SearchFields implements Serializable
     private int _nIdSuggestSubmitSort = SubmitFilter.ALL_INT;
     private int _nIdFilterCategory = SubmitFilter.ALL_INT;
     private int _nIdFilterSuggestSubmitType = SubmitFilter.ALL_INT;
+    private String _strDepartment;
 
     public String getQuery( )
     {
@@ -114,5 +115,26 @@ public class SearchFields implements Serializable
     public void setLuteceUserName( String strLuteceUserName )
     {
         this._strLuteceUserName = strLuteceUserName;
+    }
+
+    /**
+     * Returns the department the authors of the listed suggest submits belong to.
+     *
+     * @return the department, or empty for every department
+     */
+    public String getDepartment( )
+    {
+        return _strDepartment;
+    }
+
+    /**
+     * Sets the department the authors of the listed suggest submits belong to.
+     *
+     * @param strDepartment
+     *            the department, or empty for every department
+     */
+    public void setDepartment( String strDepartment )
+    {
+        _strDepartment = strDepartment;
     }
 }

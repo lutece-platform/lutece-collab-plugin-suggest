@@ -35,6 +35,9 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -48,6 +51,9 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
     private static final String SQL_QUERY_DELETE = "DELETE FROM suggest_suggest_user_info WHERE lutece_user_key= ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE suggest_suggest_user_info SET " + "first_name= ?,last_name= ?,business_mail=?,home_mail=?,login= ?,department= ?"
             + " WHERE lutece_user_key= ? ";
+    private static final String SQL_QUERY_SELECT_DEPARTMENTS = "SELECT u.department FROM suggest_suggest_user_info u WHERE u.department <> '' AND EXISTS ( "
+            + "SELECT 1 FROM suggest_suggest_submit d WHERE d.lutece_user_key = u.lutece_user_key AND d.id_suggest = ? AND d.id_state = ? ) "
+            + "GROUP BY u.department ORDER BY u.department";
 
     /**
      * {@inheritDoc}
@@ -135,5 +141,28 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
             daoUtil.setString( 1, strLuteceUserKey );
             daoUtil.executeUpdate( );
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> selectDepartments( int nIdSuggest, int nIdSuggestSubmitState, Plugin plugin )
+    {
+        List<String> listDepartments = new ArrayList<>( );
+
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_DEPARTMENTS, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdSuggest );
+            daoUtil.setInt( 2, nIdSuggestSubmitState );
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                listDepartments.add( daoUtil.getString( 1 ) );
+            }
+        }
+
+        return listDepartments;
     }
 }

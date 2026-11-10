@@ -81,6 +81,7 @@ public class SubmitFilter
     private int _nIdPinned = ALL_INT;
     private int _nIdContainsCommentDisable = ALL_INT;
     private String _strLuteceUserKey = null;
+    private String _strDepartment = null;
     private List<Integer> _listSortBy = new ArrayList<>( );
 
     /**
@@ -462,6 +463,37 @@ public class SubmitFilter
     public boolean containsLuteceUserKey( )
     {
         return ( !StringUtils.isEmpty( _strLuteceUserKey ) );
+    }
+
+    /**
+     * Sets the department the authors of the suggest submits must belong to.
+     *
+     * @param strDepartment
+     *            the department, or null for every department
+     */
+    public void setDepartment( String strDepartment )
+    {
+        _strDepartment = strDepartment;
+    }
+
+    /**
+     * Returns the department the authors of the suggest submits must belong to.
+     *
+     * @return the department, or null for every department
+     */
+    public String getDepartment( )
+    {
+        return _strDepartment;
+    }
+
+    /**
+     * Tells whether the filter keeps the suggest submits of the authors of one department only.
+     *
+     * @return true if the filter contains a department
+     */
+    public boolean containsDepartment( )
+    {
+        return StringUtils.isNotEmpty( _strDepartment );
     }
 
     /**

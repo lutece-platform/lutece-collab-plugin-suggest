@@ -498,6 +498,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String PARAMETER_TERMS_OF_USE = "terms_of_use";
     private static final String PARAMETER_DATE_BEGIN_VOTE = "date_begin_vote";
     private static final String PARAMETER_ENABLE_COMPLEMENTS = "enable_complements";
+    private static final String PARAMETER_ENABLE_DEPARTMENT_FILTER = "enable_department_filter";
     private static final String PARAMETER_DATE_END_VOTE = "date_end_vote";
     private static final String PARAMETER_DISPLAY_COMMENT_IN_SUGGEST_SUBMIT_LIST = "display_comment_in_suggest_submit_list";
     private static final String PARAMETER_NUMBER_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST = "number_comment_display_in_suggest_submit_list";
@@ -2293,6 +2294,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         suggest.setLimitNumberVote( strLimitNumberVote != null );
         suggest.setEnableVoteWithdrawal( strEnableVoteWithdrawal != null );
         suggest.setEnableComplements( request.getParameter( PARAMETER_ENABLE_COMPLEMENTS ) != null );
+        suggest.setEnableDepartmentFilter( request.getParameter( PARAMETER_ENABLE_DEPARTMENT_FILTER ) != null );
         suggest.setShowCategoryBlock( strShowCategoryBlock != null );
         suggest.setShowTopScoreBlock( strShowTopScoreBlock != null );
         suggest.setShowTopCommentBlock( strShowTopCommentBlock != null );

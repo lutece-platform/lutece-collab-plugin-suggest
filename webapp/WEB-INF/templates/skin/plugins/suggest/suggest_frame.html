@@ -83,7 +83,9 @@
 				<@cBtn label='#i18n{suggest.suggestFrame.altSearch}' class='primary' type='submit' />
 			</@cInputGroup>
 		</@cForm>
-		<#assign hasActiveFilter = (query!'')?has_content || (lutece_user_name_filter!'')?has_content || type_selected?? || selectedCategory?has_content>
+		<#assign departmentFilter = department_filter!''>
+		<#assign departmentUrl = urlSuggestList + '&filter_page_index=1&filter_department='>
+		<#assign hasActiveFilter = (query!'')?has_content || (lutece_user_name_filter!'')?has_content || type_selected?? || selectedCategory?has_content || departmentFilter?has_content>
 		<#if hasActiveFilter>
 			<@cBlock class='d-flex flex-wrap align-items-center gap-2 mb-4'>
 				<#if (query!'')?has_content>
@@ -101,6 +103,11 @@
 				<#if selectedCategory?has_content>
 					<#assign removeCategoryUrl = urlSuggestList + '&id_filter_category=-1'>
 					<@cBtn href=removeCategoryUrl class='secondary btn-sm' label=selectedCategory.title nestedPos='after' params='title="#i18n{suggest.suggestFrame.labelRemoveCategoryFilterTitle}"'>
+						<@cIcon name='x' class='ms-1' />
+					</@cBtn>
+				</#if>
+				<#if departmentFilter?has_content>
+					<@cBtn href=departmentUrl class='secondary btn-sm' label=departmentFilter nestedPos='after' params='title="#i18n{portal.util.labelCancel}"'>
 						<@cIcon name='x' class='ms-1' />
 					</@cBtn>
 				</#if>
@@ -150,6 +157,23 @@
 								<@cLink href=categoryUrl class=categoryClass label='' params=categoryParams>
 									<@cInline class='d-inline-block rounded-circle me-2 flex-shrink-0' params=categoryDotParams></@cInline>${category.title}
 								</@cLink>
+							</#list>
+						</@cBlock>
+					</@cBlock>
+				</#if>
+				<#if list_departments?has_content>
+					<@cBlock class='card mb-4'>
+						<@cBlock class='card-body pb-2'>
+							<@cTitle level=2 class='h6 mb-0'>#i18n{suggest.suggestFrame.labelDepartments}</@cTitle>
+						</@cBlock>
+						<@cBlock class='list-group list-group-flush'>
+							<#assign allDepartmentsClass = 'list-group-item list-group-item-action text-decoration-none' + (!departmentFilter?has_content)?then(' fw-bold bg-body-tertiary', '')>
+							<#assign allDepartmentsParams = (!departmentFilter?has_content)?then('aria-current="true"', '')>
+							<@cLink href=departmentUrl class=allDepartmentsClass label='' params=allDepartmentsParams>#i18n{suggest.suggestFrame.labelAllDepartments}</@cLink>
+							<#list list_departments as department>
+								<#assign departmentClass = 'list-group-item list-group-item-action text-decoration-none' + (department == departmentFilter)?then(' fw-bold bg-body-tertiary', '')>
+								<#assign departmentParams = (department == departmentFilter)?then('aria-current="true"', '')>
+								<@cLink href=departmentUrl + department?url('UTF-8') class=departmentClass label=department params=departmentParams />
 							</#list>
 						</@cBlock>
 					</@cBlock>

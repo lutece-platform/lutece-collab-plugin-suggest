@@ -423,7 +423,7 @@ public class SuggestSubmitService implements ISuggestSubmitService
                 SubmitFilter filterPinned = SuggestUtils.createPinnedFilter( filter );
                 List<SuggestSubmit> listSuggestSubmitPinned = SuggestSubmitHome.getSuggestSubmitList( filterPinned, plugin, nNumberMaxSuggestSubmit );
                 filter.setIdPinned( SubmitFilter.ID_FALSE );
-                listSuggestSubmitPinned.addAll( SuggestSubmitHome.getSuggestSubmitList( filterPinned, plugin,
+                listSuggestSubmitPinned.addAll( SuggestSubmitHome.getSuggestSubmitList( filter, plugin,
                         nNumberMaxSuggestSubmit - listSuggestSubmitPinned.size( ) ) );
                 filter.setIdPinned( SubmitFilter.ALL_INT );
 

@@ -68,6 +68,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
     private static final String SQL_FILTER_CONTAINS_COMMENT_DISABLE = " d.comment_number <> d.comment_enable_number ";
     private static final String SQL_FILTER_NOT_CONTAINS_COMMENT_DISABLE = " d.comment_number = d.comment_enable_number ";
     private static final String SQL_FILTER_LUTECE_USER_KEY = " d.lutece_user_key = ? ";
+    private static final String SQL_FILTER_DEPARTMENT = " d.lutece_user_key IN ( SELECT u.lutece_user_key FROM suggest_suggest_user_info u WHERE u.department = ? ) ";
     private static final String SQL_FILTER_SORT_BY_DATE_RESPONSE_ASC = " d.date_response ASC ";
     private static final String SQL_FILTER_SORT_BY_DATE_RESPONSE_DESC = " d.date_response DESC ";
     private static final String SQL_FILTER_SORT_BY_SCORE_ASC = " d.score_number ASC ";
@@ -378,6 +379,11 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
             listStrFilter.add( SQL_FILTER_IS_PINNED );
         }
 
+        if ( filter.containsDepartment( ) )
+        {
+            listStrFilter.add( SQL_FILTER_DEPARTMENT );
+        }
+
         if ( filter.containsIdType( ) )
         {
             listStrFilter.add( SQL_FILTER_ID_TYPE );
@@ -451,6 +457,12 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
             if ( filter.containsIdPinned( ) )
             {
                 daoUtil.setInt( nIndex, filter.getIdPinned( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsDepartment( ) )
+            {
+                daoUtil.setString( nIndex, filter.getDepartment( ) );
                 nIndex++;
             }
 
@@ -536,6 +548,11 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
             listStrFilter.add( SQL_FILTER_LUTECE_USER_KEY );
         }
 
+        if ( filter.containsDepartment( ) )
+        {
+            listStrFilter.add( SQL_FILTER_DEPARTMENT );
+        }
+
         if ( filter.containsIdType( ) )
         {
             listStrFilter.add( SQL_FILTER_ID_TYPE );
@@ -615,6 +632,12 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
             if ( filter.containsLuteceUserKey( ) )
             {
                 daoUtil.setString( nIndex, filter.getLuteceUserKey( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsDepartment( ) )
+            {
+                daoUtil.setString( nIndex, filter.getDepartment( ) );
                 nIndex++;
             }
 
@@ -700,6 +723,11 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
             listStrFilter.add( SQL_FILTER_LUTECE_USER_KEY );
         }
 
+        if ( filter.containsDepartment( ) )
+        {
+            listStrFilter.add( SQL_FILTER_DEPARTMENT );
+        }
+
         if ( filter.containsIdType( ) )
         {
             listStrFilter.add( SQL_FILTER_ID_TYPE );
@@ -773,6 +801,12 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
             if ( filter.containsLuteceUserKey( ) )
             {
                 daoUtil.setString( nIndex, filter.getLuteceUserKey( ) );
+                nIndex++;
+            }
+
+            if ( filter.containsDepartment( ) )
+            {
+                daoUtil.setString( nIndex, filter.getDepartment( ) );
                 nIndex++;
             }
 

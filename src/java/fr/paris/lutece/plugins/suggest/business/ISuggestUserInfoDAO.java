@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 /**
@@ -80,4 +82,17 @@ public interface ISuggestUserInfoDAO
      *            the plugin
      */
     void delete( String strLuteceUserKey, Plugin plugin );
+
+    /**
+     * Returns the departments of the authors of the suggest submits of a suggest in a state, sorted, without the empty ones.
+     *
+     * @param nIdSuggest
+     *            the id of the suggest
+     * @param nIdSuggestSubmitState
+     *            the id of the state of the suggest submits
+     * @param plugin
+     *            the plugin
+     * @return the departments
+     */
+    List<String> selectDepartments( int nIdSuggest, int nIdSuggestSubmitState, Plugin plugin );
 }
