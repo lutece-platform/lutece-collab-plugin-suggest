@@ -42,6 +42,7 @@ import fr.paris.lutece.plugins.suggest.business.SuggestHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
 import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
+import fr.paris.lutece.plugins.suggest.service.suggestsearch.SuggestSearchWords;
 import fr.paris.lutece.plugins.suggest.service.suggestsearch.SuggestSearchItem;
 import fr.paris.lutece.plugins.suggest.web.SuggestApp;
 import fr.paris.lutece.portal.service.content.XPageAppService;
@@ -247,11 +248,12 @@ public class SuggestIndexer implements SearchIndexer
             }
         }
 
-        StringBuilder sb = new StringBuilder( StringUtils.defaultString( suggestSubmit.getSuggestSubmitTitle( ) ) ).append( ' ' )
-                .append( Jsoup.parse( writerFieldContent.toString( ) ).text( ) );
+        String strContents = new StringBuilder( StringUtils.defaultString( suggestSubmit.getSuggestSubmitTitle( ) ) ).append( ' ' )
+                .append( Jsoup.parse( writerFieldContent.toString( ) ).text( ) ).toString( );
         // Add the tag-stripped contents as a Reader-valued Text field so it will
         // get tokenized and indexed.
-        doc.add( new Field( SearchItem.FIELD_CONTENTS, sb.toString( ), TextField.TYPE_NOT_STORED ) );
+        doc.add( new Field( SearchItem.FIELD_CONTENTS, strContents, TextField.TYPE_NOT_STORED ) );
+        doc.add( new TextField( SuggestSearchWords.FIELD_WORDS, SuggestSearchWords.tokenStream( strContents ) ) );
 
         // Add the title as a separate Text field, so that it can be searched
         // separately.
