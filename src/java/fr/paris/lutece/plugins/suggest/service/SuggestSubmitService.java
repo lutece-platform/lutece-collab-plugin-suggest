@@ -43,6 +43,7 @@ import jakarta.enterprise.event.Event;
 import jakarta.enterprise.context.ApplicationScoped;
 import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
+import fr.paris.lutece.plugins.suggest.business.CommentSubmitHome;
 import fr.paris.lutece.plugins.suggest.business.Suggest;
 import fr.paris.lutece.plugins.suggest.business.SuggestHome;
 import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
@@ -516,11 +517,9 @@ public class SuggestSubmitService implements ISuggestSubmitService
         }
 
         suggestSubmit.setResponses( listResponses );
-        // update Number of comment
-        suggestSubmit.setNumberComment( _commentSubmitService.getCountCommentSubmit( filter, plugin ) );
-        // update Number of Comment Enable
-        filter.setIdCommentSubmitState( CommentSubmit.STATE_ENABLE );
-        suggestSubmit.setNumberCommentEnable( _commentSubmitService.getCountCommentSubmit( filter, plugin ) );
+        List<CommentSubmit> listComments = CommentSubmitHome.getCommentSubmitList( filter, null, plugin ).stream( ).filter( CommentSubmit::isInDiscussion ).toList( );
+        suggestSubmit.setNumberComment( listComments.size( ) );
+        suggestSubmit.setNumberCommentEnable( (int) listComments.stream( ).filter( CommentSubmit::isActive ).count( ) );
         // update SuggestSubmitValue
         suggestSubmit.setSuggestSubmitValue( SuggestUtils.getHtmlSuggestSubmitValue( suggestSubmit, locale ) );
         // update SuggestSubmitValue show in the list

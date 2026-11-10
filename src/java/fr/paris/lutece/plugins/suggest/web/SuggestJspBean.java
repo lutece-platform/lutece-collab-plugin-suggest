@@ -1698,10 +1698,6 @@ public class SuggestJspBean extends MVCAdminJspBean
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSubmitSuggest, false, plugin );
 
         commentSubmit.setActive( true );
-        suggestSubmit.setNumberCommentEnable( suggestSubmit.getNumberCommentEnable( ) + 1 );
-        suggestSubmit.setNumberComment( suggestSubmit.getNumberComment( ) + 1 );
-        _suggestSubmitService.update( suggestSubmit, plugin );
-
         commentSubmit.setDateComment( SuggestUtils.getCurrentDate( ) );
         commentSubmit.setSuggestSubmit( suggestSubmit );
         commentSubmit.setValue( strCommentValueSuggest );
@@ -1710,6 +1706,13 @@ public class SuggestJspBean extends MVCAdminJspBean
         if ( answeredComment != null )
         {
             commentSubmit.setIdParent( nIdParent );
+        }
+
+        if ( commentSubmit.isInDiscussion( ) )
+        {
+            suggestSubmit.setNumberCommentEnable( suggestSubmit.getNumberCommentEnable( ) + 1 );
+            suggestSubmit.setNumberComment( suggestSubmit.getNumberComment( ) + 1 );
+            _suggestSubmitService.update( suggestSubmit, plugin );
         }
 
         LuteceUser user = null;
@@ -1788,8 +1791,9 @@ public class SuggestJspBean extends MVCAdminJspBean
         listRemoved.add( commentSubmit );
         _commentSubmitService.remove( nIdCommentSubmit, plugin );
 
-        suggestSubmit.setNumberCommentEnable( suggestSubmit.getNumberCommentEnable( ) - (int) listRemoved.stream( ).filter( CommentSubmit::isActive ).count( ) );
-        suggestSubmit.setNumberComment( suggestSubmit.getNumberComment( ) - listRemoved.size( ) );
+        List<CommentSubmit> listCounted = listRemoved.stream( ).filter( CommentSubmit::isInDiscussion ).toList( );
+        suggestSubmit.setNumberCommentEnable( suggestSubmit.getNumberCommentEnable( ) - (int) listCounted.stream( ).filter( CommentSubmit::isActive ).count( ) );
+        suggestSubmit.setNumberComment( suggestSubmit.getNumberComment( ) - listCounted.size( ) );
         _suggestSubmitService.update( suggestSubmit, plugin );
 
         return redirect( request, getJspManageCommentSubmit( request ) );
@@ -1926,8 +1930,12 @@ public class SuggestJspBean extends MVCAdminJspBean
 
             commentSubmit.setActive( false );
             _commentSubmitService.update( commentSubmit, plugin );
-            suggestSubmit.setNumberCommentEnable( suggestSubmit.getNumberCommentEnable( ) - 1 );
-            _suggestSubmitService.update( suggestSubmit, plugin );
+
+            if ( commentSubmit.isInDiscussion( ) )
+            {
+                suggestSubmit.setNumberCommentEnable( suggestSubmit.getNumberCommentEnable( ) - 1 );
+                _suggestSubmitService.update( suggestSubmit, plugin );
+            }
         }
 
         return null;
@@ -1958,8 +1966,12 @@ public class SuggestJspBean extends MVCAdminJspBean
 
             commentSubmit.setActive( true );
             _commentSubmitService.update( commentSubmit, plugin );
-            suggestSubmit.setNumberCommentEnable( suggestSubmit.getNumberCommentEnable( ) + 1 );
-            _suggestSubmitService.update( suggestSubmit, plugin );
+
+            if ( commentSubmit.isInDiscussion( ) )
+            {
+                suggestSubmit.setNumberCommentEnable( suggestSubmit.getNumberCommentEnable( ) + 1 );
+                _suggestSubmitService.update( suggestSubmit, plugin );
+            }
         }
 
         return null;

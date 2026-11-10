@@ -38,8 +38,10 @@
 </#macro>
 <@cTpl>
 <#if list_comment?has_content>
+<#assign official = list_comment?filter(c -> c.comment_submit.isOfficialAnswer())>
+<#assign others = list_comment?filter(c -> !c.comment_submit.isOfficialAnswer())>
 <@cBlock class='d-grid gap-3'>
-	<#list list_comment?reverse as comment_submit_lutece_user>
+	<#list official?reverse + others?reverse as comment_submit_lutece_user>
 		<#assign commentSubmit = comment_submit_lutece_user.comment_submit>
 		<#assign commentClass = 'card' + commentSubmit.isOfficialAnswer()?then(' border-warning', '')>
 		<@cBlock class=commentClass>
