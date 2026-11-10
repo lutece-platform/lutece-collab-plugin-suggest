@@ -234,6 +234,16 @@ public class CommentSubmit
     }
 
     /**
+     * Tells whether the comment belongs to the discussion: every comment does, except an official answer to the suggest submit itself.
+     *
+     * @return true if the comment is counted among the comments of the suggest submit
+     */
+    public boolean isInDiscussion( )
+    {
+        return !_bOfficialAnswer || ( _nIdParent > SubmitFilter.ID_PARENT_NULL );
+    }
+
+    /**
      * return the last comment date
      * 
      * @return the last comment date

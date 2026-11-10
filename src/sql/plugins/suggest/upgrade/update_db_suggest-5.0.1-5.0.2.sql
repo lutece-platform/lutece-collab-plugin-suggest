@@ -39,3 +39,8 @@ INSERT INTO suggest_entry_type ( id_type, title, class_name ) VALUES ( 7, 'File'
 -- preconditions onFail:MARK_RAN onError:MARK_RAN
 -- precondition-sql-check expectedResult:1 SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = database() AND table_name = 'suggest_entry_attr_additional' AND column_name = 'attr_value' AND character_maximum_length < 1000
 ALTER TABLE suggest_entry_attr_additional MODIFY attr_value varchar(1000) NOT NULL;
+
+-- changeset suggest:update_db_suggest-5.0.1-5.0.2-rev4.sql
+UPDATE suggest_suggest_submit SET
+  comment_number = ( SELECT COUNT(*) FROM suggest_comment_submit c WHERE c.id_suggest_submit = suggest_suggest_submit.id_suggest_submit AND ( c.official_answer = 0 OR c.id_parent_comment > 0 ) ),
+  comment_enable_number = ( SELECT COUNT(*) FROM suggest_comment_submit c WHERE c.id_suggest_submit = suggest_suggest_submit.id_suggest_submit AND c.active = 1 AND ( c.official_answer = 0 OR c.id_parent_comment > 0 ) );
