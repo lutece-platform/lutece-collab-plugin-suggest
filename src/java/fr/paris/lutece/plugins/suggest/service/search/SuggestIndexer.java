@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.suggest.service.search;
 
+import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
 import jakarta.enterprise.inject.spi.CDI;
 import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
@@ -248,7 +249,7 @@ public class SuggestIndexer implements SearchIndexer
             }
         }
 
-        String strContents = new StringBuilder( StringUtils.defaultString( suggestSubmit.getSuggestSubmitTitle( ) ) ).append( ' ' )
+        String strContents = new StringBuilder( StringUtils.defaultString( SuggestUtils.toPlainText( suggestSubmit.getSuggestSubmitTitle( ) ) ) ).append( ' ' )
                 .append( Jsoup.parse( writerFieldContent.toString( ) ).text( ) ).toString( );
         // Add the tag-stripped contents as a Reader-valued Text field so it will
         // get tokenized and indexed.

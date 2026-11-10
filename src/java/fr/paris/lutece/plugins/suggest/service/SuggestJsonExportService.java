@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.suggest.service;
 
+import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -207,7 +208,7 @@ public class SuggestJsonExportService
             {
                 if ( response.getEntry( ) != null )
                 {
-                    mapResponseByEntry.put( response.getEntry( ).getIdEntry( ), response.getValueResponse( ) );
+                    mapResponseByEntry.put( response.getEntry( ).getIdEntry( ), SuggestUtils.toPlainText( response.getValueResponse( ) ) );
                 }
             }
         }
@@ -218,7 +219,7 @@ public class SuggestJsonExportService
             listResponseExport.add( new ResponseExport( entry.getIdEntry( ), mapResponseByEntry.getOrDefault( entry.getIdEntry( ), "" ) ) );
         }
 
-        return new SubmitExport( suggestSubmit.getIdSuggestSubmit( ), suggestSubmit.getSuggestSubmitTitle( ), toIsoDate( suggestSubmit.getDateResponse( ) ),
+        return new SubmitExport( suggestSubmit.getIdSuggestSubmit( ), SuggestUtils.toPlainText( suggestSubmit.getSuggestSubmitTitle( ) ), toIsoDate( suggestSubmit.getDateResponse( ) ),
                 suggestSubmit.getNumberScore( ), suggestSubmit.getNumberVote( ), suggestSubmit.getNumberComment( ),
                 ( suggestSubmit.getCategory( ) != null ) ? suggestSubmit.getCategory( ).getTitle( ) : null,
                 ( suggestSubmit.getSuggestSubmitType( ) != null ) ? suggestSubmit.getSuggestSubmitType( ).getName( ) : null, listResponseExport,

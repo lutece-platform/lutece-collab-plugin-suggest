@@ -265,7 +265,7 @@ public class EntryTypeVideo extends Entry
             VideoType video = new VideoType( );
             video.setVideo( bytes );
             video.setMimeType( item.getContentType( ) );
-            video.setCredits( strCredits );
+            video.setCredits( SuggestUtils.getSafeText( request, strCredits ) );
             response.setVideo( video );
         }
         else

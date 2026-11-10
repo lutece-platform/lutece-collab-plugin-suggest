@@ -45,7 +45,9 @@ import fr.paris.lutece.plugins.suggest.business.SuggestUserInfo;
 import fr.paris.lutece.plugins.suggest.business.EntryFilter;
 import fr.paris.lutece.plugins.suggest.business.EntryHome;
 import fr.paris.lutece.plugins.suggest.business.EntryType;
+import fr.paris.lutece.plugins.suggest.business.EntryTypeEditorBbcode;
 import fr.paris.lutece.plugins.suggest.business.EntryTypeHome;
+import fr.paris.lutece.plugins.suggest.business.EntryTypeUrl;
 import fr.paris.lutece.plugins.suggest.business.FormError;
 import fr.paris.lutece.plugins.suggest.business.IEntry;
 import fr.paris.lutece.plugins.suggest.business.ReportedMessage;
@@ -73,9 +75,11 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
+import fr.paris.lutece.util.http.MultipartUtil;
 import fr.paris.lutece.util.string.StringUtil;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.parser.Parser;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.sql.Timestamp;
@@ -94,6 +98,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -141,6 +146,14 @@ public final class SuggestUtils
     private static final String CONSTANTE_CHARACTERNEW_LINE = "\n";
     private static final String CONSTANTE_CHARACTER_RETURN = "\r";
     private static final String MARK_AVATAR = "avatar";
+    private static final String MESSAGE_INVALID_URL = "suggest.message.invalidUrl";
+    private static final Pattern PATTERN_WEB_URL = Pattern.compile( "https?://\\S+", Pattern.CASE_INSENSITIVE );
+    private static final String [ ] ESCAPED_CHARACTERS = {
+            "&", "<", ">", "\"", "'"
+    };
+    private static final String [ ] ESCAPED_ENTITIES = {
+            "&amp;", "&lt;", "&gt;", "&#34;", "&#39;"
+    };
 
     // Xml Tags
 
@@ -989,12 +1002,111 @@ public final class SuggestUtils
             listResponse.add( response );
         }
 
-        if ( formError != null )
+        if ( formError == null )
         {
-            return formError;
+            formError = sanitizeResponses( entry, listResponse, request, locale );
         }
 
-        suggestSubmit.getResponses( ).addAll( listResponse );
+        if ( formError == null )
+        {
+            suggestSubmit.getResponses( ).addAll( listResponse );
+        }
+
+        return formError;
+    }
+
+    /**
+     * Tells whether the parameters of a request are raw: a multipart request does not go through the request sanitizer of the core.
+     *
+     * @param request
+     *            the request
+     * @return true if the request is multipart
+     */
+    public static boolean isMultipart( HttpServletRequest request )
+    {
+        return StringUtils.startsWithIgnoreCase( request.getContentType( ), MultipartUtil.MULTIPART );
+    }
+
+    /**
+     * Escapes a text so that a page shows it exactly as typed, markup included, without interpreting it.
+     *
+     * @param strText
+     *            the text
+     * @return the escaped text
+     */
+    public static String escapeText( String strText )
+    {
+        return StringUtils.replaceEach( strText, ESCAPED_CHARACTERS, ESCAPED_ENTITIES );
+    }
+
+    /**
+     * Returns a text typed by a user, safe to display: escaped when its request is multipart, else left to the request sanitizer of the core.
+     *
+     * @param request
+     *            the request
+     * @param strText
+     *            the text
+     * @return the text to store
+     */
+    public static String getSafeText( HttpServletRequest request, String strText )
+    {
+        return isMultipart( request ) ? escapeText( strText ) : strText;
+    }
+
+    /**
+     * Turns a text stored for display into plain text, for an e-mail subject, an export or a search index.
+     *
+     * @param strText
+     *            the stored text
+     * @return the plain text
+     */
+    public static String toPlainText( String strText )
+    {
+        return ( strText == null ) ? null : Parser.unescapeEntities( strText, false );
+    }
+
+    /**
+     * Makes the values of the responses of an entry safe to display, and refuses a link that is not a web address. The BBCode entry is left as is:
+     * its value is cleaned once converted to HTML.
+     *
+     * @param entry
+     *            the entry
+     * @param listResponse
+     *            the responses of the entry
+     * @param request
+     *            the request
+     * @param locale
+     *            the locale of the error message
+     * @return an error when a link is not a web address, else null
+     */
+    public static FormError sanitizeResponses( IEntry entry, List<Response> listResponse, HttpServletRequest request, Locale locale )
+    {
+        if ( entry instanceof EntryTypeEditorBbcode )
+        {
+            return null;
+        }
+
+        for ( Response response : listResponse )
+        {
+            String strValue = response.getValueResponse( );
+
+            if ( StringUtils.isEmpty( strValue ) )
+            {
+                continue;
+            }
+
+            if ( ( entry instanceof EntryTypeUrl ) && !PATTERN_WEB_URL.matcher( toPlainText( strValue ) ).matches( ) )
+            {
+                FormError formError = new FormError( );
+                formError.setMandatoryError( false );
+                formError.setTitleQuestion( entry.getTitle( ) );
+                formError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_INVALID_URL, locale ) );
+
+                return formError;
+            }
+
+            response.setValueResponse( getSafeText( request, strValue ) );
+        }
 
         return null;
     }

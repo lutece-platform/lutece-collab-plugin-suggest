@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.suggest.service.notification;
 
+import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.plugins.suggest.business.SuggestUserInfo;
 import fr.paris.lutece.plugins.suggest.service.ISuggestUserInfoService;
 import fr.paris.lutece.plugins.suggest.service.SuggestPlugin;
@@ -200,7 +201,7 @@ public class SuggestNotificationService
         try
         {
             String strBody = AppTemplateService.getTemplate( strTemplate, I18nService.getDefaultLocale( ), model ).getHtml( );
-            MailService.sendMailHtml( strEmail, strSenderName, MailService.getNoReplyEmail( ), strSubject, strBody );
+            MailService.sendMailHtml( strEmail, strSenderName, MailService.getNoReplyEmail( ), SuggestUtils.toPlainText( strSubject ), strBody );
 
             return true;
         }

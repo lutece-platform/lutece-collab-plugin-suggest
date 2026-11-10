@@ -732,7 +732,7 @@ public class SuggestApp extends MVCApplication
             SiteMessageService.setMessage( request, MESSAGE_ERROR, SiteMessage.TYPE_STOP );
         }
 
-        String strValue = request.getParameter( PARAMETER_COMPLEMENT_VALUE );
+        String strValue = SuggestUtils.getSafeText( request, request.getParameter( PARAMETER_COMPLEMENT_VALUE ) );
 
         if ( StringUtils.isBlank( strValue ) )
         {
@@ -1448,6 +1448,11 @@ public class SuggestApp extends MVCApplication
             }
         }
 
+        if ( !suggest.isActiveEditorBbcode( ) )
+        {
+            strCommentValueSuggest = SuggestUtils.getSafeText( request, strCommentValueSuggest );
+        }
+
         CommentSubmit commentSubmit = doInsertComment( request, suggestSubmit, strCommentValueSuggest, _plugin, luteceUserConnected, nIdParentComment );
 
         if ( suggest.isEnableMailNewCommentSubmit( ) && ( suggest.getIdMailingListSuggestSubmit( ) != SuggestUtils.CONSTANT_ID_NULL ) )
@@ -1529,7 +1534,7 @@ public class SuggestApp extends MVCApplication
             suggestSubmit.setSuggest( suggest );
         }
 
-        String strReportedValue = request.getParameter( PARAMETER_REPORTED_VALUE );
+        String strReportedValue = SuggestUtils.getSafeText( request, request.getParameter( PARAMETER_REPORTED_VALUE ) );
 
         if ( ( strReportedValue == null ) || strReportedValue.trim( ).equals( EMPTY_STRING ) )
         {
@@ -2408,14 +2413,14 @@ public class SuggestApp extends MVCApplication
     private SearchFields getSearchFields( HttpServletRequest request )
     {
         HttpSession session = request.getSession( );
-        String strQuery = request.getParameter( PARAMETER_QUERY );
+        String strQuery = SuggestUtils.getSafeText( request, request.getParameter( PARAMETER_QUERY ) );
         String strIdFilterPeriod = request.getParameter( PARAMETER_ID_FILTER_PERIOD );
         String strIdSuggestSubmitSort = request.getParameter( PARAMETER_ID_SUGGEST_SUBMIT_SORT );
         String strIdFilterCategory = request.getParameter( PARAMETER_ID_FILTER_CATEGORY_SUGGEST );
         String strFilterPageIndex = request.getParameter( PARAMETER_FILTER_PAGE_INDEX );
         String strIdFilterSuggestSubmitType = request.getParameter( PARAMETER_ID_FILTER_SUGGEST_SUBMIT_TYPE );
-        String strLuteceUserName = request.getParameter( PARAMETER_LUTECE_USER_NAME_FILTER );
-        String strDepartment = request.getParameter( PARAMETER_FILTER_DEPARTMENT );
+        String strLuteceUserName = SuggestUtils.getSafeText( request, request.getParameter( PARAMETER_LUTECE_USER_NAME_FILTER ) );
+        String strDepartment = SuggestUtils.getSafeText( request, request.getParameter( PARAMETER_FILTER_DEPARTMENT ) );
 
         int nIdFilterPeriod = SuggestUtils.getIntegerParameter( strIdFilterPeriod );
         int nIdSuggestSubmitSort = SuggestUtils.getIntegerParameter( strIdSuggestSubmitSort );
