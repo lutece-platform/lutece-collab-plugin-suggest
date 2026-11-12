@@ -2,23 +2,24 @@
 <#include "include_advanced_parameters_tabs.html" />
 <@pageContainer>
 	<@pageColumn>
-		<@pageHeader title='#i18n{suggest.manageAdvancedParameters.title}'>
+		<@pageHeader title='#i18n{suggest.manageAdvancedParameters.labelCategory}'>
 			<@aButton href='jsp/admin/plugins/suggest/ManageCategory.jsp?view=createCategory' buttonIcon='plus' title='#i18n{suggest.manageCategory.buttonCreate}' color='primary' />
 		</@pageHeader>
 		<@advancedParametersTabs>
 			<#if category_list?has_content>
-				<@manageFeature>
+				<@manageFeature layout='list'>
 					<#list category_list as category>
+					<#assign count = category_counts[category.idCategory?c]!0 />
 					<@manageFeatureItem>
-						<@manageFeatureItemColumn auto=true>
-							<@tag color='' class='text-white' params=' style="background-color:${category.color!}"'>&nbsp;</@tag>
-						</@manageFeatureItemColumn>
 						<@manageFeatureItemColumn>
-							<strong>${category.title!}</strong>
+							<span class="status" style="--tblr-status-color:${category.color!'#667382'}"><span class="status-dot"></span>${category.title!}</span>
 						</@manageFeatureItemColumn>
-						<@manageFeatureItemColumn auto=true align='end'>
-							<@aButton href='jsp/admin/plugins/suggest/ManageCategory.jsp?view=modifyCategory&id_category=${category.idCategory}' title='#i18n{portal.util.labelModify}' buttonIcon='edit' class='me-1' hideTitle=['all'] />
-							<@aButton href='jsp/admin/plugins/suggest/ManageCategory.jsp?view=confirmRemoveCategory&id_category=${category.idCategory}' title='#i18n{suggest.manageCategory.altDelete}' buttonIcon='trash' color='danger' hideTitle=['all'] />
+						<@manageFeatureItemColumn auto=true class='text-secondary text-nowrap'>
+							${count} <#if count gt 1>#i18n{suggest.manageCategory.labelSuggestSubmits}<#else>#i18n{suggest.manageCategory.labelSuggestSubmit}</#if>
+						</@manageFeatureItemColumn>
+						<@manageFeatureItemColumn auto=true align='end' class='gap-1'>
+							<@aButton href='jsp/admin/plugins/suggest/ManageCategory.jsp?view=modifyCategory&id_category=${category.idCategory}' title='#i18n{portal.util.labelModify}' buttonIcon='edit' color='ghost-secondary' size='sm' hideTitle=['all'] />
+							<@aButton href='jsp/admin/plugins/suggest/ManageCategory.jsp?view=confirmRemoveCategory&id_category=${category.idCategory}' title='#i18n{suggest.manageCategory.altDelete}' buttonIcon='trash' color='ghost-danger' size='sm' hideTitle=['all'] class=(count gt 0)?then('invisible', '') />
 						</@manageFeatureItemColumn>
 					</@manageFeatureItem>
 					</#list>

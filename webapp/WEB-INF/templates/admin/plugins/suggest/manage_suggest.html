@@ -39,40 +39,43 @@
 		<#if suggest_list?has_content>
 			<@manageFeature>
 				<#list suggest_list as suggest>
+				<#assign actions = suggest.actions![] />
+				<#assign submitsAction = actions?filter(a -> a.permission == 'MANAGE_SUGGEST_SUBMIT')?first! />
+				<#assign modifyAction = actions?filter(a -> a.permission == 'MODIFY')?first! />
+				<#assign submitsUrl = submitsAction?has_content?then('${submitsAction.url}&id_suggest=${suggest.idSuggest}', '') />
 				<@manageFeatureItem>
-					<@manageFeatureItemColumn auto=true>
-						<#if suggest.active>
-							<@tag color='success' title='#i18n{portal.util.labelEnabled}'><@icon style='check' /></@tag>
-						<#else>
-							<@tag color='danger' title='#i18n{portal.util.labelDisabled}'><@icon style='x' /></@tag>
-						</#if>
-					</@manageFeatureItemColumn>
 					<@manageFeatureItemColumn flex=false>
-						<@link href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=modifySuggest&id_suggest=${suggest.idSuggest}' title='#i18n{suggest.action.modify.description}'>
+						<#if submitsAction?has_content>
+							<@link href=submitsUrl class='fw-semibold text-reset'>${suggest.title!}</@link>
+						<#else>
 							<strong>${suggest.title!}</strong>
-						</@link>
-					</@manageFeatureItemColumn>
-					<@manageFeatureItemColumn auto=true align='end'>
-						<@aButton href='jsp/site/Portal.jsp?page=suggest&id_suggest=${suggest.idSuggest}' target='_blank' buttonIcon='world' title='${suggest.title!}' color='light' hideTitle=['all'] class='me-1' />
-						<#if suggest.active>
-							<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=statistics&id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageAdvancedParameters.labelStatistics}' buttonIcon='chart-bar' color='light' hideTitle=['all'] class='me-1' />
 						</#if>
-						<#if suggest.actions??>
-							<#list suggest.actions as action>
-								<#if action.permission=='DELETE' || action.nameKey=='suggest.action.disable.name'>
-									<#assign buttonColor='danger' />
-								<#elseif action.nameKey=='suggest.action.enable.name'>
-									<#assign buttonColor='success' />
-								<#else>
-									<#assign buttonColor='primary' />
-								</#if>
+						<div class="mt-1">
+							<span class="status ${suggest.active?then('status-green', 'status-secondary')}"><span class="status-dot"></span>${suggest.active?then('#i18n{portal.util.labelEnabled}', '#i18n{portal.util.labelDisabled}')}</span>
+						</div>
+					</@manageFeatureItemColumn>
+					<@manageFeatureItemColumn auto=true align='end' class='gap-1'>
+						<#if submitsAction?has_content>
+							<@aButton href=submitsUrl title=submitsAction.name buttonIcon='inbox' color='light' hideTitle=['xs','sm'] />
+						</#if>
+						<#if suggest.active>
+							<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=statistics&id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageAdvancedParameters.labelStatistics}' buttonIcon='chart-bar' color='light' hideTitle=['xs','sm'] />
+						</#if>
+						<@aButton dropdownMenu=true title='#i18n{portal.util.labelActions}' color='ghost-secondary' hideTitle=['all'] buttonIcon='dots-vertical'>
+							<#if modifyAction?has_content>
+								<@link class='dropdown-item' linkIcon='edit' href='${modifyAction.url}&id_suggest=${suggest.idSuggest}' label=modifyAction.name />
+							</#if>
+							<@link class='dropdown-item' linkIcon='world' href='jsp/site/Portal.jsp?page=suggest&id_suggest=${suggest.idSuggest}' target='_blank' label='#i18n{suggest.manageSuggest.labelViewOnSite}' />
+							<#list actions?filter(a -> a.permission != 'MANAGE_SUGGEST_SUBMIT' && a.permission != 'MODIFY') as action>
+								<#if action?is_first><div class="dropdown-divider"></div></#if>
+								<#assign itemClass = (action.permission == 'DELETE')?then('dropdown-item text-danger', 'dropdown-item') />
 								<#if action.url?contains('action=')>
-									<@button type='submit' formId='suggest_row_action_form' params='formaction="${action.url}&id_suggest=${suggest.idSuggest}"' title='${action.description}' hideTitle=['all'] color=buttonColor buttonIcon=action.iconUrl class='me-1' />
+									<button type="submit" form="suggest_row_action_form" formaction="${action.url}&id_suggest=${suggest.idSuggest}" class="${itemClass}"><@icon style=action.iconUrl class='me-2' />${action.name}</button>
 								<#else>
-									<@aButton href='${action.url}&id_suggest=${suggest.idSuggest}' title='${action.description}' hideTitle=['all'] color=buttonColor buttonIcon=action.iconUrl class='me-1' />
+									<@link class=itemClass linkIcon=action.iconUrl href='${action.url}&id_suggest=${suggest.idSuggest}' label=action.name />
 								</#if>
 							</#list>
-						</#if>
+						</@aButton>
 					</@manageFeatureItemColumn>
 				</@manageFeatureItem>
 				</#list>

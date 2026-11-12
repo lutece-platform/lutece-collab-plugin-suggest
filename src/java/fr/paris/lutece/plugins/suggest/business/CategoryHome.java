@@ -39,6 +39,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import jakarta.enterprise.inject.spi.CDI;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -146,6 +147,18 @@ public final class CategoryHome
     public static boolean isAssociateToSuggest( int nIdCategory, Plugin plugin )
     {
         return _dao.isAssociateToSuggest( nIdCategory, plugin );
+    }
+
+    /**
+     * Counts the suggest submits filed under each category
+     *
+     * @param plugin
+     *            the plugin
+     * @return the number of suggest submits by category key, the categories without any left out
+     */
+    public static Map<Integer, Integer> countSuggestSubmits( Plugin plugin )
+    {
+        return _dao.countSuggestSubmits( plugin );
     }
 
     /**

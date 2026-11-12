@@ -62,6 +62,8 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.url.UrlItem;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -94,6 +96,7 @@ public class CategoryJspBean extends MVCAdminJspBean
     // Markers
     private static final String MARK_CATEGORY_LIST = "category_list";
     private static final String MARK_CATEGORY = "category";
+    private static final String MARK_CATEGORY_COUNTS = "category_counts";
 
     // parameters form
     private static final String PARAMETER_ID_CATEGORY = "id_category";
@@ -139,6 +142,8 @@ public class CategoryJspBean extends MVCAdminJspBean
         listCategory = (List<Category>) RBACService.getAuthorizedCollection( listCategory, CategoryResourceIdService.PERMISSION_MANAGE, (User) getUser( ) );
 
         _pager.withListItem( listCategory ).populateModels( request, model, getLocale( ) );
+        model.put( MARK_CATEGORY_COUNTS, CategoryHome.countSuggestSubmits( plugin ).entrySet( ).stream( )
+                .collect( Collectors.toMap( entry -> String.valueOf( entry.getKey( ) ), Map.Entry::getValue ) ) );
 
         return getPage( PROPERTY_MANAGE_CATEGORY_TITLE, TEMPLATE_MANAGE_CATEGORY );
     }

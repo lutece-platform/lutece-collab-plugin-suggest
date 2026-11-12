@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.suggest.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -113,6 +114,15 @@ public interface ICategoryDAO
      * @return true if there is a suggest associate to the category
      */
     boolean isAssociateToSuggest( int nIdCategory, Plugin plugin );
+
+    /**
+     * Counts the suggest submits filed under each category
+     *
+     * @param plugin
+     *            the plugin
+     * @return the number of suggest submits by category key, the categories without any left out
+     */
+    Map<Integer, Integer> countSuggestSubmits( Plugin plugin );
 
     /**
      * Delete an association between suggest and categories

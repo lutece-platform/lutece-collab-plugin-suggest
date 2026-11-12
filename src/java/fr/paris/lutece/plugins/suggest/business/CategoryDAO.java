@@ -39,7 +39,9 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -60,6 +62,7 @@ public class CategoryDAO implements ICategoryDAO
     private static final String SQL_QUERY_SELECT_BY_ID_SUGGEST = "SELECT c.id_category,c.title,c.color FROM suggest_category c,suggest_suggest_category dc "
             + "WHERE c.id_category=dc.id_category AND dc.id_suggest=? ORDER BY title";
     private static final String SQL_QUERY_DELETE_ASSOCIATED_CATEGORIE = "DELETE FROM suggest_suggest_category WHERE id_suggest = ? and id_category= ? ";
+    private static final String SQL_QUERY_COUNT_SUGGEST_SUBMITS = "SELECT id_category, COUNT(*) FROM suggest_suggest_submit WHERE id_category IS NOT NULL GROUP BY id_category";
     private static final String SQL_QUERY_INSERT_ASSOCIATED_CATEGORY = "INSERT INTO suggest_suggest_category(id_suggest,id_category) VALUES(?,?) ";
 
     /**
@@ -220,6 +223,27 @@ public class CategoryDAO implements ICategoryDAO
 
             return daoUtil.next( ) && daoUtil.getInt( 1 ) != 0;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<Integer, Integer> countSuggestSubmits( Plugin plugin )
+    {
+        Map<Integer, Integer> mapCounts = new HashMap<>( );
+
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_SUGGEST_SUBMITS, plugin ) )
+        {
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                mapCounts.put( daoUtil.getInt( 1 ), daoUtil.getInt( 2 ) );
+            }
+        }
+
+        return mapCounts;
     }
 
     @Override
