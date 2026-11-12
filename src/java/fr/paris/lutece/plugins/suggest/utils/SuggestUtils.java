@@ -1397,6 +1397,49 @@ public final class SuggestUtils
     }
 
     /**
+     * Computes the range shifts that renumber list orders from 1 in the given sequence
+     *
+     * @param listOrders
+     *            the current list order of each element, in the wanted sequence
+     * @return the shifts as { first order, last order, delta }, empty when nothing moves, or null when the current orders are not distinct positive
+     *         numbers and cannot be shifted by ranges
+     */
+    public static List<int [ ]> getOrderShifts( List<Integer> listOrders )
+    {
+        if ( listOrders.stream( ).anyMatch( nOrder -> ( nOrder == null ) || ( nOrder < 1 ) ) || ( listOrders.stream( ).distinct( ).count( ) != listOrders.size( ) ) )
+        {
+            return null;
+        }
+
+        List<int [ ]> listShifts = new ArrayList<>( );
+        int [ ] shift = null;
+
+        for ( int i = 0; i < listOrders.size( ); i++ )
+        {
+            int nOrder = listOrders.get( i );
+            int nDelta = i + 1 - nOrder;
+
+            if ( ( shift != null ) && ( shift [2] == nDelta ) && ( shift [1] + 1 == nOrder ) )
+            {
+                shift [1] = nOrder;
+            }
+            else if ( nDelta == 0 )
+            {
+                shift = null;
+            }
+            else
+            {
+                shift = new int [ ] {
+                        nOrder, nOrder, nDelta
+                };
+                listShifts.add( shift );
+            }
+        }
+
+        return listShifts;
+    }
+
+    /**
      * Tells whether a proposal of a suggest may be filed under a category: any proposal when the suggest has no category, otherwise only under one of
      * the categories of the suggest.
      *
@@ -1665,23 +1708,6 @@ public final class SuggestUtils
         }
 
         return list1;
-    }
-
-    /**
-     * move a element in the list
-     * 
-     * @param nOldPosistion
-     *            the old position
-     * @param nNewPosition
-     *            the new position
-     * @param list
-     *            The list
-     */
-    public static void moveElement( int nOldPosistion, int nNewPosition, ArrayList<Integer> list )
-    {
-        Integer element = list.get( nOldPosistion - 1 );
-        list.remove( nOldPosistion - 1 );
-        list.add( nNewPosition - 1, element );
     }
 
     /**

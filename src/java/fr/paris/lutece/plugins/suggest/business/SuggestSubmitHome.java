@@ -45,6 +45,7 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * class FormSubmitHome
@@ -330,6 +331,58 @@ public final class SuggestSubmitHome
     public static void updateSuggestSubmitOrder( int nNewOrder, int nIdSuggestSubmit, Plugin plugin )
     {
         _dao.storeSuggestSubmitOrder( nNewOrder, nIdSuggestSubmit, plugin );
+    }
+
+    /**
+     * Returns the list order of the suggest submits of a suggest, pinned or not, by id, in their list order
+     *
+     * @param nIdSuggest
+     *            the id of the suggest
+     * @param bListPinned
+     *            true for the pinned suggest submits, false for the others
+     * @param plugin
+     *            the plugin
+     * @return the list order of each suggest submit, by id, in list order
+     */
+    public static Map<Integer, Integer> getListOrders( int nIdSuggest, boolean bListPinned, Plugin plugin )
+    {
+        return _dao.selectListOrders( nIdSuggest, bListPinned, plugin );
+    }
+
+    /**
+     * Shifts the list orders of a range of suggest submits and marks them as moved by storing them negative
+     *
+     * @param nIdSuggest
+     *            the id of the suggest
+     * @param bListPinned
+     *            true for the pinned suggest submits, false for the others
+     * @param nFirstOrder
+     *            the first list order of the range
+     * @param nLastOrder
+     *            the last list order of the range
+     * @param nDelta
+     *            the shift added to each list order
+     * @param plugin
+     *            the plugin
+     */
+    public static void shiftListOrders( int nIdSuggest, boolean bListPinned, int nFirstOrder, int nLastOrder, int nDelta, Plugin plugin )
+    {
+        _dao.shiftListOrders( nIdSuggest, bListPinned, nFirstOrder, nLastOrder, nDelta, plugin );
+    }
+
+    /**
+     * Turns the list orders marked as moved back to positive
+     *
+     * @param nIdSuggest
+     *            the id of the suggest
+     * @param bListPinned
+     *            true for the pinned suggest submits, false for the others
+     * @param plugin
+     *            the plugin
+     */
+    public static void restoreShiftedListOrders( int nIdSuggest, boolean bListPinned, Plugin plugin )
+    {
+        _dao.restoreShiftedListOrders( nIdSuggest, bListPinned, plugin );
     }
 
     /**

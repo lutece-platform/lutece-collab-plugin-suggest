@@ -42,7 +42,9 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.sql.Timestamp;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class provides Data Access methods for objects SuggestSubmitDAO
@@ -98,6 +100,9 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
     private static final String SQL_QUERY_SELECT_COUNT_BY_FILTER = "SELECT COUNT(d.id_suggest_submit) " + "FROM suggest_suggest_submit d ";
 
     // Order
+    private static final String SQL_QUERY_SELECT_LIST_ORDERS = "SELECT id_suggest_submit, suggest_submit_list_order FROM suggest_suggest_submit WHERE id_suggest = ? AND is_pinned = ? ORDER BY suggest_submit_list_order, id_suggest_submit";
+    private static final String SQL_QUERY_SHIFT_LIST_ORDERS = "UPDATE suggest_suggest_submit SET suggest_submit_list_order = -( suggest_submit_list_order + ? ) WHERE id_suggest = ? AND is_pinned = ? AND suggest_submit_list_order BETWEEN ? AND ?";
+    private static final String SQL_QUERY_RESTORE_SHIFTED_LIST_ORDERS = "UPDATE suggest_suggest_submit SET suggest_submit_list_order = -suggest_submit_list_order WHERE id_suggest = ? AND is_pinned = ? AND suggest_submit_list_order < 0";
     private static final String SQL_QUERY_SELECT_MAX_SUGGEST_SUBMIT_LIST_ORDER = "SELECT max(d.suggest_submit_list_order) FROM suggest_suggest_submit d WHERE d.id_suggest = ? AND "
             + SQL_FILTER_IS_PINNED;
     private static final String SQL_QUERY_UPDATE_SUGGEST_SUBMIT_LIST_ORDER = "UPDATE suggest_suggest_submit SET suggest_submit_list_order = ?  WHERE id_suggest_submit = ?";
@@ -945,6 +950,60 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
         {
             daoUtil.setInt( 1, nNewOrder );
             daoUtil.setInt( 2, nId );
+            daoUtil.executeUpdate( );
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<Integer, Integer> selectListOrders( int nIdSuggest, boolean bListPinned, Plugin plugin )
+    {
+        Map<Integer, Integer> mapOrders = new LinkedHashMap<>( );
+
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_LIST_ORDERS, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdSuggest );
+            daoUtil.setBoolean( 2, bListPinned );
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                mapOrders.put( daoUtil.getInt( 1 ), daoUtil.getInt( 2 ) );
+            }
+        }
+
+        return mapOrders;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void shiftListOrders( int nIdSuggest, boolean bListPinned, int nFirstOrder, int nLastOrder, int nDelta, Plugin plugin )
+    {
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SHIFT_LIST_ORDERS, plugin ) )
+        {
+            daoUtil.setInt( 1, nDelta );
+            daoUtil.setInt( 2, nIdSuggest );
+            daoUtil.setBoolean( 3, bListPinned );
+            daoUtil.setInt( 4, nFirstOrder );
+            daoUtil.setInt( 5, nLastOrder );
+            daoUtil.executeUpdate( );
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void restoreShiftedListOrders( int nIdSuggest, boolean bListPinned, Plugin plugin )
+    {
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_RESTORE_SHIFTED_LIST_ORDERS, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdSuggest );
+            daoUtil.setBoolean( 2, bListPinned );
             daoUtil.executeUpdate( );
         }
     }

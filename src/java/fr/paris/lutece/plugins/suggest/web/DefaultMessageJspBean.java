@@ -104,6 +104,7 @@ public class DefaultMessageJspBean extends MVCAdminJspBean
 
     // message
     private static final String MESSAGE_MANDATORY_FIELD = "suggest.message.mandatory.field";
+    private static final String MESSAGE_SAVED = "suggest.message.saved";
     private static final String FIELD_UNAVAILABILITY_MESSAGE = "suggest.manageDefaultMessage.labelUnavailabilityMessage";
     private static final String FIELD_LIBELLE_VALIDATE_BUTTON = "suggest.manageDefaultMessage.labelLibelleValidateButton";
     private static final String FIELD_LIBELLE_CONTRIBUTION = "suggest.manageDefaultMessage.labelLibelleContribution";
@@ -161,10 +162,14 @@ public class DefaultMessageJspBean extends MVCAdminJspBean
             if ( strError != null )
             {
                 addError( strError );
-                return redirectView( request, VIEW_MANAGE_DEFAULT_MESSAGE );
+            }
+            else
+            {
+                DefaultMessageHome.update( defaultMessage, getPlugin( ) );
+                addInfo( MESSAGE_SAVED, getLocale( ) );
             }
 
-            DefaultMessageHome.update( defaultMessage, getPlugin( ) );
+            return redirectView( request, VIEW_MANAGE_DEFAULT_MESSAGE );
         }
 
         return redirect( request, getHomeUrl( request ) );

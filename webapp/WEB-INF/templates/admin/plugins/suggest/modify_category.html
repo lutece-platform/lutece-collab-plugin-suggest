@@ -1,9 +1,11 @@
 <@pageContainer>
 	<@pageColumn>
-		<@pageHeader title='#i18n{suggest.modifyCategory.title}' />
+		<@pageHeader title='#i18n{suggest.modifyCategory.title}'>
+			<@aButton href='jsp/admin/plugins/suggest/ManageCategory.jsp' buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' hideTitle=['xs','sm'] />
+		</@pageHeader>
 		<@messages errors=errors![] />
 		<@row>
-			<@columns>
+			<@columns lg=8 xl=6>
 				<@box>
 					<@boxBody>
 						<@tform method='post' action='jsp/admin/plugins/suggest/ManageCategory.jsp'><@input type='hidden' name='action' value='modifyCategory' />
@@ -16,7 +18,7 @@
 							</@formGroup>
 							<@formGroup>
 								<@button name='save' type='submit' title='#i18n{suggest.createCategory.buttonSave}' buttonIcon='device-floppy' />
-								<@aButton href='jsp/admin/plugins/suggest/ManageCategory.jsp?plugin_name=suggest' title='#i18n{suggest.createCategory.buttonCancel}' buttonIcon='x' color='light' />
+								<@aButton href='jsp/admin/plugins/suggest/ManageCategory.jsp' title='#i18n{suggest.createCategory.buttonCancel}' buttonIcon='x' color='light' />
 							</@formGroup>
 						</@tform>
 					</@boxBody>

@@ -196,7 +196,7 @@ topList: a ranked list of suggest submits, each with the property named by count
 							<@box class='h-100'>
 								<@boxHeader title='#i18n{suggest.statistics.labelMostCommented}' />
 								<#if most_commented?has_content>
-									<@topList items=most_commented iconName='message' count='numberComment' />
+									<@topList items=most_commented iconName='message' count='numberCommentEnable' />
 								<#else>
 									<@boxBody><@p class='text-secondary mb-0'>#i18n{suggest.statistics.labelNoComment}</@p></@boxBody>
 								</#if>

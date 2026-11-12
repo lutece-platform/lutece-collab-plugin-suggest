@@ -37,43 +37,114 @@ import java.sql.Date;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.function.UnaryOperator;
 
-import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
-import fr.paris.lutece.plugins.suggest.business.SuggestUserInfo;
+import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
+import fr.paris.lutece.plugins.suggest.business.statistics.StatisticsCount;
+import fr.paris.lutece.plugins.suggest.business.statistics.StatisticsTotals;
+import fr.paris.lutece.plugins.suggest.business.statistics.SuggestStatisticsDAO;
+import fr.paris.lutece.portal.service.plugin.Plugin;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
- * Counts of suggest submits for the statistics page: by period, by department, most commented.
+ * Counts of suggest submits for the statistics page, computed by the database whatever the number of suggest submits.
  */
 @ApplicationScoped
 public class SuggestStatisticsService
 {
     private static final int MAX_WEEKS = 16;
     private static final int MIN_WEEKS = 11;
+    @Inject
+    private SuggestStatisticsDAO _dao;
+
+    /**
+     * Counts the suggest submits of each state
+     *
+     * @param filter
+     *            the suggest, period, category and type counted
+     * @param plugin
+     *            the plugin
+     * @return the number of suggest submits by state, the states without any left out
+     */
+    public Map<Integer, Integer> countByState( SubmitFilter filter, Plugin plugin )
+    {
+        return _dao.countByState( filter, plugin );
+    }
+
+    /**
+     * Sums the votes, the authors and the published comments of the published suggest submits
+     *
+     * @param filter
+     *            the suggest, period, category and type counted
+     * @param plugin
+     *            the plugin
+     * @return the totals
+     */
+    public StatisticsTotals getPublishedTotals( SubmitFilter filter, Plugin plugin )
+    {
+        return _dao.getPublishedTotals( filter, plugin );
+    }
+
+    /**
+     * Counts the published suggest submits of each department of their authors, the largest first
+     *
+     * @param filter
+     *            the suggest, period, category and type counted
+     * @param plugin
+     *            the plugin
+     * @return one count per department, labelled null for the authors whose department is unknown
+     */
+    public List<StatisticsCount> countPublishedByDepartment( SubmitFilter filter, Plugin plugin )
+    {
+        return _dao.countPublishedByDepartment( filter, plugin );
+    }
+
+    /**
+     * Counts the published suggest submits of each category
+     *
+     * @param filter
+     *            the suggest, period, category and type counted
+     * @param plugin
+     *            the plugin
+     * @return the number of published suggest submits by category key, the categories without any left out
+     */
+    public Map<Integer, Integer> countPublishedByCategory( SubmitFilter filter, Plugin plugin )
+    {
+        return _dao.countPublishedByCategory( filter, plugin );
+    }
+
+    /**
+     * Counts the suggest submits deposited each day, whatever their state
+     *
+     * @param filter
+     *            the suggest, period, category and type counted
+     * @param plugin
+     *            the plugin
+     * @return the number of suggest submits by day, the oldest first, the days without any left out
+     */
+    public TreeMap<LocalDate, Integer> countByDay( SubmitFilter filter, Plugin plugin )
+    {
+        return _dao.countByDay( filter, plugin );
+    }
 
     /**
      * Returns the first day of the default span: the oldest deposit, at least 11 weeks before the last day
      *
-     * @param listSuggestSubmit
-     *            the suggest submits
+     * @param mapDayCounts
+     *            the number of suggest submits by day
      * @param dateLast
      *            the last day of the span
      * @return the first day of the span
      */
-    public LocalDate getPeriodStart( List<SuggestSubmit> listSuggestSubmit, LocalDate dateLast )
+    public LocalDate getPeriodStart( TreeMap<LocalDate, Integer> mapDayCounts, LocalDate dateLast )
     {
         LocalDate dateFloor = dateLast.minusWeeks( MIN_WEEKS );
 
-        return listSuggestSubmit.stream( ).map( SuggestSubmit::getDateResponse ).filter( Objects::nonNull ).map( date -> date.toLocalDateTime( ).toLocalDate( ) )
-                .filter( date -> date.isBefore( dateFloor ) ).min( Comparator.naturalOrder( ) ).orElse( dateFloor );
+        return ( !mapDayCounts.isEmpty( ) && mapDayCounts.firstKey( ).isBefore( dateFloor ) ) ? mapDayCounts.firstKey( ) : dateFloor;
     }
 
     /**
@@ -91,20 +162,20 @@ public class SuggestStatisticsService
     }
 
     /**
-     * Counts the suggest submits deposited in each week, or each month, of a span, empty periods included
+     * Groups daily counts by week, or by month, over a span, empty periods included
      *
-     * @param listSuggestSubmit
-     *            the suggest submits
+     * @param mapDayCounts
+     *            the number of suggest submits by day
      * @param dateFirst
      *            the first day of the span
      * @param dateLast
      *            the last day of the span
      * @return one count per period, the oldest first, dated by its first day
      */
-    public List<StatisticsCount> countByPeriod( List<SuggestSubmit> listSuggestSubmit, LocalDate dateFirst, LocalDate dateLast )
+    public List<StatisticsCount> countByPeriod( Map<LocalDate, Integer> mapDayCounts, LocalDate dateFirst, LocalDate dateLast )
     {
         boolean bWeekly = isWeekly( dateFirst, dateLast );
-        Function<LocalDate, LocalDate> periodStart = day -> bWeekly ? day.with( DayOfWeek.MONDAY ) : day.withDayOfMonth( 1 );
+        UnaryOperator<LocalDate> periodStart = day -> bWeekly ? day.with( DayOfWeek.MONDAY ) : day.withDayOfMonth( 1 );
         Map<LocalDate, Integer> mapCounts = new TreeMap<>( );
 
         for ( LocalDate day = periodStart.apply( dateFirst ); !day.isAfter( dateLast ); day = bWeekly ? day.plusWeeks( 1 ) : day.plusMonths( 1 ) )
@@ -112,55 +183,8 @@ public class SuggestStatisticsService
             mapCounts.put( day, 0 );
         }
 
-        listSuggestSubmit.stream( ).map( SuggestSubmit::getDateResponse ).filter( Objects::nonNull )
-                .forEach( date -> mapCounts.computeIfPresent( periodStart.apply( date.toLocalDateTime( ).toLocalDate( ) ), ( day, nCount ) -> nCount + 1 ) );
+        mapDayCounts.forEach( ( day, nCount ) -> mapCounts.computeIfPresent( periodStart.apply( day ), ( start, nTotal ) -> nTotal + nCount ) );
 
         return mapCounts.entrySet( ).stream( ).map( entry -> new StatisticsCount( null, Date.valueOf( entry.getKey( ) ), entry.getValue( ) ) ).toList( );
-    }
-
-    /**
-     * Counts the suggest submits of each department of their authors, the largest first
-     *
-     * @param listSuggestSubmit
-     *            the suggest submits
-     * @param mapUsersInfo
-     *            the user infos of the authors, by lutece user key
-     * @return one count per department, labelled null for the authors whose department is unknown
-     */
-    public List<StatisticsCount> countByDepartment( List<SuggestSubmit> listSuggestSubmit, Map<String, SuggestUserInfo> mapUsersInfo )
-    {
-        Map<String, Long> mapCounts = listSuggestSubmit.stream( )
-                .collect( Collectors.groupingBy( suggestSubmit -> departmentOf( mapUsersInfo.get( suggestSubmit.getLuteceUserKey( ) ) ), LinkedHashMap::new,
-                        Collectors.counting( ) ) );
-
-        return mapCounts.entrySet( ).stream( ).map( entry -> new StatisticsCount( entry.getKey( ).isEmpty( ) ? null : entry.getKey( ), null, entry.getValue( ).intValue( ) ) )
-                .sorted( Comparator.comparingInt( StatisticsCount::getCount ).reversed( ) ).toList( );
-    }
-
-    /**
-     * Returns the most commented suggest submits, those without comment left out
-     *
-     * @param listSuggestSubmit
-     *            the suggest submits
-     * @param nMax
-     *            the maximum number returned
-     * @return the most commented suggest submits, the most commented first
-     */
-    public List<SuggestSubmit> getMostCommented( List<SuggestSubmit> listSuggestSubmit, int nMax )
-    {
-        return listSuggestSubmit.stream( ).filter( suggestSubmit -> suggestSubmit.getNumberComment( ) > 0 )
-                .sorted( Comparator.comparingInt( SuggestSubmit::getNumberComment ).reversed( ) ).limit( nMax ).toList( );
-    }
-
-    /**
-     * Returns the department of a user, empty when unknown
-     *
-     * @param userInfo
-     *            the user info, or null
-     * @return the department, or an empty string
-     */
-    private static String departmentOf( SuggestUserInfo userInfo )
-    {
-        return ( ( userInfo == null ) || ( userInfo.getDepartment( ) == null ) ) ? "" : userInfo.getDepartment( ).trim( );
     }
 }

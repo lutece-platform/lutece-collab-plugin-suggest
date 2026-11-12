@@ -54,7 +54,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.TreeMap;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -100,6 +100,7 @@ import fr.paris.lutece.plugins.suggest.service.CategoryResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.DefaultMessageResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.SuggestResourceIdService;
 import fr.paris.lutece.plugins.suggest.service.SuggestService;
+import fr.paris.lutece.plugins.suggest.business.statistics.StatisticsTotals;
 import fr.paris.lutece.plugins.suggest.service.statistics.SuggestStatisticsService;
 import fr.paris.lutece.plugins.suggest.service.SuggestSubmitAttachmentService;
 import fr.paris.lutece.plugins.suggest.service.SuggestSubmitComplementService;
@@ -234,6 +235,7 @@ public class SuggestJspBean extends MVCAdminJspBean
 
     // message
     private static final String MESSAGE_ACTION_ERROR = "suggest.message.workflow.action.error";
+    private static final String MESSAGE_SAVED = "suggest.message.saved";
     private static final String MESSAGE_CONFIRM_REMOVE_SUGGEST = "suggest.message.confirmRemoveSuggest";
     private static final String MESSAGE_CONFIRM_REMOVE_SUGGEST_SUBMIT = "suggest.message.confirmRemoveSuggestSubmit";
     private static final String MESSAGE_CONFIRM_REMOVE_COMMENT_SUBMIT = "suggest.message.confirmRemoveCommentSubmit";
@@ -365,8 +367,8 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String MARK_COMMENT_STATE_SELECTED = "comment_state_selected";
     private static final String MARK_CONTAINS_SUB_COMMENT_DISABLE_LIST = "comment_contains_sub_comment_disable_list";
     private static final String MARK_CONTAINS_SUB_COMMENT_DISABLE_SELECTED = "comment_contains_sub_comment_disable_selected";
-    private static final String MARK_SUGGEST_SUBMIT_ORDER_LIST = "order_list";
-    private static final String MARK_SUGGEST_SUBMIT_ORDER_LIST_PINNED = "order_list_pinned";
+    private static final String MARK_SUGGEST_SUBMIT_ORDER_MAX = "order_max";
+    private static final String MARK_SUGGEST_SUBMIT_ORDER_MAX_PINNED = "order_max_pinned";
     private static final String MARK_FIRST_DATE_FILTER = "first_date_filter";
     private static final String MARK_LAST_DATE_FILTER = "last_date_filter";
     private static final String MARK_NUMBER_VOTES = "number_votes";
@@ -987,8 +989,8 @@ public class SuggestJspBean extends MVCAdminJspBean
             listSuggestSubmitDisplay.add( suggestSubmit );
         }
 
-        model.put( MARK_SUGGEST_SUBMIT_ORDER_LIST_PINNED, getSuggestSubmitOrderList( _nIdSuggest, true ) );
-        model.put( MARK_SUGGEST_SUBMIT_ORDER_LIST, getSuggestSubmitOrderList( _nIdSuggest, false ) );
+        model.put( MARK_SUGGEST_SUBMIT_ORDER_MAX_PINNED, _suggestSubmitService.getMaxOrderList( _nIdSuggest, true, getPlugin( ) ) );
+        model.put( MARK_SUGGEST_SUBMIT_ORDER_MAX, _suggestSubmitService.getMaxOrderList( _nIdSuggest, false, getPlugin( ) ) );
         model.put( MARK_DISABLE_SUGGEST_SUBMIT_STATE_NUMBER, SuggestSubmit.STATE_DISABLE );
         model.put( MARK_PUBLISH_SUGGEST_SUBMIT_STATE_NUMBER, SuggestSubmit.STATE_PUBLISH );
         model.put( MARK_WAITING_FOR_PUBLISH_SUGGEST_SUBMIT_STATE_NUMBER, SuggestSubmit.STATE_WAITING_FOR_PUBLISH );
@@ -3703,35 +3705,14 @@ public class SuggestJspBean extends MVCAdminJspBean
         SuggestSubmit suggestSubmit = getAuthorizedSuggestSubmit( nIdSuggestSubmit );
         int nIdSuggest = Integer.parseInt( request.getParameter( PARAMETER_ID_SUGGEST ) );
 
-        if ( suggestSubmit != null )
-        {
-            int nNewOrder = Integer.parseInt( request.getParameter( PARAMETER_SUGGEST_SUBMIT_ORDER ) );
+        int nNewOrder = SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_SUGGEST_SUBMIT_ORDER ) );
 
-            _suggestSubmitService.updateSuggestSubmitOrder( suggestSubmit.getSuggestSubmitOrder( ), nNewOrder, suggestSubmit.getSuggest( ).getIdSuggest( ),
-                    suggestSubmit.isPinned( ), getPlugin( ) );
+        if ( ( suggestSubmit != null ) && ( nNewOrder > 0 ) )
+        {
+            _suggestSubmitService.moveSuggestSubmit( suggestSubmit, nNewOrder, getPlugin( ) );
         }
 
         return redirect( request, getJspManageSuggestSubmitOrder( request ) + "&" + PARAMETER_ID_SUGGEST + "=" + nIdSuggest );
-    }
-
-    /**
-     * Builts a list of sequence numbers
-     *
-     * @param nIdSuggest
-     *            the id of the Suggest
-     * @return the list of sequence numbers
-     */
-    private ReferenceList getSuggestSubmitOrderList( int nIdSuggest, boolean bListPinned )
-    {
-        int nMax = _suggestSubmitService.getMaxOrderList( nIdSuggest, bListPinned, getPlugin( ) );
-        ReferenceList list = new ReferenceList( );
-
-        for ( int i = 1; i < ( nMax + 1 ); i++ )
-        {
-            list.addItem( i, Integer.toString( i ) );
-        }
-
-        return list;
     }
 
     /**
@@ -3816,53 +3797,27 @@ public class SuggestJspBean extends MVCAdminJspBean
         filter.setIdCategory( nIdCategory );
         filter.setIdType( nIdType );
 
-        // number of comments
-        filter.setIdSuggestSubmitState( SuggestSubmit.STATE_PUBLISH );
-
-        int nNbComments = _commentSubmitService.getCountCommentSubmit( filter, plugin );
-
-        // number of votes
-        filter.setIdSuggestSubmitState( SubmitFilter.ALL_INT );
-
-        int nNbVotes = 0;
-
-        List<SuggestSubmit> listDeposited = _suggestSubmitService.getSuggestSubmitList( filter, plugin );
-        Map<Integer, Long> mapStateCounts = listDeposited.stream( )
-                .collect( Collectors.groupingBy( d -> d.getSuggestSubmitState( ).getIdSuggestSubmitState( ), Collectors.counting( ) ) );
-        List<SuggestSubmit> listSuggestSubmit = listDeposited.stream( )
-                .filter( d -> d.getSuggestSubmitState( ).getIdSuggestSubmitState( ) == SuggestSubmit.STATE_PUBLISH ).toList( );
-        List<String> listUsersKey = new ArrayList<>( );
-
-        for ( SuggestSubmit d : listSuggestSubmit )
-        {
-            nNbVotes += d.getNumberVote( );
-
-            if ( !listUsersKey.contains( d.getLuteceUserKey( ) ) )
-            {
-                listUsersKey.add( d.getLuteceUserKey( ) );
-            }
-        }
-
-        // number of suggest submit
-        int nNbSuggestSubmitDisabled = mapStateCounts.getOrDefault( SuggestSubmit.STATE_DISABLE, 0L ).intValue( );
-        int nNbSuggestSubmitWaiting = mapStateCounts.getOrDefault( SuggestSubmit.STATE_WAITING_FOR_PUBLISH, 0L ).intValue( );
-        int nNbSuggestSubmitPublished = listSuggestSubmit.size( );
-
-        int nNumberMaxSuggestSubmit = AppPropertiesService.getPropertyInt( PROPERTY_SUGGESTSUBMIT_HIGHSCORES, 10 );
-        model.put( MARK_DEPARTMENT_STATISTICS, _statisticsService.countByDepartment( listSuggestSubmit, getUsersInfo( listSuggestSubmit, plugin ) ) );
-        model.put( MARK_MOST_COMMENTED, _statisticsService.getMostCommented( listSuggestSubmit, nNumberMaxSuggestSubmit ) );
-
+        Map<Integer, Integer> mapStateCounts = _statisticsService.countByState( filter, plugin );
+        StatisticsTotals totals = _statisticsService.getPublishedTotals( filter, plugin );
+        TreeMap<LocalDate, Integer> mapDayCounts = _statisticsService.countByDay( filter, plugin );
         LocalDate dateLast = ( tLastDateFilter == null ) ? LocalDate.now( ) : tLastDateFilter.toLocalDateTime( ).toLocalDate( );
-        LocalDate dateFirst = ( tFirstDateFilter == null ) ? _statisticsService.getPeriodStart( listDeposited, dateLast )
+        LocalDate dateFirst = ( tFirstDateFilter == null ) ? _statisticsService.getPeriodStart( mapDayCounts, dateLast )
                 : tFirstDateFilter.toLocalDateTime( ).toLocalDate( );
-        model.put( MARK_PERIOD_STATISTICS, _statisticsService.countByPeriod( listDeposited, dateFirst, dateLast ) );
-        model.put( MARK_PERIOD_WEEKLY, _statisticsService.isWeekly( dateFirst, dateLast ) );
-        filter.setIdSuggestSubmitState( SuggestSubmit.STATE_PUBLISH );
+        int nNumberMaxSuggestSubmit = AppPropertiesService.getPropertyInt( PROPERTY_SUGGESTSUBMIT_HIGHSCORES, 10 );
 
-        // high scores
+        model.put( MARK_DEPARTMENT_STATISTICS, _statisticsService.countPublishedByDepartment( filter, plugin ) );
+        model.put( MARK_PERIOD_STATISTICS, _statisticsService.countByPeriod( mapDayCounts, dateFirst, dateLast ) );
+        model.put( MARK_PERIOD_WEEKLY, _statisticsService.isWeekly( dateFirst, dateLast ) );
+        model.put( MARK_CATEGORY_STATISTICS, getPublishedCountByCategory( suggest, nIdCategory, _statisticsService.countPublishedByCategory( filter, plugin ) ) );
+
+        filter.setIdSuggestSubmitState( SuggestSubmit.STATE_PUBLISH );
+        SuggestUtils.initSubmitFilterBySort( filter, SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC );
+        model.put( MARK_MOST_COMMENTED, _suggestSubmitService.getSuggestSubmitList( filter, plugin, nNumberMaxSuggestSubmit ).stream( )
+                .filter( suggestSubmit -> suggestSubmit.getNumberCommentEnable( ) > 0 ).toList( ) );
+        filter.setSortBy( new ArrayList<>( ) );
         SuggestUtils.initSubmitFilterBySort( filter, SubmitFilter.SORT_BY_SCORE_DESC );
 
-        listSuggestSubmit = _suggestSubmitService.getSuggestSubmitList( filter, plugin, nNumberMaxSuggestSubmit );
+        List<SuggestSubmit> listSuggestSubmit = _suggestSubmitService.getSuggestSubmitList( filter, plugin, nNumberMaxSuggestSubmit );
 
         ReferenceList refSuggestList = SuggestUtils.getRefListSuggest( listSuggest, false );
 
@@ -3870,8 +3825,8 @@ public class SuggestJspBean extends MVCAdminJspBean
         model.put( MARK_LAST_DATE_FILTER, ( tLastDateFilter == null ) ? null : new Date( tLastDateFilter.getTime( ) ) );
         model.put( MARK_SUGGEST, suggest );
 
-        model.put( MARK_NUMBER_VOTES, nNbVotes );
-        model.put( MARK_NUMBER_COMMENTS, nNbComments );
+        model.put( MARK_NUMBER_VOTES, totals.votes( ) );
+        model.put( MARK_NUMBER_COMMENTS, totals.comments( ) );
 
         if ( ( suggest.getCategories( ) != null ) && !suggest.getCategories( ).isEmpty( ) )
         {
@@ -3899,12 +3854,11 @@ public class SuggestJspBean extends MVCAdminJspBean
             }
         }
 
-        model.put( MARK_NUMBER_SUGGESTSUBMIT_DISABLED, nNbSuggestSubmitDisabled );
-        model.put( MARK_NUMBER_SUGGESTSUBMIT_WAITING, nNbSuggestSubmitWaiting );
-        model.put( MARK_NUMBER_SUGGESTSUBMIT_PUBLISHED, nNbSuggestSubmitPublished );
-        model.put( MARK_NUMBER_USERS, listUsersKey.size( ) );
+        model.put( MARK_NUMBER_SUGGESTSUBMIT_DISABLED, mapStateCounts.getOrDefault( SuggestSubmit.STATE_DISABLE, 0 ) );
+        model.put( MARK_NUMBER_SUGGESTSUBMIT_WAITING, mapStateCounts.getOrDefault( SuggestSubmit.STATE_WAITING_FOR_PUBLISH, 0 ) );
+        model.put( MARK_NUMBER_SUGGESTSUBMIT_PUBLISHED, mapStateCounts.getOrDefault( SuggestSubmit.STATE_PUBLISH, 0 ) );
+        model.put( MARK_NUMBER_USERS, totals.contributors( ) );
         model.put( MARK_HIGH_SCORES, listSuggestSubmit );
-        model.put( MARK_CATEGORY_STATISTICS, getPublishedCountByCategory( suggest, tFirstDateFilter, tLastDateFilter, nIdCategory, nIdType, plugin ) );
         model.put( MARK_SUGGEST_LIST, refSuggestList );
         model.put( MARK_URL, AppPathService.getBaseUrl( request ) + JSP_MANAGE_COMMENT_SUBMIT + "&id_suggest_submit=" );
 
@@ -3912,24 +3866,17 @@ public class SuggestJspBean extends MVCAdminJspBean
     }
 
     /**
-     * Count the published suggest submits of each category of the suggest, with the filters of the statistics page
+     * Lists the categories of the suggest with their number of published suggest submits
      *
      * @param suggest
      *            the suggest
-     * @param tFirstDateFilter
-     *            the first date of the period, or null
-     * @param tLastDateFilter
-     *            the last date of the period, or null
      * @param nIdCategory
      *            the category selected in the filters, or SuggestUtils.CONSTANT_ID_NULL for every category
-     * @param nIdType
-     *            the type selected in the filters, or SuggestUtils.CONSTANT_ID_NULL for every type
-     * @param plugin
-     *            the plugin
+     * @param mapCounts
+     *            the number of published suggest submits by category key
      * @return one entry per category, holding its title, its color and its number of published suggest submits
      */
-    private List<Map<String, Object>> getPublishedCountByCategory( Suggest suggest, Timestamp tFirstDateFilter, Timestamp tLastDateFilter, int nIdCategory,
-            int nIdType, Plugin plugin )
+    private List<Map<String, Object>> getPublishedCountByCategory( Suggest suggest, int nIdCategory, Map<Integer, Integer> mapCounts )
     {
         List<Map<String, Object>> listCategoryStatistics = new ArrayList<>( );
 
@@ -3940,24 +3887,14 @@ public class SuggestJspBean extends MVCAdminJspBean
 
         for ( Category category : suggest.getCategories( ) )
         {
-            if ( ( nIdCategory != SuggestUtils.CONSTANT_ID_NULL ) && ( nIdCategory != category.getIdCategory( ) ) )
+            if ( ( nIdCategory == SuggestUtils.CONSTANT_ID_NULL ) || ( nIdCategory == category.getIdCategory( ) ) )
             {
-                continue;
+                Map<String, Object> categoryStatistics = new HashMap<>( );
+                categoryStatistics.put( MARK_CATEGORY_STATISTICS_TITLE, category.getTitle( ) );
+                categoryStatistics.put( MARK_CATEGORY_STATISTICS_COLOR, category.getColor( ) );
+                categoryStatistics.put( MARK_CATEGORY_STATISTICS_COUNT, mapCounts.getOrDefault( category.getIdCategory( ), 0 ) );
+                listCategoryStatistics.add( categoryStatistics );
             }
-
-            SubmitFilter filter = new SubmitFilter( );
-            filter.setIdSuggest( suggest.getIdSuggest( ) );
-            filter.setDateFirst( tFirstDateFilter );
-            filter.setDateLast( tLastDateFilter );
-            filter.setIdType( nIdType );
-            filter.setIdCategory( category.getIdCategory( ) );
-            filter.setIdSuggestSubmitState( SuggestSubmit.STATE_PUBLISH );
-
-            Map<String, Object> categoryStatistics = new HashMap<>( );
-            categoryStatistics.put( MARK_CATEGORY_STATISTICS_TITLE, category.getTitle( ) );
-            categoryStatistics.put( MARK_CATEGORY_STATISTICS_COLOR, category.getColor( ) );
-            categoryStatistics.put( MARK_CATEGORY_STATISTICS_COUNT, _suggestSubmitService.getCountSuggestSubmit( filter, plugin ) );
-            listCategoryStatistics.add( categoryStatistics );
         }
 
         return listCategoryStatistics;
@@ -4055,6 +3992,8 @@ public class SuggestJspBean extends MVCAdminJspBean
                 SuggestHome.update( suggestDefault, plugin );
             }
         }
+
+        addInfo( MESSAGE_SAVED, getLocale( ) );
 
         return redirect( request, getJspManageAdvancedParameters( request ) );
     }

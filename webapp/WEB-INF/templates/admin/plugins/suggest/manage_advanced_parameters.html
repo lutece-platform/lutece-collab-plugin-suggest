@@ -4,6 +4,7 @@
 	<@pageColumn>
 		<@pageHeader title='#i18n{suggest.manageAdvancedParameters.title}' />
 		<@advancedParametersTabs>
+			<@row><@columns lg=8 xl=6>
 			<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggest.jsp'><@input type='hidden' name='action' value='modifyAdvancedParameters' />
 				<@formGroup labelFor='id_default_suggest' labelKey='#i18n{suggest.manageAdvancedParameters.labelDefaultSuggest}' helpKey='#i18n{suggest.manageAdvancedParameters.labelDefaultSuggestComment}'>
 					<@select name='id_default_suggest' default_value='${id_default_suggest}' items=suggest_list  />
@@ -12,6 +13,7 @@
 					<@button type='submit' title='#i18n{suggest.manageAdvancedParameters.buttonModify}' buttonIcon='device-floppy' color='primary' />
 				</@formGroup>
 			</@tform>
+			</@columns></@row>
 		</@advancedParametersTabs>
 	</@pageColumn>
 </@pageContainer>

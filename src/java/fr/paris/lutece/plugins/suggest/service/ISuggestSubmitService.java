@@ -246,6 +246,18 @@ public interface ISuggestSubmitService
     void updateSuggestSubmitOrder( Integer nPositionElement, Integer nNewPositionElement, int nIdSuggest, boolean bListPinned, Plugin plugin );
 
     /**
+     * Moves a suggest submit to a rank of its list, pinned or not, whatever the state of the stored list orders
+     *
+     * @param suggestSubmit
+     *            the suggest submit
+     * @param nNewPosition
+     *            the new rank, from 1, brought back into the list when out of it
+     * @param plugin
+     *            the plugin
+     */
+    void moveSuggestSubmit( SuggestSubmit suggestSubmit, int nNewPosition, Plugin plugin );
+
+    /**
      * Search the max order number of contacts for one list
      * 
      * @param nIdSuggest

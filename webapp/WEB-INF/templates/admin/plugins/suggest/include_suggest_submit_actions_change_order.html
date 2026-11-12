@@ -1,19 +1,8 @@
 <@tform method='post' type='inline' action='jsp/admin/plugins/suggest/ManageSuggest.jsp'><@input type='hidden' name='action' value='modifySuggestSubmitOrder' />
 	<@input type='hidden' name='id_suggest_submit' value='${suggest_submit.idSuggestSubmit}' />
 	<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
-	<#if suggest_submit.pinned>
-		<@formGroup formStyle='inline'>
-			<@inputGroup>
-				<@select name='suggest_submit_order' default_value='${suggest_submit.suggestSubmitOrder}' items=order_list_pinned />
-				<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}' buttonIcon='arrows' hideTitle=['all'] />
-			</@inputGroup>
-		</@formGroup>
-	<#else>
-		<@formGroup formStyle='inline'>
-			<@inputGroup>
-				<@select name='suggest_submit_order' default_value='${suggest_submit.suggestSubmitOrder}' items=order_list />
-				<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}' buttonIcon='check' hideTitle=['all'] />
-			</@inputGroup>
-		</@formGroup>
-	</#if>
+	<@inputGroup size='sm'>
+		<input class="form-control" type="number" name="suggest_submit_order" value="${suggest_submit.suggestSubmitOrder?c}" min="1" max="${suggest_submit.pinned?then(order_max_pinned, order_max)?c}" required style="width:6rem" aria-label="#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}">
+		<@button type='submit' title='#i18n{suggest.manageSuggestSubmit.buttonChangeOrder}' buttonIcon='check' color='light' hideTitle=['all'] />
+	</@inputGroup>
 </@tform>

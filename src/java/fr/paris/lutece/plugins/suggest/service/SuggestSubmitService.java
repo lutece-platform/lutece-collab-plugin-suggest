@@ -236,40 +236,69 @@ public class SuggestSubmitService implements ISuggestSubmitService
      * {@inheritDoc}
      */
     @Override
+    public void moveSuggestSubmit( SuggestSubmit suggestSubmit, int nNewPosition, Plugin plugin )
+    {
+        int nIdSuggest = suggestSubmit.getSuggest( ).getIdSuggest( );
+
+        inTransaction( plugin, ( ) -> {
+            Map<Integer, Integer> mapOrders = SuggestSubmitHome.getListOrders( nIdSuggest, suggestSubmit.isPinned( ), plugin );
+            int nPosition = new ArrayList<>( mapOrders.keySet( ) ).indexOf( suggestSubmit.getIdSuggestSubmit( ) ) + 1;
+
+            renumber( mapOrders, nPosition, Math.max( 1, Math.min( mapOrders.size( ), nNewPosition ) ), nIdSuggest, suggestSubmit.isPinned( ), plugin );
+        } );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void updateSuggestSubmitOrder( Integer nPositionElement, Integer nNewPositionElement, int nIdSuggest, boolean bListPinned, Plugin plugin )
     {
-        inTransaction( plugin, ( ) -> {
-            SubmitFilter filter = new SubmitFilter( );
-            filter.setIdSuggest( nIdSuggest );
-    
-            List<Integer> listSortByManually = new ArrayList<>( );
-            listSortByManually.add( SubmitFilter.SORT_MANUALLY );
-            filter.setSortBy( listSortByManually );
-            //
-            filter.setIdPinned( bListPinned ? SubmitFilter.ID_TRUE : SubmitFilter.ID_FALSE );
-    
-            List<Integer> listIdSuggestDubmit = getSuggestSubmitListId( filter, plugin );
-    
-            if ( ( listIdSuggestDubmit != null ) && ( !listIdSuggestDubmit.isEmpty( ) ) )
+        inTransaction( plugin,
+                ( ) -> renumber( SuggestSubmitHome.getListOrders( nIdSuggest, bListPinned, plugin ), nPositionElement, nNewPositionElement, nIdSuggest, bListPinned, plugin ) );
+    }
+
+    /**
+     * Renumbers a list from 1, after moving one element when both positions are valid
+     *
+     * @param mapOrders
+     *            the list order of each suggest submit, by id, in list order
+     * @param nPositionElement
+     *            the position of the element to move, from 1, or null
+     * @param nNewPositionElement
+     *            the new position of the element, from 1, or null
+     * @param nIdSuggest
+     *            the id of the suggest
+     * @param bListPinned
+     *            true for the pinned suggest submits, false for the others
+     * @param plugin
+     *            the plugin
+     */
+    private void renumber( Map<Integer, Integer> mapOrders, Integer nPositionElement, Integer nNewPositionElement, int nIdSuggest, boolean bListPinned, Plugin plugin )
+    {
+        List<Integer> listIdSuggestSubmit = new ArrayList<>( mapOrders.keySet( ) );
+
+        if ( ( nPositionElement != null ) && ( nNewPositionElement != null ) && !nPositionElement.equals( nNewPositionElement ) && ( nPositionElement > 0 )
+                && ( nPositionElement <= listIdSuggestSubmit.size( ) ) && ( nNewPositionElement > 0 ) && ( nNewPositionElement <= listIdSuggestSubmit.size( ) ) )
+        {
+            listIdSuggestSubmit.add( nNewPositionElement - 1, listIdSuggestSubmit.remove( nPositionElement - 1 ) );
+        }
+
+        List<Integer> listOrders = listIdSuggestSubmit.stream( ).map( mapOrders::get ).toList( );
+        List<int [ ]> listShifts = SuggestUtils.getOrderShifts( listOrders );
+
+        if ( listShifts == null )
+        {
+            for ( int i = 0; i < listIdSuggestSubmit.size( ); i++ )
             {
-                if ( ( nPositionElement != null ) && ( nNewPositionElement != null ) && ( !nPositionElement.equals( nNewPositionElement ) ) )
-                {
-                    if ( ( ( nPositionElement > 0 ) && ( nPositionElement <= ( listIdSuggestDubmit.size( ) + 1 ) ) )
-                            && ( ( nNewPositionElement > 0 ) && ( nNewPositionElement <= ( listIdSuggestDubmit.size( ) + 1 ) ) ) )
-                    {
-                        SuggestUtils.moveElement( nPositionElement, nNewPositionElement, (ArrayList<Integer>) listIdSuggestDubmit );
-                    }
-                }
-    
-                int nNewOrder = 1;
-    
-                // update all Suggest submit
-                for ( Integer nIdSuggestSubmit : listIdSuggestDubmit )
-                {
-                    SuggestSubmitHome.updateSuggestSubmitOrder( nNewOrder++, nIdSuggestSubmit, plugin );
-                }
+                SuggestSubmitHome.updateSuggestSubmitOrder( i + 1, listIdSuggestSubmit.get( i ), plugin );
             }
-        } );
+        }
+        else if ( !listShifts.isEmpty( ) )
+        {
+            listShifts.forEach( shift -> SuggestSubmitHome.shiftListOrders( nIdSuggest, bListPinned, shift [0], shift [1], shift [2], plugin ) );
+            SuggestSubmitHome.restoreShiftedListOrders( nIdSuggest, bListPinned, plugin );
+        }
     }
 
     /**

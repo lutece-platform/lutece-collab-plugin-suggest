@@ -1,9 +1,11 @@
 <@pageContainer>
 	<@pageColumn>
-		<@pageHeader title='#i18n{suggest.modifySuggestSubmitType.title}' />
+		<@pageHeader title='#i18n{suggest.modifySuggestSubmitType.title}'>
+			<@aButton href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp' buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' hideTitle=['xs','sm'] />
+		</@pageHeader>
 		<@messages errors=errors![] />
 		<@row>
-			<@columns>
+			<@columns lg=8 xl=6>
 				<@box>
 					<@boxBody>
 						<@tform method='post' action='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp' enctype='multipart/form-data'><@input type='hidden' name='action' value='modifySuggestSubmitType' />
@@ -28,7 +30,7 @@
 							</@formGroup>
 							<@formGroup>
 								<@button type='submit' name='save' title='#i18n{suggest.createCategory.buttonSave}' buttonIcon='device-floppy' />
-								<@aButton href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?plugin_name=suggest' name='cancel' title='#i18n{suggest.createCategory.buttonCancel}' buttonIcon='x' color='light' />
+								<@aButton href='jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp' name='cancel' title='#i18n{suggest.createCategory.buttonCancel}' buttonIcon='x' color='light' />
 							</@formGroup>
 		                </@tform>
 					</@boxBody>

@@ -35,46 +35,23 @@ package fr.paris.lutece.plugins.suggest.service.statistics;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.junit.jupiter.api.Test;
 
-import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
-import fr.paris.lutece.plugins.suggest.business.SuggestUserInfo;
+import fr.paris.lutece.plugins.suggest.business.statistics.StatisticsCount;
 
 /**
- * Tests the counts of the statistics page.
+ * Tests the periods of the statistics page.
  */
 public class SuggestStatisticsServiceTest
 {
     private final SuggestStatisticsService _service = new SuggestStatisticsService( );
-
-    /**
-     * Returns a suggest submit deposited on a day by an author, with a number of comments
-     *
-     * @param day
-     *            the day of the deposit
-     * @param strAuthor
-     *            the lutece user key of the author
-     * @param nComments
-     *            the number of comments
-     * @return the suggest submit
-     */
-    private static SuggestSubmit submit( LocalDate day, String strAuthor, int nComments )
-    {
-        SuggestSubmit suggestSubmit = new SuggestSubmit( );
-        suggestSubmit.setDateResponse( Timestamp.valueOf( day.atTime( 10, 0 ) ) );
-        suggestSubmit.setLuteceUserKey( strAuthor );
-        suggestSubmit.setNumberComment( nComments );
-
-        return suggestSubmit;
-    }
 
     /**
      * A short span is counted week by week from its Monday, empty weeks included.
@@ -83,8 +60,8 @@ public class SuggestStatisticsServiceTest
     public void testCountByWeek( )
     {
         LocalDate wednesday = LocalDate.of( 2026, 11, 11 );
-        List<StatisticsCount> list = _service.countByPeriod( List.of( submit( wednesday, "a", 0 ), submit( wednesday.minusDays( 1 ), "a", 0 ),
-                submit( wednesday.minusWeeks( 2 ), "b", 0 ) ), wednesday.minusWeeks( 3 ), wednesday );
+        List<StatisticsCount> list = _service.countByPeriod( Map.of( wednesday, 1, wednesday.minusDays( 1 ), 1, wednesday.minusWeeks( 2 ), 1 ),
+                wednesday.minusWeeks( 3 ), wednesday );
 
         assertTrue( _service.isWeekly( wednesday.minusWeeks( 3 ), wednesday ) );
         assertEquals( List.of( 0, 1, 0, 2 ), list.stream( ).map( StatisticsCount::getCount ).toList( ) );
@@ -92,60 +69,31 @@ public class SuggestStatisticsServiceTest
     }
 
     /**
-     * The default span starts on the oldest deposit, and no later than 11 weeks before its last day.
+     * A span of more than 16 weeks is counted month by month, the days outside the span left out.
+     */
+    @Test
+    public void testCountByMonth( )
+    {
+        LocalDate last = LocalDate.of( 2026, 11, 11 );
+        List<StatisticsCount> list = _service.countByPeriod( Map.of( last, 3, LocalDate.of( 2026, 6, 30 ), 2, LocalDate.of( 2025, 1, 1 ), 9 ),
+                LocalDate.of( 2026, 6, 1 ), last );
+
+        assertFalse( _service.isWeekly( LocalDate.of( 2026, 6, 1 ), last ) );
+        assertEquals( 6, list.size( ) );
+        assertEquals( 2, list.get( 0 ).getCount( ) );
+        assertEquals( 3, list.get( 5 ).getCount( ) );
+    }
+
+    /**
+     * The default span starts at the oldest deposit, and never less than 11 weeks before its last day.
      */
     @Test
     public void testPeriodStart( )
     {
         LocalDate last = LocalDate.of( 2026, 11, 11 );
 
-        assertEquals( last.minusWeeks( 11 ), _service.getPeriodStart( List.of( submit( last.minusWeeks( 2 ), "a", 0 ) ), last ) );
-        assertEquals( last.minusWeeks( 20 ), _service.getPeriodStart( List.of( submit( last.minusWeeks( 20 ), "a", 0 ), submit( last, "a", 0 ) ), last ) );
-    }
-
-    /**
-     * A span of more than 16 weeks is counted month by month.
-     */
-    @Test
-    public void testCountByMonth( )
-    {
-        LocalDate last = LocalDate.of( 2026, 11, 11 );
-        List<StatisticsCount> list = _service.countByPeriod( List.of( submit( last, "a", 0 ), submit( LocalDate.of( 2026, 6, 30 ), "a", 0 ) ),
-                LocalDate.of( 2026, 6, 1 ), last );
-
-        assertFalse( _service.isWeekly( LocalDate.of( 2026, 6, 1 ), last ) );
-        assertEquals( 6, list.size( ) );
-        assertEquals( 1, list.get( 0 ).getCount( ) );
-        assertEquals( 1, list.get( 5 ).getCount( ) );
-    }
-
-    /**
-     * The departments are counted the largest first, the unknown ones under a null label.
-     */
-    @Test
-    public void testCountByDepartment( )
-    {
-        SuggestUserInfo dsin = new SuggestUserInfo( );
-        dsin.setDepartment( "DSIN" );
-        LocalDate day = LocalDate.of( 2026, 11, 11 );
-        List<StatisticsCount> list = _service.countByDepartment( List.of( submit( day, "x", 0 ), submit( day, "a", 0 ), submit( day, "a", 0 ) ),
-                Map.of( "a", dsin ) );
-
-        assertEquals( "DSIN", list.get( 0 ).getLabel( ) );
-        assertEquals( 2, list.get( 0 ).getCount( ) );
-        assertNull( list.get( 1 ).getLabel( ) );
-    }
-
-    /**
-     * The most commented come first, the ideas without comment left out.
-     */
-    @Test
-    public void testMostCommented( )
-    {
-        LocalDate day = LocalDate.of( 2026, 11, 11 );
-        SuggestSubmit two = submit( day, "a", 2 );
-        SuggestSubmit five = submit( day, "a", 5 );
-
-        assertEquals( List.of( five, two ), _service.getMostCommented( List.of( two, submit( day, "a", 0 ), five ), 10 ) );
+        assertEquals( last.minusWeeks( 11 ), _service.getPeriodStart( new TreeMap<>( ), last ) );
+        assertEquals( last.minusWeeks( 11 ), _service.getPeriodStart( new TreeMap<>( Map.of( last.minusDays( 3 ), 1 ) ), last ) );
+        assertEquals( LocalDate.of( 2026, 1, 5 ), _service.getPeriodStart( new TreeMap<>( Map.of( LocalDate.of( 2026, 1, 5 ), 1 ) ), last ) );
     }
 }

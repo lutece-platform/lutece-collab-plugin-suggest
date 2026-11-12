@@ -1,35 +1,23 @@
 <#include "include_suggest_submit_tabs.html" />
 <#include "include_active_filters.html" />
+<#assign removeAllFiltersUrl = 'jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmit&id_suggest=${suggest.idSuggest}&query=&id_category_filter=-1&id_type=-1&id_suggest_submit_state=-1&id_suggest_submit_report=-1&id_contains_comment_disable=-1&id_suggest_submit_sort=-1' />
 <@pageContainer>
 	<@pageColumn>
 		<@pageHeader title='${suggest.title!}'>
 			<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp' buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' hideTitle=['xs','sm','md'] />
-			<@button type='button' title='#i18n{suggest.manageSuggestSubmit.buttonSearch}' buttonIcon='filter' color='light' hideTitle=['xs','sm','md'] params='data-bs-toggle="modal" data-bs-target="#suggestSubmitFilterModal"' />
 			<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=createSuggestSubmit&id_suggest=${suggest.idSuggest}' title='#i18n{suggest.manageSuggestSubmit.buttonAddSuggestSubmit}' buttonIcon='plus' color='primary' />
 		</@pageHeader>
 		<@modal id='suggestSubmitFilterModal'>
-			<@modalHeader modalTitle='#i18n{suggest.manageSuggestSubmit.buttonSearch}' />
+			<@modalHeader modalTitle='#i18n{suggest.manageSuggestSubmit.buttonMoreFilters}' />
 			<@modalBody>
 				<@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp' id='filter'>
 					<@input type='hidden' name='view' value='manageSuggestSubmit' />
 					<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
-				<@formGroup labelFor='query' labelKey='#i18n{suggest.manageSuggestSubmit.buttonSearch}'>
-					<#if query?exists><#assign value = query /><#else><#assign value='' /></#if>
-					<@input type='text' name='query' id='query' placeHolder='#i18n{suggest.manageSuggestSubmit.labelSearch}' value=value />
-				</@formGroup>
-				<#if category_list?has_content>
-					<@formGroup labelFor='id_category_filter' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitCategory}'>
-						<@select name='id_category_filter' default_value='${suggest_submit_category_selected}' items=category_list />
-					</@formGroup>
-				</#if>
 				<#if suggest_submit_type_list?has_content>
 					<@formGroup labelFor='id_type' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitType}'>
 						<@select name='id_type' default_value='${suggest_submit_type_selected}' items=suggest_submit_type_list />
 					</@formGroup>
 				</#if>
-				<@formGroup labelFor='id_suggest_submit_state' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitState}'>
-					<@select name='id_suggest_submit_state' default_value='${suggest_submit_state_selected}' items=suggest_submit_state_list />
-				</@formGroup>
 				<@formGroup labelFor='id_suggest_submit_report' labelKey='#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitReport}'>
 					<@select name='id_suggest_submit_report' default_value='${suggest_submit_report_selected}' items=suggest_submit_report_list />
 				</@formGroup>
@@ -42,12 +30,34 @@
 				</@tform>
 			</@modalBody>
 			<@modalFooter>
-				<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmit&id_suggest=${suggest.idSuggest}&query=&id_category_filter=-1&id_type=-1&id_suggest_submit_state=-1&id_suggest_submit_report=-1&id_contains_comment_disable=-1&id_suggest_submit_sort=-1' buttonIcon='refresh' title='#i18n{suggest.manageSuggestSubmit.buttonReinitSearch}' color='light' />
+				<@aButton href=removeAllFiltersUrl buttonIcon='refresh' title='#i18n{suggest.manageSuggestSubmit.buttonReinitSearch}' color='light' />
 				<@button type='submit' formId='filter' buttonIcon='search' title='#i18n{suggest.manageSuggestSubmit.buttonSearch}' color='primary' />
 			</@modalFooter>
 		</@modal>
 		<@suggestSubmitTabs active='list'>
-			<@activeFiltersBar removeAllUrl='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmit&id_suggest=${suggest.idSuggest}&query=&id_category_filter=-1&id_type=-1&id_suggest_submit_state=-1&id_suggest_submit_report=-1&id_contains_comment_disable=-1&id_suggest_submit_sort=-1'>
+			<@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp' id='quick_filter' class='row g-2 align-items-center mb-3' params='role="search"'>
+				<@input type='hidden' name='view' value='manageSuggestSubmit' />
+				<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
+				<div class="col-12 col-md">
+					<div class="input-icon">
+						<span class="input-icon-addon"><@icon style='search' /></span>
+						<input class="form-control" type="search" name="query" value="${query!}" placeholder="#i18n{suggest.manageSuggestSubmit.labelSearch}" aria-label="#i18n{suggest.manageSuggestSubmit.labelSearch}">
+					</div>
+				</div>
+				<#if category_list?has_content>
+				<div class="col-6 col-md-auto">
+					<@select name='id_category_filter' id='quick_id_category_filter' default_value='${suggest_submit_category_selected}' items=[{'code': '-1', 'name': '#i18n{suggest.manageSuggestSubmit.labelAllCategories}'}] + category_list?filter(i -> i.code != '-1') params='aria-label="#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitCategory}"' />
+				</div>
+				</#if>
+				<div class="col-6 col-md-auto">
+					<@select name='id_suggest_submit_state' id='quick_id_suggest_submit_state' default_value='${suggest_submit_state_selected}' items=suggest_submit_state_list params='aria-label="#i18n{suggest.manageSuggestSubmit.labelSuggestSubmitState}"' />
+				</div>
+				<div class="col-auto d-flex gap-2">
+					<@button type='submit' buttonIcon='search' title='#i18n{suggest.manageSuggestSubmit.buttonSearch}' color='primary' hideTitle=['xs','sm'] />
+					<@button type='button' title='#i18n{suggest.manageSuggestSubmit.buttonMoreFilters}' buttonIcon='adjustments-horizontal' color='light' hideTitle=['xs','sm','md'] params='data-bs-toggle="modal" data-bs-target="#suggestSubmitFilterModal"' />
+				</div>
+			</@tform>
+			<@activeFiltersBar removeAllUrl=removeAllFiltersUrl>
 				<#if query?has_content>
 					<@activeFilter label='#i18n{suggest.manageSuggestSubmit.labelFilterQuery}' value=query removeUrl='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmit&id_suggest=${suggest.idSuggest}&query=' />
 				</#if>
@@ -81,7 +91,12 @@
 				</@tform>
 				<@paginationAdmin paginator=paginator combo=1 />
 			<#else>
-				<@empty title='#i18n{portal.util.labelNoItem}' iconName='message-off' actionTitle='#i18n{suggest.manageSuggestSubmit.buttonAddSuggestSubmit}' actionUrl='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=createSuggestSubmit&id_suggest=${suggest.idSuggest}' />
+				<#assign hasFilters = query?has_content || [suggest_submit_category_selected!-1, suggest_submit_type_selected!-1, suggest_submit_state_selected!-1, suggest_submit_report_selected!-1, suggest_submit_contains_comment_disable_selected!-1]?filter(v -> v != -1)?has_content />
+				<#if hasFilters>
+					<@empty title='#i18n{suggest.manageSuggestSubmit.labelNoResult}' iconName='search-off' actionTitle='#i18n{suggest.manageSuggestSubmit.buttonRemoveAllFilters}' actionUrl=removeAllFiltersUrl actionIcon='filter-off' />
+				<#else>
+					<@empty title='#i18n{portal.util.labelNoItem}' iconName='message-off' actionTitle='#i18n{suggest.manageSuggestSubmit.buttonAddSuggestSubmit}' actionUrl='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=createSuggestSubmit&id_suggest=${suggest.idSuggest}' />
+				</#if>
 			</#if>
 		</@suggestSubmitTabs>
 		<@tform id='suggest_export_form' action='jsp/admin/plugins/suggest/DoDownloadSuggestExport.jsp'><@input type='hidden' name='view' value='exportSuggestSubmit' /><@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' /></@tform>

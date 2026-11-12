@@ -5,38 +5,58 @@
 		<@pageHeader title='#i18n{suggest.manageAdvancedParameters.labelDefaultMessage}' />
 		<@advancedParametersTabs>
 			<@tform action='jsp/admin/plugins/suggest/ManageDefaultMessage.jsp'><@input type='hidden' name='action' value='modifyDefaultMessage' />
+				<@box>
+				<@boxHeader title='#i18n{suggest.modifySuggest.section.texts}' />
+				<@boxBody>
 				<@formGroup labelFor='libelle_contribution' labelKey='#i18n{suggest.manageDefaultMessage.labelLibelleContribution}' mandatory=true>
 					<@input type='text' name='libelle_contribution' id='libelle_contribution' value='${default_message.libelleContribution}' />
-				</@formGroup>
-				<@formGroup labelFor='unavailability_message' labelKey='#i18n{suggest.manageDefaultMessage.labelUnavailabilityMessage}' mandatory=true>
-					<@input type='textarea' name='unavailability_message' id='unavailability_message' richtext=true rows=5>${default_message.unavailabilityMessage}</@input>
 				</@formGroup>
 				<@formGroup labelFor='libelle_validate_button' labelKey='#i18n{suggest.manageDefaultMessage.labelLibelleValidateButton}' mandatory=true>
 					<@input type='text' name='libelle_validate_button' id='libelle_validate_button' value='${default_message.libelleValidateButton}' />
 				</@formGroup>
+				<@formGroup labelFor='unavailability_message' labelKey='#i18n{suggest.manageDefaultMessage.labelUnavailabilityMessage}' mandatory=true>
+					<@input type='textarea' name='unavailability_message' id='unavailability_message' richtext=true rows=5>${default_message.unavailabilityMessage}</@input>
+				</@formGroup>
+				</@boxBody>
+				</@box>
+				<@box>
+				<@boxHeader title='#i18n{suggest.manageDefaultMessage.sectionDisplay}' />
+				<@boxBody>
 				<@formGroup labelFor='number_suggest_submit_in_top_score' labelKey='#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitInTopScore}' mandatory=true>
-					<@input type='text' name='number_suggest_submit_in_top_score' id='number_suggest_submit_in_top_score' value='${default_message.numberSuggestSubmitInTopScore}' maxlength=10 />
+					<@input type='number' name='number_suggest_submit_in_top_score' id='number_suggest_submit_in_top_score' value='${default_message.numberSuggestSubmitInTopScore}' min=0 />
 				</@formGroup>
 				<@formGroup labelFor='number_suggest_submit_in_top_comment' labelKey='#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitInTopComment}' mandatory=true>
-					<@input type='text' name='number_suggest_submit_in_top_comment' id='number_suggest_submit_in_top_comment' value='${default_message.numberSuggestSubmitInTopComment}' maxlength=10 />
+					<@input type='number' name='number_suggest_submit_in_top_comment' id='number_suggest_submit_in_top_comment' value='${default_message.numberSuggestSubmitInTopComment}' min=0 />
 				</@formGroup>
 				<@formGroup labelFor='number_suggest_submit_caracters_shown' labelKey='#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitCaractersShown}' mandatory=true helpKey='#i18n{suggest.manageDefaultMessage.labelNumberSuggestSubmitCaractersShownComment}'>
-					<@input type='text' name='number_suggest_submit_caracters_shown' id='number_suggest_submit_caracters_shown' value='${default_message.numberSuggestSubmitCaractersShown}' maxlength=10 />
+					<@input type='number' name='number_suggest_submit_caracters_shown' id='number_suggest_submit_caracters_shown' value='${default_message.numberSuggestSubmitCaractersShown}' min=0 />
 				</@formGroup>
+				</@boxBody>
+				</@box>
+				<@box>
+				<@boxHeader title='#i18n{suggest.manageDefaultMessage.sectionComments}' />
+				<@boxBody>
 				<@formGroup labelFor='notification_new_comment_title' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewCommentTitle}' mandatory=true>
-					<@input type='textarea' name='notification_new_comment_title' id='notification_new_comment_title' rows=5>${default_message.notificationNewCommentTitle!}</@input>
+					<@input type='textarea' name='notification_new_comment_title' id='notification_new_comment_title' rows=2>${default_message.notificationNewCommentTitle!}</@input>
 				</@formGroup>
 				<@formGroup labelFor='notification_new_comment_body' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewCommentBody}' mandatory=true>
-					<@input type='textarea' name='notification_new_comment_body' id='notification_new_comment_body' rows=5>${default_message.notificationNewCommentBody!}</@input>
+					<@input type='textarea' name='notification_new_comment_body' id='notification_new_comment_body' rows=10 class='font-monospace small'>${default_message.notificationNewCommentBody!}</@input>
 				</@formGroup>
+				</@boxBody>
+				</@box>
+				<@box>
+				<@boxHeader title='#i18n{suggest.manageDefaultMessage.sectionSuggestSubmits}' />
+				<@boxBody>
 				<@formGroup labelFor='notification_new_suggest_submit_title' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewSuggestSubmitTitle}' mandatory=true>
-					<@input type='textarea' name='notification_new_suggest_submit_title' id='notification_new_suggest_submit_title' rows=5>${default_message.notificationNewSuggestSubmitTitle!}</@input>
+					<@input type='textarea' name='notification_new_suggest_submit_title' id='notification_new_suggest_submit_title' rows=2>${default_message.notificationNewSuggestSubmitTitle!}</@input>
 				</@formGroup>
 				<@formGroup labelFor='notification_new_suggest_submit_body' labelKey='#i18n{suggest.manageDefaultMessage.labelNotificationNewSuggestSubmitBody}' mandatory=true>
-					<@input type='textarea' name='notification_new_suggest_submit_body' id='notification_new_suggest_submit_body' rows=5>${default_message.notificationNewSuggestSubmitBody!}</@input>
+					<@input type='textarea' name='notification_new_suggest_submit_body' id='notification_new_suggest_submit_body' rows=10 class='font-monospace small'>${default_message.notificationNewSuggestSubmitBody!}</@input>
 				</@formGroup>
+				</@boxBody>
+				</@box>
 				<@formGroup>
-					<@button type='submit' name='save' title='#i18n{suggest.createSuggest.buttonSave}' buttonIcon='device-floppy' />
+					<@button type='submit' name='save' title='#i18n{suggest.createSuggest.buttonSave}' buttonIcon='device-floppy' color='primary' />
 				</@formGroup>
 			</@tform>
 	

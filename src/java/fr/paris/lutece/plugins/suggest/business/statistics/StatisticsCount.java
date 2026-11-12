@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.suggest.service.statistics;
+package fr.paris.lutece.plugins.suggest.business.statistics;
 
 import java.io.Serializable;
 import java.util.Date;

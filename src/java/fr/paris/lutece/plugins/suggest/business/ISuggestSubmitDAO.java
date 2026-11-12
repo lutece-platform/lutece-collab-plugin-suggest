@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.suggest.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -132,6 +133,49 @@ public interface ISuggestSubmitDAO
      *            The plugin
      */
     void storeSuggestSubmitOrder( int nNewOrder, int nId, Plugin plugin );
+
+    /**
+     * Returns the list order of the suggest submits of a suggest, pinned or not, by id, in their list order
+     *
+     * @param nIdSuggest
+     *            the id of the suggest
+     * @param bListPinned
+     *            true for the pinned suggest submits, false for the others
+     * @param plugin
+     *            the plugin
+     * @return the list order of each suggest submit, by id, in list order
+     */
+    Map<Integer, Integer> selectListOrders( int nIdSuggest, boolean bListPinned, Plugin plugin );
+
+    /**
+     * Shifts the list orders of a range of suggest submits and marks them as moved by storing them negative
+     *
+     * @param nIdSuggest
+     *            the id of the suggest
+     * @param bListPinned
+     *            true for the pinned suggest submits, false for the others
+     * @param nFirstOrder
+     *            the first list order of the range
+     * @param nLastOrder
+     *            the last list order of the range
+     * @param nDelta
+     *            the shift added to each list order
+     * @param plugin
+     *            the plugin
+     */
+    void shiftListOrders( int nIdSuggest, boolean bListPinned, int nFirstOrder, int nLastOrder, int nDelta, Plugin plugin );
+
+    /**
+     * Turns the list orders marked as moved back to positive
+     *
+     * @param nIdSuggest
+     *            the id of the suggest
+     * @param bListPinned
+     *            true for the pinned suggest submits, false for the others
+     * @param plugin
+     *            the plugin
+     */
+    void restoreShiftedListOrders( int nIdSuggest, boolean bListPinned, Plugin plugin );
 
     /**
      * Calculate the new max order in a list
