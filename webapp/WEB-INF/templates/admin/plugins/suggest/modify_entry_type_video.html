@@ -1,6 +1,9 @@
+<#assign backUrl = 'jsp/admin/plugins/suggest/ManageSuggest.jsp?view=modifySuggest&id_suggest=${entry.suggest.idSuggest}#panel-1' />
 <@pageContainer>
 	<@pageColumn>
-		<@pageHeader title='#i18n{suggest.modifyEntry.titleQuestion}: "${entry.suggest.title}" &gt; #i18n{suggest.createEntry.labelType}: ${entry.entryType.title}' />
+		<@pageHeader title='#i18n{suggest.modifyEntry.titleQuestion}' description='${entry.entryType.title} · ${entry.suggest.title}'>
+			<@aButton href=backUrl buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' hideTitle=['xs','sm'] />
+		</@pageHeader>
 		<@row>
 			<@columns>
 				<@box>
@@ -34,7 +37,7 @@
 								<#else>
 									<#assign value = '' />
 								</#if>
-								<@input type='text' name='width' id='width' value=value />
+								<@input type='number' name='width' id='width' value=value min=1 />
 							</@formGroup>
 					
 							<@formGroup labelFor='height' labelKey='#i18n{suggest.createEntryVideo.labelHeight}'>
@@ -43,7 +46,7 @@
 								<#else>
 									<#assign value = '' />
 								</#if>
-								<@input type='text' name='height' id='height' value=value />
+								<@input type='number' name='height' id='height' value=value min=1 />
 							</@formGroup>
 					
 							<@formGroup labelFor='autostart' labelKey='#i18n{suggest.createEntryVideo.labelAutostart}'>
@@ -92,7 +95,7 @@
 					
 							<@formGroup>
 								<@button type='submit' name='save' buttonIcon='check' title='#i18n{suggest.createEntry.buttonSave}' />
-								<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=modifySuggest&plugin_name=suggest&amp;id_suggest=${entry.suggest.idSuggest}' buttonIcon='x' title='#i18n{suggest.modifyEntry.buttonCancel}' color='light' />
+								<@aButton href=backUrl buttonIcon='x' title='#i18n{suggest.modifyEntry.buttonCancel}' color='light' />
 							</@formGroup>
 		                </@tform>
 					</@boxBody>

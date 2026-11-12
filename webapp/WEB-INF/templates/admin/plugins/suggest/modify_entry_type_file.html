@@ -1,6 +1,9 @@
+<#assign backUrl = 'jsp/admin/plugins/suggest/ManageSuggest.jsp?view=modifySuggest&id_suggest=${entry.suggest.idSuggest}#panel-1' />
 <@pageContainer>
 	<@pageColumn>
-		<@pageHeader title='#i18n{suggest.modifyEntry.titleQuestion}: "${entry.suggest.title}" &gt; #i18n{suggest.createEntry.labelType} :${entry.entryType.title}' />
+		<@pageHeader title='#i18n{suggest.modifyEntry.titleQuestion}' description='${entry.entryType.title} · ${entry.suggest.title}'>
+			<@aButton href=backUrl buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' hideTitle=['xs','sm'] />
+		</@pageHeader>
 		<@row>
 			<@columns>
 				<@box>
@@ -33,7 +36,7 @@
 							</@formGroup>
 							<@formGroup>
 								<@button type='submit' name='save' title='#i18n{suggest.createEntry.buttonSave}' buttonIcon='device-floppy' />
-								<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=modifySuggest&plugin_name=suggest&amp;id_suggest=${entry.suggest.idSuggest}' buttonIcon='x' title='#i18n{suggest.createEntry.buttonCancel}' color='light' />
+								<@aButton href=backUrl buttonIcon='x' title='#i18n{suggest.createEntry.buttonCancel}' color='light' />
 							</@formGroup>
 						</@tform>
 					</@boxBody>

@@ -60,6 +60,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import fr.paris.lutece.portal.service.upload.MultipartItem;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -892,8 +893,7 @@ public class SuggestJspBean extends MVCAdminJspBean
             throw new AccessDeniedException( "Access denied" );
         }
 
-        String [ ] selectedSuggestSubmit = request.getParameterValues( PARAMETER_SELECTED_SUGGEST_SUBMIT );
-        _searchFields.setSelectedSuggestSubmit( ( selectedSuggestSubmit != null ) ? Arrays.asList( selectedSuggestSubmit ) : new ArrayList<>( ) );
+        _searchFields.setSelectedSuggestSubmit( Arrays.asList( ArrayUtils.nullToEmpty( request.getParameterValues( PARAMETER_SELECTED_SUGGEST_SUBMIT ) ) ) );
 
         ISuggestAction action = PluginActionManager.getPluginAction( request, ISuggestAction.class );
 
@@ -1520,7 +1520,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     public String getConfirmMassChangeSuggestSubmitCategory( HttpServletRequest request ) throws AccessDeniedException
     {
         // fill the selected records
-        String [ ] selectedSuggestSubmit = request.getParameterValues( PARAMETER_SELECTED_SUGGEST_SUBMIT );
+        String [ ] selectedSuggestSubmit = ArrayUtils.nullToEmpty( request.getParameterValues( PARAMETER_SELECTED_SUGGEST_SUBMIT ) );
         int nIdSuggestSubmit;
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         int nIdCategory = SuggestUtils.getIntegerParameter( strIdCategory );
@@ -1573,7 +1573,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     public String doMassChangeSuggestSubmitCategory( HttpServletRequest request ) throws AccessDeniedException
     {
         // fill the selected records
-        String [ ] selectedSuggestSubmit = request.getParameterValues( PARAMETER_SELECTED_SUGGEST_SUBMIT );
+        String [ ] selectedSuggestSubmit = ArrayUtils.nullToEmpty( request.getParameterValues( PARAMETER_SELECTED_SUGGEST_SUBMIT ) );
         int nIdSuggestSubmit;
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         int nIdCategory = SuggestUtils.getIntegerParameter( strIdCategory );
@@ -1601,6 +1601,8 @@ public class SuggestJspBean extends MVCAdminJspBean
             categorySelected = CategoryHome.findByPrimaryKey( nIdCategory, getPlugin( ) );
         }
 
+        Map<Integer, Suggest> mapSuggest = new HashMap<>( );
+
         // update all suggest submit selected
         for ( String strIdSuggestSubmittoUpdate : selectedSuggestSubmit )
         {
@@ -1609,8 +1611,14 @@ public class SuggestJspBean extends MVCAdminJspBean
                 nIdSuggestSubmit = SuggestUtils.getIntegerParameter( strIdSuggestSubmittoUpdate );
 
                 SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
-                suggestSubmit.setCategory( categorySelected );
-                _suggestSubmitService.update( suggestSubmit, getPlugin( ) );
+
+                Suggest suggest = mapSuggest.computeIfAbsent( suggestSubmit.getSuggest( ).getIdSuggest( ), nId -> SuggestHome.findByPrimaryKey( nId, getPlugin( ) ) );
+
+                if ( SuggestUtils.isCategoryAllowed( suggest, nIdCategory ) )
+                {
+                    suggestSubmit.setCategory( categorySelected );
+                    _suggestSubmitService.update( suggestSubmit, getPlugin( ) );
+                }
             }
         }
 

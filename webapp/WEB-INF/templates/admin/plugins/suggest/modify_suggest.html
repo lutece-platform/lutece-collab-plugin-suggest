@@ -85,26 +85,25 @@
 							</@boxHeader>
 							<@boxBody>
 								<#if entry_list?has_content>
-									<@manageFeature>
+									<@manageFeature layout='list' class='mt-0 shadow-none'>
 										<#list entry_list as entry>
 										<@manageFeatureItem>
 											<@manageFeatureItemColumn flex=false>
 												<@p class='fw-bold mb-0'>${entry.title!}</@p>
 											</@manageFeatureItemColumn>
 											<@manageFeatureItemColumn auto=true flex=false valign='top'>
-												<@p class='text-secondary small mb-0'>#i18n{suggest.modifySuggest.manageEnter.rowType}</@p>
-												${entry.entryType.title!}
+												<@span class='text-secondary small'>${entry.entryType.title!}</@span>
 											</@manageFeatureItemColumn>
-											<@manageFeatureItemColumn auto=true align='end'>
-												<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=modifyEntry&id_entry=${entry.idEntry}' title='#i18n{portal.util.labelModify}' buttonIcon='edit' size='sm' class='me-1' hideTitle=['all'] />
+											<@manageFeatureItemColumn auto=true align='end' class='gap-1'>
+												<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=modifyEntry&id_entry=${entry.idEntry}' title='#i18n{portal.util.labelModify}' buttonIcon='edit' color='ghost-secondary' size='sm' hideTitle=['all'] />
 												<#if id_entry_first_in_the_list!=entry.idEntry>
-													<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=moveUpEntry&id_entry=${entry.idEntry}#panel1"' title='#i18n{suggest.modifySuggest.manageEnter.titleMoveUp}' buttonIcon='chevron-up' color='light' size='sm' class='me-1' hideTitle=['all'] />
+													<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=moveUpEntry&id_entry=${entry.idEntry}#panel-1"' title='#i18n{suggest.modifySuggest.manageEnter.titleMoveUp}' buttonIcon='chevron-up' color='ghost-secondary' size='sm' hideTitle=['all'] />
 												</#if>
 												<#if id_entry_last_in_the_list!=entry.idEntry>
-													<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=moveDownEntry&id_entry=${entry.idEntry}#panel1"' title='#i18n{suggest.modifySuggest.manageEnter.titleMoveDown}' buttonIcon='chevron-down' color='light' size='sm' class='me-1' hideTitle=['all'] />
+													<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=moveDownEntry&id_entry=${entry.idEntry}#panel-1"' title='#i18n{suggest.modifySuggest.manageEnter.titleMoveDown}' buttonIcon='chevron-down' color='ghost-secondary' size='sm' hideTitle=['all'] />
 												</#if>
-												<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=copyEntry&id_entry=${entry.idEntry}#panel1"' title='#i18n{suggest.modifySuggest.manageEnter.titleCopy}' buttonIcon='copy' color='light' size='sm' class='me-1' hideTitle=['all'] />
-												<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=confirmRemoveEntry&id_entry=${entry.idEntry}#panel1' title='#i18n{suggest.modifySuggest.manageEnter.titleDelete}' buttonIcon='trash' color='danger' size='sm' hideTitle=['all'] />
+												<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=copyEntry&id_entry=${entry.idEntry}#panel-1"' title='#i18n{suggest.modifySuggest.manageEnter.titleCopy}' buttonIcon='copy' color='ghost-secondary' size='sm' hideTitle=['all'] />
+												<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=confirmRemoveEntry&id_entry=${entry.idEntry}#panel-1' title='#i18n{suggest.modifySuggest.manageEnter.titleDelete}' buttonIcon='trash' color='ghost-danger' size='sm' hideTitle=['all'] />
 											</@manageFeatureItemColumn>
 										</@manageFeatureItem>
 										</#list>
@@ -127,17 +126,14 @@
 							</@boxHeader>
 							<@boxBody>
 								<#if suggest.categories?? && suggest.categories?has_content>
-									<@manageFeature>
+									<@manageFeature layout='list' class='mt-0 shadow-none'>
 										<#list suggest.categories as category>
 										<@manageFeatureItem>
-											<@manageFeatureItemColumn auto=true>
-												<@tag color='' class='p-2' params='style="background-color:${category.color!}" aria-hidden="true"'> </@tag>
-											</@manageFeatureItemColumn>
 											<@manageFeatureItemColumn>
-												<@p class='fw-bold mb-0'>${category.title!}</@p>
+												<@colorStatus color=category.color!'' label=category.title!'' />
 											</@manageFeatureItemColumn>
-											<@manageFeatureItemColumn auto=true align='end'>
-												<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=removeCategory&id_suggest=${suggest.idSuggest}&id_category=${category.idCategory}#panel2"' title='#i18n{suggest.modifySuggest.titleDeleteCategory}' buttonIcon='trash' color='danger' size='sm' hideTitle=['all'] />
+											<@manageFeatureItemColumn auto=true align='end' class='gap-1'>
+												<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=removeCategory&id_suggest=${suggest.idSuggest}&id_category=${category.idCategory}#panel-2"' title='#i18n{suggest.modifySuggest.titleDeleteCategory}' buttonIcon='trash' color='ghost-danger' size='sm' hideTitle=['all'] />
 											</@manageFeatureItemColumn>
 										</@manageFeatureItem>
 										</#list>
@@ -160,17 +156,14 @@
 							</@boxHeader>
 							<@boxBody>
 								<#if suggest.suggestSubmitTypes?? && suggest.suggestSubmitTypes?has_content>
-									<@manageFeature>
+									<@manageFeature layout='list' class='mt-0 shadow-none'>
 										<#list suggest.suggestSubmitTypes as suggestSubmitType>
 										<@manageFeatureItem>
-											<@manageFeatureItemColumn auto=true>
-												<@tag color='' class='p-2' params='style="background-color:${suggestSubmitType.color!}" aria-hidden="true"'> </@tag>
-											</@manageFeatureItemColumn>
 											<@manageFeatureItemColumn>
-												<@p class='fw-bold mb-0'>${suggestSubmitType.name!}</@p>
+												<@colorStatus color=suggestSubmitType.color!'' label=suggestSubmitType.name!'' />
 											</@manageFeatureItemColumn>
-											<@manageFeatureItemColumn auto=true align='end'>
-												<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=removeSuggestSubmitType&id_suggest=${suggest.idSuggest}&id_suggest_submit_type=${suggestSubmitType.idType}#panel3"' title='#i18n{suggest.modifySuggest.titleDeleteSuggestSubmitType}' buttonIcon='trash' color='danger' size='sm' hideTitle=['all'] />
+											<@manageFeatureItemColumn auto=true align='end' class='gap-1'>
+												<@button type='submit' formId='suggest_row_action_form' params='formaction="jsp/admin/plugins/suggest/ManageSuggest.jsp?action=removeSuggestSubmitType&id_suggest=${suggest.idSuggest}&id_suggest_submit_type=${suggestSubmitType.idType}#panel-3"' title='#i18n{suggest.modifySuggest.titleDeleteSuggestSubmitType}' buttonIcon='trash' color='ghost-danger' size='sm' hideTitle=['all'] />
 											</@manageFeatureItemColumn>
 										</@manageFeatureItem>
 										</#list>
@@ -441,8 +434,8 @@
 	</@pageColumn>
 </@pageContainer>
 <@tform id='create_entry_form' action='jsp/admin/plugins/suggest/ManageSuggest.jsp'><@input type='hidden' name='view' value='createEntry' /></@tform>
-<@tform id='insert_category_form' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#panel2'><@input type='hidden' name='action' value='insertCategory' /><@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' /><@input type='hidden' name='panel' value='panel2' /></@tform>
-<@tform id='insert_suggest_submit_type_form' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#panel3'><@input type='hidden' name='action' value='insertSuggestSubmitType' /><@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' /><@input type='hidden' name='panel' value='panel3' /></@tform>
+<@tform id='insert_category_form' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#panel-2'><@input type='hidden' name='action' value='insertCategory' /><@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' /><@input type='hidden' name='panel' value='panel2' /></@tform>
+<@tform id='insert_suggest_submit_type_form' action='jsp/admin/plugins/suggest/ManageSuggest.jsp#panel-3'><@input type='hidden' name='action' value='insertSuggestSubmitType' /><@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' /><@input type='hidden' name='panel' value='panel3' /></@tform>
 <@tform id='suggest_row_action_form' action='jsp/admin/plugins/suggest/ManageSuggest.jsp'></@tform>
 <#include "/admin/util/editor/editor.html" />
 <@initEditor />

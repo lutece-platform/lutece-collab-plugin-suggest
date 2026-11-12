@@ -1,6 +1,9 @@
+<#assign backUrl = 'jsp/admin/plugins/suggest/ManageSuggest.jsp?view=modifySuggest&id_suggest=${entry.suggest.idSuggest}#panel-1' />
 <@pageContainer>
 	<@pageColumn>
-		<@pageHeader title='#i18n{suggest.modifyEntry.titleQuestion}: "${entry.suggest.title}" &gt; #i18n{suggest.createEntry.labelType} :${entry.entryType.title}' />
+		<@pageHeader title='#i18n{suggest.modifyEntry.titleQuestion}' description='${entry.entryType.title} · ${entry.suggest.title}'>
+			<@aButton href=backUrl buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' hideTitle=['xs','sm'] />
+		</@pageHeader>
 
 		<@row>
 			<@columns>
@@ -32,7 +35,7 @@
 								<#else>
 									<#assign value = '' />
 								</#if>
-								<@input type='text' name='width' id='width' value=value />
+								<@input type='number' name='width' id='width' value=value min=1 />
 							</@formGroup>
 							<@formGroup labelFor='height' labelKey='#i18n{suggest.createEntry.labelHeight}' mandatory=true>
 								<#if entry.height!=-1>
@@ -40,7 +43,7 @@
 								<#else>
 									<#assign value = '' />
 								</#if>
-								<@input type='text' name='height' id='height' value=value />
+								<@input type='number' name='height' id='height' value=value min=1 />
 							</@formGroup>
 							<@formGroup labelFor='max_size_enter' labelKey='#i18n{suggest.createEntry.labelMaxSizeEnter}'>
 								<#if entry.maxSizeEnter!=-1>
@@ -55,7 +58,7 @@
 							</@formGroup>
 							<@formGroup>
 								<@button type='submit' name='save' title='#i18n{suggest.modifyEntry.buttonSave}' buttonIcon='device-floppy' />
-								<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=modifySuggest&plugin_name=suggest&amp;id_suggest=${entry.suggest.idSuggest}' title='#i18n{suggest.modifyEntry.buttonCancel}' buttonIcon='x' color='light' />
+								<@aButton href=backUrl title='#i18n{suggest.modifyEntry.buttonCancel}' buttonIcon='x' color='light' />
 							</@formGroup>
 						</@tform>
 					</@boxBody>

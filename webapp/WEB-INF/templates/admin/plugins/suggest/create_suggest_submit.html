@@ -1,6 +1,9 @@
+<#assign backUrl = 'jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmit&id_suggest=${suggest.idSuggest}' />
 <@pageContainer>
 	<@pageColumn>
-		<@pageHeader title='#i18n{suggest.suggestForm.title}' />
+		<@pageHeader title='#i18n{suggest.manageSuggestSubmit.buttonAddSuggestSubmit}'>
+			<@aButton href=backUrl buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' hideTitle=['xs','sm'] />
+		</@pageHeader>
 		<@messages errors=errors![] />
 		<@row>
 			<@columns>
@@ -35,7 +38,7 @@
 							</@formGroup>
 							<@formGroup>
 								<@button type='submit' name='submit' title='&nbsp;${suggest.libelleValidateButton}' buttonIcon='check' />
-								<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp' title='#i18n{suggest.createSuggest.buttonCancel}' buttonIcon='x' color='light' />
+								<@aButton href=backUrl title='#i18n{suggest.createSuggest.buttonCancel}' buttonIcon='x' color='light' />
 							</@formGroup>
 						</@tform>
 					</@boxBody>
@@ -43,6 +46,5 @@
 			</@columns>
 		</@row>
 
-		</fieldset>
 	</@pageColumn>
 </@pageContainer>

@@ -1,6 +1,9 @@
+<#assign backUrl = 'jsp/admin/plugins/suggest/ManageSuggest.jsp?view=modifySuggest&id_suggest=${entry.suggest.idSuggest}#panel-1' />
 <@pageContainer>
 	<@pageColumn>
-		<@pageHeader title='#i18n{suggest.createEntry.titleQuestion}: "${entry.suggest.title}" &gt; #i18n{suggest.createEntry.labelType}: ${entry.entryType.title}' />
+		<@pageHeader title='#i18n{suggest.createEntry.titleQuestion}' description='${entry.entryType.title} · ${entry.suggest.title}'>
+			<@aButton href=backUrl buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' hideTitle=['xs','sm'] />
+		</@pageHeader>
 		<@row>
 			<@columns>
 				<@box>
@@ -20,17 +23,17 @@
 								<@checkBox orientation='switch' labelKey='#i18n{suggest.createEntry.labelMandatory}' id='mandatory' name='mandatory' value='1' />
 							</@formGroup>
 							<@formGroup labelFor='width' labelKey='#i18n{suggest.createEntryImg.labelWidth}'>
-								<@input type='text' name='width' id='width' value='' />
+								<@input type='number' name='width' id='width' value='' min=1 />
 							</@formGroup>
 							<@formGroup labelFor='height' labelKey='#i18n{suggest.createEntryImg.labelHeight}'>
-								<@input type='text' name='height' id='height' value='' />
+								<@input type='number' name='height' id='height' value='' min=1 />
 							</@formGroup>
 							<@formGroup helpKey='#i18n{suggest.createSuggest.labelShowInSuggestSubmitListComment}'>
 								<@checkBox orientation='switch' labelKey='#i18n{suggest.createEntry.labelShowInSuggestSubmitList}' id='show_in_suggest_submit_list' name='show_in_suggest_submit_list' value='1' checked=true />
 							</@formGroup>
 							<@formGroup>
 								<@button type='submit' name='save' title='#i18n{suggest.createEntry.buttonSave}' buttonIcon='device-floppy' />
-								<@aButton href='jsp/admin/plugins/suggest/ManageSuggest.jsp?view=modifySuggest&plugin_name=suggest&amp;id_suggest=${entry.suggest.idSuggest}' title='#i18n{suggest.createEntry.buttonCancel}' buttonIcon='x' color='light' />
+								<@aButton href=backUrl title='#i18n{suggest.createEntry.buttonCancel}' buttonIcon='x' color='light' />
 							</@formGroup>
 						</@tform>
 					</@boxBody>

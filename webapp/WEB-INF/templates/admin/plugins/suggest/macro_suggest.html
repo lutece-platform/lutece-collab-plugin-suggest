@@ -1,2 +1,4 @@
 <#-- Prints a stored number, or nothing when it is unset (-1 or absent) -->
 <#macro numberValue value=''><#if value?is_number && value != -1>${value?c}</#if></#macro>
+<#-- Prints a label behind a dot of the given colour, grey when the colour is unset -->
+<#macro colorStatus color='' label=''><span class="status" style="--tblr-status-color:${color?has_content?then(color, '#667382')}"><span class="status-dot"></span>${label}</span></#macro>
