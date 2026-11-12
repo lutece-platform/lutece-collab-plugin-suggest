@@ -39,13 +39,14 @@ import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
 import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
 import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.search.SuggestIndexer;
-import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * DocumentSearchService
@@ -59,8 +60,6 @@ public class SuggestSearchService
     @Inject
     private ISuggestSubmitService _suggestSubmitService;
 
-    private static final String REGEX_ID = "^[\\d]+$";
-
 
     /**
      * Return search results
@@ -71,35 +70,22 @@ public class SuggestSearchService
      *            The filter
      * @param plugin
      *            The plugin
-     * @return Results as a collection of {@link SuggestSubmit}
+     * @return the ids of the suggest submits matching the filter and, when a query is given, found by the search engine, in the order of the filter
      */
     public List<Integer> getSearchResults( String strQuery, SubmitFilter filter, Plugin plugin )
     {
-        List<Integer> listSuggestSubmitResult = new ArrayList<>( );
-        List<Integer> suggestSubmitListId = _suggestSubmitService.getSuggestSubmitListId( filter, plugin );
-        List<SuggestSearchItem> listSearchesults = StringUtils.isEmpty( strQuery ) ? null : _engine.getSearchResults( strQuery, filter );
+        List<Integer> listIdSuggestSubmit = _suggestSubmitService.getSuggestSubmitListId( filter, plugin );
 
-        if ( StringUtils.isEmpty( strQuery ) )
+        if ( StringUtils.isEmpty( strQuery ) || ( listIdSuggestSubmit == null ) )
         {
-            listSuggestSubmitResult = suggestSubmitListId;
+            return ( listIdSuggestSubmit == null ) ? new ArrayList<>( ) : listIdSuggestSubmit;
         }
-        else
-            if ( suggestSubmitListId != null )
-            {
-                for ( Integer nSuggestSubmitId : suggestSubmitListId )
-                {
-                    for ( SuggestSearchItem searchResult : listSearchesults )
-                    {
-                        if ( ( searchResult.getType( ) != null ) && ( searchResult.getId( ) != null )
-                                && searchResult.getType( ).equals( SuggestIndexer.INDEX_TYPE_SUGGEST ) && searchResult.getIdSuggestSubmit( ).matches( REGEX_ID )
-                                && ( Integer.parseInt( searchResult.getIdSuggestSubmit( ) ) == nSuggestSubmitId ) )
-                        {
-                            listSuggestSubmitResult.add( SuggestUtils.getIntegerParameter( searchResult.getIdSuggestSubmit( ) ) );
-                        }
-                    }
-                }
-            }
 
-        return listSuggestSubmitResult;
+        Set<Integer> setIdFound = _engine.getSearchResults( strQuery, filter ).stream( )
+                .filter( item -> SuggestIndexer.INDEX_TYPE_SUGGEST.equals( item.getType( ) ) && ( item.getId( ) != null )
+                        && StringUtils.isNumeric( item.getIdSuggestSubmit( ) ) )
+                .map( item -> Integer.valueOf( item.getIdSuggestSubmit( ) ) ).collect( Collectors.toSet( ) );
+
+        return listIdSuggestSubmit.stream( ).filter( setIdFound::contains ).collect( Collectors.toList( ) );
     }
 }

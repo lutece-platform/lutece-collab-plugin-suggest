@@ -381,6 +381,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String MARK_DEPARTMENT_STATISTICS = "department_statistics";
     private static final String MARK_PERIOD_STATISTICS = "period_statistics";
     private static final String MARK_PERIOD_WEEKLY = "period_weekly";
+    private static final String MARK_EXPORT_STARTED = "export_started";
     private static final String MARK_MOST_COMMENTED = "most_commented";
     private static final String MARK_CATEGORY_STATISTICS_TITLE = "title";
     private static final String MARK_CATEGORY_STATISTICS_COLOR = "color";
@@ -424,6 +425,7 @@ public class SuggestJspBean extends MVCAdminJspBean
     // parameters form
     private static final String PARAMETER_ID_SUGGEST = "id_suggest";
     private static final String PARAMETER_PANEL = "panel";
+    private static final String PARAMETER_EXPORT = "export";
 
     private static final String PARAMETER_ID_SUGGEST_SUBMIT = "id_suggest_submit";
     private static final String PARAMETER_ID_COMMENT_SUBMIT = "id_comment_submit";
@@ -833,6 +835,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         }
 
         model.put( MARK_SUGGEST_ACTIONS, PluginActionManager.getListPluginAction( ISuggestAction.class ) );
+        model.put( MARK_EXPORT_STARTED, request.getParameter( PARAMETER_EXPORT ) != null );
 
         return getPage( PROPERTY_MANAGE_SUGGEST_SUBMIT_PAGE_TITLE, TEMPLATE_MANAGE_SUGGEST_SUBMIT );
     }

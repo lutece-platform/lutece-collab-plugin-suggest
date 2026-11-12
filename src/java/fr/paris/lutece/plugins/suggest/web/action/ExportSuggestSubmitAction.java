@@ -37,13 +37,8 @@ import fr.paris.lutece.api.user.User;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.ApplicationScoped;
-import fr.paris.lutece.plugins.suggest.business.CommentSubmit;
 import fr.paris.lutece.plugins.suggest.business.Suggest;
 import fr.paris.lutece.plugins.suggest.business.SuggestHome;
-import fr.paris.lutece.plugins.suggest.business.SuggestSubmit;
-import fr.paris.lutece.plugins.suggest.business.EntryFilter;
-import fr.paris.lutece.plugins.suggest.business.EntryHome;
-import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
 import fr.paris.lutece.plugins.suggest.service.ICommentSubmitService;
 import fr.paris.lutece.plugins.suggest.service.ISuggestSubmitService;
 import fr.paris.lutece.plugins.suggest.service.SuggestJsonExportService;
@@ -63,11 +58,15 @@ import fr.paris.lutece.portal.web.pluginaction.AbstractPluginAction;
 import fr.paris.lutece.portal.web.pluginaction.DefaultPluginActionResult;
 import fr.paris.lutece.portal.web.pluginaction.IPluginActionResult;
 
+import fr.paris.lutece.plugins.filegenerator.service.TemporaryFileGeneratorService;
+import fr.paris.lutece.plugins.suggest.service.export.SuggestExportFileGenerator;
+import fr.paris.lutece.portal.service.util.AppPathService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -92,14 +91,20 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
     @Inject
     private SuggestJsonExportService _suggestJsonExportService;
 
+    @Inject
+    private TemporaryFileGeneratorService _temporaryFileGeneratorService;
+
     private static final String ACTION_NAME = "Export Suggest JSON";
     private static final String MESSAGE_YOU_ARE_NOT_ALLOWED_TO_DOWLOAD_THIS_FILE = "suggest.message.youAreNotAllowedToDownloadFile";
     private static final String MESSAGE_ERROR_DURING_DOWNLOAD_FILE = "suggest.message.errorDuringDownloadFile";
     private static final String PARAMETER_BUTTON_EXPORT_ALL = "export_search_all";
     private static final String PARAMETER_BUTTON_EXPORT_SEARCH = "export_search_result";
     private static final String PARAMETER_ID_SUGGEST = "id_suggest";
+    private static final String MESSAGE_EXPORT_DESCRIPTION = "suggest.export.description";
+    private static final String PROPERTY_ASYNCHRONOUS_THRESHOLD = "suggest.export.asynchronous.threshold";
+    private static final int DEFAULT_ASYNCHRONOUS_THRESHOLD = 1000;
+    private static final String JSP_MANAGE_SUGGEST_SUBMIT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=manageSuggestSubmit&export=started&id_suggest=";
     private static final String EXPORT_EXTENSION = ".json";
-    private static final String CONSTANT_MIME_TYPE_JSON = "application/json";
 
     /**
      * {@inheritDoc}
@@ -155,30 +160,28 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
             throw new AccessDeniedException( I18nService.getLocalizedString( MESSAGE_YOU_ARE_NOT_ALLOWED_TO_DOWLOAD_THIS_FILE, request.getLocale( ) ) );
         }
 
-        EntryFilter entryfilter = new EntryFilter( );
-        entryfilter.setIdSuggest( suggest.getIdSuggest( ) );
-        suggest.setEntries( EntryHome.getEntryList( entryfilter, plugin ) );
-
         List<Integer> listIdSuggestSubmit = _suggestSubmitService.getSuggestSubmitListId( SuggestUtils.getSuggestSubmitFilter( searchFields ), plugin );
-        List<SuggestSubmit> listSuggestSubmit = new ArrayList<>( listIdSuggestSubmit.size( ) );
-        SubmitFilter commentFilter = new SubmitFilter( );
+        boolean bAsynchronous = listIdSuggestSubmit.size( ) > AppPropertiesService.getPropertyInt( PROPERTY_ASYNCHRONOUS_THRESHOLD, DEFAULT_ASYNCHRONOUS_THRESHOLD );
+        String strDescription = I18nService.getLocalizedString( MESSAGE_EXPORT_DESCRIPTION, new Object [ ] {
+                suggest.getTitle( ), listIdSuggestSubmit.size( )
+        }, adminUser.getLocale( ) );
+        SuggestExportFileGenerator generator = new SuggestExportFileGenerator( suggest, listIdSuggestSubmit, strDescription, bAsynchronous, plugin,
+                _suggestSubmitService, _commentSubmitService, _suggestJsonExportService );
 
-        for ( Integer nIdSuggestSubmit : listIdSuggestSubmit )
+        if ( bAsynchronous )
         {
-            SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, true, plugin );
-            commentFilter.setIdSuggestSubmit( nIdSuggestSubmit );
-            List<CommentSubmit> listCommentSubmit = _commentSubmitService.getCommentSubmitList( commentFilter, plugin );
-            suggestSubmit.setComments( listCommentSubmit );
-            suggestSubmit.setSuggest( suggest );
-            listSuggestSubmit.add( suggestSubmit );
+            _temporaryFileGeneratorService.generateFile( generator, adminUser );
+            result.setRedirect( AppPathService.getBaseUrl( request ) + JSP_MANAGE_SUGGEST_SUBMIT + suggest.getIdSuggest( ) );
+
+            return result;
         }
 
         try
         {
-            byte [ ] byteFileOutPut = _suggestJsonExportService.export( suggest, listSuggestSubmit ).getBytes( StandardCharsets.UTF_8 );
+            byte [ ] byteFileOutPut = generator.generateJson( ).getBytes( StandardCharsets.UTF_8 );
 
             SuggestUtils.addHeaderResponse( request, response, suggest.getTitle( ) + EXPORT_EXTENSION );
-            response.setContentType( CONSTANT_MIME_TYPE_JSON );
+            response.setContentType( SuggestExportFileGenerator.MIME_TYPE_JSON );
             response.setCharacterEncoding( StandardCharsets.UTF_8.name( ) );
             response.setContentLength( byteFileOutPut.length );
 

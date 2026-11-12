@@ -35,6 +35,12 @@
 			</@modalFooter>
 		</@modal>
 		<@suggestSubmitTabs active='list'>
+			<#if export_started!false>
+				<@alert color='info' iconTitle='file-export'>
+					#i18n{suggest.manageSuggestSubmit.labelExportStarted}
+					<@link href='jsp/admin/plugins/filegenerator/ManageMyFiles.jsp' class='alert-link'>#i18n{suggest.manageSuggestSubmit.labelExportFiles}</@link>
+				</@alert>
+			</#if>
 			<@tform action='jsp/admin/plugins/suggest/ManageSuggest.jsp' id='quick_filter' class='row g-2 align-items-center mb-3' params='role="search"'>
 				<@input type='hidden' name='view' value='manageSuggestSubmit' />
 				<@input type='hidden' name='id_suggest' value='${suggest.idSuggest}' />
