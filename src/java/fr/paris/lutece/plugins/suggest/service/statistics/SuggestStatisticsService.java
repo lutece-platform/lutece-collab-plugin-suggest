@@ -65,7 +65,7 @@ public class SuggestStatisticsService
      * Counts the suggest submits of each state
      *
      * @param filter
-     *            the suggest, period, category and type counted
+     *            the suggest, period, category, type and department counted
      * @param plugin
      *            the plugin
      * @return the number of suggest submits by state, the states without any left out
@@ -79,7 +79,7 @@ public class SuggestStatisticsService
      * Sums the votes, the authors and the published comments of the published suggest submits
      *
      * @param filter
-     *            the suggest, period, category and type counted
+     *            the suggest, period, category, type and department counted
      * @param plugin
      *            the plugin
      * @return the totals
@@ -93,7 +93,7 @@ public class SuggestStatisticsService
      * Counts the published suggest submits of each department of their authors, the largest first
      *
      * @param filter
-     *            the suggest, period, category and type counted
+     *            the suggest, period, category, type and department counted
      * @param plugin
      *            the plugin
      * @return one count per department, labelled null for the authors whose department is unknown
@@ -107,7 +107,7 @@ public class SuggestStatisticsService
      * Counts the published suggest submits of each category
      *
      * @param filter
-     *            the suggest, period, category and type counted
+     *            the suggest, period, category, type and department counted
      * @param plugin
      *            the plugin
      * @return the number of published suggest submits by category key, the categories without any left out
@@ -121,7 +121,7 @@ public class SuggestStatisticsService
      * Counts the suggest submits deposited each day, whatever their state
      *
      * @param filter
-     *            the suggest, period, category and type counted
+     *            the suggest, period, category, type and department counted
      * @param plugin
      *            the plugin
      * @return the number of suggest submits by day, the oldest first, the days without any left out

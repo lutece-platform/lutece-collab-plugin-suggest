@@ -45,6 +45,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -76,6 +77,8 @@ import fr.paris.lutece.plugins.suggest.business.VoteType;
 import fr.paris.lutece.plugins.suggest.business.VoteTypeHome;
 import fr.paris.lutece.plugins.suggest.service.ISuggestUserInfoService;
 import fr.paris.lutece.plugins.suggest.service.SuggestService;
+import fr.paris.lutece.plugins.suggest.service.statistics.SuggestStatisticsService;
+import fr.paris.lutece.plugins.suggest.business.statistics.StatisticsCount;
 import fr.paris.lutece.plugins.suggest.service.SuggestSubmitAttachmentService;
 import fr.paris.lutece.plugins.suggest.service.SuggestSubmitComplementService;
 import fr.paris.lutece.plugins.suggest.service.upload.SuggestAsynchronousUploadHandler;
@@ -206,6 +209,8 @@ public class SuggestApp extends MVCApplication
     private static final String MARK_DEPARTMENT_FILTER = "department_filter";
     private static final String MARK_AUTHOR_NUMBER_SUGGEST_SUBMIT = "author_number_suggest_submit";
     private static final String MARK_LIST_DEPARTMENTS = "list_departments";
+    private static final String MARK_CATEGORY_COUNTS = "category_counts";
+    private static final String MARK_DEPARTMENT_COUNTS = "department_counts";
     private static final String MARK_LUTECE_USER_NAME_FILTER_INFO = "lutece_user_name_filter_info";
     private static final String MARK_USER_VOTED = "user_voted";
     private static final String MARK_ENABLE_VOTE_WITHDRAWAL = "enable_vote_withdrawal";
@@ -331,6 +336,8 @@ public class SuggestApp extends MVCApplication
     private SecurityTokenHandler _securityTokenHandler;
     @Inject
     private SuggestSubmitComplementService _complementService;
+    @Inject
+    private SuggestStatisticsService _statisticsService;
     @Inject
     private SuggestSubmitAttachmentService _attachmentService;
     @Inject
@@ -662,6 +669,27 @@ public class SuggestApp extends MVCApplication
     }
 
     /**
+     * Builds the filter of a facet count of a suggest
+     *
+     * @param suggest
+     *            the suggest
+     * @param nIdCategory
+     *            the category counted, or SubmitFilter.ALL_INT for every category
+     * @param strDepartment
+     *            the department counted, or null for every department
+     * @return the filter
+     */
+    private static SubmitFilter getFacetFilter( Suggest suggest, int nIdCategory, String strDepartment )
+    {
+        SubmitFilter filter = new SubmitFilter( );
+        filter.setIdSuggest( suggest.getIdSuggest( ) );
+        filter.setIdCategory( nIdCategory );
+        filter.setDepartment( strDepartment );
+
+        return filter;
+    }
+
+    /**
      * Returns the department the list is filtered by: the one of the search fields when the suggest enables the department filter.
      *
      * @param suggest
@@ -901,6 +929,17 @@ public class SuggestApp extends MVCApplication
         if ( suggest.isActive( ) && suggest.isEnableDepartmentFilter( ) )
         {
             model.put( MARK_LIST_DEPARTMENTS, _suggestUserInfoService.getDepartments( suggest.getIdSuggest( ), _nIdSuggestSubmitStatePublish, _plugin ) );
+        }
+
+        if ( suggest.isActive( ) )
+        {
+            SubmitFilter categoryFacet = getFacetFilter( suggest, SubmitFilter.ALL_INT, strDepartment );
+            model.put( MARK_CATEGORY_COUNTS, _statisticsService.countPublishedByCategory( categoryFacet, _plugin ).entrySet( ).stream( )
+                    .collect( Collectors.toMap( entry -> String.valueOf( entry.getKey( ) ), Map.Entry::getValue ) ) );
+
+            SubmitFilter departmentFacet = getFacetFilter( suggest, searchFields.getIdFilterCategory( ), null );
+            model.put( MARK_DEPARTMENT_COUNTS, _statisticsService.countPublishedByDepartment( departmentFacet, _plugin ).stream( )
+                    .filter( count -> count.getLabel( ) != null ).collect( Collectors.toMap( StatisticsCount::getLabel, StatisticsCount::getCount ) ) );
         }
 
         addSuggestPageFrameset( getHtmlListSuggestSubmit( getLocale( request ), _plugin, suggest, searchFields, urlSuggestXpage, luteceUserConnected ),
