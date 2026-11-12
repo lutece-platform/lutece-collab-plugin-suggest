@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -939,7 +940,8 @@ public class SuggestApp extends MVCApplication
 
             SubmitFilter departmentFacet = getFacetFilter( suggest, searchFields.getIdFilterCategory( ), null );
             model.put( MARK_DEPARTMENT_COUNTS, _statisticsService.countPublishedByDepartment( departmentFacet, _plugin ).stream( )
-                    .filter( count -> count.getLabel( ) != null ).collect( Collectors.toMap( StatisticsCount::getLabel, StatisticsCount::getCount ) ) );
+                    .filter( count -> count.getLabel( ) != null ).collect( Collectors.toMap( StatisticsCount::getLabel, StatisticsCount::getCount, Integer::sum,
+                            ( ) -> new TreeMap<>( String.CASE_INSENSITIVE_ORDER ) ) ) );
         }
 
         addSuggestPageFrameset( getHtmlListSuggestSubmit( getLocale( request ), _plugin, suggest, searchFields, urlSuggestXpage, luteceUserConnected ),

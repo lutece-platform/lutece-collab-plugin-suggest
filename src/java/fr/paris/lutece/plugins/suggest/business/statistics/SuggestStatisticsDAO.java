@@ -136,11 +136,11 @@ public class SuggestStatisticsDAO
      *            the suggest, period, category, type and department counted; its state is ignored
      * @param plugin
      *            the plugin
-     * @return one count per department, labelled null for the authors whose department is unknown
+     * @return one count per department whatever its case, labelled null for the authors whose department is unknown
      */
     public List<StatisticsCount> countPublishedByDepartment( SubmitFilter filter, Plugin plugin )
     {
-        Map<String, Integer> mapCounts = new HashMap<>( );
+        Map<String, Integer> mapCounts = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
 
         try( DAOUtil daoUtil = prepare( SQL_COUNT_BY_DEPARTMENT, SQL_GROUP_BY_DEPARTMENT, filter, true, plugin ) )
         {

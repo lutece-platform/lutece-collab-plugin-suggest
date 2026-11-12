@@ -35,8 +35,13 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -51,9 +56,10 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
     private static final String SQL_QUERY_DELETE = "DELETE FROM suggest_suggest_user_info WHERE lutece_user_key= ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE suggest_suggest_user_info SET " + "first_name= ?,last_name= ?,business_mail=?,home_mail=?,login= ?,department= ?"
             + " WHERE lutece_user_key= ? ";
-    private static final String SQL_QUERY_SELECT_DEPARTMENTS = "SELECT u.department FROM suggest_suggest_user_info u WHERE u.department <> '' AND EXISTS ( "
-            + "SELECT 1 FROM suggest_suggest_submit d WHERE d.lutece_user_key = u.lutece_user_key AND d.id_suggest = ? AND d.id_state = ? ) "
-            + "GROUP BY u.department ORDER BY u.department";
+    private static final String SQL_QUERY_SELECT_DEPARTMENTS = "SELECT u.department, COUNT(*) FROM suggest_suggest_user_info u, suggest_suggest_submit d "
+            + "WHERE d.lutece_user_key = u.lutece_user_key AND u.department <> '' AND d.id_suggest = ? AND d.id_state = ? GROUP BY u.lutece_user_key, u.department";
+    private static final Comparator<Map.Entry<String, Integer>> MOST_USED_SPELLING = Map.Entry.<String, Integer> comparingByValue( )
+            .thenComparing( Map.Entry.comparingByKey( Comparator.reverseOrder( ) ) );
 
     /**
      * {@inheritDoc}
@@ -149,7 +155,7 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
     @Override
     public List<String> selectDepartments( int nIdSuggest, int nIdSuggestSubmitState, Plugin plugin )
     {
-        List<String> listDepartments = new ArrayList<>( );
+        Map<String, Map<String, Integer>> mapSpellings = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
 
         try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_DEPARTMENTS, plugin ) )
         {
@@ -159,10 +165,12 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
 
             while ( daoUtil.next( ) )
             {
-                listDepartments.add( daoUtil.getString( 1 ) );
+                String strDepartment = daoUtil.getString( 1 ).trim( );
+                mapSpellings.computeIfAbsent( strDepartment, strKey -> new HashMap<>( ) ).merge( strDepartment, daoUtil.getInt( 2 ), Integer::sum );
             }
         }
 
-        return listDepartments;
+        return mapSpellings.values( ).stream( ).map( mapCounts -> Collections.max( mapCounts.entrySet( ), MOST_USED_SPELLING ).getKey( ) )
+                .collect( Collectors.toList( ) );
     }
 }

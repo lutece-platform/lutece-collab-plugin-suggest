@@ -110,7 +110,8 @@ public final class SuggestUserInfoHome
     }
 
     /**
-     * Returns the departments of the authors of the suggest submits of a suggest in a state, sorted, without the empty ones.
+     * Returns the departments of the authors of the suggest submits of a suggest in a state, sorted, without the empty ones. Spellings differing only
+     * by case are one department, returned under its most used spelling.
      *
      * @param nIdSuggest
      *            the id of the suggest
