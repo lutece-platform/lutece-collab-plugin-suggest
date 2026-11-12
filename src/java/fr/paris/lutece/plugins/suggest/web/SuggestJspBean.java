@@ -1052,21 +1052,16 @@ public class SuggestJspBean extends MVCAdminJspBean
                 && SuggestService.isAuthorized( suggest.getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
             List<Response> listResponse = new ArrayList<Response>( );
-            String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
             String strIdType = request.getParameter( PARAMETER_ID_TYPE_SUGGEST );
             String strDisableVote = request.getParameter( PARAMETER_DISABLE_VOTE );
             String strDisableComment = request.getParameter( PARAMETER_DISABLE_COMMENT );
             String strEnablePin = request.getParameter( PARAMETER_ENABLE_PIN );
-            int nIdCategory = SuggestUtils.getIntegerParameter( strIdCategory );
+            int nIdCategory = SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_ID_CATEGORY ) );
             int nIdType = SuggestUtils.getIntegerParameter( strIdType );
 
-            // Check if a category is selected (in the case or the suggest has some categories)
-            if ( !suggest.getCategories( ).isEmpty( ) )
+            if ( !SuggestUtils.isCategoryAllowed( suggest, nIdCategory ) )
             {
-                if ( ( strIdCategory == null ) || strIdCategory.equals( Integer.toString( SuggestUtils.CONSTANT_ID_NULL ) ) )
-                {
-                    return redirectWithError( request, VIEW_CREATE_SUGGEST_SUBMIT, suggest.getIdSuggest( ), I18nService.getLocalizedString( MESSAGE_ERROR_NO_CATEGORY, getLocale( ) ) );
-                }
+                return redirectWithError( request, VIEW_CREATE_SUGGEST_SUBMIT, suggest.getIdSuggest( ), I18nService.getLocalizedString( MESSAGE_ERROR_NO_CATEGORY, getLocale( ) ) );
             }
 
             // Check if a category is selected (in the case or the suggest has some type)

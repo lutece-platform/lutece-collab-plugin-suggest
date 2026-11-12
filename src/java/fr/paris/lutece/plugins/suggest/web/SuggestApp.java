@@ -636,7 +636,8 @@ public class SuggestApp extends MVCApplication
     }
 
     /**
-     * Counts the published proposals of a suggest, of one author when a user key is given, of the authors of one department when a department is given.
+     * Counts the published proposals of a suggest, of one author when a user key is given, of the authors of one department when a department is given, of
+     * one category when a category id is given.
      *
      * @param nIdSuggest
      *            the suggest id
@@ -644,14 +645,17 @@ public class SuggestApp extends MVCApplication
      *            the author, or empty for every author
      * @param strDepartment
      *            the department of the authors, or empty for every department
+     * @param nIdCategory
+     *            the category id, or {@link SuggestUtils#CONSTANT_ID_NULL} for every category
      * @return the number of published proposals
      */
-    private int getNumberPublishedSuggestSubmit( int nIdSuggest, String strLuteceUserKey, String strDepartment )
+    private int getNumberPublishedSuggestSubmit( int nIdSuggest, String strLuteceUserKey, String strDepartment, int nIdCategory )
     {
         SubmitFilter filter = new SubmitFilter( );
         filter.setIdSuggest( nIdSuggest );
         filter.setLuteceUserKey( strLuteceUserKey );
         filter.setDepartment( strDepartment );
+        filter.setIdCategory( nIdCategory );
         filter.setIdSuggestSubmitState( _nIdSuggestSubmitStatePublish );
 
         return _suggestSubmitService.getCountSuggestSubmit( filter, _plugin );
@@ -890,7 +894,8 @@ public class SuggestApp extends MVCApplication
 
         SearchFields searchFields = getSearchFields( request );
         String strDepartment = getDepartmentFilter( suggest, searchFields );
-        model.put( MARK_NUMBER_PUBLISHED_SUGGEST_SUBMIT, getNumberPublishedSuggestSubmit( suggest.getIdSuggest( ), searchFields.getLuteceUserName( ), strDepartment ) );
+        model.put( MARK_NUMBER_PUBLISHED_SUGGEST_SUBMIT, getNumberPublishedSuggestSubmit( suggest.getIdSuggest( ), searchFields.getLuteceUserName( ), strDepartment,
+                searchFields.getIdFilterCategory( ) ) );
         model.put( MARK_DEPARTMENT_FILTER, strDepartment );
 
         if ( suggest.isActive( ) && suggest.isEnableDepartmentFilter( ) )
@@ -1132,10 +1137,9 @@ public class SuggestApp extends MVCApplication
             testUserAuthorizationAccess( suggest, request, luteceUserConnected );
         }
 
-        String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY_SUGGEST );
         String strIdType = request.getParameter( PARAMETER_ID_TYPE_SUGGEST );
         String strMessage = MESSAGE_NEW_SUGGEST_SUBMIT;
-        int nIdCategory = SuggestUtils.getIntegerParameter( strIdCategory );
+        int nIdCategory = SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_ID_CATEGORY_SUGGEST ) );
         int nIdType = SuggestUtils.getIntegerParameter( strIdType );
         String strTermsOfUse = request.getParameter( PARAMETER_TERMS_OF_USE );
 
@@ -1145,13 +1149,9 @@ public class SuggestApp extends MVCApplication
             throw new SuggestFormValidationException( I18nService.getLocalizedString( MESSAGE_ERROR_MUST_SELECTED_TERMS_OF_USE, getLocale( request ) ) );
         }
 
-        // Check if a category is selected (in the case or the suggest has some categories)
-        if ( !suggest.getCategories( ).isEmpty( ) )
+        if ( !SuggestUtils.isCategoryAllowed( suggest, nIdCategory ) )
         {
-            if ( ( strIdCategory == null ) || strIdCategory.equals( Integer.toString( SuggestUtils.CONSTANT_ID_NULL ) ) )
-            {
-                throw new SuggestFormValidationException( I18nService.getLocalizedString( MESSAGE_ERROR_NO_CATEGORY, getLocale( request ) ) );
-            }
+            throw new SuggestFormValidationException( I18nService.getLocalizedString( MESSAGE_ERROR_NO_CATEGORY, getLocale( request ) ) );
         }
 
         // Check if a type is selected (in the case or the suggest has some type)
@@ -1987,7 +1987,8 @@ public class SuggestApp extends MVCApplication
         if ( StringUtils.isNotEmpty( suggestSubmit.getLuteceUserKey( ) ) )
         {
             model.put( MARK_AUTHOR_NUMBER_SUGGEST_SUBMIT,
-                    getNumberPublishedSuggestSubmit( suggestSubmit.getSuggest( ).getIdSuggest( ), suggestSubmit.getLuteceUserKey( ), null ) );
+                    getNumberPublishedSuggestSubmit( suggestSubmit.getSuggest( ).getIdSuggest( ), suggestSubmit.getLuteceUserKey( ), null,
+                            SuggestUtils.CONSTANT_ID_NULL ) );
         }
         model.put( MARK_CAN_ADD_COMPLEMENT, _complementService.canAddComplement( suggestSubmit.getSuggest( ), suggestSubmit,
                 ( luteceUserConnected != null ) ? luteceUserConnected.getName( ) : null ) );

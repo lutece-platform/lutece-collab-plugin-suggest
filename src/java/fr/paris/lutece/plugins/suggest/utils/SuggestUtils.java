@@ -1397,6 +1397,21 @@ public final class SuggestUtils
     }
 
     /**
+     * Tells whether a proposal of a suggest may be filed under a category: any proposal when the suggest has no category, otherwise only under one of
+     * the categories of the suggest.
+     *
+     * @param suggest
+     *            the suggest, with its categories
+     * @param nIdCategory
+     *            the category id, {@link #CONSTANT_ID_NULL} when none is chosen
+     * @return true if the category is allowed
+     */
+    public static boolean isCategoryAllowed( Suggest suggest, int nIdCategory )
+    {
+        return suggest.getCategories( ).isEmpty( ) || suggest.getCategories( ).stream( ).anyMatch( category -> category.getIdCategory( ) == nIdCategory );
+    }
+
+    /**
      * Init reference list with the different categories
      *
      *
