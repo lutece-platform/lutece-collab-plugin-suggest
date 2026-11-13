@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -73,7 +73,7 @@ import org.jsoup.Jsoup;
 
 /**
  * SuggestIndexer
- * 
+ *
  */
 public class SuggestIndexer implements SearchIndexer
 {
@@ -95,7 +95,7 @@ public class SuggestIndexer implements SearchIndexer
 
     /**
      * Returns the indexer service description
-     * 
+     *
      * @return The indexer service description
      */
     public String getDescription( )
@@ -105,7 +105,7 @@ public class SuggestIndexer implements SearchIndexer
 
     /**
      * Index suggest documents
-     * 
+     *
      * @throws IOException
      *             Exception
      * @throws InterruptedException
@@ -160,7 +160,7 @@ public class SuggestIndexer implements SearchIndexer
 
     /**
      * Return Lucene documents
-     * 
+     *
      * @param strIdSuggest
      *            the if of the suggest
      * @return a list of Documents
@@ -198,13 +198,13 @@ public class SuggestIndexer implements SearchIndexer
 
     /**
      * Builds a document which will be used by Lucene during the indexing of the suggest submit list
-     * 
+     *
      * @param suggestSubmit
      *            the suggest submit to index
      * @param strUrl
      *            the url of suggest submit
      * @return a lucene document
-     * 
+     *
      * @throws IOException
      *             The IO Exception
      * @throws InterruptedException
@@ -278,7 +278,7 @@ public class SuggestIndexer implements SearchIndexer
 
     /**
      * Get the name of the indexer.
-     * 
+     *
      * @return The name
      */
     public String getName( )
@@ -288,7 +288,7 @@ public class SuggestIndexer implements SearchIndexer
 
     /**
      * Get the version of the indexer
-     * 
+     *
      * @return The version number
      */
     public String getVersion( )
@@ -298,7 +298,7 @@ public class SuggestIndexer implements SearchIndexer
 
     /**
      * Get the state of indexer
-     * 
+     *
      * @return Return true if the indexer is enabled, false else.
      */
     public boolean isEnable( )

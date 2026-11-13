@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,7 +63,7 @@ public class ReportedMessageDAO implements IReportedMessageDAO
     @Override
     public void insert( ReportedMessage reportedMessage, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
             reportedMessage.setIdReported( newPrimaryKey( plugin ) );
             daoUtil.setInt( 1, reportedMessage.getIdReported( ) );
@@ -80,7 +80,7 @@ public class ReportedMessageDAO implements IReportedMessageDAO
     @Override
     public ReportedMessage load( int nKey, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
             daoUtil.setInt( 1, nKey );
             daoUtil.executeQuery( );
@@ -101,7 +101,7 @@ public class ReportedMessageDAO implements IReportedMessageDAO
     @Override
     public void deleteBySuggestSubmit( int nIdSuggestSubmit, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_SUGGEST_SUBMIT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_SUGGEST_SUBMIT, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggestSubmit );
             daoUtil.executeUpdate( );
@@ -116,7 +116,7 @@ public class ReportedMessageDAO implements IReportedMessageDAO
     {
         List<ReportedMessage> reportedMessageList = new ArrayList<>( );
 
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_SUGGEST_SUBMIT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_SUGGEST_SUBMIT, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggestSubmit );
             daoUtil.executeQuery( );
@@ -139,7 +139,7 @@ public class ReportedMessageDAO implements IReportedMessageDAO
      */
     private int newPrimaryKey( Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
         {
             daoUtil.executeQuery( );
             daoUtil.next( );
@@ -149,7 +149,7 @@ public class ReportedMessageDAO implements IReportedMessageDAO
 
     /**
      * return ReportedMessage
-     * 
+     *
      * @param daoUtil
      *            ReportedMessage
      * @return ReportedMessage

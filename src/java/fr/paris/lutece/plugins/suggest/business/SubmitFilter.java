@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,9 +40,9 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * 
+ *
  * class SubmiFilter
- * 
+ *
  */
 public class SubmitFilter
 {
@@ -85,7 +85,7 @@ public class SubmitFilter
     private List<Integer> _listSortBy = new ArrayList<>( );
 
     /**
-     * 
+     *
      * @return the id of the suggest insert in the filter
      */
     public int getIdSuggest( )
@@ -95,7 +95,7 @@ public class SubmitFilter
 
     /**
      * set the id of the suggest in the filter
-     * 
+     *
      * @param nIdSuggest
      *            the id of suggest to insert in the filter
      */
@@ -105,7 +105,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain an id of suggest
      */
     public boolean containsIdSuggest( )
@@ -114,10 +114,10 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return the suggest submit state
-     * 
-     * */
+     *
+     */
     public int getIdSuggestSubmitState( )
     {
         return _nIdSuggestSubmitState;
@@ -125,7 +125,7 @@ public class SubmitFilter
 
     /**
      * Set the suggest submit state
-     * 
+     *
      * @param idState
      *            the suggest submit state
      */
@@ -135,7 +135,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain the suggest submit state
      */
     public boolean containsIdSuggestSubmitState( )
@@ -144,10 +144,10 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return the comment submit state
-     * 
-     * */
+     *
+     */
     public int getIdCommentSubmitState( )
     {
         return _nIdCommentSubmitState;
@@ -155,7 +155,7 @@ public class SubmitFilter
 
     /**
      * Set the comment submit state
-     * 
+     *
      * @param nIdState
      *            the comment submit state
      */
@@ -165,7 +165,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain the comment submit state
      */
     public boolean containsIdCommentSubmitState( )
@@ -174,7 +174,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return the id of the suggest submit insert in the filter
      */
     public int getIdSuggestSubmit( )
@@ -184,7 +184,7 @@ public class SubmitFilter
 
     /**
      * set the id of the suggest submit in the filter
-     * 
+     *
      * @param nIdSuggestSubmit
      *            the id of suggest submit to insert in the filter
      */
@@ -194,7 +194,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain an id of suggest
      */
     public boolean containsIdSuggestSubmit( )
@@ -203,7 +203,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return the id of entry insert in the filter
      */
     public int getIdEntry( )
@@ -213,7 +213,7 @@ public class SubmitFilter
 
     /**
      * set the id of entry depend in the filter
-     * 
+     *
      * @param nIdEntry
      *            the id of entry depend to insert in the filter
      */
@@ -223,7 +223,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain an id of entry depend
      */
     public boolean containsIdEntry( )
@@ -232,7 +232,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return date of the first submit
      */
     public Timestamp getDateFirst( )
@@ -242,7 +242,7 @@ public class SubmitFilter
 
     /**
      * set the date of the first submit
-     * 
+     *
      * @param begin
      *            date of the first submit
      */
@@ -252,7 +252,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain the date of the first submit
      */
     public boolean containsDateFirst( )
@@ -261,7 +261,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return date of the last submit
      */
     public Timestamp getDateLast( )
@@ -271,7 +271,7 @@ public class SubmitFilter
 
     /**
      * set the date of the last submit
-     * 
+     *
      * @param end
      *            the date of the last submit
      */
@@ -281,7 +281,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain the date of the last submit
      */
     public boolean containsDateLast( )
@@ -291,7 +291,7 @@ public class SubmitFilter
 
     /**
      * return the list of sort
-     * 
+     *
      * @return the list of sort
      */
     public List<Integer> getSortBy( )
@@ -301,7 +301,7 @@ public class SubmitFilter
 
     /**
      * set the list of sort
-     * 
+     *
      * @param listSortBy
      *            the list of sort
      */
@@ -311,7 +311,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain the list of sort
      */
     public boolean containsSortBy( )
@@ -342,7 +342,7 @@ public class SubmitFilter
 
     /**
      * convert a int to a boolean
-     * 
+     *
      * @param nIdBoolean
      *            the id to convert
      * @return boolean
@@ -353,7 +353,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return the id of the category insert in the filter
      */
     public int getIdCategory( )
@@ -363,7 +363,7 @@ public class SubmitFilter
 
     /**
      * set the id of the category in the filter
-     * 
+     *
      * @param nIdCategory
      *            the id of the category to insert in the filter
      */
@@ -373,7 +373,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain an id of category
      */
     public boolean containsIdCategory( )
@@ -382,7 +382,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return 1 if the suggests return must be reported 0 if the suggests return must not be reported
      */
     public int getIdReported( )
@@ -392,7 +392,7 @@ public class SubmitFilter
 
     /**
      * set 1 if the suggests return must be reported 0 if the suggests return must not be reported
-     * 
+     *
      * @param nIdReported
      *            idReported
      */
@@ -402,7 +402,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain reported
      */
     public boolean containsIdReported( )
@@ -411,7 +411,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return the number of vote in the filter
      */
     public int getNumberVote( )
@@ -421,7 +421,7 @@ public class SubmitFilter
 
     /**
      * set the number of vote in the filter
-     * 
+     *
      * @param nNumberVote
      *            the number of vote
      */
@@ -431,7 +431,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain a number of vote
      */
     public boolean containsNumberVote( )
@@ -457,7 +457,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain a number of vote
      */
     public boolean containsLuteceUserKey( )
@@ -497,7 +497,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return the id of the suggest insert in the filter
      */
     public int getIdParent( )
@@ -507,7 +507,7 @@ public class SubmitFilter
 
     /**
      * set the id of the suggest in the filter
-     * 
+     *
      * @param nIdParent
      *            the id of suggest to insert in the filter
      */
@@ -517,7 +517,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain an id of suggest
      */
     public boolean containsIdParent( )
@@ -526,7 +526,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return 1 if the suggests return must be reported 0 if the suggestss return must not be reported
      */
     public int getIdPinned( )
@@ -536,7 +536,7 @@ public class SubmitFilter
 
     /**
      * set 1 if the suggestsubmit return must be pinned 0 if the suggestsubmit return must not be pinned
-     * 
+     *
      * @param nIdPinned
      *            idPinned
      */
@@ -546,7 +546,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain reported
      */
     public boolean containsIdPinned( )
@@ -555,7 +555,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return the id of the type insert in the filter
      */
     public int getIdType( )
@@ -565,7 +565,7 @@ public class SubmitFilter
 
     /**
      * set the id of the type in the filter
-     * 
+     *
      * @param nIdType
      *            the id of the type to insert in the filter
      */
@@ -575,7 +575,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contain an id of type
      */
     public boolean containsIdType( )
@@ -584,7 +584,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return 1 if the suggestsubmit return must contains comment disable 0 if the suggestsubmit return must not contains comment disable
      */
     public int getIdContainsCommentDisable( )
@@ -593,7 +593,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @param nIdContainsCommentDisable
      *            1 if the suggestsubmit return must contains comment disable 0 if the suggestsubmit return must not contains comment disable
      */
@@ -603,7 +603,7 @@ public class SubmitFilter
     }
 
     /**
-     * 
+     *
      * @return true if the filter contains Id comment Disable
      */
     public boolean containsIdContainsCommentDisable( )

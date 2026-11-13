@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -72,7 +72,7 @@ public final class VoteHome
 
     /**
      * Load the data of all vote associate to the suggest submit
-     * 
+     *
      * @param nIdSuggestSubmit
      *            the id of the suggest submit
      * @param plugin
@@ -86,7 +86,7 @@ public final class VoteHome
 
     /**
      * return the number of vote for a lutece user on suggestSubmit
-     * 
+     *
      * @param nIdSuggestSubmit
      *            the id of the suggest submit
      * @param strLuteceUserKey
@@ -118,7 +118,7 @@ public final class VoteHome
 
     /**
      * return the number of vote for a lutece user on suggestSubmit
-     * 
+     *
      * @param nIdSuggestSubmit
      *            the id of the suggest submit
      * @param plugin

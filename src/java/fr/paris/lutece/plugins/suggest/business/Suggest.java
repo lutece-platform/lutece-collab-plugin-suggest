@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,6 @@ import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupResource;
 import java.sql.Timestamp;
 import java.util.List;
 
-
 /**
  *
  * Class Suggest
@@ -57,7 +56,6 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     public static final String ROLE_NONE = "none";
     public static final int STATE_ENABLE = 1;
     public static final int STATE_DISABLE = 0;
-
 
     private int _nIdSuggest;
     private String _strTitle;
@@ -165,7 +163,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the id of the mailing list associate to the suggest submit
-     * 
+     *
      * @param mailingListId
      *            the id of the mailing list associate to the suggest submit
      */
@@ -185,7 +183,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the suggest for creating suggest contain a captcha
-     * 
+     *
      * @param activeCaptcha
      *            true if the suggest for creating suggest contain a captcha
      */
@@ -205,7 +203,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the libelle of the validate button
-     * 
+     *
      * @param libelleValidateButton
      *            the libelle of the validate button
      */
@@ -225,7 +223,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the libelle of the suggest name
-     * 
+     *
      * @param libelleSuggestName
      *            the libelle of the suggest contribution
      */
@@ -245,7 +243,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the title of the suggest
-     * 
+     *
      * @param strTitle
      *            the title of the suggest
      */
@@ -265,7 +263,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the unavailability message of the suggest
-     * 
+     *
      * @param unavailabilityMessage
      *            the unavailability message of the suggest
      */
@@ -285,7 +283,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the work group associate to the suggest
-     * 
+     *
      * @param workGroup
      *            the work group associate to the suggest
      */
@@ -296,7 +294,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * Get the ID of the workflow associated to this suggest
-     * 
+     *
      * @return the ID of the workflow
      */
     public int getIdWorkflow( )
@@ -306,7 +304,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * Set the ID of the workflow associated to this suggest
-     * 
+     *
      * @param idWorkflow
      */
     public void setIdWorkflow( int idWorkflow )
@@ -325,7 +323,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the id of the suggest
-     * 
+     *
      * @param idSuggest
      *            the id of the suggest
      */
@@ -345,7 +343,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the suggest is active
-     * 
+     *
      * @param active
      *            true if the suggest is active
      */
@@ -365,7 +363,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the creation date
-     * 
+     *
      * @param dateCreation
      *            the creation date
      */
@@ -376,7 +374,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * RBAC resource implmentation
-     * 
+     *
      * @return The resource type code
      */
     public String getResourceTypeCode( )
@@ -386,7 +384,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * RBAC resource implmentation
-     * 
+     *
      * @return The resourceId
      */
     public String getResourceId( )
@@ -405,7 +403,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set a list of action can be use for the suggest
-     * 
+     *
      * @param suggestActions
      *            a list of action must be use for the suggest
      */
@@ -416,7 +414,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * return the number of vote required for publishing a suggest submit
-     * 
+     *
      * @return the number of vote required for publishing a suggest submit
      */
     public int getNumberVoteRequired( )
@@ -426,7 +424,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * Set the number of vote required for publishing a suggest submit
-     * 
+     *
      * @param numberVoteRequired
      *            the number of vote required for publishing a suggest submit
      */
@@ -437,7 +435,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * return the number of day required for disable a suggest submit
-     * 
+     *
      * @return the number of day required for disable a suggest submit
      */
     public int getNumberDayRequired( )
@@ -447,7 +445,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the number of day required for disable a suggest submit
-     * 
+     *
      * @param numberDayRequired
      *            the number of day required for disable a suggest submit
      */
@@ -458,7 +456,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * return true if the form of suggest submit creation required a captcha
-     * 
+     *
      * @return true if the form of suggest submit creation required a captcha
      */
     public boolean isActiveSuggestSubmitAuthentification( )
@@ -468,7 +466,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the form of suggest submit creation required a captcha
-     * 
+     *
      * @param activeSuggestSubmitAuthentification
      *            true if the form of suggest submit creation required a captcha
      */
@@ -488,7 +486,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the vote on suggest submit required an authentification
-     * 
+     *
      * @param activeVoteAuthentification
      *            true if the vote on suggest submit required an authentification
      */
@@ -508,7 +506,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the comment on suggest submit required an authentification
-     * 
+     *
      * @param activeCommentAuthentification
      *            true if the comment on suggest submit required an authentification
      */
@@ -528,7 +526,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the new suggest submit must be disable
-     * 
+     *
      * @param disableNewSuggestSubmit
      *            true if the new suggest submit must be disable
      */
@@ -548,7 +546,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if a mail must be sent when the new suggest is submitted
-     * 
+     *
      * @param enableMailNewSuggestSubmit
      *            true if a mail must be sent when the new suggest is submitted
      */
@@ -568,7 +566,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * true if the new comment must be disable
-     * 
+     *
      * @param disableNewComment
      *            true if the new comment must be disable
      */
@@ -588,7 +586,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the list of entries associate to the suggest
-     * 
+     *
      * @param listEntries
      *            the list of entries associate to the suggest
      */
@@ -608,7 +606,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the list of categories associate to the suggest
-     * 
+     *
      * @param listCategories
      *            the list of categories associate to the suggest
      */
@@ -628,7 +626,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the vote type associate to the suggest
-     * 
+     *
      * @param type
      *            the vote type associate to the suggest
      */
@@ -639,7 +637,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * return true if the comment are authorized
-     * 
+     *
      * @return true if the comment are authorized
      */
     public boolean isAuthorizedComment( )
@@ -649,7 +647,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the comment are authorized
-     * 
+     *
      * @param authorizedComment
      *            true if the comment are authorized
      */
@@ -660,7 +658,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * return true if the suggest proposition state exist
-     * 
+     *
      * @return true if the suggest proposition state exist
      */
     public boolean isActiveSuggestPropositionState( )
@@ -670,7 +668,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the suggest proposition state exist
-     * 
+     *
      * @param activeSuggestPropositionState
      *            true if the suggest proposition state exist
      */
@@ -681,7 +679,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * return the number of suggest submit display in the list of top comment
-     * 
+     *
      * @return the number of suggest submit display in the list of top comment
      */
     public int getNumberSuggestSubmitInTopComment( )
@@ -691,7 +689,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * Set the number of suggest submit display in the list of top comment
-     * 
+     *
      * @param numberTopComment
      *            the number of suggest submit in the list of top comment
      */
@@ -702,7 +700,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * return the number of suggest submit display in the list of top score
-     * 
+     *
      * @return the number of suggest submit display in the list of top score
      */
     public int getNumberSuggestSubmitInTopScore( )
@@ -712,7 +710,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * Set the number of comment display in the list of top score
-     * 
+     *
      * @param numberTopScore
      *            the top score
      */
@@ -732,7 +730,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the user can submit just one vote
-     * 
+     *
      * @param numberVote
      *            true if the user can submit just one vote
      */
@@ -743,7 +741,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * return the nunber of caracters shown in the list of suggest submit
-     * 
+     *
      * @return the nunber of caracters shown in the list of suggest submit
      */
     public int getNumberSuggestSubmitCaractersShown( )
@@ -753,7 +751,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the nunber of caracters shown in the list of suggest submit
-     * 
+     *
      * @param numberCaractersShown
      *            the nunber of caracters shown in the list of suggest submit
      */
@@ -773,7 +771,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the category bloc must be show
-     * 
+     *
      * @param activeCategoryBloc
      *            true if the category bloc must be show
      */
@@ -793,7 +791,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the top score bloc must be show
-     * 
+     *
      * @param activeTopScoreBloc
      *            true if the top score bloc must be show
      */
@@ -813,7 +811,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the top comment bloc must be show
-     * 
+     *
      * @param activeTopCommentBloc
      *            true if the top comment bloc must be show
      */
@@ -833,7 +831,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the suggest submit List associate to the suggest
-     * 
+     *
      * @param suggestsSubmit
      *            the suggest submit List associate to the suggest
      */
@@ -853,7 +851,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the number of suggest submit per page
-     * 
+     *
      * @param numberSuggestSubmitPerPage
      *            the number of suggest submit per page
      */
@@ -873,7 +871,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the paginator is enable
-     * 
+     *
      * @param activeSuggestSubmitPaginator
      *            true if the paginator is enable
      */
@@ -884,7 +882,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * Gets the suggest role
-     * 
+     *
      * @return suggest's role as a String
      *
      */
@@ -895,7 +893,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * Sets the suggest's role
-     * 
+     *
      * @param strRole
      *            The role
      *
@@ -907,7 +905,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * Sets the suggest's header
-     * 
+     *
      * @param strHeader
      *            the strHeader to set
      */
@@ -960,7 +958,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the editor BBcode must be display
-     * 
+     *
      * @param nActiveEditorBbCode
      *            true if the editor BBcode must be display
      */
@@ -980,7 +978,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * parseBbcodeValue
-     * 
+     *
      * @param strValue
      *            the value to parse
      * @return the result of the parsing
@@ -1006,7 +1004,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set id Default Sort
-     * 
+     *
      * @param nIdDefaultSort
      *            the default sort id
      */
@@ -1026,7 +1024,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the suggest is a Default suggest
-     * 
+     *
      * @param bDefaultSuggest
      *            true if the suggest is a Default suggest
      */
@@ -1046,7 +1044,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if the vote is disable
-     * 
+     *
      * @param bDisable
      *            true if the vote is disable
      */
@@ -1123,7 +1121,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if a mail must be sent when the new comment is submitted
-     * 
+     *
      * @param bEnableMailNewCommentSubmit
      *            true if a mail must be sent when the new comment is submitted
      */
@@ -1154,8 +1152,8 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * Tells whether the participants are notified at once: the author when the suggest submit is received and commented, the author of a comment when
-     * someone answers it.
+     * Tells whether the participants are notified at once: the author when the suggest submit is received and commented, the author of a comment when someone
+     * answers it.
      *
      * @return true if the participants are notified
      */
@@ -1312,7 +1310,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set true if a mail must be sent when the new reported is submitted
-     * 
+     *
      * @param bEnableMailNewReportedSubmit
      *            true if a mail must be sent when the new comment is submitted
      */
@@ -1332,7 +1330,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set the suggest submit type List associate to the suggest
-     * 
+     *
      * @param suggestSubmitTypes
      *            the suggest submit type List associate to the suggest
      */
@@ -1362,7 +1360,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * the terms of use
-     * 
+     *
      * @return the terms of use
      */
     public String getTermsOfUse( )
@@ -1372,7 +1370,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set Terms of use
-     * 
+     *
      * @param strTermsOfUse
      *            the terms of use
      */
@@ -1391,7 +1389,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * 
+     *
      * @param strDescription
      *            set the suggest description
      */
@@ -1410,7 +1408,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * 
+     *
      * @param bEnableReports
      *            true if reports are enable
      */
@@ -1421,7 +1419,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * the image resource id associate to the suggest
-     * 
+     *
      * @return Resource Image
      */
     public Integer getIdImageResource( )
@@ -1431,7 +1429,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * image resource id associate to the suggest
-     * 
+     *
      * @param nIdImageResource
      *            image resource id associate to the suggest
      */
@@ -1442,7 +1440,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * get Image
-     * 
+     *
      * @return Image Resource
      */
     public ImageResource getImage( )
@@ -1452,7 +1450,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
 
     /**
      * set Image Resource
-     * 
+     *
      * @param image
      *            Image Resource
      */
@@ -1515,7 +1513,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * 
+     *
      * @return getNotificationNewCommentSenderName
      */
     public String getNotificationNewCommentSenderName( )
@@ -1524,7 +1522,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * 
+     *
      * @param strNotificationNewCommentSenderName
      */
     public void setNotificationNewCommentSenderName( String strNotificationNewCommentSenderName )
@@ -1533,7 +1531,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String getNotificationNewCommentTitle( )
@@ -1542,7 +1540,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * 
+     *
      * @param strNotificationNewCommentTitle
      */
     public void setNotificationNewCommentTitle( String strNotificationNewCommentTitle )
@@ -1551,7 +1549,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String getNotificationNewCommentBody( )
@@ -1560,7 +1558,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * 
+     *
      * @param strNotificationNewCommentBody
      */
     public void setNotificationNewCommentBody( String strNotificationNewCommentBody )
@@ -1569,7 +1567,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String getNotificationNewSuggestSubmitSenderName( )
@@ -1578,7 +1576,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * 
+     *
      * @param strNotificationNewSuggestSubmitSenderName
      */
     public void setNotificationNewSuggestSubmitSenderName( String strNotificationNewSuggestSubmitSenderName )
@@ -1587,7 +1585,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String getNotificationNewSuggestSubmitTitle( )
@@ -1596,7 +1594,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * 
+     *
      * @param strNotificationNewSuggestSubmitTitle
      */
     public void setNotificationNewSuggestSubmitTitle( String strNotificationNewSuggestSubmitTitle )
@@ -1605,7 +1603,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * 
+     *
      * @return
      */
     public String getNotificationNewSuggestSubmitBody( )
@@ -1614,7 +1612,7 @@ public class Suggest implements IExtendableResource, AdminWorkgroupResource, RBA
     }
 
     /**
-     * 
+     *
      * @param strNotificationSuggestSubmitBody
      */
     public void setNotificationNewSuggestSubmitBody( String strNotificationSuggestSubmitBody )

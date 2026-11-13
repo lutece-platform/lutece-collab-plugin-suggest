@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,7 +55,7 @@ public class DefaultMessage implements RBACResource
     private String _strNotificationNewSuggestSubmitBody;
 
     /**
-     * 
+     *
      * @return getNotificationNewCommentTitle
      */
     public String getNotificationNewCommentTitle( )
@@ -64,7 +64,7 @@ public class DefaultMessage implements RBACResource
     }
 
     /**
-     * 
+     *
      * @param strNotificationNewCommentTitle
      *            NotificationNewCommentTitle
      */
@@ -74,7 +74,7 @@ public class DefaultMessage implements RBACResource
     }
 
     /**
-     * 
+     *
      * @return NotificationNewCommentBody
      */
     public String getNotificationNewCommentBody( )
@@ -83,7 +83,7 @@ public class DefaultMessage implements RBACResource
     }
 
     /**
-     * 
+     *
      * @param strNotificationNewCommentBody
      *            NotificationNewCommentBody
      */
@@ -93,7 +93,7 @@ public class DefaultMessage implements RBACResource
     }
 
     /**
-     * 
+     *
      * @return NotificationNewSuggestSubmitTitle
      */
     public String getNotificationNewSuggestSubmitTitle( )
@@ -102,7 +102,7 @@ public class DefaultMessage implements RBACResource
     }
 
     /**
-     * 
+     *
      * @param strNotificationNewSuggestSubmitTitle
      *            NotificationNewSuggestSubmitTitle
      */
@@ -112,7 +112,7 @@ public class DefaultMessage implements RBACResource
     }
 
     /**
-     * 
+     *
      * @return NotificationSuggestSubmitBody
      */
     public String getNotificationNewSuggestSubmitBody( )
@@ -121,7 +121,7 @@ public class DefaultMessage implements RBACResource
     }
 
     /**
-     * 
+     *
      * @param strNotificationSuggestSubmitBody
      *            NotificationSuggestSubmitBody
      */
@@ -141,7 +141,7 @@ public class DefaultMessage implements RBACResource
 
     /**
      * set the default value of validate button
-     * 
+     *
      * @param libelleValidateButton
      *            value of validate button
      */
@@ -161,7 +161,7 @@ public class DefaultMessage implements RBACResource
 
     /**
      * set the Unavailability Message who see by the user when the form will be enable
-     * 
+     *
      * @param unavailabilityMessage
      *            the default Unavailability Message
      */
@@ -172,7 +172,7 @@ public class DefaultMessage implements RBACResource
 
     /**
      * RBAC resource implmentation
-     * 
+     *
      * @return The resource type code
      */
     public String getResourceTypeCode( )
@@ -182,7 +182,7 @@ public class DefaultMessage implements RBACResource
 
     /**
      * RBAC resource implmentation
-     * 
+     *
      * @return The resourceId
      */
     public String getResourceId( )
@@ -201,7 +201,7 @@ public class DefaultMessage implements RBACResource
 
     /**
      * set the default libelle of suggest contribution
-     * 
+     *
      * @param libelleSuggestName
      *            the default libelle of suggest contribution
      */
@@ -212,7 +212,7 @@ public class DefaultMessage implements RBACResource
 
     /**
      * return the number of suggest submit display in the list of top comment
-     * 
+     *
      * @return the number of suggest submit display in the list of top comment
      */
     public int getNumberSuggestSubmitInTopComment( )
@@ -222,7 +222,7 @@ public class DefaultMessage implements RBACResource
 
     /**
      * Set the number of suggest submit display in the list of top comment
-     * 
+     *
      * @param numberTopComment
      *            the number of suggest submit in the list of top comment
      */
@@ -233,7 +233,7 @@ public class DefaultMessage implements RBACResource
 
     /**
      * return the number of suggest submit display in the list of top score
-     * 
+     *
      * @return the number of suggest submit display in the list of top score
      */
     public int getNumberSuggestSubmitInTopScore( )
@@ -243,7 +243,7 @@ public class DefaultMessage implements RBACResource
 
     /**
      * Set the number of comment display in the list of top score
-     * 
+     *
      * @param numberTopScore
      *            the number of comment display in the list of top score
      */
@@ -254,7 +254,7 @@ public class DefaultMessage implements RBACResource
 
     /**
      * return the nunber of caracters shown in the list of suggest submit
-     * 
+     *
      * @return the nunber of caracters shown in the list of suggest submit
      */
     public int getNumberSuggestSubmitCaractersShown( )
@@ -264,7 +264,7 @@ public class DefaultMessage implements RBACResource
 
     /**
      * set the nunber of caracters shown in the list of suggest submit
-     * 
+     *
      * @param numberCaractersShown
      *            the nunber of caracters shown in the list of suggest submit
      */

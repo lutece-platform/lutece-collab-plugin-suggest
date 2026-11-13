@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -67,7 +67,7 @@ public class SuggestWorkflowService
 
     /**
      * Process the automatic workflow actions when a SuggestSubmit is created
-     * 
+     *
      * @param suggest
      *            The Suggest associated with the workflow
      * @param suggestSubmit
@@ -77,15 +77,15 @@ public class SuggestWorkflowService
      */
     public static void processActionOnSuggestSubmitCreation( Suggest suggest, SuggestSubmit suggestSubmit, User user )
     {
-        CDI.current( ).select( WorkflowService.class ).get( ).getState( suggestSubmit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, suggest.getIdWorkflow( ),
-                suggest.getIdSuggest( ) );
-        CDI.current( ).select( WorkflowService.class ).get( ).executeActionAutomatic( suggestSubmit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, suggest.getIdWorkflow( ),
-                suggest.getIdSuggest( ), user );
+        CDI.current( ).select( WorkflowService.class ).get( ).getState( suggestSubmit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE,
+                suggest.getIdWorkflow( ), suggest.getIdSuggest( ) );
+        CDI.current( ).select( WorkflowService.class ).get( ).executeActionAutomatic( suggestSubmit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE,
+                suggest.getIdWorkflow( ), suggest.getIdSuggest( ), user );
     }
 
     /**
      * Remove the resources linked to the specified workflow and consultation
-     * 
+     *
      * @param nIdWorkflow
      *            The workflow's ID
      * @param nIdSuggest
@@ -108,13 +108,13 @@ public class SuggestWorkflowService
 
     /**
      * Retrieve the list of state identifiers for the specified workflow. The list is filtered depending on the permissions of the specified user.
-     * 
+     *
      * @param nIdWorkflow
      *            the workflow id
-     * 
+     *
      * @param adminUser
      *            the user
-     * 
+     *
      * @return the list of workflow state identifiers
      */
     public static List<Integer> getListIdWorkflowState( int nIdWorkflow, User user )

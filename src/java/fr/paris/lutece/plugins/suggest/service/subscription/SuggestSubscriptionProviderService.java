@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -110,47 +110,44 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
                 if ( suggest != null )
                 {
                     Object [ ] params = {
-                        suggest.getTitle( )
+                            suggest.getTitle( )
                     };
 
                     return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_SUGGEST, params, locale );
                 }
             }
-            else
-                if ( Strings.CS.equals( SUBSCRIPTION_SUGGEST_SUBMIT, strSubscriptionKey ) )
+            else if ( Strings.CS.equals( SUBSCRIPTION_SUGGEST_SUBMIT, strSubscriptionKey ) )
+            {
+                SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nId, false, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+
+                if ( suggestSubmit != null )
                 {
-                    SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nId, false,
-                            PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+                    UrlItem url = new UrlItem( AppPathService.getPortalUrl( ) );
+                    url.addParameter( PARAMETER_PAGE, XPAGE_SUGGEST );
+                    url.addParameter( PARAMETER_ID_SUGGEST, suggestSubmit.getSuggest( ).getIdSuggest( ) );
+                    url.addParameter( PARAMETER_ID_SUGGEST_SUBMIT, nId );
+                    url.addParameter( PARAMETER_ACTION, SuggestApp.ACTION_VIEW_SUGGEST_SUBMIT );
 
-                    if ( suggestSubmit != null )
-                    {
-                        UrlItem url = new UrlItem( AppPathService.getPortalUrl( ) );
-                        url.addParameter( PARAMETER_PAGE, XPAGE_SUGGEST );
-                        url.addParameter( PARAMETER_ID_SUGGEST, suggestSubmit.getSuggest( ).getIdSuggest( ) );
-                        url.addParameter( PARAMETER_ID_SUGGEST_SUBMIT, nId );
-                        url.addParameter( PARAMETER_ACTION, SuggestApp.ACTION_VIEW_SUGGEST_SUBMIT );
-
-                        Object [ ] params = {
+                    Object [ ] params = {
                             "<a href=\"" + url.getUrlWithEntity( ) + "\">" + suggestSubmit.getSuggestSubmitTitle( ) + "</a>"
-                        };
+                    };
 
-                        return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_SUGGEST_SUBMIT, params, locale );
-                    }
+                    return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_SUGGEST_SUBMIT, params, locale );
                 }
-                else
-                    if ( Strings.CS.equals( SUBSCRIPTION_SUGGEST_CATEGORY, strSubscriptionKey ) )
-                    {
-                        Category category = CategoryHome.findByPrimaryKey( nId, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
+            }
+            else if ( Strings.CS.equals( SUBSCRIPTION_SUGGEST_CATEGORY, strSubscriptionKey ) )
+            {
+                Category category = CategoryHome.findByPrimaryKey( nId, PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) );
 
-                        if ( category != null )
-                        {
-                            Object [ ] params = {
-                                category.getTitle( )
-                            };
+                if ( category != null )
+                {
+                    Object [ ] params = {
+                            category.getTitle( )
+                    };
 
-                            return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_SUGGEST_CATEGORY, params, locale );
-                        }
-                    }
+                    return I18nService.getLocalizedString( MESSAGE_SUBSCRIBED_SUGGEST_CATEGORY, params, locale );
+                }
+            }
         }
 
         return StringUtils.EMPTY;
@@ -187,7 +184,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Remove a subscription of a user to a suggest
-     * 
+     *
      * @param user
      *            The user to remove the subscription of
      * @param nIdSuggest
@@ -200,7 +197,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Remove a subscription of a user to a suggest category
-     * 
+     *
      * @param user
      *            The user to remove the subscription of
      * @param nIdCategory
@@ -213,7 +210,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Remove a subscription of a user to a suggest submit
-     * 
+     *
      * @param user
      *            The user to remove the subscription of
      * @param nIdSuggestSubmit
@@ -226,7 +223,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Remove a subscription to a suggest resource
-     * 
+     *
      * @param user
      *            The user to remove the subscription of
      * @param nId
@@ -251,7 +248,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Create a new subscription to a suggest
-     * 
+     *
      * @param user
      *            The user to create a subscription of
      * @param nIdSuggest
@@ -267,7 +264,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Create a new subscription to a suggest
-     * 
+     *
      * @param user
      *            The user to create a subscription of
      * @param nIdSuggest
@@ -283,7 +280,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Create a new subscription to a suggest submit
-     * 
+     *
      * @param user
      *            The user to create a subscription of
      * @param nIdSuggestSubmit
@@ -367,7 +364,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Check if a user has subscribed to a suggest category
-     * 
+     *
      * @param user
      *            The user
      * @param nIdSuggestCategory
@@ -381,7 +378,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Check if a user has subscribed to a suggest submit
-     * 
+     *
      * @param user
      *            The user
      * @param nIdSuggestSubmit
@@ -395,7 +392,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Check if a user has subscribed to a suggest
-     * 
+     *
      * @param user
      *            The user
      * @param nIdSuggest
@@ -409,7 +406,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
 
     /**
      * Check if a user has subscribed to a resource
-     * 
+     *
      * @param user
      *            The user
      * @param nId
@@ -439,7 +436,7 @@ public class SuggestSubscriptionProviderService implements ISubscriptionProvider
         SubscriptionFilter filter = new SubscriptionFilter( strUserKey, getProviderName( ), strSubscriptionKey, Integer.toString( nId ) );
         List<Subscription> listSubscription = _subscriptionService.findByFilter( filter );
 
-        return listSubscription != null  && !listSubscription.isEmpty( );
+        return listSubscription != null && !listSubscription.isEmpty( );
     }
 
     /**

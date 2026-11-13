@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -161,7 +161,8 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
         }
 
         List<Integer> listIdSuggestSubmit = _suggestSubmitService.getSuggestSubmitListId( SuggestUtils.getSuggestSubmitFilter( searchFields ), plugin );
-        boolean bAsynchronous = listIdSuggestSubmit.size( ) > AppPropertiesService.getPropertyInt( PROPERTY_ASYNCHRONOUS_THRESHOLD, DEFAULT_ASYNCHRONOUS_THRESHOLD );
+        boolean bAsynchronous = listIdSuggestSubmit.size( ) > AppPropertiesService.getPropertyInt( PROPERTY_ASYNCHRONOUS_THRESHOLD,
+                DEFAULT_ASYNCHRONOUS_THRESHOLD );
         String strDescription = I18nService.getLocalizedString( MESSAGE_EXPORT_DESCRIPTION, new Object [ ] {
                 suggest.getTitle( ), listIdSuggestSubmit.size( )
         }, adminUser.getLocale( ) );
@@ -203,7 +204,7 @@ public class ExportSuggestSubmitAction extends AbstractPluginAction<SuggestAdmin
 
     /**
      * Gets the plugin
-     * 
+     *
      * @return the plugin
      */
     private Plugin getPlugin( )

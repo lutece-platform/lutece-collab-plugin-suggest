@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,7 +44,7 @@ public interface IEntryDAO
 {
     /**
      * Insert a new record in the table.
-     * 
+     *
      * @param entry
      *            instance of the Entry object to insert
      * @param plugin
@@ -55,7 +55,7 @@ public interface IEntryDAO
 
     /**
      * Update the entry in the table
-     * 
+     *
      * @param entry
      *            instance of the Entry object to update
      * @param plugin
@@ -65,7 +65,7 @@ public interface IEntryDAO
 
     /**
      * Delete a record from the table
-     * 
+     *
      * @param nIdEntry
      *            The identifier of the entry
      * @param plugin
@@ -78,7 +78,7 @@ public interface IEntryDAO
 
     /**
      * Load the data of the entry from the table
-     * 
+     *
      * @param nIdEntry
      *            The identifier of the entry
      * @param plugin
@@ -89,7 +89,7 @@ public interface IEntryDAO
 
     /**
      * Load the data of all the entry who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -100,7 +100,7 @@ public interface IEntryDAO
 
     /**
      * Return the number of entry who verify the filter
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -111,7 +111,7 @@ public interface IEntryDAO
 
     /**
      * Delete an association between entry and a regular expression
-     * 
+     *
      * @param nIdEntry
      *            The identifier of the field
      * @param nIdExpression
@@ -123,7 +123,7 @@ public interface IEntryDAO
 
     /**
      * insert an association between entry and a regular expression
-     * 
+     *
      * @param nIdEntry
      *            The identifier of the entry
      * @param nIdExpression
@@ -135,7 +135,7 @@ public interface IEntryDAO
 
     /**
      * Load the key of all the regularExpression associate to the entry and returns them in a list
-     * 
+     *
      * @param nIdEntry
      *            the id of entry
      * @param plugin
@@ -146,7 +146,7 @@ public interface IEntryDAO
 
     /**
      * verify if the regular expresssion is use
-     * 
+     *
      * @param nIdExpression
      *            The identifier of the entry
      * @param plugin

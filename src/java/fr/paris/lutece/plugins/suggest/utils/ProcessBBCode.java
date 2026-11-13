@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -62,7 +62,7 @@ import java.util.regex.Pattern;
 
 /**
  * $Id: ProcessBBCode.java,v 1.18.2.2.4.4 2007/04/17 17:27:08 daltoncamargo Exp $
- * 
+ *
  * @author Dalton Camargo - <a href="mailto:dalton@javabb.org">dalton@javabb.org </a> <br>
  * @author Ronald Tetsuo Miura
  */
@@ -141,14 +141,12 @@ public class ProcessBBCode implements Serializable
         StringBuffer buffer = new StringBuffer( string );
         processCode( buffer );
 
-        processNestedTags(
-                buffer,
-                "quote",
-                "<table width='90%' cellspacing='1' cellpadding='1' border='0' "
-                        + "align='center'><tr><td><span class='genmed'><b>{BBCODE_PARAM}:</b></span></td></tr></table><table width='90%' cellspacing='1' cellpadding='1' border='0' align='center'><tr><td class='quote' bgcolor='#F3F5FF'>",
-                " &nbsp;</td></tr></table>", "<table width='90%' cellspacing='1' cellpadding='3' border='0' "
-                        + "align='center'><tr><td><span class='genmed'><b>Quote:</b></span></td></tr><tr><td class='quote'>", " &nbsp;</td></tr></table>",
-                "[*]", false, true, true );
+        processNestedTags( buffer, "quote", "<table width='90%' cellspacing='1' cellpadding='1' border='0' "
+                + "align='center'><tr><td><span class='genmed'><b>{BBCODE_PARAM}:</b></span></td></tr></table><table width='90%' cellspacing='1' cellpadding='1' border='0' align='center'><tr><td class='quote' bgcolor='#F3F5FF'>",
+                " &nbsp;</td></tr></table>",
+                "<table width='90%' cellspacing='1' cellpadding='3' border='0' "
+                        + "align='center'><tr><td><span class='genmed'><b>Quote:</b></span></td></tr><tr><td class='quote'>",
+                " &nbsp;</td></tr></table>", "[*]", false, true, true );
 
         processNestedTags( buffer, "list", "<ol type=\"{BBCODE_PARAM}\">", "</ol>", "<ul>", "</ul>", "<li>", true, true, false );
 
@@ -210,8 +208,7 @@ public class ProcessBBCode implements Serializable
             content = content.replaceAll( "<br>", "\n" );
 
             String replacement = "<!-- [ -code- ] --></span>" //
-                    + "<textarea name=\"code\" id=\"code\" class=\"java\" rows=\"15\" cols=\"100\">"
-                    + content
+                    + "<textarea name=\"code\" id=\"code\" class=\"java\" rows=\"15\" cols=\"100\">" + content
                     + "</textarea><span class='postbody'><!-- [/ -code- ] -->";
 
             buffer.replace( start, end, replacement );
@@ -359,26 +356,24 @@ public class ProcessBBCode implements Serializable
 
                 // test closing tags
             }
-            else
-                if ( ( matcher.group( closeTagGroup ) != null ) && !openStack.isEmpty( ) )
+            else if ( ( matcher.group( closeTagGroup ) != null ) && !openStack.isEmpty( ) )
+            {
+                MutableCharSequence openSeq = openStack.pop( );
+
+                if ( acceptParam )
                 {
-                    MutableCharSequence openSeq = openStack.pop( );
-
-                    if ( acceptParam )
-                    {
-                        matchedSeq._param = openSeq._param;
-                    }
-
-                    subsOpen.add( openSeq );
-                    subsClose.add( matchedSeq );
-
-                    // test internal tags
+                    matchedSeq._param = openSeq._param;
                 }
-                else
-                    if ( processInternalTags && ( matcher.group( internalTagGroup ) != null ) && ( !openStack.isEmpty( ) ) )
-                    {
-                        subsInternal.add( matchedSeq );
-                    }
+
+                subsOpen.add( openSeq );
+                subsClose.add( matchedSeq );
+
+                // test internal tags
+            }
+            else if ( processInternalTags && ( matcher.group( internalTagGroup ) != null ) && ( !openStack.isEmpty( ) ) )
+            {
+                subsInternal.add( matchedSeq );
+            }
         }
 
         LinkedList<MutableCharSequence> subst = new LinkedList<>( );
@@ -414,29 +409,27 @@ public class ProcessBBCode implements Serializable
                     buffer.append( closeSubstWithoutParam );
                 }
             }
-            else
-                if ( subsInternal.contains( seq ) )
-                {
-                    buffer.append( internalSubst );
-                }
-                else
-                    if ( subsOpen.contains( seq ) )
-                    {
-                        Matcher m = Pattern.compile( openTag ).matcher( str.substring( seq._start, seq._start + seq._length ) );
+            else if ( subsInternal.contains( seq ) )
+            {
+                buffer.append( internalSubst );
+            }
+            else if ( subsOpen.contains( seq ) )
+            {
+                Matcher m = Pattern.compile( openTag ).matcher( str.substring( seq._start, seq._start + seq._length ) );
 
-                        if ( m.matches( ) )
-                        {
-                            if ( acceptParam && ( seq._param != null ) )
-                            {
-                                buffer.append( //
+                if ( m.matches( ) )
+                {
+                    if ( acceptParam && ( seq._param != null ) )
+                    {
+                        buffer.append( //
                                 openSubstWithParam.replaceAll( "\\{BBCODE_PARAM\\}", seq._param ) );
-                            }
-                            else
-                            {
-                                buffer.append( openSubstWithoutParam );
-                            }
-                        }
                     }
+                    else
+                    {
+                        buffer.append( openSubstWithoutParam );
+                    }
+                }
+            }
 
             start = seq._start + seq._length;
         }

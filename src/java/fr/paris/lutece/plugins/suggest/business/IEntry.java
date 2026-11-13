@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,7 +57,7 @@ public interface IEntry
 
     /**
      * set the id of the entry
-     * 
+     *
      * @param idEntry
      *            the id of the entry
      */
@@ -70,7 +70,7 @@ public interface IEntry
 
     /**
      * set title entry
-     * 
+     *
      * @param title
      *            title
      */
@@ -83,7 +83,7 @@ public interface IEntry
 
     /**
      * set the entry help message
-     * 
+     *
      * @param helpMessage
      *            the entry help message
      */
@@ -96,7 +96,7 @@ public interface IEntry
 
     /**
      * set entry comment
-     * 
+     *
      * @param comment
      *            entry comment
      */
@@ -114,7 +114,7 @@ public interface IEntry
 
     /**
      * set true if the question is mandatory
-     * 
+     *
      * @param mandatory
      *            true if the question is mandatory
      */
@@ -122,7 +122,7 @@ public interface IEntry
 
     /**
      * set true if the entry must be shown in suggest submit list
-     * 
+     *
      * @param show
      *            true if the entry must be shown in suggest submit list
      */
@@ -135,7 +135,7 @@ public interface IEntry
 
     /**
      * set position entry
-     * 
+     *
      * @param position
      *            position entry
      */
@@ -149,7 +149,7 @@ public interface IEntry
 
     /**
      * set the suggest of the entry
-     * 
+     *
      * @param suggest
      *            the suggest of the entry
      */
@@ -162,7 +162,7 @@ public interface IEntry
 
     /**
      * set the type of the entry
-     * 
+     *
      * @param entryType
      *            the type of the entry
      */
@@ -176,7 +176,7 @@ public interface IEntry
 
     /**
      * set a list of regular expression which is associate to the entry
-     * 
+     *
      * @param regularExpressionList
      *            a list of regular expression which is associate to the entry
      */
@@ -190,7 +190,7 @@ public interface IEntry
 
     /**
      * set the default value of the entry
-     * 
+     *
      * @param value
      *            the default value of the entry
      */
@@ -204,7 +204,7 @@ public interface IEntry
 
     /**
      * set the width of the entry
-     * 
+     *
      * @param width
      *            the width of the entry
      */
@@ -218,7 +218,7 @@ public interface IEntry
 
     /**
      * set the height of the entry
-     * 
+     *
      * @param height
      *            the height of the entry
      */
@@ -232,7 +232,7 @@ public interface IEntry
 
     /**
      * set the max size of enter user
-     * 
+     *
      * @param maxSizeEnter
      *            the max size of enter user
      */
@@ -240,7 +240,7 @@ public interface IEntry
 
     /**
      * Get the request data
-     * 
+     *
      * @param request
      *            HttpRequest
      * @param locale
@@ -251,7 +251,7 @@ public interface IEntry
 
     /**
      * save in the list of response the response associate to the entry in the form submit
-     * 
+     *
      * @param request
      *            HttpRequest
      * @param listResponse
@@ -264,7 +264,7 @@ public interface IEntry
 
     /**
      * save in the list of response the response associate to the entry in the form submit
-     * 
+     *
      * @param nIdSuggestSubmit
      *            the id of the suggestSubmit
      * @param request
@@ -281,36 +281,36 @@ public interface IEntry
 
     /**
      * Get the HtmlCode of the entry
-     * 
+     *
      * @return the HtmlCode of the entry
      *
-     * */
+     */
     String getTemplateHtmlCodeForm( );
 
     /**
      * Get the template of the html code of the response value associate to the entry
-     * 
+     *
      * @return the template of the html code of the response value associate to the entry
      */
     String getTemplateHtmlCodeResponse( );
 
     /**
      * Get template create url of the entry
-     * 
+     *
      * @return template create url of the entry
      */
     String getTemplateCreate( );
 
     /**
      * Get the template modify url of the entry
-     * 
+     *
      * @return template modify url of the entry
      */
     String getTemplateModify( );
 
     /**
      * The paginator who is use in the template modify of the entry
-     * 
+     *
      * @param nItemPerPage
      *            Number of items to display per page
      * @param strBaseUrl
@@ -325,7 +325,7 @@ public interface IEntry
 
     /**
      * Get the list of regular expression who is use in the template modify of the entry
-     * 
+     *
      * @param plugin
      *            the plugin
      * @param entry
@@ -342,7 +342,7 @@ public interface IEntry
 
     /**
      * set a list of additional attribute which is associate to the entry
-     * 
+     *
      * @param entryAdditionalAttributeList
      *            a list of additional attribute which is associate to the entry
      */

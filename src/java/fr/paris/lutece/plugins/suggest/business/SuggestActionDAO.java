@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,7 +52,7 @@ public class SuggestActionDAO implements ISuggestActionDAO
 
     /**
      * Load the list of actions for a all suggest by suggest state
-     * 
+     *
      * @param nState
      *            the state of the suggest
      * @param plugin
@@ -62,11 +62,11 @@ public class SuggestActionDAO implements ISuggestActionDAO
     public List<SuggestAction> selectActionsBySuggestState( int nState, Plugin plugin )
     {
         List<SuggestAction> listActions = new ArrayList<>( );
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ACTIONS, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ACTIONS, plugin ) )
         {
             daoUtil.setInt( 1, nState );
             daoUtil.executeQuery( );
-    
+
             while ( daoUtil.next( ) )
             {
                 SuggestAction action = new SuggestAction( );

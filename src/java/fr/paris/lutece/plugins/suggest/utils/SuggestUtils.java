@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -198,7 +198,7 @@ public final class SuggestUtils
 
     /**
      * sendMail of notification for new suggest submit
-     * 
+     *
      * @param suggest
      *            the suggest
      * @param suggestSubmit
@@ -219,8 +219,8 @@ public final class SuggestUtils
             // we have to replace the src='image? string by a string containing the server url
             if ( suggestSubmit.getSuggestSubmitValue( ).contains( "src='image?" ) )
             {
-                suggestSubmit.setSuggestSubmitValue( suggestSubmit.getSuggestSubmitValue( )
-                        .replace( "src='image?", "src='" + AppPropertiesService.getProperty( PROPERTY_PROD_URL, EMPTY_STRING ) + "/image?" ) );
+                suggestSubmit.setSuggestSubmitValue( suggestSubmit.getSuggestSubmitValue( ).replace( "src='image?",
+                        "src='" + AppPropertiesService.getProperty( PROPERTY_PROD_URL, EMPTY_STRING ) + "/image?" ) );
             }
 
             Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( suggest.getIdMailingListSuggestSubmit( ) );
@@ -246,7 +246,7 @@ public final class SuggestUtils
 
     /**
      * sendMail of notification for new suggest submit disable
-     * 
+     *
      * @param suggest
      *            the suggest
      * @param suggestSubmit
@@ -265,8 +265,8 @@ public final class SuggestUtils
             // we have to replace the src='image? string by a string containing the server url
             if ( suggestSubmit.getSuggestSubmitValue( ).toString( ).contains( "src='image?" ) )
             {
-                suggestSubmit.setSuggestSubmitValue( suggestSubmit.getSuggestSubmitValue( )
-                        .replace( "src='image?", "src='" + AppPropertiesService.getProperty( PROPERTY_PROD_URL, EMPTY_STRING ) + "/image?" ) );
+                suggestSubmit.setSuggestSubmitValue( suggestSubmit.getSuggestSubmitValue( ).replace( "src='image?",
+                        "src='" + AppPropertiesService.getProperty( PROPERTY_PROD_URL, EMPTY_STRING ) + "/image?" ) );
             }
 
             Collection<Recipient> listRecipients = AdminMailingListService.getRecipients( suggest.getIdMailingListSuggestSubmit( ) );
@@ -332,7 +332,7 @@ public final class SuggestUtils
 
     /**
      * sendMail of notification for new reported message
-     * 
+     *
      * @param suggest
      *            the suggest
      * @param reportedMessage
@@ -373,7 +373,7 @@ public final class SuggestUtils
 
     /**
      * return a timestamp Object which correspond with the string specified in parameter.
-     * 
+     *
      * @param strDate
      *            the date who must convert
      * @param locale
@@ -406,7 +406,7 @@ public final class SuggestUtils
 
     /**
      * return a timestamp Object which correspond with the string specified in parameter.
-     * 
+     *
      * @param strDate
      *            the date who must convert
      * @param locale
@@ -439,7 +439,7 @@ public final class SuggestUtils
 
     /**
      * return the first day of week function of the date .
-     * 
+     *
      * @param date
      *            the date
      * @return the first day of week function of the date.
@@ -459,7 +459,7 @@ public final class SuggestUtils
 
     /**
      * return the last day of week function of the date .
-     * 
+     *
      * @param date
      *            the date
      * @return the last day of week function of the date.
@@ -479,7 +479,7 @@ public final class SuggestUtils
 
     /**
      * return a timestamp Object which correspond at the fist minute of the date .
-     * 
+     *
      * @param date
      *            the date
      * @return a timestamp Object which correspond at the fist minute of the date .
@@ -498,7 +498,7 @@ public final class SuggestUtils
 
     /**
      * return a timestamp Object which correspond at the last minute of the date .
-     * 
+     *
      * @param date
      *            the date
      * @return a timestamp Object which correspond at the last minute of the date .
@@ -517,7 +517,7 @@ public final class SuggestUtils
 
     /**
      * return the first day of month function of the date .
-     * 
+     *
      * @param date
      *            the date
      * @return the first day of mont function of the date.
@@ -537,7 +537,7 @@ public final class SuggestUtils
 
     /**
      * return the last day of month function of the date .
-     * 
+     *
      * @param date
      *            the date
      * @return the last day of mont function of the date.
@@ -573,7 +573,7 @@ public final class SuggestUtils
 
     /**
      * return current date
-     * 
+     *
      * @return return current date
      */
     public static Timestamp getCurrentDate( )
@@ -583,7 +583,7 @@ public final class SuggestUtils
 
     /**
      * Return a date corresponding to the date provides in parameter add with a number of day
-     * 
+     *
      * @param date
      *            the date
      * @param nDay
@@ -601,7 +601,7 @@ public final class SuggestUtils
 
     /**
      * return an instance of IEntry function of type entry
-     * 
+     *
      * @param request
      *            the request
      * @param plugin
@@ -652,7 +652,7 @@ public final class SuggestUtils
 
     /**
      * return the index in the list of the entry whose key is specified in parameter
-     * 
+     *
      * @param nIdEntry
      *            the key of the entry
      * @param listEntry
@@ -760,7 +760,7 @@ public final class SuggestUtils
 
     /**
      * insert in the string buffer the content of the html code of the entry
-     * 
+     *
      * @param nIdEntry
      *            the key of the entry which html code must be insert in the stringBuffer
      * @param plugin
@@ -772,7 +772,8 @@ public final class SuggestUtils
      * @param bBackOffice
      *            true to render the back office form, false for the front office one
      */
-    public static void getHtmlFormEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale, boolean bBackOffice, HttpServletRequest request )
+    public static void getHtmlFormEntry( int nIdEntry, Plugin plugin, StringBuffer stringBuffer, Locale locale, boolean bBackOffice,
+            HttpServletRequest request )
     {
         Map<String, Object> model = new HashMap<>( );
         HtmlTemplate template;
@@ -788,7 +789,7 @@ public final class SuggestUtils
 
     /**
      * return the content of the html code response
-     * 
+     *
      * @param response
      *            the response which html code must be generate
      * @param stringBuffer
@@ -813,7 +814,7 @@ public final class SuggestUtils
 
     /**
      * return the content of the html code of the suggest submit
-     * 
+     *
      * @param suggestSubmit
      *            the suggestsubmit
      * @param locale
@@ -844,7 +845,7 @@ public final class SuggestUtils
 
     /**
      * return the content of the html code of the suggest submit show in the list of suggest submit
-     * 
+     *
      * @param suggestSubmit
      *            the suggestsubmit
      * @param locale
@@ -902,7 +903,7 @@ public final class SuggestUtils
 
     /**
      * return the title of the suggest submit
-     * 
+     *
      * @param suggestSubmit
      *            the suggestsubmit
      * @param locale
@@ -923,7 +924,7 @@ public final class SuggestUtils
 
     /**
      * perform in the object suggestSubmit the responses associates to the suggestsubmit
-     * 
+     *
      * @param request
      * @param suggestSubmit
      * @param plugin
@@ -967,7 +968,7 @@ public final class SuggestUtils
     /**
      * perform in the object suggestSubmit the responses associates with a entry specify in parameter. return null if there is no error in the response else
      * return a FormError Object
-     * 
+     *
      * @param request
      *            the request
      * @param nIdEntry
@@ -1066,8 +1067,8 @@ public final class SuggestUtils
     }
 
     /**
-     * Makes the values of the responses of an entry safe to display, and refuses a link that is not a web address. The BBCode entry is left as is:
-     * its value is cleaned once converted to HTML.
+     * Makes the values of the responses of an entry safe to display, and refuses a link that is not a web address. The BBCode entry is left as is: its value is
+     * cleaned once converted to HTML.
      *
      * @param entry
      *            the entry
@@ -1113,7 +1114,7 @@ public final class SuggestUtils
 
     /**
      * convert a string to int
-     * 
+     *
      * @param strParameter
      *            the string parameter to convert
      * @return the conversion
@@ -1139,7 +1140,7 @@ public final class SuggestUtils
 
     /**
      * Returns a copy of the string , with leading and trailing whitespace omitted.
-     * 
+     *
      * @param strParameter
      *            the string parameter to convert
      * @return null if the strParameter is null other return with leading and trailing whitespace omitted.
@@ -1156,7 +1157,7 @@ public final class SuggestUtils
 
     /**
      * initialized the submit filter object with the period specified in parameter
-     * 
+     *
      * @param submitFilter
      *            the filter to initialized
      * @param nIdPeriod
@@ -1200,7 +1201,7 @@ public final class SuggestUtils
 
     /**
      * initialized the submit filter object with the sort specified in parameter
-     * 
+     *
      * @param submitFilter
      *            the filter to initialized
      * @param nIdSort
@@ -1276,7 +1277,7 @@ public final class SuggestUtils
 
     /**
      * initialized the submit filter object with the sort specified in parameter
-     * 
+     *
      * @param submitFilter
      *            the filter to initialized
      * @param nIdSort
@@ -1320,7 +1321,7 @@ public final class SuggestUtils
 
     /**
      * Perform the vote on a suggest submit
-     * 
+     *
      * @param nIdSuggestSubmit
      *            the id of the suggest submit
      * @param strLuteceUserKey
@@ -1381,7 +1382,7 @@ public final class SuggestUtils
 
     /**
      * Perform the report on a suggest submit
-     * 
+     *
      * @param suggestSubmit
      *            the suggest submit
      * @param plugin
@@ -1401,12 +1402,13 @@ public final class SuggestUtils
      *
      * @param listOrders
      *            the current list order of each element, in the wanted sequence
-     * @return the shifts as { first order, last order, delta }, empty when nothing moves, or null when the current orders are not distinct positive
-     *         numbers and cannot be shifted by ranges
+     * @return the shifts as { first order, last order, delta }, empty when nothing moves, or null when the current orders are not distinct positive numbers and
+     *         cannot be shifted by ranges
      */
     public static List<int [ ]> getOrderShifts( List<Integer> listOrders )
     {
-        if ( listOrders.stream( ).anyMatch( nOrder -> ( nOrder == null ) || ( nOrder < 1 ) ) || ( listOrders.stream( ).distinct( ).count( ) != listOrders.size( ) ) )
+        if ( listOrders.stream( ).anyMatch( nOrder -> ( nOrder == null ) || ( nOrder < 1 ) )
+                || ( listOrders.stream( ).distinct( ).count( ) != listOrders.size( ) ) )
         {
             return null;
         }
@@ -1440,8 +1442,8 @@ public final class SuggestUtils
     }
 
     /**
-     * Tells whether a proposal of a suggest may be filed under a category: any proposal when the suggest has no category, otherwise only under one of
-     * the categories of the suggest.
+     * Tells whether a proposal of a suggest may be filed under a category: any proposal when the suggest has no category, otherwise only under one of the
+     * categories of the suggest.
      *
      * @param suggest
      *            the suggest, with its categories
@@ -1550,12 +1552,14 @@ public final class SuggestUtils
         refListSorter.addItem( CONSTANT_ID_NULL, EMPTY_STRING );
         addEmptyItem( refListSorter );
         refListSorter.addItem( SubmitFilter.SORT_BY_DATE_RESPONSE_ASC, I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_ASC, locale ) );
-        refListSorter.addItem( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC, I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_DESC, locale ) );
+        refListSorter.addItem( SubmitFilter.SORT_BY_DATE_RESPONSE_DESC,
+                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_DATE_RESPONSE_DESC, locale ) );
         refListSorter.addItem( SubmitFilter.SORT_BY_SCORE_ASC, I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_SCORE_ASC, locale ) );
         refListSorter.addItem( SubmitFilter.SORT_BY_SCORE_DESC, I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_SCORE_DESC, locale ) );
-        refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_COMMENT_ASC, I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_ASC, locale ) );
-        refListSorter
-                .addItem( SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC, I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_DESC, locale ) );
+        refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_COMMENT_ASC,
+                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_ASC, locale ) );
+        refListSorter.addItem( SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC,
+                I18nService.getLocalizedString( PROPERTY_SORTER_LIST_ITEM_AMOUNT_COMMENT_DESC, locale ) );
 
         if ( !bFront )
         {
@@ -1626,7 +1630,7 @@ public final class SuggestUtils
 
     /**
      * write the http header in the response
-     * 
+     *
      * @param request
      *            the httpServletRequest
      * @param response
@@ -1644,7 +1648,7 @@ public final class SuggestUtils
 
     /**
      * Builds a query with filters placed in parameters
-     * 
+     *
      * @param strSelect
      *            the select of the query
      * @param listStrFilter
@@ -1737,7 +1741,7 @@ public final class SuggestUtils
 
     /**
      * Add an empty element to a reference list
-     * 
+     *
      * @param refList
      *            The reference list to add the empty element to
      */
@@ -1751,7 +1755,7 @@ public final class SuggestUtils
 
     /**
      * Depopulate the suggest into a map of key - value
-     * 
+     *
      * @param suggest
      *            the suggest
      * @return a map of key - value
@@ -1787,7 +1791,7 @@ public final class SuggestUtils
 
     /**
      * create a filter for getting the list of pinned suggest submit
-     * 
+     *
      * @param filter
      *            the init filter
      * @return a filter for getting f the list of pinned suggest submit
@@ -1839,10 +1843,9 @@ public final class SuggestUtils
         filter.setIdCategory( searchFields.getIdCategory( ) );
         filter.setIdType( searchFields.getIdType( ) );
         filter.setIdContainsCommentDisable( searchFields.getIdSuggestSubmitContainsCommentDisable( ) );
-        SuggestUtils.initSubmitFilterBySort(
-                filter,
-                ( ( searchFields.getIdSuggestSubmitSort( ) == SuggestUtils.CONSTANT_ID_NULL ) && ( nDefaultIdSort != null ) ) ? nDefaultIdSort : searchFields
-                        .getIdSuggestSubmitSort( ) );
+        SuggestUtils.initSubmitFilterBySort( filter,
+                ( ( searchFields.getIdSuggestSubmitSort( ) == SuggestUtils.CONSTANT_ID_NULL ) && ( nDefaultIdSort != null ) ) ? nDefaultIdSort
+                        : searchFields.getIdSuggestSubmitSort( ) );
         // add sort by pinned first
         SuggestUtils.initSubmitFilterBySort( filter, SubmitFilter.SORT_BY_PINNED_FIRST );
 
@@ -1851,7 +1854,7 @@ public final class SuggestUtils
 
     /**
      * Add Avatar to model
-     * 
+     *
      * @param model
      * @param luteceUserInfo
      */
@@ -1865,11 +1868,10 @@ public final class SuggestUtils
             {
                 model.put( MARK_AVATAR, AvatarService.getAvatarUrl( luteceUserInfo.getHomeMail( ) ) );
             }
-            else
-                if ( !StringUtils.isEmpty( luteceUserInfo.getBusinessMail( ) ) )
-                {
-                    model.put( MARK_AVATAR, AvatarService.getAvatarUrl( luteceUserInfo.getBusinessMail( ) ) );
-                }
+            else if ( !StringUtils.isEmpty( luteceUserInfo.getBusinessMail( ) ) )
+            {
+                model.put( MARK_AVATAR, AvatarService.getAvatarUrl( luteceUserInfo.getBusinessMail( ) ) );
+            }
 
         }
 

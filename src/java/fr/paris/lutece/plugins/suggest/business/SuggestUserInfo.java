@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -107,7 +107,7 @@ public class SuggestUserInfo
 
     /**
      * Gets a user's info
-     * 
+     *
      * @param key
      *            The info key
      * @return The info value
@@ -122,22 +122,19 @@ public class SuggestUserInfo
             {
                 strReturn = getFirstName( );
             }
-            else
-                if ( key.equals( LuteceUser.NAME_FAMILY ) )
-                {
-                    strReturn = getLastName( );
-                }
-                else
-                    if ( key.equals( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL ) )
-                    {
-                        strReturn = getBusinessMail( );
-                    }
+            else if ( key.equals( LuteceUser.NAME_FAMILY ) )
+            {
+                strReturn = getLastName( );
+            }
+            else if ( key.equals( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL ) )
+            {
+                strReturn = getBusinessMail( );
+            }
 
-                    else
-                        if ( key.equals( LuteceUser.HOME_INFO_ONLINE_EMAIL ) )
-                        {
-                            strReturn = getHomeMail( );
-                        }
+            else if ( key.equals( LuteceUser.HOME_INFO_ONLINE_EMAIL ) )
+            {
+                strReturn = getHomeMail( );
+            }
         }
 
         return strReturn;
@@ -145,7 +142,7 @@ public class SuggestUserInfo
 
     /**
      * toString implementation
-     * 
+     *
      * @return The login
      */
     public String toString( )

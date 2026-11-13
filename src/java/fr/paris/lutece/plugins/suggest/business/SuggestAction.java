@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -180,7 +180,7 @@ public class SuggestAction implements RBACAction, Localizable
 
     /**
      * Returns the permission associated to the action
-     * 
+     *
      * @return The permission
      */
     public String getPermission( )
@@ -201,7 +201,7 @@ public class SuggestAction implements RBACAction, Localizable
 
     /**
      * Implements Localizable
-     * 
+     *
      * @param locale
      *            The current locale
      */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,10 +63,10 @@ public class EntryTypeUrl extends Entry
 
     /**
      * Get the HtmlCode of the entry
-     * 
+     *
      * @return the HtmlCode of the entry
      *
-     * */
+     */
     @Override
     public String getTemplateHtmlCodeForm( )
     {
@@ -75,7 +75,7 @@ public class EntryTypeUrl extends Entry
 
     /**
      * Get the request data
-     * 
+     *
      * @param request
      *            HttpRequest
      * @param locale
@@ -104,16 +104,15 @@ public class EntryTypeUrl extends Entry
             strFieldError = FIELD_TITLE;
         }
 
-        else
-            if ( ( strWidth == null ) || strWidth.trim( ).equals( EMPTY_STRING ) )
-            {
-                strFieldError = FIELD_WIDTH;
-            }
+        else if ( ( strWidth == null ) || strWidth.trim( ).equals( EMPTY_STRING ) )
+        {
+            strFieldError = FIELD_WIDTH;
+        }
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
             Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
+                    I18nService.getLocalizedString( strFieldError, locale )
             };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
@@ -143,7 +142,7 @@ public class EntryTypeUrl extends Entry
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
             Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
+                    I18nService.getLocalizedString( strFieldError, locale )
             };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
@@ -165,7 +164,7 @@ public class EntryTypeUrl extends Entry
 
     /**
      * Get template create url of the entry
-     * 
+     *
      * @return template create url of the entry
      */
     @Override
@@ -176,7 +175,7 @@ public class EntryTypeUrl extends Entry
 
     /**
      * Get the template modify url of the entry
-     * 
+     *
      * @return template modify url of the entry
      */
     @Override
@@ -187,7 +186,7 @@ public class EntryTypeUrl extends Entry
 
     /**
      * The paginator who is use in the template modify of the entry
-     * 
+     *
      * @param nItemPerPage
      *            Number of items to display per page
      * @param strBaseUrl
@@ -206,7 +205,7 @@ public class EntryTypeUrl extends Entry
 
     /**
      * return the list of regular expression whose not associate to the entry
-     * 
+     *
      * @param entry
      *            the entry
      * @param plugin
@@ -236,7 +235,7 @@ public class EntryTypeUrl extends Entry
 
     /**
      * save in the list of response the response associate to the entry in the form submit
-     * 
+     *
      * @param request
      *            HttpRequest
      * @param listResponse
@@ -264,7 +263,8 @@ public class EntryTypeUrl extends Entry
                 return formError;
             }
 
-            if ( ( listRegularExpression != null ) && ( !listRegularExpression.isEmpty( ) ) && CDI.current( ).select( RegularExpressionService.class ).get( ).isAvailable( ) )
+            if ( ( listRegularExpression != null ) && ( !listRegularExpression.isEmpty( ) )
+                    && CDI.current( ).select( RegularExpressionService.class ).get( ).isAvailable( ) )
             {
                 for ( RegularExpression regularExpression : listRegularExpression )
                 {
@@ -290,7 +290,7 @@ public class EntryTypeUrl extends Entry
 
     /**
      * save in the list of response the response associate to the entry in the form submit
-     * 
+     *
      * @param nIdSuggestSubmit
      *            The if of the SuggestSubmit
      * @param request
@@ -311,7 +311,7 @@ public class EntryTypeUrl extends Entry
 
     /**
      * Get the template of the html code of the response value associate to the entry
-     * 
+     *
      * @return the template of the html code of the response value associate to the entry
      */
     @Override

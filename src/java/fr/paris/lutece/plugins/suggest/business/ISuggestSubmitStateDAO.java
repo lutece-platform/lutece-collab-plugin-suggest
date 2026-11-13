@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -68,7 +68,7 @@ public interface ISuggestSubmitStateDAO
 
     /**
      * Load the data of all suggest submit state returns them in a list
-     * 
+     *
      * @param plugin
      *            the plugin
      * @return the list of suggest submit state

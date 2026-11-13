@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,7 @@ public interface ISuggestResourceRssConfigDAO
 {
     /**
      * Insert a new record in the table.
-     * 
+     *
      * @param config
      *            The Instance of the object config
      * @param plugin
@@ -66,7 +66,7 @@ public interface ISuggestResourceRssConfigDAO
 
     /**
      * load the data of SuggestResourceRssConfig from the table
-     * 
+     *
      * @param nIdConfig
      *            the config id
      * @param plugin
@@ -78,7 +78,7 @@ public interface ISuggestResourceRssConfigDAO
 
     /**
      * Delete a record from the table
-     * 
+     *
      * @param nIdConfig
      *            The id of object SuggestResourceRssConfig
      * @param plugin
@@ -88,7 +88,7 @@ public interface ISuggestResourceRssConfigDAO
 
     /**
      * Return all record
-     * 
+     *
      * @param plugin
      *            le plugin
      * @return List of SuggestResourceRssConfig

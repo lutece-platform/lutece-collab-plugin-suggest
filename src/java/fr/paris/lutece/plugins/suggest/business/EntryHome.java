@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -197,7 +197,7 @@ public final class EntryHome
 
     /**
      * Load the data of all the entry who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -218,7 +218,7 @@ public final class EntryHome
 
     /**
      * Return the number of entry who verify the filter
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -276,7 +276,7 @@ public final class EntryHome
 
     /**
      * Load the key of all the regularExpression associate to the entry and returns them in a list
-     * 
+     *
      * @param nIdEntry
      *            the id of entry
      * @param plugin

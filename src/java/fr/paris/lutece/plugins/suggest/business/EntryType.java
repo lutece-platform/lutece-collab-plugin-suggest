@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,7 +55,7 @@ public class EntryType
 
     /**
      * set the id of the entry type
-     * 
+     *
      * @param idType
      *            the id of the entry type
      */
@@ -75,7 +75,7 @@ public class EntryType
 
     /**
      * set the title of the entry type
-     * 
+     *
      * @param title
      *            the title of the entry type
      */
@@ -95,7 +95,7 @@ public class EntryType
 
     /**
      * set the path for acces to the Class Entry
-     * 
+     *
      * @param className
      *            the path for acces to the Class Entry
      */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -75,8 +75,8 @@ public class DefaultMessageJspBean extends MVCAdminJspBean
     private static final String ACTION_MODIFY_DEFAULT_MESSAGE = "modifyDefaultMessage";
 
     /**
-	 * 
-	 */
+     *
+     */
     private static final long serialVersionUID = -8248033294625285115L;
 
     // templates
@@ -126,7 +126,7 @@ public class DefaultMessageJspBean extends MVCAdminJspBean
 
     /**
      * gets the manage default message page
-     * 
+     *
      * @param request
      *            the Http request
      * @param model
@@ -146,7 +146,7 @@ public class DefaultMessageJspBean extends MVCAdminJspBean
 
     /**
      * perform the default message modification
-     * 
+     *
      * @param request
      *            the Http request
      * @return The URL to go after performing the action
@@ -154,7 +154,8 @@ public class DefaultMessageJspBean extends MVCAdminJspBean
     @Action( value = ACTION_MODIFY_DEFAULT_MESSAGE, securityTokenAction = VIEW_MANAGE_DEFAULT_MESSAGE )
     public String doModifyDefaultMessage( HttpServletRequest request )
     {
-        if ( RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, DefaultMessageResourceIdService.PERMISSION_MANAGE, (User) getUser( ) ) )
+        if ( RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, DefaultMessageResourceIdService.PERMISSION_MANAGE,
+                (User) getUser( ) ) )
         {
             DefaultMessage defaultMessage = new DefaultMessage( );
             String strError = getDefaultMessageData( request, defaultMessage );
@@ -178,7 +179,7 @@ public class DefaultMessageJspBean extends MVCAdminJspBean
     /**
      * Get the request data and if there is no error insert the data in the default Message object specified in parameter. return null if there is no error or
      * else return the localized error message
-     * 
+     *
      * @param request
      *            the request
      * @param defaultMessage
@@ -208,64 +209,55 @@ public class DefaultMessageJspBean extends MVCAdminJspBean
         {
             strFieldError = FIELD_LIBELLE_CONTRIBUTION;
         }
-        else
-            if ( StringUtils.isEmpty( strUnavailabilityMessage ) )
-            {
-                strFieldError = FIELD_UNAVAILABILITY_MESSAGE;
-            }
+        else if ( StringUtils.isEmpty( strUnavailabilityMessage ) )
+        {
+            strFieldError = FIELD_UNAVAILABILITY_MESSAGE;
+        }
 
-            else
-                if ( StringUtils.isEmpty( strLibelleValidateButton ) )
-                {
-                    strFieldError = FIELD_LIBELLE_VALIDATE_BUTTON;
-                }
-                else
-                    if ( StringUtils.isEmpty( strNumberSuggestSubmitInTopScore ) )
-                    {
-                        strFieldError = FIELD_NUMBER_SUGGEST_SUBMIT_IN_TOP_SCORE;
-                    }
+        else if ( StringUtils.isEmpty( strLibelleValidateButton ) )
+        {
+            strFieldError = FIELD_LIBELLE_VALIDATE_BUTTON;
+        }
+        else if ( StringUtils.isEmpty( strNumberSuggestSubmitInTopScore ) )
+        {
+            strFieldError = FIELD_NUMBER_SUGGEST_SUBMIT_IN_TOP_SCORE;
+        }
 
-                    else
-                        if ( StringUtils.isEmpty( strNumberSuggestSubmitInTopComment ) )
-                        {
-                            strFieldError = FIELD_NUMBER_SUGGEST_SUBMIT_IN_TOP_COMMENT;
-                        }
-                        else
-                            if ( StringUtils.isEmpty( strNumberSuggestSubmitCaractersShown ) )
-                            {
-                                strFieldError = FIELD_NUMBER_SUGGEST_SUBMIT_CARACTERS_SHOWN;
-                            }
+        else if ( StringUtils.isEmpty( strNumberSuggestSubmitInTopComment ) )
+        {
+            strFieldError = FIELD_NUMBER_SUGGEST_SUBMIT_IN_TOP_COMMENT;
+        }
+        else if ( StringUtils.isEmpty( strNumberSuggestSubmitCaractersShown ) )
+        {
+            strFieldError = FIELD_NUMBER_SUGGEST_SUBMIT_CARACTERS_SHOWN;
+        }
 
-                            else
-                                if ( StringUtils.isEmpty( strNotificationNewCommentTitle ) )
-                                {
-                                    strFieldError = FIELD_NOTIFICATION_NEW_COMMENT_TITLE;
+        else if ( StringUtils.isEmpty( strNotificationNewCommentTitle ) )
+        {
+            strFieldError = FIELD_NOTIFICATION_NEW_COMMENT_TITLE;
 
-                                }
-                                else
-                                    if ( StringUtils.isEmpty( strNotificationNewCommentBody ) )
-                                    {
-                                        strFieldError = FIELD_NOTIFICATION_NEW_COMMENT_BODY;
+        }
+        else if ( StringUtils.isEmpty( strNotificationNewCommentBody ) )
+        {
+            strFieldError = FIELD_NOTIFICATION_NEW_COMMENT_BODY;
 
-                                    }
+        }
 
-                                    else
-                                        if ( StringUtils.isEmpty( strNotificationNewSuggestSubmitTitle ) )
-                                        {
+        else if ( StringUtils.isEmpty( strNotificationNewSuggestSubmitTitle ) )
+        {
 
-                                            strFieldError = FIELD_NOTIFICATION_NEW_SUGGEST_DUBMIT_TITLE;
-                                        }
-                                        else
-                                            if ( StringUtils.isEmpty( strNotificationNewSuggestSubmitBody ) )
-                                            {
+            strFieldError = FIELD_NOTIFICATION_NEW_SUGGEST_DUBMIT_TITLE;
+        }
+        else if ( StringUtils.isEmpty( strNotificationNewSuggestSubmitBody ) )
+        {
 
-                                                strFieldError = FIELD_NOTIFICATION_NEW_SUGGEST_DUBMIT_BODY;
-                                            }
+            strFieldError = FIELD_NOTIFICATION_NEW_SUGGEST_DUBMIT_BODY;
+        }
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
             Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, getLocale( ) )
+                    I18nService.getLocalizedString( strFieldError, getLocale( ) )
             };
 
             return I18nService.getLocalizedString( MESSAGE_MANDATORY_FIELD, tabRequiredFields, getLocale( ) );

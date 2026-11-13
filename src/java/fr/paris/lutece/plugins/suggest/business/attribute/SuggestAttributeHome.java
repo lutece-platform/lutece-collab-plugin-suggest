@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,12 +56,12 @@ public final class SuggestAttributeHome
      */
     private SuggestAttributeHome( )
     {
-        
+
     }
-    
+
     /**
      * Load the attributes of the suggest
-     * 
+     *
      * @param nIdSuggest
      *            the id suggest
      * @return a map of key - value
@@ -73,7 +73,7 @@ public final class SuggestAttributeHome
 
     /**
      * create a suggest Attribute
-     * 
+     *
      * @param nIdSuggest
      *            the id of the suggest
      * @param strAttributeKey
@@ -88,7 +88,7 @@ public final class SuggestAttributeHome
 
     /**
      * Create the attribute of the suggest
-     * 
+     *
      * @param nIdSuggest
      *            the if of the suggest
      * @param mapAttributes
@@ -104,7 +104,7 @@ public final class SuggestAttributeHome
 
     /**
      * Remove the attributes of the suggest
-     * 
+     *
      * @param nIdSuggest
      *            the id suggest
      */

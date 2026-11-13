@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -260,7 +260,7 @@ public final class SuggestHome
 
     /**
      * Load the data of all the suggests who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -290,7 +290,7 @@ public final class SuggestHome
 
     /**
      * Update the value of the field which will be use to sort the suggestSubmit
-     * 
+     *
      * @param nIdSuggest
      *            the id of the suggestSubmit
      * @param nNewField

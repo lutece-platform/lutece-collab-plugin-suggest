@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,7 +52,6 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.portal.service.upload.MultipartItem;
 
-
 /**
  *
  * class EntryTypeVideo
@@ -80,10 +79,10 @@ public class EntryTypeVideo extends Entry
 
     /**
      * Get the HtmlCode of the entry
-     * 
+     *
      * @return the HtmlCode of the entry
      *
-     * */
+     */
     @Override
     public String getTemplateHtmlCodeForm( )
     {
@@ -92,7 +91,7 @@ public class EntryTypeVideo extends Entry
 
     /**
      * Get the request data
-     * 
+     *
      * @param request
      *            HttpRequest
      * @param locale
@@ -129,7 +128,7 @@ public class EntryTypeVideo extends Entry
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
             Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
+                    I18nService.getLocalizedString( strFieldError, locale )
             };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
@@ -162,7 +161,7 @@ public class EntryTypeVideo extends Entry
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
             Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
+                    I18nService.getLocalizedString( strFieldError, locale )
             };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
@@ -212,7 +211,7 @@ public class EntryTypeVideo extends Entry
 
     /**
      * Get template create url of the entry
-     * 
+     *
      * @return template create url of the entry
      */
     @Override
@@ -223,7 +222,7 @@ public class EntryTypeVideo extends Entry
 
     /**
      * Get the template modify url of the entry
-     * 
+     *
      * @return template modify url of the entry
      */
     @Override
@@ -234,7 +233,7 @@ public class EntryTypeVideo extends Entry
 
     /**
      * save in the list of response the response associate to the entry in the form submit
-     * 
+     *
      * @param nIdSuggestSubmit
      *            the id of the SuggestSubmit
      * @param request
@@ -307,11 +306,10 @@ public class EntryTypeVideo extends Entry
             {
                 bAutostart = Boolean.parseBoolean( attr.getValue( ) );
             }
-            else
-                if ( attr.getName( ).equals( PARAMETER_LOOP ) )
-                {
-                    bLoop = Boolean.parseBoolean( attr.getValue( ) );
-                }
+            else if ( attr.getName( ).equals( PARAMETER_LOOP ) )
+            {
+                bLoop = Boolean.parseBoolean( attr.getValue( ) );
+            }
         }
 
         Map<String, Object> model = new HashMap<>( );
@@ -327,7 +325,7 @@ public class EntryTypeVideo extends Entry
 
     /**
      * Get the template of the html code of the response value associate to the entry
-     * 
+     *
      * @return the template of the html code of the response value associate to the entry
      */
     @Override

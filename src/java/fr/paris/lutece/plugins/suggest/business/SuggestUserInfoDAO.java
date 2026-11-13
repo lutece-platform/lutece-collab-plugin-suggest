@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,8 +54,8 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
     private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_suggest_user_info ( lutece_user_key,first_name,last_name,business_mail,home_mail,login,department ) "
             + "VALUES(?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM suggest_suggest_user_info WHERE lutece_user_key= ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE suggest_suggest_user_info SET " + "first_name= ?,last_name= ?,business_mail=?,home_mail=?,login= ?,department= ?"
-            + " WHERE lutece_user_key= ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE suggest_suggest_user_info SET "
+            + "first_name= ?,last_name= ?,business_mail=?,home_mail=?,login= ?,department= ?" + " WHERE lutece_user_key= ? ";
     private static final String SQL_QUERY_SELECT_DEPARTMENTS = "SELECT u.department, COUNT(*) FROM suggest_suggest_user_info u, suggest_suggest_submit d "
             + "WHERE d.lutece_user_key = u.lutece_user_key AND u.department <> '' AND d.id_suggest = ? AND d.id_state = ? GROUP BY u.lutece_user_key, u.department";
     private static final Comparator<Map.Entry<String, Integer>> MOST_USED_SPELLING = Map.Entry.<String, Integer> comparingByValue( )
@@ -68,9 +68,9 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
     public void insert( SuggestUserInfo suggestUserInfo, Plugin plugin )
     {
         int ncpt = 1;
-        
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
-        {    
+
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        {
             daoUtil.setString( ncpt++, suggestUserInfo.getLuteceUserKey( ) );
             daoUtil.setString( ncpt++, suggestUserInfo.getFirstName( ) );
             daoUtil.setString( ncpt++, suggestUserInfo.getLastName( ) );
@@ -89,8 +89,8 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
     public void update( SuggestUserInfo suggestUserInfo, Plugin plugin )
     {
         int ncpt = 1;
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
-        {    
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
             daoUtil.setString( ncpt++, suggestUserInfo.getFirstName( ) );
             daoUtil.setString( ncpt++, suggestUserInfo.getLastName( ) );
             daoUtil.setString( ncpt++, suggestUserInfo.getBusinessMail( ) );
@@ -112,16 +112,16 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
 
         int ncpt = 1;
 
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
-        {    
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+        {
             daoUtil.setString( 1, strLuteceUserKey );
-    
+
             daoUtil.executeQuery( );
-    
+
             if ( daoUtil.next( ) )
             {
                 submitUserInfo = new SuggestUserInfo( );
-    
+
                 submitUserInfo.setLuteceUserKey( strLuteceUserKey );
                 submitUserInfo.setFirstName( daoUtil.getString( ncpt++ ) );
                 submitUserInfo.setLastName( daoUtil.getString( ncpt++ ) );
@@ -142,7 +142,7 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
     @Override
     public void delete( String strLuteceUserKey, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
             daoUtil.setString( 1, strLuteceUserKey );
             daoUtil.executeUpdate( );
@@ -157,7 +157,7 @@ public class SuggestUserInfoDAO implements ISuggestUserInfoDAO
     {
         Map<String, Map<String, Integer>> mapSpellings = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
 
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_DEPARTMENTS, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_DEPARTMENTS, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggest );
             daoUtil.setInt( 2, nIdSuggestSubmitState );

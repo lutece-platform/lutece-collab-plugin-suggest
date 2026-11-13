@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,7 +41,6 @@ import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
 import fr.paris.lutece.portal.business.style.Theme;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
-
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -73,7 +72,7 @@ public interface ISuggestSubmitService
 
     /**
      * Remove the record whose identifier is specified in parameter, as well as its related workflow resources
-     * 
+     *
      * @param nIdSuggestSubmit
      *            The id of the suggestSubmit
      * @param plugin
@@ -96,7 +95,7 @@ public interface ISuggestSubmitService
 
     /**
      * Update of the suggestSubmit which is specified in parameter
-     * 
+     *
      * @param suggestSubmit
      * @param bUpdateIndex
      * @param plugin
@@ -148,7 +147,7 @@ public interface ISuggestSubmitService
 
     /**
      * Load the data of all the suggestSubmit who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -159,7 +158,7 @@ public interface ISuggestSubmitService
 
     /**
      * Load the id of all the suggestSubmit who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -170,7 +169,7 @@ public interface ISuggestSubmitService
 
     /**
      * Load the data of all the suggestSubmit who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -183,18 +182,18 @@ public interface ISuggestSubmitService
 
     /**
      * Get all the SuggestSubmit of a specific Suggest element
-     * 
+     *
      * @param nIdSuggest
-     * The ID of the Suggest
+     *            The ID of the Suggest
      * @param plugin
-     * The Plugin
+     *            The Plugin
      * @return the List of SuggestSubmit associated to the specified Suggest
      */
     List<SuggestSubmit> getListSuggestSubmitBySuggestId( int nIdSuggest, Plugin plugin );
 
     /**
      * Load the number of all the suggestSubmit who verify the filter
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -205,7 +204,7 @@ public interface ISuggestSubmitService
 
     /**
      * return the id of the next suggest submit in the list
-     * 
+     *
      * @param nIdCurrentSuggestSubmit
      *            the id of the current suggest submit
      * @param filter
@@ -218,7 +217,7 @@ public interface ISuggestSubmitService
 
     /**
      * return the id of the prev suggest submit in the list
-     * 
+     *
      * @param nIdCurrentSuggestSubmit
      *            the id of the current suggest submit
      * @param filter
@@ -231,7 +230,7 @@ public interface ISuggestSubmitService
 
     /**
      * move an element in the list of suggestSubmit and update the order
-     * 
+     *
      * @param nPositionElement
      *            the position of the element to move
      * @param nNewPositionElement
@@ -259,7 +258,7 @@ public interface ISuggestSubmitService
 
     /**
      * Search the max order number of contacts for one list
-     * 
+     *
      * @param nIdSuggest
      *            the Id of the Suggest
      * @param bListPinned
@@ -284,7 +283,7 @@ public interface ISuggestSubmitService
 
     /**
      * update the display of the suggestsubmit
-     * 
+     *
      * @param nIdSuggestSubmit
      *            the suggestSubmit Id
      * @param plugin

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -133,7 +133,7 @@ import fr.paris.lutece.util.url.UrlItem;
 public class SuggestApp extends MVCApplication
 {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -1994396667980739722L;
     public static final String ANCHOR_SUGGEST_SUBMIT = "suggest";
@@ -644,8 +644,8 @@ public class SuggestApp extends MVCApplication
     }
 
     /**
-     * Counts the published proposals of a suggest, of one author when a user key is given, of the authors of one department when a department is given, of
-     * one category when a category id is given.
+     * Counts the published proposals of a suggest, of one author when a user key is given, of the authors of one department when a department is given, of one
+     * category when a category id is given.
      *
      * @param nIdSuggest
      *            the suggest id
@@ -821,7 +821,7 @@ public class SuggestApp extends MVCApplication
 
     /**
      * Display Suggest List
-     * 
+     *
      * @param request
      *            the {@link HttpServletRequest}
      * @param nMode
@@ -862,7 +862,7 @@ public class SuggestApp extends MVCApplication
 
     /**
      * Display SuggestSubmit List
-     * 
+     *
      * @param request
      *            the {@link HttpServletRequest}
      * @param nMode
@@ -908,12 +908,12 @@ public class SuggestApp extends MVCApplication
 
             if ( nIdCategory > 0 )
             {
-                model.put( MARK_USER_SUBSCRIBED,
-                        _suggestSubscriptionProviderService.hasUserSubscribedToSuggestCategory( luteceUserConnected, nIdCategory ) );
+                model.put( MARK_USER_SUBSCRIBED, _suggestSubscriptionProviderService.hasUserSubscribedToSuggestCategory( luteceUserConnected, nIdCategory ) );
             }
             else
             {
-                model.put( MARK_USER_SUBSCRIBED, _suggestSubscriptionProviderService.hasUserSubscribedToSuggest( luteceUserConnected, suggest.getIdSuggest( ) ) );
+                model.put( MARK_USER_SUBSCRIBED,
+                        _suggestSubscriptionProviderService.hasUserSubscribedToSuggest( luteceUserConnected, suggest.getIdSuggest( ) ) );
             }
         }
 
@@ -923,8 +923,8 @@ public class SuggestApp extends MVCApplication
 
         SearchFields searchFields = getSearchFields( request );
         String strDepartment = getDepartmentFilter( suggest, searchFields );
-        model.put( MARK_NUMBER_PUBLISHED_SUGGEST_SUBMIT, getNumberPublishedSuggestSubmit( suggest.getIdSuggest( ), searchFields.getLuteceUserName( ), strDepartment,
-                searchFields.getIdFilterCategory( ) ) );
+        model.put( MARK_NUMBER_PUBLISHED_SUGGEST_SUBMIT, getNumberPublishedSuggestSubmit( suggest.getIdSuggest( ), searchFields.getLuteceUserName( ),
+                strDepartment, searchFields.getIdFilterCategory( ) ) );
         model.put( MARK_DEPARTMENT_FILTER, strDepartment );
 
         if ( suggest.isActive( ) && suggest.isEnableDepartmentFilter( ) )
@@ -939,20 +939,21 @@ public class SuggestApp extends MVCApplication
                     .collect( Collectors.toMap( entry -> String.valueOf( entry.getKey( ) ), Map.Entry::getValue ) ) );
 
             SubmitFilter departmentFacet = getFacetFilter( suggest, searchFields.getIdFilterCategory( ), null );
-            model.put( MARK_DEPARTMENT_COUNTS, _statisticsService.countPublishedByDepartment( departmentFacet, _plugin ).stream( )
-                    .filter( count -> count.getLabel( ) != null ).collect( Collectors.toMap( StatisticsCount::getLabel, StatisticsCount::getCount, Integer::sum,
-                            ( ) -> new TreeMap<>( String.CASE_INSENSITIVE_ORDER ) ) ) );
+            model.put( MARK_DEPARTMENT_COUNTS,
+                    _statisticsService.countPublishedByDepartment( departmentFacet, _plugin ).stream( ).filter( count -> count.getLabel( ) != null )
+                            .collect( Collectors.toMap( StatisticsCount::getLabel, StatisticsCount::getCount, Integer::sum,
+                                    ( ) -> new TreeMap<>( String.CASE_INSENSITIVE_ORDER ) ) ) );
         }
 
-        addSuggestPageFrameset( getHtmlListSuggestSubmit( getLocale( request ), _plugin, suggest, searchFields, urlSuggestXpage, luteceUserConnected ),
-                request, page, suggest, model, searchFields, luteceUserConnected );
+        addSuggestPageFrameset( getHtmlListSuggestSubmit( getLocale( request ), _plugin, suggest, searchFields, urlSuggestXpage, luteceUserConnected ), request,
+                page, suggest, model, searchFields, luteceUserConnected );
 
         return page;
     }
 
     /**
      * Display view SuggestSubmit
-     * 
+     *
      * @param request
      *            the {@link HttpServletRequest}
      * @param nMode
@@ -995,7 +996,7 @@ public class SuggestApp extends MVCApplication
 
     /**
      * Display create SuggestSubmit Form
-     * 
+     *
      * @param request
      *            the {@link HttpServletRequest}
      * @param nMode
@@ -1041,7 +1042,7 @@ public class SuggestApp extends MVCApplication
 
     /**
      * Display create sub comment
-     * 
+     *
      * @param request
      *            the {@link HttpServletRequest}
      * @param nMode
@@ -1103,7 +1104,7 @@ public class SuggestApp extends MVCApplication
 
     /**
      * Display create Report form
-     * 
+     *
      * @param request
      *            the {@link HttpServletRequest}
      * @param nMode
@@ -1142,7 +1143,7 @@ public class SuggestApp extends MVCApplication
 
     /**
      * Perform Action create Suggest Submit
-     * 
+     *
      * @param request
      *            the {@link HttpServletRequest}
      * @param nMode
@@ -1156,7 +1157,8 @@ public class SuggestApp extends MVCApplication
      * @throws SuggestFormValidationException
      *             if the form is refused
      */
-    public void doCreateSuggestSubmit( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException, SuggestFormValidationException
+    public void doCreateSuggestSubmit( XPage page, int nMode, HttpServletRequest request )
+            throws UserNotSignedException, SiteMessageException, SuggestFormValidationException
     {
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
 
@@ -1200,7 +1202,8 @@ public class SuggestApp extends MVCApplication
         {
             if ( ( strIdType == null ) || strIdType.equals( Integer.toString( SuggestUtils.CONSTANT_ID_NULL ) ) )
             {
-                throw new SuggestFormValidationException( I18nService.getLocalizedString( MESSAGE_ERROR_NO_SUGGEST_SUBMIT_TYPE_SELECTED, getLocale( request ) ) );
+                throw new SuggestFormValidationException(
+                        I18nService.getLocalizedString( MESSAGE_ERROR_NO_SUGGEST_SUBMIT_TYPE_SELECTED, getLocale( request ) ) );
             }
         }
 
@@ -1231,7 +1234,7 @@ public class SuggestApp extends MVCApplication
         if ( !StringUtils.isEmpty( suggest.getConfirmationMessage( ) ) )
         {
             Object [ ] args = {
-                ( suggest.getConfirmationMessage( ) == null ) ? "" : suggest.getConfirmationMessage( )
+                    ( suggest.getConfirmationMessage( ) == null ) ? "" : suggest.getConfirmationMessage( )
             };
             SiteMessageService.setMessage( request, strMessage, args, null, getNewUrlItemPage( ).getUrl( ), null, SiteMessage.TYPE_INFO, parameters );
         }
@@ -1240,7 +1243,7 @@ public class SuggestApp extends MVCApplication
     /**
      * Do subscribe to a suggest or a suggest submit. If the parameter {@link #PARAMETER_ID_SUBMIT_SUGGEST} has a value, then subscribe to the suggest submit,
      * otherwise subscribe to the suggest
-     * 
+     *
      * @param request
      *            The request
      * @throws SiteMessageException
@@ -1331,7 +1334,7 @@ public class SuggestApp extends MVCApplication
     /**
      * Do unsubscribe to a suggest or a suggest submit. If the parameter {@link #PARAMETER_ID_SUBMIT_SUGGEST} has a value, then unsubscribe to the suggest
      * submit, otherwise unsubscribe to the suggest
-     * 
+     *
      * @param request
      *            The request
      * @throws SiteMessageException
@@ -1417,7 +1420,7 @@ public class SuggestApp extends MVCApplication
 
     /**
      * Perform Action create Comment
-     * 
+     *
      * @param request
      *            the {@link HttpServletRequest}
      * @param nMode
@@ -1431,7 +1434,8 @@ public class SuggestApp extends MVCApplication
      * @throws SuggestFormValidationException
      *             if the form is refused
      */
-    public void doCreateComment( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException, SuggestFormValidationException
+    public void doCreateComment( XPage page, int nMode, HttpServletRequest request )
+            throws UserNotSignedException, SiteMessageException, SuggestFormValidationException
     {
         String strIdSubmitSuggest = request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST );
         int nIdSubmitSuggest = SuggestUtils.getIntegerParameter( strIdSubmitSuggest );
@@ -1512,7 +1516,7 @@ public class SuggestApp extends MVCApplication
             parameters.put( PARAMETER_ACTION, CONSTANT_VIEW_SUGGEST_SUBMIT );
 
             Object [ ] args = {
-                ( suggest.getConfirmationMessage( ) == null ) ? "" : suggest.getConfirmationMessage( )
+                    ( suggest.getConfirmationMessage( ) == null ) ? "" : suggest.getConfirmationMessage( )
             };
             SiteMessageService.setMessage( request, strMessage, args, null, getNewUrlItemPage( ).getUrl( ), null, SiteMessage.TYPE_INFO, parameters );
         }
@@ -1547,7 +1551,7 @@ public class SuggestApp extends MVCApplication
     /**
      *
      * Perform Action Report
-     * 
+     *
      * @param request
      *            the {@link HttpServletRequest}
      * @param nMode
@@ -1561,7 +1565,8 @@ public class SuggestApp extends MVCApplication
      * @throws SuggestFormValidationException
      *             if the form is refused
      */
-    public void doReport( XPage page, int nMode, HttpServletRequest request ) throws UserNotSignedException, SiteMessageException, SuggestFormValidationException
+    public void doReport( XPage page, int nMode, HttpServletRequest request )
+            throws UserNotSignedException, SiteMessageException, SuggestFormValidationException
     {
         String strIdSubmitSuggest = request.getParameter( PARAMETER_ID_SUBMIT_SUGGEST );
         int nIdSubmitSuggest = SuggestUtils.getIntegerParameter( strIdSubmitSuggest );
@@ -1630,7 +1635,7 @@ public class SuggestApp extends MVCApplication
 
     /**
      * Perform Action Vote
-     * 
+     *
      * @param request
      *            the {@link HttpServletRequest}
      * @param nMode
@@ -1668,29 +1673,26 @@ public class SuggestApp extends MVCApplication
                 {
                     throw new UserNotSignedException( );
                 }
-                else
-                    if ( ( suggest.getRole( ) != null ) && !Suggest.ROLE_NONE.equals( suggest.getRole( ) )
-                            && !SecurityService.getInstance( ).isUserInRole( request, suggest.getRole( ) ) )
-                    {
-                        SiteMessageService.setMessage( request, MESSAGE_ACCESS_DENIED, SiteMessage.TYPE_STOP );
-                    }
+                else if ( ( suggest.getRole( ) != null ) && !Suggest.ROLE_NONE.equals( suggest.getRole( ) )
+                        && !SecurityService.getInstance( ).isUserInRole( request, suggest.getRole( ) ) )
+                {
+                    SiteMessageService.setMessage( request, MESSAGE_ACCESS_DENIED, SiteMessage.TYPE_STOP );
+                }
 
                 if ( VoteHome.getUserNumberVoteOnSuggestSubmit( nIdSubmitSuggest, luteceUserConnected.getName( ), _plugin ) == 0 )
                 {
                     doVote( strVote, nIdSubmitSuggest, _plugin, luteceUserConnected.getName( ) );
                 }
-                else
-                    if ( suggest.isEnableVoteWithdrawal( ) )
-                    {
-                        doWithdrawVote( strVote, nIdSubmitSuggest, _plugin, luteceUserConnected.getName( ) );
-                    }
-            }
-            else
-                if ( request.getSession( ).getAttribute( EMPTY_STRING + nIdSubmitSuggest ) == null )
+                else if ( suggest.isEnableVoteWithdrawal( ) )
                 {
-                    doVote( strVote, nIdSubmitSuggest, _plugin, null );
-                    request.getSession( ).setAttribute( EMPTY_STRING + nIdSubmitSuggest, PARAMETER_VOTED );
+                    doWithdrawVote( strVote, nIdSubmitSuggest, _plugin, luteceUserConnected.getName( ) );
                 }
+            }
+            else if ( request.getSession( ).getAttribute( EMPTY_STRING + nIdSubmitSuggest ) == null )
+            {
+                doVote( strVote, nIdSubmitSuggest, _plugin, null );
+                request.getSession( ).setAttribute( EMPTY_STRING + nIdSubmitSuggest, PARAMETER_VOTED );
+            }
         }
         else
         {
@@ -1720,7 +1722,7 @@ public class SuggestApp extends MVCApplication
             nScore = Integer.parseInt( strVote );
             SuggestUtils.doVoteSuggestSubmit( nIdSubmitSuggest, nScore, strUserKey, plugin );
         }
-            
+
     }
 
     /**
@@ -1745,7 +1747,7 @@ public class SuggestApp extends MVCApplication
 
     /**
      * return the html list of suggest submit
-     * 
+     *
      * @param locale
      *            the locale
      * @param plugin
@@ -1773,10 +1775,9 @@ public class SuggestApp extends MVCApplication
 
         // Filter the list
         SuggestUtils.initSubmitFilterByPeriod( submitFilter, searchFields.getIdFilterPeriod( ) );
-        SuggestUtils.initSubmitFilterBySort(
-                submitFilter,
-                ( searchFields.getIdSuggestSubmitSort( ) != SuggestUtils.CONSTANT_ID_NULL ) ? searchFields.getIdSuggestSubmitSort( ) : suggest
-                        .getIdDefaultSort( ) );
+        SuggestUtils.initSubmitFilterBySort( submitFilter,
+                ( searchFields.getIdSuggestSubmitSort( ) != SuggestUtils.CONSTANT_ID_NULL ) ? searchFields.getIdSuggestSubmitSort( )
+                        : suggest.getIdDefaultSort( ) );
         // add sort by pinned first
         SuggestUtils.initSubmitFilterBySort( submitFilter, SubmitFilter.SORT_BY_PINNED_FIRST );
 
@@ -1896,8 +1897,8 @@ public class SuggestApp extends MVCApplication
 
             luteceUserInfo = null;
             suggestSubmit = _suggestSubmitService.findByPrimaryKey( idSuggestSubmit,
-                    ( suggest.isAuthorizedComment( ) && suggest.isDisplayCommentInSuggestSubmitList( ) ),
-                    suggest.getNumberCommentDisplayInSuggestSubmitList( ), plugin );
+                    ( suggest.isAuthorizedComment( ) && suggest.isDisplayCommentInSuggestSubmitList( ) ), suggest.getNumberCommentDisplayInSuggestSubmitList( ),
+                    plugin );
             modelSuggest.put( MARK_SUGGEST_SUBMIT, suggestSubmit );
 
             if ( SecurityService.isAuthenticationEnable( ) && ( suggestSubmit.getLuteceUserKey( ) != null ) )
@@ -1909,9 +1910,8 @@ public class SuggestApp extends MVCApplication
             SuggestUtils.addAvatarToModel( modelSuggest, luteceUserInfo );
             modelSuggest.put( MARK_WORKFLOW_STATE, SuggestWorkflowService.getState( suggest, suggestSubmit ) );
 
-            modelSuggest.put( MARK_SUGGEST_SUBMIT_VOTE_TYPE,
-                    getHtmlSuggestSubmitVoteType( suggest, voteType, suggestSubmit, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT, locale,
-                            setVoted.contains( idSuggestSubmit ) ) );
+            modelSuggest.put( MARK_SUGGEST_SUBMIT_VOTE_TYPE, getHtmlSuggestSubmitVoteType( suggest, voteType, suggestSubmit, CONSTANT_VIEW_LIST_SUGGEST_SUBMIT,
+                    locale, setVoted.contains( idSuggestSubmit ) ) );
 
             listHashSuggest.add( modelSuggest );
         }
@@ -1947,10 +1947,10 @@ public class SuggestApp extends MVCApplication
             modelComment.put( MARK_LUTECE_USER, luteceUserInfo );
             SuggestUtils.addAvatarToModel( modelComment, luteceUserInfo );
 
-            modelComment.put(
-                    MARK_LIST_SUB_COMMENT_SUBMIT_SUGGEST,
-                    ( ( commentSubmit.getComments( ) != null ) && !commentSubmit.getComments( ).isEmpty( ) ) ? getCommentSubmitDisplayList(
-                            commentSubmit.getComments( ), plugin ) : null );
+            modelComment.put( MARK_LIST_SUB_COMMENT_SUBMIT_SUGGEST,
+                    ( ( commentSubmit.getComments( ) != null ) && !commentSubmit.getComments( ).isEmpty( ) )
+                            ? getCommentSubmitDisplayList( commentSubmit.getComments( ), plugin )
+                            : null );
 
             listHashComment.add( modelComment );
         }
@@ -1977,8 +1977,8 @@ public class SuggestApp extends MVCApplication
      * @throws SiteMessageException
      *             SiteMessageException
      */
-    private String getHtmlSuggestSubmitDetail( HttpServletRequest request, int nMode, Plugin plugin, SuggestSubmit suggestSubmit, LuteceUser luteceUserConnected )
-            throws SiteMessageException
+    private String getHtmlSuggestSubmitDetail( HttpServletRequest request, int nMode, Plugin plugin, SuggestSubmit suggestSubmit,
+            LuteceUser luteceUserConnected ) throws SiteMessageException
     {
         SuggestUserInfo luteceUserInfo = null;
         HashMap<String, Object> model = new HashMap<>( );
@@ -2002,8 +2002,7 @@ public class SuggestApp extends MVCApplication
         if ( luteceUserConnected != null )
         {
             model.put( MARK_USER_SUBSCRIBED,
-                    _suggestSubscriptionProviderService
-                            .hasUserSubscribedToSuggestSubmit( luteceUserConnected, suggestSubmit.getIdSuggestSubmit( ) ) );
+                    _suggestSubscriptionProviderService.hasUserSubscribedToSuggestSubmit( luteceUserConnected, suggestSubmit.getIdSuggestSubmit( ) ) );
         }
 
         model.put( MARK_ID_SUGGEST, suggestSubmit.getSuggest( ).getIdSuggest( ) );
@@ -2027,9 +2026,8 @@ public class SuggestApp extends MVCApplication
 
         if ( StringUtils.isNotEmpty( suggestSubmit.getLuteceUserKey( ) ) )
         {
-            model.put( MARK_AUTHOR_NUMBER_SUGGEST_SUBMIT,
-                    getNumberPublishedSuggestSubmit( suggestSubmit.getSuggest( ).getIdSuggest( ), suggestSubmit.getLuteceUserKey( ), null,
-                            SuggestUtils.CONSTANT_ID_NULL ) );
+            model.put( MARK_AUTHOR_NUMBER_SUGGEST_SUBMIT, getNumberPublishedSuggestSubmit( suggestSubmit.getSuggest( ).getIdSuggest( ),
+                    suggestSubmit.getLuteceUserKey( ), null, SuggestUtils.CONSTANT_ID_NULL ) );
         }
         model.put( MARK_CAN_ADD_COMPLEMENT, _complementService.canAddComplement( suggestSubmit.getSuggest( ), suggestSubmit,
                 ( luteceUserConnected != null ) ? luteceUserConnected.getName( ) : null ) );
@@ -2043,10 +2041,8 @@ public class SuggestApp extends MVCApplication
 
         if ( suggestSubmit.getSuggest( ).isAuthorizedComment( ) && !suggestSubmit.isDisableComment( ) )
         {
-            model.put(
-                    MARK_LIST_COMMENT_SUBMIT_SUGGEST,
-                    getHtmlCommentSubmitList( request, suggestSubmit.getComments( ), suggestSubmit.getSuggest( ), suggestSubmit.getIdSuggestSubmit( ),
-                            luteceUserConnected, plugin ) );
+            model.put( MARK_LIST_COMMENT_SUBMIT_SUGGEST, getHtmlCommentSubmitList( request, suggestSubmit.getComments( ), suggestSubmit.getSuggest( ),
+                    suggestSubmit.getIdSuggestSubmit( ), luteceUserConnected, plugin ) );
         }
         if ( suggestSubmit.getSuggest( ).isActiveCaptcha( ) && _captchaService.isResolvable( ) )
         {
@@ -2088,7 +2084,8 @@ public class SuggestApp extends MVCApplication
      */
     private VoteType getOpenVoteType( Suggest suggest )
     {
-        return SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) ? VoteTypeHome.findByPrimaryKey( suggest.getVoteType( ).getIdVoteType( ), _plugin ) : null;
+        return SuggestService.isVoteOpen( suggest, LocalDate.now( ) ) ? VoteTypeHome.findByPrimaryKey( suggest.getVoteType( ).getIdVoteType( ), _plugin )
+                : null;
     }
 
     /**
@@ -2284,7 +2281,7 @@ public class SuggestApp extends MVCApplication
             if ( formError.isMandatoryError( ) )
             {
                 Object [ ] tabRequiredFields = {
-                    formError.getTitleQuestion( )
+                        formError.getTitleQuestion( )
                 };
                 throw new SuggestFormValidationException( I18nService.getLocalizedString( MESSAGE_MANDATORY_QUESTION, tabRequiredFields, locale ) );
             }
@@ -2410,7 +2407,7 @@ public class SuggestApp extends MVCApplication
     /**
      *
      * method init
-     * 
+     *
      * @param request
      *            The HTTP request
      * @param plugin
@@ -2447,7 +2444,7 @@ public class SuggestApp extends MVCApplication
     /**
      *
      * Return the searcheField contains in the request or store in session
-     * 
+     *
      * @param request
      *            {@link HttpServletRequest}
      * @return the SearchField
@@ -2476,8 +2473,8 @@ public class SuggestApp extends MVCApplication
         searchFields.setIdFilterPeriod( ( strIdFilterPeriod != null ) ? nIdFilterPeriod : searchFields.getIdFilterPeriod( ) );
         searchFields.setIdSuggestSubmitSort( ( strIdSuggestSubmitSort != null ) ? nIdSuggestSubmitSort : searchFields.getIdSuggestSubmitSort( ) );
         searchFields.setIdFilterCategory( ( strIdFilterCategory != null ) ? nIdFilterCategory : searchFields.getIdFilterCategory( ) );
-        searchFields.setIdFilterSuggestSubmitType( ( strIdFilterSuggestSubmitType != null ) ? nIdFilterSuggestSubmitType : searchFields
-                .getIdFilterSuggestSubmitType( ) );
+        searchFields.setIdFilterSuggestSubmitType(
+                ( strIdFilterSuggestSubmitType != null ) ? nIdFilterSuggestSubmitType : searchFields.getIdFilterSuggestSubmitType( ) );
         searchFields.setPageIndex( ( strFilterPageIndex != null ) ? strFilterPageIndex : searchFields.getPageIndex( ) );
 
         searchFields.setLuteceUserName( ( strLuteceUserName != null ) ? strLuteceUserName : searchFields.getLuteceUserName( ) );
@@ -2491,7 +2488,7 @@ public class SuggestApp extends MVCApplication
 
     /**
      * Add the suggest page frameset
-     * 
+     *
      * @param strContentSuggest
      * @param request
      *            the {@link HttpServletRequest}
@@ -2608,7 +2605,7 @@ public class SuggestApp extends MVCApplication
 
     /**
      * return a new UrlItem Xpage
-     * 
+     *
      * @return a new UrlItem Xpage
      */
     private UrlItem getNewUrlItemPage( )
@@ -2630,8 +2627,7 @@ public class SuggestApp extends MVCApplication
      * @throws SiteMessageException
      *             {@link SiteMessageException}
      */
-    private void testUserAuthorizationAccess( Suggest suggest, HttpServletRequest request, LuteceUser user ) throws UserNotSignedException,
-            SiteMessageException
+    private void testUserAuthorizationAccess( Suggest suggest, HttpServletRequest request, LuteceUser user ) throws UserNotSignedException, SiteMessageException
     {
         if ( suggest == null )
         {
@@ -2645,11 +2641,10 @@ public class SuggestApp extends MVCApplication
                 throw new UserNotSignedException( );
             }
 
-            else
-                if ( !SecurityService.getInstance( ).isUserInRole( request, suggest.getRole( ) ) )
-                {
-                    SiteMessageService.setMessage( request, MESSAGE_ACCESS_DENIED, SiteMessage.TYPE_STOP );
-                }
+            else if ( !SecurityService.getInstance( ).isUserInRole( request, suggest.getRole( ) ) )
+            {
+                SiteMessageService.setMessage( request, MESSAGE_ACCESS_DENIED, SiteMessage.TYPE_STOP );
+            }
         }
     }
 }

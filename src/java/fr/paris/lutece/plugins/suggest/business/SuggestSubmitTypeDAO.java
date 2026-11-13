@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -75,16 +75,16 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
     private int newPrimaryKey( Plugin plugin )
     {
         int nKey;
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
         {
-            daoUtil.executeQuery( );    
-            
+            daoUtil.executeQuery( );
+
             if ( !daoUtil.next( ) )
             {
                 // if the table is empty
                 nKey = 1;
             }
-    
+
             nKey = daoUtil.getInt( 1 ) + 1;
         }
 
@@ -102,15 +102,15 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
      */
     public int insert( SuggestSubmitType suggestSubmitType, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
             suggestSubmitType.setIdType( newPrimaryKey( plugin ) );
-    
+
             daoUtil.setInt( 1, suggestSubmitType.getIdType( ) );
             daoUtil.setString( 2, suggestSubmitType.getName( ) );
             daoUtil.setString( 3, suggestSubmitType.getColor( ) );
             daoUtil.setBoolean( 4, suggestSubmitType.getParameterizableInFO( ) );
-    
+
             if ( suggestSubmitType.getIdImageResource( ) != null )
             {
                 daoUtil.setInt( 5, suggestSubmitType.getIdImageResource( ) );
@@ -119,7 +119,7 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
             {
                 daoUtil.setIntNull( 5 );
             }
-    
+
             daoUtil.executeUpdate( );
         }
 
@@ -138,11 +138,11 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
     public SuggestSubmitType load( int nIdSuggestSubmitType, Plugin plugin )
     {
         SuggestSubmitType suggestSubmitType = null;
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggestSubmitType );
             daoUtil.executeQuery( );
-    
+
             if ( daoUtil.next( ) )
             {
                 suggestSubmitType = getRow( daoUtil );
@@ -155,7 +155,7 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
 
     /**
      * Load the list of the suggestSubmitType from the table The images are not loaded in the SuggestSubmitType Objects
-     * 
+     *
      * @param plugin
      *            the plugin
      * @return the instance of the suggestSubmitType
@@ -163,10 +163,10 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
     public List<SuggestSubmitType> selectList( Plugin plugin )
     {
         List<SuggestSubmitType> list = new ArrayList<>( );
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ALL, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ALL, plugin ) )
         {
             daoUtil.executeQuery( );
-    
+
             while ( daoUtil.next( ) )
             {
                 list.add( getRow( daoUtil ) );
@@ -187,7 +187,7 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
      */
     public void delete( int nIdSuggestSubmitType, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggestSubmitType );
             daoUtil.executeUpdate( );
@@ -204,12 +204,12 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
      */
     public void store( SuggestSubmitType suggestSubmitType, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
-        {    
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
             daoUtil.setString( 1, suggestSubmitType.getName( ) );
             daoUtil.setString( 2, suggestSubmitType.getColor( ) );
             daoUtil.setBoolean( 3, suggestSubmitType.getParameterizableInFO( ) );
-    
+
             if ( suggestSubmitType.getIdImageResource( ) != null )
             {
                 daoUtil.setInt( 4, suggestSubmitType.getIdImageResource( ) );
@@ -218,16 +218,16 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
             {
                 daoUtil.setIntNull( 4 );
             }
-    
+
             daoUtil.setInt( 5, suggestSubmitType.getIdType( ) );
-    
+
             daoUtil.executeUpdate( );
         }
     }
 
     /**
      * return SuggestSubmitType
-     * 
+     *
      * @param daoUtil
      *            daoUtil
      * @return SuggestSubmitType
@@ -251,7 +251,7 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
 
     /**
      * Load the list of the suggestSubmitType from the table The images are not loaded in the SuggestSubmitType Objects
-     * 
+     *
      * @param plugin
      *            the plugin
      * @return the instance of the suggestSubmitType
@@ -259,11 +259,11 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
     public List<SuggestSubmitType> selectListByIdSuggest( int nIdSuggest, Plugin plugin )
     {
         List<SuggestSubmitType> list = new ArrayList<>( );
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_SUGGEST, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_SUGGEST, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggest );
             daoUtil.executeQuery( );
-    
+
             while ( daoUtil.next( ) )
             {
                 list.add( getRow( daoUtil ) );
@@ -276,7 +276,7 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
 
     /**
      * true if there is a suggest associate to the suggest submit type
-     * 
+     *
      * @param nIdType
      *            the key of the type
      * @param plugin
@@ -285,11 +285,11 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
      */
     public boolean isAssociateToSuggest( int nIdType, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_NUMBER_OF_SUGGEST_ASSOCIATE_TO_THE_SUGGEST_SUBMIT_TYPE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_NUMBER_OF_SUGGEST_ASSOCIATE_TO_THE_SUGGEST_SUBMIT_TYPE, plugin ) )
         {
             daoUtil.setInt( 1, nIdType );
             daoUtil.executeQuery( );
-    
+
             return daoUtil.next( ) && daoUtil.getInt( 1 ) != 0;
         }
     }
@@ -300,11 +300,11 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
     @Override
     public void deleteSuggestAssociation( int nIdSuggest, int nIdSuggestSubmitType, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_ASSOCIATION_SUGGEST, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_ASSOCIATION_SUGGEST, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggest );
             daoUtil.setInt( 2, nIdSuggestSubmitType );
-    
+
             daoUtil.executeUpdate( );
         }
     }
@@ -315,7 +315,7 @@ public final class SuggestSubmitTypeDAO implements ISuggestSubmitTypeDAO
     @Override
     public void insertSuggestAssociation( int nIdSuggest, int nIdSuggestSubmitType, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_ASSOCIATION_SUGGEST, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_ASSOCIATION_SUGGEST, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggest );
             daoUtil.setInt( 2, nIdSuggestSubmitType );

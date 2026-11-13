@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -74,7 +74,7 @@ public class CategoryDAO implements ICategoryDAO
      */
     public int newPrimaryKey( Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
         {
             daoUtil.executeQuery( );
             daoUtil.next( );
@@ -93,7 +93,7 @@ public class CategoryDAO implements ICategoryDAO
     @Override
     public void insert( Category category, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
             category.setIdCategory( newPrimaryKey( plugin ) );
             daoUtil.setInt( 1, category.getIdCategory( ) );
@@ -114,7 +114,7 @@ public class CategoryDAO implements ICategoryDAO
     @Override
     public void store( Category category, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
             daoUtil.setInt( 1, category.getIdCategory( ) );
             daoUtil.setString( 2, category.getTitle( ) );
@@ -136,7 +136,7 @@ public class CategoryDAO implements ICategoryDAO
     @Override
     public Category load( int idKey, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
             daoUtil.setInt( 1, idKey );
             daoUtil.executeQuery( );
@@ -157,7 +157,7 @@ public class CategoryDAO implements ICategoryDAO
 
     /**
      * Load the data of all category returns them in a list
-     * 
+     *
      * @param plugin
      *            the plugin
      * @return the list of category
@@ -165,7 +165,7 @@ public class CategoryDAO implements ICategoryDAO
     @Override
     public List<Category> select( Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
             daoUtil.executeQuery( );
 
@@ -196,7 +196,7 @@ public class CategoryDAO implements ICategoryDAO
     @Override
     public void delete( int nIdCategory, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
             daoUtil.setInt( 1, nIdCategory );
             daoUtil.executeUpdate( );
@@ -205,7 +205,7 @@ public class CategoryDAO implements ICategoryDAO
 
     /**
      * true if there is a suggest or a suggest submit associate to the category
-     * 
+     *
      * @param nIdCategory
      *            the key of the category
      * @param plugin
@@ -215,7 +215,7 @@ public class CategoryDAO implements ICategoryDAO
     @Override
     public boolean isAssociateToSuggest( int nIdCategory, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_NUMBER_OF_SUGGEST_ASSOCIATE_TO_THE_CATEGORY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_NUMBER_OF_SUGGEST_ASSOCIATE_TO_THE_CATEGORY, plugin ) )
         {
             daoUtil.setInt( 1, nIdCategory );
             daoUtil.setInt( 2, nIdCategory );
@@ -233,7 +233,7 @@ public class CategoryDAO implements ICategoryDAO
     {
         Map<Integer, Integer> mapCounts = new HashMap<>( );
 
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_SUGGEST_SUBMITS, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_SUGGEST_SUBMITS, plugin ) )
         {
             daoUtil.executeQuery( );
 
@@ -249,7 +249,7 @@ public class CategoryDAO implements ICategoryDAO
     @Override
     public List<Category> select( int nIdSuggest, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_ID_SUGGEST, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_ID_SUGGEST, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggest );
             daoUtil.executeQuery( );
@@ -283,7 +283,7 @@ public class CategoryDAO implements ICategoryDAO
     @Override
     public void deleteSuggestAssociation( int nIdSuggest, int nIdCategory, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_ASSOCIATED_CATEGORIE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_ASSOCIATED_CATEGORIE, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggest );
             daoUtil.setInt( 2, nIdCategory );
@@ -305,7 +305,7 @@ public class CategoryDAO implements ICategoryDAO
     @Override
     public void insertSuggestAssociation( int nIdSuggest, int nIdCategory, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_ASSOCIATED_CATEGORY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_ASSOCIATED_CATEGORY, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggest );
             daoUtil.setInt( 2, nIdCategory );

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,8 +46,7 @@ import fr.paris.lutece.util.sql.DAOUtil;
 @ApplicationScoped
 public class DefaultMessageDAO implements IDefaultMessageDAO
 {
-    private static final String SQL_QUERY_SELECT = "SELECT "
-            + "unavailability_message,libelle_validate_button,libelle_Contribution, "
+    private static final String SQL_QUERY_SELECT = "SELECT " + "unavailability_message,libelle_validate_button,libelle_Contribution, "
             + "number_suggest_submit_in_top_score,number_suggest_submit_in_top_comment,number_suggest_submit_caracters_shown,notification_new_comment_title,notification_new_comment_body,notification_new_suggest_submit_title,notification_new_suggest_submit_body "
             + "FROM suggest_default_message";
     private static final String SQL_QUERY_UPDATE = "UPDATE suggest_default_message SET  "
@@ -64,7 +63,7 @@ public class DefaultMessageDAO implements IDefaultMessageDAO
     @Override
     public void store( DefaultMessage defaultMessage, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
             daoUtil.setString( 1, defaultMessage.getUnavailabilityMessage( ) );
             daoUtil.setString( 2, defaultMessage.getLibelleValidateButton( ) );
@@ -92,7 +91,7 @@ public class DefaultMessageDAO implements IDefaultMessageDAO
     @Override
     public DefaultMessage load( Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
             daoUtil.executeQuery( );
 

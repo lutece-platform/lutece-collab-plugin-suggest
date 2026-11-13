@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -65,7 +65,7 @@ public class SuggestSubmitStateDAO implements ISuggestSubmitStateDAO
     @Override
     public SuggestSubmitState load( int idKey, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
             daoUtil.setInt( 1, idKey );
             daoUtil.executeQuery( );
@@ -96,7 +96,7 @@ public class SuggestSubmitStateDAO implements ISuggestSubmitStateDAO
     @Override
     public SuggestSubmitState loadByNumero( int numero, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_NUMERO, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_NUMERO, plugin ) )
         {
             daoUtil.setInt( 1, numero );
             daoUtil.executeQuery( );
@@ -117,7 +117,7 @@ public class SuggestSubmitStateDAO implements ISuggestSubmitStateDAO
 
     /**
      * Load the data of all suggest submit state returns them in a list
-     * 
+     *
      * @param plugin
      *            the plugin
      * @return the list of suggest submit state
@@ -125,7 +125,7 @@ public class SuggestSubmitStateDAO implements ISuggestSubmitStateDAO
     @Override
     public List<SuggestSubmitState> select( Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
             daoUtil.executeQuery( );
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -93,7 +93,7 @@ public final class SuggestSubmitHome
 
     /**
      * Update of the suggestSubmit which is specified in parameter
-     * 
+     *
      * @param suggestSubmit
      *            The suggest submit
      * @param bUpdateIndex
@@ -216,7 +216,7 @@ public final class SuggestSubmitHome
 
     /**
      * Load the data of all the suggestSubmit who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -254,7 +254,7 @@ public final class SuggestSubmitHome
 
     /**
      * Load the id of all the suggestSubmit who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -268,7 +268,7 @@ public final class SuggestSubmitHome
 
     /**
      * Load the data of all the suggestSubmit who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -306,7 +306,7 @@ public final class SuggestSubmitHome
 
     /**
      * Load the number of all the suggestSubmit who verify the filter
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -320,7 +320,7 @@ public final class SuggestSubmitHome
 
     /**
      * Update the number order of suggestSubmit
-     * 
+     *
      * @param nIdSuggestSubmit
      *            the id of the suggestSubmit
      * @param nNewOrder
@@ -387,7 +387,7 @@ public final class SuggestSubmitHome
 
     /**
      * Search the max order number of contacts for one list
-     * 
+     *
      * @param nIdSuggest
      *            the Id of the Suggest
      * @return int the max order

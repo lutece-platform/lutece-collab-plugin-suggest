@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,7 +58,7 @@ public class VoteType
 
     /**
      * set the id of the vote type
-     * 
+     *
      * @param idVoteType
      *            the id of the vote type
      */
@@ -78,7 +78,7 @@ public class VoteType
 
     /**
      * set the title of the vote type
-     * 
+     *
      * @param title
      *            the title of the vote type
      */
@@ -98,7 +98,7 @@ public class VoteType
 
     /**
      * set the list of vote buttons associated to the vote type
-     * 
+     *
      * @param voteButtons
      *            the list of vote buttons associated to the vote type
      */
@@ -118,7 +118,7 @@ public class VoteType
 
     /**
      * set the template file name
-     * 
+     *
      * @param templateFileName
      *            the template file name
      */

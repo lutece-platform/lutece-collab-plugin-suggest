@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -124,10 +124,9 @@ public class CategoryJspBean extends MVCAdminJspBean
     @Pager( name = "suggest.categories", listBookmark = MARK_CATEGORY_LIST, defaultItemsPerPage = PROPERTY_ITEM_PER_PAGE, baseUrl = "jsp/admin/plugins/suggest/ManageCategory.jsp" )
     private IPager<Category, Category> _pager;
 
-
     /**
      * Return management category( list of category)
-     * 
+     *
      * @param request
      *            The Http request
      * @param model
@@ -150,7 +149,7 @@ public class CategoryJspBean extends MVCAdminJspBean
 
     /**
      * Gets the category creation page
-     * 
+     *
      * @param request
      *            The HTTP request
      * @param model
@@ -170,7 +169,7 @@ public class CategoryJspBean extends MVCAdminJspBean
 
     /**
      * Perform the category creation
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The URL to go after performing the action
@@ -199,7 +198,7 @@ public class CategoryJspBean extends MVCAdminJspBean
 
     /**
      * Gets the category modification page
-     * 
+     *
      * @param request
      *            The HTTP request
      * @param model
@@ -248,7 +247,7 @@ public class CategoryJspBean extends MVCAdminJspBean
 
     /**
      * Perform the category modification
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The URL to go after performing the action
@@ -298,7 +297,7 @@ public class CategoryJspBean extends MVCAdminJspBean
 
     /**
      * Gets the confirmation page of delete category
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return the confirmation page of delete category
@@ -316,12 +315,13 @@ public class CategoryJspBean extends MVCAdminJspBean
         UrlItem url = new UrlItem( JSP_DO_REMOVE_CATEGORY );
         url.addParameter( PARAMETER_ID_CATEGORY, strIdCategory );
 
-        return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_CATEGORY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
+        return redirect( request,
+                AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_CATEGORY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
     }
 
     /**
      * Perform the category supression
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The URL to go after performing the action
@@ -363,7 +363,7 @@ public class CategoryJspBean extends MVCAdminJspBean
     /**
      * Get the request data and if there is no error insert the data in the category object specified in parameter. return null if there is no error or else
      * return the localized error message
-     * 
+     *
      * @param request
      *            the request
      * @param category
@@ -390,7 +390,7 @@ public class CategoryJspBean extends MVCAdminJspBean
         if ( !strFieldError.equals( SuggestUtils.EMPTY_STRING ) )
         {
             Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, getLocale( ) )
+                    I18nService.getLocalizedString( strFieldError, getLocale( ) )
             };
 
             return I18nService.getLocalizedString( MESSAGE_MANDATORY_FIELD, tabRequiredFields, getLocale( ) );
@@ -404,7 +404,7 @@ public class CategoryJspBean extends MVCAdminJspBean
 
     /**
      * return the url of manage category
-     * 
+     *
      * @param request
      *            the request
      * @return the url of manage category

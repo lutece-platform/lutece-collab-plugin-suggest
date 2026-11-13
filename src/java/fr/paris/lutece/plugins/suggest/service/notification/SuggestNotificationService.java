@@ -132,8 +132,8 @@ public class SuggestNotificationService
     }
 
     /**
-     * Renders a notification whose subject and body are FreeMarker strings, and queues it to a user. A user without email is skipped; a rendering error
-     * is logged and skips this mail only.
+     * Renders a notification whose subject and body are FreeMarker strings, and queues it to a user. A user without email is skipped; a rendering error is
+     * logged and skips this mail only.
      *
      * @param strUserKey
      *            the Lutece user key of the recipient
@@ -174,8 +174,8 @@ public class SuggestNotificationService
     }
 
     /**
-     * Renders a notification whose body is a template file, and queues it to a user. A user without email is skipped; a rendering error is logged and
-     * skips this mail only.
+     * Renders a notification whose body is a template file, and queues it to a user. A user without email is skipped; a rendering error is logged and skips
+     * this mail only.
      *
      * @param strUserKey
      *            the Lutece user key of the recipient

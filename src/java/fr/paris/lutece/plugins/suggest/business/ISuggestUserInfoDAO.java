@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,7 +44,7 @@ public interface ISuggestUserInfoDAO
 {
     /**
      * Update SuggestUserInfo
-     * 
+     *
      * @param suggestUserInfo
      *            suggestUserInfo
      * @param plugin
@@ -54,7 +54,7 @@ public interface ISuggestUserInfoDAO
 
     /**
      * insert SuggestUserInfo
-     * 
+     *
      * @param suggestUserInfo
      *            suggestUserInfo
      * @param plugin
@@ -64,7 +64,7 @@ public interface ISuggestUserInfoDAO
 
     /**
      * Load user information by lutece user key
-     * 
+     *
      * @param strLuteceUserKey
      *            the lutece userKey
      * @param plugin
@@ -75,7 +75,7 @@ public interface ISuggestUserInfoDAO
 
     /**
      * Delete suggest user info
-     * 
+     *
      * @param strLuteceUserKey
      *            the lutece user key
      * @param plugin
@@ -84,8 +84,8 @@ public interface ISuggestUserInfoDAO
     void delete( String strLuteceUserKey, Plugin plugin );
 
     /**
-     * Returns the departments of the authors of the suggest submits of a suggest in a state, sorted, without the empty ones. Spellings differing only
-     * by case are one department, returned under its most used spelling.
+     * Returns the departments of the authors of the suggest submits of a suggest in a state, sorted, without the empty ones. Spellings differing only by case
+     * are one department, returned under its most used spelling.
      *
      * @param nIdSuggest
      *            the id of the suggest

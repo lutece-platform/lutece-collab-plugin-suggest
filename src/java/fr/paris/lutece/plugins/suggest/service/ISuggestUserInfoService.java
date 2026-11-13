@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,7 +49,7 @@ public interface ISuggestUserInfoService
 {
     /**
      * update user information associate to the luteceUserConnected
-     * 
+     *
      * @param luteceUserConnected
      *            {@link LuteceUser}
      * @param plugin
@@ -62,7 +62,7 @@ public interface ISuggestUserInfoService
 
     /**
      * return user information associate to the lutece user key
-     * 
+     *
      * @param strLuteceUserKey
      *            the lutece user
      * @param plugin
@@ -72,8 +72,8 @@ public interface ISuggestUserInfoService
     SuggestUserInfo findSuggestUserInfoByKey( String strLuteceUserKey, Plugin plugin );
 
     /**
-     * Returns the departments of the authors of the suggest submits of a suggest in a state, sorted, without the empty ones. Spellings differing only
-     * by case are one department, returned under its most used spelling.
+     * Returns the departments of the authors of the suggest submits of a suggest in a state, sorted, without the empty ones. Spellings differing only by case
+     * are one department, returned under its most used spelling.
      *
      * @param nIdSuggest
      *            the id of the suggest

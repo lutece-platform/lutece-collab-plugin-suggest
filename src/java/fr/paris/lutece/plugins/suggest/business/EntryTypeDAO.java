@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -64,11 +64,11 @@ public class EntryTypeDAO implements IEntryTypeDAO
     public EntryType load( int idKey, Plugin plugin )
     {
         EntryType entryType = null;
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
             daoUtil.setInt( 1, idKey );
             daoUtil.executeQuery( );
-    
+
             if ( daoUtil.next( ) )
             {
                 entryType = new EntryType( );
@@ -84,7 +84,7 @@ public class EntryTypeDAO implements IEntryTypeDAO
 
     /**
      * Load the data of all entry type returns them in a list
-     * 
+     *
      * @param plugin
      *            the plugin
      * @return the list of entry type
@@ -92,12 +92,12 @@ public class EntryTypeDAO implements IEntryTypeDAO
     public List<EntryType> select( Plugin plugin )
     {
         List<EntryType> listEntryType = new ArrayList<>( );
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
             daoUtil.executeQuery( );
-    
+
             EntryType entryType = null;
-    
+
             while ( daoUtil.next( ) )
             {
                 entryType = new EntryType( );

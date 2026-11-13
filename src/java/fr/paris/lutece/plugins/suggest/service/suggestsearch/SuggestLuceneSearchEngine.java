@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -67,7 +67,7 @@ public class SuggestLuceneSearchEngine implements SuggestSearchEngine
 {
     /**
      * Return search results
-     * 
+     *
      * @param strQuery
      *            The search query, every word of which must match
      * @param filter
@@ -89,12 +89,14 @@ public class SuggestLuceneSearchEngine implements SuggestSearchEngine
 
             if ( filter.containsIdSuggest( ) )
             {
-                query.add( new TermQuery( new Term( SuggestSearchItem.FIELD_ID_SUGGEST, String.valueOf( filter.getIdSuggest( ) ) ) ), BooleanClause.Occur.FILTER );
+                query.add( new TermQuery( new Term( SuggestSearchItem.FIELD_ID_SUGGEST, String.valueOf( filter.getIdSuggest( ) ) ) ),
+                        BooleanClause.Occur.FILTER );
             }
 
             if ( filter.containsIdSuggestSubmitState( ) )
             {
-                query.add( new TermQuery( new Term( SearchItem.FIELD_STATE, String.valueOf( filter.getIdSuggestSubmitState( ) ) ) ), BooleanClause.Occur.FILTER );
+                query.add( new TermQuery( new Term( SearchItem.FIELD_STATE, String.valueOf( filter.getIdSuggestSubmitState( ) ) ) ),
+                        BooleanClause.Occur.FILTER );
             }
 
             query.add( new TermQuery( new Term( SearchItem.FIELD_TYPE, SuggestIndexer.INDEX_TYPE_SUGGEST ) ), BooleanClause.Occur.FILTER );
@@ -150,8 +152,8 @@ public class SuggestLuceneSearchEngine implements SuggestSearchEngine
     }
 
     /**
-     * Builds the query of a search text: a proposal matches when every word of the text matches its stemmed contents, or its words as typed, each
-     * word allowing a few typing errors.
+     * Builds the query of a search text: a proposal matches when every word of the text matches its stemmed contents, or its words as typed, each word allowing
+     * a few typing errors.
      *
      * @param strText
      *            the search text

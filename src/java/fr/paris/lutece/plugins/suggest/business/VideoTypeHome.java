@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -77,7 +77,7 @@ public final class VideoTypeHome
      * @param plugin
      *            the Plugin
      * @return the id of the new videoType
-     * @throws SQLException 
+     * @throws SQLException
      */
     public static int create( VideoType videoType, Plugin plugin ) throws SQLException
     {

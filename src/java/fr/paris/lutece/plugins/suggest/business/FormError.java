@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,7 @@ public class FormError
 
     /**
      * return true if the error is a mandatory error
-     * 
+     *
      * @return true if the error is a mandatory error
      */
     public boolean isMandatoryError( )
@@ -56,7 +56,7 @@ public class FormError
 
     /**
      * set true if the error is a mandatory error
-     * 
+     *
      * @param mandatoryError
      *            true if the error is a mandatory error
      */
@@ -67,7 +67,7 @@ public class FormError
 
     /**
      * Gets the error Message
-     * 
+     *
      * @return the error Message
      */
     public String getErrorMessage( )
@@ -77,7 +77,7 @@ public class FormError
 
     /**
      * set the error message
-     * 
+     *
      * @param errorMessage
      *            the erroer message
      */
@@ -97,7 +97,7 @@ public class FormError
 
     /**
      * set the title of the mandatory question
-     * 
+     *
      * @param titleMandatoryQuestion
      *            the title of the mandatory question
      */

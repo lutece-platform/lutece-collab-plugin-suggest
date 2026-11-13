@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -77,7 +77,7 @@ public class SuggestFilter
 
     /**
      * Set 1 if the suggests return must be enabled 0 if the suggests return must be disabled
-     * 
+     *
      * @param idState
      *            1 if the suggests return must be enabled 0 if the suggests return must be disabled
      */
@@ -106,7 +106,7 @@ public class SuggestFilter
 
     /**
      * set the workgroup of the search suggests
-     * 
+     *
      * @param workgroup
      *            the workgroup of the search suggests
      */
@@ -144,7 +144,7 @@ public class SuggestFilter
 
     /**
      * Set 1 if the suggests return must be a default suggest 0 if the suggests return must no be a default suggest
-     * 
+     *
      * @param idDefaultSuggest
      *            1 if the suggests return must be a default suggest 0 if the suggests return must not be a default suggest
      */

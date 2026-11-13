@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,7 +47,7 @@ public class FileManager
 
     /**
      * Gets the template to enter the attribute value
-     * 
+     *
      * @return The template to enter the attribute value
      */
     String getCreateTemplate( )
@@ -57,7 +57,7 @@ public class FileManager
 
     /**
      * Gets the template to modify the attribute value
-     * 
+     *
      * @return The template to modify the attribute value
      */
     String getModifyTemplate( )
@@ -67,7 +67,7 @@ public class FileManager
 
     /**
      * Gets the template to enter the parameters of the attribute value
-     * 
+     *
      * @return The template to enter the parameters of the attribute value
      */
     String getCreateParametersTemplate( )
@@ -77,7 +77,7 @@ public class FileManager
 
     /**
      * Gets the template to modify the parameters of the attribute value
-     * 
+     *
      * @return The template to modify the parameters of the attribute value
      */
     String getModifyParametersTemplate( )

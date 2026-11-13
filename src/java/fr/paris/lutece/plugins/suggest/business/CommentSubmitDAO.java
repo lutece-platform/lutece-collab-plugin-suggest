@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -90,7 +90,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
      */
     private int newPrimaryKey( Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
         {
             daoUtil.executeQuery( );
 
@@ -105,7 +105,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public void insert( CommentSubmit commentSubmit, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
             commentSubmit.setIdCommentSubmit( newPrimaryKey( plugin ) );
             daoUtil.setInt( 1, commentSubmit.getIdCommentSubmit( ) );
@@ -130,7 +130,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
         CommentSubmit commentSubmit = null;
         SuggestSubmit suggestSubmit;
 
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
             daoUtil.setInt( 1, nIdCommentSubmit );
             daoUtil.executeQuery( );
@@ -163,7 +163,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public void delete( int nIdTagSubmit, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
             daoUtil.setInt( 1, nIdTagSubmit );
             daoUtil.executeUpdate( );
@@ -176,7 +176,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public void store( CommentSubmit commentSubmit, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
             daoUtil.setInt( 1, commentSubmit.getIdCommentSubmit( ) );
             daoUtil.setInt( 2, commentSubmit.getSuggestSubmit( ).getIdSuggestSubmit( ) );
@@ -197,7 +197,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public void storeDateModify( Timestamp dateModify, int idCommentSubmit, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_DATE_MODIFY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_DATE_MODIFY, plugin ) )
         {
             daoUtil.setTimestamp( 1, dateModify );
             daoUtil.setInt( 2, idCommentSubmit );
@@ -250,7 +250,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
             strSQL = strSQL + SQL_LIMIT + nLimit;
         }
 
-        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
             int nIndex = 1;
 
@@ -305,7 +305,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     public List<CommentSubmit> findSuggestCommentByDate( Date dateCreation, Plugin plugin )
     {
         List<CommentSubmit> listComment = new ArrayList<>( );
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_COMMENTED_SUGGEST_SUBMIT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_COMMENTED_SUGGEST_SUBMIT, plugin ) )
         {
             daoUtil.setTimestamp( 1, new Timestamp( dateCreation.getTime( ) ) );
             daoUtil.executeQuery( );
@@ -364,7 +364,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
         }
 
         String strSQL = SuggestUtils.buildRequestWithFilter( SQL_QUERY_SELECT_COUNT_BY_FILTER, listStrFilter, null );
-        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
             int nIndex = 1;
 
@@ -400,7 +400,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
 
     /**
      * build the order by clause
-     * 
+     *
      * @param listSortBy
      *            list of sort by
      * @return the sql order by clause
@@ -462,7 +462,7 @@ public final class CommentSubmitDAO implements ICommentSubmitDAO
     @Override
     public void deleteByIdParent( int nIdParentCommentSubmit, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_PARENT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_PARENT, plugin ) )
         {
             daoUtil.setInt( 1, nIdParentCommentSubmit );
             daoUtil.executeUpdate( );

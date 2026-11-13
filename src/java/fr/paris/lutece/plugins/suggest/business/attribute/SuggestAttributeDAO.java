@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,11 +59,11 @@ public class SuggestAttributeDAO implements ISuggestAttributeDAO
     public Map<String, Object> load( int nIdDirectory, Plugin plugin )
     {
         Map<String, Object> mapAttributes = new HashMap<>( );
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
             daoUtil.setInt( 1, nIdDirectory );
             daoUtil.executeQuery( );
-    
+
             while ( daoUtil.next( ) )
             {
                 int nIndex = 1;
@@ -83,13 +83,13 @@ public class SuggestAttributeDAO implements ISuggestAttributeDAO
     public synchronized void insert( int nIdDirectory, String strAttributeKey, Object attributeValue, Plugin plugin )
     {
         int nIndex = 1;
-        
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
             daoUtil.setInt( nIndex++, nIdDirectory );
             daoUtil.setString( nIndex++, strAttributeKey );
             daoUtil.setString( nIndex++, ( attributeValue != null ) ? attributeValue.toString( ) : null );
-    
+
             daoUtil.executeUpdate( );
 
         }
@@ -100,7 +100,7 @@ public class SuggestAttributeDAO implements ISuggestAttributeDAO
      */
     public void remove( int nIdDirectory, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
             daoUtil.setInt( 1, nIdDirectory );
             daoUtil.executeUpdate( );

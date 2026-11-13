@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -51,8 +51,8 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.util.ElisionFilter;
 
 /**
- * Words of a proposal as typed, lower case and without accents nor French stop words, indexed beside the stemmed contents so that a search
- * tolerates typing errors on whole words.
+ * Words of a proposal as typed, lower case and without accents nor French stop words, indexed beside the stemmed contents so that a search tolerates typing
+ * errors on whole words.
  */
 public final class SuggestSearchWords
 {

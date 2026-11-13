@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,6 @@ import fr.paris.lutece.plugins.suggest.business.SubmitFilter;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
-
 
 public interface ICommentSubmitService
 {
@@ -87,7 +86,7 @@ public interface ICommentSubmitService
 
     /**
      * Load the data of all the commentSubmit who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -98,7 +97,7 @@ public interface ICommentSubmitService
 
     /**
      * Load the data of all the commentSubmit who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param nLimitParentNumber
@@ -111,7 +110,7 @@ public interface ICommentSubmitService
 
     /**
      * Load the number of all the commentSubmit who verify the filter
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin

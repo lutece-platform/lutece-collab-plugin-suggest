@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -88,7 +88,7 @@ public interface ICategoryDAO
 
     /**
      * Load the data of all category returns them in a list
-     * 
+     *
      * @param plugin
      *            the plugin
      * @return the list of category
@@ -97,7 +97,7 @@ public interface ICategoryDAO
 
     /**
      * Select all category associate to a suggest and returns them in a list
-     * 
+     *
      * @param plugin
      *            the plugin
      * @return the list of category
@@ -106,7 +106,7 @@ public interface ICategoryDAO
 
     /**
      * true if there is a suggest associate to the category
-     * 
+     *
      * @param nIdCategory
      *            the key of the category
      * @param plugin

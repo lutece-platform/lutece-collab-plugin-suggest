@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -148,8 +148,8 @@ public class MassChangeCategorySuggestSubmitAction extends AbstractPluginAction<
 
                     SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, plugin );
 
-                    if ( ( suggestSubmit == null )
-                            || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) adminUser ) )
+                    if ( ( suggestSubmit == null ) || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ),
+                            SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) adminUser ) )
                     {
                         throw new AccessDeniedException( "Access denied" );
                     }
@@ -172,7 +172,7 @@ public class MassChangeCategorySuggestSubmitAction extends AbstractPluginAction<
 
     /**
      * Gets the plugin
-     * 
+     *
      * @return the plugin
      */
     private Plugin getPlugin( )

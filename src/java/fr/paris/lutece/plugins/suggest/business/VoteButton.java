@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,7 +57,7 @@ public class VoteButton
 
     /**
      * set the id of the vote button
-     * 
+     *
      * @param idVoteButton
      *            the id of the vote button
      */
@@ -77,7 +77,7 @@ public class VoteButton
 
     /**
      * set the title of the vote button
-     * 
+     *
      * @param title
      *            the title of the vote button
      */
@@ -97,7 +97,7 @@ public class VoteButton
 
     /**
      * set the value of the vote button
-     * 
+     *
      * @param value
      *            the value of the vote value
      */
@@ -117,7 +117,7 @@ public class VoteButton
 
     /**
      * set the icon MimeType
-     * 
+     *
      * @param iconMimeType
      *            the icon MimeType
      */
@@ -137,7 +137,7 @@ public class VoteButton
 
     /**
      * set the icon content
-     * 
+     *
      * @param iconContent
      *            the icon content
      */

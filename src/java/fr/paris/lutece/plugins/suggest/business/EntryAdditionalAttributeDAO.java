@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,7 +55,7 @@ public final class EntryAdditionalAttributeDAO implements IEntryAdditionalAttrib
 
     /**
      * Insert a new record in the table.
-     * 
+     *
      * @param entryAdditionalAttribute
      *            instance of the Entry additional attribute object to insert
      * @param plugin
@@ -63,19 +63,19 @@ public final class EntryAdditionalAttributeDAO implements IEntryAdditionalAttrib
      */
     public void insert( EntryAdditionalAttribute entryAdditionalAttribute, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
             daoUtil.setInt( 1, entryAdditionalAttribute.getIdEntry( ) );
             daoUtil.setString( 2, entryAdditionalAttribute.getName( ) );
             daoUtil.setString( 3, entryAdditionalAttribute.getValue( ) );
-    
+
             daoUtil.executeUpdate( );
         }
     }
 
     /**
      * Select additional attributes list of an entry
-     * 
+     *
      * @param idEntry
      *            the id of the entry
      * @param plugin
@@ -85,18 +85,18 @@ public final class EntryAdditionalAttributeDAO implements IEntryAdditionalAttrib
     public List<EntryAdditionalAttribute> selectEntryAdditionalAttributeList( int idEntry, Plugin plugin )
     {
         List<EntryAdditionalAttribute> entryAdditionalAttributeList = new ArrayList<>( );
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_ENTRY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_ENTRY, plugin ) )
         {
             daoUtil.setInt( 1, idEntry );
             daoUtil.executeQuery( );
-    
+
             while ( daoUtil.next( ) )
             {
                 EntryAdditionalAttribute entryAdditionalAttribute = new EntryAdditionalAttribute( );
                 entryAdditionalAttribute.setIdEntry( daoUtil.getInt( 1 ) );
                 entryAdditionalAttribute.setName( daoUtil.getString( 2 ) );
                 entryAdditionalAttribute.setValue( daoUtil.getString( 3 ) );
-    
+
                 entryAdditionalAttributeList.add( entryAdditionalAttribute );
             }
         }
@@ -114,7 +114,7 @@ public final class EntryAdditionalAttributeDAO implements IEntryAdditionalAttrib
      */
     public void delete( int nIdEntry, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
             daoUtil.setInt( 1, nIdEntry );
             daoUtil.executeUpdate( );
@@ -131,12 +131,12 @@ public final class EntryAdditionalAttributeDAO implements IEntryAdditionalAttrib
      */
     public void store( EntryAdditionalAttribute entryAdditionalAttribute, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
-        {    
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
             daoUtil.setString( 1, entryAdditionalAttribute.getValue( ) );
             daoUtil.setInt( 2, entryAdditionalAttribute.getIdEntry( ) );
             daoUtil.setString( 3, entryAdditionalAttribute.getName( ) );
-    
+
             daoUtil.executeUpdate( );
         }
     }

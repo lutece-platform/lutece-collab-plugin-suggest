@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,8 +36,6 @@ package fr.paris.lutece.plugins.suggest.service;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-
-
 
 import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.suggest.business.Suggest;
@@ -114,7 +112,7 @@ public class SuggestService
 
     /**
      * Tells whether the user holds the permission on the suggest and belongs to its workgroup
-     * 
+     *
      * @param nIdSuggest
      *            The suggest id
      * @param strPermission
@@ -149,8 +147,8 @@ public class SuggestService
     }
 
     /**
-     * Tells whether the vote of a suggest has started on a given day: the vote is not disabled and its period, when it has a start date, has begun. A
-     * vote that started stays started after its period ends, so that its results remain visible.
+     * Tells whether the vote of a suggest has started on a given day: the vote is not disabled and its period, when it has a start date, has begun. A vote that
+     * started stays started after its period ends, so that its results remain visible.
      *
      * @param suggest
      *            the suggest
@@ -209,7 +207,7 @@ public class SuggestService
 
     /**
      * Remove the specified Suggest and all its associated elements ( SuggestSubmit, workflow resources... )
-     * 
+     *
      * @param nIdSuggest
      *            The ID of the Suggest to remove
      * @param user
@@ -227,7 +225,7 @@ public class SuggestService
 
     /**
      * Remove the workflow resources from a Suggest (consultation)
-     * 
+     *
      * @param nIdSuggest
      *            The Suggest's identifier
      * @param user

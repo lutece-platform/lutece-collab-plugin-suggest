@@ -144,8 +144,8 @@ public class SuggestNotificationListener
     }
 
     /**
-     * Subscribes the author of a new comment to the suggest submit, then notifies the author of the suggest submit, the author of the answered comment
-     * and, for an official answer, the subscribers.
+     * Subscribes the author of a new comment to the suggest submit, then notifies the author of the suggest submit, the author of the answered comment and, for
+     * an official answer, the subscribers.
      *
      * @param event
      *            the creation event
@@ -174,7 +174,8 @@ public class SuggestNotificationListener
             return;
         }
 
-        CommentSubmit parentComment = ( comment.getIdParent( ) > SubmitFilter.ID_PARENT_NULL ) ? _commentSubmitService.findByPrimaryKey( comment.getIdParent( ), plugin )
+        CommentSubmit parentComment = ( comment.getIdParent( ) > SubmitFilter.ID_PARENT_NULL )
+                ? _commentSubmitService.findByPrimaryKey( comment.getIdParent( ), plugin )
                 : null;
         Map<String, String> mapReasons = getRecipients( suggest, suggestSubmit, comment, parentComment );
 
@@ -368,7 +369,8 @@ public class SuggestNotificationListener
     {
         addRecipient( mapReasons, rootComment.getLuteceUserKey( ), REASON_THREAD, strCommenter );
 
-        for ( CommentSubmit answer : _commentSubmitService.getAnswers( rootComment.getIdCommentSubmit( ), PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) ) )
+        for ( CommentSubmit answer : _commentSubmitService.getAnswers( rootComment.getIdCommentSubmit( ),
+                PluginService.getPlugin( SuggestPlugin.PLUGIN_NAME ) ) )
         {
             if ( answer.isActive( ) )
             {
@@ -437,8 +439,7 @@ public class SuggestNotificationListener
      * @param model
      *            the model
      */
-    private void send( Suggest suggest, String strUserKey, String strSubjectKey, SuggestSubmit suggestSubmit, String strTemplate,
-            Map<String, Object> model )
+    private void send( Suggest suggest, String strUserKey, String strSubjectKey, SuggestSubmit suggestSubmit, String strTemplate, Map<String, Object> model )
     {
         String strSubject = I18nService.getLocalizedString( strSubjectKey, new Object [ ] {
                 suggestSubmit.getSuggestSubmitTitle( )

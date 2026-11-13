@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -418,8 +418,10 @@ public class SuggestJspBean extends MVCAdminJspBean
     private static final String ANCHOR_COMMENT = "#comment";
     private static final String JSP_MANAGE_COMMENT_SUBMIT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MANAGE_COMMENT_SUBMIT;
     private static final String JSP_MANAGE_ADVANCED_PARAMETERS = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_MANAGE_ADVANCED_PARAMETERS;
-    private static final String JSP_DO_UPDATE_ALL_SUGGEST_SUBMIT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_UPDATE_ALL_DISPLAY_OF_SUGGEST_SUBMIT;
-    private static final String JSP_DO_CHANGE_SUGGEST_SUBMIT_CATEGORY = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action=" + ACTION_MASS_CHANGE_SUGGEST_SUBMIT_CATEGORY;
+    private static final String JSP_DO_UPDATE_ALL_SUGGEST_SUBMIT = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action="
+            + ACTION_UPDATE_ALL_DISPLAY_OF_SUGGEST_SUBMIT;
+    private static final String JSP_DO_CHANGE_SUGGEST_SUBMIT_CATEGORY = "jsp/admin/plugins/suggest/ManageSuggest.jsp?action="
+            + ACTION_MASS_CHANGE_SUGGEST_SUBMIT_CATEGORY;
     private static final String JSP_WORKFLOW_TASK_FORM = "jsp/admin/plugins/suggest/ManageSuggest.jsp?view=" + VIEW_WORKFLOW_TASK_FORM;
 
     // parameters form
@@ -664,8 +666,6 @@ public class SuggestJspBean extends MVCAdminJspBean
         model.put( MARK_PERMISSION_MANAGE_ADVANCED_PARAMETERS, bPermissionAdvancedParameter );
         model.put( MARK_PERMISSION_CREATE_SUGGEST, bPermissionCreateSuggest );
 
-        
-
         // ReferenceList refMailingList;
         // refMailingList=AdminMailingListService.getMailingLists(adminUser);
         return getPage( PROPERTY_MANAGE_SUGGEST_PAGE_TITLE, TEMPLATE_MANAGE_SUGGEST );
@@ -703,8 +703,8 @@ public class SuggestJspBean extends MVCAdminJspBean
 
         model.put( MARK_SUGGEST_LIST, SuggestUtils.getRefListSuggest( listSuggest, true ) );
         model.put( MARK_ID_DEFAULT_SUGGEST, nIdDefaultSuggest );
-        model.put( MARK_PERMISSION_MANAGE_CATEGORY,
-                RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, CategoryResourceIdService.PERMISSION_MANAGE, (User) getUser( ) ) );
+        model.put( MARK_PERMISSION_MANAGE_CATEGORY, RBACService.isAuthorized( Category.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                CategoryResourceIdService.PERMISSION_MANAGE, (User) getUser( ) ) );
         model.put( MARK_PERMISSION_MANAGE_DEFAULT_MESSAGE, RBACService.isAuthorized( DefaultMessage.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 DefaultMessageResourceIdService.PERMISSION_MANAGE, (User) getUser( ) ) );
 
@@ -936,7 +936,6 @@ public class SuggestJspBean extends MVCAdminJspBean
         return super.processController( request, response );
     }
 
-
     /**
      * Returns advanced parameters form
      *
@@ -1075,7 +1074,8 @@ public class SuggestJspBean extends MVCAdminJspBean
 
             if ( !SuggestUtils.isCategoryAllowed( suggest, nIdCategory ) )
             {
-                return redirectWithError( request, VIEW_CREATE_SUGGEST_SUBMIT, suggest.getIdSuggest( ), I18nService.getLocalizedString( MESSAGE_ERROR_NO_CATEGORY, getLocale( ) ) );
+                return redirectWithError( request, VIEW_CREATE_SUGGEST_SUBMIT, suggest.getIdSuggest( ),
+                        I18nService.getLocalizedString( MESSAGE_ERROR_NO_CATEGORY, getLocale( ) ) );
             }
 
             // Check if a category is selected (in the case or the suggest has some type)
@@ -1099,7 +1099,7 @@ public class SuggestJspBean extends MVCAdminJspBean
                 if ( formError.isMandatoryError( ) )
                 {
                     Object [ ] tabRequiredFields = {
-                        formError.getTitleQuestion( )
+                            formError.getTitleQuestion( )
                     };
 
                     return redirectWithError( request, VIEW_CREATE_SUGGEST_SUBMIT, suggest.getIdSuggest( ),
@@ -1167,8 +1167,8 @@ public class SuggestJspBean extends MVCAdminJspBean
                 submit.setState( _workflowService.getState( submit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, nIdWorkflow, suggest.getIdSuggest( ) ) );
             }
 
-            submit.setListWorkflowActions( _workflowService.getActions( submit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, nIdWorkflow,
-                    (User) getUser( ) ) );
+            submit.setListWorkflowActions(
+                    _workflowService.getActions( submit.getIdSuggestSubmit( ), SuggestSubmit.RESOURCE_TYPE, nIdWorkflow, (User) getUser( ) ) );
         }
     }
 
@@ -1313,7 +1313,8 @@ public class SuggestJspBean extends MVCAdminJspBean
 
         Suggest suggest = SuggestHome.findByPrimaryKey( suggestSubmit.getSuggest( ).getIdSuggest( ), plugin );
 
-        if ( !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+        if ( !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT,
+                (User) getUser( ) ) )
         {
             throw new AccessDeniedException( "Access denied" );
         }
@@ -1341,8 +1342,8 @@ public class SuggestJspBean extends MVCAdminJspBean
 
         ReferenceList refCategoryList = SuggestUtils.getRefListCategory( suggest.getCategories( ) );
         SuggestUtils.addEmptyItem( refCategoryList );
-        Paginator<CommentSubmit> paginator = new Paginator<CommentSubmit>( listCommentSubmit, _nItemsPerPageCommentSubmit,
-                getJspManageCommentSubmit( request ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexCommentSubmit );
+        Paginator<CommentSubmit> paginator = new Paginator<CommentSubmit>( listCommentSubmit, _nItemsPerPageCommentSubmit, getJspManageCommentSubmit( request ),
+                PARAMETER_PAGE_INDEX, _strCurrentPageIndexCommentSubmit );
         ReferenceList refListAllYesNo = getRefListAllYesNo( getLocale( ) );
 
         model.put( MARK_COMMENT_SORT_SELECTED, _nIdCommentSort );
@@ -1378,8 +1379,6 @@ public class SuggestJspBean extends MVCAdminJspBean
         model.put( MARK_ID_PARENT, strCommentIdParent );
         model.put( MARK_COMMENT_MAX_DEPTH, _commentSubmitService.getMaxDepth( ) );
 
-        
-
         // ReferenceList refMailingList;
         // refMailingList=AdminMailingListService.getMailingLists(adminUser);
         return getPage( PROPERTY_MANAGE_COMMENT_SUBMIT_PAGE_TITLE, TEMPLATE_MANAGE_COMMENT_SUBMIT );
@@ -1408,8 +1407,8 @@ public class SuggestJspBean extends MVCAdminJspBean
 
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
 
-        if ( ( suggestSubmit == null )
-                || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+        if ( ( suggestSubmit == null ) || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ),
+                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
             return redirect( request, getJspManageSuggest( request ) );
         }
@@ -1450,8 +1449,8 @@ public class SuggestJspBean extends MVCAdminJspBean
 
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
 
-        if ( ( suggestSubmit == null )
-                || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+        if ( ( suggestSubmit == null ) || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ),
+                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
             return redirect( request, getJspManageSuggest( request ) );
         }
@@ -1494,9 +1493,8 @@ public class SuggestJspBean extends MVCAdminJspBean
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, plugin );
         SuggestSubmitState suggestSubmitState = SuggestSubmitStateHome.findByNumero( nStateNumber, plugin );
 
-        if ( ( suggestSubmit == null )
-                || ( suggestSubmitState == null )
-                || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+        if ( ( suggestSubmit == null ) || ( suggestSubmitState == null ) || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ),
+                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
             return redirect( request, getJspManageSuggest( request ) );
         }
@@ -1514,7 +1512,7 @@ public class SuggestJspBean extends MVCAdminJspBean
 
     /**
      * Gets the confirmation page of delete directory record
-     * 
+     *
      * @param request
      *            The HTTP request
      * @throws AccessDeniedException
@@ -1541,8 +1539,8 @@ public class SuggestJspBean extends MVCAdminJspBean
 
                 SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
 
-                if ( ( suggestSubmit == null )
-                        || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+                if ( ( suggestSubmit == null ) || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ),
+                        SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
                 {
                     throw new AccessDeniedException( "Access denied" );
                 }
@@ -1555,14 +1553,15 @@ public class SuggestJspBean extends MVCAdminJspBean
         {
             Category category = CategoryHome.findByPrimaryKey( nIdCategory, getPlugin( ) );
             Object [ ] args = {
-                ( ( category == null ) || ( category.getTitle( ) == null ) ) ? "" : category.getTitle( )
+                    ( ( category == null ) || ( category.getTitle( ) == null ) ) ? "" : category.getTitle( )
             };
 
             return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_CHANGE_SUGGEST_SUBMIT_CATEGORY, args, url.getUrl( ),
                     AdminMessage.TYPE_CONFIRMATION ) );
         }
 
-        return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_SUGGEST_SUBMIT_CATEGORY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
+        return redirect( request,
+                AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_SUGGEST_SUBMIT_CATEGORY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
     }
 
     /**
@@ -1593,8 +1592,8 @@ public class SuggestJspBean extends MVCAdminJspBean
 
                 SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
 
-                if ( ( suggestSubmit == null )
-                        || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+                if ( ( suggestSubmit == null ) || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ),
+                        SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
                 {
                     throw new AccessDeniedException( "Access denied" );
                 }
@@ -1617,7 +1616,8 @@ public class SuggestJspBean extends MVCAdminJspBean
 
                 SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, getPlugin( ) );
 
-                Suggest suggest = mapSuggest.computeIfAbsent( suggestSubmit.getSuggest( ).getIdSuggest( ), nId -> SuggestHome.findByPrimaryKey( nId, getPlugin( ) ) );
+                Suggest suggest = mapSuggest.computeIfAbsent( suggestSubmit.getSuggest( ).getIdSuggest( ),
+                        nId -> SuggestHome.findByPrimaryKey( nId, getPlugin( ) ) );
 
                 if ( SuggestUtils.isCategoryAllowed( suggest, nIdCategory ) )
                 {
@@ -1651,8 +1651,8 @@ public class SuggestJspBean extends MVCAdminJspBean
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( nIdSuggestSubmit, false, plugin );
         Category category = CategoryHome.findByPrimaryKey( nIdCategory, plugin );
 
-        if ( ( suggestSubmit == null )
-                || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+        if ( ( suggestSubmit == null ) || !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ),
+                SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
         {
             return redirect( request, getJspManageSuggest( request ) );
         }
@@ -1706,16 +1706,14 @@ public class SuggestJspBean extends MVCAdminJspBean
 
             return redirect( request, AdminMessageService.getMessageUrl( request, strMessage, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
         }
-        else
-            if ( request.getParameter( PARAMETER_ENABLE ) != null )
-            {
-                doEnableCommentSubmit( request );
-            }
-            else
-                if ( request.getParameter( PARAMETER_DISABLE ) != null )
-                {
-                    doDisableCommentSubmit( request );
-                }
+        else if ( request.getParameter( PARAMETER_ENABLE ) != null )
+        {
+            doEnableCommentSubmit( request );
+        }
+        else if ( request.getParameter( PARAMETER_DISABLE ) != null )
+        {
+            doDisableCommentSubmit( request );
+        }
 
         return redirect( request, getJspManageCommentSubmit( request, strIdParentCommentSubmit ) );
     }
@@ -1836,7 +1834,8 @@ public class SuggestJspBean extends MVCAdminJspBean
 
         SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( commentSubmit.getSuggestSubmit( ).getIdSuggestSubmit( ), false, plugin );
 
-        if ( !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+        if ( !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT,
+                (User) getUser( ) ) )
         {
             return redirect( request, getJspManageSuggest( request ) );
         }
@@ -1846,7 +1845,8 @@ public class SuggestJspBean extends MVCAdminJspBean
         _commentSubmitService.remove( nIdCommentSubmit, plugin );
 
         List<CommentSubmit> listCounted = listRemoved.stream( ).filter( CommentSubmit::isInDiscussion ).toList( );
-        suggestSubmit.setNumberCommentEnable( suggestSubmit.getNumberCommentEnable( ) - (int) listCounted.stream( ).filter( CommentSubmit::isActive ).count( ) );
+        suggestSubmit
+                .setNumberCommentEnable( suggestSubmit.getNumberCommentEnable( ) - (int) listCounted.stream( ).filter( CommentSubmit::isActive ).count( ) );
         suggestSubmit.setNumberComment( suggestSubmit.getNumberComment( ) - listCounted.size( ) );
         _suggestSubmitService.update( suggestSubmit, plugin );
 
@@ -1876,7 +1876,8 @@ public class SuggestJspBean extends MVCAdminJspBean
     @Action( value = ACTION_REMOVE_COMPLEMENT, securityTokenAction = TOKEN_SUGGEST )
     public String doRemoveComplement( HttpServletRequest request )
     {
-        SuggestSubmitComplement complement = _complementService.findByPrimaryKey( SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_ID_COMPLEMENT ) ) );
+        SuggestSubmitComplement complement = _complementService
+                .findByPrimaryKey( SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_ID_COMPLEMENT ) ) );
 
         if ( ( complement == null ) || !canManageSuggestSubmit( complement.getIdSuggestSubmit( ) ) )
         {
@@ -1911,7 +1912,8 @@ public class SuggestJspBean extends MVCAdminJspBean
     @Action( value = ACTION_REMOVE_ATTACHMENT, securityTokenAction = TOKEN_SUGGEST )
     public String doRemoveAttachment( HttpServletRequest request )
     {
-        SuggestSubmitAttachment attachment = _attachmentService.findByPrimaryKey( SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_ID_ATTACHMENT ) ) );
+        SuggestSubmitAttachment attachment = _attachmentService
+                .findByPrimaryKey( SuggestUtils.getIntegerParameter( request.getParameter( PARAMETER_ID_ATTACHMENT ) ) );
 
         if ( ( attachment == null ) || !canManageSuggestSubmit( attachment.getIdSuggestSubmit( ) ) )
         {
@@ -1977,7 +1979,8 @@ public class SuggestJspBean extends MVCAdminJspBean
         {
             SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( commentSubmit.getSuggestSubmit( ).getIdSuggestSubmit( ), false, plugin );
 
-            if ( !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+            if ( !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT,
+                    (User) getUser( ) ) )
             {
                 return getJspManageSuggest( request );
             }
@@ -2013,7 +2016,8 @@ public class SuggestJspBean extends MVCAdminJspBean
         {
             SuggestSubmit suggestSubmit = _suggestSubmitService.findByPrimaryKey( commentSubmit.getSuggestSubmit( ).getIdSuggestSubmit( ), false, plugin );
 
-            if ( !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT, (User) getUser( ) ) )
+            if ( !SuggestService.isAuthorized( suggestSubmit.getSuggest( ).getIdSuggest( ), SuggestResourceIdService.PERMISSION_MANAGE_SUGGEST_SUBMIT,
+                    (User) getUser( ) ) )
             {
                 return getJspManageSuggest( request );
             }
@@ -2149,7 +2153,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         int nNumberCommentDisplayInSuggestSubmitList = SuggestUtils.getIntegerParameter( strNumberCommentDisplayInSuggestSubmitList );
         int nNumberCharCommentDisplayInSuggestSubmitList = SuggestUtils.getIntegerParameter( strNumberCharCommentDisplayInSuggestSubmitList );
 
-        //Retrieve the selected workflow
+        // Retrieve the selected workflow
         String strIdWorkflow = request.getParameter( PARAMETER_ID_WORKFLOW );
         int nIdWorkflow = SuggestUtils.getIntegerParameter( strIdWorkflow );
 
@@ -2160,96 +2164,82 @@ public class SuggestJspBean extends MVCAdminJspBean
             strFieldError = FIELD_TITLE;
         }
 
-        else
-            if ( StringUtils.isEmpty( strLibelleContribution ) )
-            {
-                strFieldError = FIELD_LIBELLE_CONTRIBUTION;
-            }
+        else if ( StringUtils.isEmpty( strLibelleContribution ) )
+        {
+            strFieldError = FIELD_LIBELLE_CONTRIBUTION;
+        }
 
-            else
-                if ( StringUtils.isEmpty( strUnavailabilityMessage ) )
-                {
-                    strFieldError = FIELD_UNAVAILABILITY_MESSAGE;
-                }
-                else
-                    if ( nIdVoteType == -1 )
-                    {
-                        strFieldError = FIELD_VOTE_TYPE;
-                    }
-                    else
-                        if ( StringUtils.isEmpty( strNumberSuggestSubmitCaractersShown ) )
-                        {
-                            strFieldError = FIELD_NUMBER_SUGGEST_SUBMIT_CARACTERS_SHOWN;
-                        }
-                        else
-                            if ( ( ( ( strShowTopScoreBlock != null ) && strShowTopScoreBlock.trim( ).equals( CONSTANTE_YES_VALUE ) ) && ( strNumberSuggestSubmitInTopScore == null ) )
-                                    || strNumberSuggestSubmitInTopScore.trim( ).equals( EMPTY_STRING ) )
-                            {
-                                strFieldError = FIELD_NUMBER_SUGGEST_SUBMIT_IN_TOP_SCORE;
-                            }
+        else if ( StringUtils.isEmpty( strUnavailabilityMessage ) )
+        {
+            strFieldError = FIELD_UNAVAILABILITY_MESSAGE;
+        }
+        else if ( nIdVoteType == -1 )
+        {
+            strFieldError = FIELD_VOTE_TYPE;
+        }
+        else if ( StringUtils.isEmpty( strNumberSuggestSubmitCaractersShown ) )
+        {
+            strFieldError = FIELD_NUMBER_SUGGEST_SUBMIT_CARACTERS_SHOWN;
+        }
+        else if ( ( ( ( strShowTopScoreBlock != null ) && strShowTopScoreBlock.trim( ).equals( CONSTANTE_YES_VALUE ) )
+                && ( strNumberSuggestSubmitInTopScore == null ) ) || strNumberSuggestSubmitInTopScore.trim( ).equals( EMPTY_STRING ) )
+        {
+            strFieldError = FIELD_NUMBER_SUGGEST_SUBMIT_IN_TOP_SCORE;
+        }
 
-                            else
-                                if ( ( ( strAuthorizedComment != null ) && strAuthorizedComment.trim( ).equals( CONSTANTE_YES_VALUE ) )
-                                        && ( ( strNumberSuggestSubmitInTopComment == null ) || strNumberSuggestSubmitInTopComment.trim( ).equals( EMPTY_STRING ) ) )
-                                {
-                                    strFieldError = FIELD_NUMBER_SUGGEST_SUBMIT_IN_TOP_COMMENT;
-                                }
+        else if ( ( ( strAuthorizedComment != null ) && strAuthorizedComment.trim( ).equals( CONSTANTE_YES_VALUE ) )
+                && ( ( strNumberSuggestSubmitInTopComment == null ) || strNumberSuggestSubmitInTopComment.trim( ).equals( EMPTY_STRING ) ) )
+        {
+            strFieldError = FIELD_NUMBER_SUGGEST_SUBMIT_IN_TOP_COMMENT;
+        }
 
-                                else
-                                    if ( ( ( strActiveSuggestSubmitPaginator != null ) && strActiveSuggestSubmitPaginator.trim( ).equals( CONSTANTE_YES_VALUE ) )
-                                            && ( ( strNumberSuggestSubmitPerPage == null ) || strNumberSuggestSubmitPerPage.trim( ).equals( EMPTY_STRING ) ) )
-                                    {
-                                        strFieldError = FIELD_NUMBER_SUGGEST_SUBMIT_PER_PAGE;
-                                    }
+        else if ( ( ( strActiveSuggestSubmitPaginator != null ) && strActiveSuggestSubmitPaginator.trim( ).equals( CONSTANTE_YES_VALUE ) )
+                && ( ( strNumberSuggestSubmitPerPage == null ) || strNumberSuggestSubmitPerPage.trim( ).equals( EMPTY_STRING ) ) )
+        {
+            strFieldError = FIELD_NUMBER_SUGGEST_SUBMIT_PER_PAGE;
+        }
 
-                                    else
-                                        if ( ( strLibelleValidateButton == null ) || strLibelleValidateButton.trim( ).equals( EMPTY_STRING ) )
-                                        {
-                                            strFieldError = FIELD_LIBELE_VALIDATE_BUTTON;
-                                        }
-                                        else
-                                            if ( ( ( strDisplayCommentInSuggestSubmitList != null ) && ( ( strNumberCommentDisplayInSuggestSubmitList == null ) || strNumberCommentDisplayInSuggestSubmitList
-                                                    .trim( ).equals( EMPTY_STRING ) ) ) )
-                                            {
-                                                strFieldError = FIELD_NUMBER_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST;
-                                            }
-                                            else
-                                                if ( ( ( strDisplayCommentInSuggestSubmitList != null ) && ( ( strNumberCharCommentDisplayInSuggestSubmitList == null ) || strNumberCharCommentDisplayInSuggestSubmitList
-                                                        .trim( ).equals( EMPTY_STRING ) ) ) )
-                                                {
-                                                    strFieldError = FIELD_NUMBER_CHAR_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST;
-                                                }
+        else if ( ( strLibelleValidateButton == null ) || strLibelleValidateButton.trim( ).equals( EMPTY_STRING ) )
+        {
+            strFieldError = FIELD_LIBELE_VALIDATE_BUTTON;
+        }
+        else if ( ( ( strDisplayCommentInSuggestSubmitList != null )
+                && ( ( strNumberCommentDisplayInSuggestSubmitList == null ) || strNumberCommentDisplayInSuggestSubmitList.trim( ).equals( EMPTY_STRING ) ) ) )
+        {
+            strFieldError = FIELD_NUMBER_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST;
+        }
+        else if ( ( ( strDisplayCommentInSuggestSubmitList != null ) && ( ( strNumberCharCommentDisplayInSuggestSubmitList == null )
+                || strNumberCharCommentDisplayInSuggestSubmitList.trim( ).equals( EMPTY_STRING ) ) ) )
+        {
+            strFieldError = FIELD_NUMBER_CHAR_COMMENT_DISPLAY_IN_SUGGEST_SUBMIT_LIST;
+        }
 
-                                                else
-                                                    if ( StringUtils.isEmpty( strNotificationNewCommentTitle ) )
-                                                    {
-                                                        strFieldError = FIELD_NOTIFICATION_NEW_COMMENT_TITLE;
+        else if ( StringUtils.isEmpty( strNotificationNewCommentTitle ) )
+        {
+            strFieldError = FIELD_NOTIFICATION_NEW_COMMENT_TITLE;
 
-                                                    }
-                                                    else
-                                                        if ( StringUtils.isEmpty( strNotificationNewCommentBody ) )
-                                                        {
-                                                            strFieldError = FIELD_NOTIFICATION_NEW_COMMENT_BODY;
+        }
+        else if ( StringUtils.isEmpty( strNotificationNewCommentBody ) )
+        {
+            strFieldError = FIELD_NOTIFICATION_NEW_COMMENT_BODY;
 
-                                                        }
+        }
 
-                                                        else
-                                                            if ( StringUtils.isEmpty( strNotificationNewSuggestSubmitTitle ) )
-                                                            {
+        else if ( StringUtils.isEmpty( strNotificationNewSuggestSubmitTitle ) )
+        {
 
-                                                                strFieldError = FIELD_NOTIFICATION_NEW_SUGGEST_DUBMIT_TITLE;
-                                                            }
-                                                            else
-                                                                if ( StringUtils.isEmpty( strNotificationNewSuggestSubmitBody ) )
-                                                                {
+            strFieldError = FIELD_NOTIFICATION_NEW_SUGGEST_DUBMIT_TITLE;
+        }
+        else if ( StringUtils.isEmpty( strNotificationNewSuggestSubmitBody ) )
+        {
 
-                                                                    strFieldError = FIELD_NOTIFICATION_NEW_SUGGEST_DUBMIT_BODY;
-                                                                }
+            strFieldError = FIELD_NOTIFICATION_NEW_SUGGEST_DUBMIT_BODY;
+        }
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
             Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, getLocale( ) )
+                    I18nService.getLocalizedString( strFieldError, getLocale( ) )
             };
 
             return I18nService.getLocalizedString( MESSAGE_MANDATORY_FIELD, tabRequiredFields, getLocale( ) );
@@ -2477,8 +2467,8 @@ public class SuggestJspBean extends MVCAdminJspBean
     {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 
-        if ( ( multipartRequest.getParameter( PARAMETER_CANCEL ) == null )
-                && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, SuggestResourceIdService.PERMISSION_CREATE, (User) getUser( ) ) )
+        if ( ( multipartRequest.getParameter( PARAMETER_CANCEL ) == null ) && RBACService.isAuthorized( Suggest.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+                SuggestResourceIdService.PERMISSION_CREATE, (User) getUser( ) ) )
         {
             Plugin plugin = getPlugin( );
             Suggest suggest = new Suggest( );
@@ -2531,8 +2521,7 @@ public class SuggestJspBean extends MVCAdminJspBean
             suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
         }
 
-        if ( ( suggest == null )
-                || !SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
+        if ( ( suggest == null ) || !SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_MODIFY, (User) getUser( ) ) )
         {
             return getManageSuggest( request, model );
         }
@@ -2554,8 +2543,9 @@ public class SuggestJspBean extends MVCAdminJspBean
         _strCurrentPageIndexEntry = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndexEntry );
         _nItemsPerPageEntry = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPageEntry, _nDefaultItemsPerPage );
 
-        Paginator<IEntry> paginator = new Paginator<IEntry>( listEntry, _nItemsPerPageEntry, AppPathService.getBaseUrl( request ) + JSP_MODIFY_SUGGEST
-                + "&id_suggest=" + suggest.getIdSuggest( ), PARAMETER_PAGE_INDEX, _strCurrentPageIndexEntry );
+        Paginator<IEntry> paginator = new Paginator<IEntry>( listEntry, _nItemsPerPageEntry,
+                AppPathService.getBaseUrl( request ) + JSP_MODIFY_SUGGEST + "&id_suggest=" + suggest.getIdSuggest( ), PARAMETER_PAGE_INDEX,
+                _strCurrentPageIndexEntry );
 
         AdminUser adminUser = getUser( );
 
@@ -2695,7 +2685,7 @@ public class SuggestJspBean extends MVCAdminJspBean
 
     /**
      * remove SuggestSubmitType association
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The URL to go after performing the action
@@ -2805,8 +2795,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         String strMessage;
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
 
-        if ( ( nIdSuggest == -1 )
-                || !SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_DELETE, (User) getUser( ) ) )
+        if ( ( nIdSuggest == -1 ) || !SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_DELETE, (User) getUser( ) ) )
         {
             return redirect( request, getJspManageSuggest( request ) );
         }
@@ -2845,8 +2834,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         Plugin plugin = getPlugin( );
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
 
-        if ( ( nIdSuggest != -1 )
-                && SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_DELETE, (User) getUser( ) ) )
+        if ( ( nIdSuggest != -1 ) && SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_DELETE, (User) getUser( ) ) )
         {
             // Remove the specified Suggest
             _suggestService.removeSuggest( nIdSuggest, getUser( ) );
@@ -2870,8 +2858,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         String strIdSuggest = request.getParameter( PARAMETER_ID_SUGGEST );
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
 
-        if ( ( nIdSuggest == -1 )
-                || !SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_COPY, (User) getUser( ) ) )
+        if ( ( nIdSuggest == -1 ) || !SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_COPY, (User) getUser( ) ) )
         {
             return redirect( request, getJspManageSuggest( request ) );
         }
@@ -2879,7 +2866,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
 
         Object [ ] tabSuggestTileCopy = {
-            suggest.getTitle( )
+                suggest.getTitle( )
         };
         String strTitleCopySuggest = I18nService.getLocalizedString( PROPERTY_COPY_SUGGEST_TITLE, tabSuggestTileCopy, getLocale( ) );
 
@@ -3153,7 +3140,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         }
 
         Object [ ] tabEntryTileCopy = {
-            entry.getTitle( )
+                entry.getTitle( )
         };
         String strTitleCopyEntry = I18nService.getLocalizedString( PROPERTY_COPY_ENTRY_TITLE, tabEntryTileCopy, getLocale( ) );
 
@@ -3307,8 +3294,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
         suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
 
-        if ( ( suggest != null )
-                && SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_CHANGE_STATE, (User) getUser( ) ) )
+        if ( ( suggest != null ) && SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_CHANGE_STATE, (User) getUser( ) ) )
         {
             suggest.setActive( false );
             SuggestHome.update( suggest, getPlugin( ) );
@@ -3345,8 +3331,7 @@ public class SuggestJspBean extends MVCAdminJspBean
         int nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
         suggest = SuggestHome.findByPrimaryKey( nIdSuggest, plugin );
 
-        if ( ( suggest != null )
-                && SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_CHANGE_STATE, (User) getUser( ) ) )
+        if ( ( suggest != null ) && SuggestService.isAuthorized( nIdSuggest, SuggestResourceIdService.PERMISSION_CHANGE_STATE, (User) getUser( ) ) )
         {
             suggest.setActive( true );
             SuggestHome.update( suggest, getPlugin( ) );
@@ -3489,12 +3474,13 @@ public class SuggestJspBean extends MVCAdminJspBean
      *            the key of suggest to modify
      * @param strPanel
      *            the panel anchor
-     * 
+     *
      * @return return url of the jsp modify suggest
      */
     private String getJspModifySuggest( HttpServletRequest request, int nIdSuggest, String strPanel )
     {
-        return !StringUtils.isEmpty( strPanel ) ? getJspModifySuggest( request, nIdSuggest ) + "&panel=" + strPanel : getJspModifySuggest( request, nIdSuggest );
+        return !StringUtils.isEmpty( strPanel ) ? getJspModifySuggest( request, nIdSuggest ) + "&panel=" + strPanel
+                : getJspModifySuggest( request, nIdSuggest );
     }
 
     /**
@@ -3755,11 +3741,10 @@ public class SuggestJspBean extends MVCAdminJspBean
         {
             _nIdSuggest = SuggestUtils.getIntegerParameter( strIdSuggest );
         }
-        else
-            if ( listSuggest.size( ) > 0 )
-            {
-                _nIdSuggest = listSuggest.get( 0 ).getIdSuggest( );
-            }
+        else if ( listSuggest.size( ) > 0 )
+        {
+            _nIdSuggest = listSuggest.get( 0 ).getIdSuggest( );
+        }
 
         Suggest suggest = SuggestHome.findByPrimaryKey( _nIdSuggest, plugin );
 
@@ -3811,7 +3796,8 @@ public class SuggestJspBean extends MVCAdminJspBean
         model.put( MARK_DEPARTMENT_STATISTICS, _statisticsService.countPublishedByDepartment( filter, plugin ) );
         model.put( MARK_PERIOD_STATISTICS, _statisticsService.countByPeriod( mapDayCounts, dateFirst, dateLast ) );
         model.put( MARK_PERIOD_WEEKLY, _statisticsService.isWeekly( dateFirst, dateLast ) );
-        model.put( MARK_CATEGORY_STATISTICS, getPublishedCountByCategory( suggest, nIdCategory, _statisticsService.countPublishedByCategory( filter, plugin ) ) );
+        model.put( MARK_CATEGORY_STATISTICS,
+                getPublishedCountByCategory( suggest, nIdCategory, _statisticsService.countPublishedByCategory( filter, plugin ) ) );
 
         filter.setIdSuggestSubmitState( SuggestSubmit.STATE_PUBLISH );
         SuggestUtils.initSubmitFilterBySort( filter, SubmitFilter.SORT_BY_NUMBER_COMMENT_DESC );
@@ -3925,7 +3911,8 @@ public class SuggestJspBean extends MVCAdminJspBean
         UrlItem url = new UrlItem( JSP_DO_UPDATE_ALL_SUGGEST_SUBMIT );
         url.addParameter( PARAMETER_ID_SUGGEST, strIdSuggest );
 
-        return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_UPDATE_ALL_SUGGEST_SUBMIT, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
+        return redirect( request,
+                AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_UPDATE_ALL_SUGGEST_SUBMIT, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
     }
 
     /**
@@ -3952,7 +3939,7 @@ public class SuggestJspBean extends MVCAdminJspBean
 
     /**
      * Do modify advanced parameters
-     * 
+     *
      * @param request
      *            the request
      * @return url
@@ -4061,7 +4048,7 @@ public class SuggestJspBean extends MVCAdminJspBean
 
     /**
      * Process a workflow's action (task)
-     * 
+     *
      * @param request
      *            The request
      * @return the SuggestSubmit's management page if it is a simple task, or the form associated to the task (if it has any)
@@ -4088,8 +4075,8 @@ public class SuggestJspBean extends MVCAdminJspBean
                 return redirect( request, getTaskFormJsp( request, nIdAction, nIdSuggestSubmit ) );
             }
             // Otherwise, just execute the task
-            _workflowService.doProcessAction( nIdSuggestSubmit, SuggestSubmit.RESOURCE_TYPE, nIdAction, submit.getSuggest( ).getIdSuggest( ),
-                    request, getLocale( ), false, getUser( ) );
+            _workflowService.doProcessAction( nIdSuggestSubmit, SuggestSubmit.RESOURCE_TYPE, nIdAction, submit.getSuggest( ).getIdSuggest( ), request,
+                    getLocale( ), false, getUser( ) );
 
             if ( request.getParameter( PARAMETER_COMMENT ) != null )
             {
@@ -4101,7 +4088,7 @@ public class SuggestJspBean extends MVCAdminJspBean
 
     /**
      * Get the JSP used to display a workflow's task's form
-     * 
+     *
      * @param request
      *            The request
      * @param nIdAction
@@ -4121,7 +4108,7 @@ public class SuggestJspBean extends MVCAdminJspBean
 
     /**
      * Get the form of the task being processed
-     * 
+     *
      * @param request
      *            The request
      * @param model
@@ -4141,14 +4128,15 @@ public class SuggestJspBean extends MVCAdminJspBean
         {
             // If an error occurs, return to the main management page
             AppLogService.error( "Can't get workflow task's form: action ID is {} & SuggestSubmit ID is {}", nIdAction, nIdSuggestSubmit );
-            return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_ACTION_ERROR, getJspManageSuggestSubmit( request ), AdminMessage.TYPE_ERROR ) );
+            return redirect( request,
+                    AdminMessageService.getMessageUrl( request, MESSAGE_ACTION_ERROR, getJspManageSuggestSubmit( request ), AdminMessage.TYPE_ERROR ) );
         }
 
         getAuthorizedSuggestSubmit( nIdSuggestSubmit );
 
         // Retrieve the form associated with this workflow's task
-        String strHtmlTaskForm = _workflowService.getDisplayTasksForm( nIdSuggestSubmit, SuggestSubmit.RESOURCE_TYPE, nIdAction, request,
-                getLocale( ), getUser( ) );
+        String strHtmlTaskForm = _workflowService.getDisplayTasksForm( nIdSuggestSubmit, SuggestSubmit.RESOURCE_TYPE, nIdAction, request, getLocale( ),
+                getUser( ) );
         model.put( MARK_ID_SUGGEST_SUBMIT, nIdSuggestSubmit );
         model.put( MARK_ID_ACTION, nIdAction );
         model.put( MARK_TASK_FORM, strHtmlTaskForm );
@@ -4158,7 +4146,7 @@ public class SuggestJspBean extends MVCAdminJspBean
 
     /**
      * Save the content of a workflow's task's form
-     * 
+     *
      * @param request
      *            The request
      * @return the SuggestSubmit's management page
@@ -4187,7 +4175,8 @@ public class SuggestJspBean extends MVCAdminJspBean
                 {
                     // Redirect with an error message
                     AppLogService.error( "Can't process Suggest workflow action: {}", strError );
-                    return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_ACTION_ERROR, getJspManageSuggestSubmit( request ), AdminMessage.TYPE_ERROR ) );
+                    return redirect( request,
+                            AdminMessageService.getMessageUrl( request, MESSAGE_ACTION_ERROR, getJspManageSuggestSubmit( request ), AdminMessage.TYPE_ERROR ) );
                 }
             }
             return redirect( request, getJspManageSuggestSubmit( request ) );

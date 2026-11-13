@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,7 +54,7 @@ public interface ICommentSubmitDAO
      *            instance of the Comment Submit object to insert
      * @param plugin
      *            the plugin
-     * */
+     */
     void insert( CommentSubmit commentSubmit, Plugin plugin );
 
     /**
@@ -100,7 +100,7 @@ public interface ICommentSubmitDAO
 
     /**
      * Load the data of all the commentSubmit who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param nLimit
@@ -113,7 +113,7 @@ public interface ICommentSubmitDAO
 
     /**
      * Get the list of comments posted after a given date
-     * 
+     *
      * @param dateCreation
      *            The creation date of comments
      * @param plugin
@@ -124,7 +124,7 @@ public interface ICommentSubmitDAO
 
     /**
      * return the number of all the commentSubmit who verify the filter
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -135,7 +135,7 @@ public interface ICommentSubmitDAO
 
     /**
      * Update date modify
-     * 
+     *
      * @param dateModify
      *            update the modification date
      * @param idCommentSubmit

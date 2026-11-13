@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,8 +58,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Keeps in session the files an author attaches to the file fields of a proposal before submitting it, and refuses the files the options of the field
- * forbid: a type not accepted, a file too big, too many files.
+ * Keeps in session the files an author attaches to the file fields of a proposal before submitting it, and refuses the files the options of the field forbid: a
+ * type not accepted, a file too big, too many files.
  */
 @ApplicationScoped
 @Named( SuggestAsynchronousUploadHandler.BEAN_NAME )

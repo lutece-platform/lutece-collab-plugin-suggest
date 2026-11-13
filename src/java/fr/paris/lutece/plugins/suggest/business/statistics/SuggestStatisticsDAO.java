@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -92,7 +92,7 @@ public class SuggestStatisticsDAO
      */
     public StatisticsTotals getPublishedTotals( SubmitFilter filter, Plugin plugin )
     {
-        try( DAOUtil daoUtil = prepare( SQL_TOTALS, "", filter, true, plugin ) )
+        try ( DAOUtil daoUtil = prepare( SQL_TOTALS, "", filter, true, plugin ) )
         {
             daoUtil.executeQuery( );
 
@@ -113,7 +113,7 @@ public class SuggestStatisticsDAO
     {
         TreeMap<LocalDate, Integer> mapCounts = new TreeMap<>( );
 
-        try( DAOUtil daoUtil = prepare( SQL_COUNT_BY_DAY, SQL_GROUP_BY_DAY, filter, false, plugin ) )
+        try ( DAOUtil daoUtil = prepare( SQL_COUNT_BY_DAY, SQL_GROUP_BY_DAY, filter, false, plugin ) )
         {
             daoUtil.executeQuery( );
 
@@ -142,7 +142,7 @@ public class SuggestStatisticsDAO
     {
         Map<String, Integer> mapCounts = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
 
-        try( DAOUtil daoUtil = prepare( SQL_COUNT_BY_DEPARTMENT, SQL_GROUP_BY_DEPARTMENT, filter, true, plugin ) )
+        try ( DAOUtil daoUtil = prepare( SQL_COUNT_BY_DEPARTMENT, SQL_GROUP_BY_DEPARTMENT, filter, true, plugin ) )
         {
             daoUtil.executeQuery( );
 
@@ -153,7 +153,8 @@ public class SuggestStatisticsDAO
             }
         }
 
-        return mapCounts.entrySet( ).stream( ).map( entry -> new StatisticsCount( entry.getKey( ).isEmpty( ) ? null : entry.getKey( ), null, entry.getValue( ) ) )
+        return mapCounts.entrySet( ).stream( )
+                .map( entry -> new StatisticsCount( entry.getKey( ).isEmpty( ) ? null : entry.getKey( ), null, entry.getValue( ) ) )
                 .sorted( Comparator.comparingInt( StatisticsCount::getCount ).reversed( ) ).toList( );
     }
 
@@ -190,7 +191,7 @@ public class SuggestStatisticsDAO
     {
         Map<Integer, Integer> mapCounts = new HashMap<>( );
 
-        try( DAOUtil daoUtil = prepare( strSelect, strEnd, filter, bPublished, plugin ) )
+        try ( DAOUtil daoUtil = prepare( strSelect, strEnd, filter, bPublished, plugin ) )
         {
             daoUtil.executeQuery( );
 

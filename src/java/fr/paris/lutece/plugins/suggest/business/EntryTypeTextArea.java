@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -60,10 +60,10 @@ public class EntryTypeTextArea extends Entry
 
     /**
      * Get the HtmlCode of the entry
-     * 
+     *
      * @return the HtmlCode of the entry
      *
-     * */
+     */
     @Override
     public String getTemplateHtmlCodeForm( )
     {
@@ -72,7 +72,7 @@ public class EntryTypeTextArea extends Entry
 
     /**
      * Get the request data
-     * 
+     *
      * @param request
      *            HttpRequest
      * @param locale
@@ -103,21 +103,19 @@ public class EntryTypeTextArea extends Entry
             strFieldError = FIELD_TITLE;
         }
 
-        else
-            if ( ( strWidth == null ) || strWidth.trim( ).equals( EMPTY_STRING ) )
-            {
-                strFieldError = FIELD_WIDTH;
-            }
-            else
-                if ( ( strHeight == null ) || strHeight.trim( ).equals( EMPTY_STRING ) )
-                {
-                    strFieldError = FIELD_HEIGHT;
-                }
+        else if ( ( strWidth == null ) || strWidth.trim( ).equals( EMPTY_STRING ) )
+        {
+            strFieldError = FIELD_WIDTH;
+        }
+        else if ( ( strHeight == null ) || strHeight.trim( ).equals( EMPTY_STRING ) )
+        {
+            strFieldError = FIELD_HEIGHT;
+        }
 
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
             Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
+                    I18nService.getLocalizedString( strFieldError, locale )
             };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
@@ -147,7 +145,7 @@ public class EntryTypeTextArea extends Entry
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
             Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
+                    I18nService.getLocalizedString( strFieldError, locale )
             };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
@@ -171,7 +169,7 @@ public class EntryTypeTextArea extends Entry
 
     /**
      * Get template create url of the entry
-     * 
+     *
      * @return template create url of the entry
      */
     @Override
@@ -182,7 +180,7 @@ public class EntryTypeTextArea extends Entry
 
     /**
      * Get the template modify url of the entry
-     * 
+     *
      * @return template modify url of the entry
      */
     @Override
@@ -193,7 +191,7 @@ public class EntryTypeTextArea extends Entry
 
     /**
      * save in the list of response the response associate to the entry in the form submit
-     * 
+     *
      * @param request
      *            HttpRequest
      * @param listResponse
@@ -230,7 +228,7 @@ public class EntryTypeTextArea extends Entry
 
     /**
      * save in the list of response the response associate to the entry in the form submit
-     * 
+     *
      * @param nIdSuggestSubmit
      *            The if of the SuggestSubmit
      * @param request
@@ -251,7 +249,7 @@ public class EntryTypeTextArea extends Entry
 
     /**
      * Get the template of the html code of the response value associate to the entry
-     * 
+     *
      * @return the template of the html code of the response value associate to the entry
      */
     @Override

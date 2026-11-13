@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,7 +53,7 @@ public final class ImageResourceDAO implements IImageResourceDAO
     @Override
     public synchronized int insert( ImageResource imageResource, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
             daoUtil.setBytes( 2, imageResource.getImage( ) );
             daoUtil.setString( 3, imageResource.getMimeType( ) );
@@ -69,7 +69,7 @@ public final class ImageResourceDAO implements IImageResourceDAO
     @Override
     public ImageResource load( int nId, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
             daoUtil.setInt( 1, nId );
             daoUtil.executeQuery( );
@@ -90,7 +90,7 @@ public final class ImageResourceDAO implements IImageResourceDAO
     @Override
     public void delete( int nId, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
             daoUtil.setInt( 1, nId );
             daoUtil.executeUpdate( );
@@ -99,14 +99,14 @@ public final class ImageResourceDAO implements IImageResourceDAO
 
     /**
      * generate new primary key
-     * 
+     *
      * @param plugin
      *            plugin
      * @return
      */
     private int newPrimaryKey( Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
         {
             daoUtil.executeQuery( );
             daoUtil.next( );

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -70,19 +70,19 @@ public class VoteTypeDAO implements IVoteTypeDAO
     public VoteType load( int idKey, Plugin plugin )
     {
         VoteType voteType = null;
-        
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
             daoUtil.setInt( 1, idKey );
             daoUtil.executeQuery( );
-            
+
             if ( daoUtil.next( ) )
             {
                 voteType = new VoteType( );
                 voteType.setIdVoteType( daoUtil.getInt( 1 ) );
                 voteType.setTitle( daoUtil.getString( 2 ) );
                 voteType.setTemplateFileName( daoUtil.getString( 3 ) );
-    
+
                 // voteType.setVoteButtons(selectListVoteButton(voteType.getIdVoteType(), plugin ));
             }
 
@@ -93,7 +93,7 @@ public class VoteTypeDAO implements IVoteTypeDAO
 
     /**
      * Load the data of all vote type returns them in a list
-     * 
+     *
      * @param plugin
      *            the plugin
      * @return the list of vote type
@@ -101,20 +101,20 @@ public class VoteTypeDAO implements IVoteTypeDAO
     public List<VoteType> select( Plugin plugin )
     {
         List<VoteType> listVoteType = new ArrayList<>( );
-        
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
+
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
             daoUtil.executeQuery( );
-    
+
             VoteType voteType = null;
-    
+
             while ( daoUtil.next( ) )
             {
                 voteType = new VoteType( );
                 voteType.setIdVoteType( daoUtil.getInt( 1 ) );
                 voteType.setTitle( daoUtil.getString( 2 ) );
                 voteType.setTemplateFileName( daoUtil.getString( 3 ) );
-    
+
                 listVoteType.add( voteType );
             }
 
@@ -139,7 +139,7 @@ public class VoteTypeDAO implements IVoteTypeDAO
      */
     public void deleteAllAssociatedVoteButtons( int nIdVoteType, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_VOTE_BUTTON_ASSOCIATED_BY_ID_VOTE_TYPE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_VOTE_BUTTON_ASSOCIATED_BY_ID_VOTE_TYPE, plugin ) )
         {
             daoUtil.setInt( 1, nIdVoteType );
             daoUtil.executeUpdate( );
@@ -160,12 +160,12 @@ public class VoteTypeDAO implements IVoteTypeDAO
      */
     public void insertVoteButtonAssociated( int nIdVoteType, int nIdVoteButton, int nNumero, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_ASSOCIATED_VOTE_BUTTON, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_ASSOCIATED_VOTE_BUTTON, plugin ) )
         {
             daoUtil.setInt( 1, nIdVoteType );
             daoUtil.setInt( 2, nIdVoteButton );
             daoUtil.setInt( 3, nNumero );
-    
+
             daoUtil.executeUpdate( );
         }
     }

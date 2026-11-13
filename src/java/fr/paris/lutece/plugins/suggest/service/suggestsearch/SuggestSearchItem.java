@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -79,7 +79,7 @@ public class SuggestSearchItem extends SearchItem
 
     /**
      * Id suggest submit
-     * 
+     *
      * @return the suggest submit id
      */
     public String getIdSuggestSubmit( )
@@ -89,7 +89,7 @@ public class SuggestSearchItem extends SearchItem
 
     /**
      * The the suggest submit id
-     * 
+     *
      * @param strIdSuggestSubmit
      *            the new suggest submit id
      */

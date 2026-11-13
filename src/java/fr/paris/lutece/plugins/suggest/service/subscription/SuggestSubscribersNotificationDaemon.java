@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -151,8 +151,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
             {
                 for ( Subscription subscription : listSubscription )
                 {
-                    if ( StringUtils.isNotEmpty( subscription.getIdSubscribedResource( ) )
-                            && StringUtils.isNumeric( subscription.getIdSubscribedResource( ) ) )
+                    if ( StringUtils.isNotEmpty( subscription.getIdSubscribedResource( ) ) && StringUtils.isNumeric( subscription.getIdSubscribedResource( ) ) )
                     {
                         int nIdSuggestSubmit = Integer.parseInt( subscription.getIdSubscribedResource( ) );
                         List<CommentSubmit> listComments = mapCommentsBySuggestSubmitId.get( nIdSuggestSubmit );
@@ -189,8 +188,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
             {
                 for ( Subscription subscription : listSubscription )
                 {
-                    if ( StringUtils.isNotEmpty( subscription.getIdSubscribedResource( ) )
-                            && StringUtils.isNumeric( subscription.getIdSubscribedResource( ) ) )
+                    if ( StringUtils.isNotEmpty( subscription.getIdSubscribedResource( ) ) && StringUtils.isNumeric( subscription.getIdSubscribedResource( ) ) )
                     {
                         int nIdCategory = SuggestUtils.getIntegerParameter( subscription.getIdSubscribedResource( ) );
 
@@ -215,8 +213,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
             {
                 for ( Subscription subscription : listSubscription )
                 {
-                    if ( StringUtils.isNotEmpty( subscription.getIdSubscribedResource( ) )
-                            && StringUtils.isNumeric( subscription.getIdSubscribedResource( ) ) )
+                    if ( StringUtils.isNotEmpty( subscription.getIdSubscribedResource( ) ) && StringUtils.isNumeric( subscription.getIdSubscribedResource( ) ) )
                     {
                         int nIdSuggest = Integer.parseInt( subscription.getIdSubscribedResource( ) );
 
@@ -272,7 +269,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
     /**
      * Add a comment to a map of suggest submit ids and list of comments
-     * 
+     *
      * @param comment
      *            The comment to add
      * @param mapCommentsBySuggestSubmitId
@@ -302,7 +299,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
     /**
      * Register a list of comments to send to a user. If a comment has already been registered for the user, then it is ignored
-     * 
+     *
      * @param listComments
      *            The list of comments to send
      * @param strUserId
@@ -354,7 +351,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
     /**
      * Send all registered comment notifications
-     * 
+     *
      * @param plugin
      *            the plugin
      */
@@ -393,7 +390,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
     /**
      * Send a single comment notification
-     * 
+     *
      * @param suggest
      *            the Suggest link to the notification
      * @param listComments
@@ -414,7 +411,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
     /**
      * Register a suggest submit to send to a user
-     * 
+     *
      * @param suggestSubmit
      *            The suggest submit to register
      * @param strUserName
@@ -459,7 +456,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
     /**
      * Send all registered comment notifications
-     * 
+     *
      * @param plugin
      *            plugin
      */
@@ -497,7 +494,7 @@ public class SuggestSubscribersNotificationDaemon extends Daemon
 
     /**
      * Send a single suggest submit notification
-     * 
+     *
      * @param suggest
      *            the Suggest link to the notification
      * @param listSuggestSubmit

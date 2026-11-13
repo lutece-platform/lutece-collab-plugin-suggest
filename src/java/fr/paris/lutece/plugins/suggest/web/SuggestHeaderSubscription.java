@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -67,8 +67,8 @@ public class SuggestHeaderSubscription
      *
      * @param request
      *            the request
-     * @return the id of the suggest, whether the user subscribed and the security token, or an empty map when nobody is connected or no suggest is the
-     *         default one
+     * @return the id of the suggest, whether the user subscribed and the security token, or an empty map when nobody is connected or no suggest is the default
+     *         one
      */
     public Map<String, Object> getSubscription( HttpServletRequest request )
     {

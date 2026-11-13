@@ -54,8 +54,8 @@ public final class SuggestEvents
     }
 
     /**
-     * Fires an event to the asynchronous observers of its action. While the server stops, its executor refuses new tasks: the observers are then notified
-     * in the current thread.
+     * Fires an event to the asynchronous observers of its action. While the server stops, its executor refuses new tasks: the observers are then notified in
+     * the current thread.
      *
      * @param <T>
      *            the event type

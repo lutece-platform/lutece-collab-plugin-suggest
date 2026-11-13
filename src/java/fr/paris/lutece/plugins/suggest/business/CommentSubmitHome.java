@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -86,7 +86,7 @@ public final class CommentSubmitHome
 
     /**
      * Update the modification date of the commentSubmit which is specified in parameter
-     * 
+     *
      * @param dateModify
      *            The new date of modification of the commentSubmit
      * @param idCommentSubmit
@@ -145,7 +145,7 @@ public final class CommentSubmitHome
 
     /**
      * Load the data of all the commentSubmit who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param nLimit
@@ -161,7 +161,7 @@ public final class CommentSubmitHome
 
     /**
      * Get the list of comments posted after a given date
-     * 
+     *
      * @param dateCreation
      *            The creation date of comments
      * @param plugin
@@ -175,7 +175,7 @@ public final class CommentSubmitHome
 
     /**
      * Load the number of all the commentSubmit who verify the filter
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin

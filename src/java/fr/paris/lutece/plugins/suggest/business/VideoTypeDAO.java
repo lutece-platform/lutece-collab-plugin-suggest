@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -66,13 +66,13 @@ public class VideoTypeDAO implements IVideoTypeDAO
      */
     public int insert( VideoType videoType, Plugin plugin ) throws SQLException
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
-        {    
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        {
             daoUtil.setInt( 1, videoType.getIdSuggestSubmit( ) );
             daoUtil.setBytes( 2, videoType.getVideo( ) );
             daoUtil.setString( 3, videoType.getMimeType( ) );
             daoUtil.setString( 4, videoType.getCredits( ) );
-    
+
             try
             {
                 daoUtil.executeUpdate( );
@@ -99,12 +99,12 @@ public class VideoTypeDAO implements IVideoTypeDAO
     public VideoType load( int nId, Plugin plugin )
     {
         VideoType videoType = null;
-        
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
             daoUtil.setInt( 1, nId );
             daoUtil.executeQuery( );
-    
+
             if ( daoUtil.next( ) )
             {
                 videoType = new VideoType( );
@@ -129,7 +129,7 @@ public class VideoTypeDAO implements IVideoTypeDAO
      */
     public void delete( int nIdSuggestSubmit, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggestSubmit );
             daoUtil.executeUpdate( );
@@ -146,13 +146,13 @@ public class VideoTypeDAO implements IVideoTypeDAO
      */
     public void store( VideoType video, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
-        {    
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
             daoUtil.setBytes( 1, video.getVideo( ) );
             daoUtil.setString( 2, video.getMimeType( ) );
             daoUtil.setString( 3, video.getCredits( ) );
             daoUtil.setInt( 4, video.getIdSuggestSubmit( ) );
-    
+
             daoUtil.executeUpdate( );
         }
     }

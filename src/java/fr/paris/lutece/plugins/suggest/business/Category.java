@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,7 +63,7 @@ public class Category implements RBACResource, Serializable
 
     /**
      * set the id of the category
-     * 
+     *
      * @param idCategory
      *            the id of the category
      */
@@ -83,7 +83,7 @@ public class Category implements RBACResource, Serializable
 
     /**
      * set the title of the category
-     * 
+     *
      * @param title
      *            the title of the category
      */
@@ -106,7 +106,7 @@ public class Category implements RBACResource, Serializable
 
     /**
      * RBAC resource implmentation
-     * 
+     *
      * @return The resource type code
      */
     public String getResourceTypeCode( )
@@ -116,7 +116,7 @@ public class Category implements RBACResource, Serializable
 
     /**
      * RBAC resource implmentation
-     * 
+     *
      * @return The resourceId
      */
     public String getResourceId( )

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,10 +48,10 @@ public class EntryTypeEditorBbcode extends EntryTypeTextArea
 
     /**
      * Get the HtmlCode of the entry
-     * 
+     *
      * @return the HtmlCode of the entry
      *
-     * */
+     */
     @Override
     public String getTemplateHtmlCodeForm( )
     {
@@ -60,7 +60,7 @@ public class EntryTypeEditorBbcode extends EntryTypeTextArea
 
     /**
      * Get the template of the html code of the response value associate to the entry
-     * 
+     *
      * @return the template of the html code of the response value associate to the entry
      */
     @Override

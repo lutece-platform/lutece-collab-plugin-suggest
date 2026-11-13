@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,7 +50,7 @@ public class SuggestRegularExpressionRemovalListener implements RemovalListener
 
     /**
      * Check if the object can be safely removed
-     * 
+     *
      * @param strId
      *            The object id
      * @return true if the object can be removed otherwise false
@@ -69,7 +69,7 @@ public class SuggestRegularExpressionRemovalListener implements RemovalListener
 
     /**
      * Gives a message explaining why the object can't be removed
-     * 
+     *
      * @param strId
      *            The object id
      * @param locale

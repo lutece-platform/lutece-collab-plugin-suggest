@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,7 @@ public interface ISuggestAttributeDAO
 {
     /**
      * Load the attributes of the suggest
-     * 
+     *
      * @param nIdSuggest
      *            the id suggest
      * @param plugin
@@ -57,7 +57,7 @@ public interface ISuggestAttributeDAO
 
     /**
      * Create the attributes of the directory
-     * 
+     *
      * @param nIdSuggest
      *            the id suggest
      * @param strAttributeKey
@@ -71,7 +71,7 @@ public interface ISuggestAttributeDAO
 
     /**
      * Remove the attributes of the suggest
-     * 
+     *
      * @param nIdSuggest
      *            the id suggest
      * @param plugin

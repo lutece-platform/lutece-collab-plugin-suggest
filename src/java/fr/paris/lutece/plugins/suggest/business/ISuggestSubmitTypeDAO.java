@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -97,7 +97,7 @@ public interface ISuggestSubmitTypeDAO
 
     /**
      * Load the list of the suggestSubmitType from the table
-     * 
+     *
      * @param nIdSuggest
      *            the id Suggest
      * @param plugin
@@ -108,7 +108,7 @@ public interface ISuggestSubmitTypeDAO
 
     /**
      * true if there is a suggest associate to the suggest submit type
-     * 
+     *
      * @param nIdType
      *            the key of the type
      * @param plugin

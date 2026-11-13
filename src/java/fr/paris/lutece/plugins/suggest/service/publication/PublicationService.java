@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -101,7 +101,8 @@ public final class PublicationService
 
                 for ( SuggestSubmit suggestSubmit : listSuggestSubmit )
                 {
-                    suggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).findByPrimaryKey( suggestSubmit.getIdSuggestSubmit( ), false, plugin );
+                    suggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).findByPrimaryKey( suggestSubmit.getIdSuggestSubmit( ), false,
+                            plugin );
                     suggestSubmit.setSuggestSubmitState( suggestSubmitStateDisable );
                     CDI.current( ).select( ISuggestSubmitService.class ).get( ).update( suggestSubmit, plugin );
                     SuggestUtils.sendNotificationNewSuggestSubmitDisable( suggest, suggestSubmit, I18nService.getDefaultLocale( ) );

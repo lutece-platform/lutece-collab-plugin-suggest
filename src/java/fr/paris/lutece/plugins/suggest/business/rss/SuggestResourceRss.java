@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -335,7 +335,7 @@ public class SuggestResourceRss extends ResourceRss
         if ( !strError.equals( "" ) )
         {
             Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strError, locale )
+                    I18nService.getLocalizedString( strError, locale )
             };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
@@ -343,7 +343,8 @@ public class SuggestResourceRss extends ResourceRss
 
         if ( bisSubmitRss )
         {
-            SuggestSubmit suggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).findByPrimaryKey( Integer.parseInt( stridSuggestSubmit ), false, pluginSuggest );
+            SuggestSubmit suggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).findByPrimaryKey( Integer.parseInt( stridSuggestSubmit ),
+                    false, pluginSuggest );
             this.setName( suggestSubmit.getSuggestSubmitTitle( ) );
             this.setDescription( suggestSubmit.getSuggestSubmitValue( ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
         }
@@ -379,13 +380,14 @@ public class SuggestResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter( );
             submitFilter.setIdSuggest( suggest.getIdSuggest( ) );
 
-            List<SuggestSubmit> suggestSubmitList = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter, pluginSuggest );
+            List<SuggestSubmit> suggestSubmitList = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter,
+                    pluginSuggest );
             ReferenceList referenceSuggestSubmit = new ReferenceList( );
 
             for ( SuggestSubmit suggestSubmit : suggestSubmitList )
             {
-                referenceSuggestSubmit.addItem( suggestSubmit.getIdSuggestSubmit( ), suggestSubmit.getSuggestSubmitValue( ).replaceAll( "<div[^>]+>", "" )
-                        .replaceAll( "</div>", "" ) );
+                referenceSuggestSubmit.addItem( suggestSubmit.getIdSuggestSubmit( ),
+                        suggestSubmit.getSuggestSubmitValue( ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
             }
 
             suggestMap.put( String.valueOf( suggest.getIdSuggest( ) ), referenceSuggestSubmit );
@@ -434,13 +436,14 @@ public class SuggestResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter( );
             submitFilter.setIdSuggest( suggest.getIdSuggest( ) );
 
-            List<SuggestSubmit> suggestSubmitList = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter, pluginSuggest );
+            List<SuggestSubmit> suggestSubmitList = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter,
+                    pluginSuggest );
             ReferenceList referenceSuggestSubmit = new ReferenceList( );
 
             for ( SuggestSubmit suggestSubmit : suggestSubmitList )
             {
-                referenceSuggestSubmit.addItem( suggestSubmit.getIdSuggestSubmit( ), suggestSubmit.getSuggestSubmitValue( ).replaceAll( "<div[^>]+>", "" )
-                        .replaceAll( "</div>", "" ) );
+                referenceSuggestSubmit.addItem( suggestSubmit.getIdSuggestSubmit( ),
+                        suggestSubmit.getSuggestSubmitValue( ).replaceAll( "<div[^>]+>", "" ).replaceAll( "</div>", "" ) );
             }
 
             suggestMap.put( String.valueOf( suggest.getIdSuggest( ) ), referenceSuggestSubmit );
@@ -485,7 +488,8 @@ public class SuggestResourceRss extends ResourceRss
         if ( config.isSubmitRss( ) )
         {
             // Submit Rss
-            SuggestSubmit suggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).findByPrimaryKey( config.getIdSuggestSubmit( ), false, pluginSuggestglike );
+            SuggestSubmit suggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).findByPrimaryKey( config.getIdSuggestSubmit( ), false,
+                    pluginSuggestglike );
             SuggestSubmitState suggestsubmitStage = suggestSubmit.getSuggestSubmitState( );
             Category category = suggestSubmit.getCategory( );
             model.put( MARK_RSS_SITE_NAME, suggestSubmit.getSuggestSubmitTitle( ) );
@@ -509,7 +513,8 @@ public class SuggestResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter( );
             submitFilter.setIdSuggestSubmit( config.getIdSuggestSubmit( ) );
 
-            List<CommentSubmit> listResultCommentSubmit = CDI.current( ).select( ICommentSubmitService.class ).get( ).getCommentSubmitList( submitFilter, pluginSuggestglike );
+            List<CommentSubmit> listResultCommentSubmit = CDI.current( ).select( ICommentSubmitService.class ).get( ).getCommentSubmitList( submitFilter,
+                    pluginSuggestglike );
             List<Map<String, Object>> listItem = new ArrayList<>( );
 
             // Descriptino of the comments
@@ -526,10 +531,8 @@ public class SuggestResourceRss extends ResourceRss
                     item.put( MARK_RSS_ITEM_AUTHOR, null );
                 }
 
-                item.put(
-                        MARK_RSS_ITEM_STATE,
-                        commentSubmit.isActive( ) ? I18nService.getLocalizedString( FIELD_STATE_ENABLE, locale ) : I18nService.getLocalizedString(
-                                FIELD_STATE_DISABLE, locale ) );
+                item.put( MARK_RSS_ITEM_STATE, commentSubmit.isActive( ) ? I18nService.getLocalizedString( FIELD_STATE_ENABLE, locale )
+                        : I18nService.getLocalizedString( FIELD_STATE_DISABLE, locale ) );
                 item.put( MARK_RSS_ITEM_DESCRIPTION, commentSubmit.getValue( ) );
                 item.put( MARK_RSS_ID_SUBMIT, suggestSubmit.getIdSuggestSubmit( ) );
                 item.put( MARK_RSS_ITEM_DATE, new SimpleDateFormat( FORMAT_RSS_DATE, Locale.ENGLISH ).format( commentSubmit.getDateComment( ) ) );
@@ -569,7 +572,8 @@ public class SuggestResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter( );
             submitFilter.setIdSuggest( config.getIdSuggest( ) );
 
-            List<SuggestSubmit> listResultSuggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter, pluginSuggestglike );
+            List<SuggestSubmit> listResultSuggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter,
+                    pluginSuggestglike );
             List<Map<String, Object>> listItem = new ArrayList<>( );
 
             // Description of the submits
@@ -623,7 +627,8 @@ public class SuggestResourceRss extends ResourceRss
         if ( config.isSubmitRss( ) )
         {
             // Submit Rss
-            SuggestSubmit suggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).findByPrimaryKey( config.getIdSuggestSubmit( ), false, pluginSuggestglike );
+            SuggestSubmit suggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).findByPrimaryKey( config.getIdSuggestSubmit( ), false,
+                    pluginSuggestglike );
             SuggestSubmitState suggestsubmitStage = suggestSubmit.getSuggestSubmitState( );
             Category category = suggestSubmit.getCategory( );
 
@@ -631,7 +636,7 @@ public class SuggestResourceRss extends ResourceRss
             resource.setTitle( suggestSubmit.getSuggestSubmitTitle( ) );
             /**
              * The link is changed to access to the suggest in FO
-             * 
+             *
              * @since v2.2.5
              */
 
@@ -670,7 +675,8 @@ public class SuggestResourceRss extends ResourceRss
             SubmitFilter submitFilter = new SubmitFilter( );
             submitFilter.setIdSuggestSubmit( config.getIdSuggestSubmit( ) );
 
-            List<CommentSubmit> listResultCommentSubmit = CDI.current( ).select( ICommentSubmitService.class ).get( ).getCommentSubmitList( submitFilter, pluginSuggestglike );
+            List<CommentSubmit> listResultCommentSubmit = CDI.current( ).select( ICommentSubmitService.class ).get( ).getCommentSubmitList( submitFilter,
+                    pluginSuggestglike );
             List<IFeedResourceItem> listItems = new ArrayList<>( );
 
             // Description of the comments
@@ -690,10 +696,8 @@ public class SuggestResourceRss extends ResourceRss
                     model2.put( MARK_RSS_ITEM_AUTHOR, null );
                 }
 
-                model2.put(
-                        MARK_RSS_ITEM_STATE,
-                        commentSubmit.isActive( ) ? I18nService.getLocalizedString( FIELD_STATE_ENABLE, locale ) : I18nService.getLocalizedString(
-                                FIELD_STATE_DISABLE, locale ) );
+                model2.put( MARK_RSS_ITEM_STATE, commentSubmit.isActive( ) ? I18nService.getLocalizedString( FIELD_STATE_ENABLE, locale )
+                        : I18nService.getLocalizedString( FIELD_STATE_DISABLE, locale ) );
 
                 HtmlTemplate template2 = AppTemplateService.getTemplate( TEMPLATE_RSS_SUBMIT_ITEM_TITLE, locale, model2 );
                 strTitleItem = template2.getHtml( );
@@ -701,7 +705,7 @@ public class SuggestResourceRss extends ResourceRss
                 item.setTitle( strTitleItem );
                 /**
                  * The link is changed to access to the suggest submit in FO
-                 * 
+                 *
                  * @since v2.2.5
                  */
 
@@ -725,7 +729,7 @@ public class SuggestResourceRss extends ResourceRss
             resource.setTitle( suggest.getTitle( ) );
             /**
              * The link is changed to access to the suggest in FO
-             * 
+             *
              * @since v2.2.5
              */
 
@@ -744,19 +748,20 @@ public class SuggestResourceRss extends ResourceRss
 
             if ( suggest.isActive( ) )
             {
-                resource.setDescription( I18nService.getLocalizedString( FIELD_STATE, locale ) + " : "
-                        + I18nService.getLocalizedString( FIELD_STATE_ENABLE, locale ) );
+                resource.setDescription(
+                        I18nService.getLocalizedString( FIELD_STATE, locale ) + " : " + I18nService.getLocalizedString( FIELD_STATE_ENABLE, locale ) );
             }
             else
             {
-                resource.setDescription( I18nService.getLocalizedString( FIELD_STATE, locale ) + " : "
-                        + I18nService.getLocalizedString( FIELD_STATE_DISABLE, locale ) );
+                resource.setDescription(
+                        I18nService.getLocalizedString( FIELD_STATE, locale ) + " : " + I18nService.getLocalizedString( FIELD_STATE_DISABLE, locale ) );
             }
 
             SubmitFilter submitFilter = new SubmitFilter( );
             submitFilter.setIdSuggest( config.getIdSuggest( ) );
 
-            List<SuggestSubmit> listResultSuggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter, pluginSuggestglike );
+            List<SuggestSubmit> listResultSuggestSubmit = CDI.current( ).select( ISuggestSubmitService.class ).get( ).getSuggestSubmitList( submitFilter,
+                    pluginSuggestglike );
             List<IFeedResourceItem> listItems = new ArrayList<>( );
 
             // Description of the submits
@@ -785,7 +790,7 @@ public class SuggestResourceRss extends ResourceRss
                 item.setTitle( strTitle );
                 /**
                  * The link is changed to access to the suggest submit in FO
-                 * 
+                 *
                  * @since v2.2.5
                  */
 

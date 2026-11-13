@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -51,7 +51,7 @@ public interface IReportedMessageDAO
      *            The instance of the reported Message which contains the informations to storet
      * @param plugin
      *            the plugin
-     * */
+     */
     void insert( ReportedMessage reportedMessage, Plugin plugin );
 
     /**
@@ -77,7 +77,7 @@ public interface IReportedMessageDAO
 
     /**
      * Load the data of all the reportedMessage who is associated to the nIdSuggestSubmit
-     * 
+     *
      * @param nIdSuggestSubmit
      *            the nIdSuggestSubmit
      * @param plugin

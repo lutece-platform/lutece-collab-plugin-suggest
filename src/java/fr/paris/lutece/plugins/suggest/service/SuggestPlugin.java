@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.suggest.service;
 
 import java.io.Serializable;
 
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -50,7 +49,7 @@ public class SuggestPlugin extends PluginDefaultImplementation implements Serial
 
     /**
      * Get the Plugin object associated with plugin-suggest
-     * 
+     *
      * @return the Suggest Plugin
      */
     public static Plugin getPlugin( )

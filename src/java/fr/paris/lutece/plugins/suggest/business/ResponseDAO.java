@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -76,7 +76,7 @@ public final class ResponseDAO implements IResponseDAO
      */
     private int newPrimaryKey( Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
         {
             daoUtil.executeQuery( );
             daoUtil.next( );
@@ -96,7 +96,7 @@ public final class ResponseDAO implements IResponseDAO
     @Override
     public void insert( Response response, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
             response.setIdResponse( newPrimaryKey( plugin ) );
             daoUtil.setInt( 1, response.getIdResponse( ) );
@@ -134,7 +134,7 @@ public final class ResponseDAO implements IResponseDAO
         IEntry entry = null;
         EntryType entryType;
         SuggestSubmit suggestSubmit;
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
             daoUtil.setInt( 1, nIdResponse );
             daoUtil.executeQuery( );
@@ -196,7 +196,7 @@ public final class ResponseDAO implements IResponseDAO
     @Override
     public void delete( int nIdResponse, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
             daoUtil.setInt( 1, nIdResponse );
             daoUtil.executeUpdate( );
@@ -214,7 +214,7 @@ public final class ResponseDAO implements IResponseDAO
     @Override
     public void store( Response response, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
             daoUtil.setInt( 1, response.getIdResponse( ) );
             daoUtil.setInt( 2, response.getSuggestSubmit( ).getIdSuggestSubmit( ) );
@@ -237,7 +237,7 @@ public final class ResponseDAO implements IResponseDAO
 
     /**
      * Load the data of all the response who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -260,7 +260,7 @@ public final class ResponseDAO implements IResponseDAO
         strSQL += ( ( filter.containsIdEntry( ) ) ? SQL_FILTER_ID_ENTRY : EMPTY_STRING );
         strSQL += SQL_ORDER_BY_ID_RESPONSE;
 
-        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
             int nIndex = 1;
 

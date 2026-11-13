@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -92,8 +92,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
             + "vote_number,score_number,id_category,suggest_submit_value ,suggest_submit_title,comment_enable_number,suggest_submit_value_show_in_the_list,reported,"
             + "lutece_user_key,suggest_submit_list_order,suggest_submit_type,number_view,disable_vote,is_pinned,disable_comment,id_image_resource,comment_number ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM suggest_suggest_submit WHERE id_suggest_submit = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE suggest_suggest_submit SET "
-            + "id_suggest_submit=?,id_suggest=?,id_state=?"
+    private static final String SQL_QUERY_UPDATE = "UPDATE suggest_suggest_submit SET " + "id_suggest_submit=?,id_suggest=?,id_state=?"
             + ",vote_number=?,score_number=?,id_category=?,suggest_submit_value=?,suggest_submit_title=? ,comment_enable_number=? ,suggest_submit_value_show_in_the_list=?,reported=?,lutece_user_key= ?,suggest_submit_list_order=?,suggest_submit_type=?,number_view=?,disable_vote=?,is_pinned= ?,disable_comment=?,id_image_resource= ?,comment_number = ? "
             + "WHERE id_suggest_submit=? ";
     private static final String SQL_QUERY_SELECT_ID_SUGGEST_SUBMIT_BY_FILTER = "SELECT d.id_suggest_submit " + "FROM suggest_suggest_submit d ";
@@ -117,16 +116,16 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
     private int newPrimaryKey( Plugin plugin )
     {
         int nKey;
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
         {
             daoUtil.executeQuery( );
-        
+
             if ( !daoUtil.next( ) )
             {
                 // if the table is empty
                 nKey = 1;
             }
-    
+
             nKey = daoUtil.getInt( 1 ) + 1;
         }
 
@@ -145,7 +144,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
     @Override
     public int insert( SuggestSubmit suggestSubmit, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
             Timestamp timestamp = new java.sql.Timestamp( new java.util.Date( ).getTime( ) );
 
@@ -223,7 +222,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
     {
         SuggestSubmit suggestSubmit = null;
 
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggestSubmit );
             daoUtil.executeQuery( );
@@ -248,7 +247,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
     @Override
     public void delete( int nIdSuggestSubmit, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggestSubmit );
             daoUtil.executeUpdate( );
@@ -265,7 +264,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
      */
     public void store( SuggestSubmit suggestSubmit, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
             daoUtil.setInt( 1, suggestSubmit.getIdSuggestSubmit( ) );
             daoUtil.setInt( 2, suggestSubmit.getSuggest( ).getIdSuggest( ) );
@@ -322,7 +321,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
 
     /**
      * Load the data of all the suggestSubmit who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -407,7 +406,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
 
         String strSQL = SuggestUtils.buildRequestWithFilter( SQL_QUERY_SELECT_SUGGEST_SUBMIT_BY_FILTER, listStrFilter, strOrderBy );
 
-        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
             int nIndex = 1;
 
@@ -490,7 +489,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
 
     /**
      * Load the id of all the suggestSubmit who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -576,7 +575,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
 
         String strSQL = SuggestUtils.buildRequestWithFilter( SQL_QUERY_SELECT_ID_SUGGEST_SUBMIT_BY_FILTER, listStrFilter, strOrderBy );
 
-        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
             int nIndex = 1;
 
@@ -665,7 +664,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
 
     /**
      * return the number of all the suggestSubmit who verify the filter
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -745,7 +744,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
         }
 
         String strSQL = SuggestUtils.buildRequestWithFilter( SQL_QUERY_SELECT_COUNT_BY_FILTER, listStrFilter, null );
-        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
             int nIndex = 1;
 
@@ -834,7 +833,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
 
     /**
      * build the order by clause
-     * 
+     *
      * @param listSortBy
      *            list of sort by
      * @return the sql order by clause
@@ -936,7 +935,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
 
     /**
      * Modify the order of a suggestsubmit
-     * 
+     *
      * @param nNewOrder
      *            The order number
      * @param nId
@@ -946,7 +945,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
      */
     public void storeSuggestSubmitOrder( int nNewOrder, int nId, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_SUGGEST_SUBMIT_LIST_ORDER, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_SUGGEST_SUBMIT_LIST_ORDER, plugin ) )
         {
             daoUtil.setInt( 1, nNewOrder );
             daoUtil.setInt( 2, nId );
@@ -962,7 +961,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
     {
         Map<Integer, Integer> mapOrders = new LinkedHashMap<>( );
 
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_LIST_ORDERS, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_LIST_ORDERS, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggest );
             daoUtil.setBoolean( 2, bListPinned );
@@ -983,7 +982,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
     @Override
     public void shiftListOrders( int nIdSuggest, boolean bListPinned, int nFirstOrder, int nLastOrder, int nDelta, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SHIFT_LIST_ORDERS, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SHIFT_LIST_ORDERS, plugin ) )
         {
             daoUtil.setInt( 1, nDelta );
             daoUtil.setInt( 2, nIdSuggest );
@@ -1000,7 +999,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
     @Override
     public void restoreShiftedListOrders( int nIdSuggest, boolean bListPinned, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_RESTORE_SHIFTED_LIST_ORDERS, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_RESTORE_SHIFTED_LIST_ORDERS, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggest );
             daoUtil.setBoolean( 2, bListPinned );
@@ -1010,7 +1009,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
 
     /**
      * Calculate the new max order in a list
-     * 
+     *
      * @param nIdSuggest
      *            the id of the suggest
      * @param bListPinned
@@ -1022,7 +1021,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
     public int maxOrderSuggestSubmit( int nIdSuggest, boolean bListPinned, Plugin plugin )
     {
         int nOrder = 0;
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_SUGGEST_SUBMIT_LIST_ORDER, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_SUGGEST_SUBMIT_LIST_ORDER, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggest );
             daoUtil.setBoolean( 2, bListPinned );

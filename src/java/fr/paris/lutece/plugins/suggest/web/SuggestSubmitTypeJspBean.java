@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -121,16 +121,16 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
 
     // Jsp Definition
     private static final String JSP_MANAGE_SUGGEST_SUBMIT_TYPE = "jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp";
-    private static final String JSP_DO_REMOVE_SUGGEST_SUBMIT_TYPE = "jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?action=" + ACTION_REMOVE_SUGGEST_SUBMIT_TYPE;
+    private static final String JSP_DO_REMOVE_SUGGEST_SUBMIT_TYPE = "jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp?action="
+            + ACTION_REMOVE_SUGGEST_SUBMIT_TYPE;
 
     @Inject
     @Pager( name = "suggest.suggestSubmitTypes", listBookmark = MARK_SUGGEST_SUBMIT_TYPE_LIST, defaultItemsPerPage = PROPERTY_ITEM_PER_PAGE, baseUrl = "jsp/admin/plugins/suggest/ManageSuggestSubmitType.jsp" )
     private IPager<SuggestSubmitType, SuggestSubmitType> _pager;
 
-
     /**
      * Return management suggest submit type
-     * 
+     *
      * @param request
      *            The Http request
      * @param model
@@ -149,7 +149,7 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
 
     /**
      * Gets the suggestsubmit type creation page
-     * 
+     *
      * @param request
      *            The HTTP request
      * @param model
@@ -164,7 +164,7 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
 
     /**
      * Perform the suggestsubmit type creation
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The URL to go after performing the action
@@ -190,7 +190,7 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
 
     /**
      * Gets the suggestSubmitType modification page
-     * 
+     *
      * @param request
      *            The HTTP request
      * @param model
@@ -237,7 +237,7 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
 
     /**
      * Perform the suggestSubmitType modification
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The URL to go after performing the action
@@ -286,7 +286,7 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
 
     /**
      * Confirm the suggestsubmittype removal
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The forward URL
@@ -304,12 +304,13 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
         UrlItem url = new UrlItem( JSP_DO_REMOVE_SUGGEST_SUBMIT_TYPE );
         url.addParameter( PARAMETER_ID_SUGGEST_SUBMIT_TYPE, strIdSuggestSubmitType );
 
-        return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_SUGGEST_SUBMIT_TYPE, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
+        return redirect( request,
+                AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_SUGGEST_SUBMIT_TYPE, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
     }
 
     /**
      * Perform the suggestSubmitType suppression
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The URL to go after performing the action
@@ -338,7 +339,7 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
     /**
      * Get the request data and if there is no error insert the data in the suggestSubmitType object specified in parameter. return null if there is no error or
      * else return the localized error message
-     * 
+     *
      * @param multipartRequest
      *            the request
      * @param suggestSubmitType
@@ -361,17 +362,16 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
             strFieldError = FIELD_NAME;
         }
 
-        else
-            if ( ( strParameterizable == null ) || strParameterizable.trim( ).equals( EMPTY_STRING ) )
-            {
-                bParameterizable = false;
-            }
+        else if ( ( strParameterizable == null ) || strParameterizable.trim( ).equals( EMPTY_STRING ) )
+        {
+            bParameterizable = false;
+        }
 
         // Mandatory fields
         if ( !strFieldError.equals( EMPTY_STRING ) )
         {
             Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, getLocale( ) )
+                    I18nService.getLocalizedString( strFieldError, getLocale( ) )
             };
 
             return I18nService.getLocalizedString( MESSAGE_MANDATORY_FIELD, tabRequiredFields, getLocale( ) );
@@ -400,7 +400,7 @@ public class SuggestSubmitTypeJspBean extends MVCAdminJspBean
 
     /**
      * return the url of manage suggest submit type
-     * 
+     *
      * @param request
      *            the request
      * @return the url of manage suggest submit type

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -137,7 +137,7 @@ public final class CategoryHome
 
     /**
      * true if there is a suggest associate to the category
-     * 
+     *
      * @param nIdCategory
      *            the key of the category
      * @param plugin
@@ -163,7 +163,7 @@ public final class CategoryHome
 
     /**
      * Returns a list of all category associate to the suggest
-     * 
+     *
      * @param nIdSuggest
      *            the id suggest
      * @param plugin

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,7 +47,7 @@ public interface ISuggestSubmitDAO
 {
     /**
      * Insert a new record in the table.
-     * 
+     *
      * @param suggestSubmit
      *            instance of the Suggest Submit object to insert
      * @param plugin
@@ -89,7 +89,7 @@ public interface ISuggestSubmitDAO
 
     /**
      * Load the data of all the suggestSubmit who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -100,7 +100,7 @@ public interface ISuggestSubmitDAO
 
     /**
      * Load the id of all the suggestSubmit who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -113,7 +113,7 @@ public interface ISuggestSubmitDAO
      *
      *
      * return the number of all the suggestSubmit who verify the filter
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -124,7 +124,7 @@ public interface ISuggestSubmitDAO
 
     /**
      * Modify the order of a suggestsubmit
-     * 
+     *
      * @param nNewOrder
      *            The order number
      * @param nId
@@ -179,7 +179,7 @@ public interface ISuggestSubmitDAO
 
     /**
      * Calculate the new max order in a list
-     * 
+     *
      * @param nIdSuggest
      *            the id of the suggest
      * @return the max order of suggestsubmit

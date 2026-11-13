@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,8 +52,8 @@ public class SuggestSubmitDepartmentFilterTest extends LuteceTestCase
     private ISuggestSubmitService _suggestSubmitService;
 
     /**
-     * Keeps the suggest submits of the authors of one department, counts them, lists the departments of the authors, keeps the pinned suggest
-     * submits within the department and author filters and lists the pinned suggest submits first, then the others, in a limited list.
+     * Keeps the suggest submits of the authors of one department, counts them, lists the departments of the authors, keeps the pinned suggest submits within
+     * the department and author filters and lists the pinned suggest submits first, then the others, in a limited list.
      */
     @Test
     public void testFilterByDepartment( )

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,22 +55,16 @@ public final class SuggestDAO implements ISuggestDAO
     private static final String SQL_COLS_AUTHENTICATION = "active_vote_authentification,active_comment_authentification,disable_new_suggest_submit, ";
     private static final String SQL_COLS_COMMENTS = "authorized_comment, disable_new_comment ,id_mailing_list_suggest_submit, ";
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_suggest ) FROM suggest_suggest";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_suggest,title,"
-            + SQL_COLS_UNAVAILABILITY_WORKGROUP_WORKFLOW
-            + SQL_COLS_VOTE_TABLE
-            + SQL_COLS_AUTHENTICATION
-            + SQL_COLS_COMMENTS
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_suggest,title," + SQL_COLS_UNAVAILABILITY_WORKGROUP_WORKFLOW + SQL_COLS_VOTE_TABLE
+            + SQL_COLS_AUTHENTICATION + SQL_COLS_COMMENTS
             + "active_captcha,active, date_creation, libelle_validate_button,active_suggest_proposition_state,libelle_contribution, "
             + "number_suggest_submit_in_top_score,number_suggest_submit_in_top_comment,limit_number_vote,number_suggest_submit_caracters_shown, "
             + "show_category_block,show_top_score_block,show_top_comment_block,active_suggest_submit_paginator,number_suggest_submit_per_page,role, "
             + "enable_new_suggest_submit_mail,header,sort_field,confirmation_message,active_editor_bbcode, "
             + "default_suggest,id_default_sort,notification_new_comment_sender,notification_new_comment_title,notification_new_comment_body,notification_new_suggest_submit_sender,notification_new_suggest_submit_title,notification_new_suggest_submit_body "
             + "FROM suggest_suggest WHERE id_suggest = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_suggest ( id_suggest,title,"
-            + SQL_COLS_UNAVAILABILITY_WORKGROUP_WORKFLOW
-            + SQL_COLS_VOTE_TABLE
-            + SQL_COLS_AUTHENTICATION
-            + SQL_COLS_COMMENTS
+    private static final String SQL_QUERY_INSERT = "INSERT INTO suggest_suggest ( id_suggest,title," + SQL_COLS_UNAVAILABILITY_WORKGROUP_WORKFLOW
+            + SQL_COLS_VOTE_TABLE + SQL_COLS_AUTHENTICATION + SQL_COLS_COMMENTS
             + "active_captcha,active, date_creation, libelle_validate_button,active_suggest_proposition_state, "
             + "libelle_contribution,number_suggest_submit_in_top_score,number_suggest_submit_in_top_comment,limit_number_vote, "
             + "number_suggest_submit_caracters_shown,show_category_block,show_top_score_block,show_top_comment_block ,active_suggest_submit_paginator,number_suggest_submit_per_page,role,"
@@ -89,11 +83,8 @@ public final class SuggestDAO implements ISuggestDAO
             + "default_suggest=?,id_default_sort=?,notification_new_comment_sender=?,notification_new_comment_title=?,"
             + "notification_new_comment_body=?,notification_new_suggest_submit_sender=?,notification_new_suggest_submit_title=?"
             + ",notification_new_suggest_submit_body=? " + "WHERE id_suggest=?";
-    private static final String SQL_QUERY_SELECT_SUGGEST_BY_FILTER = "SELECT id_suggest,title,"
-            + SQL_COLS_UNAVAILABILITY_WORKGROUP_WORKFLOW
-            + SQL_COLS_VOTE_TABLE
-            + SQL_COLS_AUTHENTICATION
-            + SQL_COLS_COMMENTS
+    private static final String SQL_QUERY_SELECT_SUGGEST_BY_FILTER = "SELECT id_suggest,title," + SQL_COLS_UNAVAILABILITY_WORKGROUP_WORKFLOW
+            + SQL_COLS_VOTE_TABLE + SQL_COLS_AUTHENTICATION + SQL_COLS_COMMENTS
             + "active_captcha,active, date_creation, libelle_validate_button,active_suggest_proposition_state,libelle_contribution, "
             + "number_suggest_submit_in_top_score,number_suggest_submit_in_top_comment,limit_number_vote,number_suggest_submit_caracters_shown, "
             + "show_category_block,show_top_score_block,show_top_comment_block, active_suggest_submit_paginator,number_suggest_submit_per_page,role,  "
@@ -116,7 +107,7 @@ public final class SuggestDAO implements ISuggestDAO
      */
     public int newPrimaryKey( Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
         {
             daoUtil.executeQuery( );
 
@@ -137,7 +128,7 @@ public final class SuggestDAO implements ISuggestDAO
     @Override
     public int insert( Suggest suggest, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
             Timestamp timestamp = new java.sql.Timestamp( new java.util.Date( ).getTime( ) );
 
@@ -206,7 +197,7 @@ public final class SuggestDAO implements ISuggestDAO
     @Override
     public Suggest load( int nId, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
             daoUtil.setInt( 1, nId );
             daoUtil.executeQuery( );
@@ -283,7 +274,7 @@ public final class SuggestDAO implements ISuggestDAO
     @Override
     public void delete( int nIdSuggest, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggest );
             daoUtil.executeUpdate( );
@@ -301,7 +292,7 @@ public final class SuggestDAO implements ISuggestDAO
     @Override
     public void store( Suggest suggest, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
             int nIndex = 1;
             suggest.setIdSuggest( suggest.getIdSuggest( ) );
@@ -358,7 +349,7 @@ public final class SuggestDAO implements ISuggestDAO
 
     /**
      * Load the data of all the suggest who verify the filter and returns them in a list
-     * 
+     *
      * @param filter
      *            the filter
      * @param plugin
@@ -395,7 +386,7 @@ public final class SuggestDAO implements ISuggestDAO
         }
 
         String strSQL = SuggestUtils.buildRequestWithFilter( SQL_QUERY_SELECT_SUGGEST_BY_FILTER, listStrFilter, SQL_ORDER_BY_DATE_CREATION );
-        try( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( strSQL, plugin ) )
         {
             int nIndex = 1;
 
@@ -487,7 +478,7 @@ public final class SuggestDAO implements ISuggestDAO
 
     /**
      * Modify the order of a suggestsubmit
-     * 
+     *
      * @param nSortField
      *            The reference field to sort
      * @param nId
@@ -498,7 +489,7 @@ public final class SuggestDAO implements ISuggestDAO
     @Override
     public void storeSuggestOrderField( int nId, int nSortField, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_SUGGEST_ORDER, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_SUGGEST_ORDER, plugin ) )
         {
             daoUtil.setInt( 1, nSortField );
             daoUtil.setInt( 2, nId );

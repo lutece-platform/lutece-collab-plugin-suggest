@@ -20,7 +20,7 @@
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNERS OR CONTRIBUTORS BE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
  * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
  * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
  * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
@@ -176,8 +176,8 @@ public class SuggestJsonExportService
         List<EntryExport> listEntryExport = new ArrayList<>( );
         for ( IEntry entry : listEntry )
         {
-            listEntryExport.add( new EntryExport( entry.getIdEntry( ), entry.getTitle( ),
-                    ( entry.getEntryType( ) != null ) ? entry.getEntryType( ).getIdType( ) : null ) );
+            listEntryExport.add(
+                    new EntryExport( entry.getIdEntry( ), entry.getTitle( ), ( entry.getEntryType( ) != null ) ? entry.getEntryType( ).getIdType( ) : null ) );
         }
 
         List<SubmitExport> listSubmitExport = new ArrayList<>( );
@@ -219,9 +219,9 @@ public class SuggestJsonExportService
             listResponseExport.add( new ResponseExport( entry.getIdEntry( ), mapResponseByEntry.getOrDefault( entry.getIdEntry( ), "" ) ) );
         }
 
-        return new SubmitExport( suggestSubmit.getIdSuggestSubmit( ), SuggestUtils.toPlainText( suggestSubmit.getSuggestSubmitTitle( ) ), toIsoDate( suggestSubmit.getDateResponse( ) ),
-                suggestSubmit.getNumberScore( ), suggestSubmit.getNumberVote( ), suggestSubmit.getNumberComment( ),
-                ( suggestSubmit.getCategory( ) != null ) ? suggestSubmit.getCategory( ).getTitle( ) : null,
+        return new SubmitExport( suggestSubmit.getIdSuggestSubmit( ), SuggestUtils.toPlainText( suggestSubmit.getSuggestSubmitTitle( ) ),
+                toIsoDate( suggestSubmit.getDateResponse( ) ), suggestSubmit.getNumberScore( ), suggestSubmit.getNumberVote( ),
+                suggestSubmit.getNumberComment( ), ( suggestSubmit.getCategory( ) != null ) ? suggestSubmit.getCategory( ).getTitle( ) : null,
                 ( suggestSubmit.getSuggestSubmitType( ) != null ) ? suggestSubmit.getSuggestSubmitType( ).getName( ) : null, listResponseExport,
                 toCommentExports( suggestSubmit.getComments( ) ) );
     }

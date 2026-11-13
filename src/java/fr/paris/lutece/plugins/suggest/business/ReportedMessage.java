@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,7 +58,7 @@ public class ReportedMessage
 
     /**
      * set the suggest submit of the reported
-     * 
+     *
      * @param suggestSubmit
      *            the suggest submit of the reported
      */
@@ -69,7 +69,7 @@ public class ReportedMessage
 
     /**
      * return the reported date
-     * 
+     *
      * @return the reported date
      */
     public Timestamp getDateReported( )
@@ -79,7 +79,7 @@ public class ReportedMessage
 
     /**
      * set the reported date
-     * 
+     *
      * @param reportedDate
      *            the reported date
      */
@@ -99,7 +99,7 @@ public class ReportedMessage
 
     /**
      * set the value of the reported
-     * 
+     *
      * @param strValue
      *            the value of the reported
      */
@@ -118,7 +118,7 @@ public class ReportedMessage
     }
 
     /**
-     * 
+     *
      * @param nIdReported
      *            the reported id
      */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,11 +33,9 @@
  */
 package fr.paris.lutece.plugins.suggest.business;
 
-
 import java.sql.Timestamp;
 
 import java.util.List;
-
 
 /**
  *
@@ -61,7 +59,7 @@ public class CommentSubmit
 
     /**
      * return the id of the comment submit
-     * 
+     *
      * @return the id of the comment submit
      */
     public int getIdCommentSubmit( )
@@ -71,7 +69,7 @@ public class CommentSubmit
 
     /**
      * set the id of the comment submit
-     * 
+     *
      * @param idCommentSubmit
      *            the id of the comment submit
      */
@@ -91,7 +89,7 @@ public class CommentSubmit
 
     /**
      * set the suggest submit of the comment
-     * 
+     *
      * @param suggestSubmit
      *            the suggest submit of the comment
      */
@@ -102,7 +100,7 @@ public class CommentSubmit
 
     /**
      * return the comment date
-     * 
+     *
      * @return the comment date
      */
     public Timestamp getDateComment( )
@@ -112,7 +110,7 @@ public class CommentSubmit
 
     /**
      * set the comment date
-     * 
+     *
      * @param commentDate
      *            the comment date
      */
@@ -132,7 +130,7 @@ public class CommentSubmit
 
     /**
      * set the value of the comment
-     * 
+     *
      * @param value
      *            the value of the comment
      */
@@ -152,7 +150,7 @@ public class CommentSubmit
 
     /**
      * set true if the comment is active
-     * 
+     *
      * @param active
      *            true if the comment is active
      */
@@ -173,7 +171,7 @@ public class CommentSubmit
     /**
      *
      * set the lutece user key associate to the suggest submit
-     * 
+     *
      * @param luteceUserKey
      *            the lutece user key
      */
@@ -245,7 +243,7 @@ public class CommentSubmit
 
     /**
      * return the last comment date
-     * 
+     *
      * @return the last comment date
      */
     public Timestamp getDateModify( )
@@ -255,7 +253,7 @@ public class CommentSubmit
 
     /**
      * set the last comment date
-     * 
+     *
      * @param lastCommentDate
      *            the last comment date
      */

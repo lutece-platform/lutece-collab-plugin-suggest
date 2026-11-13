@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,7 +49,7 @@ public class ResourceValueObject implements Serializable
 
     /**
      * Returns the IdObject
-     * 
+     *
      * @return The IdObject
      */
     public int getIdObject( )
@@ -59,7 +59,7 @@ public class ResourceValueObject implements Serializable
 
     /**
      * Sets the IdObject
-     * 
+     *
      * @param nIdObject
      *            The IdObject
      */
@@ -70,7 +70,7 @@ public class ResourceValueObject implements Serializable
 
     /**
      * Returns the Content
-     * 
+     *
      * @return The Content
      */
     public byte [ ] getContent( )
@@ -80,7 +80,7 @@ public class ResourceValueObject implements Serializable
 
     /**
      * Sets the Content
-     * 
+     *
      * @param content
      *            The Content
      */
@@ -91,7 +91,7 @@ public class ResourceValueObject implements Serializable
 
     /**
      * Returns the ContentType
-     * 
+     *
      * @return The ContentType
      */
     public String getContentType( )
@@ -101,7 +101,7 @@ public class ResourceValueObject implements Serializable
 
     /**
      * Sets the ContentType
-     * 
+     *
      * @param strContentType
      *            The ContentType
      */
@@ -112,7 +112,7 @@ public class ResourceValueObject implements Serializable
 
     /**
      * Returns the Filename
-     * 
+     *
      * @return The Filename
      */
     public String getFilename( )
@@ -122,7 +122,7 @@ public class ResourceValueObject implements Serializable
 
     /**
      * Sets the Filename
-     * 
+     *
      * @param strFilename
      *            The Filename
      */

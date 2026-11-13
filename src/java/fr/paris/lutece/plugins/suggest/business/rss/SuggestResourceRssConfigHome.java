@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -81,7 +81,7 @@ public final class SuggestResourceRssConfigHome
 
     /**
      * Delete a configuration
-     * 
+     *
      * @param nIdSuggestResourceRssConfig
      *            id SuggestResourceRssConfig
      * @param plugin
@@ -94,7 +94,7 @@ public final class SuggestResourceRssConfigHome
 
     /**
      * Delete a configuration
-     * 
+     *
      * @param nIdSuggestResourceRssConfig
      *            id task
      * @param plugin
@@ -109,7 +109,7 @@ public final class SuggestResourceRssConfigHome
 
     /**
      * Load All SuggestResourceRssConfig
-     * 
+     *
      * @param plugin
      *            the plugin
      * @return a list of SuggestResourceRssConfig

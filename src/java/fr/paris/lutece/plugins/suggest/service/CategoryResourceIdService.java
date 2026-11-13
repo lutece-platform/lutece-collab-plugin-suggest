@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -84,7 +84,7 @@ public class CategoryResourceIdService extends ResourceIdService
 
     /**
      * Returns a list of category resource ids
-     * 
+     *
      * @param locale
      *            The current locale
      * @return A list of resource ids
@@ -96,7 +96,7 @@ public class CategoryResourceIdService extends ResourceIdService
 
     /**
      * Returns the Title of a given resource
-     * 
+     *
      * @param strId
      *            The Id of the resource
      * @param locale

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,7 +55,7 @@ public final class SuggestUserInfoHome
 
     /**
      * create suggestUserInfo
-     * 
+     *
      * @param suggestUserInfo
      *            suggestUserInfo
      * @param plugin
@@ -68,7 +68,7 @@ public final class SuggestUserInfoHome
 
     /**
      * update suggestUserInfo
-     * 
+     *
      * @param suggestUserInfo
      *            suggestUserInfo
      * @param plugin
@@ -81,7 +81,7 @@ public final class SuggestUserInfoHome
 
     /**
      * remove SuggestUserInfo
-     * 
+     *
      * @param strLuteceUserKey
      *            the key
      * @param plugin
@@ -97,7 +97,7 @@ public final class SuggestUserInfoHome
 
     /**
      * find user info by key
-     * 
+     *
      * @param strLuteceUserKey
      *            strLuteceUserKey
      * @param plugin
@@ -110,8 +110,8 @@ public final class SuggestUserInfoHome
     }
 
     /**
-     * Returns the departments of the authors of the suggest submits of a suggest in a state, sorted, without the empty ones. Spellings differing only
-     * by case are one department, returned under its most used spelling.
+     * Returns the departments of the authors of the suggest submits of a suggest in a state, sorted, without the empty ones. Spellings differing only by case
+     * are one department, returned under its most used spelling.
      *
      * @param nIdSuggest
      *            the id of the suggest

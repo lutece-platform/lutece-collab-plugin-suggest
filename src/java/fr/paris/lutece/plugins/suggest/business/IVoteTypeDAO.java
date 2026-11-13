@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,15 +38,15 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import java.util.List;
 
 /**
- * 
+ *
  * Interface IVoteTypeDAO
- * 
+ *
  */
 public interface IVoteTypeDAO
 {
     /**
      * Load the data of the vote type from the table
-     * 
+     *
      * @param idKey
      *            The identifier of the vote type
      * @param plugin
@@ -57,7 +57,7 @@ public interface IVoteTypeDAO
 
     /**
      * Load the data of all vote type returns them in a list
-     * 
+     *
      * @param plugin
      *            the plugin
      * @return the list of Vote type

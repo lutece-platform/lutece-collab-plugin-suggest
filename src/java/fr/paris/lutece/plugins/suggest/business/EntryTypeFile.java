@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,8 +53,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * A field where the author attaches one or more files, uploaded one by one before the form is sent. Its options are the accepted extensions, the maximum
- * size of a file and the maximum number of files.
+ * A field where the author attaches one or more files, uploaded one by one before the form is sent. Its options are the accepted extensions, the maximum size
+ * of a file and the maximum number of files.
  */
 public class EntryTypeFile extends Entry
 {

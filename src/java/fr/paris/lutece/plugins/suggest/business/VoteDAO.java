@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -73,7 +73,7 @@ public class VoteDAO implements IVoteDAO
      */
     public void insert( Vote vote, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
             daoUtil.setInt( 1, vote.getIdSuggestSubmit( ) );
             daoUtil.setString( 2, vote.getLuteceUserKey( ) );
@@ -93,7 +93,7 @@ public class VoteDAO implements IVoteDAO
 
     /**
      * Load the data of all vote associate to the suggest submit
-     * 
+     *
      * @param nIdSuggestSubmit
      *            the SuggestSubmit id
      * @param plugin
@@ -103,14 +103,14 @@ public class VoteDAO implements IVoteDAO
     public List<Vote> selectVoteByIdSuggestSubmit( int nIdSuggestSubmit, Plugin plugin )
     {
         List<Vote> listVote = new ArrayList<>( );
-        
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_VOTE_BY_ID_SUGGEST_SUBMIT, plugin ) )
+
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_VOTE_BY_ID_SUGGEST_SUBMIT, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggestSubmit );
             daoUtil.executeQuery( );
-    
+
             Vote vote = null;
-    
+
             while ( daoUtil.next( ) )
             {
                 vote = load( daoUtil );
@@ -124,7 +124,7 @@ public class VoteDAO implements IVoteDAO
 
     /**
      * return the number of vote for a lutece user on suggestSubmit
-     * 
+     *
      * @param nIdSuggestSubmit
      *            the id of the suggest submit
      * @param strLuteceUserKey
@@ -136,12 +136,12 @@ public class VoteDAO implements IVoteDAO
     public int selectCountVoteByIdSuggestSubmitAndLuteceUserKey( int nIdSuggestSubmit, String strLuteceUserKey, Plugin plugin )
     {
         int nIdCount = 0;
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_VOTE_BY_ID_SUGGEST_SUBMIT_AND_LUTECE_USER_KEY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_VOTE_BY_ID_SUGGEST_SUBMIT_AND_LUTECE_USER_KEY, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggestSubmit );
             daoUtil.setString( 2, strLuteceUserKey );
             daoUtil.executeQuery( );
-    
+
             if ( daoUtil.next( ) )
             {
                 nIdCount = daoUtil.getInt( 1 );
@@ -196,7 +196,7 @@ public class VoteDAO implements IVoteDAO
     {
         Vote vote = null;
 
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_VOTE_BY_ID_SUGGEST_SUBMIT_AND_LUTECE_USER_KEY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_VOTE_BY_ID_SUGGEST_SUBMIT_AND_LUTECE_USER_KEY, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggestSubmit );
             daoUtil.setString( 2, strLuteceUserKey );
@@ -217,7 +217,7 @@ public class VoteDAO implements IVoteDAO
     @Override
     public void deleteByIdSuggestSubmitAndLuteceUserKey( int nIdSuggestSubmit, String strLuteceUserKey, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_SUGGEST_SUBMIT_AND_LUTECE_USER_KEY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_SUGGEST_SUBMIT_AND_LUTECE_USER_KEY, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggestSubmit );
             daoUtil.setString( 2, strLuteceUserKey );
@@ -244,7 +244,7 @@ public class VoteDAO implements IVoteDAO
 
     /**
      * return the number of vote for a lutece user on suggestSubmit
-     * 
+     *
      * @param nIdSuggestSubmit
      *            the id of the suggest submit
      * @param plugin
@@ -254,11 +254,11 @@ public class VoteDAO implements IVoteDAO
     public int selectCountVoteByIdSuggestSubmit( int nIdSuggestSubmit, Plugin plugin )
     {
         int nIdCount = 0;
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_VOTE_BY_ID_SUGGEST_SUBMIT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_VOTE_BY_ID_SUGGEST_SUBMIT, plugin ) )
         {
             daoUtil.setInt( 1, nIdSuggestSubmit );
             daoUtil.executeQuery( );
-    
+
             if ( daoUtil.next( ) )
             {
                 nIdCount = daoUtil.getInt( 1 );

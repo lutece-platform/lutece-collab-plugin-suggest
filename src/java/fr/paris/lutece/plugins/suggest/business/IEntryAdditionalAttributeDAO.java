@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,7 +44,7 @@ public interface IEntryAdditionalAttributeDAO
 {
     /**
      * Insert a new record in the table.
-     * 
+     *
      * @param entryAdditionalAttribute
      *            instance of the Entry additional attribute object to insert
      * @param plugin
@@ -54,7 +54,7 @@ public interface IEntryAdditionalAttributeDAO
 
     /**
      * Load the additional attribute of the entry returns them in a list
-     * 
+     *
      * @param idEntry
      *            the id of the Entry
      * @param plugin

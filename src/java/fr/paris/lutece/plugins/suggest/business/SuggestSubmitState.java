@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,7 +55,7 @@ public class SuggestSubmitState
 
     /**
      * set the id of the submit state
-     * 
+     *
      * @param idSuggestSubmitState
      *            the id of the submit state
      */
@@ -75,7 +75,7 @@ public class SuggestSubmitState
 
     /**
      * set number of the submit state
-     * 
+     *
      * @param nSuggestSubmitState
      *            the id of the submit state
      */
@@ -95,7 +95,7 @@ public class SuggestSubmitState
 
     /**
      * set the title of the state
-     * 
+     *
      * @param title
      *            the title of the state
      */

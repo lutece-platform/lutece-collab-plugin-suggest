@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,8 +35,6 @@ package fr.paris.lutece.plugins.suggest.business;
 
 import fr.paris.lutece.portal.service.image.ImageResource;
 
-
-
 /**
  *
  * class Response
@@ -63,7 +61,7 @@ public class Response
 
     /**
      * set the suggest submit of the response
-     * 
+     *
      * @param suggestSubmit
      *            the suggest submit of the response
      */
@@ -83,7 +81,7 @@ public class Response
 
     /**
      * set the entry associate to the response
-     * 
+     *
      * @param entry
      *            the entry associate to the response
      */
@@ -103,7 +101,7 @@ public class Response
 
     /**
      * set the id of the response
-     * 
+     *
      * @param idResponse
      *            the id of the response
      */
@@ -123,7 +121,7 @@ public class Response
 
     /**
      * set the value of the response
-     * 
+     *
      * @param strValueResponse
      *            Value of the response
      */
@@ -134,7 +132,7 @@ public class Response
 
     /**
      * get Image
-     * 
+     *
      * @return Image Resource
      */
     public ImageResource getImage( )
@@ -144,7 +142,7 @@ public class Response
 
     /**
      * set Image Resource
-     * 
+     *
      * @param image
      *            Image Resource
      */
@@ -176,7 +174,7 @@ public class Response
 
     /**
      * the image resource id associate to the response
-     * 
+     *
      * @return Resource Image
      */
     public Integer getIdImageResource( )
@@ -186,7 +184,7 @@ public class Response
 
     /**
      * image resource id associate to the response
-     * 
+     *
      * @param idImageResource
      *            image resource id associate to the response
      */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,7 +56,7 @@ public class SuggestResourceRssConfig
 
     /**
      * set id Rss
-     * 
+     *
      * @param idRss
      *            id Rss
      */
@@ -76,7 +76,7 @@ public class SuggestResourceRssConfig
 
     /**
      * set id suggest
-     * 
+     *
      * @param idSuggest
      *            id suggest
      */
@@ -96,7 +96,7 @@ public class SuggestResourceRssConfig
 
     /**
      * set true if it is a submit RSS
-     * 
+     *
      * @param isSubmitRss
      *            true if it is a submit RSS
      */
@@ -116,7 +116,7 @@ public class SuggestResourceRssConfig
 
     /**
      * set id suggestSubmit
-     * 
+     *
      * @param idSuggestSubmit
      *            id suggestSubmit
      */

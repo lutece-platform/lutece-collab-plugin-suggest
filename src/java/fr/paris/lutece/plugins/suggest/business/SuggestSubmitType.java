@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2025, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -141,7 +141,7 @@ public class SuggestSubmitType implements RBACResource, Serializable
 
     /**
      * RBAC resource implmentation
-     * 
+     *
      * @return The resource type code
      */
     public String getResourceTypeCode( )
@@ -151,7 +151,7 @@ public class SuggestSubmitType implements RBACResource, Serializable
 
     /**
      * RBAC resource implmentation
-     * 
+     *
      * @return The resourceId
      */
     public String getResourceId( )
@@ -172,7 +172,7 @@ public class SuggestSubmitType implements RBACResource, Serializable
 
     /**
      * the image resource id associate to the response
-     * 
+     *
      * @return Resource Image
      */
     public Integer getIdImageResource( )
@@ -182,7 +182,7 @@ public class SuggestSubmitType implements RBACResource, Serializable
 
     /**
      * image resource id associate to the response
-     * 
+     *
      * @param idImageResource
      *            image resource id associate to the response
      */
