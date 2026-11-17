@@ -178,6 +178,39 @@ public interface ISuggestSubmitDAO
     void restoreShiftedListOrders( int nIdSuggest, boolean bListPinned, Plugin plugin );
 
     /**
+     * Adds one to the number of views of a suggest submit
+     *
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param plugin
+     *            the plugin
+     */
+    void incrementNumberView( int nIdSuggestSubmit, Plugin plugin );
+
+    /**
+     * Records a viewer of a suggest submit and adds one to its number of unique views, unless this viewer is already recorded
+     *
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param strViewerKey
+     *            the key of the viewer
+     * @param plugin
+     *            the plugin
+     * @return true when the viewer is new for this suggest submit
+     */
+    boolean insertView( int nIdSuggestSubmit, String strViewerKey, Plugin plugin );
+
+    /**
+     * Deletes the recorded viewers of a suggest submit
+     *
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param plugin
+     *            the plugin
+     */
+    void deleteViews( int nIdSuggestSubmit, Plugin plugin );
+
+    /**
      * Calculate the new max order in a list
      *
      * @param nIdSuggest

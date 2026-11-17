@@ -64,6 +64,7 @@ public class SuggestSubmit implements IExtendableResource
     private int _nNumberEnableComment;
     private int _nNumberComment;
     private int _nNumberView;
+    private int _nNumberUniqueView;
     private String _strSuggestSubmitValue;
     private String _strSuggestSubmitTitle;
     private String _strSuggestSubmitValueShowInTheList;
@@ -391,6 +392,27 @@ public class SuggestSubmit implements IExtendableResource
     public void setNumberView( int nNumberView )
     {
         _nNumberView = nNumberView;
+    }
+
+    /**
+     * Returns the number of distinct viewers of the suggest submit, its author left out
+     *
+     * @return the number of unique views
+     */
+    public int getNumberUniqueView( )
+    {
+        return _nNumberUniqueView;
+    }
+
+    /**
+     * Sets the number of distinct viewers of the suggest submit
+     *
+     * @param nNumberUniqueView
+     *            the number of unique views
+     */
+    public void setNumberUniqueView( int nNumberUniqueView )
+    {
+        _nNumberUniqueView = nNumberUniqueView;
     }
 
     /**

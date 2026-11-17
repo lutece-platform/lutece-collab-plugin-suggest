@@ -177,7 +177,37 @@ public final class SuggestSubmitHome
             SuggestIndexerUtils.addIndexerAction( strIdSuggestSubmit, IndexerAction.TASK_DELETE );
         }
 
+        _dao.deleteViews( nIdSuggestSubmit, plugin );
         _dao.delete( nIdSuggestSubmit, plugin );
+    }
+
+    /**
+     * Adds one to the number of views of a suggest submit
+     *
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param plugin
+     *            the plugin
+     */
+    public static void incrementNumberView( int nIdSuggestSubmit, Plugin plugin )
+    {
+        _dao.incrementNumberView( nIdSuggestSubmit, plugin );
+    }
+
+    /**
+     * Records a viewer of a suggest submit and adds one to its number of unique views, unless this viewer is already recorded
+     *
+     * @param nIdSuggestSubmit
+     *            the id of the suggest submit
+     * @param strViewerKey
+     *            the key of the viewer
+     * @param plugin
+     *            the plugin
+     * @return true when the viewer is new for this suggest submit
+     */
+    public static boolean addView( int nIdSuggestSubmit, String strViewerKey, Plugin plugin )
+    {
+        return _dao.insertView( nIdSuggestSubmit, strViewerKey, plugin );
     }
 
     // /////////////////////////////////////////////////////////////////////////

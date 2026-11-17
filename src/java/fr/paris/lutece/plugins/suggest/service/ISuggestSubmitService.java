@@ -257,6 +257,18 @@ public interface ISuggestSubmitService
     void moveSuggestSubmit( SuggestSubmit suggestSubmit, int nNewPosition, Plugin plugin );
 
     /**
+     * Counts a display of a suggest submit: one more view, and one more unique view the first time a viewer other than its author displays it
+     *
+     * @param suggestSubmit
+     *            the suggest submit, whose counters are brought up to date
+     * @param strViewer
+     *            what identifies the viewer, a user key or a session, or null when the viewer is unknown
+     * @param plugin
+     *            the plugin
+     */
+    void registerView( SuggestSubmit suggestSubmit, String strViewer, Plugin plugin );
+
+    /**
      * Search the max order number of contacts for one list
      *
      * @param nIdSuggest

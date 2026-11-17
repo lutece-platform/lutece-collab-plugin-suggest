@@ -67,6 +67,7 @@ import fr.paris.lutece.portal.service.event.EventAction;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.CryptoService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 
@@ -82,6 +83,8 @@ import java.util.function.Supplier;
 @ApplicationScoped
 public class SuggestSubmitService implements ISuggestSubmitService
 {
+    private static final String ALGORITHM_VIEWER_KEY = "SHA-256";
+
     @Inject
     private ICommentSubmitService _commentSubmitService;
 
@@ -231,6 +234,30 @@ public class SuggestSubmitService implements ISuggestSubmitService
                 removeWorkflowResources( nIdSuggestSubmit );
             }
         } );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void registerView( SuggestSubmit suggestSubmit, String strViewer, Plugin plugin )
+    {
+        int nIdSuggestSubmit = suggestSubmit.getIdSuggestSubmit( );
+        boolean bCountsAsUnique = ( strViewer != null ) && !strViewer.equals( suggestSubmit.getLuteceUserKey( ) );
+        boolean bNewViewer = inTransaction( plugin, ( ) -> {
+            SuggestSubmitHome.incrementNumberView( nIdSuggestSubmit, plugin );
+
+            return bCountsAsUnique && SuggestSubmitHome.addView( nIdSuggestSubmit, CryptoService.encrypt( strViewer, ALGORITHM_VIEWER_KEY ), plugin );
+        } );
+
+        suggestSubmit.setNumberView( suggestSubmit.getNumberView( ) + 1 );
+
+        if ( bNewViewer )
+        {
+            suggestSubmit.setNumberUniqueView( suggestSubmit.getNumberUniqueView( ) + 1 );
+        }
+
+        fireEvent( EventAction.UPDATE, suggestSubmit );
     }
 
     /**

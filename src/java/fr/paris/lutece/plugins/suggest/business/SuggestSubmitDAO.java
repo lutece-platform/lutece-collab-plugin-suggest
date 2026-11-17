@@ -37,6 +37,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import fr.paris.lutece.plugins.suggest.utils.SuggestUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import java.sql.Timestamp;
@@ -56,7 +57,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_suggest_submit ) FROM suggest_suggest_submit";
     private static final String SQL_QUERY_SELECT_SUGGEST_SUBMIT_BY_FILTER = "SELECT d.id_suggest_submit,d.id_suggest,s.id_state,s.title,s.number,d.date_response, "
             + "d.vote_number,d.score_number,d.id_category,d.suggest_submit_value,d.suggest_submit_title,d.comment_enable_number,d.suggest_submit_value_show_in_the_list, "
-            + "d.reported, d.lutece_user_key, d.suggest_submit_list_order, d.suggest_submit_type,d.number_view,d.disable_vote,d.is_pinned,d.disable_comment,d.id_image_resource,d.comment_number FROM suggest_suggest_submit d,suggest_suggest_submit_state s ";
+            + "d.reported, d.lutece_user_key, d.suggest_submit_list_order, d.suggest_submit_type,d.number_view,d.disable_vote,d.is_pinned,d.disable_comment,d.id_image_resource,d.comment_number,d.number_unique_view FROM suggest_suggest_submit d,suggest_suggest_submit_state s ";
     private static final String SQL_FILTER_ID_SUGGEST_SUBMIT = " d.id_suggest_submit = ? ";
     private static final String SQL_FILTER_ID_SUGGEST = " d.id_suggest = ? ";
     private static final String SQL_FILTER_ID_CATEGORY = " d.id_category = ? ";
@@ -79,8 +80,8 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
     private static final String SQL_FILTER_SORT_BY_SCORE_DESC = " d.score_number DESC ";
     private static final String SQL_FILTER_SORT_BY_NUMBER_COMMENT_ENABLE_ASC = " d.comment_enable_number ASC ";
     private static final String SQL_FILTER_SORT_BY_NUMBER_COMMENT_ENABLE_DESC = " d.comment_enable_number DESC ";
-    private static final String SQL_FILTER_SORT_BY_NUMBER_VIEW_ASC = " d.number_view ASC ";
-    private static final String SQL_FILTER_SORT_BY_NUMBER_VIEW_DESC = " d.number_view DESC ";
+    private static final String SQL_FILTER_SORT_BY_NUMBER_VIEW_ASC = " d.number_unique_view ASC ";
+    private static final String SQL_FILTER_SORT_BY_NUMBER_VIEW_DESC = " d.number_unique_view DESC ";
     private static final String SQL_FILTER_SORT_MANUALLY = " d.suggest_submit_list_order ASC ";
     private static final String SQL_ORDER_BY = " ORDER BY ";
     private static final String SQL_JOIN_STATE = " d.id_state = s.id_state ";
@@ -97,6 +98,12 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
             + "WHERE id_suggest_submit=? ";
     private static final String SQL_QUERY_SELECT_ID_SUGGEST_SUBMIT_BY_FILTER = "SELECT d.id_suggest_submit " + "FROM suggest_suggest_submit d ";
     private static final String SQL_QUERY_SELECT_COUNT_BY_FILTER = "SELECT COUNT(d.id_suggest_submit) " + "FROM suggest_suggest_submit d ";
+
+    private static final String SQL_QUERY_INCREMENT_NUMBER_VIEW = "UPDATE suggest_suggest_submit SET number_view = number_view + 1 WHERE id_suggest_submit = ?";
+    private static final String SQL_QUERY_INCREMENT_NUMBER_UNIQUE_VIEW = "UPDATE suggest_suggest_submit SET number_unique_view = number_unique_view + 1 WHERE id_suggest_submit = ?";
+    private static final String SQL_QUERY_COUNT_VIEW = "SELECT COUNT(*) FROM suggest_suggest_submit_view WHERE id_suggest_submit = ? AND viewer_key = ?";
+    private static final String SQL_QUERY_INSERT_VIEW = "INSERT INTO suggest_suggest_submit_view ( id_suggest_submit, viewer_key, date_view ) VALUES ( ?, ?, ? )";
+    private static final String SQL_QUERY_DELETE_VIEWS = "DELETE FROM suggest_suggest_submit_view WHERE id_suggest_submit = ?";
 
     // Order
     private static final String SQL_QUERY_SELECT_LIST_ORDERS = "SELECT id_suggest_submit, suggest_submit_list_order FROM suggest_suggest_submit WHERE id_suggest = ? AND is_pinned = ? ORDER BY suggest_submit_list_order, id_suggest_submit";
@@ -1037,6 +1044,71 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void incrementNumberView( int nIdSuggestSubmit, Plugin plugin )
+    {
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INCREMENT_NUMBER_VIEW, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdSuggestSubmit );
+            daoUtil.executeUpdate( );
+        }
+    }
+
+    /**
+     * {@inheritDoc} A viewer recorded meanwhile by a concurrent request is not counted twice.
+     */
+    @Override
+    public boolean insertView( int nIdSuggestSubmit, String strViewerKey, Plugin plugin )
+    {
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_VIEW, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdSuggestSubmit );
+            daoUtil.setString( 2, strViewerKey );
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) && ( daoUtil.getInt( 1 ) > 0 ) )
+            {
+                return false;
+            }
+        }
+
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_VIEW, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdSuggestSubmit );
+            daoUtil.setString( 2, strViewerKey );
+            daoUtil.setTimestamp( 3, new Timestamp( System.currentTimeMillis( ) ) );
+            daoUtil.executeUpdate( );
+        }
+        catch( AppException e )
+        {
+            return false;
+        }
+
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INCREMENT_NUMBER_UNIQUE_VIEW, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdSuggestSubmit );
+            daoUtil.executeUpdate( );
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteViews( int nIdSuggestSubmit, Plugin plugin )
+    {
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_VIEWS, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdSuggestSubmit );
+            daoUtil.executeUpdate( );
+        }
+    }
+
+    /**
      *
      * @param daoUtil
      *            {@link DAOUtil}
@@ -1093,6 +1165,7 @@ public final class SuggestSubmitDAO implements ISuggestSubmitDAO
         }
 
         suggestSubmit.setNumberComment( daoUtil.getInt( 23 ) );
+        suggestSubmit.setNumberUniqueView( daoUtil.getInt( 24 ) );
 
         return suggestSubmit;
     }

@@ -1990,9 +1990,8 @@ public class SuggestApp extends MVCApplication
             return null;
         }
 
-        // update number view
-        suggestSubmit.setNumberView( suggestSubmit.getNumberView( ) + 1 );
-        _suggestSubmitService.update( suggestSubmit, false, plugin );
+        _suggestSubmitService.registerView( suggestSubmit,
+                ( luteceUserConnected != null ) ? luteceUserConnected.getName( ) : request.getSession( true ).getId( ), plugin );
 
         if ( SecurityService.isAuthenticationEnable( ) && ( suggestSubmit.getLuteceUserKey( ) != null ) )
         {
